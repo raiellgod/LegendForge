@@ -1,0 +1,18 @@
+nvm use 24.13.1
+
+pnpm add typescript@5.9.3 @types/node@24.10.13  -D
+
+pnpm add prettier@3.8.1 eslint@9.39.2 -D
+
+git init
+
+npx tsc --init
+
+npx tsc
+
+node dist/index.js
+
+pnpm add -D tsx@4.21.0
+
+git add .
+

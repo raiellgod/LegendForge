@@ -1,0 +1,74 @@
+====================================
+LEGEND FORGE — DEV STATE SNAPSHOT
+====================================
+
+DATA DA ATUALIZAÇÃO
+31/03/2026
+
+
+------------------------------------
+1 — ESTRUTURA DE PASTAS
+------------------------------------
+
+LegendForge/
+
+dist/
+    index.js
+node_modules/
+src/
+    index.ts
+.gitatributes
+.gitignore
+DEV_STATE_SNAPSHOT.txt
+DEVELOPER_CONFIG-UTILIZE.txt
+FEATURE_CAPSULE.txt
+LICENSE
+package.json
+pnpm-lock.yaml
+PROJECT_CONTEXT.txt
+README.md
+SESSION_BOOT.txt
+tsconfig.json
+
+
+------------------------------------
+2 — DEPENDÊNCIAS BACKEND
+------------------------------------
+
+------------------------------------
+3 — BANCO DE DADOS
+------------------------------------
+
+
+
+------------------------------------
+4 — MODELOS DO BANCO
+------------------------------------
+
+
+
+
+------------------------------------
+5 — ENDPOINTS EXISTENTES
+------------------------------------
+
+
+
+
+------------------------------------
+6 — FEATURES IMPLEMENTADAS
+------------------------------------
+
+
+
+
+------------------------------------
+7 — PRÓXIMA TAREFA
+------------------------------------
+
+
+
+------------------------------------
+8 — NOTAS DE ARQUITETURA
+------------------------------------
+

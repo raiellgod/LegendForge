@@ -1,0 +1,31 @@
+------------------------------------
+Capsule 1
+------------------------------------
+
+Instal dependencies:
+ - node 24.13.1
+ - typescript 5.9.3
+ - type/node 24.10.13
+ - prettier 3.8.1
+ - eslint 9.39.2
+ - git init
+ - tsc init
+ - tsx 4.21.0
+
+
+Itens 
+ - tsconfig.json alterada
+ - pasta src criada
+ - index.ts criado
+ - index.ts alterado
+ - pasta dist
+ - index.js criado
+ - package.json reconfigurada
+ - run dev já funcionando
+
+
+
+
+------------------------------------
+Capsule 2
+------------------------------------
