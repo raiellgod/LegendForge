@@ -6,7 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/tech-TypeScript-3178c6)
 ![Node](https://img.shields.io/badge/runtime-Node.js-339933)
 
-> 🎲 A modern Virtual Tabletop built for flexibility, performance and modularity.
+> 🎲 A modular Virtual Tabletop (VTT) focused on flexibility, learning, and real-world architecture.
 
 ---
 
@@ -25,55 +25,159 @@ Player2 joined the room
 ✅ Session ready
 ```
 
-> ⚠️ This is a simulated preview. Real features are under development.
+> ⚠️ Preview is simulated. Core features are under development.
 
 ---
 
 ## 🧠 Overview
 
-**LegendForge** is a Virtual Tabletop (VTT) inspired by Roll20 and Foundry VTT.
+**LegendForge** is a Virtual Tabletop (VTT) designed for tabletop RPG sessions.
 
-It is being built with a focus on:
+Inspired by platforms like Roll20 and Foundry Virtual Tabletop,  
+it aims to provide a flexible and modular environment for creating and running custom campaigns.
 
-- 🧩 modular architecture  
-- 🌐 real-time systems  
-- ⚡ performance  
-- 🧠 developer experience  
+The system is:
+
+- 🧩 system-agnostic
+- 🎲 initially inspired by Dungeons & Dragons
+- 🌌 focused on narrative-driven campaigns
+- 👨‍💻 developed as a solo project
 
 ---
 
-## 🎯 Why this project exists
+## 🎯 Project Goals
 
-Most VTTs today are either:
+LegendForge is built around three main goals:
 
-- too limited  
-- too complex  
-- or not flexible enough  
+### 1 — Play RPG with friends
 
-LegendForge aims to provide:
+Provide a functional virtual tabletop with:
 
-- 🔧 extensibility  
-- ⚡ performance  
-- 🧩 modular design  
+- chat system
+- dice rolling
+- character sheets
+- campaigns
+- maps
+
+---
+
+### 2 — Build a strong portfolio project
+
+Demonstrate real-world skills in:
+
+- backend architecture
+- code organization
+- database modeling
+- full-stack development
+
+---
+
+### 3 — Evolve as a developer
+
+This project is also a learning journey:
+
+- continuous improvement
+- safe experimentation
+- natural refactoring
+
+---
+
+## 💡 Development Philosophy
+
+LegendForge follows a core principle:
+
+> **Incremental development**
+
+This means:
+
+- small steps
+- testable features
+- always something working
+
+---
+
+### 🧠 Principles
+
+- 1️⃣ Evolve stack by stack
+- 2️⃣ Always see something working
+- 3️⃣ Build correct architecture from the start
+- 4️⃣ Refactoring is allowed
+- 5️⃣ No rush — long-term vision
 
 ---
 
 ## 🏗️ Architecture
 
-- **Backend** → rooms, players, realtime  
-- **Frontend** → UI and interaction  
-- **Shared** → types and contracts  
+The project is currently structured as:
+
+```bash
+LegendForge/
+├── backend/
+├── frontend/
+├── docs/
+```
 
 ---
 
-## 📂 Project Structure
+### 📌 Strategy
+
+- ❌ Not a monorepo (yet)
+- ✅ Separate backend and frontend
+- 🎯 Backend-first approach
+
+Future possibility:
+
+- migrate to monorepo using pnpm workspaces
+
+---
+
+## ⚙️ Tech Stack
+
+### 🖥️ Backend
+
+- Node.js
+- Fastify
+- TypeScript
+- Prisma
+- PostgreSQL
+- pnpm
+
+### 🎨 Frontend (planned)
+
+- React
+- Vite
+- Tailwind
+- TypeScript
+
+> ⚠️ Frontend will start only after backend core is stable.
+
+---
+
+## 🏗️ Backend Architecture (Planned)
 
 ```bash
-legendforge/
-├── backend/
-├── frontend/
-├── shared/
-├── docs/
+backend/
+├── src/
+│   ├── modules/
+│   │   ├── user/
+│   │   │   ├── user.routes.ts
+│   │   │   ├── user.controller.ts
+│   │   │   └── user.service.ts
+│   │   │
+│   │   ├── campaign/
+│   │       ├── campaign.routes.ts
+│   │       ├── campaign.controller.ts
+│   │       └── campaign.service.ts
+│   │
+│   ├── db/
+│   │   └── prisma.ts
+│   │
+│   ├── plugins/
+│   │
+│   └── server.ts
+│
+├── prisma/
+│   └── schema.prisma
 ```
 
 ---
@@ -91,60 +195,71 @@ pnpm dev
 
 ## 🧪 Current Status
 
-> 🟡 Early development stage  
+> 🟡 Initial development stage
 
-✔️ Setup complete  
-🧠 Architecture in progress  
-⚙️ Core systems being built  
-
----
-
-## 🗺️ Roadmap
-
-### Phase 1 — Core
-- [ ] Server setup  
-- [ ] Rooms  
-- [ ] Player connection  
-
-### Phase 2 — Interaction
-- [ ] WebSocket  
-- [ ] Chat  
-- [ ] Sync  
-
-### Phase 3 — VTT
-- [ ] Grid  
-- [ ] Tokens  
-- [ ] Movement  
-
-### Phase 4 — Advanced
-- [ ] Sheets  
-- [ ] Dice  
-- [ ] Plugins  
+- ✔️ Repository initialized
+- ⚙️ Backend setup in progress
+- 🧠 Architecture defined
 
 ---
 
-## 💡 Development Philosophy
+## 🗺️ Roadmap (Initial)
 
-> Small steps. Fast feedback. Continuous evolution.
+### Step 0 - Config Setup
 
----
+### Step 1 — Backend Setup
 
-## 🎬 Example
+- Fastify
+- TypeScript
+- Prisma
+- PostgreSQL
 
-```bash
-⚔️ LegendForge started...
+**Goal:** working server with:
 
-Player1 connected
-Room created: #123
-Player2 joined
-
-🎲 Rolling dice...
-Result: 17
-
-📍 Token moved
-
-✅ Session running
+```json
+{
+  "message": "LegendForge API"
+}
 ```
+
+---
+
+### Step 2 — Database
+
+- Prisma connection
+- User table
+
+---
+
+### Step 3 — Users
+
+- Register
+- Login
+- Password hashing
+
+---
+
+### Step 4 — Campaigns
+
+---
+
+### Step 5 — Dice System
+
+---
+
+### Step 6 — Chat
+
+---
+
+### Step 7 — Character Sheets
+
+---
+
+## 🔄 Development Rules
+
+- Build in small steps
+- Avoid premature complexity
+- Always keep the system runnable
 
 ---
 
@@ -171,4 +286,16 @@ https://github.com/raiellgod
 
 ## 🌌 Vision
 
-LegendForge aims to become a powerful and modular VTT platform for developers and players.
+LegendForge is not just a VTT.
+
+It is a long-term project designed to become a flexible platform  
+for building and experiencing tabletop RPG systems without limitations.
+
+---
+
+## ⭐ Final Note
+
+This project is in its early stages,  
+but it is being built with strong foundations and long-term vision.
+
+Follow the journey.
