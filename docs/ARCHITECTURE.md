@@ -1,218 +1,221 @@
-====================================
-LEGEND FORGE — PROJECT CONTEXT
-====================================
+# 🏗️ ARCHITECTURE — LegendForge
 
-VISÃO DO PROJETO
+---
 
-LegendForge é um Virtual Tabletop (VTT) para RPG de mesa.
+## 🎯 Project Vision
 
-Inspirado em plataformas como Roll20 e Foundry Virtual Tabletop,
-porém com foco em:
+**LegendForge** é um Virtual Tabletop (VTT) para RPG de mesa.
 
-- ser agnóstico de sistema
-- permitir campanhas personalizadas
-- servir como ferramenta prática para jogar com amigos
+Inspirado em plataformas como Roll20 e Foundry Virtual Tabletop, com foco em:
 
-Também é um projeto de portfólio e aprendizado.
+- 🧩 ser agnóstico de sistema  
+- 🎲 permitir campanhas personalizadas  
+- 👥 servir como ferramenta prática para jogar com amigos  
 
+Além disso, é um projeto voltado para:
 
-------------------------------------
-OBJETIVOS PRINCIPAIS
-------------------------------------
+- 💼 portfólio  
+- 🧠 aprendizado contínuo  
 
-1. Criar uma mesa virtual funcional
+---
 
-- chat
-- rolagem de dados
-- campanhas
-- fichas de personagem
-- mapas (futuro)
+## 🎯 Main Goals
 
-2. Construir um projeto forte de portfólio
+### 1 — Criar uma mesa virtual funcional
 
-- arquitetura backend organizada
-- código limpo e modular
-- boas práticas modernas
+- 💬 Chat  
+- 🎲 Rolagem de dados  
+- 🗺️ Campanhas  
+- 📄 Fichas de personagem  
+- 🧭 Mapas (futuro)  
 
-3. Evoluir como programador
+---
 
-- aprender backend moderno
-- entender banco de dados
-- trabalhar com sistemas reais
+### 2 — Construir um projeto forte de portfólio
 
+- 🏗️ Arquitetura backend organizada  
+- 🧹 Código limpo e modular  
+- 📐 Boas práticas modernas  
 
-------------------------------------
-FILOSOFIA DE DESENVOLVIMENTO
-------------------------------------
+---
 
-O projeto segue desenvolvimento incremental.
+### 3 — Evoluir como programador
 
-Princípios:
+- 📚 Aprender backend moderno  
+- 🧠 Entender banco de dados  
+- ⚙️ Trabalhar com sistemas reais  
 
-- pequenos passos diários
-- sempre ter algo funcionando
-- evoluir stack por stack
-- evitar complexidade prematura
-- aceitar refatorações
-- sem pressa
+---
 
-O objetivo não é velocidade.
-É consistência.
+## 💡 Development Philosophy
 
+O projeto segue **desenvolvimento incremental**.
 
-------------------------------------
-ESTRATÉGIA DE REPOSITÓRIO
-------------------------------------
+### Princípios
 
-Inicialmente:
+- ✔️ Pequenos passos diários  
+- ✔️ Sempre ter algo funcionando  
+- ✔️ Evoluir stack por stack  
+- ✔️ Evitar complexidade prematura  
+- ✔️ Aceitar refatorações  
+- ✔️ Sem pressa  
 
-- backend e frontend separados
+> 🎯 O objetivo não é velocidade — é consistência.
 
-Estrutura:
+---
 
+## 📦 Repository Strategy
+
+### Estrutura inicial
+
+```
 LegendForge/
-backend/
-frontend/
-docs/
+├── backend/
+├── frontend/
+├── docs/
+```
 
-Motivo:
+### Decisão
 
-- reduzir complexidade inicial
-- focar primeiro no backend
+- 🔹 Backend e frontend separados  
+- 🔹 Foco inicial no backend  
+- 🔹 Redução de complexidade  
 
-No futuro:
+### Futuro
 
-- possibilidade de migrar para monorepo com pnpm
+- 🔄 Possível migração para monorepo com pnpm  
 
+---
 
-------------------------------------
-STACK TECNOLÓGICA
-------------------------------------
+## ⚙️ Tech Stack
 
-Backend:
+### 🖥️ Backend
 
-- Node.js
-- Fastify
-- TypeScript
-- Prisma
-- PostgreSQL
-- pnpm
+- Node.js  
+- Fastify  
+- TypeScript  
+- Prisma  
+- PostgreSQL  
+- pnpm  
 
-Frontend (futuro):
+---
 
-- React
-- Vite
-- Tailwind
-- TypeScript
+### 🎨 Frontend (planejado)
 
-Ferramentas:
+- React  
+- Vite  
+- Tailwind  
+- TypeScript  
 
-- VS Code
-- Git
+---
 
+### 🛠️ Ferramentas
 
-------------------------------------
-ARQUITETURA DO BACKEND
-------------------------------------
+- VS Code  
+- Git  
 
-Estrutura planejada:
+---
 
+## 🏗️ Backend Architecture
+
+### Estrutura planejada
+
+```
 src/
+├── modules/
+│   ├── user/
+│   │   ├── user.routes.ts
+│   │   ├── user.controller.ts
+│   │   └── user.service.ts
+│   │
+│   ├── campaign/
+│   │   ├── campaign.routes.ts
+│   │   ├── campaign.controller.ts
+│   │   └── campaign.service.ts
+│
+├── db/
+│   └── prisma.ts
+│
+├── plugins/
+│
+└── server.ts
+```
 
-modules/
+### Objetivos da arquitetura
 
-user/
-user.routes.ts
-user.controller.ts
-user.service.ts
+- 🧩 Separar responsabilidades  
+- 📦 Evitar arquivos grandes  
+- 🔧 Facilitar manutenção  
 
-campaign/
-campaign.routes.ts
-campaign.controller.ts
-campaign.service.ts
+---
 
-db/
-prisma.ts
+## 🧩 Development Strategy
 
-plugins/
+O projeto será desenvolvido utilizando **Feature Capsules**.
 
-server.ts
+### Cada feature deve ser:
 
+- pequena  
+- independente  
+- testável  
+- funcional  
 
-Objetivo:
+### Exemplos de cápsulas
 
-- separar responsabilidades
-- evitar arquivos grandes
-- facilitar manutenção
+1. Server Boot  
+2. User System  
+3. Campaign System  
+4. Dice Roller  
+5. Chat  
 
+---
 
-------------------------------------
-ESTRATÉGIA DE DESENVOLVIMENTO
-------------------------------------
+## 🗺️ Initial Roadmap
 
-O projeto será desenvolvido usando Feature Capsules.
+### Step 0
+- Setup inicial  
 
-Cada feature:
+### Step 1
+- Setup backend  
 
-- pequena
-- independente
-- testável
-- funcional
+### Step 2
+- Banco de dados + User  
 
-Exemplos:
+### Step 3
+- Autenticação  
 
-1. Server Boot
-2. User System
-3. Campaign System
-4. Dice Roller
-5. Chat
+### Step 4
+- Campanhas  
 
+### Step 5
+- Dice Roller  
 
-------------------------------------
-ROADMAP INICIAL
-------------------------------------
+### Step 6
+- Chat  
 
-Step 0:
-Setup inicial
+### Step 7
+- Fichas  
 
-Step 1:
-Setup backend
+---
 
-Step 2:
-Banco de dados + User
+## ⚠️ Important
 
-Step 3:
-Autenticação
+Este arquivo **NÃO representa o estado atual do projeto**.
 
-Step 4:
-Campanhas
+Ele define:
 
-Step 5:
-Dice Roller
+- 🧠 visão  
+- 🎯 direção  
+- 🏗️ decisões arquiteturais  
 
-Step 6:
-Chat
+---
 
-Step 7:
-Fichas
+## 📄 Referências
 
+Para estado atual:
 
-------------------------------------
-IMPORTANTE
-------------------------------------
+→ `DEV_STATE.md`  
 
-Este arquivo NÃO representa o estado atual do projeto.
+Para entrada rápida:
 
-Ele representa:
-
-- visão
-- direção
-- decisões arquiteturais
-
-Para estado atual usar:
-
-DEV_STATE.md
-
-Para entrada rápida usar:
-
-BOOT.md
+→ `BOOT.md`  

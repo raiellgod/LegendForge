@@ -1,111 +1,108 @@
-====================================
-LEGEND FORGE — DEV STATE SNAPSHOT
-====================================
+# 📊 DEV STATE — LegendForge
 
-DATA DA ATUALIZAÇÃO
+---
+
+## 📅 Last Update
+
 31/03/2026
 
+---
 
-------------------------------------
-1 — ESTRUTURA DE PASTAS
-------------------------------------
+## 🧱 Project Structure
 
+```
 LegendForge/
+├── .vscode/
+│   └── settings.json
+│
+├── dist/
+│   └── index.js
+│
+├── docs/
+│   ├── DEV_STATE.md
+│   ├── ARCHITECTURE.md
+│   ├── BOOT.md
+│   ├── FEATURE_CAPSULE.md
+│   └── DEVELOPER_CONFIG-UTILIZE.txt
+│
+├── src/
+│   └── index.ts
+│
+├── .env
+├── .env_explicação
+├── .gitignore
+├── .npmrc
+├── eslint.config.js
+├── package.json
+├── tsconfig.json
+```
 
-.vscode/
-    settings.json
+---
 
-dist/
-    index.js
+## ⚙️ Dependencies (Setup / Backend)
 
-docs/
-    DEV_STATE.md
-    DEVELOPER_CONFIG-UTILIZE.txt
-    FEATURE_CAPSULE.md
-    ARCHITECTURE.md
-    BOOT.md
+### 🧪 Development
 
-node_modules/
+- TypeScript — 5.9.3  
+- tsx — 4.21.0  
+- @types/node — 24.10.13  
 
-src/
-    index.ts
+### 🧹 Lint & Format
 
-.env
+- ESLint — 9.39.2  
+- eslint-config-prettier — 10.1.8  
+- eslint-plugin-simple-import-sort — 12.1.1  
+- Prettier — 3.8.1  
 
-.env_explicação
+---
 
-.gitatributes
+## 🗄️ Database
 
-.gitignore
+- ❌ Ainda não configurado  
 
-.npmrc
+---
 
-eslint.config.js
+## 🧩 Database Models
 
-LICENSE
+- ❌ Nenhum modelo definido  
 
-package.json
+---
 
-pnpm-lock.yaml
+## 🌐 API Endpoints
 
-README.md
+- ❌ Nenhum endpoint definido  
 
-tsconfig.json
+---
 
+## ✅ Implemented Features
 
-------------------------------------
-2 — DEPENDÊNCIAS SETUP/BACKEND
-------------------------------------
-    "@eslint/js": "^10.0.1",
-    "@types/node": "^24.10.13",
-    "eslint": "9.39.2",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-simple-import-sort": "12.1.1",
-    "globals": "^17.4.0",
-    "prettier": "3.8.1",
-    "tsx": "4.21.0",
-    "typescript": "5.9.3",
-    "typescript-eslint": "^8.58.0"
-------------------------------------
-3 — BANCO DE DADOS
-------------------------------------
+- ⚡ Fastify API inicial configurada  
+- 🧱 Base do backend pronta  
+- 🛠️ Ambiente de desenvolvimento funcional  
 
+---
 
+## 🎯 Current Focus
 
-------------------------------------
-4 — MODELOS DO BANCO
-------------------------------------
+Iniciar camada de dados e estrutura do sistema:
 
+- modelagem do banco  
+- definição das entidades principais  
+- preparação para Prisma  
 
+---
 
+## 🚀 Next Steps
 
-------------------------------------
-5 — ENDPOINTS EXISTENTES
-------------------------------------
+- [ ] Iniciar banco de dados  
+- [ ] Definir entidades principais do sistema  
+- [ ] Estruturar modelo inicial do jogo  
+- [ ] Integrar Prisma  
 
+---
 
+## 🧠 Architecture Notes
 
-
-------------------------------------
-6 — FEATURES IMPLEMENTADAS
-------------------------------------
-Fastify api
-
-
-
-------------------------------------
-7 — PRÓXIMA TAREFA
-------------------------------------
-
-Iniciar banco de dados
-
-pensar todos os ramos do banco
-
-começar pensar nas utilizações do jogo
-
-------------------------------------
-8 — NOTAS DE ARQUITETURA
-------------------------------------
-
-Analizar erros no tsconfig.json
- 
+- Revisar possíveis erros no `tsconfig.json`  
+- Manter desenvolvimento incremental  
+- Evitar complexidade prematura  
