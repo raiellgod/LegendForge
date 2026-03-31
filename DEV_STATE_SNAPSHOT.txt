@@ -3,7 +3,7 @@ LEGEND FORGE — DEV STATE SNAPSHOT
 ====================================
 
 DATA DA ATUALIZAÇÃO
-31/03/2026
+30/03/2026
 
 
 ------------------------------------
@@ -12,6 +12,8 @@ DATA DA ATUALIZAÇÃO
 
 LegendForge/
 
+.vscode/
+    settings.json
 dist/
     index.js
 node_modules/
@@ -22,6 +24,7 @@ src/
 .npmrc
 DEV_STATE_SNAPSHOT.txt
 DEVELOPER_CONFIG-UTILIZE.txt
+eslint.config.js
 FEATURE_CAPSULE.txt
 LICENSE
 package.json
@@ -35,7 +38,14 @@ tsconfig.json
 ------------------------------------
 2 — DEPENDÊNCIAS BACKEND
 ------------------------------------
-
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.10.13",
+    "eslint": "9.39.2",
+    "globals": "^17.4.0",
+    "prettier": "3.8.1",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.58.0"
 ------------------------------------
 3 — BANCO DE DADOS
 ------------------------------------
@@ -73,3 +83,4 @@ tsconfig.json
 8 — NOTAS DE ARQUITETURA
 ------------------------------------
 
+Analizar erros no tsconfig.json

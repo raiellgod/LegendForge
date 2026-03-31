@@ -11,6 +11,9 @@ Instal dependencies:
  - git init
  - tsc init
  - tsx 4.21.0
+ - create eslint/config 1.11.0
+    - opções : JavaScript / To check syntax and find problems/ JavaScript modules (import/export)/ none of these/ Yes / Node/ JavaScript/ Yes/ Pnpm
+ - 
 
 
 Itens 

@@ -20,3 +20,16 @@ git commit -m "chore: add typescript and tsx setup"
 
 git add .
 
+git commit -m "chore: add node version to package.json"
+
+pnpm create @eslint/config@1.11.0
+
+       - opções : JavaScript / To check syntax and find problems/ JavaScript modules (import/export)/ none of these/ Yes / Node/ JavaScript/ Yes/ Pnpm
+
+pnpm add eslint-config-prettier@10.1.8 -D
+
+pnpm add eslint-plugin-simple-import-sort@12.1.1 -D
+
+git add .
+
+git commit -m "chore:add eslint and prettier setup"
