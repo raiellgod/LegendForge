@@ -39,3 +39,23 @@ git add .
 git commit -m "chore: update ao txt archives"
 
 git push -u origin
+
+pnpm add fastify@5.7.4
+
+pnpm add dotenv@17.3.1
+
+git add .
+
+git commit -m "feat: add fastify api"
+
+pnpm add zod@3.24.2 fastify-type-provider-zod@4.0.2
+
+pnpm add @fastify/swagger@9.7.0 @fastify/swagger-ui@5.2.5
+
+pnpm add @prisma/client@7.4.0 @prisma/adapter-pg@7.4.0
+
+pnpm add prisma@7.4.0 -D
+
+npx prisma init
+
+npx prisma format

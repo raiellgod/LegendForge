@@ -172,25 +172,28 @@ Exemplos:
 ROADMAP INICIAL
 ------------------------------------
 
-Dia 1:
+Step 0:
+Setup inicial
+
+Step 1:
 Setup backend
 
-Dia 2:
+Step 2:
 Banco de dados + User
 
-Dia 3:
+Step 3:
 Autenticação
 
-Dia 4:
+Step 4:
 Campanhas
 
-Dia 5:
+Step 5:
 Dice Roller
 
-Dia 6:
+Step 6:
 Chat
 
-Dia 7:
+Step 7:
 Fichas
 
 
@@ -208,8 +211,8 @@ Ele representa:
 
 Para estado atual usar:
 
-DEV_STATE_SNAPSHOT.txt
+DEV_STATE.md
 
 Para entrada rápida usar:
 
-SESSION_BOOT.txt
+BOOT.md
