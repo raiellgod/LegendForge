@@ -48,4 +48,6 @@ Capsule 2
 
 instalação
   - fatify 5.7.4
+  - zod 4.3.6
+  - fastify-type-provider-zod 6.1.0
   

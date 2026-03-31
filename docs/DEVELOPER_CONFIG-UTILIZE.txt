@@ -48,7 +48,11 @@ git add .
 
 git commit -m "feat: add fastify api"
 
-pnpm add zod@3.24.2 fastify-type-provider-zod@4.0.2
+pnpm add zod@4.3.6 fastify-type-provider-zod@6.1.0
+
+git add .
+
+git commit -m "chore: add zod anda fastify-type-provider-zod setup"
 
 pnpm add @fastify/swagger@9.7.0 @fastify/swagger-ui@5.2.5
 
@@ -59,3 +63,26 @@ pnpm add prisma@7.4.0 -D
 npx prisma init
 
 npx prisma format
+
+
+
+
+======================================================================================================================================
+
+sites utilizados
+
+https://www.npmjs.com/package/eslint-config-prettier
+
+https://github.com/prettier/eslint-config-prettier
+
+https://www.npmjs.com/package/eslint-plugin-simple-import-sort
+
+https://github.com/lydell/eslint-plugin-simple-import-sort
+
+https://fastify.dev/
+
+https://www.npmjs.com/package/dotenv
+
+https://zod.dev/
+
+https://github.com/turkerdev/fastify-type-provider-zod
