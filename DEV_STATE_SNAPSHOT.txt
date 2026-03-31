@@ -19,6 +19,7 @@ src/
     index.ts
 .gitatributes
 .gitignore
+.npmrc
 DEV_STATE_SNAPSHOT.txt
 DEVELOPER_CONFIG-UTILIZE.txt
 FEATURE_CAPSULE.txt

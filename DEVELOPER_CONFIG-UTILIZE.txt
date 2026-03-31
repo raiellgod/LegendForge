@@ -16,3 +16,7 @@ pnpm add -D tsx@4.21.0
 
 git add .
 
+git commit -m "chore: add typescript and tsx setup"
+
+git add .
+
