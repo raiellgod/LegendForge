@@ -36,11 +36,13 @@ tsconfig.json
 
 
 ------------------------------------
-2 — DEPENDÊNCIAS BACKEND
+2 — DEPENDÊNCIAS SETUP/BACKEND
 ------------------------------------
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.10.13",
     "eslint": "9.39.2",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-simple-import-sort": "12.1.1",
     "globals": "^17.4.0",
     "prettier": "3.8.1",
     "tsx": "4.21.0",
@@ -77,10 +79,12 @@ tsconfig.json
 7 — PRÓXIMA TAREFA
 ------------------------------------
 
-
+Iniciar a config do backend com Fastify, zod, fastify swagger e o prisma
 
 ------------------------------------
 8 — NOTAS DE ARQUITETURA
 ------------------------------------
 
 Analizar erros no tsconfig.json
+
+ao final retirar todos os txt de guia 

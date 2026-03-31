@@ -13,7 +13,18 @@ Instal dependencies:
  - tsx 4.21.0
  - create eslint/config 1.11.0
     - opções : JavaScript / To check syntax and find problems/ JavaScript modules (import/export)/ none of these/ Yes / Node/ JavaScript/ Yes/ Pnpm
- - 
+ - eslint-config-prettier 10.1.8
+    - configurar com o import "import eslintConfigPrettier from 'eslint-config-prettier/flat'" e o "eslintConfigPrettier," no corpo
+ - eslint-plugin-simple-import-sort 12.1.1
+    - configurar com o import "import simpleImportSort from 'eslint-plugin-simple-import-sort'" e o objeto  " {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+    },
+  },"  no corpo
 
 
 Itens 
@@ -28,7 +39,7 @@ Itens
  -.npmrc
 
 
-
+✅ finalizado e funcionando
 
 ------------------------------------
 Capsule 2

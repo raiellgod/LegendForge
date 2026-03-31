@@ -33,3 +33,7 @@ pnpm add eslint-plugin-simple-import-sort@12.1.1 -D
 git add .
 
 git commit -m "chore:add eslint and prettier setup"
+
+git add .
+
+git commit -m "chore: update ao txt archives"
