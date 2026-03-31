@@ -56,6 +56,10 @@ git commit -m "chore: add zod anda fastify-type-provider-zod setup"
 
 pnpm add @fastify/swagger@9.7.0 @fastify/swagger-ui@5.2.5
 
+git add .
+
+git commit -m "chore: add fastify swagger generation"
+
 pnpm add @prisma/client@7.4.0 @prisma/adapter-pg@7.4.0
 
 pnpm add prisma@7.4.0 -D
@@ -86,3 +90,7 @@ https://www.npmjs.com/package/dotenv
 https://zod.dev/
 
 https://github.com/turkerdev/fastify-type-provider-zod
+
+https://swagger.io/
+
+https://dbdiagram.io/d

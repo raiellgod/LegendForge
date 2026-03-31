@@ -50,4 +50,5 @@ instalação
   - fatify 5.7.4
   - zod 4.3.6
   - fastify-type-provider-zod 6.1.0
-  
+  - fastify/swagger 9.7.0 
+  - fastify/swagger-ui 5.2.5

@@ -8,12 +8,15 @@ Node + Fastify + TypeScript + Prisma + PostgreSQL
 Frontend futuro: React + Vite + Tailwind
 
 STATE:
-Setup configurado
+Setup configurado - backend configurado
 
 NEXT TASK:
-configure BACKEND
 
-Fastify, zod, fastify swagger and prisma
+install and config prisma
+
+configure database
+
+construct database prot
 
 DOCS:
 ARCHITECTURE.md
