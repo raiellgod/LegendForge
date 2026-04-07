@@ -127,13 +127,21 @@ Adicionar base do backend com Fastify e ferramentas essenciais.
 
 ---
 
-# 🧠 Capsule 03 — (Next)
+# 🧠 Capsule 03 — Data & UI Design
 
 ## 🎯 Goal
 
-Definir e implementar a camada de dados.
+Definir toda a estrutura de dados e a interface visual antes da implementação técnica.
 
----
+## ⚙️ Tools Used
+
+- dbdiagram.io (Modelagem ERD)
+- Figma (Prototipagem)
+
+## ✅ Result (In Progress)
+
+- Estrutura de Users e Campaigns definida visualmente.
+- Planejamento de tabelas para Chat e Dice Roller em andamento.
 
 ## 🔜 Planned
 
@@ -147,4 +155,18 @@ Definir e implementar a camada de dados.
 ## 📝 Notes
 
 - manter abordagem incremental  
-- validar cada etapa antes de avançar  
+- validar cada etapa antes de avançar
+
+---
+
+# capsule 4
+
+## Telas
+![banco de dados](./imagens/banco_de_dados.png)
+
+
+![telas figma](./images/figma.png)
+
+começamos telas e banco de dados
+
+# capsule 5

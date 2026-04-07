@@ -35,9 +35,11 @@ Virtual Tabletop (VTT)
 
 ## 🎯 Next Tasks
 
-- [ ] Instalar e configurar Prisma  
-- [ ] Configurar banco de dados  
-- [ ] Modelar estrutura inicial do banco  
+- [ ] Definir modelos iniciais (User, Campaign, Participant) no dbdiagram.io
+- [ ] Finalizar Modelagem Completa do Banco (Tabelas de Chat, Dados, Fichas)
+- [ ] Criar Protótipo de Alta Fidelidade no Figma (Baseado no Roll20/Foundry)
+- [ ] Validar Fluxo de UX para Criação de Mundos
+- [ ] Instalar e configurar Prisma
 
 ---
 
@@ -65,5 +67,7 @@ Continue o desenvolvimento a partir do estado atual, seguindo:
 Projeto em fase inicial de backend.
 
 Próximo passo crítico:
+
+→ finalizar banco e prototipo do figma
 
 → iniciar banco de dados e modelagem
