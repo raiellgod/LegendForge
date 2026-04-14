@@ -1,5 +1,11 @@
 # 🎲 LegendForge
 
+![Status](https://img.shields.io/badge/status-in%20development-yellow)
+![Backend](https://img.shields.io/badge/backend-fastify-blue)
+![Frontend](https://img.shields.io/badge/frontend-react-purple)
+![Database](https://img.shields.io/badge/database-postgresql-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 > A modern Virtual Tabletop (VTT) for tabletop RPGs  
 > Built with a focus on modular architecture, incremental development, and real-world backend engineering.
 
