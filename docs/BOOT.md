@@ -15,10 +15,10 @@ Virtual Tabletop (VTT)
 - Node.js  
 - Fastify  
 - TypeScript  
-- Prisma  
+- Prisma (em preparação)  
 - PostgreSQL  
 
-### Frontend (future)
+### Frontend (em progresso)
 - React  
 - Vite  
 - Tailwind  
@@ -27,47 +27,68 @@ Virtual Tabletop (VTT)
 
 ## 📊 Current State
 
-- ✅ Setup inicial concluído  
-- ✅ Backend configurado  
-- ⚠️ Banco de dados ainda não iniciado  
+- ✅ Backend base funcional  
+- ✅ Estrutura do projeto definida  
+- ✅ Modelagem do banco praticamente finalizada  
+- ✅ Protótipo Figma avançado  
+- ⚠️ Prisma ainda não integrado  
+- ⚠️ API ainda não conectada ao banco  
 
 ---
 
-## 🎯 Next Tasks
+## 🎯 Next Tasks (ATUALIZADO)
 
-- [ ] Definir modelos iniciais (User, Campaign, Participant) no dbdiagram.io
-- [ ] Finalizar Modelagem Completa do Banco (Tabelas de Chat, Dados, Fichas)
-- [ ] Criar Protótipo de Alta Fidelidade no Figma (Baseado no Roll20/Foundry)
-- [ ] Validar Fluxo de UX para Criação de Mundos
-- [ ] Instalar e configurar Prisma
+### 🔥 PRIORIDADE ALTA
+
+- [ ] Implementar Prisma no projeto
+- [ ] Criar schema.prisma baseado no banco atual
+- [ ] Rodar primeira migration
+- [ ] Criar módulo de Users (primeira feature real)
+
+---
+
+### 🧩 BACKEND
+
+- [ ] Criar endpoints:
+  - POST /users
+  - POST /sessions
+  - GET /campaigns
+- [ ] Estruturar services
+
+---
+
+### 🎨 FRONTEND
+
+- [ ] Finalizar tela:
+  - Criar Partida
+  - Procurar Partida
+- [ ] Iniciar tela:
+  - Mesa de jogo
 
 ---
 
 ## 📄 Project Docs
 
-- `ARCHITECTURE.md` → visão e decisões  
-- `DEV_STATE.md` → estado atual detalhado  
+- `ARCHITECTURE.md` → visão geral  
+- `DEV_STATE.md` → estado real  
 - `FEATURE_CAPSULE.md` → progresso incremental  
-- `DEVELOPER_CONFIG-UTILIZE.txt` → comandos e setup  
+
+---
+
+## ⚡ Quick Context
+
+Projeto NÃO está mais no início.
+
+Estamos na transição crítica:
+
+👉 Design → Implementação real
 
 ---
 
 ## 🧠 Instruction
 
-Continue o desenvolvimento a partir do estado atual, seguindo:
+Agora o foco muda:
 
-- desenvolvimento incremental  
-- pequenas features funcionais  
-- validação a cada etapa  
-
----
-
-## ⚡ Quick Context (para novos chats)
-
-Projeto em fase inicial de backend.
-
-Próximo passo crítico:
-
-→ finalizar banco e prototipo do figma
-
-→ iniciar banco de dados e modelagem
+- menos planejamento  
+- mais execução  
+- features reais conectadas  

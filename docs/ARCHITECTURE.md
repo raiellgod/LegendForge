@@ -210,6 +210,46 @@ Ele define:
 
 ---
 
+---
+
+## 🔄 Current Phase
+
+O projeto evoluiu da fase de planejamento para execução.
+
+### Situação atual:
+
+- Banco modelado
+- UI definida no Figma
+- Backend base pronto
+
+### Nova prioridade:
+
+Transformar:
+
+👉 design → código real  
+👉 estrutura → funcionalidades  
+
+---
+
+## ⚠️ Direção Atual
+
+Antes:
+- Planejamento
+- Estrutura
+
+Agora:
+- Implementação
+- Integração
+- Testes reais
+
+---
+
+## 🧠 Regra importante
+
+Se algo não está sendo usado no código:
+
+→ não precisa existir ainda
+
 ## 📄 Referências
 
 Para estado atual:

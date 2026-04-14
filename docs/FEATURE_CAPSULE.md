@@ -159,14 +159,59 @@ Definir toda a estrutura de dados e a interface visual antes da implementação 
 
 ---
 
-# capsule 4
+# ⚡ Capsule 04 — Database Design
 
-## Telas
-![banco de dados](./imagens/banco_de_dados.png)
+## 🎯 Goal
 
+Criar estrutura completa do banco de dados.
 
-![telas figma](./images/figma.png)
+## ✅ Result
 
-começamos telas e banco de dados
+- Estrutura completa definida
+- Suporte a:
+  - personagens
+  - classes
+  - itens
+  - campanhas
 
-# capsule 5
+## 🔜 Next
+
+- Implementar no Prisma
+
+---
+
+# ⚡ Capsule 05 — Figma UI
+
+## 🎯 Goal
+
+Criar interface visual do sistema
+
+## ✅ Result
+
+- Tela de criação de partida pronta
+- Tela de busca iniciada
+- Tela da mesa iniciada
+
+## 🔜 Next
+
+- Conectar com backend
+
+---
+
+# ⚡ Capsule 06 — System Design (RPG)
+
+## 🎯 Goal
+
+Criar sistema próprio de RPG
+
+## ✅ Result
+
+- Classes definidas
+- Subclasses definidas
+- Progressão 1–20
+- Talentos criados
+
+## 🔜 Next
+
+- Integrar ao banco
+- Criar lógica de cálculo

@@ -58,13 +58,26 @@ LegendForge/
 
 ## 🗄️ Database
 
-- ❌ Ainda não configurado
+- ✅ Modelagem praticamente finalizada
+- ✅ Tabelas principais definidas:
+  - users
+  - campaigns
+  - characters
+  - items
+  - abilities
+- ⚠️ Ainda não implementado com Prisma
 
 ---
 
 ## 🧩 Database Models
 
-- ❌ Nenhum modelo definido
+- ✔️ Estrutura completa pensada
+- ✔️ Suporte a:
+  - múltiplos sistemas
+  - classes e subclasses
+  - inventário
+  - habilidades
+- ⚠️ Falta tradução para Prisma schema
 
 ---
 
@@ -73,6 +86,25 @@ LegendForge/
 - ❌ Nenhum endpoint definido
 
 ---
+
+## 🎨 Frontend / Figma
+
+- ✅ Tela de criação de partida pronta
+- 🟡 Tela de buscar partidas em andamento
+- 🟡 Tela inicial da mesa iniciada
+
+---
+
+## 🧠 Sistema RPG
+
+- ✅ Classes definidas
+- ✅ Subclasses definidas
+- ✅ Sistema de progressão criado
+- ✅ Talentos implementados
+- 🟡 Balanceamento em evolução
+
+---
+
 
 ## ✅ Implemented Features
 
@@ -84,28 +116,30 @@ LegendForge/
 
 ## 🎯 Current Focus
 
-Iniciar camada de dados e estrutura do sistema:
+TRANSIÇÃO PARA IMPLEMENTAÇÃO:
 
-- Design de arquitetura de dados e interface (UI/UX):
-- Modelagem visual no dbdiagram.io
-- Prototipagem no Figma
+### Backend
+- Prisma
+- Models reais
+- Primeiros endpoints
 
-## Telas
-![banco de dados](./imagens/banco_de_dados.png)
+### Frontend
+- Fluxo jogável mínimo
 
-
-![telas figma](./images/figma.png)
+---
 
 ## 🚀 Next Steps
 
-- [ ] continuar diagrama de entidades e relacionamentos (ERD)
-- [ ] continuar protótipo das telas de Dashboard e Mesa Virtual
-- [ ] (Pausado) Integração Prisma (Aguardando definição do design)
+- [ ] Prisma setup
+- [ ] Primeira migration
+- [ ] CRUD de usuário
+- [ ] Login funcional
+- [ ] Criar campanha via API
 
 ---
 
 ## 🧠 Architecture Notes
 
-- Revisar possíveis erros no `tsconfig.json`
-- Manter desenvolvimento incremental
-- Evitar complexidade prematura
+- Sistema está ficando grande → manter modularização
+- Evitar overengineering
+- Focar no MVP jogável

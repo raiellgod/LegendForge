@@ -26,7 +26,7 @@ Inspired by tools like Roll20 and Foundry Virtual Tabletop, but with a different
 - Dice rolling  
 - Campaign management  
 - Character sheets  
-- Maps *(future)*  
+- Maps *(in progress)*  
 
 ---
 
@@ -53,67 +53,94 @@ Inspired by tools like Roll20 and Foundry Virtual Tabletop, but with a different
 - Node.js  
 - Fastify  
 - TypeScript  
-- Prisma *(in progress)*  
-- PostgreSQL *(planned)*  
+- Prisma *(ready to integrate)*  
+- PostgreSQL *(modeled)*  
 - pnpm  
 
 ---
 
-### 🎨 Frontend *(future)*
+### 🎨 Frontend *(in progress)*
 
 - React  
 - Vite  
 - Tailwind  
+- Figma (UI/UX Design)
 
 ---
 
 ## 🧱 Project Structure
 
-```
 LegendForge/
 ├── src/
-│   └── index.ts
+│ └── index.ts
 │
 ├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── DEV_STATE.md
-│   ├── BOOT.md
-│   ├── FEATURE_CAPSULE.md
-│   └── DEVELOPER_CONFIG-UTILIZE.txt
+│ ├── ARCHITECTURE.md
+│ ├── DEV_STATE.md
+│ ├── BOOT.md
+│ ├── FEATURE_CAPSULE.md
+│ └── DEVELOPER_CONFIG-UTILIZE.txt
 │
 ├── dist/
 ├── package.json
 ├── tsconfig.json
-```
+
 
 ---
 
 ## 📊 Current Status
 
-> 🟢 Initial backend setup completed
+> 🟡 Transition phase: Design → Implementation
 
-### ✅ Done
+### ✅ Completed
 
 - TypeScript environment  
 - ESLint + Prettier  
 - Fastify API initialized  
-- Zod integration  
-- Swagger documentation setup  
+- Zod validation setup  
+- Swagger documentation  
+- Database fully modeled (ERD)  
+- RPG system designed (classes, races, progression)  
+- Figma prototype (core flows)
 
 ---
 
 ### 🚧 In Progress
 
-- Database modeling  
-- Prisma setup  
+- Prisma integration  
+- API endpoints  
+- Frontend screens:
+  - Create Campaign  
+  - Browse Campaigns  
+  - Game Table (initial)
 
 ---
 
 ### 🔜 Next Steps
 
-- Define core entities (User, Campaign, etc.)  
-- Implement database schema  
-- Build authentication system  
+- Implement Prisma schema  
+- Run first migration  
+- Create User system (auth)  
+- Connect frontend to backend  
+- Enable campaign creation flow  
+
+---
+
+## 🎨 UI / UX (Figma)
+
+The interface is being designed before implementation to ensure better usability.
+
+### Screens:
+
+- ✅ Create Campaign  
+- 🟡 Browse Campaigns  
+- 🟡 Game Table  
+
+Focus:
+
+- Simple UX  
+- Fast session creation  
+- Real gameplay usability  
 
 ---
 
@@ -136,9 +163,12 @@ Development is organized into small, functional steps:
 
 - Capsule 01 — Setup  
 - Capsule 02 — Backend Base  
-- Capsule 03 — Database *(next)*  
+- Capsule 03 — Data & UI Design  
+- Capsule 04 — Database Design  
+- Capsule 05 — Figma UI  
+- Capsule 06 — RPG System Design  
 
-👉 Full details:  
+Full details:  
 `docs/FEATURE_CAPSULE.md`
 
 ---
@@ -161,40 +191,28 @@ Development is organized into small, functional steps:
 ```bash
 git clone https://github.com/raiellgod/LegendForge.git
 cd LegendForge
-```
-
----
-
-### 2. Install dependencies
-
-```bash
 pnpm install
-```
-
----
-
-### 3. Run the project
-
-```bash
 pnpm dev
-```
 
 ---
 
-## 🧭 Roadmap
+## Roadmap
 
-- [x] Setup environment  
-- [x] Backend base  
-- [ ] Database  
-- [ ] Authentication  
-- [ ] Campaign system  
-- [ ] Dice roller  
-- [ ] Chat  
-- [ ] Character sheets  
+ [x] Setup environment
+ [x] Backend base
+ [x] Database modeling
+ [] UI/UX prototyping
+ [] Prisma integration
+ [] Authentication system
+ [] Campaign system
+ [] Dice roller
+ [] Chat
+ [] Character sheets
+ [] Game table (real-time)
 
----
+ ---
 
-## 🤝 Contributing
+ ##Contributing
 
 This project is currently developed as a personal learning project.
 
@@ -202,29 +220,45 @@ Contributions, ideas, and discussions are welcome.
 
 ---
 
-## 📄 License
+## Why This Project Matters
+
+LegendForge is not just a VTT.
+
+It demonstrates:
+
+Real backend architecture
+Database design skills
+Product thinking
+Full-stack capability
+System design for games
+
+---
+
+## License
 
 MIT License
 
 ---
 
-## 👨‍💻 Author
+## Author
 
-Developed by **Raiel Godinho**
+Developed by Raiel Godinho
 
 https://github.com/raiellgod
 
 ---
 
-## 🔮 Vision
+## Vision
 
 LegendForge aims to become:
 
-- a fully functional VTT  
-- a strong backend portfolio project  
-- a playground for experimentation and learning  
+A complete Virtual Tabletop
+A strong backend portfolio project
+A sandbox for RPG system creation
 
 ---
 
-> Built step by step.  
-> Built to last.
+Built step by step.
+Built to scale.
+Built like a real product.
+
