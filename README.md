@@ -190,18 +190,6 @@ Full details:
 
 ---
 
-## 🚀 Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/raiellgod/LegendForge.git
-cd LegendForge
-pnpm install
-pnpm dev
-
----
-
 ## Roadmap
 
  [x] Setup environment
@@ -218,7 +206,7 @@ pnpm dev
 
  ---
 
- ##Contributing
+ ## Contributing
 
 This project is currently developed as a personal learning project.
 
@@ -268,3 +256,15 @@ Built step by step.
 Built to scale.
 Built like a real product.
 
+---
+
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/raiellgod/LegendForge.git
+cd LegendForge
+pnpm install
+pnpm dev
