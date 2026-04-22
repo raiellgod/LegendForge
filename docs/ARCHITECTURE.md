@@ -6,86 +6,108 @@
 
 **LegendForge** é um Virtual Tabletop (VTT) moderno para RPG de mesa.
 
-Inspirado em plataformas como Roll20 e Foundry Virtual Tabletop, mas com uma abordagem diferente:
+Inspirado em plataformas como Roll20 e Foundry VTT, mas com foco em:
 
 - 🧩 Sistema agnóstico (multi-RPG)  
-- 🎲 Campanhas altamente customizáveis  
-- 👥 Foco em gameplay real entre jogadores  
+- 🎲 Campanhas customizáveis  
+- 👥 Experiência real de jogo entre usuários  
 
-Além disso, o projeto é construído como:
+Além disso, o projeto é:
 
-- 💼 Portfólio técnico de alto nível  
+- 💼 Portfólio técnico avançado  
 - 🧠 Plataforma de aprendizado contínuo  
-- ⚙️ Sistema real com preocupação de produção  
+- ⚙️ Sistema real com mentalidade de produção  
 
 ---
 
 ## 🎯 Main Goals
 
-### 1 — VTT Funcional
+### 1 — Base funcional de VTT
 
-- 💬 Chat em tempo real  
-- 🎲 Sistema de rolagem de dados  
-- 🗺️ Gerenciamento de campanhas  
-- 📄 Fichas de personagem dinâmicas  
-- 🧭 Mapas interativos *(em evolução)*  
+- 🔐 Sistema de autenticação (✔ funcionando)  
+- 🧑‍🤝‍🧑 Gestão de usuários  
+- 🗺️ Base para campanhas *(em desenvolvimento)*  
+- 📄 Base para personagens *(em desenvolvimento)*  
 
 ---
 
-### 2 — Backend de Nível Profissional
+### 2 — Backend profissional
 
-- 🏗️ Arquitetura modular e escalável  
-- 🔒 Integridade forte de dados (DB-first mindset)  
+- 🏗️ Arquitetura escalável  
+- 🔒 Integridade de dados forte  
 - 📐 Separação clara de responsabilidades  
-- ⚡ Preparado para crescimento real  
+- ⚡ Estrutura pronta para crescimento  
 
 ---
 
-### 3 — Evolução Técnica
+### 3 — Evolução técnica
 
-- 📚 Domínio de backend moderno  
-- 🧠 Modelagem avançada de banco de dados  
-- ⚙️ Construção de sistemas complexos  
-- 🧩 Integração entre camadas (DB + API + UI)  
+- 📚 Backend moderno (Fastify + Prisma)  
+- 🧠 Modelagem de banco robusta  
+- ⚙️ Integração entre camadas  
+- 🧩 Construção incremental de sistema complexo  
 
 ---
 
 ## 💡 Development Philosophy
 
-O projeto segue **desenvolvimento incremental com mentalidade de produção**.
+> Desenvolvimento incremental com mentalidade de produção
 
 ### Princípios
 
-- ✔️ Pequenos passos, sempre funcionais  
-- ✔️ Refatorar faz parte do processo  
+- ✔️ Pequenos passos funcionais  
+- ✔️ Refatoração contínua  
 - ✔️ Backend como fonte da verdade  
-- ✔️ Evitar complexidade prematura, mas não ignorar escala  
-- ✔️ Código serve ao domínio, não o contrário  
-
-> 🎯 Consistência > velocidade
+- ✔️ Simplicidade primeiro, escala depois  
+- ✔️ Código serve ao domínio  
 
 ---
 
-## 📦 Repository Strategy
+## 📦 Repository Structure
 
-### Estrutura atual
-
+```txt
 LegendForge/
-├── backend/
-├── frontend/
+├── prisma/
+├── src/
 ├── docs/
+├── docker-compose.yml
+```
 
+---
 
-### Decisões
+### 🔹 Detalhamento
 
-- 🔹 Separação clara entre backend e frontend  
-- 🔹 Backend desenvolvido primeiro (core do sistema)  
-- 🔹 Documentação como parte do produto  
+#### prisma/
 
-### Futuro
+- `schema.prisma` → definição do banco  
+- Prisma controla a estrutura real do banco  
 
-- 🔄 Possível monorepo (pnpm workspaces)  
-- 🔄 Shared types entre backend e frontend  
+---
+
+#### src/
+
+```txt
+src/
+├── generated/
+│   └── prisma/ → Prisma Client gerado
+│
+├── lib/
+│   └── auth.ts → configuração do Better Auth
+│
+├── routes/
+│   └── (rotas HTTP)
+│
+├── index.ts → entrypoint do servidor
+```
+
+---
+
+#### docs/
+
+- Documentação do sistema  
+- Arquitetura  
+- Banco de dados  
+- Estado do projeto  
 
 ---
 
@@ -96,60 +118,37 @@ LegendForge/
 - Node.js  
 - Fastify  
 - TypeScript  
-- Prisma (ORM)  
-- PostgreSQL (fonte de verdade)  
+- Prisma ORM  
+- PostgreSQL  
+- Better Auth  
+- Zod  
 - pnpm  
 
 ---
 
-### 🎨 Frontend (em progresso)
+### 🎨 Frontend (futuro)
 
 - React  
 - Vite  
 - Tailwind  
 - TypeScript  
-- Figma → UI já estruturada até fluxo de criação de partida  
+- Figma  
 
 ---
 
 ## 🏗️ Backend Architecture
 
-### Estrutura base
-
-src/
-├── modules/
-│ ├── user/
-│ ├── campaign/
-│ ├── character/
-│ ├── system/
-│
-├── db/
-│ ├── prisma.ts
-│ └── migrations/
-│
-├── plugins/
-├── utils/
-└── server.ts
-
+### 🔹 Camadas do sistema
 
 ---
-
-## 🧠 Camadas do Sistema
 
 ### 1. Banco de Dados (PostgreSQL)
 
 Responsável por:
 
-- Integridade de dados  
-- Constraints críticas  
-- Regras de negócio essenciais  
-- Performance  
-
-> Exemplo:
-> - Limite de atributos (1–30)
-> - Nível máximo (1–20)
-> - Integridade de subclasses
-> - Ownership de features
+- Persistência  
+- Integridade  
+- Relacionamentos  
 
 ---
 
@@ -158,160 +157,210 @@ Responsável por:
 Responsável por:
 
 - Tipagem forte  
-- Produtividade  
-- Relacionamentos  
 - Queries seguras  
-
-> ⚠️ Prisma NÃO substitui regras críticas do banco
+- Mapeamento do banco  
 
 ---
 
-### 3. Backend (Fastify)
+### 3. Autenticação (Better Auth)
 
 Responsável por:
 
-- Regras de negócio  
-- Validação (Zod)  
+- Registro  
+- Login  
+- Sessões  
+- Tokens  
+
+### ⚠️ Decisão crítica
+
+> Better Auth é o **núcleo de identidade do sistema**
+
+Isso significa:
+
+- tabelas oficiais:
+  - `user`
+  - `session`
+  - `account`
+  - `verification`
+- NÃO recriamos sistema de auth
+- TODO o sistema usa `user.id` como base
+
+---
+
+### 4. Backend (Fastify)
+
+Responsável por:
+
+- Rotas HTTP  
 - Orquestração  
-- Segurança  
+- Integração com Auth  
+- Validação com Zod  
 
 ---
 
-### 4. Frontend
+## 🔐 Sistema de Autenticação
 
-Responsável por:
+### ✔️ Implementado
 
-- Experiência do usuário  
-- Interação  
-- Consumo da API  
-
----
-
-## 🧩 Modelagem do Domínio
-
-O sistema foi projetado para suportar:
-
-- 🎭 Multiclasse real (ex: Guerreiro 3 / Mago 2)  
-- 🧬 Sistema de atributos dinâmico  
-- 🎲 Sistemas diferentes (D&D, custom, etc)  
-- ⚔️ Itens instanciáveis por personagem  
-- 📜 Logs de campanha escaláveis  
+- Better Auth  
+- Prisma Adapter  
+- Sessões persistentes  
+- Integração com banco  
 
 ---
 
-## ⚙️ Decisões Arquiteturais Críticas
+### 🔄 Fluxo
 
-### 🔹 Features unificadas
-
-Uma única tabela para:
-
-- Raças  
-- Classes  
-- Subclasses  
-
-✔ Simplifica queries  
-⚠ Exige validação forte no banco  
+1. Usuário se registra  
+2. Usuário é salvo na tabela `user`  
+3. Sessão é criada (`session`)  
+4. Token é retornado  
+5. Backend usa o usuário autenticado  
 
 ---
 
-### 🔹 Inventário por instância
+## 🧩 Modelagem Atual
 
-- `items` → modelo global  
-- `character_inventory` → instância  
+### ✔️ Núcleo implementado
 
-✔ Permite customização sem quebrar o sistema  
+- User (Better Auth)  
+- Session  
+- Account  
+- Verification  
 
 ---
 
-### 🔹 Banco como autoridade
+### 🟡 Domínio RPG (parcial)
 
-Regras críticas estão no banco:
+- GameSystem  
+- Stats  
+- Skills  
 
-- CHECK constraints  
-- Triggers  
-- Integridade relacional  
+---
+
+### 🔜 Domínio planejado
+
+- Campaign  
+- Character  
+- Classes / Subclasses  
+- Inventory  
+- Logs  
+
+---
+
+## ⚙️ Decisões Arquiteturais
+
+---
+
+### 🔹 DB-first mindset
+
+> Banco é a fonte de verdade
+
+---
+
+### 🔹 Auth como módulo externo confiável
+
+- Better Auth controla identidade  
+- Backend consome  
+- Sistema não reimplementa segurança  
+
+---
+
+### 🔹 Prisma como camada oficial
+
+- acesso ao banco  
+- tipagem  
+- segurança  
+
+---
+
+### 🔹 Separação de responsabilidades
+
+| Camada     | Responsabilidade |
+|------------|------------------|
+| DB         | dados |
+| Prisma     | acesso |
+| Auth       | identidade |
+| Backend    | lógica |
+| Frontend   | UX |
 
 ---
 
 ## 🧩 Development Strategy
 
-Uso de **Feature Capsules**:
+> Feature-driven incremental development
 
-Cada feature é:
+Cada passo:
 
-- pequena  
-- isolada  
+- pequeno  
 - testável  
-- incremental  
+- funcional  
 
 ---
 
-## 🗺️ Roadmap Atualizado
+## 🗺️ Roadmap Atual
+
+---
 
 ### ✔ Concluído
 
 - Setup backend  
-- Modelagem do banco (nível produção)  
-- Estrutura base do projeto  
-- UI no Figma (até criação de partida)  
+- Prisma configurado  
+- Banco sincronizado  
+- Better Auth funcionando  
+- Integração com Fastify  
 
 ---
 
 ### 🚧 Em andamento
 
-- Integração Prisma  
-- Migrations reais  
-- Ajustes de constraints e triggers  
+- Expansão do domínio RPG  
+- Organização das rotas  
+- Estruturação do backend  
 
 ---
 
 ### 🔜 Próximos passos
 
-- Sistema de autenticação  
 - CRUD de campanhas  
-- Criação de personagens  
-- Sistema de inventário  
-- Logs em tempo real  
+- Sistema de personagens  
+- Inventário  
+- Permissões (GM / Player)  
+- Logs de campanha  
 
 ---
 
 ## ⚠️ Pontos de Atenção
 
-### 📊 Escalabilidade
+---
 
-- Logs crescerão rapidamente  
-- Futuro: partitioning / otimização  
+### 📊 Estrutura ainda inicial
+
+- rotas ainda simples  
+- sem camada de service completa  
 
 ---
 
-### 🧠 Versionamento
+### 🧠 Crescimento do domínio
 
-Ainda básico.
-
-Futuro:
-- versionamento real de sistema (RPG rules)
-
----
-
-### ⚙️ Regras complexas
-
-Algumas regras exigem:
-
-- triggers no banco  
-- validação no backend  
+- regras complexas ainda não implementadas  
+- triggers e constraints ainda pendentes  
 
 ---
 
 ## 🔄 Current Phase
 
-O projeto está em **transição de arquitetura para implementação real**.
+> **CORE AUTH + DATABASE STABLE — DOMAIN EXPANSION PHASE**
+
+---
 
 ### Estado atual
 
-- Banco: quase 100% (nível produção)  
-- Prisma: em implementação  
-- Figma: fluxo principal definido  
-- Backend: base pronta  
+- Auth: ✔ funcionando  
+- Banco: ✔ integrado  
+- Prisma: ✔ operacional  
+- Backend: ✔ ativo  
+- Domínio RPG: 🚧 em expansão  
 
 ---
 
@@ -319,34 +368,36 @@ O projeto está em **transição de arquitetura para implementação real**.
 
 Foco em:
 
-- transformar modelagem → código  
-- integrar backend + banco  
-- validar regras reais  
+- expandir domínio do sistema  
+- estruturar backend  
+- implementar primeiras features reais  
 
 ---
 
 ## 🧠 Regra Fundamental
 
-> Se uma regra pode quebrar o sistema  
-> → ela deve existir no banco
+> Se uma regra é crítica  
+> → ela deve existir no banco ou no backend  
 
 ---
 
 ## 📄 Referências
 
-- `DEV_STATE.md` → estado atual  
-- `BOOT.md` → entrada rápida  
-- `DATABASE.md` *(futuro recomendado)* → detalhamento do banco  
+- DATABASE_SETUP.md  
+- DEV_STATE.md  
+- FEATURE_CAPSULE.md  
 
 ---
 
 ## 🏆 Estado da Arquitetura
 
-✔ Modular  
-✔ Escalável  
-✔ Consistente  
-✔ Preparada para produção  
+✔ Funcional  
+✔ Base sólida  
+✔ Auth resolvido  
+✔ Pronta para escalar  
 
 ---
 
-**Status: IMPLEMENTATION PHASE (PRODUCTION-READY FOUNDATION)**
+## 🚀 Status
+
+**CORE BACKEND READY — DOMAIN EXPANSION STARTED**

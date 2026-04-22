@@ -4,37 +4,36 @@
 
 ## 📅 Last Update
 
-15/04/2026
+22/04/2026
 
 ---
 
 ## 🧱 Project Structure
 
+```txt
 LegendForge/
-├── backend/
-│ ├── src/
-│ │ ├── modules/
-│ │ ├── db/
-│ │ ├── plugins/
-│ │ └── server.ts
-│ │
-│ ├── prisma/
-│ │ ├── schema.prisma
-│ │ └── migrations/
-│ │
-│ └── package.json
+├── src/
+│   ├── generated/prisma/
+│   ├── lib/
+│   │   └── auth.ts
+│   ├── routes/
+│   └── index.ts
 │
-├── frontend/
-│ ├── src/
-│ └── package.json
+├── prisma/
+│   └── schema.prisma
 │
 ├── docs/
-│ ├── DEV_STATE.md
-│ ├── ARCHITECTURE.md
-│ ├── BOOT.md
-│ ├── FEATURE_CAPSULE.md
-│ └── DEVELOPER_CONFIG-UTILIZE.txt
-
+│   ├── DEV_STATE.md
+│   ├── ARCHITECTURE.md
+│   ├── BOOT.md
+│   ├── DATABASE_SETUP.md
+│   ├── FEATURE_CAPSULE.md
+│   └── DEVELOPER_CONFIG-UTILIZE.txt
+│
+├── package.json
+├── docker-compose.yml
+└── tsconfig.json
+```
 
 ---
 
@@ -51,7 +50,20 @@ LegendForge/
 ### 🗄️ Database
 
 - PostgreSQL  
-- Prisma *(em implementação)*  
+- Prisma ✅ (integrado)  
+
+---
+
+### 🔐 Auth
+
+- Better Auth  
+
+---
+
+### 📄 API Docs
+
+- Swagger  
+- Scalar API Reference  
 
 ---
 
@@ -66,59 +78,72 @@ LegendForge/
 
 ### ✅ Modelagem
 
-- ✔️ Estrutura final definida (nível produção — 11/10)  
-- ✔️ Normalização correta  
-- ✔️ Suporte a múltiplos sistemas RPG  
-- ✔️ Multiclasse funcional  
-- ✔️ Inventário baseado em instância  
-- ✔️ Sistema de features unificado  
+- ✔️ Schema Prisma funcional  
+- ✔️ Integração com PostgreSQL  
+- ✔️ Suporte inicial ao domínio RPG (GameSystem, Stat, Skill)  
+- ✔️ Estrutura compatível com Better Auth  
+- ✔️ Base preparada para expansão  
 
 ---
 
 ### ⚠️ Pontos Críticos já considerados
 
-- ✔️ Limite de atributos (1–30)  
-- ✔️ Limite de nível (1–20)  
-- ✔️ Integridade de subclasses (via trigger)  
-- ✔️ Ownership de features (CHECK constraint)  
-- ✔️ Base preparada para escala  
+- ✔️ Usuário com autenticação completa  
+- ✔️ Sessions persistidas  
+- ✔️ Accounts vinculadas  
+- ✔️ Estrutura pronta para múltiplos sistemas  
+- ✔️ Relacionamentos básicos consolidados  
 
 ---
 
 ### 🚧 Em andamento
 
-- [ ] Tradução completa para `schema.prisma`  
-- [ ] Criação de migrations reais  
-- [ ] Implementação de constraints no PostgreSQL  
+- [ ] Expansão do domínio RPG completo  
+- [ ] Implementação de constraints avançadas no banco  
+- [ ] Tradução completa do dbdiagram → Prisma  
+- [ ] Triggers e regras SQL críticas  
 
 ---
 
 ## 🧩 Database Capabilities
 
-O banco já suporta:
+O banco atualmente suporta:
 
-- 🎭 Multiclasse complexa  
-- 🧬 Sistemas de RPG diferentes  
-- ⚔️ Itens customizados por personagem  
-- 📜 Logs de campanha escaláveis  
-- 🧠 Expansão futura (IA, sistemas novos)  
+- 👤 Sistema de usuários com auth completo  
+- 🔐 Sessões persistidas  
+- 🔗 Contas vinculadas  
+- 🎲 Estrutura inicial para sistemas de RPG  
+- 🧠 Expansão futura segura  
 
 ---
 
 ## 🌐 API (STATUS)
 
-### ❌ Ainda não implementado
+### ✅ Implementado
 
-Nenhum endpoint conectado ao banco ainda.
+- ✔️ Fastify configurado  
+- ✔️ Integração com Better Auth  
+- ✔️ Endpoint `/api/auth/*` funcionando  
+- ✔️ Registro de usuário funcional  
+- ✔️ Login funcional  
+- ✔️ Documentação via Swagger + Scalar  
 
 ---
 
-### 🎯 Primeiros endpoints planejados
+### 🚧 Em evolução
 
-- POST `/users`  
-- POST `/sessions`  
-- GET `/campaigns`  
-- POST `/campaigns`  
+- [ ] Rotas de domínio (GameSystem, Stat, Skill)  
+- [ ] Integração completa com Prisma nos módulos  
+- [ ] Camada de services  
+
+---
+
+### 🎯 Próximos endpoints
+
+- POST `/systems`  
+- GET `/systems`  
+- POST `/stats`  
+- GET `/stats`  
 
 ---
 
@@ -132,8 +157,8 @@ Nenhum endpoint conectado ao banco ainda.
 
 ### 🟡 Em progresso
 
-- Buscar campanhas  
-- Tela inicial da mesa  
+- Integração com backend  
+- Estrutura base React  
 
 ---
 
@@ -145,56 +170,59 @@ Nenhum endpoint conectado ao banco ainda.
 
 ## 🧠 Sistema RPG
 
-### ✅ Definido
+### 🟡 Parcialmente implementado
 
-- Classes  
-- Subclasses  
-- Progressão (1–20)  
-- Talentos (feats)  
-- Estrutura de atributos  
+- ✔️ GameSystem  
+- ✔️ Stat  
+- ✔️ Skill  
 
 ---
 
-### 🟡 Em evolução
+### 🚧 Em evolução
 
-- Balanceamento  
-- Ajustes finos de progressão  
+- Classes  
+- Subclasses  
+- Features  
+- Characters  
+- Campaigns  
 
 ---
 
 ## ✅ Implemented Features
 
 - ⚡ Fastify configurado  
-- 🧱 Base do backend pronta  
-- 🧪 Ambiente de desenvolvimento funcional  
-- 🧠 Modelagem de domínio consolidada  
+- 🔐 Better Auth integrado  
+- 🗄️ Prisma conectado ao banco  
+- 📄 Swagger + Scalar funcionando  
+- 🧪 Endpoint de auth testado e validado  
+- 🧠 Base de domínio iniciada  
 
 ---
 
 ## 🎯 Current Focus
 
-### 🔥 FASE ATUAL: INTEGRAÇÃO REAL
+### 🔥 FASE ATUAL: EXPANSÃO CONTROLADA
 
-O projeto saiu do planejamento.
+O sistema já está funcional.
 
-Agora está em:
+Agora o foco é:
 
-👉 **conectar banco + backend + regras reais**
+👉 **expandir o domínio sem quebrar auth nem banco**
 
 ---
 
 ### Backend
 
-- Prisma  
-- Migrations  
-- Primeiros módulos reais  
+- Expansão do schema Prisma  
+- Novos models do domínio RPG  
+- Primeiras rotas reais  
 
 ---
 
 ### Frontend
 
-- Fluxo mínimo jogável  
-- Integração com API  
+- Integração inicial com API  
+- Setup base  
 
 ---
 
@@ -202,26 +230,26 @@ Agora está em:
 
 ### 🔴 Crítico
 
-- [ ] Criar `schema.prisma`
-- [ ] Rodar primeira migration
-- [ ] Validar constraints no banco
+- [ ] Consolidar `schema.prisma` com domínio RPG  
+- [ ] Implementar `GameSystem`, `Stat`, `Skill` via API  
+- [ ] Garantir integridade dos relacionamentos  
 
 ---
 
 ### 🟠 Backend
 
-- [ ] Criar módulo de users
-- [ ] Implementar autenticação
-- [ ] Criar services
-- [ ] Integrar Zod
+- [ ] Criar módulo de systems  
+- [ ] Criar módulo de stats  
+- [ ] Criar services  
+- [ ] Integrar Zod nas rotas  
 
 ---
 
 ### 🟡 Produto
 
-- [ ] Criar campanha via API
-- [ ] Criar personagem
-- [ ] Persistir dados reais
+- [ ] Criar sistema via API  
+- [ ] Criar atributos e skills  
+- [ ] Persistir dados reais do domínio  
 
 ---
 
@@ -229,15 +257,15 @@ Agora está em:
 
 ### 📊 Escalabilidade
 
-- `campaign_logs` crescerá rapidamente  
-- Futuro: partitioning  
+- Estrutura já preparada para crescimento  
+- Logs e campanhas ainda não implementados  
 
 ---
 
 ### 🧠 Versionamento
 
 - Ainda básico  
-- Futuro: versionamento real de sistemas RPG  
+- Futuro: versionamento de sistemas RPG  
 
 ---
 
@@ -252,22 +280,23 @@ Algumas regras NÃO podem depender só do backend:
 
 ## 🧠 Architecture Notes
 
-- Sistema já saiu do nível inicial  
-- Complexidade controlada, mas crescente  
-- Banco é o núcleo do sistema  
+- Projeto saiu da fase teórica  
+- Sistema já funcional (auth + API)  
+- Complexidade começando a crescer  
+- Banco continua sendo o núcleo  
 
 ---
 
 ## 🏁 Estado Atual
 
-👉 **PRONTO PARA IMPLEMENTAÇÃO REAL**
+👉 **SISTEMA FUNCIONAL + BASE ESTÁVEL**
 
-- Arquitetura sólida  
-- Banco robusto  
-- UI definida  
+- Auth funcionando  
+- Banco integrado  
+- API documentada  
 
-Falta:
+Agora:
 
-👉 transformar tudo em código funcional
+👉 expandir domínio com segurança  
 
 ---

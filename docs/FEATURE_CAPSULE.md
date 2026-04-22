@@ -144,7 +144,6 @@ Essa cápsula passou por múltiplas refatorações até atingir nível produçã
 
 ### 🧩 Domínio
 
-- usuários  
 - campanhas  
 - personagens  
 - classes e subclasses  
@@ -162,8 +161,8 @@ Essa cápsula passou por múltiplas refatorações até atingir nível produçã
 ## 🧠 Decisões Importantes
 
 - features centralizadas em uma tabela  
-- regras críticas no banco (não só no backend)  
-- separação entre modelo e instância (items vs inventory)  
+- regras críticas no banco  
+- separação entre modelo e instância  
 
 ---
 
@@ -171,17 +170,9 @@ Essa cápsula passou por múltiplas refatorações até atingir nível produçã
 
 - limite de atributos (1–30)  
 - limite de nível (1–20)  
-- integridade de subclasses (trigger)  
-- ownership de features (CHECK constraint)  
+- integridade de subclasses  
+- ownership de features  
 - base preparada para escala  
-
----
-
-## 🚧 Next
-
-- implementar via Prisma  
-- criar migrations reais  
-- validar constraints no PostgreSQL  
 
 ---
 
@@ -210,15 +201,8 @@ Criar interface visual do sistema.
 
 ## 🟡 Em progresso
 
-- buscar campanhas  
-- tela inicial da mesa  
-
----
-
-## 🔜 Next
-
-- integração com backend  
-- interação real com dados  
+- busca de campanhas  
+- tela da mesa  
 
 ---
 
@@ -235,30 +219,15 @@ Criar sistema próprio de RPG.
 - classes definidas  
 - subclasses definidas  
 - progressão 1–20  
-- talentos (feats) criados  
+- talentos (feats)  
 - estrutura de atributos  
 
 ---
 
 ## ✅ Result
 
-- sistema jogável conceitualmente  
+- sistema consistente  
 - pronto para integração  
-
----
-
-## 🟡 Em evolução
-
-- balanceamento  
-- ajustes finos  
-
----
-
-## 🔜 Next
-
-- integrar ao banco  
-- criar lógica de cálculo  
-- validar progressão real  
 
 ---
 
@@ -276,23 +245,23 @@ Elevar o banco para nível produção real.
 - normalização completa  
 - criação de enums  
 - revisão de relações  
-- preparação para múltiplos sistemas RPG  
+- suporte a múltiplos sistemas  
 
 ---
 
 ## ✅ Result
 
-- banco nível sênior (quase enterprise)  
-- pronto para escalar  
+- banco nível sênior  
 - consistente  
+- escalável  
 
 ---
 
 ## ⚠️ Aprendizados
 
-- banco NÃO é só armazenamento → é regra de negócio  
-- constraints são obrigatórias  
-- trigger resolve problemas que FK não resolve  
+- banco é parte da lógica de negócio  
+- constraints são essenciais  
+- triggers resolvem validações complexas  
 
 ---
 
@@ -300,38 +269,34 @@ Elevar o banco para nível produção real.
 
 ## 🎯 Goal
 
-Implementar regras críticas no banco.
+Definir regras críticas de integridade.
 
 ---
 
 ## 🧪 Changes Made
 
-- validação de atributos (1–30)  
-- validação de nível (1–20)  
-- estrutura para validação de multiclasse  
-- preparação para triggers  
+- limites de atributos  
+- limites de nível  
+- preparação para validações complexas  
 
 ---
 
 ## ✅ Result
 
-- integridade forte de dados  
-- redução de bugs futuros  
+- dados protegidos  
+- redução de inconsistências  
 
 ---
 
 ## ⚠️ Observação
 
-Nem tudo pode ser resolvido só com constraint:
+Algumas regras exigem:
 
-- soma de níveis  
-- validações complexas  
-
-→ requer backend + banco  
+- banco + backend  
 
 ---
 
-# ⚡ Capsule 09 — Prisma Integration (CURRENT)
+# ⚡ Capsule 09 — Prisma Integration
 
 ## 🎯 Goal
 
@@ -339,25 +304,88 @@ Conectar modelagem ao sistema real.
 
 ---
 
-## 🧪 Em andamento
+## 🧪 Changes Made
 
 - criação do `schema.prisma`  
 - adaptação do banco para ORM  
-- planejamento de migrations  
+- geração do Prisma Client  
+- sincronização com PostgreSQL  
 
 ---
 
-## 🎯 Resultado Esperado
+## ✅ Result
 
 - banco operacional  
-- API persistindo dados reais  
+- queries tipadas  
+- integração backend ↔ banco  
 
 ---
 
-## 🔥 Próximo passo crítico
+# ⚡ Capsule 10 — Authentication (Better Auth)
 
-- rodar primeira migration  
-- validar estrutura no PostgreSQL  
+## 🎯 Goal
+
+Implementar sistema de autenticação real.
+
+---
+
+## 🧪 Changes Made
+
+- integração do Better Auth  
+- criação de tabelas:
+  - user
+  - session
+  - account
+  - verification  
+- adaptação do backend  
+- integração com Fastify  
+
+---
+
+## ✅ Result
+
+- registro funcionando  
+- login funcionando  
+- sessões persistidas  
+- autenticação real em produção  
+
+---
+
+## 🧠 Decisão Crítica
+
+> Auth NÃO é mais parte do sistema  
+> → é o núcleo do sistema
+
+Todo o domínio agora depende de:
+
+```txt
+user.id
+```
+
+---
+
+# ⚡ Capsule 11 — API Integration (Current)
+
+## 🎯 Goal
+
+Validar sistema funcionando end-to-end.
+
+---
+
+## 🧪 Changes Made
+
+- integração Fastify + Auth  
+- testes via Swagger/Scalar  
+- validação de endpoints  
+- persistência real de dados  
+
+---
+
+## ✅ Result
+
+- API funcional  
+- fluxo completo validado  
+- base pronta para expansão  
 
 ---
 
@@ -371,25 +399,33 @@ O projeto saiu de:
 
 E entrou em:
 
-👉 **implementação real**
+👉 **sistema real funcionando**
 
 ---
 
 ## 🏁 Status
 
-✔ Arquitetura sólida  
-✔ Banco robusto  
-✔ Sistema definido  
+✔ Auth funcional  
+✔ Banco integrado  
+✔ API funcionando  
+✔ Base sólida  
 
-🚧 Falta:
+---
 
-👉 transformar tudo em código funcional  
+## 🚧 Próxima fase
+
+👉 expansão do domínio RPG  
+
+- campaigns  
+- characters  
+- inventory  
+- permissions  
 
 ---
 
 ## 🧠 Regra de Ouro
 
 > Cada cápsula deve gerar valor real  
-> e deixar o sistema mais próximo de ser jogável
+> e aproximar o sistema de ser jogável  
 
 ---

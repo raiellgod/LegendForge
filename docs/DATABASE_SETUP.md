@@ -13,10 +13,12 @@ Este documento descreve:
 # 📌 STATUS ATUAL
 
 ✔ Banco modelado no dbdiagram  
-✔ Regras avançadas criadas em DATABASE_RULES.sql  
-🔄 Conversão para Prisma em andamento  
-❌ Migrações ainda não executadas  
-❌ Backend ainda não integrado completamente  
+✔ Prisma integrado e funcionando  
+✔ Better Auth integrado ao banco  
+✔ Auth persistindo dados corretamente  
+🔄 Expansão do domínio RPG em andamento  
+❌ Regras SQL avançadas ainda não aplicadas  
+❌ Triggers ainda não implementadas  
 
 ---
 
@@ -24,44 +26,53 @@ Este documento descreve:
 
 ```sql
 //////////////////////////////////////////////////////
-// ENUMS
+// AUTH (BETTER AUTH CORE)
 //////////////////////////////////////////////////////
 
-Enum user_status { ACTIVE BANNED INACTIVE }
-Enum participant_role { PLAYER GM }
-Enum participant_status { PENDING APPROVED REJECTED REMOVED }
-Enum source_origin { OFFICIAL USER AI }
-Enum log_type { CHAT SYSTEM ROLL COMBAT }
-Enum invite_status { PENDING ACCEPTED EXPIRED REVOKED }
-
-//////////////////////////////////////////////////////
-// USERS
-//////////////////////////////////////////////////////
-
-Table users {
-  id uuid [pk]
-  username varchar(30) [not null, unique]
-  email varchar(255) [not null, unique]
-  password_hash text [not null]
-  avatar_url text
-  email_verified boolean [default: false]
-  terms_accepted_at timestamp
-  status user_status [default: 'ACTIVE']
-  last_login timestamp
-  created_at timestamp
-  updated_at timestamp
-  deleted_at timestamp
+Table user {
+  id string [pk]
+  name string
+  email string [unique]
+  emailVerified boolean
+  image string
+  createdAt timestamp
+  updatedAt timestamp
 }
 
-Table user_sessions {
-  id uuid [pk]
-  user_id uuid [ref: > users.id]
-  refresh_token text
-  ip_address varchar(45)
-  user_agent text
-  is_revoked boolean
-  expires_at timestamp
-  created_at timestamp
+Table session {
+  id string [pk]
+  expiresAt timestamp
+  token string [unique]
+  createdAt timestamp
+  updatedAt timestamp
+  ipAddress string
+  userAgent string
+  userId string [ref: > user.id]
+}
+
+Table account {
+  id string [pk]
+  accountId string
+  providerId string
+  userId string [ref: > user.id]
+  accessToken string
+  refreshToken string
+  idToken string
+  accessTokenExpiresAt timestamp
+  refreshTokenExpiresAt timestamp
+  scope string
+  password string
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table verification {
+  id string [pk]
+  identifier string
+  value string
+  expiresAt timestamp
+  createdAt timestamp
+  updatedAt timestamp
 }
 
 //////////////////////////////////////////////////////
@@ -88,149 +99,29 @@ Table skills {
   stat_id uuid [ref: > stats.id]
   name varchar(50)
 }
-
-//////////////////////////////////////////////////////
-// RACES / CLASSES
-//////////////////////////////////////////////////////
-
-Table races {
-  id uuid [pk]
-  system_id uuid [ref: > game_systems.id]
-  name varchar(100)
-}
-
-Table classes {
-  id uuid [pk]
-  system_id uuid [ref: > game_systems.id]
-  name varchar(100)
-  hit_die integer
-}
-
-Table subclasses {
-  id uuid [pk]
-  class_id uuid [ref: > classes.id]
-  name varchar(100)
-  unlock_level integer
-}
-
-//////////////////////////////////////////////////////
-// FEATURES
-//////////////////////////////////////////////////////
-
-Table features {
-  id uuid [pk]
-  system_id uuid [ref: > game_systems.id]
-  class_id uuid
-  subclass_id uuid
-  race_id uuid
-  name varchar(100)
-  required_level integer
-}
-
-//////////////////////////////////////////////////////
-// CAMPAIGNS
-//////////////////////////////////////////////////////
-
-Table campaigns {
-  id uuid [pk]
-  owner_id uuid [ref: > users.id]
-  system_id uuid [ref: > game_systems.id]
-  name varchar(100)
-  invite_code varchar(20)
-  is_public boolean
-  is_active boolean
-}
-
-Table participants {
-  id uuid [pk]
-  campaign_id uuid [ref: > campaigns.id]
-  user_id uuid [ref: > users.id]
-  role participant_role
-}
-
-//////////////////////////////////////////////////////
-// CHARACTERS
-//////////////////////////////////////////////////////
-
-Table characters {
-  id uuid [pk]
-  user_id uuid [ref: > users.id]
-  campaign_id uuid [ref: > campaigns.id]
-  race_id uuid [ref: > races.id]
-  name varchar(100)
-  level integer
-  hp_current integer
-  hp_max integer
-}
-
-Table character_classes {
-  id uuid [pk]
-  character_id uuid [ref: > characters.id]
-  class_id uuid [ref: > classes.id]
-  subclass_id uuid
-  class_level integer
-}
-
-Table character_stats {
-  character_id uuid [ref: > characters.id]
-  stat_id uuid [ref: > stats.id]
-  value integer
-}
-
-//////////////////////////////////////////////////////
-// ITEMS
-//////////////////////////////////////////////////////
-
-Table items {
-  id uuid [pk]
-  system_id uuid [ref: > game_systems.id]
-  name varchar(100)
-  weight decimal
-  source source_origin
-}
-
-Table character_inventory {
-  id uuid [pk]
-  character_id uuid [ref: > characters.id]
-  item_id uuid [ref: > items.id]
-  quantity integer
-}
-
-//////////////////////////////////////////////////////
-// LOGS
-//////////////////////////////////////////////////////
-
-Table campaign_logs {
-  id uuid [pk]
-  campaign_id uuid [ref: > campaigns.id]
-  user_id uuid [ref: > users.id]
-  type log_type
-  content text
-}
+```
 
 ---
 
 # ⚠️ LIMITAÇÕES DO DBDIAGRAM
 
-O dbdiagram **não suporta**:
+O dbdiagram não suporta:
 
 ## ❌ Regras avançadas
-- CHECK constraints
-- validações condicionais
-- regras entre tabelas
+- CHECK constraints  
+- validações condicionais  
+- regras entre tabelas  
 
 ## ❌ Triggers
-- validação de subclasse ↔ classe
-- validação de soma de níveis
-- validação de coerência entre sistemas
+- validação de domínio (ex: subclasses)  
+- validação de consistência de dados  
 
 ## ❌ Índices parciais
-- ex: apenas 1 GM por campanha
+- ex: apenas 1 GM por campanha  
 
 ## ❌ Constraints complexas
-- garantir que uma feature tenha exatamente 1 owner válido
-- garantir que a subclasse pertença à classe correta
-- garantir que a soma das classes bata com o nível total do personagem
+- validações cruzadas entre tabelas  
+- regras condicionais baseadas em múltiplos campos  
 
 ---
 
@@ -238,155 +129,66 @@ O dbdiagram **não suporta**:
 
 Arquivo: `DATABASE_RULES.sql`
 
+---
+
 ## ✔ Regras importantes
 
-### 1. Apenas 1 GM por campanha
-
-```sql
-CREATE UNIQUE INDEX uq_one_gm_per_campaign
-ON participants (campaign_id)
-WHERE role = 'GM' AND removed_at IS NULL;
-```
-
-### 2. Subclasse pertence à classe
-
-Isso é validado com **trigger** no PostgreSQL.
-
-Regra de negócio:
+### 1. Consistência de sistema
 
 ```txt
-subclasses.class_id precisa ser igual ao class_id usado em character_classes
+stats.system_id deve corresponder ao sistema correto
+skills devem respeitar stats do mesmo sistema
 ```
-
-Ou seja:
-
-- se o personagem escolher `class_id = mage`
-- a `subclass_id` precisa pertencer à classe `mage`
 
 ---
 
-### 3. Feature só pode ter 1 origem válida
+### 2. Limites numéricos
 
-A tabela `features` foi modelada para permitir associação com:
-
-- classe
-- subclasse
-- raça
-
-Mas a regra correta é:
-
-```txt
-exatamente 1 entre class_id, subclass_id ou race_id deve estar preenchido
-```
-
-Não pode:
-- deixar os 3 nulos
-- preencher 2 ou 3 ao mesmo tempo
-
-Isso será resolvido com `CHECK constraint` no PostgreSQL.
+- stats entre 1 e 30  
+- níveis entre 1 e 20  
+- valores não negativos  
 
 ---
 
-### 4. Soma dos níveis das classes deve bater com o nível total do personagem
+### 3. Integridade de dados
 
-Regra:
-
-```txt
-sum(character_classes.class_level) == characters.level
-```
-
-Exemplo válido:
-- Guerreiro 3
-- Mago 2
-- `characters.level = 5`
-
-Exemplo inválido:
-- Guerreiro 3
-- Mago 2
-- `characters.level = 4`
-
-Essa regra exige trigger ou validação forte no banco.
-
----
-
-### 5. Skills e Stats devem pertencer ao mesmo sistema
-
-Regra:
-
-```txt
-skills.system_id precisa ser igual ao system_id do stat associado
-```
-
-Exemplo inválido:
-- skill do sistema D&D
-- stat do sistema Pathfinder
-
-Essa coerência não é bem representada no dbdiagram e será validada fora dele.
-
----
-
-### 6. Origem USER ou AI exige autor (`created_by`)
-
-Para tabelas como `items` e `features`:
-
-```txt
-se source = OFFICIAL → created_by pode ser nulo
-se source = USER ou AI → created_by deve existir
-```
-
-Isso garante rastreabilidade da origem do conteúdo.
-
----
-
-### 7. Limites numéricos críticos
-
-Regras que devem existir no PostgreSQL:
-
-- `characters.level` entre 1 e 20
-- `character_classes.class_level` entre 1 e 20
-- `subclasses.unlock_level` entre 1 e 20
-- `features.required_level` entre 1 e 20
-- `character_stats.value` entre 1 e 30
-- `items.weight >= 0`
-- `character_inventory.quantity >= 1`
-- `hp_current >= 0`
-- `hp_max >= 1`
-- `hp_current <= hp_max`
-
-Essas são regras clássicas de `CHECK constraint`.
+- relações sempre válidas  
+- dados órfãos não devem existir  
+- consistência entre entidades  
 
 ---
 
 # ⚙️ REGRAS QUE FICAM NO BACKEND
 
-Essas regras **não devem ficar só no banco**.  
-Elas fazem parte da lógica da aplicação.
-
 ## 🎯 Permissões
-- GM vs PLAYER
-- controle de acesso a páginas
-- autorização de ações
-- quem pode editar campanha
-- quem pode convidar/remover jogadores
+
+- controle de acesso por usuário  
+- autorização de ações  
+- proteção de rotas  
+
+---
+
+## 🎯 Fluxo
+
+- impedir ações inválidas  
+- validar entrada de dados  
+- garantir consistência de gameplay  
+
+---
 
 ## 🎯 IA
-- recomendação de builds
-- sugestão de magias
-- sugestão de itens
-- filtragem por classe e nível
-- impedir recomendações inválidas
 
-## 🎯 Validações de UX
-- mensagens de erro
-- validação amigável de formulários
-- confirmação de ações
-- feedback visual
+- recomendações válidas  
+- filtragem por regras  
+- sugestões inteligentes  
 
-## 🎯 Regras de fluxo
-- impedir criação de personagem por usuário que não participa da campanha
-- impedir seleção de subclasse antes do nível correto
-- impedir adicionar item/habilidade sem requisitos mínimos
-- impedir ações em campanhas deletadas/inativas
+---
+
+## 🎯 UX
+
+- mensagens de erro  
+- validação amigável  
+- feedback visual  
 
 ---
 
@@ -394,10 +196,11 @@ Elas fazem parte da lógica da aplicação.
 
 | Camada     | Responsabilidade |
 |------------|------------------|
-| DB         | integridade estrutural dos dados |
-| SQL RULES  | regras críticas e invariáveis |
-| Backend    | lógica de negócio e orquestração |
-| Frontend   | experiência do usuário |
+| DB         | integridade estrutural |
+| SQL RULES  | regras críticas |
+| Prisma     | acesso tipado |
+| Backend    | lógica |
+| Frontend   | experiência |
 
 ---
 
@@ -405,81 +208,69 @@ Elas fazem parte da lógica da aplicação.
 
 ## 🔹 Fase 1 — Setup Prisma
 - [x] Criar `schema.prisma`
-- [ ] Converter models
-- [ ] Validar schema
-- [ ] Gerar Prisma Client
+- [x] Validar schema
+- [x] Gerar Prisma Client
+- [x] Conectar com banco
+
+---
 
 ## 🔹 Fase 2 — Banco
-- [ ] Rodar primeira migration
-- [ ] Aplicar `DATABASE_RULES.sql`
-- [ ] Validar estrutura no PostgreSQL
+- [x] Criar estrutura inicial
+- [ ] Aplicar regras SQL avançadas
+- [ ] Implementar triggers
+
+---
 
 ## 🔹 Fase 3 — Backend
-- [ ] Auth (login/register)
-- [ ] CRUD campanhas
-- [ ] CRUD personagens
-- [ ] Sessions
+- [x] Auth funcionando
+- [ ] CRUD sistemas RPG
 - [ ] Services
+- [ ] Validação com Zod
+
+---
 
 ## 🔹 Fase 4 — Sistema RPG
-- [ ] Classes / subclasses
-- [ ] Stats / skills
-- [ ] Features
-- [ ] Inventário
-- [ ] Regras de progressão
+- [x] GameSystem
+- [x] Stat
+- [x] Skill
+- [ ] Classes
+- [ ] Characters
+- [ ] Campaigns
+
+---
 
 ## 🔹 Fase 5 — IA
-- [ ] Recomendação de build
-- [ ] Filtro inteligente de itens
-- [ ] Sugestão de magias
-- [ ] Logs/regras de uso da IA
+- [ ] Sistema de recomendação
+- [ ] Sugestão de builds
+- [ ] Filtros inteligentes
 
 ---
 
 # 🧠 FILOSOFIA DO PROJETO
 
-> Pequenos passos → sistema sólido
+> Banco é a fundação do sistema
 
 Ordem correta:
 
-1. Banco correto
-2. Regras críticas protegidas
-3. Backend confiável
-4. Frontend consistente
-5. Features avançadas
+1. Auth funcionando  
+2. Banco consistente  
+3. Backend confiável  
+4. Expansão controlada  
+5. Features avançadas  
 
 ---
 
 # 📍 PRÓXIMO PASSO
 
-Continuar a conversão do banco para `schema.prisma`, em blocos pequenos.
-
-Próximos models planejados:
-
-- `Campaign`
-- `Participant`
-- `CampaignInvite`
-- `Race`
-- `Class`
-- `Subclass`
-- `Feature`
-- `Character`
-- `CharacterClass`
-- `CharacterStat`
-- `CharacterSkill`
-- `Item`
-- `ItemRequirement`
-- `CharacterInventory`
-- `CampaignLog`
+👉 Expandir domínio RPG no Prisma sem quebrar o auth
 
 ---
 
 # 📌 CHECKPOINT
 
-Se este documento estiver atualizado, você já tem:
+✔ Auth funcionando  
+✔ Prisma integrado  
+✔ Banco funcional  
+✔ Base pronta para escalar  
 
-- banco modelado
-- responsabilidades separadas
-- regras críticas identificadas
-- caminho claro para Prisma
-- base profissional de documentação
+👉 Próximo nível: domínio RPG completo

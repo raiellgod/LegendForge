@@ -1,11 +1,12 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-in%20development-yellow)
+![Status](https://img.shields.io/badge/status-core%20working-yellow)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-react-purple)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
 ![ORM](https://img.shields.io/badge/orm-prisma-2D3748)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Auth](https://img.shields.io/badge/auth-better--auth-green)
+![License](https://img.shields.io/badge/license-MIT-brightgreen)
 
 > A modern Virtual Tabletop (VTT) built with production-grade backend architecture,
 > focusing on scalability, modularity, and real-world system design.
@@ -31,11 +32,11 @@ LegendForge is not just a VTT.
 
 It demonstrates:
 
-- 🏗️ Backend architecture realista
-- 🗄️ Modelagem de banco nível produção
-- ⚙️ Regras de negócio no banco
-- 🧠 Pensamento de sistema
-- 🎮 Engine de RPG flexível
+- 🏗️ Real backend architecture
+- 🗄️ Production-oriented database modeling
+- ⚙️ Business rules treated seriously
+- 🧠 System design thinking
+- 🎮 Flexible RPG engine foundation
 
 ---
 
@@ -46,8 +47,12 @@ It demonstrates:
 - Node.js
 - Fastify
 - TypeScript
-- Prisma _(em integração)_
+- Prisma
 - PostgreSQL
+- Better Auth
+- Zod
+- Swagger
+- Scalar API Reference
 
 ### 🎨 Frontend
 
@@ -60,30 +65,36 @@ It demonstrates:
 
 ## 🧱 Project Structure
 
-```
+```txt
 LegendForge/
-├── backend/
-│   ├── src/
-│   ├── prisma/
-│   └── package.json
+├── src/
+│   ├── generated/prisma/
+│   ├── lib/
+│   │   └── auth.ts
+│   ├── routes/
+│   └── index.ts
 │
-├── frontend/
-│   ├── src/
-│   └── package.json
+├── prisma/
+│   └── schema.prisma
 │
 ├── docs/
 │   ├── ARCHITECTURE.md
-│   ├── DEV_STATE.md
 │   ├── BOOT.md
+│   ├── DATABASE_SETUP.md
+│   ├── DEV_STATE.md
 │   ├── FEATURE_CAPSULE.md
 │   └── DEVELOPER_CONFIG-UTILIZE.txt
+│
+├── package.json
+├── docker-compose.yml
+└── tsconfig.json
 ```
 
 ---
 
 ## 📊 Current Status
 
-> 🟡 Transition phase: Design → Implementation
+> 🟡 Core system working — ready for domain expansion
 
 ### ✅ Completed
 
@@ -91,50 +102,98 @@ LegendForge/
 - ESLint + Prettier
 - Zod validation
 - Swagger docs
-- Database modelado (nível produção)
-- Sistema RPG definido
-- Figma com fluxos principais
+- Scalar interactive docs
+- Prisma integration
+- PostgreSQL connection
+- Better Auth integration
+- User registration and login flow
+- Database persistence validated
+- Initial RPG domain models:
+  - GameSystem
+  - Stat
+  - Skill
+- Figma with core UI flows
 
 ---
 
 ### 🚧 In Progress
 
-- Prisma
-- Migrations
-- Endpoints
-- Telas:
-  - Criar campanha
-  - Buscar campanha
-  - Mesa
+- Expanding `schema.prisma`
+- RPG domain implementation
+- API routes for game systems
+- Backend organization and modular growth
 
 ---
 
 ### 🔜 Next Steps
 
-- Criar `schema.prisma`
-- Rodar primeira migration
-- Sistema de autenticação
-- CRUD de campanhas
-- Persistência real
+- Implement `GameSystem` CRUD
+- Implement `Stat` CRUD
+- Implement `Skill` CRUD
+- Expand schema with:
+  - Campaign
+  - Participant
+  - Character
+- Add protected route `/me`
+- Start campaign domain integration
+
+---
+
+## 🔐 Authentication
+
+LegendForge uses **Better Auth** as the core authentication layer.
+
+Current auth foundation includes:
+
+- `user`
+- `session`
+- `account`
+- `verification`
+
+This means authentication is not a side feature — it is part of the system core.
+
+---
+
+## 🗄️ Database
+
+The project follows a **DB-first mindset**.
+
+Current state:
+
+- Prisma is integrated
+- PostgreSQL is connected
+- Database sync is working
+- Auth tables are operational
+- RPG domain is being expanded incrementally
+
+More details are documented in:
+
+- `docs/DATABASE_SETUP.md`
+- `docs/ARCHITECTURE.md`
+- `docs/DEV_STATE.md`
 
 ---
 
 ## 🎨 UI / UX (Figma)
 
-Fluxo definido antes da implementação:
+The project UI is being designed before full implementation.
 
-- ✅ Criar campanha
-- 🟡 Buscar campanhas
-- 🟡 Mesa de jogo
+Current UI progress:
+
+- ✅ Create campaign flow
+- 🟡 Search campaign flow
+- 🟡 Tabletop / session screen
+- 🟡 Auth screens refinement
 
 ---
 
 ## 🧠 Development Philosophy
 
 - Incremental
-- Sempre funcional
-- Sem overengineering
-- Evolução contínua
+- Always functional
+- No unnecessary overengineering
+- Continuous refinement
+- Production mindset from the start
 
 > “Build small. Scale right.”
 
@@ -142,17 +201,25 @@ Fluxo definido antes da implementação:
 
 ## 📦 Feature Capsules
 
+The project is documented through **Feature Capsules**, which record small validated steps.
+
+Current capsules include:
+
 - Capsule 01 — Setup
 - Capsule 02 — Backend Base
 - Capsule 03 — Data & UI Design
 - Capsule 04 — Database Design
 - Capsule 05 — Figma UI
 - Capsule 06 — RPG System
-- Capsule 07 — Refinamento do banco
-- Capsule 08 — Constraints produção
-- Capsule 09 — Prisma _(atual)_
+- Capsule 07 — Database Refinement
+- Capsule 08 — Production Constraints
+- Capsule 09 — Prisma Integration
+- Capsule 10 — Better Auth
+- Capsule 11 — API Integration
 
-📄 docs/FEATURE_CAPSULE.md
+See:
+
+`docs/FEATURE_CAPSULE.md`
 
 ---
 
@@ -168,9 +235,28 @@ pnpm dev
 
 ---
 
+## 🧪 Local Development Notes
+
+When changing the Prisma schema:
+
+```bash
+npx prisma format
+npx prisma validate
+npx prisma generate
+npx prisma db push
+```
+
+When testing auth or database changes:
+
+- restart the server
+- validate the request in Scalar
+- confirm persistence in Prisma Studio
+
+---
+
 ## 🤝 Contributing
 
-This is currently a personal project focused on learning and portfolio.
+This is currently a personal project focused on learning, architecture, and portfolio quality.
 
 Discussions, ideas, and feedback are welcome.
 
@@ -184,7 +270,7 @@ MIT License
 
 ## 👨‍💻 Author
 
-Raiel Godinho
+Raiel Godinho  
 https://github.com/raiellgod
 
 ---
@@ -196,9 +282,10 @@ LegendForge aims to become:
 - 🎲 A complete Virtual Tabletop
 - 🧠 A strong backend portfolio project
 - ⚙️ A modular RPG engine
+- 🔐 A well-architected full-stack product
 
 ---
 
-Built step by step.
-Built to scale.
+Built step by step.  
+Built to scale.  
 Built like a real product.
