@@ -4,86 +4,88 @@
 
 ## 🎯 Project Vision
 
-**LegendForge** é um Virtual Tabletop (VTT) para RPG de mesa.
+**LegendForge** é um Virtual Tabletop (VTT) moderno para RPG de mesa.
 
-Inspirado em plataformas como Roll20 e Foundry Virtual Tabletop, com foco em:
+Inspirado em plataformas como Roll20 e Foundry Virtual Tabletop, mas com uma abordagem diferente:
 
-- 🧩 ser agnóstico de sistema  
-- 🎲 permitir campanhas personalizadas  
-- 👥 servir como ferramenta prática para jogar com amigos  
+- 🧩 Sistema agnóstico (multi-RPG)  
+- 🎲 Campanhas altamente customizáveis  
+- 👥 Foco em gameplay real entre jogadores  
 
-Além disso, é um projeto voltado para:
+Além disso, o projeto é construído como:
 
-- 💼 portfólio  
-- 🧠 aprendizado contínuo  
+- 💼 Portfólio técnico de alto nível  
+- 🧠 Plataforma de aprendizado contínuo  
+- ⚙️ Sistema real com preocupação de produção  
 
 ---
 
 ## 🎯 Main Goals
 
-### 1 — Criar uma mesa virtual funcional
+### 1 — VTT Funcional
 
-- 💬 Chat  
-- 🎲 Rolagem de dados  
-- 🗺️ Campanhas  
-- 📄 Fichas de personagem  
-- 🧭 Mapas (futuro)  
-
----
-
-### 2 — Construir um projeto forte de portfólio
-
-- 🏗️ Arquitetura backend organizada  
-- 🧹 Código limpo e modular  
-- 📐 Boas práticas modernas  
+- 💬 Chat em tempo real  
+- 🎲 Sistema de rolagem de dados  
+- 🗺️ Gerenciamento de campanhas  
+- 📄 Fichas de personagem dinâmicas  
+- 🧭 Mapas interativos *(em evolução)*  
 
 ---
 
-### 3 — Evoluir como programador
+### 2 — Backend de Nível Profissional
 
-- 📚 Aprender backend moderno  
-- 🧠 Entender banco de dados  
-- ⚙️ Trabalhar com sistemas reais  
+- 🏗️ Arquitetura modular e escalável  
+- 🔒 Integridade forte de dados (DB-first mindset)  
+- 📐 Separação clara de responsabilidades  
+- ⚡ Preparado para crescimento real  
+
+---
+
+### 3 — Evolução Técnica
+
+- 📚 Domínio de backend moderno  
+- 🧠 Modelagem avançada de banco de dados  
+- ⚙️ Construção de sistemas complexos  
+- 🧩 Integração entre camadas (DB + API + UI)  
 
 ---
 
 ## 💡 Development Philosophy
 
-O projeto segue **desenvolvimento incremental**.
+O projeto segue **desenvolvimento incremental com mentalidade de produção**.
 
 ### Princípios
 
-- ✔️ Pequenos passos diários  
-- ✔️ Sempre ter algo funcionando  
-- ✔️ Evoluir stack por stack  
-- ✔️ Evitar complexidade prematura  
-- ✔️ Aceitar refatorações  
-- ✔️ Sem pressa  
+- ✔️ Pequenos passos, sempre funcionais  
+- ✔️ Refatorar faz parte do processo  
+- ✔️ Backend como fonte da verdade  
+- ✔️ Evitar complexidade prematura, mas não ignorar escala  
+- ✔️ Código serve ao domínio, não o contrário  
 
-> 🎯 O objetivo não é velocidade — é consistência.
+> 🎯 Consistência > velocidade
 
 ---
 
 ## 📦 Repository Strategy
 
-### Estrutura inicial
+### Estrutura atual
 
-```
 LegendForge/
 ├── backend/
 ├── frontend/
 ├── docs/
-```
 
-### Decisão
 
-- 🔹 Backend e frontend separados  
-- 🔹 Foco inicial no backend  
-- 🔹 Redução de complexidade  
+### Decisões
+
+- 🔹 Separação clara entre backend e frontend  
+- 🔹 Backend desenvolvido primeiro (core do sistema)  
+- 🔹 Documentação como parte do produto  
 
 ### Futuro
 
-- 🔄 Possível migração para monorepo com pnpm  
+- 🔄 Possível monorepo (pnpm workspaces)  
+- 🔄 Shared types entre backend e frontend  
 
 ---
 
@@ -94,168 +96,257 @@ LegendForge/
 - Node.js  
 - Fastify  
 - TypeScript  
-- Prisma  
-- PostgreSQL  
+- Prisma (ORM)  
+- PostgreSQL (fonte de verdade)  
 - pnpm  
 
 ---
 
-### 🎨 Frontend (planejado)
+### 🎨 Frontend (em progresso)
 
 - React  
 - Vite  
 - Tailwind  
 - TypeScript  
-
----
-
-### 🛠️ Ferramentas
-
-- VS Code  
-- Git  
+- Figma → UI já estruturada até fluxo de criação de partida  
 
 ---
 
 ## 🏗️ Backend Architecture
 
-### Estrutura planejada
+### Estrutura base
 
-```
 src/
 ├── modules/
-│   ├── user/
-│   │   ├── user.routes.ts
-│   │   ├── user.controller.ts
-│   │   └── user.service.ts
-│   │
-│   ├── campaign/
-│   │   ├── campaign.routes.ts
-│   │   ├── campaign.controller.ts
-│   │   └── campaign.service.ts
+│ ├── user/
+│ ├── campaign/
+│ ├── character/
+│ ├── system/
 │
 ├── db/
-│   └── prisma.ts
+│ ├── prisma.ts
+│ └── migrations/
 │
 ├── plugins/
-│
+├── utils/
 └── server.ts
-```
 
-### Objetivos da arquitetura
 
-- 🧩 Separar responsabilidades  
-- 📦 Evitar arquivos grandes  
-- 🔧 Facilitar manutenção  
+---
+
+## 🧠 Camadas do Sistema
+
+### 1. Banco de Dados (PostgreSQL)
+
+Responsável por:
+
+- Integridade de dados  
+- Constraints críticas  
+- Regras de negócio essenciais  
+- Performance  
+
+> Exemplo:
+> - Limite de atributos (1–30)
+> - Nível máximo (1–20)
+> - Integridade de subclasses
+> - Ownership de features
+
+---
+
+### 2. Prisma (ORM)
+
+Responsável por:
+
+- Tipagem forte  
+- Produtividade  
+- Relacionamentos  
+- Queries seguras  
+
+> ⚠️ Prisma NÃO substitui regras críticas do banco
+
+---
+
+### 3. Backend (Fastify)
+
+Responsável por:
+
+- Regras de negócio  
+- Validação (Zod)  
+- Orquestração  
+- Segurança  
+
+---
+
+### 4. Frontend
+
+Responsável por:
+
+- Experiência do usuário  
+- Interação  
+- Consumo da API  
+
+---
+
+## 🧩 Modelagem do Domínio
+
+O sistema foi projetado para suportar:
+
+- 🎭 Multiclasse real (ex: Guerreiro 3 / Mago 2)  
+- 🧬 Sistema de atributos dinâmico  
+- 🎲 Sistemas diferentes (D&D, custom, etc)  
+- ⚔️ Itens instanciáveis por personagem  
+- 📜 Logs de campanha escaláveis  
+
+---
+
+## ⚙️ Decisões Arquiteturais Críticas
+
+### 🔹 Features unificadas
+
+Uma única tabela para:
+
+- Raças  
+- Classes  
+- Subclasses  
+
+✔ Simplifica queries  
+⚠ Exige validação forte no banco  
+
+---
+
+### 🔹 Inventário por instância
+
+- `items` → modelo global  
+- `character_inventory` → instância  
+
+✔ Permite customização sem quebrar o sistema  
+
+---
+
+### 🔹 Banco como autoridade
+
+Regras críticas estão no banco:
+
+- CHECK constraints  
+- Triggers  
+- Integridade relacional  
 
 ---
 
 ## 🧩 Development Strategy
 
-O projeto será desenvolvido utilizando **Feature Capsules**.
+Uso de **Feature Capsules**:
 
-### Cada feature deve ser:
+Cada feature é:
 
 - pequena  
-- independente  
+- isolada  
 - testável  
-- funcional  
-
-### Exemplos de cápsulas
-
-1. Server Boot  
-2. User System  
-3. Campaign System  
-4. Dice Roller  
-5. Chat  
+- incremental  
 
 ---
 
-## 🗺️ Initial Roadmap
+## 🗺️ Roadmap Atualizado
 
-### Step 0
-- Setup inicial  
+### ✔ Concluído
 
-### Step 1
 - Setup backend  
-
-### Step 2
-- Banco de dados + User  
-
-### Step 3
-- Autenticação  
-
-### Step 4
-- Campanhas  
-
-### Step 5
-- Dice Roller  
-
-### Step 6
-- Chat  
-
-### Step 7
-- Fichas  
+- Modelagem do banco (nível produção)  
+- Estrutura base do projeto  
+- UI no Figma (até criação de partida)  
 
 ---
 
-## ⚠️ Important
+### 🚧 Em andamento
 
-Este arquivo **NÃO representa o estado atual do projeto**.
-
-Ele define:
-
-- 🧠 visão  
-- 🎯 direção  
-- 🏗️ decisões arquiteturais  
+- Integração Prisma  
+- Migrations reais  
+- Ajustes de constraints e triggers  
 
 ---
+
+### 🔜 Próximos passos
+
+- Sistema de autenticação  
+- CRUD de campanhas  
+- Criação de personagens  
+- Sistema de inventário  
+- Logs em tempo real  
+
+---
+
+## ⚠️ Pontos de Atenção
+
+### 📊 Escalabilidade
+
+- Logs crescerão rapidamente  
+- Futuro: partitioning / otimização  
+
+---
+
+### 🧠 Versionamento
+
+Ainda básico.
+
+Futuro:
+- versionamento real de sistema (RPG rules)
+
+---
+
+### ⚙️ Regras complexas
+
+Algumas regras exigem:
+
+- triggers no banco  
+- validação no backend  
 
 ---
 
 ## 🔄 Current Phase
 
-O projeto evoluiu da fase de planejamento para execução.
+O projeto está em **transição de arquitetura para implementação real**.
 
-### Situação atual:
+### Estado atual
 
-- Banco modelado
-- UI definida no Figma
-- Backend base pronto
-
-### Nova prioridade:
-
-Transformar:
-
-👉 design → código real  
-👉 estrutura → funcionalidades  
+- Banco: quase 100% (nível produção)  
+- Prisma: em implementação  
+- Figma: fluxo principal definido  
+- Backend: base pronta  
 
 ---
 
-## ⚠️ Direção Atual
+## 🎯 Direção Atual
 
-Antes:
-- Planejamento
-- Estrutura
+Foco em:
 
-Agora:
-- Implementação
-- Integração
-- Testes reais
+- transformar modelagem → código  
+- integrar backend + banco  
+- validar regras reais  
 
 ---
 
-## 🧠 Regra importante
+## 🧠 Regra Fundamental
 
-Se algo não está sendo usado no código:
+> Se uma regra pode quebrar o sistema  
+> → ela deve existir no banco
 
-→ não precisa existir ainda
+---
 
 ## 📄 Referências
 
-Para estado atual:
+- `DEV_STATE.md` → estado atual  
+- `BOOT.md` → entrada rápida  
+- `DATABASE.md` *(futuro recomendado)* → detalhamento do banco  
 
-→ `DEV_STATE.md`  
+---
 
-Para entrada rápida:
+## 🏆 Estado da Arquitetura
 
-→ `BOOT.md`  
+✔ Modular  
+✔ Escalável  
+✔ Consistente  
+✔ Preparada para produção  
+
+---
+
+**Status: IMPLEMENTATION PHASE (PRODUCTION-READY FOUNDATION)**

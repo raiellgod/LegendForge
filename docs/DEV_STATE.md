@@ -4,142 +4,270 @@
 
 ## 📅 Last Update
 
-31/03/2026
+15/04/2026
 
 ---
 
 ## 🧱 Project Structure
 
-```
 LegendForge/
-├── .vscode/
-│   └── settings.json
+├── backend/
+│ ├── src/
+│ │ ├── modules/
+│ │ ├── db/
+│ │ ├── plugins/
+│ │ └── server.ts
+│ │
+│ ├── prisma/
+│ │ ├── schema.prisma
+│ │ └── migrations/
+│ │
+│ └── package.json
 │
-├── dist/
-│   └── index.js
+├── frontend/
+│ ├── src/
+│ └── package.json
 │
 ├── docs/
-│   ├── DEV_STATE.md
-│   ├── ARCHITECTURE.md
-│   ├── BOOT.md
-│   ├── FEATURE_CAPSULE.md
-│   └── DEVELOPER_CONFIG-UTILIZE.txt
-│
-├── src/
-│   └── index.ts
-│
-├── .env
-├── .env_explicação
-├── .gitignore
-├── .npmrc
-├── eslint.config.js
-├── package.json
-├── tsconfig.json
-```
+│ ├── DEV_STATE.md
+│ ├── ARCHITECTURE.md
+│ ├── BOOT.md
+│ ├── FEATURE_CAPSULE.md
+│ └── DEVELOPER_CONFIG-UTILIZE.txt
+
 
 ---
 
-## ⚙️ Dependencies (Setup / Backend)
+## ⚙️ Dependencies (Backend)
 
-### 🧪 Development
+### 🧪 Core
 
-- TypeScript — 5.9.3
-- tsx — 4.21.0
-- @types/node — 24.10.13
-
-### 🧹 Lint & Format
-
-- ESLint — 9.39.2
-- eslint-config-prettier — 10.1.8
-- eslint-plugin-simple-import-sort — 12.1.1
-- Prettier — 3.8.1
+- Node.js  
+- Fastify  
+- TypeScript  
 
 ---
 
-## 🗄️ Database
+### 🗄️ Database
 
-- ✅ Modelagem praticamente finalizada
-- ✅ Tabelas principais definidas:
-  - users
-  - campaigns
-  - characters
-  - items
-  - abilities
-- ⚠️ Ainda não implementado com Prisma
+- PostgreSQL  
+- Prisma *(em implementação)*  
 
 ---
 
-## 🧩 Database Models
+### 🧹 Qualidade de Código
 
-- ✔️ Estrutura completa pensada
-- ✔️ Suporte a:
-  - múltiplos sistemas
-  - classes e subclasses
-  - inventário
-  - habilidades
-- ⚠️ Falta tradução para Prisma schema
+- ESLint  
+- Prettier  
 
 ---
 
-## 🌐 API Endpoints
+## 🗄️ Database (STATUS REAL)
 
-- ❌ Nenhum endpoint definido
+### ✅ Modelagem
+
+- ✔️ Estrutura final definida (nível produção — 11/10)  
+- ✔️ Normalização correta  
+- ✔️ Suporte a múltiplos sistemas RPG  
+- ✔️ Multiclasse funcional  
+- ✔️ Inventário baseado em instância  
+- ✔️ Sistema de features unificado  
+
+---
+
+### ⚠️ Pontos Críticos já considerados
+
+- ✔️ Limite de atributos (1–30)  
+- ✔️ Limite de nível (1–20)  
+- ✔️ Integridade de subclasses (via trigger)  
+- ✔️ Ownership de features (CHECK constraint)  
+- ✔️ Base preparada para escala  
+
+---
+
+### 🚧 Em andamento
+
+- [ ] Tradução completa para `schema.prisma`  
+- [ ] Criação de migrations reais  
+- [ ] Implementação de constraints no PostgreSQL  
+
+---
+
+## 🧩 Database Capabilities
+
+O banco já suporta:
+
+- 🎭 Multiclasse complexa  
+- 🧬 Sistemas de RPG diferentes  
+- ⚔️ Itens customizados por personagem  
+- 📜 Logs de campanha escaláveis  
+- 🧠 Expansão futura (IA, sistemas novos)  
+
+---
+
+## 🌐 API (STATUS)
+
+### ❌ Ainda não implementado
+
+Nenhum endpoint conectado ao banco ainda.
+
+---
+
+### 🎯 Primeiros endpoints planejados
+
+- POST `/users`  
+- POST `/sessions`  
+- GET `/campaigns`  
+- POST `/campaigns`  
 
 ---
 
 ## 🎨 Frontend / Figma
 
-- ✅ Tela de criação de partida pronta
-- 🟡 Tela de buscar partidas em andamento
-- 🟡 Tela inicial da mesa iniciada
+### ✅ Pronto
+
+- Fluxo de criação de campanha  
+
+---
+
+### 🟡 Em progresso
+
+- Buscar campanhas  
+- Tela inicial da mesa  
+
+---
+
+### 🔜 Próximo
+
+- Tela da mesa (core do produto)  
 
 ---
 
 ## 🧠 Sistema RPG
 
-- ✅ Classes definidas
-- ✅ Subclasses definidas
-- ✅ Sistema de progressão criado
-- ✅ Talentos implementados
-- 🟡 Balanceamento em evolução
+### ✅ Definido
+
+- Classes  
+- Subclasses  
+- Progressão (1–20)  
+- Talentos (feats)  
+- Estrutura de atributos  
 
 ---
 
+### 🟡 Em evolução
+
+- Balanceamento  
+- Ajustes finos de progressão  
+
+---
 
 ## ✅ Implemented Features
 
-- ⚡ Fastify API inicial configurada
-- 🧱 Base do backend pronta
-- 🛠️ Ambiente de desenvolvimento funcional
+- ⚡ Fastify configurado  
+- 🧱 Base do backend pronta  
+- 🧪 Ambiente de desenvolvimento funcional  
+- 🧠 Modelagem de domínio consolidada  
 
 ---
 
 ## 🎯 Current Focus
 
-TRANSIÇÃO PARA IMPLEMENTAÇÃO:
+### 🔥 FASE ATUAL: INTEGRAÇÃO REAL
+
+O projeto saiu do planejamento.
+
+Agora está em:
+
+👉 **conectar banco + backend + regras reais**
+
+---
 
 ### Backend
-- Prisma
-- Models reais
-- Primeiros endpoints
+
+- Prisma  
+- Migrations  
+- Primeiros módulos reais  
+
+---
 
 ### Frontend
-- Fluxo jogável mínimo
+
+- Fluxo mínimo jogável  
+- Integração com API  
 
 ---
 
 ## 🚀 Next Steps
 
-- [ ] Prisma setup
-- [ ] Primeira migration
-- [ ] CRUD de usuário
-- [ ] Login funcional
+### 🔴 Crítico
+
+- [ ] Criar `schema.prisma`
+- [ ] Rodar primeira migration
+- [ ] Validar constraints no banco
+
+---
+
+### 🟠 Backend
+
+- [ ] Criar módulo de users
+- [ ] Implementar autenticação
+- [ ] Criar services
+- [ ] Integrar Zod
+
+---
+
+### 🟡 Produto
+
 - [ ] Criar campanha via API
+- [ ] Criar personagem
+- [ ] Persistir dados reais
+
+---
+
+## ⚠️ Pontos de Atenção
+
+### 📊 Escalabilidade
+
+- `campaign_logs` crescerá rapidamente  
+- Futuro: partitioning  
+
+---
+
+### 🧠 Versionamento
+
+- Ainda básico  
+- Futuro: versionamento real de sistemas RPG  
+
+---
+
+### ⚙️ Regras Complexas
+
+Algumas regras NÃO podem depender só do backend:
+
+- precisam existir no banco  
+- e também ser validadas na API  
 
 ---
 
 ## 🧠 Architecture Notes
 
-- Sistema está ficando grande → manter modularização
-- Evitar overengineering
-- Focar no MVP jogável
+- Sistema já saiu do nível inicial  
+- Complexidade controlada, mas crescente  
+- Banco é o núcleo do sistema  
+
+---
+
+## 🏁 Estado Atual
+
+👉 **PRONTO PARA IMPLEMENTAÇÃO REAL**
+
+- Arquitetura sólida  
+- Banco robusto  
+- UI definida  
+
+Falta:
+
+👉 transformar tudo em código funcional
+
+---

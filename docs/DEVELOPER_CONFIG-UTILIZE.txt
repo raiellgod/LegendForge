@@ -68,6 +68,19 @@ npx prisma init
 
 npx prisma format
 
+docker compose up -d
+
+npx prisma db push
+
+npx prisma generate
+
+npx prisma studio
+
+pnpm add better-auth@1.4.18
+
+npx @better-auth/cli@1.4.18 generate
+
+pnpm add @fastify/cors@11.2.0
 
 
 
@@ -96,3 +109,7 @@ https://swagger.io/
 https://dbdiagram.io/d
 
 https://www.heroforge.com/
+
+https://www.prisma.io/
+
+https://better-auth.com/

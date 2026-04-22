@@ -4,51 +4,38 @@
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-react-purple)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
+![ORM](https://img.shields.io/badge/orm-prisma-2D3748)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-> A modern Virtual Tabletop (VTT) for tabletop RPGs  
-> Built with a focus on modular architecture, incremental development, and real-world backend engineering.
+> A modern Virtual Tabletop (VTT) built with production-grade backend architecture,
+> focusing on scalability, modularity, and real-world system design.
 
 ---
 
 ## 🚀 About the Project
 
-**LegendForge** is a Virtual Tabletop designed to run RPG sessions online.
+**LegendForge** is a Virtual Tabletop designed to run tabletop RPG sessions online.
 
-Inspired by tools like Roll20 and Foundry Virtual Tabletop, but with a different approach:
+Inspired by tools like Roll20 and Foundry VTT — but with a different philosophy:
 
-- 🧩 System-agnostic  
-- 🎲 Focused on custom campaigns  
-- 👥 Built for real gameplay with friends  
-- 🧠 Designed as a learning and portfolio project  
-
----
-
-## 🎯 Goals
-
-### 🎮 Functional VTT
-
-- Chat system  
-- Dice rolling  
-- Campaign management  
-- Character sheets  
-- Maps *(in progress)*  
+- 🧩 System-agnostic
+- 🎲 Focused on custom campaigns
+- 👥 Built for real gameplay with friends
+- 🧠 Designed as a serious backend portfolio project
 
 ---
 
-### 💼 Portfolio Project
+## 🎯 What Makes This Project Different
 
-- Clean backend architecture  
-- Scalable structure  
-- Modern best practices  
+LegendForge is not just a VTT.
 
----
+It demonstrates:
 
-### 🧠 Developer Growth
-
-- Learn backend development  
-- Understand databases deeply  
-- Build real-world systems  
+- 🏗️ Backend architecture realista
+- 🗄️ Modelagem de banco nível produção
+- ⚙️ Regras de negócio no banco
+- 🧠 Pensamento de sistema
+- 🎮 Engine de RPG flexível
 
 ---
 
@@ -56,41 +43,41 @@ Inspired by tools like Roll20 and Foundry Virtual Tabletop, but with a different
 
 ### 🖥️ Backend
 
-- Node.js  
-- Fastify  
-- TypeScript  
-- Prisma *(ready to integrate)*  
-- PostgreSQL *(modeled)*  
-- pnpm  
+- Node.js
+- Fastify
+- TypeScript
+- Prisma _(em integração)_
+- PostgreSQL
 
----
+### 🎨 Frontend
 
-### 🎨 Frontend *(in progress)*
-
-- React  
-- Vite  
-- Tailwind  
-- Figma (UI/UX Design)
+- React
+- Vite
+- Tailwind
+- Figma
 
 ---
 
 ## 🧱 Project Structure
 
+```
 LegendForge/
-├── src/
-│ └── index.ts
+├── backend/
+│   ├── src/
+│   ├── prisma/
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   └── package.json
 │
 ├── docs/
-│ ├── ARCHITECTURE.md
-│ ├── DEV_STATE.md
-│ ├── BOOT.md
-│ ├── FEATURE_CAPSULE.md
-│ └── DEVELOPER_CONFIG-UTILIZE.txt
-│
-├── dist/
-├── package.json
-├── tsconfig.json
-
+│   ├── ARCHITECTURE.md
+│   ├── DEV_STATE.md
+│   ├── BOOT.md
+│   ├── FEATURE_CAPSULE.md
+│   └── DEVELOPER_CONFIG-UTILIZE.txt
+```
 
 ---
 
@@ -100,171 +87,118 @@ LegendForge/
 
 ### ✅ Completed
 
-- TypeScript environment  
-- ESLint + Prettier  
-- Fastify API initialized  
-- Zod validation setup  
-- Swagger documentation  
-- Database fully modeled (ERD)  
-- RPG system designed (classes, races, progression)  
-- Figma prototype (core flows)
+- Backend base (Fastify + TypeScript)
+- ESLint + Prettier
+- Zod validation
+- Swagger docs
+- Database modelado (nível produção)
+- Sistema RPG definido
+- Figma com fluxos principais
 
 ---
 
 ### 🚧 In Progress
 
-- Prisma integration  
-- API endpoints  
-- Frontend screens:
-  - Create Campaign  
-  - Browse Campaigns  
-  - Game Table (initial)
+- Prisma
+- Migrations
+- Endpoints
+- Telas:
+  - Criar campanha
+  - Buscar campanha
+  - Mesa
 
 ---
 
 ### 🔜 Next Steps
 
-- Implement Prisma schema  
-- Run first migration  
-- Create User system (auth)  
-- Connect frontend to backend  
-- Enable campaign creation flow  
+- Criar `schema.prisma`
+- Rodar primeira migration
+- Sistema de autenticação
+- CRUD de campanhas
+- Persistência real
 
 ---
 
 ## 🎨 UI / UX (Figma)
 
-The interface is being designed before implementation to ensure better usability.
+Fluxo definido antes da implementação:
 
-### Screens:
-
-- ✅ Create Campaign  
-- 🟡 Browse Campaigns  
-- 🟡 Game Table  
-
-Focus:
-
-- Simple UX  
-- Fast session creation  
-- Real gameplay usability  
+- ✅ Criar campanha
+- 🟡 Buscar campanhas
+- 🟡 Mesa de jogo
 
 ---
 
 ## 🧠 Development Philosophy
 
-This project follows **incremental development**:
+- Incremental
+- Sempre funcional
+- Sem overengineering
+- Evolução contínua
 
-- small steps  
-- always working features  
-- continuous evolution  
-- no premature complexity  
-
-> “Consistency over speed”
+> “Build small. Scale right.”
 
 ---
 
 ## 📦 Feature Capsules
 
-Development is organized into small, functional steps:
+- Capsule 01 — Setup
+- Capsule 02 — Backend Base
+- Capsule 03 — Data & UI Design
+- Capsule 04 — Database Design
+- Capsule 05 — Figma UI
+- Capsule 06 — RPG System
+- Capsule 07 — Refinamento do banco
+- Capsule 08 — Constraints produção
+- Capsule 09 — Prisma _(atual)_
 
-- Capsule 01 — Setup  
-- Capsule 02 — Backend Base  
-- Capsule 03 — Data & UI Design  
-- Capsule 04 — Database Design  
-- Capsule 05 — Figma UI  
-- Capsule 06 — RPG System Design  
-
-Full details:  
-`docs/FEATURE_CAPSULE.md`
-
----
-
-## 📚 Documentation
-
-| File | Purpose |
-|------|--------|
-| `ARCHITECTURE.md` | Project vision and decisions |
-| `DEV_STATE.md` | Current development state |
-| `BOOT.md` | Quick start for context |
-| `FEATURE_CAPSULE.md` | Development history |
+📄 docs/FEATURE_CAPSULE.md
 
 ---
 
-## Roadmap
+## 🚀 Getting Started
 
- [x] Setup environment
- [x] Backend base
- [x] Database modeling
- [] UI/UX prototyping
- [] Prisma integration
- [] Authentication system
- [] Campaign system
- [] Dice roller
- [] Chat
- [] Character sheets
- [] Game table (real-time)
+```bash
+git clone https://github.com/raiellgod/LegendForge.git
+cd LegendForge
 
- ---
-
- ## Contributing
-
-This project is currently developed as a personal learning project.
-
-Contributions, ideas, and discussions are welcome.
+pnpm install
+pnpm dev
+```
 
 ---
 
-## Why This Project Matters
+## 🤝 Contributing
 
-LegendForge is not just a VTT.
+This is currently a personal project focused on learning and portfolio.
 
-It demonstrates:
-
-Real backend architecture
-Database design skills
-Product thinking
-Full-stack capability
-System design for games
+Discussions, ideas, and feedback are welcome.
 
 ---
 
-## License
+## 📄 License
 
 MIT License
 
 ---
 
-## Author
+## 👨‍💻 Author
 
-Developed by Raiel Godinho
-
+Raiel Godinho
 https://github.com/raiellgod
 
 ---
 
-## Vision
+## 🔮 Vision
 
 LegendForge aims to become:
 
-A complete Virtual Tabletop
-A strong backend portfolio project
-A sandbox for RPG system creation
+- 🎲 A complete Virtual Tabletop
+- 🧠 A strong backend portfolio project
+- ⚙️ A modular RPG engine
 
 ---
 
 Built step by step.
 Built to scale.
 Built like a real product.
-
----
-
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/raiellgod/LegendForge.git
-cd LegendForge
-pnpm install
-pnpm dev

@@ -11,7 +11,7 @@ Cada cápsula representa:
 - uma etapa pequena  
 - funcional  
 - testável  
-- concluída  
+- validada  
 
 ---
 
@@ -25,12 +25,12 @@ Configurar o ambiente inicial de desenvolvimento do backend.
 
 ## ⚙️ Dependencies Installed
 
-- Node — 24.13.1  
-- TypeScript — 5.9.3  
-- @types/node — 24.10.13  
-- Prettier — 3.8.1  
-- ESLint — 9.39.2  
-- tsx — 4.21.0  
+- Node  
+- TypeScript  
+- @types/node  
+- Prettier  
+- ESLint  
+- tsx  
 
 ---
 
@@ -38,57 +38,25 @@ Configurar o ambiente inicial de desenvolvimento do backend.
 
 - `git init`  
 - `tsc --init`  
-- ESLint configurado via CLI  
+- ESLint configurado  
 - Prettier integrado  
-- `eslint-config-prettier` configurado  
-- `eslint-plugin-simple-import-sort` configurado  
-
-### Configurações importantes
-
-- Importação do Prettier config:
-```ts
-import eslintConfigPrettier from 'eslint-config-prettier/flat'
-```
-
-- Plugin de ordenação de imports:
-```ts
-import simpleImportSort from 'eslint-plugin-simple-import-sort'
-```
-
-- Regras aplicadas:
-```ts
-{
-  plugins: {
-    'simple-import-sort': simpleImportSort,
-  },
-  rules: {
-    'simple-import-sort/imports': 'error',
-    'simple-import-sort/exports': 'error',
-  },
-}
-```
+- Ordenação automática de imports  
 
 ---
 
 ## 🧪 Changes Made
 
-- `tsconfig.json` ajustado  
-- pasta `src/` criada  
-- `index.ts` criado e modificado  
-- pasta `dist/` gerada  
-- `index.js` compilado  
-- `package.json` configurado  
-- script de desenvolvimento funcionando  
-- `.npmrc` configurado  
+- estrutura inicial criada  
+- TypeScript configurado  
+- scripts de desenvolvimento funcionando  
 
 ---
 
 ## ✅ Result
 
-- Ambiente de desenvolvimento funcional  
-- TypeScript compilando corretamente  
-- Lint e formatação ativos  
-- Execução via `tsx` funcionando  
+- ambiente funcional  
+- código padronizado  
+- execução consistente  
 
 ---
 
@@ -96,34 +64,31 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 
 ## 🎯 Goal
 
-Adicionar base do backend com Fastify e ferramentas essenciais.
+Criar base do backend com Fastify.
 
 ---
 
 ## ⚙️ Dependencies Installed
 
-- Fastify — 5.7.4  
-- Zod — 4.3.6  
-- fastify-type-provider-zod — 6.1.0  
-- @fastify/swagger — 9.7.0  
-- @fastify/swagger-ui — 5.2.5  
+- Fastify  
+- Zod  
+- Swagger  
 
 ---
 
 ## 🧪 Changes Made
 
-- instalação do Fastify  
-- integração inicial do Zod  
-- configuração base de tipagem com Zod  
-- adição de Swagger para documentação da API  
+- inicialização do servidor  
+- integração com Zod  
+- documentação com Swagger  
 
 ---
 
 ## ✅ Result
 
-- API Fastify inicial funcionando  
-- estrutura preparada para validação com Zod  
-- documentação Swagger pronta para uso  
+- API funcional  
+- validação estruturada  
+- documentação disponível  
 
 ---
 
@@ -131,52 +96,92 @@ Adicionar base do backend com Fastify e ferramentas essenciais.
 
 ## 🎯 Goal
 
-Definir toda a estrutura de dados e a interface visual antes da implementação técnica.
+Definir domínio do sistema antes da implementação.
+
+---
 
 ## ⚙️ Tools Used
 
-- dbdiagram.io (Modelagem ERD)
-- Figma (Prototipagem)
-
-## ✅ Result (In Progress)
-
-- Estrutura de Users e Campaigns definida visualmente.
-- Planejamento de tabelas para Chat e Dice Roller em andamento.
-
-## 🔜 Planned
-
-- modelagem do banco de dados  
-- definição das entidades principais  
-- configuração do Prisma  
-- conexão com PostgreSQL  
+- dbdiagram.io  
+- Figma  
 
 ---
 
-## 📝 Notes
+## 🧪 Changes Made
 
-- manter abordagem incremental  
-- validar cada etapa antes de avançar
+- modelagem inicial do banco  
+- definição de entidades principais  
+- estrutura inicial da UI  
 
 ---
-
-# ⚡ Capsule 04 — Database Design
-
-## 🎯 Goal
-
-Criar estrutura completa do banco de dados.
 
 ## ✅ Result
 
-- Estrutura completa definida
-- Suporte a:
-  - personagens
-  - classes
-  - itens
-  - campanhas
+- base conceitual sólida  
+- visão clara do produto  
 
-## 🔜 Next
+---
 
-- Implementar no Prisma
+# ⚡ Capsule 04 — Database Design (Core)
+
+## 🎯 Goal
+
+Criar estrutura completa do banco.
+
+---
+
+## 🧪 Evolução
+
+Essa cápsula passou por múltiplas refatorações até atingir nível produção.
+
+---
+
+## ✅ Result (FINAL)
+
+- banco modelado com qualidade profissional  
+- normalização adequada  
+- suporte a:
+
+### 🧩 Domínio
+
+- usuários  
+- campanhas  
+- personagens  
+- classes e subclasses  
+- sistemas de RPG  
+
+### ⚙️ Engenharia
+
+- multiclasse  
+- inventário por instância  
+- sistema de features unificado  
+- logs escaláveis  
+
+---
+
+## 🧠 Decisões Importantes
+
+- features centralizadas em uma tabela  
+- regras críticas no banco (não só no backend)  
+- separação entre modelo e instância (items vs inventory)  
+
+---
+
+## ⚠️ Complexidades Tratadas
+
+- limite de atributos (1–30)  
+- limite de nível (1–20)  
+- integridade de subclasses (trigger)  
+- ownership de features (CHECK constraint)  
+- base preparada para escala  
+
+---
+
+## 🚧 Next
+
+- implementar via Prisma  
+- criar migrations reais  
+- validar constraints no PostgreSQL  
 
 ---
 
@@ -184,17 +189,36 @@ Criar estrutura completa do banco de dados.
 
 ## 🎯 Goal
 
-Criar interface visual do sistema
+Criar interface visual do sistema.
+
+---
+
+## 🧪 Changes Made
+
+- fluxo de criação de campanha  
+- estrutura de navegação  
+- base da mesa de jogo  
+
+---
 
 ## ✅ Result
 
-- Tela de criação de partida pronta
-- Tela de busca iniciada
-- Tela da mesa iniciada
+- UX definida  
+- fluxo principal claro  
+
+---
+
+## 🟡 Em progresso
+
+- buscar campanhas  
+- tela inicial da mesa  
+
+---
 
 ## 🔜 Next
 
-- Conectar com backend
+- integração com backend  
+- interação real com dados  
 
 ---
 
@@ -202,16 +226,170 @@ Criar interface visual do sistema
 
 ## 🎯 Goal
 
-Criar sistema próprio de RPG
+Criar sistema próprio de RPG.
+
+---
+
+## 🧪 Changes Made
+
+- classes definidas  
+- subclasses definidas  
+- progressão 1–20  
+- talentos (feats) criados  
+- estrutura de atributos  
+
+---
 
 ## ✅ Result
 
-- Classes definidas
-- Subclasses definidas
-- Progressão 1–20
-- Talentos criados
+- sistema jogável conceitualmente  
+- pronto para integração  
+
+---
+
+## 🟡 Em evolução
+
+- balanceamento  
+- ajustes finos  
+
+---
 
 ## 🔜 Next
 
-- Integrar ao banco
-- Criar lógica de cálculo
+- integrar ao banco  
+- criar lógica de cálculo  
+- validar progressão real  
+
+---
+
+# ⚡ Capsule 07 — Database Refinement (Senior Level)
+
+## 🎯 Goal
+
+Elevar o banco para nível produção real.
+
+---
+
+## 🧪 Changes Made
+
+- remoção de JSON desnecessário  
+- normalização completa  
+- criação de enums  
+- revisão de relações  
+- preparação para múltiplos sistemas RPG  
+
+---
+
+## ✅ Result
+
+- banco nível sênior (quase enterprise)  
+- pronto para escalar  
+- consistente  
+
+---
+
+## ⚠️ Aprendizados
+
+- banco NÃO é só armazenamento → é regra de negócio  
+- constraints são obrigatórias  
+- trigger resolve problemas que FK não resolve  
+
+---
+
+# ⚡ Capsule 08 — Production Constraints & Integrity
+
+## 🎯 Goal
+
+Implementar regras críticas no banco.
+
+---
+
+## 🧪 Changes Made
+
+- validação de atributos (1–30)  
+- validação de nível (1–20)  
+- estrutura para validação de multiclasse  
+- preparação para triggers  
+
+---
+
+## ✅ Result
+
+- integridade forte de dados  
+- redução de bugs futuros  
+
+---
+
+## ⚠️ Observação
+
+Nem tudo pode ser resolvido só com constraint:
+
+- soma de níveis  
+- validações complexas  
+
+→ requer backend + banco  
+
+---
+
+# ⚡ Capsule 09 — Prisma Integration (CURRENT)
+
+## 🎯 Goal
+
+Conectar modelagem ao sistema real.
+
+---
+
+## 🧪 Em andamento
+
+- criação do `schema.prisma`  
+- adaptação do banco para ORM  
+- planejamento de migrations  
+
+---
+
+## 🎯 Resultado Esperado
+
+- banco operacional  
+- API persistindo dados reais  
+
+---
+
+## 🔥 Próximo passo crítico
+
+- rodar primeira migration  
+- validar estrutura no PostgreSQL  
+
+---
+
+# 🧠 Estado Atual do Projeto
+
+O projeto saiu de:
+
+👉 conceito  
+👉 design  
+👉 modelagem  
+
+E entrou em:
+
+👉 **implementação real**
+
+---
+
+## 🏁 Status
+
+✔ Arquitetura sólida  
+✔ Banco robusto  
+✔ Sistema definido  
+
+🚧 Falta:
+
+👉 transformar tudo em código funcional  
+
+---
+
+## 🧠 Regra de Ouro
+
+> Cada cápsula deve gerar valor real  
+> e deixar o sistema mais próximo de ser jogável
+
+---

@@ -11,84 +11,123 @@ Virtual Tabletop (VTT)
 
 ## ⚙️ Stack
 
-### Backend
+### 🖥️ Backend
+
 - Node.js  
 - Fastify  
 - TypeScript  
-- Prisma (em preparação)  
-- PostgreSQL  
+- Prisma (em implementação)  
+- PostgreSQL (fonte de verdade)  
 
-### Frontend (em progresso)
+---
+
+### 🎨 Frontend (em progresso)
+
 - React  
 - Vite  
 - Tailwind  
+- TypeScript  
 
 ---
 
 ## 📊 Current State
 
 - ✅ Backend base funcional  
-- ✅ Estrutura do projeto definida  
-- ✅ Modelagem do banco praticamente finalizada  
-- ✅ Protótipo Figma avançado  
-- ⚠️ Prisma ainda não integrado  
-- ⚠️ API ainda não conectada ao banco  
+- ✅ Arquitetura definida  
+- ✅ Banco de dados modelado (nível produção ~11/10)  
+- ✅ Figma estruturado até fluxo de criação de partida  
+- 🚧 Prisma sendo integrado  
+- ⚠️ API ainda não conectada ao banco real  
 
 ---
 
-## 🎯 Next Tasks (ATUALIZADO)
+## 🎯 Next Tasks (FOCO ATUAL)
 
-### 🔥 PRIORIDADE ALTA
+### 🔥 PRIORIDADE CRÍTICA (AGORA)
 
-- [ ] Implementar Prisma no projeto
-- [ ] Criar schema.prisma baseado no banco atual
-- [ ] Rodar primeira migration
-- [ ] Criar módulo de Users (primeira feature real)
+- [ ] Criar `schema.prisma` baseado no banco final
+- [ ] Configurar conexão com PostgreSQL
+- [ ] Rodar primeira migration real
+- [ ] Validar estrutura no banco (constraints + integridade)
 
 ---
 
-### 🧩 BACKEND
+### 🧠 BACKEND (PRÓXIMA ETAPA)
 
-- [ ] Criar endpoints:
-  - POST /users
-  - POST /sessions
-  - GET /campaigns
-- [ ] Estruturar services
+- [ ] Criar módulo `users`
+- [ ] Implementar autenticação (sessions)
+- [ ] Estruturar camada de services
+- [ ] Integrar validação (Zod)
+
+---
+
+### 🧩 FEATURES INICIAIS
+
+- [ ] POST `/users`
+- [ ] POST `/sessions`
+- [ ] GET `/campaigns`
+- [ ] POST `/campaigns`
 
 ---
 
 ### 🎨 FRONTEND
 
-- [ ] Finalizar tela:
-  - Criar Partida
-  - Procurar Partida
-- [ ] Iniciar tela:
-  - Mesa de jogo
+- [ ] Finalizar:
+  - Criar Partida  
+  - Procurar Partida  
+- [ ] Iniciar:
+  - Tela da mesa (core do produto)
 
 ---
 
 ## 📄 Project Docs
 
-- `ARCHITECTURE.md` → visão geral  
-- `DEV_STATE.md` → estado real  
+- `ARCHITECTURE.md` → visão e decisões  
+- `DEV_STATE.md` → estado real atualizado  
 - `FEATURE_CAPSULE.md` → progresso incremental  
 
 ---
 
 ## ⚡ Quick Context
 
-Projeto NÃO está mais no início.
+O projeto NÃO está mais em fase de planejamento.
 
-Estamos na transição crítica:
+Estamos na fase mais importante:
 
-👉 Design → Implementação real
+👉 **Transformar arquitetura em sistema funcional**
 
 ---
 
-## 🧠 Instruction
+## 🧠 Foco Atual
 
-Agora o foco muda:
+- Integração real com banco  
+- Primeiras features persistidas  
+- Validação de regras críticas  
 
-- menos planejamento  
-- mais execução  
-- features reais conectadas  
+---
+
+## ⚠️ Regra Importante
+
+> Não avançar features antes de validar a base.
+
+Se o banco estiver errado → tudo quebra depois.
+
+---
+
+## 🎯 Mentalidade
+
+- Construir pouco, mas certo  
+- Validar cada camada  
+- Evitar retrabalho  
+
+---
+
+## 🚀 Estado Atual
+
+👉 **PRISMA INTEGRATION PHASE**
+
+- Banco pronto  
+- Arquitetura sólida  
+- Hora de conectar tudo  
+
+---
