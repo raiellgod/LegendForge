@@ -2,7 +2,7 @@ import 'dotenv/config'
 
 import fastifyCors from '@fastify/cors'
 import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUI from '@fastify/swagger-ui'
+import fastifyApiReference from '@scalar/fastify-api-reference'
 import Fastify from 'fastify'
 import {
   jsonSchemaTransform,
@@ -13,6 +13,13 @@ import {
 import z from 'zod'
 
 import { auth } from './lib/auth.js'
+
+// import { auth } from './lib/auth.js'
+// import { aiRoutes } from './routes/ai.js'
+// import { homeRoutes } from './routes/home.js'
+// import { meRoutes } from './routes/me.js'
+// import { statsRoutes } from './routes/stats.js'
+// import { workoutPlanRoutes } from './routes/workout-plan.js'
 
 const app = Fastify({
   logger: true,
@@ -26,7 +33,7 @@ await app.register(fastifySwagger, {
     info: {
       title: 'LegendForge',
       description:
-        'VTT de jogo para rpgs de mesa ,totalmente escalavel e personalizavel para atender as necessidades de cada jogador',
+        'VTT de jogo para rpgs de mesa ,totalmente escalável e personalizável para atender as necessidades de cada jogador',
       version: '1.0.0',
     },
     servers: [
@@ -39,20 +46,53 @@ await app.register(fastifySwagger, {
   transform: jsonSchemaTransform,
 })
 
-await app.register(fastifySwaggerUI, {
-  routePrefix: '/docs',
+await app.register(fastifyCors, {
+  origin: ['http://localhost:3000'],
+  credentials: true,
 })
 
-await app.register(fastifyCors, {
-  origins: ['http://localhost:3000'],
-  credentials: true,
+await app.register(fastifyApiReference, {
+  routePrefix: '/docs',
+  configuration: {
+    sources: [
+      {
+        title: 'LegendForge API',
+        slug: 'legend-forge-api',
+        url: '/swagger.json',
+      },
+      {
+        title: 'Auth API',
+        slug: 'auth-api',
+        url: '/api/auth/open-api/generate-schema',
+      },
+    ],
+  },
+})
+
+// RESTful
+// Routes
+// await app.register(homeRoutes, { prefix: '/home' })
+// await app.register(meRoutes, { prefix: '/me' })
+// await app.register(statsRoutes, { prefix: '/stats' })
+// await app.register(workoutPlanRoutes, { prefix: '/workout-plans' })
+// await app.register(aiRoutes, { prefix: '/ai' })
+
+app.withTypeProvider<ZodTypeProvider>().route({
+  method: 'GET',
+  url: '/swagger.json',
+  schema: {
+    hide: true,
+  },
+  handler: async () => {
+    return app.swagger()
+  },
 })
 
 app.withTypeProvider<ZodTypeProvider>().route({
   method: 'GET',
   url: '/',
   schema: {
-    description: 'Hello World',
+    description: 'Hello world',
     tags: ['Hello World'],
     response: {
       200: z.object({
@@ -80,24 +120,21 @@ app.route({
       Object.entries(request.headers).forEach(([key, value]) => {
         if (value) headers.append(key, value.toString())
       })
-
       // Create Fetch API-compatible request
       const req = new Request(url.toString(), {
         method: request.method,
         headers,
         ...(request.body ? { body: JSON.stringify(request.body) } : {}),
       })
-
       // Process authentication request
       const response = await auth.handler(req)
-
       // Forward response to client
       reply.status(response.status)
       response.headers.forEach((value, key) => reply.header(key, value))
-      return reply.send(response.body ? await response.text() : null)
+      reply.send(response.body ? await response.text() : null)
     } catch (error) {
       app.log.error(error)
-      return reply.status(500).send({
+      reply.status(500).send({
         error: 'Internal authentication error',
         code: 'AUTH_FAILURE',
       })
