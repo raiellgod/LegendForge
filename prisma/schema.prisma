@@ -13,6 +13,11 @@ enum UserStatus {
   INACTIVE
 }
 
+enum ParticipantRole {
+  PLAYER
+  GM
+}
+
 model User {
   id            String     @id
   name          String
@@ -23,8 +28,10 @@ model User {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
-  sessions Session[]
-  accounts Account[]
+  sessions       Session[]
+  accounts       Account[]
+  campaignsOwned Campaign[]
+  participants   Participant[]
 
   @@unique([email])
   @@map("user")
@@ -112,4 +119,31 @@ model Skill {
   stat   Stat       @relation(fields: [statId], references: [id])
 
   @@unique([systemId, name])
+}
+
+model Campaign {
+  id         String   @id @default(uuid())
+  name       String
+  ownerId    String
+  isPublic   Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  inviteCode String?  @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  participants Participant[]
+}
+
+model Participant {
+  id         String          @id @default(uuid())
+  campaignId String
+  userId     String
+  role       ParticipantRole @default(PLAYER)
+  createdAt  DateTime        @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, userId])
 }

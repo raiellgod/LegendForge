@@ -271,7 +271,7 @@ MIT License
 ## 👨‍💻 Author
 
 Raiel Godinho  
-https://github.com/raiellgod
+<https://github.com/raiellgod>
 
 ---
 
