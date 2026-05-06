@@ -59,6 +59,7 @@ export const ModelName = {
   Stat: 'Stat',
   Skill: 'Skill',
   Campaign: 'Campaign',
+  GameSession: 'GameSession',
   Participant: 'Participant'
 } as const
 
@@ -172,6 +173,8 @@ export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof Sk
 export const CampaignScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
+  coverImage: 'coverImage',
   ownerId: 'ownerId',
   isPublic: 'isPublic',
   isActive: 'isActive',
@@ -181,6 +184,19 @@ export const CampaignScalarFieldEnum = {
 } as const
 
 export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
+
+
+export const GameSessionScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  title: 'title',
+  scheduledAt: 'scheduledAt',
+  isFinished: 'isFinished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GameSessionScalarFieldEnum = (typeof GameSessionScalarFieldEnum)[keyof typeof GameSessionScalarFieldEnum]
 
 
 export const ParticipantScalarFieldEnum = {

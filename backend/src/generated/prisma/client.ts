@@ -80,6 +80,11 @@ export type Skill = Prisma.SkillModel
  */
 export type Campaign = Prisma.CampaignModel
 /**
+ * Model GameSession
+ * 
+ */
+export type GameSession = Prisma.GameSessionModel
+/**
  * Model Participant
  * 
  */

@@ -1,34 +1,13 @@
-import { prisma } from './prisma.js'
+import { fromNodeHeaders } from "better-auth/node"
+
+import { auth } from "./auth.js"
 
 export async function getAuthenticatedSession(request: {
-  headers: {
-    authorization?: string
-  }
+  headers: Record<string, string | string[] | undefined>
 }) {
-  const authHeader = request.headers.authorization
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return null
-  }
-
-  const token = authHeader.replace('Bearer ', '').trim()
-
-  const session = await prisma.session.findUnique({
-    where: {
-      token,
-    },
-    include: {
-      user: true,
-    },
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(request.headers),
   })
-
-  if (!session) {
-    return null
-  }
-
-  if (session.expiresAt < new Date()) {
-    return null
-  }
 
   return session
 }

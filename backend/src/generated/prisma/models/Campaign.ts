@@ -27,6 +27,8 @@ export type AggregateCampaign = {
 export type CampaignMinAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
+  coverImage: string | null
   ownerId: string | null
   isPublic: boolean | null
   isActive: boolean | null
@@ -38,6 +40,8 @@ export type CampaignMinAggregateOutputType = {
 export type CampaignMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
+  coverImage: string | null
   ownerId: string | null
   isPublic: boolean | null
   isActive: boolean | null
@@ -49,6 +53,8 @@ export type CampaignMaxAggregateOutputType = {
 export type CampaignCountAggregateOutputType = {
   id: number
   name: number
+  description: number
+  coverImage: number
   ownerId: number
   isPublic: number
   isActive: number
@@ -62,6 +68,8 @@ export type CampaignCountAggregateOutputType = {
 export type CampaignMinAggregateInputType = {
   id?: true
   name?: true
+  description?: true
+  coverImage?: true
   ownerId?: true
   isPublic?: true
   isActive?: true
@@ -73,6 +81,8 @@ export type CampaignMinAggregateInputType = {
 export type CampaignMaxAggregateInputType = {
   id?: true
   name?: true
+  description?: true
+  coverImage?: true
   ownerId?: true
   isPublic?: true
   isActive?: true
@@ -84,6 +94,8 @@ export type CampaignMaxAggregateInputType = {
 export type CampaignCountAggregateInputType = {
   id?: true
   name?: true
+  description?: true
+  coverImage?: true
   ownerId?: true
   isPublic?: true
   isActive?: true
@@ -168,6 +180,8 @@ export type CampaignGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type CampaignGroupByOutputType = {
   id: string
   name: string
+  description: string | null
+  coverImage: string | null
   ownerId: string
   isPublic: boolean
   isActive: boolean
@@ -200,6 +214,8 @@ export type CampaignWhereInput = {
   NOT?: Prisma.CampaignWhereInput | Prisma.CampaignWhereInput[]
   id?: Prisma.StringFilter<"Campaign"> | string
   name?: Prisma.StringFilter<"Campaign"> | string
+  description?: Prisma.StringNullableFilter<"Campaign"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"Campaign"> | string | null
   ownerId?: Prisma.StringFilter<"Campaign"> | string
   isPublic?: Prisma.BoolFilter<"Campaign"> | boolean
   isActive?: Prisma.BoolFilter<"Campaign"> | boolean
@@ -208,11 +224,14 @@ export type CampaignWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   participants?: Prisma.ParticipantListRelationFilter
+  sessions?: Prisma.GameSessionListRelationFilter
 }
 
 export type CampaignOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -221,6 +240,7 @@ export type CampaignOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   owner?: Prisma.UserOrderByWithRelationInput
   participants?: Prisma.ParticipantOrderByRelationAggregateInput
+  sessions?: Prisma.GameSessionOrderByRelationAggregateInput
 }
 
 export type CampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -230,6 +250,8 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.CampaignWhereInput[]
   NOT?: Prisma.CampaignWhereInput | Prisma.CampaignWhereInput[]
   name?: Prisma.StringFilter<"Campaign"> | string
+  description?: Prisma.StringNullableFilter<"Campaign"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"Campaign"> | string | null
   ownerId?: Prisma.StringFilter<"Campaign"> | string
   isPublic?: Prisma.BoolFilter<"Campaign"> | boolean
   isActive?: Prisma.BoolFilter<"Campaign"> | boolean
@@ -237,11 +259,14 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   participants?: Prisma.ParticipantListRelationFilter
+  sessions?: Prisma.GameSessionListRelationFilter
 }, "id" | "inviteCode">
 
 export type CampaignOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -259,6 +284,8 @@ export type CampaignScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CampaignScalarWhereWithAggregatesInput | Prisma.CampaignScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Campaign"> | string
   name?: Prisma.StringWithAggregatesFilter<"Campaign"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Campaign"> | string | null
+  coverImage?: Prisma.StringNullableWithAggregatesFilter<"Campaign"> | string | null
   ownerId?: Prisma.StringWithAggregatesFilter<"Campaign"> | string
   isPublic?: Prisma.BoolWithAggregatesFilter<"Campaign"> | boolean
   isActive?: Prisma.BoolWithAggregatesFilter<"Campaign"> | boolean
@@ -270,6 +297,8 @@ export type CampaignScalarWhereWithAggregatesInput = {
 export type CampaignCreateInput = {
   id?: string
   name: string
+  description?: string | null
+  coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
   inviteCode?: string | null
@@ -277,11 +306,14 @@ export type CampaignCreateInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutCampaignsOwnedInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateInput = {
   id?: string
   name: string
+  description?: string | null
+  coverImage?: string | null
   ownerId: string
   isPublic?: boolean
   isActive?: boolean
@@ -289,11 +321,14 @@ export type CampaignUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -301,11 +336,14 @@ export type CampaignUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutCampaignsOwnedNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -313,11 +351,14 @@ export type CampaignUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateManyInput = {
   id?: string
   name: string
+  description?: string | null
+  coverImage?: string | null
   ownerId: string
   isPublic?: boolean
   isActive?: boolean
@@ -329,6 +370,8 @@ export type CampaignCreateManyInput = {
 export type CampaignUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -339,6 +382,8 @@ export type CampaignUpdateManyMutationInput = {
 export type CampaignUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -360,6 +405,8 @@ export type CampaignOrderByRelationAggregateInput = {
 export type CampaignCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -371,6 +418,8 @@ export type CampaignCountOrderByAggregateInput = {
 export type CampaignMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -382,6 +431,8 @@ export type CampaignMaxOrderByAggregateInput = {
 export type CampaignMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -437,6 +488,20 @@ export type CampaignUncheckedUpdateManyWithoutOwnerNestedInput = {
   deleteMany?: Prisma.CampaignScalarWhereInput | Prisma.CampaignScalarWhereInput[]
 }
 
+export type CampaignCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutSessionsInput, Prisma.CampaignUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+}
+
+export type CampaignUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutSessionsInput, Prisma.CampaignUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.CampaignUpsertWithoutSessionsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutSessionsInput, Prisma.CampaignUpdateWithoutSessionsInput>, Prisma.CampaignUncheckedUpdateWithoutSessionsInput>
+}
+
 export type CampaignCreateNestedOneWithoutParticipantsInput = {
   create?: Prisma.XOR<Prisma.CampaignCreateWithoutParticipantsInput, Prisma.CampaignUncheckedCreateWithoutParticipantsInput>
   connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutParticipantsInput
@@ -454,23 +519,29 @@ export type CampaignUpdateOneRequiredWithoutParticipantsNestedInput = {
 export type CampaignCreateWithoutOwnerInput = {
   id?: string
   name: string
+  description?: string | null
+  coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutOwnerInput = {
   id?: string
   name: string
+  description?: string | null
+  coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutOwnerInput = {
@@ -505,6 +576,8 @@ export type CampaignScalarWhereInput = {
   NOT?: Prisma.CampaignScalarWhereInput | Prisma.CampaignScalarWhereInput[]
   id?: Prisma.StringFilter<"Campaign"> | string
   name?: Prisma.StringFilter<"Campaign"> | string
+  description?: Prisma.StringNullableFilter<"Campaign"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"Campaign"> | string | null
   ownerId?: Prisma.StringFilter<"Campaign"> | string
   isPublic?: Prisma.BoolFilter<"Campaign"> | boolean
   isActive?: Prisma.BoolFilter<"Campaign"> | boolean
@@ -513,26 +586,104 @@ export type CampaignScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
 }
 
-export type CampaignCreateWithoutParticipantsInput = {
+export type CampaignCreateWithoutSessionsInput = {
   id?: string
   name: string
+  description?: string | null
+  coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutCampaignsOwnedInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
 }
 
-export type CampaignUncheckedCreateWithoutParticipantsInput = {
+export type CampaignUncheckedCreateWithoutSessionsInput = {
   id?: string
   name: string
+  description?: string | null
+  coverImage?: string | null
   ownerId: string
   isPublic?: boolean
   isActive?: boolean
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.CampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutSessionsInput, Prisma.CampaignUncheckedCreateWithoutSessionsInput>
+}
+
+export type CampaignUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.CampaignUpdateWithoutSessionsInput, Prisma.CampaignUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutSessionsInput, Prisma.CampaignUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.CampaignWhereInput
+}
+
+export type CampaignUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.CampaignWhereInput
+  data: Prisma.XOR<Prisma.CampaignUpdateWithoutSessionsInput, Prisma.CampaignUncheckedUpdateWithoutSessionsInput>
+}
+
+export type CampaignUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutCampaignsOwnedNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignCreateWithoutParticipantsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutCampaignsOwnedInput
+  sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignUncheckedCreateWithoutParticipantsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  ownerId: string
+  isPublic?: boolean
+  isActive?: boolean
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutParticipantsInput = {
@@ -554,28 +705,36 @@ export type CampaignUpdateToOneWithWhereWithoutParticipantsInput = {
 export type CampaignUpdateWithoutParticipantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutCampaignsOwnedNestedInput
+  sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutParticipantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateManyOwnerInput = {
   id?: string
   name: string
+  description?: string | null
+  coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
   inviteCode?: string | null
@@ -586,28 +745,36 @@ export type CampaignCreateManyOwnerInput = {
 export type CampaignUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateManyWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -622,10 +789,12 @@ export type CampaignUncheckedUpdateManyWithoutOwnerInput = {
 
 export type CampaignCountOutputType = {
   participants: number
+  sessions: number
 }
 
 export type CampaignCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   participants?: boolean | CampaignCountOutputTypeCountParticipantsArgs
+  sessions?: boolean | CampaignCountOutputTypeCountSessionsArgs
 }
 
 /**
@@ -645,10 +814,19 @@ export type CampaignCountOutputTypeCountParticipantsArgs<ExtArgs extends runtime
   where?: Prisma.ParticipantWhereInput
 }
 
+/**
+ * CampaignCountOutputType without action
+ */
+export type CampaignCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GameSessionWhereInput
+}
+
 
 export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
+  coverImage?: boolean
   ownerId?: boolean
   isPublic?: boolean
   isActive?: boolean
@@ -657,12 +835,15 @@ export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   participants?: boolean | Prisma.Campaign$participantsArgs<ExtArgs>
+  sessions?: boolean | Prisma.Campaign$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaign"]>
 
 export type CampaignSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
+  coverImage?: boolean
   ownerId?: boolean
   isPublic?: boolean
   isActive?: boolean
@@ -675,6 +856,8 @@ export type CampaignSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type CampaignSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
+  coverImage?: boolean
   ownerId?: boolean
   isPublic?: boolean
   isActive?: boolean
@@ -687,6 +870,8 @@ export type CampaignSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type CampaignSelectScalar = {
   id?: boolean
   name?: boolean
+  description?: boolean
+  coverImage?: boolean
   ownerId?: boolean
   isPublic?: boolean
   isActive?: boolean
@@ -695,10 +880,11 @@ export type CampaignSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ownerId" | "isPublic" | "isActive" | "inviteCode" | "createdAt" | "updatedAt", ExtArgs["result"]["campaign"]>
+export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "coverImage" | "ownerId" | "isPublic" | "isActive" | "inviteCode" | "createdAt" | "updatedAt", ExtArgs["result"]["campaign"]>
 export type CampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   participants?: boolean | Prisma.Campaign$participantsArgs<ExtArgs>
+  sessions?: boolean | Prisma.Campaign$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CampaignIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -713,10 +899,13 @@ export type $CampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     owner: Prisma.$UserPayload<ExtArgs>
     participants: Prisma.$ParticipantPayload<ExtArgs>[]
+    sessions: Prisma.$GameSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    description: string | null
+    coverImage: string | null
     ownerId: string
     isPublic: boolean
     isActive: boolean
@@ -1119,6 +1308,7 @@ export interface Prisma__CampaignClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   participants<T extends Prisma.Campaign$participantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessions<T extends Prisma.Campaign$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GameSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1150,6 +1340,8 @@ export interface Prisma__CampaignClient<T, Null = never, ExtArgs extends runtime
 export interface CampaignFieldRefs {
   readonly id: Prisma.FieldRef<"Campaign", 'String'>
   readonly name: Prisma.FieldRef<"Campaign", 'String'>
+  readonly description: Prisma.FieldRef<"Campaign", 'String'>
+  readonly coverImage: Prisma.FieldRef<"Campaign", 'String'>
   readonly ownerId: Prisma.FieldRef<"Campaign", 'String'>
   readonly isPublic: Prisma.FieldRef<"Campaign", 'Boolean'>
   readonly isActive: Prisma.FieldRef<"Campaign", 'Boolean'>
@@ -1573,6 +1765,30 @@ export type Campaign$participantsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.ParticipantScalarFieldEnum | Prisma.ParticipantScalarFieldEnum[]
+}
+
+/**
+ * Campaign.sessions
+ */
+export type Campaign$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GameSession
+   */
+  select?: Prisma.GameSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GameSession
+   */
+  omit?: Prisma.GameSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GameSessionInclude<ExtArgs> | null
+  where?: Prisma.GameSessionWhereInput
+  orderBy?: Prisma.GameSessionOrderByWithRelationInput | Prisma.GameSessionOrderByWithRelationInput[]
+  cursor?: Prisma.GameSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GameSessionScalarFieldEnum | Prisma.GameSessionScalarFieldEnum[]
 }
 
 /**

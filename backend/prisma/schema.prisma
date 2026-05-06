@@ -122,17 +122,32 @@ model Skill {
 }
 
 model Campaign {
-  id         String   @id @default(uuid())
-  name       String
-  ownerId    String
-  isPublic   Boolean  @default(false)
-  isActive   Boolean  @default(true)
-  inviteCode String?  @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  coverImage  String?
+  ownerId     String
+  isPublic    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  inviteCode  String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   participants Participant[]
+  sessions     GameSession[]
+}
+
+model GameSession {
+  id          String   @id @default(uuid())
+  campaignId  String
+  title       String
+  scheduledAt DateTime?
+  isFinished  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 }
 
 model Participant {
