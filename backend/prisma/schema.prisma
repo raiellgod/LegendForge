@@ -23,6 +23,7 @@ enum ParticipantStatus {
   APPROVED
   REJECTED
   REMOVED
+  LEAVE_REQUESTED
 }
 
 enum InviteStatus {

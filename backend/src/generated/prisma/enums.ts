@@ -30,7 +30,8 @@ export const ParticipantStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
-  REMOVED: 'REMOVED'
+  REMOVED: 'REMOVED',
+  LEAVE_REQUESTED: 'LEAVE_REQUESTED'
 } as const
 
 export type ParticipantStatus = (typeof ParticipantStatus)[keyof typeof ParticipantStatus]
