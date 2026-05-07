@@ -24,3 +24,42 @@ export const ParticipantRole = {
 } as const
 
 export type ParticipantRole = (typeof ParticipantRole)[keyof typeof ParticipantRole]
+
+
+export const ParticipantStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  REMOVED: 'REMOVED'
+} as const
+
+export type ParticipantStatus = (typeof ParticipantStatus)[keyof typeof ParticipantStatus]
+
+
+export const InviteStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED'
+} as const
+
+export type InviteStatus = (typeof InviteStatus)[keyof typeof InviteStatus]
+
+
+export const LogType = {
+  CHAT: 'CHAT',
+  SYSTEM: 'SYSTEM',
+  ROLL: 'ROLL',
+  COMBAT: 'COMBAT'
+} as const
+
+export type LogType = (typeof LogType)[keyof typeof LogType]
+
+
+export const SourceOrigin = {
+  OFFICIAL: 'OFFICIAL',
+  USER: 'USER',
+  AI: 'AI'
+} as const
+
+export type SourceOrigin = (typeof SourceOrigin)[keyof typeof SourceOrigin]

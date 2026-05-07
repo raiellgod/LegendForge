@@ -1,37 +1,40 @@
-import "dotenv/config"
+import "dotenv/config";
 
-import fastifyCors from "@fastify/cors"
-import fastifySwagger from "@fastify/swagger"
-import fastifyApiReference from "@scalar/fastify-api-reference"
-import Fastify from "fastify"
+import fastifyCors from "@fastify/cors";
+import fastifySwagger from "@fastify/swagger";
+import fastifyApiReference from "@scalar/fastify-api-reference";
+import Fastify from "fastify";
 import {
   jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
   ZodTypeProvider,
-} from "fastify-type-provider-zod"
-import z from "zod"
+} from "fastify-type-provider-zod";
+import z from "zod";
 
-import { auth } from "./lib/auth.js"
-import { campaignRoutes } from "./routes/campaigns.js"
+import { auth } from "./lib/auth.js";
+import { campaignRoutes } from "./routes/campaigns.js";
+import { systemRoutes } from "./routes/systems.js";
 
 const app = Fastify({
   logger: true,
-})
+});
 
-app.setValidatorCompiler(validatorCompiler)
-app.setSerializerCompiler(serializerCompiler)
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
 
 await app.register(fastifyCors, {
   origin: [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://192.168.0.9:3000",
+    "http://localhost:8081",
+    "http://127.0.0.1:8081",
   ],
   credentials: true,
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-})
+});
 
 await app.register(fastifySwagger, {
   openapi: {
@@ -49,62 +52,62 @@ await app.register(fastifySwagger, {
     ],
   },
   transform: jsonSchemaTransform,
-})
+});
 
 app.route({
   method: ["GET", "POST"],
   url: "/api/auth/*",
   async handler(request, reply) {
     try {
-      const url = new URL(request.url, `http://${request.headers.host}`)
+      const url = new URL(request.url, `http://${request.headers.host}`);
 
-      const headers = new Headers()
+      const headers = new Headers();
 
       Object.entries(request.headers).forEach(([key, value]) => {
         if (!value) {
-          return
+          return;
         }
 
         if (Array.isArray(value)) {
-          headers.append(key, value.join(", "))
-          return
+          headers.append(key, value.join(", "));
+          return;
         }
 
-        headers.append(key, value)
-      })
+        headers.append(key, value);
+      });
 
       const body =
         request.method !== "GET" && request.body
           ? JSON.stringify(request.body)
-          : undefined
+          : undefined;
 
       const authRequest = new Request(url.toString(), {
         method: request.method,
         headers,
         body,
-      })
+      });
 
-      const response = await auth.handler(authRequest)
+      const response = await auth.handler(authRequest);
 
-      reply.status(response.status)
+      reply.status(response.status);
 
       response.headers.forEach((value, key) => {
-        reply.header(key, value)
-      })
+        reply.header(key, value);
+      });
 
-      const responseBody = await response.text()
+      const responseBody = await response.text();
 
-      return reply.send(responseBody || null)
+      return reply.send(responseBody || null);
     } catch (error) {
-      app.log.error(error)
+      app.log.error(error);
 
       return reply.status(500).send({
         error: "Internal authentication error",
         code: "AUTH_FAILURE",
-      })
+      });
     }
   },
-})
+});
 
 await app.register(fastifyApiReference, {
   routePrefix: "/docs",
@@ -122,9 +125,7 @@ await app.register(fastifyApiReference, {
       },
     ],
   },
-})
-
-await app.register(campaignRoutes)
+});
 
 app.withTypeProvider<ZodTypeProvider>().route({
   method: "GET",
@@ -133,9 +134,9 @@ app.withTypeProvider<ZodTypeProvider>().route({
     hide: true,
   },
   handler: async () => {
-    return app.swagger()
+    return app.swagger();
   },
-})
+});
 
 app.withTypeProvider<ZodTypeProvider>().route({
   method: "GET",
@@ -152,15 +153,18 @@ app.withTypeProvider<ZodTypeProvider>().route({
   handler: () => {
     return {
       message: "Hello World",
-    }
+    };
   },
-})
+});
+
+await app.register(campaignRoutes);
+await app.register(systemRoutes);
 
 try {
   await app.listen({
     port: Number(process.env.PORT) || 8081,
-  })
+  });
 } catch (err) {
-  app.log.error(err)
-  process.exit(1)
+  app.log.error(err);
+  process.exit(1);
 }

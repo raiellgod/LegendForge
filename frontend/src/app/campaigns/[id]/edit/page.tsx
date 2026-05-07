@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
-import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { SiteHeader } from "@/components/ui/header";
 import { ParchmentBackground } from "@/components/ui/parchment-background";
+import { SiteHeader } from "@/components/ui/header";
+import { authClient } from "@/lib/auth-client";
 
 type User = {
   name?: string | null;
@@ -17,11 +17,19 @@ type User = {
   createdAt?: Date | string | null;
 };
 
+type GameSystem = {
+  id: string;
+  name: string;
+  slug: string | null;
+  version: number;
+};
+
 type Campaign = {
   id: string;
   name: string;
   description: string | null;
   coverImage: string | null;
+  systemId: string | null;
   isActive: boolean;
 };
 
@@ -39,6 +47,20 @@ async function getCampaign(id: string): Promise<Campaign> {
   return data.campaign;
 }
 
+async function getSystems(): Promise<GameSystem[]> {
+  const response = await fetch("http://localhost:8081/systems", {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar sistemas");
+  }
+
+  const data = await response.json();
+
+  return data.systems;
+}
+
 export default function EditCampaignPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -46,10 +68,16 @@ export default function EditCampaignPage() {
   const [user, setUser] = useState<User | null>(null);
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(true);
   const [coverImage, setCoverImage] = useState<string | null>(null);
+
+  const [systems, setSystems] = useState<GameSystem[]>([]);
+  const [selectedSystemId, setSelectedSystemId] = useState("");
+
+  const [loading, setLoading] = useState(true);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [savingImage, setSavingImage] = useState(false);
+  const [savingSystem, setSavingSystem] = useState(false);
+  const [savingDescription, setSavingDescription] = useState(false);
 
   useEffect(() => {
     async function loadPage() {
@@ -63,11 +91,21 @@ export default function EditCampaignPage() {
 
         setUser(data.user);
 
-        const campaign = await getCampaign(params.id);
+        const [campaign, systems] = await Promise.all([
+          getCampaign(params.id),
+          getSystems(),
+        ]);
 
         setCampaign(campaign);
         setDescription(campaign.description ?? "");
         setCoverImage(campaign.coverImage);
+        setSystems(systems);
+
+        if (campaign.systemId) {
+          setSelectedSystemId(campaign.systemId);
+        } else if (systems[0]) {
+          setSelectedSystemId(systems[0].id);
+        }
       } catch (error) {
         console.error(error);
         router.push("/campaigns");
@@ -78,29 +116,6 @@ export default function EditCampaignPage() {
 
     loadPage();
   }, [params.id, router]);
-
-  if (loading) {
-    return (
-      <main className="relative min-h-screen overflow-hidden">
-        <ParchmentBackground />
-
-        <div className="flex min-h-screen items-center justify-center">
-          <p className="text-lg font-bold text-forge-purple">Carregando...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (!user || !campaign) {
-    return null;
-  }
-
-  const memberSince = user.createdAt
-    ? new Date(user.createdAt).toLocaleDateString("pt-BR")
-    : "10/04/2026";
-
-  const userInitial =
-    user.name?.[0]?.toUpperCase() ?? user.email?.[0]?.toUpperCase() ?? "U";
 
   async function updateCampaignCover(image: string | null) {
     if (!campaign) {
@@ -157,6 +172,140 @@ export default function EditCampaignPage() {
     reader.readAsDataURL(file);
   }
 
+  async function handleSystemChange(systemId: string) {
+    if (!campaign) {
+      return;
+    }
+
+    if (campaign.systemId) {
+      return;
+    }
+
+    setSelectedSystemId(systemId);
+    setSavingSystem(true);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8081/campaigns/${campaign.id}`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            systemId,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar sistema");
+      }
+
+      const data = await response.json();
+
+      setCampaign(data.campaign);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSavingSystem(false);
+    }
+  }
+
+  async function handleSaveDescription() {
+    if (!campaign) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8081/campaigns/${campaign.id}`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            description: description.trim() || null,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao salvar descrição");
+      }
+
+      const data = await response.json();
+
+      setCampaign(data.campaign);
+      setDescription(data.campaign.description ?? "");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function handleSaveDescription() {
+    if (!campaign) {
+      return;
+    }
+
+    setSavingDescription(true);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8081/campaigns/${campaign.id}`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            description: description.trim() || null,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao salvar descrição");
+      }
+
+      const data = await response.json();
+
+      setCampaign(data.campaign);
+      setDescription(data.campaign.description ?? "");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSavingDescription(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <main className="relative min-h-screen overflow-hidden">
+        <ParchmentBackground />
+
+        <div className="flex min-h-screen items-center justify-center">
+          <p className="text-lg font-bold text-forge-purple">Carregando...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!user || !campaign) {
+    return null;
+  }
+
+  const memberSince = user.createdAt
+    ? new Date(user.createdAt).toLocaleDateString("pt-BR")
+    : "10/04/2026";
+
+  const userInitial =
+    user.name?.[0]?.toUpperCase() ?? user.email?.[0]?.toUpperCase() ?? "U";
+
   return (
     <main className="relative min-h-screen overflow-hidden">
       <ParchmentBackground />
@@ -164,6 +313,10 @@ export default function EditCampaignPage() {
 
       <section className="relative z-10 grid min-h-screen grid-cols-[2fr_1fr] gap-10 px-[9%] pt-[115px]">
         <div className="max-w-[800px] text-forge-purple">
+          {/* TODO: Revisar o tamanho e proporção da imagem de capa.
+              A versão atual usa um placeholder simples para validar o fluxo de upload.
+              Mais tarde, ajustar para seguir o layout final do Figma e definir melhor
+              responsividade, crop, preview e armazenamento real da imagem. */}
           <div className="relative mb-4 h-[170px] w-full overflow-hidden rounded-sm bg-gradient-to-br from-fuchsia-500 via-purple-500 to-violet-700">
             {coverImage ? (
               <Image
@@ -288,19 +441,55 @@ export default function EditCampaignPage() {
 
             <select
               aria-label="Sistema de jogo"
-              className="h-[28px] w-[240px] rounded-md border border-forge-gold bg-forge-parchment px-3 text-xs font-bold text-forge-purple outline-none"
-              defaultValue="meu-sistema"
+              value={selectedSystemId}
+              onChange={(event) => handleSystemChange(event.target.value)}
+              disabled={
+                savingSystem ||
+                systems.length === 0 ||
+                Boolean(campaign.systemId)
+              }
+              className="h-[28px] w-[240px] rounded-md border border-forge-gold bg-forge-parchment px-3 text-xs font-bold text-forge-purple outline-none disabled:cursor-not-allowed disabled:opacity-70"
             >
-              <option value="meu-sistema">Meu sistema</option>
+              {systems.map((system) => (
+                <option key={system.id} value={system.id}>
+                  {system.name}
+                </option>
+              ))}
             </select>
+
+            {savingSystem && (
+              <span className="text-[10px] font-bold text-forge-purple">
+                Salvando sistema...
+              </span>
+            )}
+
+            {campaign.systemId && !savingSystem && (
+              <span className="text-[10px] font-bold text-forge-purple/70">
+                Sistema definido
+              </span>
+            )}
           </div>
 
-          <textarea
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            placeholder="Adicione uma descrição para o jogo aqui ..."
-            className="min-h-[85px] w-full resize-none border-y border-forge-purple/50 bg-transparent py-3 text-sm font-semibold text-forge-purple outline-none placeholder:text-forge-purple/70"
-          />
+          <div>
+            <textarea
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="Adicione uma descrição para o jogo aqui ..."
+              className="min-h-[85px] w-full resize-none border-y border-forge-purple/50 bg-transparent py-3 text-sm font-semibold text-forge-purple outline-none placeholder:text-forge-purple/70"
+            />
+
+            <div className="mt-4 flex justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleSaveDescription}
+                disabled={savingDescription}
+                className="h-[36px] w-auto whitespace-nowrap rounded-[10px] px-5 text-xs"
+              >
+                {savingDescription ? "Salvando..." : "Salvar descrição"}
+              </Button>
+            </div>
+          </div>
         </div>
 
         <aside className="pt-1">
@@ -345,9 +534,9 @@ export default function EditCampaignPage() {
       </section>
     </main>
   );
-
-  // TODO: Revisar o tamanho e proporção da imagem de capa.
-  // A versão atual usa um placeholder simples para validar o fluxo de upload.
-  // Mais tarde, ajustar para seguir o layout final do Figma e definir melhor
-  // responsividade, crop, preview e armazenamento real da imagem.
 }
+
+// TODO: Revisar o tamanho e proporção da imagem de capa.
+// A versão atual usa um placeholder simples para validar o fluxo de upload.
+// Mais tarde, ajustar para seguir o layout final do Figma e definir melhor
+// responsividade, crop, preview e armazenamento real da imagem.

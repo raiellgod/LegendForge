@@ -4,10 +4,10 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { SiteHeader } from "@/components/ui/header";
 import { ParchmentBackground } from "@/components/ui/parchment-background";
+import { SiteHeader } from "@/components/ui/header";
+import { authClient } from "@/lib/auth-client";
 
 type User = {
   name?: string | null;
@@ -16,71 +16,112 @@ type User = {
   createdAt?: Date | string | null;
 };
 
-type CharacterSheetType = "default";
+type GameSystem = {
+  id: string;
+  name: string;
+  slug: string | null;
+  version: number;
+};
+
+async function getSystems(): Promise<GameSystem[]> {
+  const response = await fetch("http://localhost:8081/systems", {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar sistemas");
+  }
+
+  const data = await response.json();
+
+  return data.systems;
+}
 
 export default function CreateCampaignPage() {
   const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
   const [campaignName, setCampaignName] = useState("");
-  const [sheetType, setSheetType] = useState<CharacterSheetType>("default");
+  const [systems, setSystems] = useState<GameSystem[]>([]);
+  const [selectedSystemId, setSelectedSystemId] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadSession() {
-      const { data } = await authClient.getSession();
+    async function loadPage() {
+      try {
+        const { data } = await authClient.getSession();
 
-      if (!data?.user) {
-        router.push("/login");
-        return;
+        if (!data?.user) {
+          router.push("/login");
+          return;
+        }
+
+        setUser(data.user);
+
+        const systems = await getSystems();
+
+        setSystems(systems);
+
+        if (systems[0]) {
+          setSelectedSystemId(systems[0].id);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar página de criação:", error);
+        setError("Não foi possível carregar os sistemas de jogo.");
+      } finally {
+        setLoading(false);
       }
-
-      setUser(data.user);
-      setLoading(false);
     }
 
-    loadSession();
+    loadPage();
   }, [router]);
 
   async function handleCreateCampaign(event: FormEvent<HTMLFormElement>) {
-  event.preventDefault()
+    event.preventDefault();
 
-  if (!campaignName.trim()) {
-    setError("Digite um nome para o mundo.")
-    return
-  }
-
-  try {
-    setSubmitting(true)
-    setError(null)
-
-    const response = await fetch("http://localhost:8081/campaigns", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: campaignName.trim(),
-      }),
-    })
-
-    if (!response.ok) {
-      throw new Error("Erro ao criar campanha")
+    if (!campaignName.trim()) {
+      setError("Digite um nome para o mundo.");
+      return;
     }
 
-    const data = await response.json()
+    if (!selectedSystemId) {
+      setError("Escolha um sistema de ficha.");
+      return;
+    }
 
-    router.push(`/campaigns/${data.campaign.id}/edit`)
-  } catch (error) {
-    console.error(error)
-    setError("Não foi possível criar a campanha.")
-  } finally {
-    setSubmitting(false)
+    try {
+      setSubmitting(true);
+      setError(null);
+
+      const response = await fetch("http://localhost:8081/campaigns", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: campaignName.trim(),
+          systemId: selectedSystemId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao criar campanha");
+      }
+
+      const data = await response.json();
+
+      router.push(`/campaigns/${data.campaign.id}/edit`);
+    } catch (error) {
+      console.error(error);
+      setError("Não foi possível criar a campanha.");
+    } finally {
+      setSubmitting(false);
+    }
   }
-}
+
   if (loading) {
     return (
       <main className="relative min-h-screen overflow-hidden">
@@ -143,20 +184,22 @@ export default function CreateCampaignPage() {
             uma possibilidade de ficha.
           </p>
 
-          <label htmlFor="sheetType" className="sr-only">
+          <label htmlFor="systemId" className="sr-only">
             Escolha a ficha de personagem
           </label>
 
           <select
-            id="sheetType"
-            name="sheetType"
-            value={sheetType}
-            onChange={(event) =>
-              setSheetType(event.target.value as CharacterSheetType)
-            }
+            id="systemId"
+            name="systemId"
+            value={selectedSystemId}
+            onChange={(event) => setSelectedSystemId(event.target.value)}
             className="h-[46px] w-full rounded-md border border-forge-gold bg-forge-parchment px-5 text-sm font-bold text-forge-purple outline-none focus:border-forge-purple"
           >
-            <option value="default">Meu sistema</option>
+            {systems.map((system) => (
+              <option key={system.id} value={system.id}>
+                {system.name}
+              </option>
+            ))}
           </select>
 
           <div className="mt-10">
@@ -172,5 +215,3 @@ export default function CreateCampaignPage() {
     </main>
   );
 }
-
-// Esse formulário já cria campanha real usando seu POST /campaigns. Por enquanto o seletor de ficha fica visualmente pronto, mas ainda não envia sheetType para o backend porque seu endpoint de campanha ainda não espera esse campo.

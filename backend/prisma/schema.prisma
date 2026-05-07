@@ -18,10 +18,37 @@ enum ParticipantRole {
   GM
 }
 
+enum ParticipantStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REMOVED
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+enum LogType {
+  CHAT
+  SYSTEM
+  ROLL
+  COMBAT
+}
+
+enum SourceOrigin {
+  OFFICIAL
+  USER
+  AI
+}
+
 model User {
   id            String     @id
   name          String
-  email         String
+  email         String     @unique
   emailVerified Boolean    @default(false)
   image         String?
   status        UserStatus @default(ACTIVE)
@@ -33,22 +60,26 @@ model User {
   campaignsOwned Campaign[]
   participants   Participant[]
 
-  @@unique([email])
+  sentCampaignInvites     CampaignInvite[] @relation("CampaignInviteSender")
+  receivedCampaignInvites CampaignInvite[] @relation("CampaignInviteRecipient")
+
+  campaignLogs CampaignLog[]
+
   @@map("user")
 }
 
 model Session {
   id        String   @id
   expiresAt DateTime
-  token     String
+  token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@map("session")
 }
@@ -58,7 +89,6 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -68,6 +98,8 @@ model Account {
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("account")
@@ -92,8 +124,9 @@ model GameSystem {
   version   Int
   createdAt DateTime @default(now())
 
-  stats  Stat[]
-  skills Skill[]
+  stats     Stat[]
+  skills    Skill[]
+  campaigns Campaign[]
 }
 
 model Stat {
@@ -102,10 +135,11 @@ model Stat {
   name      String
   createdAt DateTime @default(now())
 
-  system GameSystem @relation(fields: [systemId], references: [id])
+  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
   skills Skill[]
 
   @@unique([systemId, name])
+  @@index([systemId])
 }
 
 model Skill {
@@ -115,10 +149,12 @@ model Skill {
   name      String
   createdAt DateTime @default(now())
 
-  system GameSystem @relation(fields: [systemId], references: [id])
-  stat   Stat       @relation(fields: [statId], references: [id])
+  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  stat   Stat       @relation(fields: [statId], references: [id], onDelete: Cascade)
 
   @@unique([systemId, name])
+  @@index([systemId])
+  @@index([statId])
 }
 
 model Campaign {
@@ -127,38 +163,97 @@ model Campaign {
   description String?
   coverImage  String?
   ownerId     String
+  systemId    String?
   isPublic    Boolean  @default(false)
   isActive    Boolean  @default(true)
   inviteCode  String?  @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner  User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  system GameSystem? @relation(fields: [systemId], references: [id], onDelete: SetNull)
+
   participants Participant[]
   sessions     GameSession[]
+  invites      CampaignInvite[]
+  logs         CampaignLog[]
+
+  @@index([ownerId])
+  @@index([systemId])
+  @@index([isPublic])
+  @@index([isActive])
 }
 
 model GameSession {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   campaignId  String
   title       String
   scheduledAt DateTime?
-  isFinished  Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isFinished  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([scheduledAt])
 }
 
 model Participant {
-  id         String          @id @default(uuid())
+  id         String            @id @default(uuid())
   campaignId String
   userId     String
-  role       ParticipantRole @default(PLAYER)
-  createdAt  DateTime        @default(now())
+  role       ParticipantRole   @default(PLAYER)
+  status     ParticipantStatus @default(APPROVED)
+  joinedAt   DateTime          @default(now())
+  removedAt  DateTime?
+  createdAt  DateTime          @default(now())
 
   campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([campaignId, userId])
+  @@index([campaignId])
+  @@index([userId])
+  @@index([status])
+}
+
+model CampaignInvite {
+  id              String       @id @default(uuid())
+  campaignId      String
+  senderId        String
+  recipientUserId String?
+  email           String?
+  token           String       @unique
+  status          InviteStatus @default(PENDING)
+  expiresAt       DateTime
+  acceptedAt      DateTime?
+  createdAt       DateTime     @default(now())
+
+  campaign      Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  sender        User     @relation("CampaignInviteSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientUser User?    @relation("CampaignInviteRecipient", fields: [recipientUserId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId])
+  @@index([senderId])
+  @@index([recipientUserId])
+  @@index([token])
+  @@index([status])
+}
+
+model CampaignLog {
+  id         String   @id @default(uuid())
+  campaignId String
+  userId     String?
+  type       LogType  @default(SYSTEM)
+  content    String
+  createdAt  DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId])
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
 }

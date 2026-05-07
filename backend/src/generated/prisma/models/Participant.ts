@@ -29,6 +29,9 @@ export type ParticipantMinAggregateOutputType = {
   campaignId: string | null
   userId: string | null
   role: $Enums.ParticipantRole | null
+  status: $Enums.ParticipantStatus | null
+  joinedAt: Date | null
+  removedAt: Date | null
   createdAt: Date | null
 }
 
@@ -37,6 +40,9 @@ export type ParticipantMaxAggregateOutputType = {
   campaignId: string | null
   userId: string | null
   role: $Enums.ParticipantRole | null
+  status: $Enums.ParticipantStatus | null
+  joinedAt: Date | null
+  removedAt: Date | null
   createdAt: Date | null
 }
 
@@ -45,6 +51,9 @@ export type ParticipantCountAggregateOutputType = {
   campaignId: number
   userId: number
   role: number
+  status: number
+  joinedAt: number
+  removedAt: number
   createdAt: number
   _all: number
 }
@@ -55,6 +64,9 @@ export type ParticipantMinAggregateInputType = {
   campaignId?: true
   userId?: true
   role?: true
+  status?: true
+  joinedAt?: true
+  removedAt?: true
   createdAt?: true
 }
 
@@ -63,6 +75,9 @@ export type ParticipantMaxAggregateInputType = {
   campaignId?: true
   userId?: true
   role?: true
+  status?: true
+  joinedAt?: true
+  removedAt?: true
   createdAt?: true
 }
 
@@ -71,6 +86,9 @@ export type ParticipantCountAggregateInputType = {
   campaignId?: true
   userId?: true
   role?: true
+  status?: true
+  joinedAt?: true
+  removedAt?: true
   createdAt?: true
   _all?: true
 }
@@ -152,6 +170,9 @@ export type ParticipantGroupByOutputType = {
   campaignId: string
   userId: string
   role: $Enums.ParticipantRole
+  status: $Enums.ParticipantStatus
+  joinedAt: Date
+  removedAt: Date | null
   createdAt: Date
   _count: ParticipantCountAggregateOutputType | null
   _min: ParticipantMinAggregateOutputType | null
@@ -181,6 +202,9 @@ export type ParticipantWhereInput = {
   campaignId?: Prisma.StringFilter<"Participant"> | string
   userId?: Prisma.StringFilter<"Participant"> | string
   role?: Prisma.EnumParticipantRoleFilter<"Participant"> | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFilter<"Participant"> | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
+  removedAt?: Prisma.DateTimeNullableFilter<"Participant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -191,6 +215,9 @@ export type ParticipantOrderByWithRelationInput = {
   campaignId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   campaign?: Prisma.CampaignOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -205,6 +232,9 @@ export type ParticipantWhereUniqueInput = Prisma.AtLeast<{
   campaignId?: Prisma.StringFilter<"Participant"> | string
   userId?: Prisma.StringFilter<"Participant"> | string
   role?: Prisma.EnumParticipantRoleFilter<"Participant"> | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFilter<"Participant"> | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
+  removedAt?: Prisma.DateTimeNullableFilter<"Participant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -215,6 +245,9 @@ export type ParticipantOrderByWithAggregationInput = {
   campaignId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ParticipantCountOrderByAggregateInput
   _max?: Prisma.ParticipantMaxOrderByAggregateInput
@@ -229,12 +262,18 @@ export type ParticipantScalarWhereWithAggregatesInput = {
   campaignId?: Prisma.StringWithAggregatesFilter<"Participant"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Participant"> | string
   role?: Prisma.EnumParticipantRoleWithAggregatesFilter<"Participant"> | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusWithAggregatesFilter<"Participant"> | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeWithAggregatesFilter<"Participant"> | Date | string
+  removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Participant"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Participant"> | Date | string
 }
 
 export type ParticipantCreateInput = {
   id?: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
   campaign: Prisma.CampaignCreateNestedOneWithoutParticipantsInput
   user: Prisma.UserCreateNestedOneWithoutParticipantsInput
@@ -245,12 +284,18 @@ export type ParticipantUncheckedCreateInput = {
   campaignId: string
   userId: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
 }
 
 export type ParticipantUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutParticipantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutParticipantsNestedInput
@@ -261,6 +306,9 @@ export type ParticipantUncheckedUpdateInput = {
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -269,12 +317,18 @@ export type ParticipantCreateManyInput = {
   campaignId: string
   userId: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
 }
 
 export type ParticipantUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -283,6 +337,9 @@ export type ParticipantUncheckedUpdateManyInput = {
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -306,6 +363,9 @@ export type ParticipantCountOrderByAggregateInput = {
   campaignId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -314,6 +374,9 @@ export type ParticipantMaxOrderByAggregateInput = {
   campaignId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -322,6 +385,9 @@ export type ParticipantMinOrderByAggregateInput = {
   campaignId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  joinedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -413,9 +479,16 @@ export type EnumParticipantRoleFieldUpdateOperationsInput = {
   set?: $Enums.ParticipantRole
 }
 
+export type EnumParticipantStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ParticipantStatus
+}
+
 export type ParticipantCreateWithoutUserInput = {
   id?: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
   campaign: Prisma.CampaignCreateNestedOneWithoutParticipantsInput
 }
@@ -424,6 +497,9 @@ export type ParticipantUncheckedCreateWithoutUserInput = {
   id?: string
   campaignId: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -461,12 +537,18 @@ export type ParticipantScalarWhereInput = {
   campaignId?: Prisma.StringFilter<"Participant"> | string
   userId?: Prisma.StringFilter<"Participant"> | string
   role?: Prisma.EnumParticipantRoleFilter<"Participant"> | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFilter<"Participant"> | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
+  removedAt?: Prisma.DateTimeNullableFilter<"Participant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Participant"> | Date | string
 }
 
 export type ParticipantCreateWithoutCampaignInput = {
   id?: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutParticipantsInput
 }
@@ -475,6 +557,9 @@ export type ParticipantUncheckedCreateWithoutCampaignInput = {
   id?: string
   userId: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -508,12 +593,18 @@ export type ParticipantCreateManyUserInput = {
   id?: string
   campaignId: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
 }
 
 export type ParticipantUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutParticipantsNestedInput
 }
@@ -522,6 +613,9 @@ export type ParticipantUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -529,6 +623,9 @@ export type ParticipantUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -536,12 +633,18 @@ export type ParticipantCreateManyCampaignInput = {
   id?: string
   userId: string
   role?: $Enums.ParticipantRole
+  status?: $Enums.ParticipantStatus
+  joinedAt?: Date | string
+  removedAt?: Date | string | null
   createdAt?: Date | string
 }
 
 export type ParticipantUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutParticipantsNestedInput
 }
@@ -550,6 +653,9 @@ export type ParticipantUncheckedUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -557,6 +663,9 @@ export type ParticipantUncheckedUpdateManyWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumParticipantRoleFieldUpdateOperationsInput | $Enums.ParticipantRole
+  status?: Prisma.EnumParticipantStatusFieldUpdateOperationsInput | $Enums.ParticipantStatus
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -567,6 +676,9 @@ export type ParticipantSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   campaignId?: boolean
   userId?: boolean
   role?: boolean
+  status?: boolean
+  joinedAt?: boolean
+  removedAt?: boolean
   createdAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -577,6 +689,9 @@ export type ParticipantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   campaignId?: boolean
   userId?: boolean
   role?: boolean
+  status?: boolean
+  joinedAt?: boolean
+  removedAt?: boolean
   createdAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -587,6 +702,9 @@ export type ParticipantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   campaignId?: boolean
   userId?: boolean
   role?: boolean
+  status?: boolean
+  joinedAt?: boolean
+  removedAt?: boolean
   createdAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -597,10 +715,13 @@ export type ParticipantSelectScalar = {
   campaignId?: boolean
   userId?: boolean
   role?: boolean
+  status?: boolean
+  joinedAt?: boolean
+  removedAt?: boolean
   createdAt?: boolean
 }
 
-export type ParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "userId" | "role" | "createdAt", ExtArgs["result"]["participant"]>
+export type ParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "userId" | "role" | "status" | "joinedAt" | "removedAt" | "createdAt", ExtArgs["result"]["participant"]>
 export type ParticipantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -625,6 +746,9 @@ export type $ParticipantPayload<ExtArgs extends runtime.Types.Extensions.Interna
     campaignId: string
     userId: string
     role: $Enums.ParticipantRole
+    status: $Enums.ParticipantStatus
+    joinedAt: Date
+    removedAt: Date | null
     createdAt: Date
   }, ExtArgs["result"]["participant"]>
   composites: {}
@@ -1055,6 +1179,9 @@ export interface ParticipantFieldRefs {
   readonly campaignId: Prisma.FieldRef<"Participant", 'String'>
   readonly userId: Prisma.FieldRef<"Participant", 'String'>
   readonly role: Prisma.FieldRef<"Participant", 'ParticipantRole'>
+  readonly status: Prisma.FieldRef<"Participant", 'ParticipantStatus'>
+  readonly joinedAt: Prisma.FieldRef<"Participant", 'DateTime'>
+  readonly removedAt: Prisma.FieldRef<"Participant", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Participant", 'DateTime'>
 }
     

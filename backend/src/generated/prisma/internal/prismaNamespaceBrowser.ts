@@ -60,7 +60,9 @@ export const ModelName = {
   Skill: 'Skill',
   Campaign: 'Campaign',
   GameSession: 'GameSession',
-  Participant: 'Participant'
+  Participant: 'Participant',
+  CampaignInvite: 'CampaignInvite',
+  CampaignLog: 'CampaignLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -176,6 +178,7 @@ export const CampaignScalarFieldEnum = {
   description: 'description',
   coverImage: 'coverImage',
   ownerId: 'ownerId',
+  systemId: 'systemId',
   isPublic: 'isPublic',
   isActive: 'isActive',
   inviteCode: 'inviteCode',
@@ -204,10 +207,41 @@ export const ParticipantScalarFieldEnum = {
   campaignId: 'campaignId',
   userId: 'userId',
   role: 'role',
+  status: 'status',
+  joinedAt: 'joinedAt',
+  removedAt: 'removedAt',
   createdAt: 'createdAt'
 } as const
 
 export type ParticipantScalarFieldEnum = (typeof ParticipantScalarFieldEnum)[keyof typeof ParticipantScalarFieldEnum]
+
+
+export const CampaignInviteScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  senderId: 'senderId',
+  recipientUserId: 'recipientUserId',
+  email: 'email',
+  token: 'token',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CampaignInviteScalarFieldEnum = (typeof CampaignInviteScalarFieldEnum)[keyof typeof CampaignInviteScalarFieldEnum]
+
+
+export const CampaignLogScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  userId: 'userId',
+  type: 'type',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type CampaignLogScalarFieldEnum = (typeof CampaignLogScalarFieldEnum)[keyof typeof CampaignLogScalarFieldEnum]
 
 
 export const SortOrder = {

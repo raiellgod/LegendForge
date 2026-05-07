@@ -153,9 +153,9 @@ export default function CampaignsPage() {
                 {campaigns.map((campaign) => (
                   <article
                     key={campaign.id}
-                    className="w-[150px] rounded-xl bg-zinc-900 p-3 text-forge-gold shadow-[10px_10px_0_rgba(0,0,0,0.35)]"
+                    className="w-[180px] rounded-xl bg-zinc-900 p-3 text-forge-gold shadow-[-10px_10px_0_rgba(0,0,0,0.35)]"
                   >
-                    <div className="mb-3 flex h-[70px] items-center justify-center overflow-hidden rounded bg-zinc-300">
+                    <div className="mb-3 flex h-[100px] items-center justify-center overflow-hidden rounded bg-zinc-300">
                       {campaign.coverImage ? (
                         <Image
                           src={campaign.coverImage}
@@ -167,19 +167,19 @@ export default function CampaignsPage() {
                       ) : null}
                     </div>
 
-                    <h2 className="text-[10px] font-bold text-forge-gold">
-                      Nome do mundo
+                    <h2 className="text-[25px] font-bold text-forge-gold">
+                      {campaign.name}
                     </h2>
 
-                    <p className="text-[10px] text-zinc-100">{campaign.name}</p>
+                    <p className="text-[10px] text-zinc-100"></p>
 
                     <p className="text-[10px] text-zinc-100">
                       {getNextSessionLabel(campaign.nextSession)}
                     </p>
 
                     <Link
-                      href={`/campaigns/${campaign.id}/play`}
-                      className="mt-1 block text-xs text-forge-gold hover:underline"
+                      href={`/campaigns/${campaign.id}/edit`}
+                      className="mt-1 block text-[20px] text-forge-gold hover:underline"
                     >
                       Launch Game
                     </Link>

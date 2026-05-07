@@ -393,7 +393,9 @@ export const ModelName = {
   Skill: 'Skill',
   Campaign: 'Campaign',
   GameSession: 'GameSession',
-  Participant: 'Participant'
+  Participant: 'Participant',
+  CampaignInvite: 'CampaignInvite',
+  CampaignLog: 'CampaignLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "stat" | "skill" | "campaign" | "gameSession" | "participant"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1153,6 +1155,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CampaignInvite: {
+      payload: Prisma.$CampaignInvitePayload<ExtArgs>
+      fields: Prisma.CampaignInviteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CampaignInviteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CampaignInviteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>
+        }
+        findFirst: {
+          args: Prisma.CampaignInviteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CampaignInviteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>
+        }
+        findMany: {
+          args: Prisma.CampaignInviteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>[]
+        }
+        create: {
+          args: Prisma.CampaignInviteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>
+        }
+        createMany: {
+          args: Prisma.CampaignInviteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CampaignInviteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>[]
+        }
+        delete: {
+          args: Prisma.CampaignInviteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>
+        }
+        update: {
+          args: Prisma.CampaignInviteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>
+        }
+        deleteMany: {
+          args: Prisma.CampaignInviteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CampaignInviteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CampaignInviteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>[]
+        }
+        upsert: {
+          args: Prisma.CampaignInviteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignInvitePayload>
+        }
+        aggregate: {
+          args: Prisma.CampaignInviteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCampaignInvite>
+        }
+        groupBy: {
+          args: Prisma.CampaignInviteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignInviteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CampaignInviteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignInviteCountAggregateOutputType> | number
+        }
+      }
+    }
+    CampaignLog: {
+      payload: Prisma.$CampaignLogPayload<ExtArgs>
+      fields: Prisma.CampaignLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CampaignLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CampaignLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>
+        }
+        findFirst: {
+          args: Prisma.CampaignLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CampaignLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>
+        }
+        findMany: {
+          args: Prisma.CampaignLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>[]
+        }
+        create: {
+          args: Prisma.CampaignLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>
+        }
+        createMany: {
+          args: Prisma.CampaignLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CampaignLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>[]
+        }
+        delete: {
+          args: Prisma.CampaignLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>
+        }
+        update: {
+          args: Prisma.CampaignLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.CampaignLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CampaignLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CampaignLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.CampaignLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignLogPayload>
+        }
+        aggregate: {
+          args: Prisma.CampaignLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCampaignLog>
+        }
+        groupBy: {
+          args: Prisma.CampaignLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CampaignLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1289,6 +1439,7 @@ export const CampaignScalarFieldEnum = {
   description: 'description',
   coverImage: 'coverImage',
   ownerId: 'ownerId',
+  systemId: 'systemId',
   isPublic: 'isPublic',
   isActive: 'isActive',
   inviteCode: 'inviteCode',
@@ -1317,10 +1468,41 @@ export const ParticipantScalarFieldEnum = {
   campaignId: 'campaignId',
   userId: 'userId',
   role: 'role',
+  status: 'status',
+  joinedAt: 'joinedAt',
+  removedAt: 'removedAt',
   createdAt: 'createdAt'
 } as const
 
 export type ParticipantScalarFieldEnum = (typeof ParticipantScalarFieldEnum)[keyof typeof ParticipantScalarFieldEnum]
+
+
+export const CampaignInviteScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  senderId: 'senderId',
+  recipientUserId: 'recipientUserId',
+  email: 'email',
+  token: 'token',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CampaignInviteScalarFieldEnum = (typeof CampaignInviteScalarFieldEnum)[keyof typeof CampaignInviteScalarFieldEnum]
+
+
+export const CampaignLogScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  userId: 'userId',
+  type: 'type',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type CampaignLogScalarFieldEnum = (typeof CampaignLogScalarFieldEnum)[keyof typeof CampaignLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1427,6 +1609,48 @@ export type EnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'ParticipantRole[]'
  */
 export type ListEnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ParticipantStatus'
+ */
+export type EnumParticipantStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ParticipantStatus[]'
+ */
+export type ListEnumParticipantStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InviteStatus'
+ */
+export type EnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'InviteStatus[]'
+ */
+export type ListEnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LogType'
+ */
+export type EnumLogTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LogType'>
+    
+
+
+/**
+ * Reference to a field of type 'LogType[]'
+ */
+export type ListEnumLogTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LogType[]'>
     
 
 
@@ -1548,6 +1772,8 @@ export type GlobalOmitConfig = {
   campaign?: Prisma.CampaignOmit
   gameSession?: Prisma.GameSessionOmit
   participant?: Prisma.ParticipantOmit
+  campaignInvite?: Prisma.CampaignInviteOmit
+  campaignLog?: Prisma.CampaignLogOmit
 }
 
 /* Types for Logging */

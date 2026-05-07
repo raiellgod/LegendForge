@@ -67,3 +67,13 @@ export type GameSession = Prisma.GameSessionModel
  * 
  */
 export type Participant = Prisma.ParticipantModel
+/**
+ * Model CampaignInvite
+ * 
+ */
+export type CampaignInvite = Prisma.CampaignInviteModel
+/**
+ * Model CampaignLog
+ * 
+ */
+export type CampaignLog = Prisma.CampaignLogModel

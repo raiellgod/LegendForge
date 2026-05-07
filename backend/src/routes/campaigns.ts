@@ -17,7 +17,8 @@ export async function campaignRoutes(app: FastifyInstance) {
           .string()
           .min(3, "Campaign name must have at least 3 characters"),
         description: z.string().optional(),
-        coverImage: z.string().url().optional(),
+        coverImage: z.string().optional(),
+        systemId: z.string().uuid().optional(),
         isPublic: z.boolean().optional(),
       }),
       response: {
@@ -25,14 +26,15 @@ export async function campaignRoutes(app: FastifyInstance) {
           campaign: z.object({
             id: z.string(),
             name: z.string(),
+            description: z.string().nullable(),
+            coverImage: z.string().nullable(),
             ownerId: z.string(),
+            systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
             inviteCode: z.string().nullable(),
             createdAt: z.string(),
             updatedAt: z.string(),
-            description: z.string().nullable(),
-            coverImage: z.string().nullable(),
           }),
         }),
         401: z.object({
@@ -56,6 +58,7 @@ export async function campaignRoutes(app: FastifyInstance) {
           name: request.body.name,
           description: request.body.description,
           coverImage: request.body.coverImage,
+          systemId: request.body.systemId,
           ownerId: session.user.id,
           isPublic: request.body.isPublic ?? false,
           inviteCode,
@@ -63,6 +66,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             create: {
               userId: session.user.id,
               role: "GM",
+              status: "APPROVED",
             },
           },
         },
@@ -126,6 +130,7 @@ export async function campaignRoutes(app: FastifyInstance) {
               participants: {
                 some: {
                   userId: session.user.id,
+                  status: "APPROVED",
                 },
               },
             },
@@ -168,6 +173,96 @@ export async function campaignRoutes(app: FastifyInstance) {
 
   app.withTypeProvider<ZodTypeProvider>().route({
     method: "GET",
+    url: "/campaigns/public",
+    schema: {
+      tags: ["Campaigns"],
+      description: "List public active campaigns",
+      response: {
+        200: z.object({
+          campaigns: z.array(
+            z.object({
+              id: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              coverImage: z.string().nullable(),
+              ownerId: z.string(),
+              systemId: z.string().nullable(),
+              inviteCode: z.string().nullable(),
+              createdAt: z.string(),
+              owner: z.object({
+                id: z.string(),
+                name: z.string(),
+                image: z.string().nullable(),
+              }),
+              participantsCount: z.number(),
+            }),
+          ),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaigns = await prisma.campaign.findMany({
+        where: {
+          isPublic: true,
+          isActive: true,
+          NOT: {
+            participants: {
+              some: {
+                userId: session.user.id,
+                status: "APPROVED",
+              },
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+          _count: {
+            select: {
+              participants: true,
+            },
+          },
+        },
+      });
+
+      return reply.status(200).send({
+        campaigns: campaigns.map((campaign) => ({
+          id: campaign.id,
+          name: campaign.name,
+          description: campaign.description,
+          coverImage: campaign.coverImage,
+          ownerId: campaign.ownerId,
+          systemId: campaign.systemId,
+          inviteCode: campaign.inviteCode,
+          createdAt: campaign.createdAt.toISOString(),
+          owner: campaign.owner,
+          participantsCount: campaign._count.participants,
+        })),
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
     url: "/campaigns/:id",
     schema: {
       tags: ["Campaigns"],
@@ -183,6 +278,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             description: z.string().nullable(),
             coverImage: z.string().nullable(),
             ownerId: z.string(),
+            systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
             inviteCode: z.string().nullable(),
@@ -218,6 +314,7 @@ export async function campaignRoutes(app: FastifyInstance) {
               participants: {
                 some: {
                   userId: session.user.id,
+                  status: "APPROVED",
                 },
               },
             },
@@ -258,6 +355,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             .optional(),
           description: z.string().nullable().optional(),
           coverImage: z.string().nullable().optional(),
+          systemId: z.string().uuid().nullable().optional(),
           isPublic: z.boolean().optional(),
         })
         .refine(
@@ -265,6 +363,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             data.name !== undefined ||
             data.description !== undefined ||
             data.coverImage !== undefined ||
+            data.systemId !== undefined ||
             data.isPublic !== undefined,
           {
             message: "At least one field must be provided",
@@ -278,6 +377,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             description: z.string().nullable(),
             coverImage: z.string().nullable(),
             ownerId: z.string(),
+            systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
             inviteCode: z.string().nullable(),
@@ -294,6 +394,9 @@ export async function campaignRoutes(app: FastifyInstance) {
         404: z.object({
           message: z.string(),
         }),
+        409: z.object({
+          message: z.string(),
+        }),
       },
     },
     handler: async (request, reply) => {
@@ -305,9 +408,10 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
-      const campaign = await prisma.campaign.findUnique({
+      const campaign = await prisma.campaign.findFirst({
         where: {
           id: request.params.id,
+          ownerId: session.user.id,
         },
       });
 
@@ -323,6 +427,17 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
+      if (
+        request.body.systemId !== undefined &&
+        campaign.systemId !== null &&
+        request.body.systemId !== campaign.systemId
+      ) {
+        return reply.status(409).send({
+          message:
+            "Campaign system cannot be changed after it has been defined",
+        });
+      }
+
       const updatedCampaign = await prisma.campaign.update({
         where: {
           id: campaign.id,
@@ -331,6 +446,7 @@ export async function campaignRoutes(app: FastifyInstance) {
           name: request.body.name,
           description: request.body.description,
           coverImage: request.body.coverImage,
+          systemId: request.body.systemId,
           isPublic: request.body.isPublic,
         },
       });
@@ -427,6 +543,9 @@ export async function campaignRoutes(app: FastifyInstance) {
             campaignId: z.string(),
             userId: z.string(),
             role: z.string(),
+            status: z.string(),
+            joinedAt: z.string(),
+            removedAt: z.string().nullable(),
             createdAt: z.string(),
           }),
         }),
@@ -478,6 +597,9 @@ export async function campaignRoutes(app: FastifyInstance) {
         where: {
           campaignId: campaign.id,
           userId: session.user.id,
+          status: {
+            not: "REMOVED",
+          },
         },
       });
 
@@ -492,12 +614,17 @@ export async function campaignRoutes(app: FastifyInstance) {
           userId: session.user.id,
           campaignId: campaign.id,
           role: "PLAYER",
+          status: "APPROVED",
         },
       });
 
       return reply.status(201).send({
         participant: {
           ...participant,
+          joinedAt: participant.joinedAt.toISOString(),
+          removedAt: participant.removedAt
+            ? participant.removedAt.toISOString()
+            : null,
           createdAt: participant.createdAt.toISOString(),
         },
       });
@@ -521,6 +648,9 @@ export async function campaignRoutes(app: FastifyInstance) {
               campaignId: z.string(),
               userId: z.string(),
               role: z.string(),
+              status: z.string(),
+              joinedAt: z.string(),
+              removedAt: z.string().nullable(),
               createdAt: z.string(),
               user: z.object({
                 id: z.string(),
@@ -584,6 +714,7 @@ export async function campaignRoutes(app: FastifyInstance) {
       const participants = await prisma.participant.findMany({
         where: {
           campaignId: campaign.id,
+          status: "APPROVED",
         },
         include: {
           user: {
@@ -603,6 +734,10 @@ export async function campaignRoutes(app: FastifyInstance) {
       return reply.status(200).send({
         participants: participants.map((participant) => ({
           ...participant,
+          joinedAt: participant.joinedAt.toISOString(),
+          removedAt: participant.removedAt
+            ? participant.removedAt.toISOString()
+            : null,
           createdAt: participant.createdAt.toISOString(),
         })),
       });
