@@ -166,6 +166,7 @@ model Campaign {
   systemId    String?
   isPublic    Boolean  @default(false)
   isActive    Boolean  @default(true)
+  maxPlayers  Int      @default(5)
   inviteCode  String?  @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

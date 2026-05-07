@@ -1442,6 +1442,7 @@ export const CampaignScalarFieldEnum = {
   systemId: 'systemId',
   isPublic: 'isPublic',
   isActive: 'isActive',
+  maxPlayers: 'maxPlayers',
   inviteCode: 'inviteCode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

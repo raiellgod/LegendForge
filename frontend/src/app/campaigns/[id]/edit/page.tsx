@@ -213,38 +213,7 @@ export default function EditCampaignPage() {
     }
   }
 
-  async function handleSaveDescription() {
-    if (!campaign) {
-      return;
-    }
 
-    try {
-      const response = await fetch(
-        `http://localhost:8081/campaigns/${campaign.id}`,
-        {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            description: description.trim() || null,
-          }),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao salvar descrição");
-      }
-
-      const data = await response.json();
-
-      setCampaign(data.campaign);
-      setDescription(data.campaign.description ?? "");
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   async function handleSaveDescription() {
     if (!campaign) {
@@ -531,6 +500,14 @@ export default function EditCampaignPage() {
             </div>
           </div>
         </aside>
+        <div className="mt-10">
+            <Link
+              href="/campaigns"
+              className="text-sm font-bold text-forge-purple hover:underline"
+            >
+              Voltar para minhas aventuras
+            </Link>
+          </div>
       </section>
     </main>
   );

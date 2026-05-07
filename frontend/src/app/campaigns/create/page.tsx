@@ -47,6 +47,8 @@ export default function CreateCampaignPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isPublic, setIsPublic] = useState(false);
+  const [maxPlayers, setMaxPlayers] = useState(5);
 
   useEffect(() => {
     async function loadPage() {
@@ -91,6 +93,11 @@ export default function CreateCampaignPage() {
       return;
     }
 
+    if (maxPlayers < 1 || maxPlayers > 10) {
+      setError("Escolha um número de jogadores entre 1 e 10.");
+      return;
+    }
+
     try {
       setSubmitting(true);
       setError(null);
@@ -104,6 +111,8 @@ export default function CreateCampaignPage() {
         body: JSON.stringify({
           name: campaignName.trim(),
           systemId: selectedSystemId,
+          isPublic,
+          maxPlayers,
         }),
       });
 
@@ -201,6 +210,37 @@ export default function CreateCampaignPage() {
               </option>
             ))}
           </select>
+
+          <div className="mt-8 grid grid-cols-2 gap-6">
+            <label className="flex cursor-pointer items-center gap-3 text-sm font-bold text-forge-purple">
+              <input
+                type="checkbox"
+                checked={isPublic}
+                onChange={(event) => setIsPublic(event.target.checked)}
+                className="h-4 w-4 accent-forge-purple"
+              />
+              Permitir que outros jogadores encontrem esta aventura
+            </label>
+
+            <div>
+              <label
+                htmlFor="maxPlayers"
+                className="mb-2 block text-sm font-bold text-forge-purple"
+              >
+                Máximo de jogadores
+              </label>
+
+              <input
+                id="maxPlayers"
+                type="number"
+                min={1}
+                max={12}
+                value={maxPlayers}
+                onChange={(event) => setMaxPlayers(Number(event.target.value))}
+                className="h-[42px] w-full rounded-md border border-forge-gold bg-forge-parchment px-4 text-sm font-bold text-forge-purple outline-none focus:border-forge-purple"
+              />
+            </div>
+          </div>
 
           <div className="mt-10">
             <Link

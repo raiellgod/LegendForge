@@ -20,8 +20,18 @@ export type CampaignModel = runtime.Types.Result.DefaultSelection<Prisma.$Campai
 
 export type AggregateCampaign = {
   _count: CampaignCountAggregateOutputType | null
+  _avg: CampaignAvgAggregateOutputType | null
+  _sum: CampaignSumAggregateOutputType | null
   _min: CampaignMinAggregateOutputType | null
   _max: CampaignMaxAggregateOutputType | null
+}
+
+export type CampaignAvgAggregateOutputType = {
+  maxPlayers: number | null
+}
+
+export type CampaignSumAggregateOutputType = {
+  maxPlayers: number | null
 }
 
 export type CampaignMinAggregateOutputType = {
@@ -33,6 +43,7 @@ export type CampaignMinAggregateOutputType = {
   systemId: string | null
   isPublic: boolean | null
   isActive: boolean | null
+  maxPlayers: number | null
   inviteCode: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -47,6 +58,7 @@ export type CampaignMaxAggregateOutputType = {
   systemId: string | null
   isPublic: boolean | null
   isActive: boolean | null
+  maxPlayers: number | null
   inviteCode: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -61,12 +73,21 @@ export type CampaignCountAggregateOutputType = {
   systemId: number
   isPublic: number
   isActive: number
+  maxPlayers: number
   inviteCode: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type CampaignAvgAggregateInputType = {
+  maxPlayers?: true
+}
+
+export type CampaignSumAggregateInputType = {
+  maxPlayers?: true
+}
 
 export type CampaignMinAggregateInputType = {
   id?: true
@@ -77,6 +98,7 @@ export type CampaignMinAggregateInputType = {
   systemId?: true
   isPublic?: true
   isActive?: true
+  maxPlayers?: true
   inviteCode?: true
   createdAt?: true
   updatedAt?: true
@@ -91,6 +113,7 @@ export type CampaignMaxAggregateInputType = {
   systemId?: true
   isPublic?: true
   isActive?: true
+  maxPlayers?: true
   inviteCode?: true
   createdAt?: true
   updatedAt?: true
@@ -105,6 +128,7 @@ export type CampaignCountAggregateInputType = {
   systemId?: true
   isPublic?: true
   isActive?: true
+  maxPlayers?: true
   inviteCode?: true
   createdAt?: true
   updatedAt?: true
@@ -149,6 +173,18 @@ export type CampaignAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CampaignAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CampaignSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CampaignMinAggregateInputType
@@ -179,6 +215,8 @@ export type CampaignGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: CampaignCountAggregateInputType | true
+  _avg?: CampaignAvgAggregateInputType
+  _sum?: CampaignSumAggregateInputType
   _min?: CampaignMinAggregateInputType
   _max?: CampaignMaxAggregateInputType
 }
@@ -192,10 +230,13 @@ export type CampaignGroupByOutputType = {
   systemId: string | null
   isPublic: boolean
   isActive: boolean
+  maxPlayers: number
   inviteCode: string | null
   createdAt: Date
   updatedAt: Date
   _count: CampaignCountAggregateOutputType | null
+  _avg: CampaignAvgAggregateOutputType | null
+  _sum: CampaignSumAggregateOutputType | null
   _min: CampaignMinAggregateOutputType | null
   _max: CampaignMaxAggregateOutputType | null
 }
@@ -227,6 +268,7 @@ export type CampaignWhereInput = {
   systemId?: Prisma.StringNullableFilter<"Campaign"> | string | null
   isPublic?: Prisma.BoolFilter<"Campaign"> | boolean
   isActive?: Prisma.BoolFilter<"Campaign"> | boolean
+  maxPlayers?: Prisma.IntFilter<"Campaign"> | number
   inviteCode?: Prisma.StringNullableFilter<"Campaign"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
@@ -247,6 +289,7 @@ export type CampaignOrderByWithRelationInput = {
   systemId?: Prisma.SortOrderInput | Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -271,6 +314,7 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   systemId?: Prisma.StringNullableFilter<"Campaign"> | string | null
   isPublic?: Prisma.BoolFilter<"Campaign"> | boolean
   isActive?: Prisma.BoolFilter<"Campaign"> | boolean
+  maxPlayers?: Prisma.IntFilter<"Campaign"> | number
   createdAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -290,12 +334,15 @@ export type CampaignOrderByWithAggregationInput = {
   systemId?: Prisma.SortOrderInput | Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CampaignCountOrderByAggregateInput
+  _avg?: Prisma.CampaignAvgOrderByAggregateInput
   _max?: Prisma.CampaignMaxOrderByAggregateInput
   _min?: Prisma.CampaignMinOrderByAggregateInput
+  _sum?: Prisma.CampaignSumOrderByAggregateInput
 }
 
 export type CampaignScalarWhereWithAggregatesInput = {
@@ -310,6 +357,7 @@ export type CampaignScalarWhereWithAggregatesInput = {
   systemId?: Prisma.StringNullableWithAggregatesFilter<"Campaign"> | string | null
   isPublic?: Prisma.BoolWithAggregatesFilter<"Campaign"> | boolean
   isActive?: Prisma.BoolWithAggregatesFilter<"Campaign"> | boolean
+  maxPlayers?: Prisma.IntWithAggregatesFilter<"Campaign"> | number
   inviteCode?: Prisma.StringNullableWithAggregatesFilter<"Campaign"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Campaign"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Campaign"> | Date | string
@@ -322,6 +370,7 @@ export type CampaignCreateInput = {
   coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -342,6 +391,7 @@ export type CampaignUncheckedCreateInput = {
   systemId?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -358,6 +408,7 @@ export type CampaignUpdateInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,6 +429,7 @@ export type CampaignUncheckedUpdateInput = {
   systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -396,6 +448,7 @@ export type CampaignCreateManyInput = {
   systemId?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -408,6 +461,7 @@ export type CampaignUpdateManyMutationInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -422,6 +476,7 @@ export type CampaignUncheckedUpdateManyInput = {
   systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -446,9 +501,14 @@ export type CampaignCountOrderByAggregateInput = {
   systemId?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CampaignAvgOrderByAggregateInput = {
+  maxPlayers?: Prisma.SortOrder
 }
 
 export type CampaignMaxOrderByAggregateInput = {
@@ -460,6 +520,7 @@ export type CampaignMaxOrderByAggregateInput = {
   systemId?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -474,9 +535,14 @@ export type CampaignMinOrderByAggregateInput = {
   systemId?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CampaignSumOrderByAggregateInput = {
+  maxPlayers?: Prisma.SortOrder
 }
 
 export type CampaignScalarRelationFilter = {
@@ -631,6 +697,7 @@ export type CampaignCreateWithoutOwnerInput = {
   coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -649,6 +716,7 @@ export type CampaignUncheckedCreateWithoutOwnerInput = {
   systemId?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -696,6 +764,7 @@ export type CampaignScalarWhereInput = {
   systemId?: Prisma.StringNullableFilter<"Campaign"> | string | null
   isPublic?: Prisma.BoolFilter<"Campaign"> | boolean
   isActive?: Prisma.BoolFilter<"Campaign"> | boolean
+  maxPlayers?: Prisma.IntFilter<"Campaign"> | number
   inviteCode?: Prisma.StringNullableFilter<"Campaign"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
@@ -708,6 +777,7 @@ export type CampaignCreateWithoutSystemInput = {
   coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -726,6 +796,7 @@ export type CampaignUncheckedCreateWithoutSystemInput = {
   ownerId: string
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -768,6 +839,7 @@ export type CampaignCreateWithoutSessionsInput = {
   coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -787,6 +859,7 @@ export type CampaignUncheckedCreateWithoutSessionsInput = {
   systemId?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -818,6 +891,7 @@ export type CampaignUpdateWithoutSessionsInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -837,6 +911,7 @@ export type CampaignUncheckedUpdateWithoutSessionsInput = {
   systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -852,6 +927,7 @@ export type CampaignCreateWithoutParticipantsInput = {
   coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -871,6 +947,7 @@ export type CampaignUncheckedCreateWithoutParticipantsInput = {
   systemId?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -902,6 +979,7 @@ export type CampaignUpdateWithoutParticipantsInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -921,6 +999,7 @@ export type CampaignUncheckedUpdateWithoutParticipantsInput = {
   systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -936,6 +1015,7 @@ export type CampaignCreateWithoutInvitesInput = {
   coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -955,6 +1035,7 @@ export type CampaignUncheckedCreateWithoutInvitesInput = {
   systemId?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -986,6 +1067,7 @@ export type CampaignUpdateWithoutInvitesInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1005,6 +1087,7 @@ export type CampaignUncheckedUpdateWithoutInvitesInput = {
   systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1020,6 +1103,7 @@ export type CampaignCreateWithoutLogsInput = {
   coverImage?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1039,6 +1123,7 @@ export type CampaignUncheckedCreateWithoutLogsInput = {
   systemId?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1070,6 +1155,7 @@ export type CampaignUpdateWithoutLogsInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1089,6 +1175,7 @@ export type CampaignUncheckedUpdateWithoutLogsInput = {
   systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1105,6 +1192,7 @@ export type CampaignCreateManyOwnerInput = {
   systemId?: string | null
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1117,6 +1205,7 @@ export type CampaignUpdateWithoutOwnerInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1135,6 +1224,7 @@ export type CampaignUncheckedUpdateWithoutOwnerInput = {
   systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1152,6 +1242,7 @@ export type CampaignUncheckedUpdateManyWithoutOwnerInput = {
   systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1165,6 +1256,7 @@ export type CampaignCreateManySystemInput = {
   ownerId: string
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: number
   inviteCode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1177,6 +1269,7 @@ export type CampaignUpdateWithoutSystemInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1195,6 +1288,7 @@ export type CampaignUncheckedUpdateWithoutSystemInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1212,6 +1306,7 @@ export type CampaignUncheckedUpdateManyWithoutSystemInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1284,6 +1379,7 @@ export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   systemId?: boolean
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: boolean
   inviteCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1305,6 +1401,7 @@ export type CampaignSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   systemId?: boolean
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: boolean
   inviteCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1321,6 +1418,7 @@ export type CampaignSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   systemId?: boolean
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: boolean
   inviteCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1337,12 +1435,13 @@ export type CampaignSelectScalar = {
   systemId?: boolean
   isPublic?: boolean
   isActive?: boolean
+  maxPlayers?: boolean
   inviteCode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "coverImage" | "ownerId" | "systemId" | "isPublic" | "isActive" | "inviteCode" | "createdAt" | "updatedAt", ExtArgs["result"]["campaign"]>
+export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "coverImage" | "ownerId" | "systemId" | "isPublic" | "isActive" | "maxPlayers" | "inviteCode" | "createdAt" | "updatedAt", ExtArgs["result"]["campaign"]>
 export type CampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   system?: boolean | Prisma.Campaign$systemArgs<ExtArgs>
@@ -1380,6 +1479,7 @@ export type $CampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     systemId: string | null
     isPublic: boolean
     isActive: boolean
+    maxPlayers: number
     inviteCode: string | null
     createdAt: Date
     updatedAt: Date
@@ -1820,6 +1920,7 @@ export interface CampaignFieldRefs {
   readonly systemId: Prisma.FieldRef<"Campaign", 'String'>
   readonly isPublic: Prisma.FieldRef<"Campaign", 'Boolean'>
   readonly isActive: Prisma.FieldRef<"Campaign", 'Boolean'>
+  readonly maxPlayers: Prisma.FieldRef<"Campaign", 'Int'>
   readonly inviteCode: Prisma.FieldRef<"Campaign", 'String'>
   readonly createdAt: Prisma.FieldRef<"Campaign", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Campaign", 'DateTime'>

@@ -16,10 +16,21 @@ export async function campaignRoutes(app: FastifyInstance) {
         name: z
           .string()
           .min(3, "Campaign name must have at least 3 characters"),
+
         description: z.string().optional(),
+
         coverImage: z.string().optional(),
+
         systemId: z.string().uuid().optional(),
+
         isPublic: z.boolean().optional(),
+
+        maxPlayers: z
+          .number()
+          .int()
+          .min(1, "Campaign must allow at least 1 player")
+          .max(10, "Campaign cannot allow more than 10 players")
+          .optional(),
       }),
       response: {
         201: z.object({
@@ -32,6 +43,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
+            maxPlayers: z.number(),
             inviteCode: z.string().nullable(),
             createdAt: z.string(),
             updatedAt: z.string(),
@@ -61,6 +73,7 @@ export async function campaignRoutes(app: FastifyInstance) {
           systemId: request.body.systemId,
           ownerId: session.user.id,
           isPublic: request.body.isPublic ?? false,
+          maxPlayers: request.body.maxPlayers ?? 5,
           inviteCode,
           participants: {
             create: {
@@ -74,7 +87,16 @@ export async function campaignRoutes(app: FastifyInstance) {
 
       return reply.status(201).send({
         campaign: {
-          ...campaign,
+          id: campaign.id,
+          name: campaign.name,
+          description: campaign.description,
+          coverImage: campaign.coverImage,
+          ownerId: campaign.ownerId,
+          systemId: campaign.systemId,
+          isPublic: campaign.isPublic,
+          isActive: campaign.isActive,
+          maxPlayers: campaign.maxPlayers,
+          inviteCode: campaign.inviteCode,
           createdAt: campaign.createdAt.toISOString(),
           updatedAt: campaign.updatedAt.toISOString(),
         },
@@ -176,7 +198,10 @@ export async function campaignRoutes(app: FastifyInstance) {
     url: "/campaigns/public",
     schema: {
       tags: ["Campaigns"],
-      description: "List public active campaigns",
+      description: "List public active campaigns available to join",
+      querystring: z.object({
+        q: z.string().optional(),
+      }),
       response: {
         200: z.object({
           campaigns: z.array(
@@ -189,12 +214,33 @@ export async function campaignRoutes(app: FastifyInstance) {
               systemId: z.string().nullable(),
               inviteCode: z.string().nullable(),
               createdAt: z.string(),
+
               owner: z.object({
                 id: z.string(),
                 name: z.string(),
                 image: z.string().nullable(),
               }),
-              participantsCount: z.number(),
+
+              system: z
+                .object({
+                  id: z.string(),
+                  name: z.string(),
+                  slug: z.string().nullable(),
+                  version: z.number(),
+                })
+                .nullable(),
+
+              playersCount: z.number(),
+              maxPlayers: z.number(),
+              availableSlots: z.number(),
+              isFull: z.boolean(),
+              canJoin: z.boolean(),
+
+              nextSession: z
+                .object({
+                  scheduledAt: z.string().nullable(),
+                })
+                .nullable(),
             }),
           ),
         }),
@@ -212,6 +258,8 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
+      const search = request.query.q?.trim();
+
       const campaigns = await prisma.campaign.findMany({
         where: {
           isPublic: true,
@@ -224,6 +272,24 @@ export async function campaignRoutes(app: FastifyInstance) {
               },
             },
           },
+          ...(search
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    description: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              }
+            : {}),
         },
         orderBy: {
           createdAt: "desc",
@@ -236,27 +302,80 @@ export async function campaignRoutes(app: FastifyInstance) {
               image: true,
             },
           },
+          system: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              version: true,
+            },
+          },
+          sessions: {
+            where: {
+              scheduledAt: {
+                gte: new Date(),
+              },
+              isFinished: false,
+            },
+            orderBy: {
+              scheduledAt: "asc",
+            },
+            take: 1,
+            select: {
+              scheduledAt: true,
+            },
+          },
           _count: {
             select: {
-              participants: true,
+              participants: {
+                where: {
+                  role: "PLAYER",
+                  status: "APPROVED",
+                },
+              },
             },
           },
         },
       });
 
       return reply.status(200).send({
-        campaigns: campaigns.map((campaign) => ({
-          id: campaign.id,
-          name: campaign.name,
-          description: campaign.description,
-          coverImage: campaign.coverImage,
-          ownerId: campaign.ownerId,
-          systemId: campaign.systemId,
-          inviteCode: campaign.inviteCode,
-          createdAt: campaign.createdAt.toISOString(),
-          owner: campaign.owner,
-          participantsCount: campaign._count.participants,
-        })),
+        campaigns: campaigns.map((campaign) => {
+          const playersCount = campaign._count.participants;
+          const availableSlots = Math.max(
+            campaign.maxPlayers - playersCount,
+            0,
+          );
+          const isFull = availableSlots === 0;
+          const canJoin = !isFull;
+
+          return {
+            id: campaign.id,
+            name: campaign.name,
+            description: campaign.description,
+            coverImage: campaign.coverImage,
+            ownerId: campaign.ownerId,
+            systemId: campaign.systemId,
+            inviteCode: campaign.inviteCode,
+            createdAt: campaign.createdAt.toISOString(),
+
+            owner: campaign.owner,
+            system: campaign.system,
+
+            playersCount,
+            maxPlayers: campaign.maxPlayers,
+            availableSlots,
+            isFull,
+            canJoin,
+
+            nextSession: campaign.sessions[0]
+              ? {
+                  scheduledAt: campaign.sessions[0].scheduledAt
+                    ? campaign.sessions[0].scheduledAt.toISOString()
+                    : null,
+                }
+              : null,
+          };
+        }),
       });
     },
   });
@@ -353,10 +472,21 @@ export async function campaignRoutes(app: FastifyInstance) {
             .string()
             .min(3, "Campaign name must have at least 3 characters")
             .optional(),
+
           description: z.string().nullable().optional(),
+
           coverImage: z.string().nullable().optional(),
+
           systemId: z.string().uuid().nullable().optional(),
+
           isPublic: z.boolean().optional(),
+
+          maxPlayers: z
+            .number()
+            .int()
+            .min(1, "Campaign must allow at least 1 player")
+            .max(12, "Campaign cannot allow more than 12 players")
+            .optional(),
         })
         .refine(
           (data) =>
@@ -364,7 +494,8 @@ export async function campaignRoutes(app: FastifyInstance) {
             data.description !== undefined ||
             data.coverImage !== undefined ||
             data.systemId !== undefined ||
-            data.isPublic !== undefined,
+            data.isPublic !== undefined ||
+            data.maxPlayers !== undefined,
           {
             message: "At least one field must be provided",
           },
@@ -380,6 +511,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
+            maxPlayers: z.number(),
             inviteCode: z.string().nullable(),
             createdAt: z.string(),
             updatedAt: z.string(),
@@ -438,6 +570,23 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
+      if (request.body.maxPlayers !== undefined) {
+        const approvedPlayersCount = await prisma.participant.count({
+          where: {
+            campaignId: campaign.id,
+            role: "PLAYER",
+            status: "APPROVED",
+          },
+        });
+
+        if (request.body.maxPlayers < approvedPlayersCount) {
+          return reply.status(409).send({
+            message:
+              "Campaign max players cannot be lower than the current approved players count",
+          });
+        }
+      }
+
       const updatedCampaign = await prisma.campaign.update({
         where: {
           id: campaign.id,
@@ -448,12 +597,22 @@ export async function campaignRoutes(app: FastifyInstance) {
           coverImage: request.body.coverImage,
           systemId: request.body.systemId,
           isPublic: request.body.isPublic,
+          maxPlayers: request.body.maxPlayers,
         },
       });
 
       return reply.status(200).send({
         campaign: {
-          ...updatedCampaign,
+          id: updatedCampaign.id,
+          name: updatedCampaign.name,
+          description: updatedCampaign.description,
+          coverImage: updatedCampaign.coverImage,
+          ownerId: updatedCampaign.ownerId,
+          systemId: updatedCampaign.systemId,
+          isPublic: updatedCampaign.isPublic,
+          isActive: updatedCampaign.isActive,
+          maxPlayers: updatedCampaign.maxPlayers,
+          inviteCode: updatedCampaign.inviteCode,
           createdAt: updatedCampaign.createdAt.toISOString(),
           updatedAt: updatedCampaign.updatedAt.toISOString(),
         },
@@ -529,13 +688,19 @@ export async function campaignRoutes(app: FastifyInstance) {
     url: "/campaigns/join",
     schema: {
       tags: ["Campaigns"],
-      description: "Join a campaign using invite code",
-      body: z.object({
-        inviteCode: z
-          .string()
-          .min(3, "Invite code must have at least 3 characters")
-          .max(20, "Invite code must have at most 20 characters"),
-      }),
+      description: "Join a campaign using campaign id or invite code",
+      body: z
+        .object({
+          campaignId: z.string().uuid().optional(),
+          inviteCode: z
+            .string()
+            .min(3, "Invite code must have at least 3 characters")
+            .max(20, "Invite code must have at most 20 characters")
+            .optional(),
+        })
+        .refine((data) => data.campaignId || data.inviteCode, {
+          message: "Campaign id or invite code is required",
+        }),
       response: {
         201: z.object({
           participant: z.object({
@@ -561,9 +726,6 @@ export async function campaignRoutes(app: FastifyInstance) {
         409: z.object({
           message: z.string(),
         }),
-        501: z.object({
-          message: z.string(),
-        }),
       },
     },
     handler: async (request, reply) => {
@@ -575,9 +737,35 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
-      const campaign = await prisma.campaign.findUnique({
-        where: {
-          inviteCode: request.body.inviteCode,
+      const campaignWhere = request.body.campaignId
+        ? {
+            id: request.body.campaignId,
+          }
+        : {
+            inviteCode: request.body.inviteCode,
+          };
+
+      const campaign = await prisma.campaign.findFirst({
+        where: campaignWhere,
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: {
+                not: "REMOVED",
+              },
+            },
+          },
+          _count: {
+            select: {
+              participants: {
+                where: {
+                  role: "PLAYER",
+                  status: "APPROVED",
+                },
+              },
+            },
+          },
         },
       });
 
@@ -593,19 +781,27 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
-      const alreadyParticipant = await prisma.participant.findFirst({
-        where: {
-          campaignId: campaign.id,
-          userId: session.user.id,
-          status: {
-            not: "REMOVED",
-          },
-        },
-      });
+      const isJoiningByInviteCode = Boolean(request.body.inviteCode);
+
+      if (!campaign.isPublic && !isJoiningByInviteCode) {
+        return reply.status(403).send({
+          message: "Campaign is private",
+        });
+      }
+
+      const alreadyParticipant = campaign.participants[0];
 
       if (alreadyParticipant) {
         return reply.status(409).send({
           message: "User already in this campaign",
+        });
+      }
+
+      const playersCount = campaign._count.participants;
+
+      if (playersCount >= campaign.maxPlayers) {
+        return reply.status(409).send({
+          message: "Campaign is full",
         });
       }
 
@@ -620,7 +816,11 @@ export async function campaignRoutes(app: FastifyInstance) {
 
       return reply.status(201).send({
         participant: {
-          ...participant,
+          id: participant.id,
+          campaignId: participant.campaignId,
+          userId: participant.userId,
+          role: participant.role,
+          status: participant.status,
           joinedAt: participant.joinedAt.toISOString(),
           removedAt: participant.removedAt
             ? participant.removedAt.toISOString()
