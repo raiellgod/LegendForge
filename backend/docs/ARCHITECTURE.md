@@ -8,15 +8,16 @@
 
 Inspirado em plataformas como Roll20 e Foundry VTT, mas com foco em:
 
-- 🧩 Sistema agnóstico (multi-RPG)  
-- 🎲 Campanhas customizáveis  
-- 👥 Experiência real de jogo entre usuários  
+- 🧩 Sistema agnóstico (multi-RPG)
+- 🎲 Campanhas customizáveis
+- 👥 Experiência real de jogo entre usuários
+- 🧠 Arquitetura real de produto full-stack
 
 Além disso, o projeto é:
 
-- 💼 Portfólio técnico avançado  
-- 🧠 Plataforma de aprendizado contínuo  
-- ⚙️ Sistema real com mentalidade de produção  
+- 💼 Portfólio técnico avançado
+- 🧠 Plataforma de aprendizado contínuo
+- ⚙️ Sistema real com mentalidade de produção
 
 ---
 
@@ -24,28 +25,25 @@ Além disso, o projeto é:
 
 ### 1 — Base funcional de VTT
 
-- 🔐 Sistema de autenticação (✔ funcionando)  
-- 🧑‍🤝‍🧑 Gestão de usuários  
-- 🗺️ Base para campanhas *(em desenvolvimento)*  
-- 📄 Base para personagens *(em desenvolvimento)*  
-
----
+- 🔐 Sistema de autenticação
+- 🧑‍🤝‍🧑 Gestão de usuários
+- 🗺️ Campanhas
+- 📄 Personagens
+- 🎲 Mesa de jogo
 
 ### 2 — Backend profissional
 
-- 🏗️ Arquitetura escalável  
-- 🔒 Integridade de dados forte  
-- 📐 Separação clara de responsabilidades  
-- ⚡ Estrutura pronta para crescimento  
+- 🏗️ Arquitetura escalável
+- 🔒 Integridade de dados forte
+- 📐 Separação clara de responsabilidades
+- ⚡ Estrutura pronta para crescimento
 
----
+### 3 — Frontend conectado ao domínio
 
-### 3 — Evolução técnica
-
-- 📚 Backend moderno (Fastify + Prisma)  
-- 🧠 Modelagem de banco robusta  
-- ⚙️ Integração entre camadas  
-- 🧩 Construção incremental de sistema complexo  
+- Telas baseadas no Figma
+- Integração real com API
+- Auth via sessão/cookie
+- UI incremental sem depender de mock permanente
 
 ---
 
@@ -55,11 +53,12 @@ Além disso, o projeto é:
 
 ### Princípios
 
-- ✔️ Pequenos passos funcionais  
-- ✔️ Refatoração contínua  
-- ✔️ Backend como fonte da verdade  
-- ✔️ Simplicidade primeiro, escala depois  
-- ✔️ Código serve ao domínio  
+- ✔️ Pequenos passos funcionais
+- ✔️ Refatoração contínua
+- ✔️ Backend como fonte da verdade
+- ✔️ Simplicidade primeiro, escala depois
+- ✔️ Código serve ao domínio
+- ✔️ Cada tela deve avançar o produto para algo jogável
 
 ---
 
@@ -67,47 +66,43 @@ Além disso, o projeto é:
 
 ```txt
 LegendForge/
-├── prisma/
-├── src/
+├── backend/
+│   ├── prisma/
+│   │   └── schema.prisma
+│   ├── src/
+│   │   ├── generated/
+│   │   ├── lib/
+│   │   │   ├── auth.ts
+│   │   │   ├── get-authenticated-session.ts
+│   │   │   └── prisma.ts
+│   │   ├── routes/
+│   │   │   └── campaigns.ts
+│   │   └── index.ts
+│   ├── docker-compose.yml
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── campaigns/
+│   │   │   │   ├── page.tsx
+│   │   │   │   ├── create/page.tsx
+│   │   │   │   └── [id]/edit/page.tsx
+│   │   │   ├── login/page.tsx
+│   │   │   ├── register/page.tsx
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
+│   │   ├── components/
+│   │   │   └── ui/
+│   │   ├── lib/
+│   │   │   └── auth-client.ts
+│   │   └── service/
+│   ├── public/
+│   └── package.json
+│
 ├── docs/
-├── docker-compose.yml
+└── README.md
 ```
-
----
-
-### 🔹 Detalhamento
-
-#### prisma/
-
-- `schema.prisma` → definição do banco  
-- Prisma controla a estrutura real do banco  
-
----
-
-#### src/
-
-```txt
-src/
-├── generated/
-│   └── prisma/ → Prisma Client gerado
-│
-├── lib/
-│   └── auth.ts → configuração do Better Auth
-│
-├── routes/
-│   └── (rotas HTTP)
-│
-├── index.ts → entrypoint do servidor
-```
-
----
-
-#### docs/
-
-- Documentação do sistema  
-- Arquitetura  
-- Banco de dados  
-- Estado do projeto  
 
 ---
 
@@ -115,86 +110,68 @@ src/
 
 ### 🖥️ Backend
 
-- Node.js  
-- Fastify  
-- TypeScript  
-- Prisma ORM  
-- PostgreSQL  
-- Better Auth  
-- Zod  
-- pnpm  
+- Node.js
+- Fastify
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- Better Auth
+- Zod
+- Swagger
+- Scalar API Reference
+- pnpm
+- Docker
 
----
+### 🎨 Frontend
 
-### 🎨 Frontend (futuro)
-
-- React  
-- Vite  
-- Tailwind  
-- TypeScript  
-- Figma  
+- Next.js
+- React
+- Tailwind CSS
+- TypeScript
+- Better Auth Client
+- Figma
 
 ---
 
 ## 🏗️ Backend Architecture
 
-### 🔹 Camadas do sistema
-
----
-
-### 1. Banco de Dados (PostgreSQL)
+### 1. Banco de Dados — PostgreSQL
 
 Responsável por:
 
-- Persistência  
-- Integridade  
-- Relacionamentos  
+- persistência
+- integridade
+- relacionamentos
+- base do domínio
 
----
-
-### 2. Prisma (ORM)
-
-Responsável por:
-
-- Tipagem forte  
-- Queries seguras  
-- Mapeamento do banco  
-
----
-
-### 3. Autenticação (Better Auth)
+### 2. Prisma
 
 Responsável por:
 
-- Registro  
-- Login  
-- Sessões  
-- Tokens  
+- acesso ao banco
+- queries tipadas
+- sincronização do schema
+- Prisma Studio
 
-### ⚠️ Decisão crítica
-
-> Better Auth é o **núcleo de identidade do sistema**
-
-Isso significa:
-
-- tabelas oficiais:
-  - `user`
-  - `session`
-  - `account`
-  - `verification`
-- NÃO recriamos sistema de auth
-- TODO o sistema usa `user.id` como base
-
----
-
-### 4. Backend (Fastify)
+### 3. Better Auth
 
 Responsável por:
 
-- Rotas HTTP  
-- Orquestração  
-- Integração com Auth  
-- Validação com Zod  
+- registro
+- login
+- sessões
+- cookies de autenticação
+- tabelas oficiais de identidade
+
+### 4. Fastify
+
+Responsável por:
+
+- rotas HTTP
+- integração com auth
+- autorização
+- validação com Zod
+- orquestração da API
 
 ---
 
@@ -202,20 +179,26 @@ Responsável por:
 
 ### ✔️ Implementado
 
-- Better Auth  
-- Prisma Adapter  
-- Sessões persistentes  
-- Integração com banco  
+- Better Auth
+- Prisma Adapter
+- Sessões persistentes
+- Integração com Fastify
+- Frontend com `authClient`
+- Backend com helper `getAuthenticatedSession`
 
----
+### 🔄 Fluxo atual
 
-### 🔄 Fluxo
+1. Usuário registra ou faz login no frontend.
+2. Better Auth cria/atualiza sessão no banco.
+3. Browser mantém cookie de sessão.
+4. Frontend chama API com `credentials: "include"`.
+5. Backend usa `auth.api.getSession`.
+6. Rotas protegidas usam `session.user.id`.
 
-1. Usuário se registra  
-2. Usuário é salvo na tabela `user`  
-3. Sessão é criada (`session`)  
-4. Token é retornado  
-5. Backend usa o usuário autenticado  
+### Decisão importante
+
+> Não usar Bearer token manual/localStorage para sessão principal.  
+> O fluxo atual usa sessão/cookie do Better Auth.
 
 ---
 
@@ -223,144 +206,108 @@ Responsável por:
 
 ### ✔️ Núcleo implementado
 
-- User (Better Auth)  
-- Session  
-- Account  
-- Verification  
+- User
+- Session
+- Account
+- Verification
 
----
+### ✔️ Domínio RPG inicial
 
-### 🟡 Domínio RPG (parcial)
+- GameSystem
+- Stat
+- Skill
 
-- GameSystem  
-- Stats  
-- Skills  
+### ✔️ Campanhas
 
----
+- Campaign
+- Participant
+- GameSession
 
 ### 🔜 Domínio planejado
 
-- Campaign  
-- Character  
-- Classes / Subclasses  
-- Inventory  
-- Logs  
+- Characters
+- Classes / Subclasses
+- Inventory
+- Logs
+- Permissions refinadas
+- Campaign Invites
+
+---
+
+## 🗺️ Campanha — Fluxo Atual
+
+### Backend
+
+- `POST /campaigns`
+- `GET /campaigns`
+- `GET /campaigns/:id`
+- `PATCH /campaigns/:id`
+- `DELETE /campaigns/:id`
+- `POST /campaigns/join`
+- rotas de participantes
+
+### Frontend
+
+- `/campaigns`
+  - home logada
+  - estado sem campanhas
+  - estado com campanhas
+- `/campaigns/create`
+  - nomear mundo
+  - selecionar ficha/sistema visualmente
+  - criar campanha
+- `/campaigns/[id]/edit`
+  - finalizar configuração inicial
+  - visualizar nome/capa/owner
+  - preparar descrição e imagem de capa
 
 ---
 
 ## ⚙️ Decisões Arquiteturais
 
----
+### DB-first mindset
 
-### 🔹 DB-first mindset
+> Banco é a fonte de verdade.
 
-> Banco é a fonte de verdade
+### Auth como módulo externo confiável
 
----
+- Better Auth controla identidade.
+- Backend consome a sessão.
+- Sistema não reimplementa segurança.
 
-### 🔹 Auth como módulo externo confiável
+### Prisma como camada oficial
 
-- Better Auth controla identidade  
-- Backend consome  
-- Sistema não reimplementa segurança  
+- acesso tipado
+- segurança
+- produtividade
 
----
+### Frontend incremental
 
-### 🔹 Prisma como camada oficial
+- Figma guia as telas
+- implementação segue o que já tem no domínio
+- telas mockadas devem ser evitadas quando a API já existir
 
-- acesso ao banco  
-- tipagem  
-- segurança  
+### Upload de imagem
 
----
-
-### 🔹 Separação de responsabilidades
-
-| Camada     | Responsabilidade |
-|------------|------------------|
-| DB         | dados |
-| Prisma     | acesso |
-| Auth       | identidade |
-| Backend    | lógica |
-| Frontend   | UX |
-
----
-
-## 🧩 Development Strategy
-
-> Feature-driven incremental development
-
-Cada passo:
-
-- pequeno  
-- testável  
-- funcional  
-
----
-
-## 🗺️ Roadmap Atual
-
----
-
-### ✔ Concluído
-
-- Setup backend  
-- Prisma configurado  
-- Banco sincronizado  
-- Better Auth funcionando  
-- Integração com Fastify  
-
----
-
-### 🚧 Em andamento
-
-- Expansão do domínio RPG  
-- Organização das rotas  
-- Estruturação do backend  
-
----
-
-### 🔜 Próximos passos
-
-- CRUD de campanhas  
-- Sistema de personagens  
-- Inventário  
-- Permissões (GM / Player)  
-- Logs de campanha  
+- Estado atual: preview/armazenamento simples via string/base64 em `coverImage`.
+- Futuro: storage real com upload, crop, validação e URL pública.
 
 ---
 
 ## ⚠️ Pontos de Atenção
 
----
-
-### 📊 Estrutura ainda inicial
-
-- rotas ainda simples  
-- sem camada de service completa  
-
----
-
-### 🧠 Crescimento do domínio
-
-- regras complexas ainda não implementadas  
-- triggers e constraints ainda pendentes  
+- Backend ainda não está modularizado em services.
+- Upload de capa ainda é temporário.
+- Busca de campanhas públicas ainda não está implementada.
+- Página de jogo ainda não existe.
+- Regras avançadas do banco ainda não foram aplicadas via SQL/triggers.
+- Tailwind/Next em dev usa `next dev --webpack` para estabilidade local.
 
 ---
 
 ## 🔄 Current Phase
 
-> **CORE AUTH + DATABASE STABLE — DOMAIN EXPANSION PHASE**
-
----
-
-### Estado atual
-
-- Auth: ✔ funcionando  
-- Banco: ✔ integrado  
-- Prisma: ✔ operacional  
-- Backend: ✔ ativo  
-- Domínio RPG: 🚧 em expansão  
+> **AUTH + CAMPAIGN FLOW WORKING — CAMPAIGN BACKEND CONSOLIDATION PHASE**
 
 ---
 
@@ -368,36 +315,36 @@ Cada passo:
 
 Foco em:
 
-- expandir domínio do sistema  
-- estruturar backend  
-- implementar primeiras features reais  
+- consolidar backend de campanhas
+- implementar busca de campanhas públicas
+- refinar PATCH de campanha
+- preparar página de jogo
+- evoluir armazenamento de capa
+- estruturar services quando as regras crescerem
 
 ---
 
 ## 🧠 Regra Fundamental
 
 > Se uma regra é crítica  
-> → ela deve existir no banco ou no backend  
+> → ela deve existir no banco ou no backend.
 
 ---
 
 ## 📄 Referências
 
-- DATABASE_SETUP.md  
-- DEV_STATE.md  
-- FEATURE_CAPSULE.md  
+- DATABASE_SETUP.md
+- DEV_STATE.md
+- FEATURE_CAPSULE.md
+- BOOT.md
 
 ---
 
 ## 🏆 Estado da Arquitetura
 
-✔ Funcional  
-✔ Base sólida  
 ✔ Auth resolvido  
-✔ Pronta para escalar  
-
----
-
-## 🚀 Status
-
-**CORE BACKEND READY — DOMAIN EXPANSION STARTED**
+✔ Backend funcional  
+✔ Prisma operacional  
+✔ Frontend conectado  
+✔ Campanhas começaram a virar produto real  
+✔ Pronta para próxima expansão do domínio

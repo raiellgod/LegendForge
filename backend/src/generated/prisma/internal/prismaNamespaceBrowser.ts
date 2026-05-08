@@ -59,7 +59,10 @@ export const ModelName = {
   Stat: 'Stat',
   Skill: 'Skill',
   Campaign: 'Campaign',
-  Participant: 'Participant'
+  GameSession: 'GameSession',
+  Participant: 'Participant',
+  CampaignInvite: 'CampaignInvite',
+  CampaignLog: 'CampaignLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -172,9 +175,13 @@ export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof Sk
 export const CampaignScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
+  coverImage: 'coverImage',
   ownerId: 'ownerId',
+  systemId: 'systemId',
   isPublic: 'isPublic',
   isActive: 'isActive',
+  maxPlayers: 'maxPlayers',
   inviteCode: 'inviteCode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -183,15 +190,59 @@ export const CampaignScalarFieldEnum = {
 export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
 
 
+export const GameSessionScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  title: 'title',
+  scheduledAt: 'scheduledAt',
+  isFinished: 'isFinished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GameSessionScalarFieldEnum = (typeof GameSessionScalarFieldEnum)[keyof typeof GameSessionScalarFieldEnum]
+
+
 export const ParticipantScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
   userId: 'userId',
   role: 'role',
+  status: 'status',
+  joinedAt: 'joinedAt',
+  removedAt: 'removedAt',
   createdAt: 'createdAt'
 } as const
 
 export type ParticipantScalarFieldEnum = (typeof ParticipantScalarFieldEnum)[keyof typeof ParticipantScalarFieldEnum]
+
+
+export const CampaignInviteScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  senderId: 'senderId',
+  recipientUserId: 'recipientUserId',
+  email: 'email',
+  token: 'token',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CampaignInviteScalarFieldEnum = (typeof CampaignInviteScalarFieldEnum)[keyof typeof CampaignInviteScalarFieldEnum]
+
+
+export const CampaignLogScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  userId: 'userId',
+  type: 'type',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type CampaignLogScalarFieldEnum = (typeof CampaignLogScalarFieldEnum)[keyof typeof CampaignLogScalarFieldEnum]
 
 
 export const SortOrder = {

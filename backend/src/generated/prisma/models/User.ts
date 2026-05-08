@@ -210,6 +210,9 @@ export type UserWhereInput = {
   accounts?: Prisma.AccountListRelationFilter
   campaignsOwned?: Prisma.CampaignListRelationFilter
   participants?: Prisma.ParticipantListRelationFilter
+  sentCampaignInvites?: Prisma.CampaignInviteListRelationFilter
+  receivedCampaignInvites?: Prisma.CampaignInviteListRelationFilter
+  campaignLogs?: Prisma.CampaignLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -225,6 +228,9 @@ export type UserOrderByWithRelationInput = {
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   campaignsOwned?: Prisma.CampaignOrderByRelationAggregateInput
   participants?: Prisma.ParticipantOrderByRelationAggregateInput
+  sentCampaignInvites?: Prisma.CampaignInviteOrderByRelationAggregateInput
+  receivedCampaignInvites?: Prisma.CampaignInviteOrderByRelationAggregateInput
+  campaignLogs?: Prisma.CampaignLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -243,6 +249,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   accounts?: Prisma.AccountListRelationFilter
   campaignsOwned?: Prisma.CampaignListRelationFilter
   participants?: Prisma.ParticipantListRelationFilter
+  sentCampaignInvites?: Prisma.CampaignInviteListRelationFilter
+  receivedCampaignInvites?: Prisma.CampaignInviteListRelationFilter
+  campaignLogs?: Prisma.CampaignLogListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -286,6 +295,9 @@ export type UserCreateInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   campaignsOwned?: Prisma.CampaignCreateNestedManyWithoutOwnerInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -301,6 +313,9 @@ export type UserUncheckedCreateInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   campaignsOwned?: Prisma.CampaignUncheckedCreateNestedManyWithoutOwnerInput
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -316,6 +331,9 @@ export type UserUpdateInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   campaignsOwned?: Prisma.CampaignUpdateManyWithoutOwnerNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -331,6 +349,9 @@ export type UserUncheckedUpdateInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   campaignsOwned?: Prisma.CampaignUncheckedUpdateManyWithoutOwnerNestedInput
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -402,6 +423,11 @@ export type UserMinOrderByAggregateInput = {
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -480,6 +506,52 @@ export type UserUpdateOneRequiredWithoutParticipantsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutParticipantsInput, Prisma.UserUpdateWithoutParticipantsInput>, Prisma.UserUncheckedUpdateWithoutParticipantsInput>
 }
 
+export type UserCreateNestedOneWithoutSentCampaignInvitesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSentCampaignInvitesInput, Prisma.UserUncheckedCreateWithoutSentCampaignInvitesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSentCampaignInvitesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReceivedCampaignInvitesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReceivedCampaignInvitesInput, Prisma.UserUncheckedCreateWithoutReceivedCampaignInvitesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReceivedCampaignInvitesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSentCampaignInvitesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSentCampaignInvitesInput, Prisma.UserUncheckedCreateWithoutSentCampaignInvitesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSentCampaignInvitesInput
+  upsert?: Prisma.UserUpsertWithoutSentCampaignInvitesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSentCampaignInvitesInput, Prisma.UserUpdateWithoutSentCampaignInvitesInput>, Prisma.UserUncheckedUpdateWithoutSentCampaignInvitesInput>
+}
+
+export type UserUpdateOneWithoutReceivedCampaignInvitesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReceivedCampaignInvitesInput, Prisma.UserUncheckedCreateWithoutReceivedCampaignInvitesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReceivedCampaignInvitesInput
+  upsert?: Prisma.UserUpsertWithoutReceivedCampaignInvitesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReceivedCampaignInvitesInput, Prisma.UserUpdateWithoutReceivedCampaignInvitesInput>, Prisma.UserUncheckedUpdateWithoutReceivedCampaignInvitesInput>
+}
+
+export type UserCreateNestedOneWithoutCampaignLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCampaignLogsInput, Prisma.UserUncheckedCreateWithoutCampaignLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampaignLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCampaignLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCampaignLogsInput, Prisma.UserUncheckedCreateWithoutCampaignLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampaignLogsInput
+  upsert?: Prisma.UserUpsertWithoutCampaignLogsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCampaignLogsInput, Prisma.UserUpdateWithoutCampaignLogsInput>, Prisma.UserUncheckedUpdateWithoutCampaignLogsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
@@ -492,6 +564,9 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   campaignsOwned?: Prisma.CampaignCreateNestedManyWithoutOwnerInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -506,6 +581,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   campaignsOwned?: Prisma.CampaignUncheckedCreateNestedManyWithoutOwnerInput
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -536,6 +614,9 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   campaignsOwned?: Prisma.CampaignUpdateManyWithoutOwnerNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -550,6 +631,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   campaignsOwned?: Prisma.CampaignUncheckedUpdateManyWithoutOwnerNestedInput
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -564,6 +648,9 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   campaignsOwned?: Prisma.CampaignCreateNestedManyWithoutOwnerInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -578,6 +665,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   campaignsOwned?: Prisma.CampaignUncheckedCreateNestedManyWithoutOwnerInput
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -608,6 +698,9 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   campaignsOwned?: Prisma.CampaignUpdateManyWithoutOwnerNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -622,6 +715,9 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   campaignsOwned?: Prisma.CampaignUncheckedUpdateManyWithoutOwnerNestedInput
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCampaignsOwnedInput = {
@@ -636,6 +732,9 @@ export type UserCreateWithoutCampaignsOwnedInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   participants?: Prisma.ParticipantCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCampaignsOwnedInput = {
@@ -650,6 +749,9 @@ export type UserUncheckedCreateWithoutCampaignsOwnedInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCampaignsOwnedInput = {
@@ -680,6 +782,9 @@ export type UserUpdateWithoutCampaignsOwnedInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   participants?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCampaignsOwnedInput = {
@@ -694,6 +799,9 @@ export type UserUncheckedUpdateWithoutCampaignsOwnedInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutParticipantsInput = {
@@ -708,6 +816,9 @@ export type UserCreateWithoutParticipantsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   campaignsOwned?: Prisma.CampaignCreateNestedManyWithoutOwnerInput
+  sentCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutParticipantsInput = {
@@ -722,6 +833,9 @@ export type UserUncheckedCreateWithoutParticipantsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   campaignsOwned?: Prisma.CampaignUncheckedCreateNestedManyWithoutOwnerInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutParticipantsInput = {
@@ -752,6 +866,9 @@ export type UserUpdateWithoutParticipantsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   campaignsOwned?: Prisma.CampaignUpdateManyWithoutOwnerNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutParticipantsInput = {
@@ -766,6 +883,261 @@ export type UserUncheckedUpdateWithoutParticipantsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   campaignsOwned?: Prisma.CampaignUncheckedUpdateManyWithoutOwnerNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSentCampaignInvitesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  campaignsOwned?: Prisma.CampaignCreateNestedManyWithoutOwnerInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutUserInput
+  receivedCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSentCampaignInvitesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  campaignsOwned?: Prisma.CampaignUncheckedCreateNestedManyWithoutOwnerInput
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutRecipientUserInput
+  campaignLogs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSentCampaignInvitesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSentCampaignInvitesInput, Prisma.UserUncheckedCreateWithoutSentCampaignInvitesInput>
+}
+
+export type UserCreateWithoutReceivedCampaignInvitesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  campaignsOwned?: Prisma.CampaignCreateNestedManyWithoutOwnerInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutSenderInput
+  campaignLogs?: Prisma.CampaignLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReceivedCampaignInvitesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  campaignsOwned?: Prisma.CampaignUncheckedCreateNestedManyWithoutOwnerInput
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutSenderInput
+  campaignLogs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReceivedCampaignInvitesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReceivedCampaignInvitesInput, Prisma.UserUncheckedCreateWithoutReceivedCampaignInvitesInput>
+}
+
+export type UserUpsertWithoutSentCampaignInvitesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSentCampaignInvitesInput, Prisma.UserUncheckedUpdateWithoutSentCampaignInvitesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSentCampaignInvitesInput, Prisma.UserUncheckedCreateWithoutSentCampaignInvitesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSentCampaignInvitesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSentCampaignInvitesInput, Prisma.UserUncheckedUpdateWithoutSentCampaignInvitesInput>
+}
+
+export type UserUpdateWithoutSentCampaignInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  campaignsOwned?: Prisma.CampaignUpdateManyWithoutOwnerNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSentCampaignInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  campaignsOwned?: Prisma.CampaignUncheckedUpdateManyWithoutOwnerNestedInput
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutRecipientUserNestedInput
+  campaignLogs?: Prisma.CampaignLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutReceivedCampaignInvitesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReceivedCampaignInvitesInput, Prisma.UserUncheckedUpdateWithoutReceivedCampaignInvitesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReceivedCampaignInvitesInput, Prisma.UserUncheckedCreateWithoutReceivedCampaignInvitesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReceivedCampaignInvitesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReceivedCampaignInvitesInput, Prisma.UserUncheckedUpdateWithoutReceivedCampaignInvitesInput>
+}
+
+export type UserUpdateWithoutReceivedCampaignInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  campaignsOwned?: Prisma.CampaignUpdateManyWithoutOwnerNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutSenderNestedInput
+  campaignLogs?: Prisma.CampaignLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReceivedCampaignInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  campaignsOwned?: Prisma.CampaignUncheckedUpdateManyWithoutOwnerNestedInput
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutSenderNestedInput
+  campaignLogs?: Prisma.CampaignLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCampaignLogsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  campaignsOwned?: Prisma.CampaignCreateNestedManyWithoutOwnerInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteCreateNestedManyWithoutRecipientUserInput
+}
+
+export type UserUncheckedCreateWithoutCampaignLogsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  campaignsOwned?: Prisma.CampaignUncheckedCreateNestedManyWithoutOwnerInput
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutUserInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutSenderInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutRecipientUserInput
+}
+
+export type UserCreateOrConnectWithoutCampaignLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCampaignLogsInput, Prisma.UserUncheckedCreateWithoutCampaignLogsInput>
+}
+
+export type UserUpsertWithoutCampaignLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCampaignLogsInput, Prisma.UserUncheckedUpdateWithoutCampaignLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCampaignLogsInput, Prisma.UserUncheckedCreateWithoutCampaignLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCampaignLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCampaignLogsInput, Prisma.UserUncheckedUpdateWithoutCampaignLogsInput>
+}
+
+export type UserUpdateWithoutCampaignLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  campaignsOwned?: Prisma.CampaignUpdateManyWithoutOwnerNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUpdateManyWithoutRecipientUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCampaignLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  campaignsOwned?: Prisma.CampaignUncheckedUpdateManyWithoutOwnerNestedInput
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutUserNestedInput
+  sentCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutSenderNestedInput
+  receivedCampaignInvites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutRecipientUserNestedInput
 }
 
 
@@ -778,6 +1150,9 @@ export type UserCountOutputType = {
   accounts: number
   campaignsOwned: number
   participants: number
+  sentCampaignInvites: number
+  receivedCampaignInvites: number
+  campaignLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -785,6 +1160,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   campaignsOwned?: boolean | UserCountOutputTypeCountCampaignsOwnedArgs
   participants?: boolean | UserCountOutputTypeCountParticipantsArgs
+  sentCampaignInvites?: boolean | UserCountOutputTypeCountSentCampaignInvitesArgs
+  receivedCampaignInvites?: boolean | UserCountOutputTypeCountReceivedCampaignInvitesArgs
+  campaignLogs?: boolean | UserCountOutputTypeCountCampaignLogsArgs
 }
 
 /**
@@ -825,6 +1203,27 @@ export type UserCountOutputTypeCountParticipantsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.ParticipantWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSentCampaignInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampaignInviteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReceivedCampaignInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampaignInviteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCampaignLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampaignLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -839,6 +1238,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   campaignsOwned?: boolean | Prisma.User$campaignsOwnedArgs<ExtArgs>
   participants?: boolean | Prisma.User$participantsArgs<ExtArgs>
+  sentCampaignInvites?: boolean | Prisma.User$sentCampaignInvitesArgs<ExtArgs>
+  receivedCampaignInvites?: boolean | Prisma.User$receivedCampaignInvitesArgs<ExtArgs>
+  campaignLogs?: boolean | Prisma.User$campaignLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -881,6 +1283,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   campaignsOwned?: boolean | Prisma.User$campaignsOwnedArgs<ExtArgs>
   participants?: boolean | Prisma.User$participantsArgs<ExtArgs>
+  sentCampaignInvites?: boolean | Prisma.User$sentCampaignInvitesArgs<ExtArgs>
+  receivedCampaignInvites?: boolean | Prisma.User$receivedCampaignInvitesArgs<ExtArgs>
+  campaignLogs?: boolean | Prisma.User$campaignLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -893,6 +1298,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     campaignsOwned: Prisma.$CampaignPayload<ExtArgs>[]
     participants: Prisma.$ParticipantPayload<ExtArgs>[]
+    sentCampaignInvites: Prisma.$CampaignInvitePayload<ExtArgs>[]
+    receivedCampaignInvites: Prisma.$CampaignInvitePayload<ExtArgs>[]
+    campaignLogs: Prisma.$CampaignLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1301,6 +1709,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   campaignsOwned<T extends Prisma.User$campaignsOwnedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$campaignsOwnedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   participants<T extends Prisma.User$participantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sentCampaignInvites<T extends Prisma.User$sentCampaignInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentCampaignInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  receivedCampaignInvites<T extends Prisma.User$receivedCampaignInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$receivedCampaignInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campaignLogs<T extends Prisma.User$campaignLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$campaignLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1819,6 +2230,78 @@ export type User$participantsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.ParticipantScalarFieldEnum | Prisma.ParticipantScalarFieldEnum[]
+}
+
+/**
+ * User.sentCampaignInvites
+ */
+export type User$sentCampaignInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampaignInvite
+   */
+  select?: Prisma.CampaignInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CampaignInvite
+   */
+  omit?: Prisma.CampaignInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampaignInviteInclude<ExtArgs> | null
+  where?: Prisma.CampaignInviteWhereInput
+  orderBy?: Prisma.CampaignInviteOrderByWithRelationInput | Prisma.CampaignInviteOrderByWithRelationInput[]
+  cursor?: Prisma.CampaignInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampaignInviteScalarFieldEnum | Prisma.CampaignInviteScalarFieldEnum[]
+}
+
+/**
+ * User.receivedCampaignInvites
+ */
+export type User$receivedCampaignInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampaignInvite
+   */
+  select?: Prisma.CampaignInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CampaignInvite
+   */
+  omit?: Prisma.CampaignInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampaignInviteInclude<ExtArgs> | null
+  where?: Prisma.CampaignInviteWhereInput
+  orderBy?: Prisma.CampaignInviteOrderByWithRelationInput | Prisma.CampaignInviteOrderByWithRelationInput[]
+  cursor?: Prisma.CampaignInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampaignInviteScalarFieldEnum | Prisma.CampaignInviteScalarFieldEnum[]
+}
+
+/**
+ * User.campaignLogs
+ */
+export type User$campaignLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampaignLog
+   */
+  select?: Prisma.CampaignLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CampaignLog
+   */
+  omit?: Prisma.CampaignLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampaignLogInclude<ExtArgs> | null
+  where?: Prisma.CampaignLogWhereInput
+  orderBy?: Prisma.CampaignLogOrderByWithRelationInput | Prisma.CampaignLogOrderByWithRelationInput[]
+  cursor?: Prisma.CampaignLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampaignLogScalarFieldEnum | Prisma.CampaignLogScalarFieldEnum[]
 }
 
 /**

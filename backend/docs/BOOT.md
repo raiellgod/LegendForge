@@ -13,37 +13,48 @@ Virtual Tabletop (VTT)
 
 ### 🖥️ Backend
 
-- Node.js  
-- Fastify  
-- TypeScript  
-- Prisma (integrado)  
-- PostgreSQL  
-- Better Auth (core de autenticação)  
-- Zod  
+- Node.js
+- Fastify
+- TypeScript
+- Prisma
+- PostgreSQL
+- Better Auth
+- Zod
+- Swagger
+- Scalar API Reference
+- Docker
 
----
+### 🎨 Frontend
 
-### 🎨 Frontend (em progresso)
-
-- React  
-- Vite  
-- Tailwind  
-- TypeScript  
+- Next.js
+- React
+- Tailwind CSS
+- TypeScript
+- Better Auth Client
+- Figma
 
 ---
 
 ## 📊 Current State
 
-- ✅ Backend funcional (Fastify rodando)
+- ✅ Backend funcional com Fastify
+- ✅ Docker/PostgreSQL funcionando
 - ✅ Prisma configurado e conectado ao banco
-- ✅ Banco sincronizado (`db push`)
+- ✅ Banco sincronizado com `db push`
 - ✅ Prisma Client gerado
-- ✅ Sistema de autenticação funcionando (Better Auth)
-- ✅ Registro e login funcionando via API
+- ✅ Prisma Studio funcionando
+- ✅ Better Auth integrado ao banco
+- ✅ Registro e login funcionando
 - ✅ Sessões persistidas no banco
-- ✅ Documentação interativa (Swagger + Scalar)
-- 🚧 Expansão do schema (domínio RPG)
-- ⚠️ Backend ainda sem modularização completa
+- ✅ Backend lendo sessão por cookie com `auth.api.getSession`
+- ✅ Frontend chamando rotas protegidas com `credentials: "include"`
+- ✅ Documentação interativa via Scalar/Swagger
+- ✅ Home logada `/campaigns` funcionando
+- ✅ Criação inicial de campanha funcionando
+- ✅ Tela `/campaigns/[id]/edit` iniciada
+- 🚧 Busca de campanhas pendente
+- 🚧 Página de jogo pendente
+- ⚠️ Backend ainda sem camada de services completa
 
 ---
 
@@ -51,58 +62,74 @@ Virtual Tabletop (VTT)
 
 ### 🔥 PRIORIDADE CRÍTICA (AGORA)
 
-- [ ] Consolidar `schema.prisma` com domínio RPG
-- [ ] Validar relações (GameSystem, Stats, Skills)
-- [ ] Garantir integridade entre tabelas
-- [ ] Testar fluxo completo: Auth → DB → API
+- [ ] Consolidar backend de campanhas
+- [ ] Ajustar `GET /campaigns/:id` para retornar `description` e `coverImage`
+- [ ] Ajustar `PATCH /campaigns/:id` para atualizar:
+  - name
+  - description
+  - coverImage
+  - isPublic
+- [ ] Criar rota para campanhas públicas/busca
+- [ ] Validar fluxo:
+  - Login → `/campaigns`
+  - Criar campanha → `/campaigns/:id/edit`
+  - Editar campanha → persistir mudanças
 
 ---
 
 ### 🧠 BACKEND (PRÓXIMA ETAPA)
 
-- [ ] Criar estrutura modular (`modules/`)
-- [ ] Separar rotas por domínio:
-  - users
-  - systems
-  - campaigns
-- [ ] Criar camada de services
-- [ ] Padronizar validação com Zod
+- [ ] Criar `GET /campaigns/public`
+- [ ] Melhorar `POST /campaigns/join`
+- [ ] Definir status de participante
+- [ ] Criar camada de services quando regras crescerem
+- [ ] Padronizar responses de erro
+- [ ] Revisar permissões de GM/PLAYER
+- [ ] Preparar upload real de imagem no futuro
 
 ---
 
 ### 🧩 FEATURES INICIAIS
 
-- [ ] CRUD de GameSystem
-- [ ] CRUD de Stats
-- [ ] CRUD de Skills
-- [ ] GET `/me` (usuário autenticado)
+- [x] Auth real
+- [x] Home logada de campanhas
+- [x] Criar campanha
+- [x] Entrar como GM automaticamente ao criar campanha
+- [x] Tela inicial de edição/finalização da campanha
+- [ ] Buscar campanha
+- [ ] Entrar em campanha pública/por convite
+- [ ] Criar página de jogo
+- [ ] Criar personagens
 
 ---
 
-### 🔐 AUTENTICAÇÃO (REFINAMENTO)
+### 🔐 AUTENTICAÇÃO
 
-- [ ] Validar fluxo completo de login
-- [ ] Testar persistência de sessão
-- [ ] Proteger rotas com middleware
-- [ ] Implementar logout
+- [x] Registro
+- [x] Login
+- [x] Persistência de sessão
+- [x] Backend usando sessão do Better Auth
+- [x] Frontend enviando cookies
+- [ ] Refinar tratamento de erro de sessão expirada
+- [ ] Revisar logout e redirects finais
 
 ---
 
 ### 🎨 FRONTEND
 
-- [ ] Conectar frontend com API
-- [ ] Tela de login real
-- [ ] Tela de registro
-- [ ] Preparar integração com campanhas
-
----
-
-## 📄 Project Docs
-
-- `ARCHITECTURE.md` → visão e decisões  
-- `DATABASE_SETUP.md` → banco e regras  
-- `DEV_STATE.md` → estado atual  
-- `FEATURE_CAPSULE.md` → execução incremental  
+- [x] Home pública
+- [x] Login
+- [x] Registro
+- [x] Header privado
+- [x] Fundo parchment
+- [x] Botão base
+- [x] `/campaigns`
+- [x] `/campaigns/create`
+- [x] `/campaigns/[id]/edit`
+- [ ] `/campaigns/search`
+- [ ] `/campaigns/[id]/play`
+- [ ] Responsividade fina
+- [ ] Upload real de capa
 
 ---
 
@@ -110,202 +137,92 @@ Virtual Tabletop (VTT)
 
 O projeto saiu da fase de:
 
-❌ Planejamento  
-❌ Modelagem isolada  
+❌ planejamento  
+❌ modelagem isolada  
+❌ auth desconectado  
+❌ frontend mockado  
 
 E entrou em:
 
-✅ **Sistema real funcionando**
+✅ **fluxo real de campanha funcionando**
 
 ---
 
 ## 🧠 Foco Atual
 
-- Consolidar base técnica  
-- Expandir domínio com segurança  
-- Evitar quebrar o que já funciona  
+- Não avançar features grandes em cima de backend incompleto.
+- Consolidar campanhas.
+- Evitar mock quando já existe API.
+- Manter cada etapa funcional.
 
 ---
 
-## ⚠️ Regra Importante
+## ⚠️ Regras Importantes
 
-> Auth é o núcleo do sistema
+> Auth é o núcleo do sistema.  
+> Campanhas dependem diretamente de `user.id`.
 
-Se quebrar:
-→ todo o sistema quebra
-
----
-
-## 🎯 Mentalidade
-
-- Construir incrementalmente  
-- Validar cada passo  
-- Manter o sistema sempre funcional  
+> Backend é a fonte da verdade.  
+> Frontend deve consumir API real sempre que possível.
 
 ---
 
-## 🚀 Estado Atual
+## 🛠️ Comandos úteis
 
-👉 **CORE SYSTEM STABLE — READY TO EXPAND**
+### Backend
 
-- Auth funcionando  
-- Banco integrado  
-- API respondendo  
-- Base pronta para crescer  
+```bash
+cd backend
+docker compose up -d
+pnpm install
+pnpm prisma generate
+pnpm prisma db push
+pnpm run dev
+```
 
----# 🚀 BOOT — LegendForge
+### Prisma Studio
 
----
+```bash
+cd backend
+pnpm prisma studio
+```
 
-## 📌 Project
+### Frontend
 
-**LegendForge**  
-Virtual Tabletop (VTT)
+```bash
+cd frontend
+pnpm install
+pnpm run dev
+```
 
----
+### Limpar cache do Next
 
-## ⚙️ Stack
+```bash
+cd frontend
+rm -rf .next
+pnpm run dev
+```
 
-### 🖥️ Backend
+### Observação local
 
-- Node.js  
-- Fastify  
-- TypeScript  
-- Prisma (integrado)  
-- PostgreSQL  
-- Better Auth (core de autenticação)  
-- Zod  
+O frontend está usando:
 
----
+```json
+"dev": "next dev --webpack"
+```
 
-### 🎨 Frontend (em progresso)
-
-- React  
-- Vite  
-- Tailwind  
-- TypeScript  
-
----
-
-## 📊 Current State
-
-- ✅ Backend funcional (Fastify rodando)
-- ✅ Prisma configurado e conectado ao banco
-- ✅ Banco sincronizado (`db push`)
-- ✅ Prisma Client gerado
-- ✅ Sistema de autenticação funcionando (Better Auth)
-- ✅ Registro e login funcionando via API
-- ✅ Sessões persistidas no banco
-- ✅ Documentação interativa (Swagger + Scalar)
-- 🚧 Expansão do schema (domínio RPG)
-- ⚠️ Backend ainda sem modularização completa
-
----
-
-## 🎯 Next Tasks (FOCO ATUAL)
-
-### 🔥 PRIORIDADE CRÍTICA (AGORA)
-
-- [ ] Consolidar `schema.prisma` com domínio RPG
-- [ ] Validar relações (GameSystem, Stats, Skills)
-- [ ] Garantir integridade entre tabelas
-- [ ] Testar fluxo completo: Auth → DB → API
-
----
-
-### 🧠 BACKEND (PRÓXIMA ETAPA)
-
-- [ ] Criar estrutura modular (`modules/`)
-- [ ] Separar rotas por domínio:
-  - users
-  - systems
-  - campaigns
-- [ ] Criar camada de services
-- [ ] Padronizar validação com Zod
-
----
-
-### 🧩 FEATURES INICIAIS
-
-- [ ] CRUD de GameSystem
-- [ ] CRUD de Stats
-- [ ] CRUD de Skills
-- [ ] GET `/me` (usuário autenticado)
-
----
-
-### 🔐 AUTENTICAÇÃO (REFINAMENTO)
-
-- [ ] Validar fluxo completo de login
-- [ ] Testar persistência de sessão
-- [ ] Proteger rotas com middleware
-- [ ] Implementar logout
-
----
-
-### 🎨 FRONTEND
-
-- [ ] Conectar frontend com API
-- [ ] Tela de login real
-- [ ] Tela de registro
-- [ ] Preparar integração com campanhas
-
----
-
-## 📄 Project Docs
-
-- `ARCHITECTURE.md` → visão e decisões  
-- `DATABASE_SETUP.md` → banco e regras  
-- `DEV_STATE.md` → estado atual  
-- `FEATURE_CAPSULE.md` → execução incremental  
-
----
-
-## ⚡ Quick Context
-
-O projeto saiu da fase de:
-
-❌ Planejamento  
-❌ Modelagem isolada  
-
-E entrou em:
-
-✅ **Sistema real funcionando**
-
----
-
-## 🧠 Foco Atual
-
-- Consolidar base técnica  
-- Expandir domínio com segurança  
-- Evitar quebrar o que já funciona  
-
----
-
-## ⚠️ Regra Importante
-
-> Auth é o núcleo do sistema
-
-Se quebrar:
-→ todo o sistema quebra
-
----
-
-## 🎯 Mentalidade
-
-- Construir incrementalmente  
-- Validar cada passo  
-- Manter o sistema sempre funcional  
+para evitar instabilidade local com Turbopack.
 
 ---
 
 ## 🚀 Estado Atual
 
-👉 **CORE SYSTEM STABLE — READY TO EXPAND**
+👉 **AUTH + CAMPAIGN FRONTEND FLOW WORKING**
 
-- Auth funcionando  
-- Banco integrado  
-- API respondendo  
-- Base pronta para crescer  
-
----
+- Auth funcionando
+- Banco integrado
+- API respondendo
+- Home de campanhas conectada
+- Criação de campanha funcionando
+- Tela inicial de edição criada
+- Próximo passo: consolidar backend de campanhas e busca

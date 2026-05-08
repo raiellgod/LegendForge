@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-forge-purple: #31084c;
+  --color-forge-gold: #d3af37;
+  --color-forge-parchment: #d9d9d9;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-medieval: var(--font-medieval);
+
+  --shadow-gold: 0 0 18px rgba(211, 175, 55, 0.75);
+  --shadow-dark: -10px 10px 10px rgba(0, 0, 0, 0.9);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}

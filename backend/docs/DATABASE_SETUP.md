@@ -2,10 +2,10 @@
 
 Este documento descreve:
 
-- Estrutura do banco (dbdiagram)
-- Regras de negócio do banco
+- Estrutura do banco
+- Regras de negócio
 - Limitações do dbdiagram
-- Regras aplicadas fora do dbdiagram (SQL + Backend)
+- Regras aplicadas fora do dbdiagram
 - Progresso da implementação com Prisma
 
 ---
@@ -16,179 +16,180 @@ Este documento descreve:
 ✔ Prisma integrado e funcionando  
 ✔ Better Auth integrado ao banco  
 ✔ Auth persistindo dados corretamente  
+✔ Campanhas implementadas no Prisma  
+✔ Participantes implementados no Prisma  
+✔ Sessões de jogo implementadas no Prisma  
 🔄 Expansão do domínio RPG em andamento  
 ❌ Regras SQL avançadas ainda não aplicadas  
 ❌ Triggers ainda não implementadas  
 
 ---
 
-# 🗺️ BANCO DE DADOS (DBDIAGRAM)
+# 🗺️ BANCO DE DADOS — NÚCLEO ATUAL
 
-```sql
-//////////////////////////////////////////////////////
-// AUTH (BETTER AUTH CORE)
-//////////////////////////////////////////////////////
+## 🔐 Auth — Better Auth Core
 
-Table user {
-  id string [pk]
-  name string
-  email string [unique]
-  emailVerified boolean
-  image string
-  createdAt timestamp
-  updatedAt timestamp
-}
+```prisma
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean
+  image         String?
+  status        UserStatus @default(ACTIVE)
+  createdAt     DateTime
+  updatedAt     DateTime
 
-Table session {
-  id string [pk]
-  expiresAt timestamp
-  token string [unique]
-  createdAt timestamp
-  updatedAt timestamp
-  ipAddress string
-  userAgent string
-  userId string [ref: > user.id]
-}
-
-Table account {
-  id string [pk]
-  accountId string
-  providerId string
-  userId string [ref: > user.id]
-  accessToken string
-  refreshToken string
-  idToken string
-  accessTokenExpiresAt timestamp
-  refreshTokenExpiresAt timestamp
-  scope string
-  password string
-  createdAt timestamp
-  updatedAt timestamp
-}
-
-Table verification {
-  id string [pk]
-  identifier string
-  value string
-  expiresAt timestamp
-  createdAt timestamp
-  updatedAt timestamp
-}
-
-//////////////////////////////////////////////////////
-// SYSTEM
-//////////////////////////////////////////////////////
-
-Table game_systems {
-  id uuid [pk]
-  name varchar(100)
-  slug varchar(100)
-  version integer
-  created_at timestamp
-}
-
-Table stats {
-  id uuid [pk]
-  system_id uuid [ref: > game_systems.id]
-  name varchar(50)
-}
-
-Table skills {
-  id uuid [pk]
-  system_id uuid [ref: > game_systems.id]
-  stat_id uuid [ref: > stats.id]
-  name varchar(50)
+  sessions      Session[]
+  accounts      Account[]
+  campaigns     Campaign[]
+  participants  Participant[]
 }
 ```
+
+Tabelas oficiais do Better Auth:
+
+- `user`
+- `session`
+- `account`
+- `verification`
+
+---
+
+## 🎲 Campanhas
+
+```prisma
+model Campaign {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  coverImage  String?
+  ownerId     String
+  isPublic    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  inviteCode  String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner        User          @relation(fields: [ownerId], references: [id])
+  participants Participant[]
+  sessions     GameSession[]
+}
+```
+
+Responsabilidades:
+
+- representar um mundo/campanha
+- guardar owner
+- permitir visibilidade pública/futura busca
+- guardar imagem de capa
+- receber participantes
+- conectar sessões de jogo
+
+---
+
+## 👥 Participantes
+
+```prisma
+model Participant {
+  id         String   @id @default(uuid())
+  campaignId String
+  userId     String
+  role       ParticipantRole
+  createdAt  DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+}
+```
+
+Status atual:
+
+- criador da campanha entra como `GM`
+- jogador que entra por convite será `PLAYER`
+- permissões refinadas ainda serão evoluídas
+
+---
+
+## 🗓️ Sessões de jogo
+
+```prisma
+model GameSession {
+  id          String   @id @default(uuid())
+  campaignId  String
+  scheduledAt DateTime
+  createdAt   DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+}
+```
+
+Uso atual:
+
+- `GET /campaigns` busca a próxima sessão futura
+- frontend mostra `Not Scheduled` se não houver sessão marcada
+
+---
+
+## ⚙️ Sistema RPG inicial
+
+- `GameSystem`
+- `Stat`
+- `Skill`
+
+Esses modelos já existem como base para sistemas customizáveis.
 
 ---
 
 # ⚠️ LIMITAÇÕES DO DBDIAGRAM
 
-O dbdiagram não suporta:
+O dbdiagram não suporta diretamente:
 
 ## ❌ Regras avançadas
-- CHECK constraints  
-- validações condicionais  
-- regras entre tabelas  
+
+- CHECK constraints
+- validações condicionais
+- regras entre tabelas
 
 ## ❌ Triggers
-- validação de domínio (ex: subclasses)  
-- validação de consistência de dados  
+
+- validação de consistência
+- validação de domínio
+- side effects controlados
 
 ## ❌ Índices parciais
-- ex: apenas 1 GM por campanha  
+
+- exemplo: apenas 1 GM principal por campanha
 
 ## ❌ Constraints complexas
-- validações cruzadas entre tabelas  
-- regras condicionais baseadas em múltiplos campos  
+
+- validações cruzadas entre entidades
+- regras condicionais com múltiplos campos
 
 ---
 
-# 🧠 REGRAS IMPLEMENTADAS FORA DO DBDIAGRAM
+# 🧠 REGRAS QUE DEVEM EXISTIR NO BANCO OU BACKEND
 
-Arquivo: `DATABASE_RULES.sql`
+## Campanhas
 
----
+- apenas owner pode deletar campanha
+- apenas owner/GM pode alterar configurações críticas
+- usuário deve ver campanhas onde é owner ou participant
+- campanhas inativas não devem aparecer na home
+- inviteCode deve ser único
 
-## ✔ Regras importantes
+## Participantes
 
-### 1. Consistência de sistema
+- owner não pode ser removido da própria campanha
+- usuário não deve entrar duas vezes na mesma campanha
+- alteração de GM deve preservar consistência
+- futuro: status `PENDING`, `APPROVED`, `REMOVED`
 
-```txt
-stats.system_id deve corresponder ao sistema correto
-skills devem respeitar stats do mesmo sistema
-```
+## Sistemas RPG
 
----
-
-### 2. Limites numéricos
-
-- stats entre 1 e 30  
-- níveis entre 1 e 20  
-- valores não negativos  
-
----
-
-### 3. Integridade de dados
-
-- relações sempre válidas  
-- dados órfãos não devem existir  
-- consistência entre entidades  
-
----
-
-# ⚙️ REGRAS QUE FICAM NO BACKEND
-
-## 🎯 Permissões
-
-- controle de acesso por usuário  
-- autorização de ações  
-- proteção de rotas  
-
----
-
-## 🎯 Fluxo
-
-- impedir ações inválidas  
-- validar entrada de dados  
-- garantir consistência de gameplay  
-
----
-
-## 🎯 IA
-
-- recomendações válidas  
-- filtragem por regras  
-- sugestões inteligentes  
-
----
-
-## 🎯 UX
-
-- mensagens de erro  
-- validação amigável  
-- feedback visual  
+- stats devem pertencer ao mesmo sistema da skill
+- níveis devem respeitar limites
+- personagens devem respeitar raça/classe/sistema da campanha
 
 ---
 
@@ -197,72 +198,88 @@ skills devem respeitar stats do mesmo sistema
 | Camada     | Responsabilidade |
 |------------|------------------|
 | DB         | integridade estrutural |
-| SQL RULES  | regras críticas |
+| SQL RULES  | regras críticas complexas |
 | Prisma     | acesso tipado |
-| Backend    | lógica |
-| Frontend   | experiência |
+| Backend    | lógica, permissões e validação |
+| Frontend   | experiência e feedback visual |
 
 ---
 
 # 🧪 PASSOS DE IMPLEMENTAÇÃO
 
 ## 🔹 Fase 1 — Setup Prisma
+
 - [x] Criar `schema.prisma`
 - [x] Validar schema
 - [x] Gerar Prisma Client
 - [x] Conectar com banco
 
----
+## 🔹 Fase 2 — Auth
 
-## 🔹 Fase 2 — Banco
-- [x] Criar estrutura inicial
-- [ ] Aplicar regras SQL avançadas
-- [ ] Implementar triggers
+- [x] Better Auth integrado
+- [x] User
+- [x] Session
+- [x] Account
+- [x] Verification
+- [x] Sessão via cookie validada
 
----
+## 🔹 Fase 3 — Campanhas
 
-## 🔹 Fase 3 — Backend
-- [x] Auth funcionando
-- [ ] CRUD sistemas RPG
-- [ ] Services
-- [ ] Validação com Zod
-
----
+- [x] Campaign
+- [x] Participant
+- [x] GameSession
+- [x] POST `/campaigns`
+- [x] GET `/campaigns`
+- [x] GET `/campaigns/:id`
+- [x] PATCH `/campaigns/:id`
+- [x] DELETE `/campaigns/:id`
+- [x] JOIN por invite code
+- [ ] Busca pública de campanhas
+- [ ] Refinar status de participante
+- [ ] Persistir descrição/capa com validação final
+- [ ] Storage real para capa
 
 ## 🔹 Fase 4 — Sistema RPG
+
 - [x] GameSystem
 - [x] Stat
 - [x] Skill
 - [ ] Classes
+- [ ] Subclasses
+- [ ] Features
 - [ ] Characters
-- [ ] Campaigns
 
----
+## 🔹 Fase 5 — Regras avançadas
 
-## 🔹 Fase 5 — IA
-- [ ] Sistema de recomendação
-- [ ] Sugestão de builds
-- [ ] Filtros inteligentes
+- [ ] Aplicar regras SQL avançadas
+- [ ] Implementar triggers quando necessário
+- [ ] Índices específicos para performance e integridade
 
 ---
 
 # 🧠 FILOSOFIA DO PROJETO
 
-> Banco é a fundação do sistema
+> Banco é a fundação do sistema.
 
 Ordem correta:
 
-1. Auth funcionando  
-2. Banco consistente  
-3. Backend confiável  
-4. Expansão controlada  
-5. Features avançadas  
+1. Auth funcionando
+2. Banco consistente
+3. Backend confiável
+4. Frontend conectado
+5. Expansão controlada
+6. Features avançadas
 
 ---
 
 # 📍 PRÓXIMO PASSO
 
-👉 Expandir domínio RPG no Prisma sem quebrar o auth
+👉 Consolidar domínio de campanhas no backend:
+
+- buscar campanhas públicas
+- melhorar update de campanha
+- preparar regras de participação
+- definir como imagem de capa será armazenada em produção
 
 ---
 
@@ -271,6 +288,7 @@ Ordem correta:
 ✔ Auth funcionando  
 ✔ Prisma integrado  
 ✔ Banco funcional  
-✔ Base pronta para escalar  
+✔ Campanhas iniciadas  
+✔ Fluxo real de criação de campanha funcionando  
 
-👉 Próximo nível: domínio RPG completo
+👉 Próximo nível: busca/participação de campanhas e página de jogo

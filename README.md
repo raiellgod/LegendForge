@@ -1,8 +1,8 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-core%20working-yellow)
+![Status](https://img.shields.io/badge/status-campaign%20flow%20working-yellow)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
-![Frontend](https://img.shields.io/badge/frontend-react-purple)
+![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
 ![ORM](https://img.shields.io/badge/orm-prisma-2D3748)
 ![Auth](https://img.shields.io/badge/auth-better--auth-green)
@@ -22,7 +22,8 @@ Inspired by tools like Roll20 and Foundry VTT — but with a different philosoph
 - 🧩 System-agnostic
 - 🎲 Focused on custom campaigns
 - 👥 Built for real gameplay with friends
-- 🧠 Designed as a serious backend portfolio project
+- 🧠 Designed as a serious full-stack portfolio project
+- ⚙️ Built incrementally with production mindset
 
 ---
 
@@ -35,8 +36,10 @@ It demonstrates:
 - 🏗️ Real backend architecture
 - 🗄️ Production-oriented database modeling
 - ⚙️ Business rules treated seriously
+- 🔐 Real authentication and persisted sessions
 - 🧠 System design thinking
 - 🎮 Flexible RPG engine foundation
+- 🎨 UI built from a Figma-driven product flow
 
 ---
 
@@ -53,12 +56,16 @@ It demonstrates:
 - Zod
 - Swagger
 - Scalar API Reference
+- Docker
+- pnpm
 
 ### 🎨 Frontend
 
+- Next.js
 - React
-- Vite
-- Tailwind
+- TypeScript
+- Tailwind CSS
+- Better Auth Client
 - Figma
 
 ---
@@ -67,75 +74,100 @@ It demonstrates:
 
 ```txt
 LegendForge/
-├── src/
-│   ├── generated/prisma/
-│   ├── lib/
-│   │   └── auth.ts
-│   ├── routes/
-│   └── index.ts
+├── backend/
+│   ├── src/
+│   │   ├── generated/prisma/
+│   │   ├── lib/
+│   │   ├── routes/
+│   │   └── index.ts
+│   ├── prisma/
+│   │   └── schema.prisma
+│   ├── docker-compose.yml
+│   └── package.json
 │
-├── prisma/
-│   └── schema.prisma
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   ├── components/
+│   │   ├── lib/
+│   │   └── service/
+│   ├── public/
+│   └── package.json
 │
 ├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── BOOT.md
-│   ├── DATABASE_SETUP.md
-│   ├── DEV_STATE.md
-│   ├── FEATURE_CAPSULE.md
-│   └── DEVELOPER_CONFIG-UTILIZE.txt
-│
-├── package.json
-├── docker-compose.yml
-└── tsconfig.json
+└── README.md
 ```
 
 ---
 
 ## 📊 Current Status
 
-> 🟡 Core system working — ready for domain expansion
+> 🟡 Auth + campaign creation flow working
 
 ### ✅ Completed
 
-- Backend base (Fastify + TypeScript)
+- Backend base with Fastify + TypeScript
 - ESLint + Prettier
 - Zod validation
 - Swagger docs
 - Scalar interactive docs
 - Prisma integration
-- PostgreSQL connection
+- PostgreSQL connection via Docker
+- Prisma Studio validation
 - Better Auth integration
 - User registration and login flow
-- Database persistence validated
+- Session persistence in database
+- Cookie-based authenticated API calls
 - Initial RPG domain models:
   - GameSystem
   - Stat
   - Skill
-- Figma with core UI flows
-
----
-
-### 🚧 In Progress
-
-- Expanding `schema.prisma`
-- RPG domain implementation
-- API routes for game systems
-- Backend organization and modular growth
-
----
-
-### 🔜 Next Steps
-
-- Implement `GameSystem` CRUD
-- Implement `Stat` CRUD
-- Implement `Skill` CRUD
-- Expand schema with:
+- Campaign domain foundation:
   - Campaign
   - Participant
+  - GameSession
+- Campaign API routes:
+  - create campaign
+  - list user campaigns
+  - get campaign by id
+  - update campaign
+  - delete campaign
+  - join campaign
+  - manage participants
+- Frontend campaign flow:
+  - `/campaigns`
+  - `/campaigns/create`
+  - `/campaigns/[id]/edit`
+
+---
+
+## 🚧 In Progress
+
+- Campaign backend consolidation
+- Public campaign search
+- Join campaign flow refinement
+- Campaign image cover workflow
+- Campaign edit persistence
+- Page/game room foundation
+
+---
+
+## 🔜 Next Steps
+
+- Implement campaign search:
+  - `GET /campaigns/public`
+  - or `GET /campaigns/search`
+- Improve `PATCH /campaigns/:id`
+- Persist description and cover image more cleanly
+- Replace temporary base64 cover flow with real storage later
+- Create `/campaigns/search`
+- Create `/campaigns/[id]/play`
+- Expand schema with:
   - Character
-- Add protected route `/me`
-- Start campaign domain integration
+  - Classes
+  - Subclasses
+  - Inventory
+  - Logs
 
 ---
 
@@ -150,7 +182,16 @@ Current auth foundation includes:
 - `account`
 - `verification`
 
-This means authentication is not a side feature — it is part of the system core.
+Authentication is not a side feature — it is part of the system core.
+
+Current flow:
+
+1. User registers or logs in.
+2. Better Auth persists session in PostgreSQL.
+3. Browser stores the session cookie.
+4. Frontend calls the API with `credentials: "include"`.
+5. Backend reads session via `auth.api.getSession`.
+6. Protected routes use `session.user.id`.
 
 ---
 
@@ -164,6 +205,7 @@ Current state:
 - PostgreSQL is connected
 - Database sync is working
 - Auth tables are operational
+- Campaign tables are operational
 - RPG domain is being expanded incrementally
 
 More details are documented in:
@@ -174,16 +216,20 @@ More details are documented in:
 
 ---
 
-## 🎨 UI / UX (Figma)
+## 🎨 UI / UX
 
-The project UI is being designed before full implementation.
+The project UI is designed in Figma and implemented incrementally.
 
 Current UI progress:
 
-- ✅ Create campaign flow
-- 🟡 Search campaign flow
-- 🟡 Tabletop / session screen
-- 🟡 Auth screens refinement
+- ✅ Public home
+- ✅ Login
+- ✅ Register
+- ✅ Logged-in campaign home
+- ✅ Create campaign page
+- ✅ Initial edit/finalize campaign page
+- 🟡 Search campaign page
+- 🟡 Tabletop/session screen
 
 ---
 
@@ -216,21 +262,43 @@ Current capsules include:
 - Capsule 09 — Prisma Integration
 - Capsule 10 — Better Auth
 - Capsule 11 — API Integration
+- Capsule 12 — Campaign Domain API
+- Capsule 13 — Campaign Frontend Flow
 
 See:
 
-`docs/FEATURE_CAPSULE.md`
+```txt
+docs/FEATURE_CAPSULE.md
+```
 
 ---
 
 ## 🚀 Getting Started
 
-```bash
-git clone https://github.com/raiellgod/LegendForge.git
-cd LegendForge
+### Backend
 
+```bash
+cd backend
+docker compose up -d
 pnpm install
-pnpm dev
+pnpm prisma generate
+pnpm prisma db push
+pnpm run dev
+```
+
+### Prisma Studio
+
+```bash
+cd backend
+pnpm prisma studio
+```
+
+### Frontend
+
+```bash
+cd frontend
+pnpm install
+pnpm run dev
 ```
 
 ---
@@ -240,17 +308,26 @@ pnpm dev
 When changing the Prisma schema:
 
 ```bash
-npx prisma format
-npx prisma validate
-npx prisma generate
-npx prisma db push
+cd backend
+pnpm prisma format
+pnpm prisma validate
+pnpm prisma generate
+pnpm prisma db push
 ```
 
 When testing auth or database changes:
 
-- restart the server
-- validate the request in Scalar
+- restart the backend
+- validate request in Scalar
 - confirm persistence in Prisma Studio
+
+For frontend cache issues:
+
+```bash
+cd frontend
+rm -rf .next
+pnpm run dev
+```
 
 ---
 
@@ -280,9 +357,10 @@ Raiel Godinho
 LegendForge aims to become:
 
 - 🎲 A complete Virtual Tabletop
-- 🧠 A strong backend portfolio project
+- 🧠 A strong full-stack portfolio project
 - ⚙️ A modular RPG engine
-- 🔐 A well-architected full-stack product
+- 🔐 A well-architected product
+- 👥 A real multiplayer tabletop experience
 
 ---
 

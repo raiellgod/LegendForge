@@ -1,31 +1,49 @@
-import { FastifyInstance } from 'fastify'
-import { ZodTypeProvider } from 'fastify-type-provider-zod'
-import { z } from 'zod'
+import { FastifyInstance } from "fastify";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { z } from "zod";
 
-import { getAuthenticatedSession } from '../lib/get-authenticated-session.js'
-import { prisma } from '../lib/prisma.js'
+import { getAuthenticatedSession } from "../lib/get-authenticated-session.js";
+import { prisma } from "../lib/prisma.js";
 
 export async function campaignRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().route({
-    method: 'POST',
-    url: '/campaigns',
+    method: "POST",
+    url: "/campaigns",
     schema: {
-      tags: ['Campaigns'],
-      description: 'Create a new campaign',
+      tags: ["Campaigns"],
+      description: "Create a new campaign",
       body: z.object({
         name: z
           .string()
-          .min(3, 'Campaign name must have at least 3 characters'),
+          .min(3, "Campaign name must have at least 3 characters"),
+
+        description: z.string().optional(),
+
+        coverImage: z.string().optional(),
+
+        systemId: z.string().uuid().optional(),
+
         isPublic: z.boolean().optional(),
+
+        maxPlayers: z
+          .number()
+          .int()
+          .min(1, "Campaign must allow at least 1 player")
+          .max(10, "Campaign cannot allow more than 10 players")
+          .optional(),
       }),
       response: {
         201: z.object({
           campaign: z.object({
             id: z.string(),
             name: z.string(),
+            description: z.string().nullable(),
+            coverImage: z.string().nullable(),
             ownerId: z.string(),
+            systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
+            maxPlayers: z.number(),
             inviteCode: z.string().nullable(),
             createdAt: z.string(),
             updatedAt: z.string(),
@@ -37,60 +55,76 @@ export async function campaignRoutes(app: FastifyInstance) {
       },
     },
     handler: async (request, reply) => {
-      const session = await getAuthenticatedSession(request)
+      const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
         return reply.status(401).send({
-          message: 'Unauthorized',
-        })
+          message: "Unauthorized",
+        });
       }
 
-      const inviteCode = crypto.randomUUID().slice(0, 8)
+      const inviteCode = crypto.randomUUID().slice(0, 8);
 
       const campaign = await prisma.campaign.create({
         data: {
           name: request.body.name,
+          description: request.body.description,
+          coverImage: request.body.coverImage,
+          systemId: request.body.systemId,
           ownerId: session.user.id,
           isPublic: request.body.isPublic ?? false,
+          maxPlayers: request.body.maxPlayers ?? 5,
           inviteCode,
           participants: {
             create: {
               userId: session.user.id,
-              role: 'GM',
+              role: "GM",
+              status: "APPROVED",
             },
           },
         },
-      })
+      });
 
       return reply.status(201).send({
         campaign: {
-          ...campaign,
+          id: campaign.id,
+          name: campaign.name,
+          description: campaign.description,
+          coverImage: campaign.coverImage,
+          ownerId: campaign.ownerId,
+          systemId: campaign.systemId,
+          isPublic: campaign.isPublic,
+          isActive: campaign.isActive,
+          maxPlayers: campaign.maxPlayers,
+          inviteCode: campaign.inviteCode,
           createdAt: campaign.createdAt.toISOString(),
           updatedAt: campaign.updatedAt.toISOString(),
         },
-      })
+      });
     },
-  })
+  });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-    method: 'GET',
-    url: '/campaigns',
+    method: "GET",
+    url: "/campaigns",
     schema: {
-      tags: ['Campaigns'],
-      description: 'List campaigns for authenticated user',
+      tags: ["Campaigns"],
+      description: "List campaigns for authenticated user",
       response: {
         200: z.object({
           campaigns: z.array(
             z.object({
               id: z.string(),
               name: z.string(),
-              ownerId: z.string(),
-              isPublic: z.boolean(),
+              description: z.string().nullable(),
+              coverImage: z.string().nullable(),
               isActive: z.boolean(),
-              inviteCode: z.string().nullable(),
-              createdAt: z.string(),
-              updatedAt: z.string(),
-            })
+              nextSession: z
+                .object({
+                  scheduledAt: z.string(),
+                })
+                .nullable(),
+            }),
           ),
         }),
         401: z.object({
@@ -99,16 +133,17 @@ export async function campaignRoutes(app: FastifyInstance) {
       },
     },
     handler: async (request, reply) => {
-      const session = await getAuthenticatedSession(request)
+      const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
         return reply.status(401).send({
-          message: 'Unauthorized',
-        })
+          message: "Unauthorized",
+        });
       }
 
       const campaigns = await prisma.campaign.findMany({
         where: {
+          isActive: true,
           OR: [
             {
               ownerId: session.user.id,
@@ -117,43 +152,255 @@ export async function campaignRoutes(app: FastifyInstance) {
               participants: {
                 some: {
                   userId: session.user.id,
+                  status: "APPROVED",
                 },
               },
             },
           ],
         },
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
-      })
+        include: {
+          sessions: {
+            where: {
+              scheduledAt: {
+                gte: new Date(),
+              },
+            },
+            orderBy: {
+              scheduledAt: "asc",
+            },
+            take: 1,
+          },
+        },
+      });
 
-      return reply.status(200).send({
+      return reply.send({
         campaigns: campaigns.map((campaign) => ({
-          ...campaign,
-          createdAt: campaign.createdAt.toISOString(),
-          updatedAt: campaign.updatedAt.toISOString(),
+          id: campaign.id,
+          name: campaign.name,
+          description: campaign.description,
+          coverImage: campaign.coverImage,
+          isActive: campaign.isActive,
+          nextSession: campaign.sessions[0]
+            ? {
+                scheduledAt: campaign.sessions[0].scheduledAt.toISOString(),
+              }
+            : null,
         })),
-      })
+      });
     },
-  })
+  });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-    method: 'GET',
-    url: '/campaigns/:id',
+    method: "GET",
+    url: "/campaigns/public",
     schema: {
-      tags: ['Campaigns'],
-      description: 'Get a campaign by id',
+      tags: ["Campaigns"],
+      description: "List public active campaigns available to join",
+      querystring: z.object({
+        q: z.string().optional(),
+      }),
+      response: {
+        200: z.object({
+          campaigns: z.array(
+            z.object({
+              id: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              coverImage: z.string().nullable(),
+              ownerId: z.string(),
+              systemId: z.string().nullable(),
+              inviteCode: z.string().nullable(),
+              createdAt: z.string(),
+
+              owner: z.object({
+                id: z.string(),
+                name: z.string(),
+                image: z.string().nullable(),
+              }),
+
+              system: z
+                .object({
+                  id: z.string(),
+                  name: z.string(),
+                  slug: z.string().nullable(),
+                  version: z.number(),
+                })
+                .nullable(),
+
+              playersCount: z.number(),
+              maxPlayers: z.number(),
+              availableSlots: z.number(),
+              isFull: z.boolean(),
+              canJoin: z.boolean(),
+
+              nextSession: z
+                .object({
+                  scheduledAt: z.string().nullable(),
+                })
+                .nullable(),
+            }),
+          ),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const search = request.query.q?.trim();
+
+      const campaigns = await prisma.campaign.findMany({
+        where: {
+          isPublic: true,
+          isActive: true,
+          NOT: {
+            participants: {
+              some: {
+                userId: session.user.id,
+                status: "APPROVED",
+              },
+            },
+          },
+          ...(search
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    description: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              }
+            : {}),
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+          system: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              version: true,
+            },
+          },
+          sessions: {
+            where: {
+              scheduledAt: {
+                gte: new Date(),
+              },
+              isFinished: false,
+            },
+            orderBy: {
+              scheduledAt: "asc",
+            },
+            take: 1,
+            select: {
+              scheduledAt: true,
+            },
+          },
+          _count: {
+            select: {
+              participants: {
+                where: {
+                  role: "PLAYER",
+                  status: "APPROVED",
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return reply.status(200).send({
+        campaigns: campaigns.map((campaign) => {
+          const playersCount = campaign._count.participants;
+          const availableSlots = Math.max(
+            campaign.maxPlayers - playersCount,
+            0,
+          );
+          const isFull = availableSlots === 0;
+          const canJoin = !isFull;
+
+          return {
+            id: campaign.id,
+            name: campaign.name,
+            description: campaign.description,
+            coverImage: campaign.coverImage,
+            ownerId: campaign.ownerId,
+            systemId: campaign.systemId,
+            inviteCode: campaign.inviteCode,
+            createdAt: campaign.createdAt.toISOString(),
+
+            owner: campaign.owner,
+            system: campaign.system,
+
+            playersCount,
+            maxPlayers: campaign.maxPlayers,
+            availableSlots,
+            isFull,
+            canJoin,
+
+            nextSession: campaign.sessions[0]
+              ? {
+                  scheduledAt: campaign.sessions[0].scheduledAt
+                    ? campaign.sessions[0].scheduledAt.toISOString()
+                    : null,
+                }
+              : null,
+          };
+        }),
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/campaigns/:id",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Get a campaign by id",
       params: z.object({
-        id: z.string().uuid('Invalid campaign id'),
+        id: z.string().uuid("Invalid campaign id"),
       }),
       response: {
         200: z.object({
           campaign: z.object({
             id: z.string(),
             name: z.string(),
+            description: z.string().nullable(),
+            coverImage: z.string().nullable(),
             ownerId: z.string(),
+            systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
+            maxPlayers: z.number(),
             inviteCode: z.string().nullable(),
             createdAt: z.string(),
             updatedAt: z.string(),
@@ -168,12 +415,12 @@ export async function campaignRoutes(app: FastifyInstance) {
       },
     },
     handler: async (request, reply) => {
-      const session = await getAuthenticatedSession(request)
+      const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
         return reply.status(401).send({
-          message: 'Unauthorized',
-        })
+          message: "Unauthorized",
+        });
       }
 
       const campaign = await prisma.campaign.findFirst({
@@ -187,60 +434,94 @@ export async function campaignRoutes(app: FastifyInstance) {
               participants: {
                 some: {
                   userId: session.user.id,
+                  status: "APPROVED",
                 },
               },
             },
           ],
         },
-      })
+      });
 
       if (!campaign) {
         return reply.status(404).send({
-          message: 'Campaign not found',
-        })
+          message: "Campaign not found",
+        });
       }
 
       return reply.status(200).send({
         campaign: {
-          ...campaign,
+          id: campaign.id,
+          name: campaign.name,
+          description: campaign.description,
+          coverImage: campaign.coverImage,
+          ownerId: campaign.ownerId,
+          systemId: campaign.systemId,
+          isPublic: campaign.isPublic,
+          isActive: campaign.isActive,
+          maxPlayers: campaign.maxPlayers,
+          inviteCode: campaign.inviteCode,
           createdAt: campaign.createdAt.toISOString(),
           updatedAt: campaign.updatedAt.toISOString(),
         },
-      })
+      });
     },
-  })
+  });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-    method: 'PATCH',
-    url: '/campaigns/:id',
+    method: "PATCH",
+    url: "/campaigns/:id",
     schema: {
-      tags: ['Campaigns'],
-      description: 'Update a campaign',
+      tags: ["Campaigns"],
+      description: "Update a campaign",
       params: z.object({
-        id: z.string().uuid('Invalid campaign id'),
+        id: z.string().uuid("Invalid campaign id"),
       }),
       body: z
         .object({
           name: z
             .string()
-            .min(3, 'Campaign name must have at least 3 characters')
+            .min(3, "Campaign name must have at least 3 characters")
             .optional(),
+
+          description: z.string().nullable().optional(),
+
+          coverImage: z.string().nullable().optional(),
+
+          systemId: z.string().uuid().nullable().optional(),
+
           isPublic: z.boolean().optional(),
+
+          maxPlayers: z
+            .number()
+            .int()
+            .min(1, "Campaign must allow at least 1 player")
+            .max(10, "Campaign cannot allow more than 10 players")
+            .optional(),
         })
         .refine(
-          (data) => data.name !== undefined || data.isPublic !== undefined,
+          (data) =>
+            data.name !== undefined ||
+            data.description !== undefined ||
+            data.coverImage !== undefined ||
+            data.systemId !== undefined ||
+            data.isPublic !== undefined ||
+            data.maxPlayers !== undefined,
           {
-            message: 'At least one field must be provided',
-          }
+            message: "At least one field must be provided",
+          },
         ),
       response: {
         200: z.object({
           campaign: z.object({
             id: z.string(),
             name: z.string(),
+            description: z.string().nullable(),
+            coverImage: z.string().nullable(),
             ownerId: z.string(),
+            systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
+            maxPlayers: z.number(),
             inviteCode: z.string().nullable(),
             createdAt: z.string(),
             updatedAt: z.string(),
@@ -255,33 +536,65 @@ export async function campaignRoutes(app: FastifyInstance) {
         404: z.object({
           message: z.string(),
         }),
+        409: z.object({
+          message: z.string(),
+        }),
       },
     },
     handler: async (request, reply) => {
-      const session = await getAuthenticatedSession(request)
+      const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
         return reply.status(401).send({
-          message: 'Unauthorized',
-        })
+          message: "Unauthorized",
+        });
       }
 
-      const campaign = await prisma.campaign.findUnique({
+      const campaign = await prisma.campaign.findFirst({
         where: {
           id: request.params.id,
+          ownerId: session.user.id,
         },
-      })
+      });
 
       if (!campaign) {
         return reply.status(404).send({
-          message: 'Campaign not found',
-        })
+          message: "Campaign not found",
+        });
       }
 
       if (campaign.ownerId !== session.user.id) {
         return reply.status(403).send({
-          message: 'Forbidden',
-        })
+          message: "Forbidden",
+        });
+      }
+
+      if (
+        request.body.systemId !== undefined &&
+        campaign.systemId !== null &&
+        request.body.systemId !== campaign.systemId
+      ) {
+        return reply.status(409).send({
+          message:
+            "Campaign system cannot be changed after it has been defined",
+        });
+      }
+
+      if (request.body.maxPlayers !== undefined) {
+        const approvedPlayersCount = await prisma.participant.count({
+          where: {
+            campaignId: campaign.id,
+            role: "PLAYER",
+            status: "APPROVED",
+          },
+        });
+
+        if (request.body.maxPlayers < approvedPlayersCount) {
+          return reply.status(409).send({
+            message:
+              "Campaign max players cannot be lower than the current approved players count",
+          });
+        }
       }
 
       const updatedCampaign = await prisma.campaign.update({
@@ -290,95 +603,114 @@ export async function campaignRoutes(app: FastifyInstance) {
         },
         data: {
           name: request.body.name,
+          description: request.body.description,
+          coverImage: request.body.coverImage,
+          systemId: request.body.systemId,
           isPublic: request.body.isPublic,
+          maxPlayers: request.body.maxPlayers,
         },
-      })
+      });
 
       return reply.status(200).send({
         campaign: {
-          ...updatedCampaign,
+          id: updatedCampaign.id,
+          name: updatedCampaign.name,
+          description: updatedCampaign.description,
+          coverImage: updatedCampaign.coverImage,
+          ownerId: updatedCampaign.ownerId,
+          systemId: updatedCampaign.systemId,
+          isPublic: updatedCampaign.isPublic,
+          isActive: updatedCampaign.isActive,
+          maxPlayers: updatedCampaign.maxPlayers,
+          inviteCode: updatedCampaign.inviteCode,
           createdAt: updatedCampaign.createdAt.toISOString(),
           updatedAt: updatedCampaign.updatedAt.toISOString(),
         },
-      })
+      });
     },
-  })
+  });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-  method: 'DELETE',
-  url: '/campaigns/:id',
-  schema: {
-    tags: ['Campaigns'],
-    description: 'Delete campaign',
-    params: z.object({
-      id: z.string().uuid('Invalid campaign id'),
-    }),
-    response: {
-      200: z.object({
-        message: z.string(),
-      }),
-      401: z.object({
-        message: z.string(),
-      }),
-      403: z.object({
-        message: z.string(),
-      }),
-      404: z.object({
-        message: z.string(),
-      }),
-    },
-  },
-  handler: async (request, reply) => {
-    const session = await getAuthenticatedSession(request)
-
-    if (!session?.user) {
-      return reply.status(401).send({
-        message: 'Unauthorized',
-      })
-    }
-
-    const campaign = await prisma.campaign.findUnique({
-      where: {
-        id: request.params.id,
-      },
-    })
-
-    if (!campaign) {
-      return reply.status(404).send({
-        message: 'Campaign not found',
-      })
-    }
-
-    if (campaign.ownerId !== session.user.id) {
-      return reply.status(403).send({
-        message: 'Forbidden',
-      })
-    }
-
-    await prisma.campaign.delete({
-      where: {
-        id: campaign.id,
-      },
-    })
-
-    return reply.status(200).send({
-      message: 'Campaign deleted successfully',
-    })
-  },
-})
-
-  app.withTypeProvider<ZodTypeProvider>().route({
-    method: 'POST',
-    url: '/campaigns/join',
+    method: "DELETE",
+    url: "/campaigns/:id",
     schema: {
-      tags: ['Campaigns'],
-      description: 'Join a campaign using invite code',
-      body: z.object({
-        inviteCode: z
-          .string()
-          .min(3, 'Invite code must have at least 3 characters')
-          .max(20, 'Invite code must have at most 20 characters'),
+      tags: ["Campaigns"],
+      description: "Delete campaign",
+      params: z.object({
+        id: z.string().uuid("Invalid campaign id"),
       }),
+      response: {
+        200: z.object({
+          message: z.string(),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findUnique({
+        where: {
+          id: request.params.id,
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      if (campaign.ownerId !== session.user.id) {
+        return reply.status(403).send({
+          message: "Forbidden",
+        });
+      }
+
+      await prisma.campaign.delete({
+        where: {
+          id: campaign.id,
+        },
+      });
+
+      return reply.status(200).send({
+        message: "Campaign deleted successfully",
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/campaigns/join",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Join a campaign using campaign id or invite code",
+      body: z
+        .object({
+          campaignId: z.string().uuid().optional(),
+          inviteCode: z
+            .string()
+            .min(3, "Invite code must have at least 3 characters")
+            .max(20, "Invite code must have at most 20 characters")
+            .optional(),
+        })
+        .refine((data) => data.campaignId || data.inviteCode, {
+          message: "Campaign id or invite code is required",
+        }),
       response: {
         201: z.object({
           participant: z.object({
@@ -386,6 +718,9 @@ export async function campaignRoutes(app: FastifyInstance) {
             campaignId: z.string(),
             userId: z.string(),
             role: z.string(),
+            status: z.string(),
+            joinedAt: z.string(),
+            removedAt: z.string().nullable(),
             createdAt: z.string(),
           }),
         }),
@@ -401,76 +736,123 @@ export async function campaignRoutes(app: FastifyInstance) {
         409: z.object({
           message: z.string(),
         }),
-        501: z.object({
-          message: z.string(),
-        }),
       },
     },
     handler: async (request, reply) => {
-      const session = await getAuthenticatedSession(request)
+      const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
         return reply.status(401).send({
-          message: 'Unauthorized',
-        })
+          message: "Unauthorized",
+        });
       }
 
-      const campaign = await prisma.campaign.findUnique({
-        where: {
-          inviteCode: request.body.inviteCode,
+      const campaignWhere = request.body.campaignId
+        ? {
+            id: request.body.campaignId,
+          }
+        : {
+            inviteCode: request.body.inviteCode,
+          };
+
+      const campaign = await prisma.campaign.findFirst({
+        where: campaignWhere,
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: {
+                not: "REMOVED",
+              },
+            },
+          },
+          _count: {
+            select: {
+              participants: {
+                where: {
+                  role: "PLAYER",
+                  status: "APPROVED",
+                },
+              },
+            },
+          },
         },
-      })
+      });
 
       if (!campaign) {
         return reply.status(404).send({
-          message: 'Campaign not found',
-        })
+          message: "Campaign not found",
+        });
       }
 
       if (!campaign.isActive) {
         return reply.status(403).send({
-          message: 'Campaign is inactive',
-        })
+          message: "Campaign is inactive",
+        });
       }
 
-      const alreadyParticipant = await prisma.participant.findFirst({
-        where: {
-          campaignId: campaign.id,
-          userId: session.user.id,
-        },
-      })
+      const isJoiningByInviteCode = Boolean(request.body.inviteCode);
+
+      if (!campaign.isPublic && !isJoiningByInviteCode) {
+        return reply.status(403).send({
+          message: "Campaign is private",
+        });
+      }
+
+      const alreadyParticipant = campaign.participants[0];
 
       if (alreadyParticipant) {
         return reply.status(409).send({
-          message: 'User already in this campaign',
-        })
+          message: "User already in this campaign",
+        });
       }
+
+      const playersCount = campaign._count.participants;
+
+      if (playersCount >= campaign.maxPlayers) {
+        return reply.status(409).send({
+          message: "Campaign is full",
+        });
+      }
+
+      const participantStatus = request.body.inviteCode
+        ? "APPROVED"
+        : "PENDING";
 
       const participant = await prisma.participant.create({
         data: {
           userId: session.user.id,
           campaignId: campaign.id,
-          role: 'PLAYER',
+          role: "PLAYER",
+          status: participantStatus,
         },
-      })
+      });
 
       return reply.status(201).send({
         participant: {
-          ...participant,
+          id: participant.id,
+          campaignId: participant.campaignId,
+          userId: participant.userId,
+          role: participant.role,
+          status: participant.status,
+          joinedAt: participant.joinedAt.toISOString(),
+          removedAt: participant.removedAt
+            ? participant.removedAt.toISOString()
+            : null,
           createdAt: participant.createdAt.toISOString(),
         },
-      })
+      });
     },
-  })
+  });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-    method: 'GET',
-    url: '/campaigns/:id/participants',
+    method: "GET",
+    url: "/campaigns/:id/participants",
     schema: {
-      tags: ['Campaigns'],
-      description: 'List campaign participants',
+      tags: ["Campaigns"],
+      description: "List campaign participants",
       params: z.object({
-        id: z.string().uuid('Invalid campaign id'),
+        id: z.string().uuid("Invalid campaign id"),
       }),
       response: {
         200: z.object({
@@ -480,6 +862,9 @@ export async function campaignRoutes(app: FastifyInstance) {
               campaignId: z.string(),
               userId: z.string(),
               role: z.string(),
+              status: z.string(),
+              joinedAt: z.string(),
+              removedAt: z.string().nullable(),
               createdAt: z.string(),
               user: z.object({
                 id: z.string(),
@@ -487,7 +872,7 @@ export async function campaignRoutes(app: FastifyInstance) {
                 email: z.string(),
                 image: z.string().nullable(),
               }),
-            })
+            }),
           ),
         }),
         401: z.object({
@@ -505,44 +890,51 @@ export async function campaignRoutes(app: FastifyInstance) {
       },
     },
     handler: async (request, reply) => {
-      const session = await getAuthenticatedSession(request)
+      const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
         return reply.status(401).send({
-          message: 'Unauthorized',
-        })
+          message: "Unauthorized",
+        });
       }
 
       const campaign = await prisma.campaign.findUnique({
         where: {
           id: request.params.id,
         },
-      })
+      });
 
       if (!campaign) {
         return reply.status(404).send({
-          message: 'Campaign not found',
-        })
+          message: "Campaign not found",
+        });
       }
 
-      const isOwner = campaign.ownerId === session.user.id
+      const isOwner = campaign.ownerId === session.user.id;
 
       const participant = await prisma.participant.findFirst({
         where: {
           campaignId: campaign.id,
           userId: session.user.id,
         },
-      })
+      });
 
       if (!isOwner && !participant) {
         return reply.status(403).send({
-          message: 'Forbidden',
-        })
+          message: "Forbidden",
+        });
       }
+
+      const canManageParticipants = isOwner || participant?.role === "GM";
 
       const participants = await prisma.participant.findMany({
         where: {
           campaignId: campaign.id,
+          status: canManageParticipants
+            ? {
+                in: ["APPROVED", "PENDING"],
+              }
+            : "APPROVED",
         },
         include: {
           user: {
@@ -555,31 +947,35 @@ export async function campaignRoutes(app: FastifyInstance) {
           },
         },
         orderBy: {
-          createdAt: 'asc',
+          createdAt: "asc",
         },
-      })
+      });
 
       return reply.status(200).send({
         participants: participants.map((participant) => ({
           ...participant,
+          joinedAt: participant.joinedAt.toISOString(),
+          removedAt: participant.removedAt
+            ? participant.removedAt.toISOString()
+            : null,
           createdAt: participant.createdAt.toISOString(),
         })),
-      })
+      });
     },
-  })
+  });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-    method: 'PATCH',
-    url: '/campaigns/:campaignId/participants/:participantId/role',
+    method: "PATCH",
+    url: "/campaigns/:campaignId/participants/:participantId/role",
     schema: {
-      tags: ['Campaigns'],
-      description: 'Update participant role',
+      tags: ["Campaigns"],
+      description: "Update participant role",
       params: z.object({
-        campaignId: z.string().uuid('Invalid campaign id'),
-        participantId: z.string().uuid('Invalid participant id'),
+        campaignId: z.string().uuid("Invalid campaign id"),
+        participantId: z.string().uuid("Invalid participant id"),
       }),
       body: z.object({
-        role: z.enum(['GM', 'PLAYER']),
+        role: z.enum(["GM", "PLAYER"]),
       }),
       response: {
         200: z.object({
@@ -588,6 +984,9 @@ export async function campaignRoutes(app: FastifyInstance) {
             campaignId: z.string(),
             userId: z.string(),
             role: z.string(),
+            status: z.string(),
+            joinedAt: z.string(),
+            removedAt: z.string().nullable(),
             createdAt: z.string(),
           }),
         }),
@@ -600,90 +999,64 @@ export async function campaignRoutes(app: FastifyInstance) {
         404: z.object({
           message: z.string(),
         }),
-        501: z.object({
-          message: z.string(),
-        }),
       },
     },
     handler: async (request, reply) => {
-      const session = await getAuthenticatedSession(request)
+      const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
         return reply.status(401).send({
-          message: 'Unauthorized',
-        })
+          message: "Unauthorized",
+        });
       }
 
       const campaign = await prisma.campaign.findUnique({
         where: {
           id: request.params.campaignId,
         },
-      })
+      });
 
       if (!campaign) {
         return reply.status(404).send({
-          message: 'Campaign not found',
-        })
+          message: "Campaign not found",
+        });
       }
 
       if (campaign.ownerId !== session.user.id) {
         return reply.status(403).send({
-          message: 'Forbidden',
-        })
+          message: "Only the campaign owner can change participant roles",
+        });
       }
 
       const participant = await prisma.participant.findFirst({
         where: {
           id: request.params.participantId,
           campaignId: campaign.id,
+          status: "APPROVED",
         },
-      })
+      });
 
       if (!participant) {
         return reply.status(404).send({
-          message: 'Participant not found',
-        })
-      }
-
-      if (request.body.role === 'GM') {
-        // 1. procurar GM atual
-        const currentGM = await prisma.participant.findFirst({
-          where: {
-            campaignId: campaign.id,
-            role: 'GM',
-            NOT: {
-              id: participant.id,
-            },
-          },
-        })
-
-        // 2. se existir, rebaixar para PLAYER
-        if (currentGM) {
-          await prisma.participant.update({
-            where: {
-              id: currentGM.id,
-            },
-            data: {
-              role: 'PLAYER',
-            },
-          })
-        }
+          message: "Participant not found",
+        });
       }
 
       const updatedParticipant = await prisma.$transaction(async (tx) => {
-        if (request.body.role === 'GM') {
+        if (request.body.role === "GM") {
           await tx.participant.updateMany({
             where: {
               campaignId: campaign.id,
-              role: 'GM',
+              role: "GM",
+              status: "APPROVED",
               NOT: {
                 id: participant.id,
               },
             },
             data: {
-              role: 'PLAYER',
+              role: "PLAYER",
             },
-          })
+          });
         }
 
         return tx.participant.update({
@@ -693,31 +1066,189 @@ export async function campaignRoutes(app: FastifyInstance) {
           data: {
             role: request.body.role,
           },
-        })
-      })
+        });
+      });
 
       return reply.status(200).send({
         participant: {
-          ...updatedParticipant,
+          id: updatedParticipant.id,
+          campaignId: updatedParticipant.campaignId,
+          userId: updatedParticipant.userId,
+          role: updatedParticipant.role,
+          status: updatedParticipant.status,
+          joinedAt: updatedParticipant.joinedAt.toISOString(),
+          removedAt: updatedParticipant.removedAt
+            ? updatedParticipant.removedAt.toISOString()
+            : null,
           createdAt: updatedParticipant.createdAt.toISOString(),
         },
-      })
+      });
     },
-  })
+  });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-    method: 'DELETE',
-    url: '/campaigns/:campaignId/participants/:participantId',
+    method: "PATCH",
+    url: "/campaigns/:campaignId/participants/:participantId/status",
     schema: {
-      tags: ['Campaigns'],
-      description: 'Remove participant from campaign',
+      tags: ["Campaigns"],
+      description: "Update participant status",
       params: z.object({
-        campaignId: z.string().uuid('Invalid campaign id'),
-        participantId: z.string().uuid('Invalid participant id'),
+        campaignId: z.string().uuid("Invalid campaign id"),
+        participantId: z.string().uuid("Invalid participant id"),
+      }),
+      body: z.object({
+        status: z.enum(["APPROVED", "REJECTED"]),
+      }),
+      response: {
+        200: z.object({
+          participant: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            userId: z.string(),
+            role: z.string(),
+            status: z.string(),
+            joinedAt: z.string(),
+            removedAt: z.string().nullable(),
+            createdAt: z.string(),
+          }),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+        409: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findUnique({
+        where: {
+          id: request.params.campaignId,
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const requesterParticipant = await prisma.participant.findFirst({
+        where: {
+          campaignId: campaign.id,
+          userId: session.user.id,
+          status: "APPROVED",
+        },
+      });
+
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = requesterParticipant?.role === "GM";
+
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message:
+            "Only the campaign owner or GM can update participant status",
+        });
+      }
+
+      const participant = await prisma.participant.findFirst({
+        where: {
+          id: request.params.participantId,
+          campaignId: campaign.id,
+        },
+      });
+
+      if (!participant) {
+        return reply.status(404).send({
+          message: "Participant not found",
+        });
+      }
+
+      if (participant.status !== "PENDING") {
+        return reply.status(409).send({
+          message: "Only pending participants can be approved or rejected",
+        });
+      }
+
+      if (request.body.status === "APPROVED") {
+        const approvedPlayersCount = await prisma.participant.count({
+          where: {
+            campaignId: campaign.id,
+            role: "PLAYER",
+            status: "APPROVED",
+          },
+        });
+
+        if (approvedPlayersCount >= campaign.maxPlayers) {
+          return reply.status(409).send({
+            message: "Campaign is full",
+          });
+        }
+      }
+
+      const updatedParticipant = await prisma.participant.update({
+        where: {
+          id: participant.id,
+        },
+        data: {
+          status: request.body.status,
+        },
+      });
+
+      return reply.status(200).send({
+        participant: {
+          id: updatedParticipant.id,
+          campaignId: updatedParticipant.campaignId,
+          userId: updatedParticipant.userId,
+          role: updatedParticipant.role,
+          status: updatedParticipant.status,
+          joinedAt: updatedParticipant.joinedAt.toISOString(),
+          removedAt: updatedParticipant.removedAt
+            ? updatedParticipant.removedAt.toISOString()
+            : null,
+          createdAt: updatedParticipant.createdAt.toISOString(),
+        },
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "DELETE",
+    url: "/campaigns/:campaignId/participants/:participantId",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Remove participant from campaign",
+      params: z.object({
+        campaignId: z.string().uuid("Invalid campaign id"),
+        participantId: z.string().uuid("Invalid participant id"),
       }),
       response: {
         200: z.object({
           message: z.string(),
+          participant: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            userId: z.string(),
+            role: z.string(),
+            status: z.string(),
+            joinedAt: z.string(),
+            removedAt: z.string().nullable(),
+            createdAt: z.string(),
+          }),
         }),
         400: z.object({
           message: z.string(),
@@ -734,84 +1265,95 @@ export async function campaignRoutes(app: FastifyInstance) {
       },
     },
     handler: async (request, reply) => {
-      const session = await getAuthenticatedSession(request)
+      const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
         return reply.status(401).send({
-          message: 'Unauthorized',
-        })
+          message: "Unauthorized",
+        });
       }
 
       const campaign = await prisma.campaign.findUnique({
         where: {
           id: request.params.campaignId,
         },
-      })
+      });
 
       if (!campaign) {
         return reply.status(404).send({
-          message: 'Campaign not found',
-        })
+          message: "Campaign not found",
+        });
       }
 
-      if (campaign.ownerId !== session.user.id) {
+      const requesterParticipant = await prisma.participant.findFirst({
+        where: {
+          campaignId: campaign.id,
+          userId: session.user.id,
+          status: "APPROVED",
+        },
+      });
+
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = requesterParticipant?.role === "GM";
+
+      if (!isOwner && !isGM) {
         return reply.status(403).send({
-          message: 'Forbidden',
-        })
+          message: "Only the campaign owner or GM can remove participants",
+        });
       }
 
       const participant = await prisma.participant.findFirst({
         where: {
           id: request.params.participantId,
           campaignId: campaign.id,
+          status: "APPROVED",
         },
-      })
+      });
 
       if (!participant) {
         return reply.status(404).send({
-          message: 'Participant not found',
-        })
+          message: "Participant not found",
+        });
       }
 
       if (participant.userId === campaign.ownerId) {
         return reply.status(400).send({
-          message: 'Owner cannot be removed',
-        })
+          message: "Campaign owner cannot be removed from the campaign",
+        });
       }
 
-      await prisma.$transaction(async (tx) => {
-        await tx.participant.delete({
-          where: {
-            id: participant.id,
-          },
-        })
+      if (!isOwner && participant.role === "GM") {
+        return reply.status(403).send({
+          message: "Only the campaign owner can remove a GM",
+        });
+      }
 
-        if (participant.role === 'GM') {
-          const ownerParticipant = await tx.participant.findFirst({
-            where: {
-              campaignId: campaign.id,
-              userId: campaign.ownerId,
-            },
-          })
-
-          if (ownerParticipant) {
-            await tx.participant.update({
-              where: {
-                id: ownerParticipant.id,
-              },
-              data: {
-                role: 'GM',
-              },
-            })
-          }
-        }
-      })
+      const removedParticipant = await prisma.participant.update({
+        where: {
+          id: participant.id,
+        },
+        data: {
+          status: "REMOVED",
+          removedAt: new Date(),
+          role: "PLAYER",
+        },
+      });
 
       return reply.status(200).send({
-        message: 'Participant removed successfully',
-      })
+        message: "Participant removed successfully",
+        participant: {
+          id: removedParticipant.id,
+          campaignId: removedParticipant.campaignId,
+          userId: removedParticipant.userId,
+          role: removedParticipant.role,
+          status: removedParticipant.status,
+          joinedAt: removedParticipant.joinedAt.toISOString(),
+          removedAt: removedParticipant.removedAt
+            ? removedParticipant.removedAt.toISOString()
+            : null,
+          createdAt: removedParticipant.createdAt.toISOString(),
+        },
+      });
     },
-  })
-
-
+  });
 }

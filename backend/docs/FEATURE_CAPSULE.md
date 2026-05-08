@@ -8,10 +8,10 @@ Este arquivo registra o desenvolvimento incremental do projeto.
 
 Cada cápsula representa:
 
-- uma etapa pequena  
-- funcional  
-- testável  
-- validada  
+- uma etapa pequena
+- funcional
+- testável
+- validada
 
 ---
 
@@ -21,42 +21,28 @@ Cada cápsula representa:
 
 Configurar o ambiente inicial de desenvolvimento do backend.
 
----
-
 ## ⚙️ Dependencies Installed
 
-- Node  
-- TypeScript  
-- @types/node  
-- Prettier  
-- ESLint  
-- tsx  
-
----
+- Node
+- TypeScript
+- @types/node
+- Prettier
+- ESLint
+- tsx
 
 ## 🛠️ Tooling & Config
 
-- `git init`  
-- `tsc --init`  
-- ESLint configurado  
-- Prettier integrado  
-- Ordenação automática de imports  
-
----
-
-## 🧪 Changes Made
-
-- estrutura inicial criada  
-- TypeScript configurado  
-- scripts de desenvolvimento funcionando  
-
----
+- `git init`
+- `tsc --init`
+- ESLint configurado
+- Prettier integrado
+- Ordenação automática de imports
 
 ## ✅ Result
 
-- ambiente funcional  
-- código padronizado  
-- execução consistente  
+- ambiente funcional
+- código padronizado
+- execução consistente
 
 ---
 
@@ -66,29 +52,17 @@ Configurar o ambiente inicial de desenvolvimento do backend.
 
 Criar base do backend com Fastify.
 
----
-
 ## ⚙️ Dependencies Installed
 
-- Fastify  
-- Zod  
-- Swagger  
-
----
-
-## 🧪 Changes Made
-
-- inicialização do servidor  
-- integração com Zod  
-- documentação com Swagger  
-
----
+- Fastify
+- Zod
+- Swagger
 
 ## ✅ Result
 
-- API funcional  
-- validação estruturada  
-- documentação disponível  
+- API funcional
+- validação estruturada
+- documentação disponível
 
 ---
 
@@ -98,27 +72,15 @@ Criar base do backend com Fastify.
 
 Definir domínio do sistema antes da implementação.
 
----
-
 ## ⚙️ Tools Used
 
-- dbdiagram.io  
-- Figma  
-
----
-
-## 🧪 Changes Made
-
-- modelagem inicial do banco  
-- definição de entidades principais  
-- estrutura inicial da UI  
-
----
+- dbdiagram.io
+- Figma
 
 ## ✅ Result
 
-- base conceitual sólida  
-- visão clara do produto  
+- base conceitual sólida
+- visão clara do produto
 
 ---
 
@@ -128,51 +90,25 @@ Definir domínio do sistema antes da implementação.
 
 Criar estrutura completa do banco.
 
----
-
-## 🧪 Evolução
-
-Essa cápsula passou por múltiplas refatorações até atingir nível produção.
-
----
-
 ## ✅ Result (FINAL)
 
-- banco modelado com qualidade profissional  
-- normalização adequada  
+- banco modelado com qualidade profissional
+- normalização adequada
 - suporte a:
-
-### 🧩 Domínio
-
-- campanhas  
-- personagens  
-- classes e subclasses  
-- sistemas de RPG  
-
-### ⚙️ Engenharia
-
-- multiclasse  
-- inventário por instância  
-- sistema de features unificado  
-- logs escaláveis  
-
----
+  - campanhas
+  - personagens
+  - classes e subclasses
+  - sistemas de RPG
+  - participantes
+  - sessões
+  - logs
 
 ## 🧠 Decisões Importantes
 
-- features centralizadas em uma tabela  
-- regras críticas no banco  
-- separação entre modelo e instância  
-
----
-
-## ⚠️ Complexidades Tratadas
-
-- limite de atributos (1–30)  
-- limite de nível (1–20)  
-- integridade de subclasses  
-- ownership de features  
-- base preparada para escala  
+- Better Auth é o núcleo de identidade
+- features centralizadas em uma tabela
+- regras críticas no banco/backend
+- separação entre modelo e instância
 
 ---
 
@@ -182,27 +118,21 @@ Essa cápsula passou por múltiplas refatorações até atingir nível produçã
 
 Criar interface visual do sistema.
 
----
-
-## 🧪 Changes Made
-
-- fluxo de criação de campanha  
-- estrutura de navegação  
-- base da mesa de jogo  
-
----
-
 ## ✅ Result
 
-- UX definida  
-- fluxo principal claro  
-
----
+- fluxo de login/registro
+- home pública
+- home logada de campanhas
+- fluxo inicial de criação de mundo
+- tela de edição/finalização da campanha
+- base visual para capa, informações da campanha e owner
 
 ## 🟡 Em progresso
 
-- busca de campanhas  
-- tela da mesa  
+- busca de campanhas
+- tela da mesa
+- responsividade fina
+- fluxo definitivo de upload de imagem
 
 ---
 
@@ -212,22 +142,14 @@ Criar interface visual do sistema.
 
 Criar sistema próprio de RPG.
 
----
-
-## 🧪 Changes Made
-
-- classes definidas  
-- subclasses definidas  
-- progressão 1–20  
-- talentos (feats)  
-- estrutura de atributos  
-
----
-
 ## ✅ Result
 
-- sistema consistente  
-- pronto para integração  
+- classes definidas
+- subclasses definidas
+- progressão 1–20
+- talentos (feats)
+- estrutura de atributos
+- base para múltiplos sistemas
 
 ---
 
@@ -237,31 +159,12 @@ Criar sistema próprio de RPG.
 
 Elevar o banco para nível produção real.
 
----
-
-## 🧪 Changes Made
-
-- remoção de JSON desnecessário  
-- normalização completa  
-- criação de enums  
-- revisão de relações  
-- suporte a múltiplos sistemas  
-
----
-
 ## ✅ Result
 
-- banco nível sênior  
-- consistente  
-- escalável  
-
----
-
-## ⚠️ Aprendizados
-
-- banco é parte da lógica de negócio  
-- constraints são essenciais  
-- triggers resolvem validações complexas  
+- banco nível sênior
+- consistente
+- escalável
+- preparado para múltiplos sistemas, campanhas, personagens e inventário
 
 ---
 
@@ -271,28 +174,12 @@ Elevar o banco para nível produção real.
 
 Definir regras críticas de integridade.
 
----
-
-## 🧪 Changes Made
-
-- limites de atributos  
-- limites de nível  
-- preparação para validações complexas  
-
----
-
 ## ✅ Result
 
-- dados protegidos  
-- redução de inconsistências  
-
----
-
-## ⚠️ Observação
-
-Algumas regras exigem:
-
-- banco + backend  
+- limites de atributos
+- limites de nível
+- preparação para validações complexas
+- entendimento de quais regras ficam no banco e quais ficam no backend
 
 ---
 
@@ -302,22 +189,13 @@ Algumas regras exigem:
 
 Conectar modelagem ao sistema real.
 
----
-
-## 🧪 Changes Made
-
-- criação do `schema.prisma`  
-- adaptação do banco para ORM  
-- geração do Prisma Client  
-- sincronização com PostgreSQL  
-
----
-
 ## ✅ Result
 
-- banco operacional  
-- queries tipadas  
-- integração backend ↔ banco  
+- `schema.prisma` criado
+- Prisma Client gerado
+- PostgreSQL conectado via Docker
+- Prisma Studio funcionando
+- banco sincronizado com `db push`
 
 ---
 
@@ -327,36 +205,34 @@ Conectar modelagem ao sistema real.
 
 Implementar sistema de autenticação real.
 
----
-
 ## 🧪 Changes Made
 
-- integração do Better Auth  
-- criação de tabelas:
-  - user
-  - session
-  - account
-  - verification  
-- adaptação do backend  
-- integração com Fastify  
-
----
+- Better Auth integrado
+- Prisma Adapter configurado
+- tabelas oficiais:
+  - `user`
+  - `session`
+  - `account`
+  - `verification`
+- login e registro funcionando
+- sessões persistidas no banco
+- frontend usando `authClient`
+- backend lendo sessão real por cookie com `auth.api.getSession`
 
 ## ✅ Result
 
-- registro funcionando  
-- login funcionando  
-- sessões persistidas  
-- autenticação real em produção  
-
----
+- registro funcionando
+- login funcionando
+- sessão persistente
+- rota protegida usando sessão real
+- fluxo frontend ↔ backend estabilizado
 
 ## 🧠 Decisão Crítica
 
 > Auth NÃO é mais parte do sistema  
 > → é o núcleo do sistema
 
-Todo o domínio agora depende de:
+Todo o domínio depende de:
 
 ```txt
 user.id
@@ -364,28 +240,91 @@ user.id
 
 ---
 
-# ⚡ Capsule 11 — API Integration (Current)
+# ⚡ Capsule 11 — API Integration
 
 ## 🎯 Goal
 
 Validar sistema funcionando end-to-end.
 
----
-
 ## 🧪 Changes Made
 
-- integração Fastify + Auth  
-- testes via Swagger/Scalar  
-- validação de endpoints  
-- persistência real de dados  
-
----
+- integração Fastify + Auth
+- testes via Swagger/Scalar
+- validação de endpoints
+- persistência real de dados
+- CORS ajustado para frontend local
+- fluxo de sessão via cookie validado
 
 ## ✅ Result
 
-- API funcional  
-- fluxo completo validado  
-- base pronta para expansão  
+- API funcional
+- auth integrado
+- banco persistindo dados reais
+- base pronta para domínio de campanhas
+
+---
+
+# ⚡ Capsule 12 — Campaign Domain API
+
+## 🎯 Goal
+
+Criar primeiras rotas reais de campanha.
+
+## 🧪 Changes Made
+
+- `POST /campaigns`
+- `GET /campaigns`
+- `GET /campaigns/:id`
+- `PATCH /campaigns/:id`
+- `DELETE /campaigns/:id`
+- `POST /campaigns/join`
+- rotas de participantes:
+  - listar participantes
+  - trocar role
+  - remover participante
+
+## ✅ Result
+
+- usuário autenticado consegue criar campanha
+- criador entra automaticamente como `GM`
+- home logada lista campanhas onde o usuário é owner ou participant
+- GET de campanha por id pronto para tela de edição
+- PATCH preparado para nome, descrição, capa e visibilidade
+
+---
+
+# ⚡ Capsule 13 — Campaign Frontend Flow
+
+## 🎯 Goal
+
+Implementar fluxo inicial real de campanhas no frontend.
+
+## 🧪 Changes Made
+
+- página `/campaigns`
+  - estado sem campanhas
+  - estado com campanhas
+  - cards reais vindos da API
+- página `/campaigns/create`
+  - nome da campanha
+  - seleção visual de ficha/sistema
+  - criação real via API
+  - redirecionamento para edição da campanha
+- página `/campaigns/[id]/edit`
+  - leitura real da campanha
+  - nome digitado aparece como título
+  - placeholder/preview de capa
+  - modal de imagem dentro da área da capa
+  - botões de ação
+  - card “Forjado por”
+  - descrição inicial da campanha
+
+## ✅ Result
+
+- primeiro fluxo de campanha funcionando de ponta a ponta
+- frontend conectado ao backend real
+- UI alinhada com o Figma atual
+- base pronta para evoluir busca de campanha e página de jogo
 
 ---
 
@@ -396,10 +335,11 @@ O projeto saiu de:
 👉 conceito  
 👉 design  
 👉 modelagem  
+👉 auth isolado  
 
 E entrou em:
 
-👉 **sistema real funcionando**
+👉 **fluxo real de campanha funcionando**
 
 ---
 
@@ -408,24 +348,27 @@ E entrou em:
 ✔ Auth funcional  
 ✔ Banco integrado  
 ✔ API funcionando  
-✔ Base sólida  
+✔ Frontend conectado  
+✔ Home logada de campanhas pronta  
+✔ Criação inicial de campanha pronta  
+✔ Tela de edição/finalização inicial pronta  
 
 ---
 
 ## 🚧 Próxima fase
 
-👉 expansão do domínio RPG  
+👉 consolidar backend de campanhas e busca
 
-- campaigns  
-- characters  
-- inventory  
-- permissions  
+- busca de campanhas públicas
+- convite/código de entrada
+- regras de participação
+- descrição e capa persistidas com fluxo mais robusto
+- futura integração com storage real
+- início da página de jogo
 
 ---
 
 ## 🧠 Regra de Ouro
 
 > Cada cápsula deve gerar valor real  
-> e aproximar o sistema de ser jogável  
-
----
+> e aproximar o sistema de ser jogável
