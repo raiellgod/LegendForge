@@ -234,7 +234,7 @@ export default function CreateCampaignPage() {
                 id="maxPlayers"
                 type="number"
                 min={1}
-                max={12}
+                max={10}
                 value={maxPlayers}
                 onChange={(event) => setMaxPlayers(Number(event.target.value))}
                 className="h-[42px] w-full rounded-md border border-forge-gold bg-forge-parchment px-4 text-sm font-bold text-forge-purple outline-none focus:border-forge-purple"

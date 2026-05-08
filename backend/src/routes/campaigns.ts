@@ -400,6 +400,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             systemId: z.string().nullable(),
             isPublic: z.boolean(),
             isActive: z.boolean(),
+            maxPlayers: z.number(),
             inviteCode: z.string().nullable(),
             createdAt: z.string(),
             updatedAt: z.string(),
@@ -449,7 +450,16 @@ export async function campaignRoutes(app: FastifyInstance) {
 
       return reply.status(200).send({
         campaign: {
-          ...campaign,
+          id: campaign.id,
+          name: campaign.name,
+          description: campaign.description,
+          coverImage: campaign.coverImage,
+          ownerId: campaign.ownerId,
+          systemId: campaign.systemId,
+          isPublic: campaign.isPublic,
+          isActive: campaign.isActive,
+          maxPlayers: campaign.maxPlayers,
+          inviteCode: campaign.inviteCode,
           createdAt: campaign.createdAt.toISOString(),
           updatedAt: campaign.updatedAt.toISOString(),
         },
@@ -485,7 +495,7 @@ export async function campaignRoutes(app: FastifyInstance) {
             .number()
             .int()
             .min(1, "Campaign must allow at least 1 player")
-            .max(12, "Campaign cannot allow more than 12 players")
+            .max(10, "Campaign cannot allow more than 10 players")
             .optional(),
         })
         .refine(
@@ -805,12 +815,16 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
+      const participantStatus = request.body.inviteCode
+        ? "APPROVED"
+        : "PENDING";
+
       const participant = await prisma.participant.create({
         data: {
           userId: session.user.id,
           campaignId: campaign.id,
           role: "PLAYER",
-          status: "APPROVED",
+          status: participantStatus,
         },
       });
 
@@ -911,10 +925,16 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
+      const canManageParticipants = isOwner || participant?.role === "GM";
+
       const participants = await prisma.participant.findMany({
         where: {
           campaignId: campaign.id,
-          status: "APPROVED",
+          status: canManageParticipants
+            ? {
+                in: ["APPROVED", "PENDING"],
+              }
+            : "APPROVED",
         },
         include: {
           user: {
@@ -945,255 +965,395 @@ export async function campaignRoutes(app: FastifyInstance) {
   });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-  method: "PATCH",
-  url: "/campaigns/:campaignId/participants/:participantId/role",
-  schema: {
-    tags: ["Campaigns"],
-    description: "Update participant role",
-    params: z.object({
-      campaignId: z.string().uuid("Invalid campaign id"),
-      participantId: z.string().uuid("Invalid participant id"),
-    }),
-    body: z.object({
-      role: z.enum(["GM", "PLAYER"]),
-    }),
-    response: {
-      200: z.object({
-        participant: z.object({
-          id: z.string(),
-          campaignId: z.string(),
-          userId: z.string(),
-          role: z.string(),
-          status: z.string(),
-          joinedAt: z.string(),
-          removedAt: z.string().nullable(),
-          createdAt: z.string(),
+    method: "PATCH",
+    url: "/campaigns/:campaignId/participants/:participantId/role",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Update participant role",
+      params: z.object({
+        campaignId: z.string().uuid("Invalid campaign id"),
+        participantId: z.string().uuid("Invalid participant id"),
+      }),
+      body: z.object({
+        role: z.enum(["GM", "PLAYER"]),
+      }),
+      response: {
+        200: z.object({
+          participant: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            userId: z.string(),
+            role: z.string(),
+            status: z.string(),
+            joinedAt: z.string(),
+            removedAt: z.string().nullable(),
+            createdAt: z.string(),
+          }),
         }),
-      }),
-      401: z.object({
-        message: z.string(),
-      }),
-      403: z.object({
-        message: z.string(),
-      }),
-      404: z.object({
-        message: z.string(),
-      }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
     },
-  },
-  handler: async (request, reply) => {
-    const session = await getAuthenticatedSession(request);
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
 
-    if (!session?.user) {
-      return reply.status(401).send({
-        message: "Unauthorized",
-      });
-    }
-
-    const campaign = await prisma.campaign.findUnique({
-      where: {
-        id: request.params.campaignId,
-      },
-    });
-
-    if (!campaign) {
-      return reply.status(404).send({
-        message: "Campaign not found",
-      });
-    }
-
-    if (campaign.ownerId !== session.user.id) {
-      return reply.status(403).send({
-        message: "Only the campaign owner can change participant roles",
-      });
-    }
-
-    const participant = await prisma.participant.findFirst({
-      where: {
-        id: request.params.participantId,
-        campaignId: campaign.id,
-        status: "APPROVED",
-      },
-    });
-
-    if (!participant) {
-      return reply.status(404).send({
-        message: "Participant not found",
-      });
-    }
-
-    const updatedParticipant = await prisma.$transaction(async (tx) => {
-      if (request.body.role === "GM") {
-        await tx.participant.updateMany({
-          where: {
-            campaignId: campaign.id,
-            role: "GM",
-            status: "APPROVED",
-            NOT: {
-              id: participant.id,
-            },
-          },
-          data: {
-            role: "PLAYER",
-          },
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
         });
       }
 
-      return tx.participant.update({
+      const campaign = await prisma.campaign.findUnique({
+        where: {
+          id: request.params.campaignId,
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      if (campaign.ownerId !== session.user.id) {
+        return reply.status(403).send({
+          message: "Only the campaign owner can change participant roles",
+        });
+      }
+
+      const participant = await prisma.participant.findFirst({
+        where: {
+          id: request.params.participantId,
+          campaignId: campaign.id,
+          status: "APPROVED",
+        },
+      });
+
+      if (!participant) {
+        return reply.status(404).send({
+          message: "Participant not found",
+        });
+      }
+
+      const updatedParticipant = await prisma.$transaction(async (tx) => {
+        if (request.body.role === "GM") {
+          await tx.participant.updateMany({
+            where: {
+              campaignId: campaign.id,
+              role: "GM",
+              status: "APPROVED",
+              NOT: {
+                id: participant.id,
+              },
+            },
+            data: {
+              role: "PLAYER",
+            },
+          });
+        }
+
+        return tx.participant.update({
+          where: {
+            id: participant.id,
+          },
+          data: {
+            role: request.body.role,
+          },
+        });
+      });
+
+      return reply.status(200).send({
+        participant: {
+          id: updatedParticipant.id,
+          campaignId: updatedParticipant.campaignId,
+          userId: updatedParticipant.userId,
+          role: updatedParticipant.role,
+          status: updatedParticipant.status,
+          joinedAt: updatedParticipant.joinedAt.toISOString(),
+          removedAt: updatedParticipant.removedAt
+            ? updatedParticipant.removedAt.toISOString()
+            : null,
+          createdAt: updatedParticipant.createdAt.toISOString(),
+        },
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "PATCH",
+    url: "/campaigns/:campaignId/participants/:participantId/status",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Update participant status",
+      params: z.object({
+        campaignId: z.string().uuid("Invalid campaign id"),
+        participantId: z.string().uuid("Invalid participant id"),
+      }),
+      body: z.object({
+        status: z.enum(["APPROVED", "REJECTED"]),
+      }),
+      response: {
+        200: z.object({
+          participant: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            userId: z.string(),
+            role: z.string(),
+            status: z.string(),
+            joinedAt: z.string(),
+            removedAt: z.string().nullable(),
+            createdAt: z.string(),
+          }),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+        409: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findUnique({
+        where: {
+          id: request.params.campaignId,
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const requesterParticipant = await prisma.participant.findFirst({
+        where: {
+          campaignId: campaign.id,
+          userId: session.user.id,
+          status: "APPROVED",
+        },
+      });
+
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = requesterParticipant?.role === "GM";
+
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message:
+            "Only the campaign owner or GM can update participant status",
+        });
+      }
+
+      const participant = await prisma.participant.findFirst({
+        where: {
+          id: request.params.participantId,
+          campaignId: campaign.id,
+        },
+      });
+
+      if (!participant) {
+        return reply.status(404).send({
+          message: "Participant not found",
+        });
+      }
+
+      if (participant.status !== "PENDING") {
+        return reply.status(409).send({
+          message: "Only pending participants can be approved or rejected",
+        });
+      }
+
+      if (request.body.status === "APPROVED") {
+        const approvedPlayersCount = await prisma.participant.count({
+          where: {
+            campaignId: campaign.id,
+            role: "PLAYER",
+            status: "APPROVED",
+          },
+        });
+
+        if (approvedPlayersCount >= campaign.maxPlayers) {
+          return reply.status(409).send({
+            message: "Campaign is full",
+          });
+        }
+      }
+
+      const updatedParticipant = await prisma.participant.update({
         where: {
           id: participant.id,
         },
         data: {
-          role: request.body.role,
+          status: request.body.status,
         },
       });
-    });
 
-    return reply.status(200).send({
-      participant: {
-        id: updatedParticipant.id,
-        campaignId: updatedParticipant.campaignId,
-        userId: updatedParticipant.userId,
-        role: updatedParticipant.role,
-        status: updatedParticipant.status,
-        joinedAt: updatedParticipant.joinedAt.toISOString(),
-        removedAt: updatedParticipant.removedAt
-          ? updatedParticipant.removedAt.toISOString()
-          : null,
-        createdAt: updatedParticipant.createdAt.toISOString(),
-      },
-    });
-  },
-});
+      return reply.status(200).send({
+        participant: {
+          id: updatedParticipant.id,
+          campaignId: updatedParticipant.campaignId,
+          userId: updatedParticipant.userId,
+          role: updatedParticipant.role,
+          status: updatedParticipant.status,
+          joinedAt: updatedParticipant.joinedAt.toISOString(),
+          removedAt: updatedParticipant.removedAt
+            ? updatedParticipant.removedAt.toISOString()
+            : null,
+          createdAt: updatedParticipant.createdAt.toISOString(),
+        },
+      });
+    },
+  });
 
   app.withTypeProvider<ZodTypeProvider>().route({
-  method: "DELETE",
-  url: "/campaigns/:campaignId/participants/:participantId",
-  schema: {
-    tags: ["Campaigns"],
-    description: "Remove participant from campaign",
-    params: z.object({
-      campaignId: z.string().uuid("Invalid campaign id"),
-      participantId: z.string().uuid("Invalid participant id"),
-    }),
-    response: {
-      200: z.object({
-        message: z.string(),
-        participant: z.object({
-          id: z.string(),
-          campaignId: z.string(),
-          userId: z.string(),
-          role: z.string(),
-          status: z.string(),
-          joinedAt: z.string(),
-          removedAt: z.string().nullable(),
-          createdAt: z.string(),
+    method: "DELETE",
+    url: "/campaigns/:campaignId/participants/:participantId",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Remove participant from campaign",
+      params: z.object({
+        campaignId: z.string().uuid("Invalid campaign id"),
+        participantId: z.string().uuid("Invalid participant id"),
+      }),
+      response: {
+        200: z.object({
+          message: z.string(),
+          participant: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            userId: z.string(),
+            role: z.string(),
+            status: z.string(),
+            joinedAt: z.string(),
+            removedAt: z.string().nullable(),
+            createdAt: z.string(),
+          }),
         }),
-      }),
-      400: z.object({
-        message: z.string(),
-      }),
-      401: z.object({
-        message: z.string(),
-      }),
-      403: z.object({
-        message: z.string(),
-      }),
-      404: z.object({
-        message: z.string(),
-      }),
+        400: z.object({
+          message: z.string(),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
     },
-  },
-  handler: async (request, reply) => {
-    const session = await getAuthenticatedSession(request);
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
 
-    if (!session?.user) {
-      return reply.status(401).send({
-        message: "Unauthorized",
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findUnique({
+        where: {
+          id: request.params.campaignId,
+        },
       });
-    }
 
-    const campaign = await prisma.campaign.findUnique({
-      where: {
-        id: request.params.campaignId,
-      },
-    });
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
 
-    if (!campaign) {
-      return reply.status(404).send({
-        message: "Campaign not found",
+      const requesterParticipant = await prisma.participant.findFirst({
+        where: {
+          campaignId: campaign.id,
+          userId: session.user.id,
+          status: "APPROVED",
+        },
       });
-    }
 
-    const requesterParticipant = await prisma.participant.findFirst({
-      where: {
-        campaignId: campaign.id,
-        userId: session.user.id,
-        status: "APPROVED",
-      },
-    });
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = requesterParticipant?.role === "GM";
 
-    const isOwner = campaign.ownerId === session.user.id;
-    const isGM = requesterParticipant?.role === "GM";
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message: "Only the campaign owner or GM can remove participants",
+        });
+      }
 
-    if (!isOwner && !isGM) {
-      return reply.status(403).send({
-        message: "Only the campaign owner or GM can remove participants",
+      const participant = await prisma.participant.findFirst({
+        where: {
+          id: request.params.participantId,
+          campaignId: campaign.id,
+          status: "APPROVED",
+        },
       });
-    }
 
-    const participant = await prisma.participant.findFirst({
-      where: {
-        id: request.params.participantId,
-        campaignId: campaign.id,
-        status: "APPROVED",
-      },
-    });
+      if (!participant) {
+        return reply.status(404).send({
+          message: "Participant not found",
+        });
+      }
 
-    if (!participant) {
-      return reply.status(404).send({
-        message: "Participant not found",
+      if (participant.userId === campaign.ownerId) {
+        return reply.status(400).send({
+          message: "Campaign owner cannot be removed from the campaign",
+        });
+      }
+
+      if (!isOwner && participant.role === "GM") {
+        return reply.status(403).send({
+          message: "Only the campaign owner can remove a GM",
+        });
+      }
+
+      const removedParticipant = await prisma.participant.update({
+        where: {
+          id: participant.id,
+        },
+        data: {
+          status: "REMOVED",
+          removedAt: new Date(),
+          role: "PLAYER",
+        },
       });
-    }
 
-    if (participant.userId === campaign.ownerId) {
-      return reply.status(400).send({
-        message: "Campaign owner cannot be removed from the campaign",
+      return reply.status(200).send({
+        message: "Participant removed successfully",
+        participant: {
+          id: removedParticipant.id,
+          campaignId: removedParticipant.campaignId,
+          userId: removedParticipant.userId,
+          role: removedParticipant.role,
+          status: removedParticipant.status,
+          joinedAt: removedParticipant.joinedAt.toISOString(),
+          removedAt: removedParticipant.removedAt
+            ? removedParticipant.removedAt.toISOString()
+            : null,
+          createdAt: removedParticipant.createdAt.toISOString(),
+        },
       });
-    }
-
-    if (!isOwner && participant.role === "GM") {
-      return reply.status(403).send({
-        message: "Only the campaign owner can remove a GM",
-      });
-    }
-
-    const removedParticipant = await prisma.participant.update({
-      where: {
-        id: participant.id,
-      },
-      data: {
-        status: "REMOVED",
-        removedAt: new Date(),
-        role: "PLAYER",
-      },
-    });
-
-    return reply.status(200).send({
-      message: "Participant removed successfully",
-      participant: {
-        id: removedParticipant.id,
-        campaignId: removedParticipant.campaignId,
-        userId: removedParticipant.userId,
-        role: removedParticipant.role,
-        status: removedParticipant.status,
-        joinedAt: removedParticipant.joinedAt.toISOString(),
-        removedAt: removedParticipant.removedAt
-          ? removedParticipant.removedAt.toISOString()
-          : null,
-        createdAt: removedParticipant.createdAt.toISOString(),
-      },
-    });
-  },
-});
+    },
+  });
 }
