@@ -11,7 +11,8 @@ type ToolMode = "select" | "pan" | "measure" | "draw" | "fog";
 type RightPanelTab = "chat" | "rolls" | "characters" | "journal" | "settings";
 type RollVisibility = "public" | "private";
 type ChatMode = "public" | "whisper";
-type CharacterType = "PLAYER" | "NPC" | "CREATURE";
+type CharacterType = "PLAYER_CHARACTER" | "NPC" | "CREATURE";
+type ActorLocation = "TABLE" | "LIBRARY" | "ARCHIVED";
 
 type User = {
   id: string;
@@ -113,20 +114,23 @@ type QuickRoll =
       kind: "coin";
     };
 
-type TableCharacter = {
+type CampaignActor = {
   id: string;
-  name: string;
+  campaignId: string;
+  ownerId: string | null;
   type: CharacterType;
+  location: ActorLocation;
+  name: string;
   initials: string;
-  ownerName: string;
-  description: string;
-  portraitUrl?: string;
-  ownerUserId?: string;
+  description: string | null;
+  portraitUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type SceneToken = {
   id: string;
-  characterId: string;
+  actorId: string;
   name: string;
   initials: string;
   type: CharacterType;
@@ -193,47 +197,6 @@ const QUICK_ROLLS: QuickRoll[] = [
   },
 ];
 
-const MOCK_CHARACTERS: TableCharacter[] = [
-  {
-    id: "char-raiel",
-    name: "Raiel",
-    type: "PLAYER",
-    initials: "R",
-    ownerName: "Jogador",
-    description: "Personagem jogável vinculado à mesa.",
-    portraitUrl: "",
-    ownerUserId: "CURRENT_USER",
-  },
-  {
-    id: "char-pendragon",
-    name: "Hikari Pendragon",
-    type: "PLAYER",
-    initials: "P",
-    ownerName: "Outro jogador",
-    description: "Herói disponível para cena e testes de token.",
-    portraitUrl: "",
-    ownerUserId: "OTHER_USER",
-  },
-  {
-    id: "char-corvo",
-    name: "Corvo da Vigília",
-    type: "NPC",
-    initials: "C",
-    ownerName: "GM",
-    description: "NPC misterioso usado pelo mestre.",
-    portraitUrl: "",
-  },
-  {
-    id: "char-sombra",
-    name: "Sombra Faminta",
-    type: "CREATURE",
-    initials: "S",
-    ownerName: "GM",
-    description: "Criatura hostil para encontros e testes de combate.",
-    portraitUrl: "",
-  },
-];
-
 async function getCampaign(id: string): Promise<Campaign> {
   const response = await fetch(`http://localhost:8081/campaigns/${id}`, {
     credentials: "include",
@@ -265,6 +228,23 @@ async function getCampaignParticipants(
   const data = await response.json();
 
   return data.participants;
+}
+
+async function getCampaignActors(campaignId: string): Promise<CampaignActor[]> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/actors`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar atores da campanha");
+  }
+
+  const data = await response.json();
+
+  return data.actors;
 }
 
 function createId() {
@@ -310,7 +290,7 @@ function getParticipantDisplayName(participant: CampaignParticipant) {
 }
 
 function getCharacterTypeLabel(type: CharacterType) {
-  if (type === "PLAYER") {
+  if (type === "PLAYER_CHARACTER") {
     return "Personagem";
   }
 
@@ -322,7 +302,7 @@ function getCharacterTypeLabel(type: CharacterType) {
 }
 
 function getCharacterTypeStyles(type: CharacterType) {
-  if (type === "PLAYER") {
+  if (type === "PLAYER_CHARACTER") {
     return "border-forge-gold bg-forge-purple text-forge-gold";
   }
 
@@ -444,27 +424,18 @@ function buildExpressionFromTerms(terms: DiceTerm[]) {
     .join(" + ");
 }
 
-function getVisibleCharactersForUser(
-  characters: TableCharacter[],
-  isGM: boolean,
-) {
+function getVisibleActorsForUser(actors: CampaignActor[], isGM: boolean) {
   if (isGM) {
-    return characters;
+    return actors;
   }
 
-  return characters.filter((character) => character.type === "PLAYER");
+  return actors.filter(
+    (actor) =>
+      actor.type === "PLAYER_CHARACTER" && actor.location === "TABLE",
+  );
 }
 
-function resolveMockOwnerUserId(
-  character: TableCharacter,
-  currentUserId: string | undefined,
-) {
-  if (character.ownerUserId === "CURRENT_USER") {
-    return currentUserId;
-  }
 
-  return character.ownerUserId;
-}
 
 export default function CampaignPlayPage() {
   const router = useRouter();
@@ -483,15 +454,10 @@ export default function CampaignPlayPage() {
   const [isLeftToolbarOpen, setIsLeftToolbarOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] =
-    useState<TableCharacter | null>(null);
+  const [selectedActor, setSelectedActor] = useState<CampaignActor | null>(null);
+  const [actionActor, setActionActor] = useState<CampaignActor | null>(null);
 
-  const [actionCharacter, setActionCharacter] = useState<TableCharacter | null>(
-    null,
-  );
-
-  const [tableCharacters, setTableCharacters] =
-    useState<TableCharacter[]>(MOCK_CHARACTERS);
+  const [campaignActors, setCampaignActors] = useState<CampaignActor[]>([]);
 
   const [chatInput, setChatInput] = useState("");
   const [chatMode, setChatMode] = useState<ChatMode>("public");
@@ -518,26 +484,7 @@ export default function CampaignPlayPage() {
 
   const [privateRolls, setPrivateRolls] = useState<RollResult[]>([]);
 
-  const [sceneTokens, setSceneTokens] = useState<SceneToken[]>([
-    {
-      id: "token-raiel-initial",
-      characterId: "char-raiel",
-      name: "Raiel",
-      initials: "R",
-      type: "PLAYER",
-      x: 320,
-      y: 260,
-    },
-    {
-      id: "token-pendragon-initial",
-      characterId: "char-pendragon",
-      name: "Hikari Pendragon",
-      initials: "P",
-      type: "PLAYER",
-      x: 420,
-      y: 260,
-    },
-  ]);
+  const [sceneTokens, setSceneTokens] = useState<SceneToken[]>([]);
 
   const [draggingTokenId, setDraggingTokenId] = useState<string | null>(null);
 
@@ -573,8 +520,11 @@ export default function CampaignPlayPage() {
 
         setUser(loggedUser);
 
-        const campaign = await getCampaign(params.id);
-        const participants = await getCampaignParticipants(params.id);
+        const [campaign, participants, actors] = await Promise.all([
+          getCampaign(params.id),
+          getCampaignParticipants(params.id),
+          getCampaignActors(params.id),
+        ]);
 
         const currentUserParticipant = participants.find(
           (participant) => participant.userId === loggedUser.id,
@@ -591,6 +541,7 @@ export default function CampaignPlayPage() {
 
         setCampaign(campaign);
         setParticipants(participants);
+        setCampaignActors(actors);
       } catch (error) {
         console.error(error);
         setAccessDenied(true);
@@ -641,79 +592,71 @@ export default function CampaignPlayPage() {
 
   const roleLabel = isGM ? "Mestre" : "Jogador";
 
-  const visibleCharacters = getVisibleCharactersForUser(tableCharacters, isGM);
+  const visibleActors = getVisibleActorsForUser(campaignActors, isGM);
 
-  const myCharacters = visibleCharacters.filter((character) => {
-    if (!user) {
-      return false;
-    }
+  const myActors = visibleActors.filter((actor) => {
+  if (!user) {
+    return false;
+  }
 
-    const ownerUserId = resolveMockOwnerUserId(character, user.id);
+  return actor.ownerId === user.id;
+});
 
-    return ownerUserId === user.id;
-  });
+  const otherPlayerActors = visibleActors.filter((actor) => {
+  if (actor.type !== "PLAYER_CHARACTER") {
+    return false;
+  }
 
-  const otherPlayerCharacters = visibleCharacters.filter((character) => {
-    if (character.type !== "PLAYER") {
-      return false;
-    }
+  if (!user) {
+    return true;
+  }
 
-    if (!user) {
-      return true;
-    }
+  return actor.ownerId !== user.id;
+});
 
-    const ownerUserId = resolveMockOwnerUserId(character, user.id);
+  const npcActors = visibleActors.filter(
+  (actor) => actor.type === "NPC" && actor.location === "TABLE",
+);
 
-    return ownerUserId !== user.id;
-  });
-
-  const npcCharacters = visibleCharacters.filter(
-    (character) => character.type === "NPC",
-  );
-
-  const creatureCharacters = visibleCharacters.filter(
-    (character) => character.type === "CREATURE",
-  );
+const creatureActors = visibleActors.filter(
+  (actor) => actor.type === "CREATURE" && actor.location === "TABLE",
+);
 
   function canMoveToken(token: SceneToken) {
-    if (isGM) {
-      return true;
-    }
-
-    if (!user) {
-      return false;
-    }
-
-    const character = tableCharacters.find(
-      (tableCharacter) => tableCharacter.id === token.characterId,
-    );
-
-    if (!character) {
-      return false;
-    }
-
-    const ownerUserId = resolveMockOwnerUserId(character, user.id);
-
-    return ownerUserId === user.id;
+  if (isGM) {
+    return true;
   }
 
-  function canCreateTokenForCharacter(character: TableCharacter) {
-    return isGM && Boolean(character);
+  if (!user) {
+    return false;
   }
 
-  function canOpenCharacterSheet(character: TableCharacter) {
-    if (isGM) {
-      return true;
-    }
+  const actor = campaignActors.find(
+    (campaignActor) => campaignActor.id === token.actorId,
+  );
 
-    if (!user) {
-      return false;
-    }
-
-    const ownerUserId = resolveMockOwnerUserId(character, user.id);
-
-    return ownerUserId === user.id;
+  if (!actor) {
+    return false;
   }
+
+  return actor.ownerId === user.id;
+}
+
+  function canCreateTokenForActor(actor: CampaignActor) {
+  return isGM && actor.location === "TABLE";
+}
+
+  function canOpenActorSheet(actor: CampaignActor) {
+  if (isGM) {
+    return true;
+  }
+
+  if (!user) {
+    return false;
+  }
+
+  return actor.ownerId === user.id;
+}
 
   const whisperTargets = useMemo(() => {
     if (!user) {
@@ -1036,28 +979,28 @@ export default function CampaignPlayPage() {
     );
   }
 
-  function handleAddTokenToScene(character: TableCharacter) {
-    if (!canCreateTokenForCharacter(character)) {
-      return;
-    }
-
-    const tokenCount = sceneTokens.length;
-    const nextX = 300 + ((tokenCount * 90) % 560);
-    const nextY = 340 + Math.floor(tokenCount / 6) * 90;
-
-    setSceneTokens((currentTokens) => [
-      ...currentTokens,
-      {
-        id: createId(),
-        characterId: character.id,
-        name: character.name,
-        initials: character.initials,
-        type: character.type,
-        x: nextX,
-        y: nextY,
-      },
-    ]);
+  function handleAddTokenToScene(actor: CampaignActor) {
+  if (!canCreateTokenForActor(actor)) {
+    return;
   }
+
+  const tokenCount = sceneTokens.length;
+  const nextX = 300 + ((tokenCount * 90) % 560);
+  const nextY = 340 + Math.floor(tokenCount / 6) * 90;
+
+  setSceneTokens((currentTokens) => [
+    ...currentTokens,
+    {
+      id: createId(),
+      actorId: actor.id,
+      name: actor.name,
+      initials: actor.initials,
+      type: actor.type,
+      x: nextX,
+      y: nextY,
+    },
+  ]);
+}
 
   function handleStartTokenDrag(tokenId: string) {
     const token = sceneTokens.find((sceneToken) => sceneToken.id === tokenId);
@@ -1113,23 +1056,30 @@ export default function CampaignPlayPage() {
     );
   }
 
-  function handleReturnCharacterToLibrary(character: TableCharacter) {
-    if (!isGM || character.type === "PLAYER") {
-      return;
-    }
-
-    setTableCharacters((currentCharacters) =>
-      currentCharacters.filter(
-        (tableCharacter) => tableCharacter.id !== character.id,
-      ),
-    );
-
-    setSceneTokens((currentTokens) =>
-      currentTokens.filter((token) => token.characterId !== character.id),
-    );
-
-    setActionCharacter(null);
+  function handleReturnActorToLibrary(actor: CampaignActor) {
+  if (!isGM || actor.type === "PLAYER_CHARACTER") {
+    return;
   }
+
+  setCampaignActors((currentActors) =>
+    currentActors.map((currentActor) => {
+      if (currentActor.id !== actor.id) {
+        return currentActor;
+      }
+
+      return {
+        ...currentActor,
+        location: "LIBRARY",
+      };
+    }),
+  );
+
+  setSceneTokens((currentTokens) =>
+    currentTokens.filter((token) => token.actorId !== actor.id),
+  );
+
+  setActionActor(null);
+}
 
   async function handleAssumeGmRole() {
     if (!campaign || !currentUserParticipant) {
@@ -1973,7 +1923,7 @@ export default function CampaignPlayPage() {
                     )}
                   </div>
 
-                  {visibleCharacters.length === 0 && (
+                 {visibleActors.length === 0 && (
                     <div className="mt-5 rounded-xl border border-white/10 bg-black/35 p-4">
                       <p className="text-sm font-black text-white">
                         Nenhum personagem visível
@@ -1987,49 +1937,49 @@ export default function CampaignPlayPage() {
                   )}
 
                   <div className="mt-5 space-y-4">
-                    {myCharacters.length > 0 && (
-                      <CharacterGroupSection
-                        title="Meus personagens"
-                        characters={myCharacters}
-                        isGM={isGM}
-                        canCreateTokenForCharacter={canCreateTokenForCharacter}
-                        canOpenSheet={canOpenCharacterSheet}
-                        onOpenActions={setActionCharacter}
-                      />
-                    )}
+                    {myActors.length > 0 && (
+  <ActorGroupSection
+    title="Meus personagens"
+    actors={myActors}
+    isGM={isGM}
+    canCreateTokenForActor={canCreateTokenForActor}
+    canOpenSheet={canOpenActorSheet}
+    onOpenActions={setActionActor}
+  />
+)}
 
-                    {otherPlayerCharacters.length > 0 && (
-                      <CharacterGroupSection
-                        title="Players"
-                        characters={otherPlayerCharacters}
-                        isGM={isGM}
-                        canCreateTokenForCharacter={canCreateTokenForCharacter}
-                        canOpenSheet={canOpenCharacterSheet}
-                        onOpenActions={setActionCharacter}
-                      />
-                    )}
+{otherPlayerActors.length > 0 && (
+  <ActorGroupSection
+    title="Players"
+    actors={otherPlayerActors}
+    isGM={isGM}
+    canCreateTokenForActor={canCreateTokenForActor}
+    canOpenSheet={canOpenActorSheet}
+    onOpenActions={setActionActor}
+  />
+)}
 
-                    {isGM && npcCharacters.length > 0 && (
-                      <CharacterGroupSection
-                        title="NPCs"
-                        characters={npcCharacters}
-                        isGM={isGM}
-                        canCreateTokenForCharacter={canCreateTokenForCharacter}
-                        canOpenSheet={canOpenCharacterSheet}
-                        onOpenActions={setActionCharacter}
-                      />
-                    )}
+{isGM && npcActors.length > 0 && (
+  <ActorGroupSection
+    title="NPCs"
+    actors={npcActors}
+    isGM={isGM}
+    canCreateTokenForActor={canCreateTokenForActor}
+    canOpenSheet={canOpenActorSheet}
+    onOpenActions={setActionActor}
+  />
+)}
 
-                    {isGM && creatureCharacters.length > 0 && (
-                      <CharacterGroupSection
-                        title="Criaturas"
-                        characters={creatureCharacters}
-                        isGM={isGM}
-                        canCreateTokenForCharacter={canCreateTokenForCharacter}
-                        canOpenSheet={canOpenCharacterSheet}
-                        onOpenActions={setActionCharacter}
-                      />
-                    )}
+{isGM && creatureActors.length > 0 && (
+  <ActorGroupSection
+    title="Criaturas"
+    actors={creatureActors}
+    isGM={isGM}
+    canCreateTokenForActor={canCreateTokenForActor}
+    canOpenSheet={canOpenActorSheet}
+    onOpenActions={setActionActor}
+  />
+)}
                   </div>
                 </section>
               )}
@@ -2446,35 +2396,35 @@ export default function CampaignPlayPage() {
         </div>
       </div>
 
-      {actionCharacter && (
-        <CharacterActionModal
-          character={actionCharacter}
-          isGM={isGM}
-          canOpenSheet={canOpenCharacterSheet(actionCharacter)}
-          canCreateToken={canCreateTokenForCharacter(actionCharacter)}
-          sceneTokens={sceneTokens.filter(
-            (token) => token.characterId === actionCharacter.id,
-          )}
-          onOpenSheet={() => {
-            setSelectedCharacter(actionCharacter);
-            setActionCharacter(null);
-          }}
-          onAddToken={() => {
-            handleAddTokenToScene(actionCharacter);
-          }}
-          onRemoveToken={handleRemoveTokenFromScene}
-          onReturnToLibrary={() => {
-            handleReturnCharacterToLibrary(actionCharacter);
-          }}
-          onClose={() => setActionCharacter(null)}
-        />
-      )}
+      {actionActor && (
+  <ActorActionModal
+    actor={actionActor}
+    isGM={isGM}
+    canOpenSheet={canOpenActorSheet(actionActor)}
+    canCreateToken={canCreateTokenForActor(actionActor)}
+    sceneTokens={sceneTokens.filter(
+      (token) => token.actorId === actionActor.id,
+    )}
+    onOpenSheet={() => {
+      setSelectedActor(actionActor);
+      setActionActor(null);
+    }}
+    onAddToken={() => {
+      handleAddTokenToScene(actionActor);
+    }}
+    onRemoveToken={handleRemoveTokenFromScene}
+    onReturnToLibrary={() => {
+      handleReturnActorToLibrary(actionActor);
+    }}
+    onClose={() => setActionActor(null)}
+  />
+)}
 
-      {selectedCharacter && (
-        <CharacterSheetModal
-          character={selectedCharacter}
+      {selectedActor && (
+        <ActorSheetModal
+          actor={selectedActor}
           isGM={isGM}
-          onClose={() => setSelectedCharacter(null)}
+          onClose={() => setSelectedActor(null)}
         />
       )}
 
@@ -2530,20 +2480,20 @@ export default function CampaignPlayPage() {
   );
 }
 
-function CharacterGroupSection({
+function ActorGroupSection({
   title,
-  characters,
+  actors,
   isGM,
-  canCreateTokenForCharacter,
+  canCreateTokenForActor,
   canOpenSheet,
   onOpenActions,
 }: {
   title: string;
-  characters: TableCharacter[];
+  actors: CampaignActor[];
   isGM: boolean;
-  canCreateTokenForCharacter: (character: TableCharacter) => boolean;
-  canOpenSheet: (character: TableCharacter) => boolean;
-  onOpenActions: (character: TableCharacter) => void;
+  canCreateTokenForActor: (actor: CampaignActor) => boolean;
+  canOpenSheet: (actor: CampaignActor) => boolean;
+  onOpenActions: (actor: CampaignActor) => void;
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -2565,43 +2515,43 @@ function CharacterGroupSection({
 
       {isOpen && (
         <div className="space-y-2 border-t border-white/10 p-3">
-          {characters.map((character) => {
-            const canCreateToken = canCreateTokenForCharacter(character);
-            const canViewSheet = canOpenSheet(character);
+          {actors.map((actor) => {
+            const canCreateToken = canCreateTokenForActor(actor);
+            const canViewSheet = canOpenSheet(actor);
 
             return (
               <button
-                key={character.id}
+                key={actor.id}
                 type="button"
-                onClick={() => onOpenActions(character)}
+                onClick={() => onOpenActions(actor)}
                 className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-black/30 p-3 text-left transition hover:border-forge-gold/50 hover:bg-forge-purple/20"
               >
                 <div
                   className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border text-sm font-black shadow-[3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
-                    character.type,
+                    actor.type,
                   )}`}
                 >
-                  {character.portraitUrl ? (
+                  {actor.portraitUrl ? (
                     <span
                       className="h-full w-full bg-cover bg-center"
                       style={{
-                        backgroundImage: `url(${character.portraitUrl})`,
+                        backgroundImage: `url(${actor.portraitUrl})`,
                       }}
                       aria-hidden="true"
                     />
                   ) : (
-                    character.initials
+                    actor.initials
                   )}
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-xs font-black text-white">
-                    {character.name}
+                    {actor.name}
                   </p>
 
                   <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
                     {isGM
-                      ? character.ownerName
+                      ? getCharacterTypeLabel(actor.type)
                       : canViewSheet
                         ? "Seu personagem"
                         : "Outro player"}
@@ -2630,8 +2580,8 @@ function CharacterGroupSection({
   );
 }
 
-function CharacterActionModal({
-  character,
+function ActorActionModal({
+  actor,
   isGM,
   canOpenSheet,
   canCreateToken,
@@ -2642,7 +2592,7 @@ function CharacterActionModal({
   onReturnToLibrary,
   onClose,
 }: {
-  character: TableCharacter;
+  actor: CampaignActor;
   isGM: boolean;
   canOpenSheet: boolean;
   canCreateToken: boolean;
@@ -2662,29 +2612,29 @@ function CharacterActionModal({
           <div className="flex min-w-0 items-center gap-3">
             <div
               className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-base font-black shadow-[4px_4px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
-                character.type,
+                actor.type,
               )}`}
             >
-              {character.portraitUrl ? (
+              {actor.portraitUrl ? (
                 <span
                   className="h-full w-full bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${character.portraitUrl})`,
+                    backgroundImage: `url(${actor.portraitUrl})`,
                   }}
                   aria-hidden="true"
                 />
               ) : (
-                character.initials
+                actor.initials
               )}
             </div>
 
             <div className="min-w-0">
               <p className="truncate text-base font-black text-forge-gold">
-                {character.name}
+                {actor.name}
               </p>
 
               <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">
-                {getCharacterTypeLabel(character.type)}
+                {getCharacterTypeLabel(actor.type)}
               </p>
             </div>
           </div>
@@ -2700,7 +2650,7 @@ function CharacterActionModal({
         </div>
 
         <p className="mt-4 text-xs font-semibold leading-relaxed text-white/55">
-          {character.description}
+          {actor.description}
         </p>
 
         <div className="mt-5 space-y-2">
@@ -2724,7 +2674,7 @@ function CharacterActionModal({
             </button>
           )}
 
-          {isGM && character.type !== "PLAYER" && (
+          {isGM && actor.type !== "PLAYER_CHARACTER" && (
             <button
               type="button"
               onClick={onReturnToLibrary}
@@ -2802,39 +2752,39 @@ function CharacterActionModal({
   );
 }
 
-function CharacterSheetModal({
-  character,
+function ActorSheetModal({
+  actor,
   isGM,
   onClose,
 }: {
-  character: TableCharacter;
+  actor: CampaignActor;
   isGM: boolean;
   onClose: () => void;
 }) {
-  const isPlayerCharacter = character.type === "PLAYER";
-  const isNpc = character.type === "NPC";
-  const isCreature = character.type === "CREATURE";
+  const isPlayerCharacter = actor.type === "PLAYER_CHARACTER";
+  const isNpc = actor.type === "NPC";
+  const isCreature = actor.type === "CREATURE";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6 backdrop-blur-sm">
       <div className="w-full max-w-3xl overflow-hidden rounded-2xl border border-forge-gold/50 bg-[#120816] shadow-[18px_18px_0_rgba(0,0,0,0.5)]">
         <div className="flex items-start justify-between gap-4 border-b border-forge-gold/25 bg-[#1a0d20] p-5">
           <div className="flex min-w-0 items-center gap-4">
-            {character.portraitUrl ? (
+            {actor.portraitUrl ? (
               <div
                 className="h-16 w-16 shrink-0 rounded-xl border border-forge-gold/40 bg-cover bg-center shadow-[5px_5px_0_rgba(0,0,0,0.35)]"
                 style={{
-                  backgroundImage: `url(${character.portraitUrl})`,
+                  backgroundImage: `url(${actor.portraitUrl})`,
                 }}
                 aria-hidden="true"
               />
             ) : (
               <div
                 className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border text-2xl font-black shadow-[5px_5px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
-                  character.type,
+                  actor.type,
                 )}`}
               >
-                {character.initials}
+                {actor.initials}
               </div>
             )}
 
@@ -2844,11 +2794,11 @@ function CharacterSheetModal({
               </p>
 
               <h2 className="mt-1 truncate text-2xl font-black text-forge-gold">
-                {character.name}
+                {actor.name}
               </h2>
 
               <p className="mt-1 text-xs font-semibold text-white/55">
-                {character.description}
+                {actor.description}
               </p>
             </div>
           </div>
@@ -2872,10 +2822,10 @@ function CharacterSheetModal({
             <div className="mt-4 grid grid-cols-2 gap-3">
               <SheetStat
                 label="Tipo"
-                value={getCharacterTypeLabel(character.type)}
+                value={getCharacterTypeLabel(actor.type)}
               />
 
-              <SheetStat label="Dono" value={character.ownerName} />
+              <SheetStat label="Dono" value={actor.ownerName} />
 
               <SheetStat
                 label="Nível"
