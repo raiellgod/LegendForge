@@ -598,6 +598,162 @@ export async function campaignRoutes(app: FastifyInstance) {
     },
   });
 
+    app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/campaigns/:id/actors",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Create a campaign actor",
+      params: z.object({
+        id: z.string().uuid("Invalid campaign id"),
+      }),
+      body: z.object({
+        name: z.string().min(1, "Actor name is required").max(80),
+        type: z.enum(["PLAYER_CHARACTER", "NPC", "CREATURE"]),
+        location: z.enum(["TABLE", "LIBRARY", "ARCHIVED"]).optional(),
+        initials: z.string().min(1).max(3).optional(),
+        description: z.string().max(1000).nullable().optional(),
+        portraitUrl: z.string().nullable().optional(),
+        ownerId: z.string().nullable().optional(),
+      }),
+      response: {
+        201: z.object({
+          actor: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            ownerId: z.string().nullable(),
+            type: z.string(),
+            location: z.string(),
+            name: z.string(),
+            initials: z.string(),
+            description: z.string().nullable(),
+            portraitUrl: z.string().nullable(),
+            createdAt: z.string(),
+            updatedAt: z.string(),
+          }),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.id,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isApprovedParticipant = Boolean(currentParticipant);
+      const isOwner = campaign.ownerId === session.user.id;
+
+      if (!isOwner && !isApprovedParticipant) {
+        return reply.status(403).send({
+          message: "Forbidden",
+        });
+      }
+
+      const isGM = currentParticipant?.role === "GM";
+
+      if (!isGM && request.body.type !== "PLAYER_CHARACTER") {
+        return reply.status(403).send({
+          message: "Only GMs can create NPCs or creatures",
+        });
+      }
+
+      const ownerId =
+        request.body.type === "PLAYER_CHARACTER"
+          ? request.body.ownerId ?? session.user.id
+          : null;
+
+      if (!isGM && ownerId !== session.user.id) {
+        return reply.status(403).send({
+          message: "Players can only create actors for themselves",
+        });
+      }
+
+      const actor = await prisma.campaignActor.create({
+        data: {
+          campaignId: campaign.id,
+          ownerId,
+          type: request.body.type,
+          location: request.body.location ?? "TABLE",
+          name: request.body.name,
+          initials:
+            request.body.initials ??
+            request.body.name
+              .trim()
+              .split(" ")
+              .map((part) => part[0])
+              .join("")
+              .slice(0, 3)
+              .toUpperCase(),
+          description: request.body.description,
+          portraitUrl: request.body.portraitUrl,
+        },
+      });
+
+      return reply.status(201).send({
+        actor: {
+          id: actor.id,
+          campaignId: actor.campaignId,
+          ownerId: actor.ownerId,
+          type: actor.type,
+          location: actor.location,
+          name: actor.name,
+          initials: actor.initials,
+          description: actor.description,
+          portraitUrl: actor.portraitUrl,
+          createdAt: actor.createdAt.toISOString(),
+          updatedAt: actor.updatedAt.toISOString(),
+        },
+      });
+    },
+  });
+
   app.withTypeProvider<ZodTypeProvider>().route({
     method: "PATCH",
     url: "/campaigns/:id",
