@@ -754,6 +754,187 @@ export async function campaignRoutes(app: FastifyInstance) {
     },
   });
 
+    app.withTypeProvider<ZodTypeProvider>().route({
+    method: "PATCH",
+    url: "/campaigns/:campaignId/actors/:actorId",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Update a campaign actor",
+      params: z.object({
+        campaignId: z.string().uuid("Invalid campaign id"),
+        actorId: z.string().uuid("Invalid actor id"),
+      }),
+      body: z
+        .object({
+          name: z.string().min(1).max(80).optional(),
+          initials: z.string().min(1).max(3).optional(),
+          description: z.string().max(1000).nullable().optional(),
+          portraitUrl: z.string().nullable().optional(),
+          location: z.enum(["TABLE", "LIBRARY", "ARCHIVED"]).optional(),
+        })
+        .refine(
+          (data) =>
+            data.name !== undefined ||
+            data.initials !== undefined ||
+            data.description !== undefined ||
+            data.portraitUrl !== undefined ||
+            data.location !== undefined,
+          {
+            message: "At least one field must be provided",
+          },
+        ),
+      response: {
+        200: z.object({
+          actor: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            ownerId: z.string().nullable(),
+            type: z.string(),
+            location: z.string(),
+            name: z.string(),
+            initials: z.string(),
+            description: z.string().nullable(),
+            portraitUrl: z.string().nullable(),
+            createdAt: z.string(),
+            updatedAt: z.string(),
+          }),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.campaignId,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isApprovedParticipant = Boolean(currentParticipant);
+      const isOwner = campaign.ownerId === session.user.id;
+
+      if (!isOwner && !isApprovedParticipant) {
+        return reply.status(403).send({
+          message: "Forbidden",
+        });
+      }
+
+      const isGM = currentParticipant?.role === "GM";
+
+      const actor = await prisma.campaignActor.findFirst({
+        where: {
+          id: request.params.actorId,
+          campaignId: campaign.id,
+        },
+      });
+
+      if (!actor) {
+        return reply.status(404).send({
+          message: "Actor not found",
+        });
+      }
+
+      if (!isGM) {
+        const isActorOwner = actor.ownerId === session.user.id;
+
+        if (!isActorOwner || actor.type !== "PLAYER_CHARACTER") {
+          return reply.status(403).send({
+            message: "Players can only update their own player character",
+          });
+        }
+
+        if (request.body.location !== undefined) {
+          return reply.status(403).send({
+            message: "Players cannot move actors between table and library",
+          });
+        }
+      }
+
+      if (
+        isGM &&
+        actor.type === "PLAYER_CHARACTER" &&
+        request.body.location !== undefined
+      ) {
+        return reply.status(403).send({
+          message: "Player characters cannot be moved to library yet",
+        });
+      }
+
+      const updatedActor = await prisma.campaignActor.update({
+        where: {
+          id: actor.id,
+        },
+        data: {
+          name: request.body.name,
+          initials: request.body.initials,
+          description: request.body.description,
+          portraitUrl: request.body.portraitUrl,
+          location: request.body.location,
+        },
+      });
+
+      return reply.status(200).send({
+        actor: {
+          id: updatedActor.id,
+          campaignId: updatedActor.campaignId,
+          ownerId: updatedActor.ownerId,
+          type: updatedActor.type,
+          location: updatedActor.location,
+          name: updatedActor.name,
+          initials: updatedActor.initials,
+          description: updatedActor.description,
+          portraitUrl: updatedActor.portraitUrl,
+          createdAt: updatedActor.createdAt.toISOString(),
+          updatedAt: updatedActor.updatedAt.toISOString(),
+        },
+      });
+    },
+  });
+
   app.withTypeProvider<ZodTypeProvider>().route({
     method: "PATCH",
     url: "/campaigns/:id",
