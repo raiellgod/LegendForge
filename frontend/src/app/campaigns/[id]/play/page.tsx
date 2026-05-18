@@ -247,6 +247,39 @@ async function getCampaignActors(campaignId: string): Promise<CampaignActor[]> {
   return data.actors;
 }
 
+async function updateCampaignActor(
+  campaignId: string,
+  actorId: string,
+  data: Partial<
+    Pick<
+      CampaignActor,
+      "location" | "name" | "initials" | "description" | "portraitUrl"
+    >
+  >,
+): Promise<CampaignActor> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/actors/${actorId}`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao atualizar ator da campanha");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.actor;
+}
+
 function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
@@ -430,12 +463,9 @@ function getVisibleActorsForUser(actors: CampaignActor[], isGM: boolean) {
   }
 
   return actors.filter(
-    (actor) =>
-      actor.type === "PLAYER_CHARACTER" && actor.location === "TABLE",
+    (actor) => actor.type === "PLAYER_CHARACTER" && actor.location === "TABLE",
   );
 }
-
-
 
 export default function CampaignPlayPage() {
   const router = useRouter();
@@ -454,8 +484,11 @@ export default function CampaignPlayPage() {
   const [isLeftToolbarOpen, setIsLeftToolbarOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-  const [selectedActor, setSelectedActor] = useState<CampaignActor | null>(null);
+  const [selectedActor, setSelectedActor] = useState<CampaignActor | null>(
+    null,
+  );
   const [actionActor, setActionActor] = useState<CampaignActor | null>(null);
+  const [isLibraryModalOpen, setIsLibraryModalOpen] = useState(false);
 
   const [campaignActors, setCampaignActors] = useState<CampaignActor[]>([]);
 
@@ -593,70 +626,77 @@ export default function CampaignPlayPage() {
   const roleLabel = isGM ? "Mestre" : "Jogador";
 
   const visibleActors = getVisibleActorsForUser(campaignActors, isGM);
-
-  const myActors = visibleActors.filter((actor) => {
-  if (!user) {
-    return false;
-  }
-
-  return actor.ownerId === user.id;
-});
-
-  const otherPlayerActors = visibleActors.filter((actor) => {
-  if (actor.type !== "PLAYER_CHARACTER") {
-    return false;
-  }
-
-  if (!user) {
-    return true;
-  }
-
-  return actor.ownerId !== user.id;
-});
-
-  const npcActors = visibleActors.filter(
-  (actor) => actor.type === "NPC" && actor.location === "TABLE",
-);
-
-const creatureActors = visibleActors.filter(
-  (actor) => actor.type === "CREATURE" && actor.location === "TABLE",
-);
-
-  function canMoveToken(token: SceneToken) {
-  if (isGM) {
-    return true;
-  }
-
-  if (!user) {
-    return false;
-  }
-
-  const actor = campaignActors.find(
-    (campaignActor) => campaignActor.id === token.actorId,
+  const visibleTableActors = visibleActors.filter(
+    (actor) => actor.location === "TABLE",
   );
 
-  if (!actor) {
-    return false;
-  }
+  const myActors = visibleTableActors.filter((actor) => {
+    if (!user) {
+      return false;
+    }
 
-  return actor.ownerId === user.id;
-}
+    return actor.ownerId === user.id;
+  });
+
+  const otherPlayerActors = visibleTableActors.filter((actor) => {
+    if (actor.type !== "PLAYER_CHARACTER") {
+      return false;
+    }
+
+    if (!user) {
+      return true;
+    }
+
+    return actor.ownerId !== user.id;
+  });
+
+  const npcActors = visibleTableActors.filter((actor) => actor.type === "NPC");
+
+  const creatureActors = visibleTableActors.filter(
+    (actor) => actor.type === "CREATURE",
+  );
+
+  const libraryActors = campaignActors.filter(
+    (actor) =>
+      actor.location === "LIBRARY" &&
+      (actor.type === "NPC" || actor.type === "CREATURE"),
+  );
+
+  function canMoveToken(token: SceneToken) {
+    if (isGM) {
+      return true;
+    }
+
+    if (!user) {
+      return false;
+    }
+
+    const actor = campaignActors.find(
+      (campaignActor) => campaignActor.id === token.actorId,
+    );
+
+    if (!actor) {
+      return false;
+    }
+
+    return actor.ownerId === user.id;
+  }
 
   function canCreateTokenForActor(actor: CampaignActor) {
-  return isGM && actor.location === "TABLE";
-}
+    return isGM && actor.location === "TABLE";
+  }
 
   function canOpenActorSheet(actor: CampaignActor) {
-  if (isGM) {
-    return true;
-  }
+    if (isGM) {
+      return true;
+    }
 
-  if (!user) {
-    return false;
-  }
+    if (!user) {
+      return false;
+    }
 
-  return actor.ownerId === user.id;
-}
+    return actor.ownerId === user.id;
+  }
 
   const whisperTargets = useMemo(() => {
     if (!user) {
@@ -980,27 +1020,27 @@ const creatureActors = visibleActors.filter(
   }
 
   function handleAddTokenToScene(actor: CampaignActor) {
-  if (!canCreateTokenForActor(actor)) {
-    return;
+    if (!canCreateTokenForActor(actor)) {
+      return;
+    }
+
+    const tokenCount = sceneTokens.length;
+    const nextX = 300 + ((tokenCount * 90) % 560);
+    const nextY = 340 + Math.floor(tokenCount / 6) * 90;
+
+    setSceneTokens((currentTokens) => [
+      ...currentTokens,
+      {
+        id: createId(),
+        actorId: actor.id,
+        name: actor.name,
+        initials: actor.initials,
+        type: actor.type,
+        x: nextX,
+        y: nextY,
+      },
+    ]);
   }
-
-  const tokenCount = sceneTokens.length;
-  const nextX = 300 + ((tokenCount * 90) % 560);
-  const nextY = 340 + Math.floor(tokenCount / 6) * 90;
-
-  setSceneTokens((currentTokens) => [
-    ...currentTokens,
-    {
-      id: createId(),
-      actorId: actor.id,
-      name: actor.name,
-      initials: actor.initials,
-      type: actor.type,
-      x: nextX,
-      y: nextY,
-    },
-  ]);
-}
 
   function handleStartTokenDrag(tokenId: string) {
     const token = sceneTokens.find((sceneToken) => sceneToken.id === tokenId);
@@ -1056,30 +1096,81 @@ const creatureActors = visibleActors.filter(
     );
   }
 
-  function handleReturnActorToLibrary(actor: CampaignActor) {
-  if (!isGM || actor.type === "PLAYER_CHARACTER") {
-    return;
+  async function handleBringActorToTable(actor: CampaignActor) {
+    if (!campaign || !isGM || actor.type === "PLAYER_CHARACTER") {
+      return;
+    }
+
+    setActionError("");
+    setActionMessage("");
+
+    try {
+      const updatedActor = await updateCampaignActor(campaign.id, actor.id, {
+        location: "TABLE",
+      });
+
+      setCampaignActors((currentActors) =>
+        currentActors.map((currentActor) => {
+          if (currentActor.id !== updatedActor.id) {
+            return currentActor;
+          }
+
+          return updatedActor;
+        }),
+      );
+
+      setIsLibraryModalOpen(false);
+      setActionMessage(`${updatedActor.name} voltou para a mesa.`);
+    } catch (error) {
+      console.error(error);
+
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível trazer o ator para a mesa.",
+      );
+    }
   }
 
-  setCampaignActors((currentActors) =>
-    currentActors.map((currentActor) => {
-      if (currentActor.id !== actor.id) {
-        return currentActor;
-      }
+  async function handleReturnActorToLibrary(actor: CampaignActor) {
+    if (!campaign || !isGM || actor.type === "PLAYER_CHARACTER") {
+      return;
+    }
 
-      return {
-        ...currentActor,
+    setActionError("");
+    setActionMessage("");
+
+    try {
+      const updatedActor = await updateCampaignActor(campaign.id, actor.id, {
         location: "LIBRARY",
-      };
-    }),
-  );
+      });
 
-  setSceneTokens((currentTokens) =>
-    currentTokens.filter((token) => token.actorId !== actor.id),
-  );
+      setCampaignActors((currentActors) =>
+        currentActors.map((currentActor) => {
+          if (currentActor.id !== updatedActor.id) {
+            return currentActor;
+          }
 
-  setActionActor(null);
-}
+          return updatedActor;
+        }),
+      );
+
+      setSceneTokens((currentTokens) =>
+        currentTokens.filter((token) => token.actorId !== updatedActor.id),
+      );
+
+      setActionActor(null);
+      setActionMessage(`${updatedActor.name} voltou para a biblioteca.`);
+    } catch (error) {
+      console.error(error);
+
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível devolver o ator para a biblioteca.",
+      );
+    }
+  }
 
   async function handleAssumeGmRole() {
     if (!campaign || !currentUserParticipant) {
@@ -1907,11 +1998,12 @@ const creatureActors = visibleActors.filter(
                     {isGM && (
                       <div className="flex shrink-0 gap-2">
                         <button
-                          type="button"
-                          className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-                        >
-                          Biblioteca
-                        </button>
+  type="button"
+  onClick={() => setIsLibraryModalOpen(true)}
+  className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
+>
+  Biblioteca
+</button>
 
                         <button
                           type="button"
@@ -1923,7 +2015,23 @@ const creatureActors = visibleActors.filter(
                     )}
                   </div>
 
-                 {visibleActors.length === 0 && (
+                  {(actionMessage || actionError) && (
+                    <div className="mt-4 space-y-2">
+                      {actionMessage && (
+                        <div className="rounded-lg border border-emerald-600/60 bg-emerald-950/40 px-3 py-2 text-xs font-bold text-emerald-200">
+                          {actionMessage}
+                        </div>
+                      )}
+
+                      {actionError && (
+                        <div className="rounded-lg border border-red-600/60 bg-red-950/40 px-3 py-2 text-xs font-bold text-red-200">
+                          {actionError}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {visibleTableActors.length === 0 && (
                     <div className="mt-5 rounded-xl border border-white/10 bg-black/35 p-4">
                       <p className="text-sm font-black text-white">
                         Nenhum personagem visível
@@ -1938,48 +2046,48 @@ const creatureActors = visibleActors.filter(
 
                   <div className="mt-5 space-y-4">
                     {myActors.length > 0 && (
-  <ActorGroupSection
-    title="Meus personagens"
-    actors={myActors}
-    isGM={isGM}
-    canCreateTokenForActor={canCreateTokenForActor}
-    canOpenSheet={canOpenActorSheet}
-    onOpenActions={setActionActor}
-  />
-)}
+                      <ActorGroupSection
+                        title="Meus personagens"
+                        actors={myActors}
+                        isGM={isGM}
+                        canCreateTokenForActor={canCreateTokenForActor}
+                        canOpenSheet={canOpenActorSheet}
+                        onOpenActions={setActionActor}
+                      />
+                    )}
 
-{otherPlayerActors.length > 0 && (
-  <ActorGroupSection
-    title="Players"
-    actors={otherPlayerActors}
-    isGM={isGM}
-    canCreateTokenForActor={canCreateTokenForActor}
-    canOpenSheet={canOpenActorSheet}
-    onOpenActions={setActionActor}
-  />
-)}
+                    {otherPlayerActors.length > 0 && (
+                      <ActorGroupSection
+                        title="Players"
+                        actors={otherPlayerActors}
+                        isGM={isGM}
+                        canCreateTokenForActor={canCreateTokenForActor}
+                        canOpenSheet={canOpenActorSheet}
+                        onOpenActions={setActionActor}
+                      />
+                    )}
 
-{isGM && npcActors.length > 0 && (
-  <ActorGroupSection
-    title="NPCs"
-    actors={npcActors}
-    isGM={isGM}
-    canCreateTokenForActor={canCreateTokenForActor}
-    canOpenSheet={canOpenActorSheet}
-    onOpenActions={setActionActor}
-  />
-)}
+                    {isGM && npcActors.length > 0 && (
+                      <ActorGroupSection
+                        title="NPCs"
+                        actors={npcActors}
+                        isGM={isGM}
+                        canCreateTokenForActor={canCreateTokenForActor}
+                        canOpenSheet={canOpenActorSheet}
+                        onOpenActions={setActionActor}
+                      />
+                    )}
 
-{isGM && creatureActors.length > 0 && (
-  <ActorGroupSection
-    title="Criaturas"
-    actors={creatureActors}
-    isGM={isGM}
-    canCreateTokenForActor={canCreateTokenForActor}
-    canOpenSheet={canOpenActorSheet}
-    onOpenActions={setActionActor}
-  />
-)}
+                    {isGM && creatureActors.length > 0 && (
+                      <ActorGroupSection
+                        title="Criaturas"
+                        actors={creatureActors}
+                        isGM={isGM}
+                        canCreateTokenForActor={canCreateTokenForActor}
+                        canOpenSheet={canOpenActorSheet}
+                        onOpenActions={setActionActor}
+                      />
+                    )}
                   </div>
                 </section>
               )}
@@ -2396,29 +2504,37 @@ const creatureActors = visibleActors.filter(
         </div>
       </div>
 
-      {actionActor && (
-  <ActorActionModal
-    actor={actionActor}
-    isGM={isGM}
-    canOpenSheet={canOpenActorSheet(actionActor)}
-    canCreateToken={canCreateTokenForActor(actionActor)}
-    sceneTokens={sceneTokens.filter(
-      (token) => token.actorId === actionActor.id,
-    )}
-    onOpenSheet={() => {
-      setSelectedActor(actionActor);
-      setActionActor(null);
-    }}
-    onAddToken={() => {
-      handleAddTokenToScene(actionActor);
-    }}
-    onRemoveToken={handleRemoveTokenFromScene}
-    onReturnToLibrary={() => {
-      handleReturnActorToLibrary(actionActor);
-    }}
-    onClose={() => setActionActor(null)}
+      {isLibraryModalOpen && (
+  <ActorLibraryModal
+    actors={libraryActors}
+    onBringToTable={handleBringActorToTable}
+    onClose={() => setIsLibraryModalOpen(false)}
   />
 )}
+      
+      {actionActor && (
+        <ActorActionModal
+          actor={actionActor}
+          isGM={isGM}
+          canOpenSheet={canOpenActorSheet(actionActor)}
+          canCreateToken={canCreateTokenForActor(actionActor)}
+          sceneTokens={sceneTokens.filter(
+            (token) => token.actorId === actionActor.id,
+          )}
+          onOpenSheet={() => {
+            setSelectedActor(actionActor);
+            setActionActor(null);
+          }}
+          onAddToken={() => {
+            handleAddTokenToScene(actionActor);
+          }}
+          onRemoveToken={handleRemoveTokenFromScene}
+          onReturnToLibrary={async () => {
+            await handleReturnActorToLibrary(actionActor);
+          }}
+          onClose={() => setActionActor(null)}
+        />
+      )}
 
       {selectedActor && (
         <ActorSheetModal
@@ -2580,6 +2696,126 @@ function ActorGroupSection({
   );
 }
 
+function ActorLibraryModal({
+  actors,
+  onBringToTable,
+  onClose,
+}: {
+  actors: CampaignActor[];
+  onBringToTable: (actor: CampaignActor) => void | Promise<void>;
+  onClose: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-6 backdrop-blur-sm">
+      <div className="flex max-h-[82vh] w-full max-w-md flex-col rounded-2xl border border-forge-gold/40 bg-[#120816] shadow-[14px_14px_0_rgba(0,0,0,0.45)]">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 p-5">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+              Biblioteca
+            </p>
+
+            <h2 className="mt-1 text-lg font-black text-forge-gold">
+              Atores guardados
+            </h2>
+
+            <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
+              NPCs e criaturas que não estão ativos na mesa agora.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-xl font-black text-white/45 transition hover:text-forge-gold"
+            aria-label="Fechar biblioteca"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-5">
+          {actors.length === 0 ? (
+            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+              <p className="text-sm font-black text-white">
+                Biblioteca vazia
+              </p>
+
+              <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
+                Quando o Mestre devolver NPCs ou criaturas para a biblioteca,
+                eles aparecerão aqui.
+              </p>
+            </div>
+          ) : (
+            actors.map((actor) => (
+              <div
+                key={actor.id}
+                className="rounded-xl border border-white/10 bg-black/30 p-3"
+              >
+                <div className="flex items-start gap-3">
+                  <div
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-sm font-black shadow-[3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
+                      actor.type,
+                    )}`}
+                  >
+                    {actor.portraitUrl ? (
+                      <span
+                        className="h-full w-full bg-cover bg-center"
+                        style={{
+                          backgroundImage: `url(${actor.portraitUrl})`,
+                        }}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      actor.initials
+                    )}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-black text-white">
+                          {actor.name}
+                        </p>
+
+                        <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
+                          {getCharacterTypeLabel(actor.type)}
+                        </p>
+                      </div>
+
+                      <span className="shrink-0 rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[8px] font-black uppercase tracking-[0.08em] text-white/45">
+                        Biblioteca
+                      </span>
+                    </div>
+
+                    <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
+                      {actor.description || "Sem descrição cadastrada."}
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => onBringToTable(actor)}
+                      className="mt-3 w-full rounded-lg border border-forge-gold/50 px-4 py-2 text-[11px] font-black text-forge-gold transition hover:bg-forge-purple"
+                    >
+                      Trazer para mesa
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="shrink-0 border-t border-white/10 p-4">
+          <p className="text-[10px] font-semibold leading-relaxed text-white/35">
+            A biblioteca agora usa o banco: ao trazer um ator para a mesa, a
+            localização dele volta para TABLE.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ActorActionModal({
   actor,
   isGM,
@@ -2600,7 +2836,7 @@ function ActorActionModal({
   onOpenSheet: () => void;
   onAddToken: () => void;
   onRemoveToken: (tokenId: string) => void;
-  onReturnToLibrary: () => void;
+  onReturnToLibrary: () => void | Promise<void>;
   onClose: () => void;
 }) {
   const hasAnyAction = canOpenSheet || canCreateToken;
@@ -2650,7 +2886,7 @@ function ActorActionModal({
         </div>
 
         <p className="mt-4 text-xs font-semibold leading-relaxed text-white/55">
-          {actor.description}
+          {actor.description ?? "Sem descrição cadastrada."}
         </p>
 
         <div className="mt-5 space-y-2">
