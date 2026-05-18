@@ -90,6 +90,11 @@ export type GameSession = Prisma.GameSessionModel
  */
 export type Participant = Prisma.ParticipantModel
 /**
+ * Model CampaignActor
+ * 
+ */
+export type CampaignActor = Prisma.CampaignActorModel
+/**
  * Model CampaignInvite
  * 
  */

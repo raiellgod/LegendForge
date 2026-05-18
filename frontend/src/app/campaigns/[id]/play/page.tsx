@@ -121,6 +121,7 @@ type TableCharacter = {
   ownerName: string;
   description: string;
   portraitUrl?: string;
+  ownerUserId?: string;
 };
 
 type SceneToken = {
@@ -201,15 +202,17 @@ const MOCK_CHARACTERS: TableCharacter[] = [
     ownerName: "Jogador",
     description: "Personagem jogável vinculado à mesa.",
     portraitUrl: "",
+    ownerUserId: "CURRENT_USER",
   },
   {
     id: "char-pendragon",
     name: "Hikari Pendragon",
     type: "PLAYER",
     initials: "P",
-    ownerName: "Jogador",
+    ownerName: "Outro jogador",
     description: "Herói disponível para cena e testes de token.",
     portraitUrl: "",
+    ownerUserId: "OTHER_USER",
   },
   {
     id: "char-corvo",
@@ -331,10 +334,7 @@ function getCharacterTypeStyles(type: CharacterType) {
 }
 
 function normalizeDiceExpression(expression: string) {
-  return expression
-    .toLowerCase()
-    .replace(/\s+/g, "")
-    .replace(/d%/g, "d100");
+  return expression.toLowerCase().replace(/\s+/g, "").replace(/d%/g, "d100");
 }
 
 function rollDiceExpression(expression: string, author: string): RollResult {
@@ -452,19 +452,18 @@ function getVisibleCharactersForUser(
     return characters;
   }
 
-  const activePlayerCharacter = characters.find(
-    (character) => character.type === "PLAYER",
-  );
-
-  return activePlayerCharacter ? [activePlayerCharacter] : [];
+  return characters.filter((character) => character.type === "PLAYER");
 }
 
-function groupCharactersByType(characters: TableCharacter[]) {
-  return {
-    players: characters.filter((character) => character.type === "PLAYER"),
-    npcs: characters.filter((character) => character.type === "NPC"),
-    creatures: characters.filter((character) => character.type === "CREATURE"),
-  };
+function resolveMockOwnerUserId(
+  character: TableCharacter,
+  currentUserId: string | undefined,
+) {
+  if (character.ownerUserId === "CURRENT_USER") {
+    return currentUserId;
+  }
+
+  return character.ownerUserId;
 }
 
 export default function CampaignPlayPage() {
@@ -486,6 +485,13 @@ export default function CampaignPlayPage() {
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacter] =
     useState<TableCharacter | null>(null);
+
+  const [actionCharacter, setActionCharacter] = useState<TableCharacter | null>(
+    null,
+  );
+
+  const [tableCharacters, setTableCharacters] =
+    useState<TableCharacter[]>(MOCK_CHARACTERS);
 
   const [chatInput, setChatInput] = useState("");
   const [chatMode, setChatMode] = useState<ChatMode>("public");
@@ -635,8 +641,79 @@ export default function CampaignPlayPage() {
 
   const roleLabel = isGM ? "Mestre" : "Jogador";
 
-  const visibleCharacters = getVisibleCharactersForUser(MOCK_CHARACTERS, isGM);
-  const visibleCharacterGroups = groupCharactersByType(visibleCharacters);
+  const visibleCharacters = getVisibleCharactersForUser(tableCharacters, isGM);
+
+  const myCharacters = visibleCharacters.filter((character) => {
+    if (!user) {
+      return false;
+    }
+
+    const ownerUserId = resolveMockOwnerUserId(character, user.id);
+
+    return ownerUserId === user.id;
+  });
+
+  const otherPlayerCharacters = visibleCharacters.filter((character) => {
+    if (character.type !== "PLAYER") {
+      return false;
+    }
+
+    if (!user) {
+      return true;
+    }
+
+    const ownerUserId = resolveMockOwnerUserId(character, user.id);
+
+    return ownerUserId !== user.id;
+  });
+
+  const npcCharacters = visibleCharacters.filter(
+    (character) => character.type === "NPC",
+  );
+
+  const creatureCharacters = visibleCharacters.filter(
+    (character) => character.type === "CREATURE",
+  );
+
+  function canMoveToken(token: SceneToken) {
+    if (isGM) {
+      return true;
+    }
+
+    if (!user) {
+      return false;
+    }
+
+    const character = tableCharacters.find(
+      (tableCharacter) => tableCharacter.id === token.characterId,
+    );
+
+    if (!character) {
+      return false;
+    }
+
+    const ownerUserId = resolveMockOwnerUserId(character, user.id);
+
+    return ownerUserId === user.id;
+  }
+
+  function canCreateTokenForCharacter(character: TableCharacter) {
+    return isGM && Boolean(character);
+  }
+
+  function canOpenCharacterSheet(character: TableCharacter) {
+    if (isGM) {
+      return true;
+    }
+
+    if (!user) {
+      return false;
+    }
+
+    const ownerUserId = resolveMockOwnerUserId(character, user.id);
+
+    return ownerUserId === user.id;
+  }
 
   const whisperTargets = useMemo(() => {
     if (!user) {
@@ -960,6 +1037,10 @@ export default function CampaignPlayPage() {
   }
 
   function handleAddTokenToScene(character: TableCharacter) {
+    if (!canCreateTokenForCharacter(character)) {
+      return;
+    }
+
     const tokenCount = sceneTokens.length;
     const nextX = 300 + ((tokenCount * 90) % 560);
     const nextY = 340 + Math.floor(tokenCount / 6) * 90;
@@ -979,7 +1060,9 @@ export default function CampaignPlayPage() {
   }
 
   function handleStartTokenDrag(tokenId: string) {
-    if (!isGM) {
+    const token = sceneTokens.find((sceneToken) => sceneToken.id === tokenId);
+
+    if (!token || !canMoveToken(token)) {
       return;
     }
 
@@ -987,7 +1070,15 @@ export default function CampaignPlayPage() {
   }
 
   function handleMoveTokenOnScene(event: PointerEvent<HTMLDivElement>) {
-    if (!draggingTokenId || !isGM) {
+    if (!draggingTokenId) {
+      return;
+    }
+
+    const draggingToken = sceneTokens.find(
+      (sceneToken) => sceneToken.id === draggingTokenId,
+    );
+
+    if (!draggingToken || !canMoveToken(draggingToken)) {
       return;
     }
 
@@ -1020,6 +1111,24 @@ export default function CampaignPlayPage() {
     setSceneTokens((currentTokens) =>
       currentTokens.filter((token) => token.id !== tokenId),
     );
+  }
+
+  function handleReturnCharacterToLibrary(character: TableCharacter) {
+    if (!isGM || character.type === "PLAYER") {
+      return;
+    }
+
+    setTableCharacters((currentCharacters) =>
+      currentCharacters.filter(
+        (tableCharacter) => tableCharacter.id !== character.id,
+      ),
+    );
+
+    setSceneTokens((currentTokens) =>
+      currentTokens.filter((token) => token.characterId !== character.id),
+    );
+
+    setActionCharacter(null);
   }
 
   async function handleAssumeGmRole() {
@@ -1080,9 +1189,7 @@ export default function CampaignPlayPage() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#120816] px-6 text-white">
         <div className="max-w-md rounded-2xl border border-forge-gold/40 bg-black/40 p-6 text-center shadow-[12px_12px_0_rgba(0,0,0,0.35)]">
-          <h1 className="text-2xl font-black text-forge-gold">
-            Acesso negado
-          </h1>
+          <h1 className="text-2xl font-black text-forge-gold">Acesso negado</h1>
 
           <p className="mt-3 text-sm font-semibold text-white/65">
             Você precisa estar logado e fazer parte desta campanha para acessar
@@ -1116,8 +1223,7 @@ export default function CampaignPlayPage() {
             </div>
 
             <div className="hidden rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs font-bold text-white/60 md:block">
-              Cena atual:{" "}
-              <span className="text-white">Primeira Vigília</span>
+              Cena atual: <span className="text-white">Primeira Vigília</span>
             </div>
           </div>
 
@@ -1299,9 +1405,9 @@ export default function CampaignPlayPage() {
                       )}`}
                       onPointerDown={() => handleStartTokenDrag(token.id)}
                       className={`flex h-16 w-16 items-center justify-center rounded-full border-2 text-xl font-black shadow-[6px_6px_0_rgba(0,0,0,0.35)] transition ${
-                        isGM
+                        canMoveToken(token)
                           ? "cursor-grab active:cursor-grabbing"
-                          : "cursor-pointer"
+                          : "cursor-not-allowed opacity-75"
                       } ${getCharacterTypeStyles(token.type)}`}
                     >
                       {token.initials}
@@ -1612,6 +1718,7 @@ export default function CampaignPlayPage() {
                           </div>
 
                           <input
+                            id="customDiceSides"
                             type="number"
                             min={2}
                             max={1000}
@@ -1619,6 +1726,7 @@ export default function CampaignPlayPage() {
                             onChange={(event) =>
                               setCustomDiceSides(Number(event.target.value))
                             }
+                            aria-label="Quantidade de lados do dado personalizado"
                             className="h-10 min-w-0 flex-1 rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-bold text-white outline-none focus:border-forge-gold"
                           />
 
@@ -1684,11 +1792,15 @@ export default function CampaignPlayPage() {
                               className="grid grid-cols-[1fr_1fr_32px] gap-2"
                             >
                               <div>
-                                <label className="mb-1 block text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+                                <label
+                                  htmlFor={`dice-quantity-${term.id}`}
+                                  className="mb-1 block text-[9px] font-black uppercase tracking-[0.14em] text-white/35"
+                                >
                                   Qtd.
                                 </label>
 
                                 <input
+                                  id={`dice-quantity-${term.id}`}
                                   type="number"
                                   min={1}
                                   max={100}
@@ -1705,11 +1817,15 @@ export default function CampaignPlayPage() {
                               </div>
 
                               <div>
-                                <label className="mb-1 block text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+                                <label
+                                  htmlFor={`dice-sides-${term.id}`}
+                                  className="mb-1 block text-[9px] font-black uppercase tracking-[0.14em] text-white/35"
+                                >
                                   Dado
                                 </label>
 
                                 <select
+                                  id={`dice-sides-${term.id}`}
                                   value={term.sides}
                                   onChange={(event) =>
                                     handleChangeDiceTerm(
@@ -1834,119 +1950,86 @@ export default function CampaignPlayPage() {
                       </h2>
 
                       <p className="mt-1 text-xs font-semibold text-white/55">
-                        Fichas, NPCs, criaturas e tokens da cena.
+                        Fichas ativas da mesa, jogadores, NPCs e criaturas.
                       </p>
                     </div>
 
-                    <button
-                      type="button"
-                      className="shrink-0 rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-                    >
-                      + Criar
-                    </button>
+                    {isGM && (
+                      <div className="flex shrink-0 gap-2">
+                        <button
+                          type="button"
+                          className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
+                        >
+                          Biblioteca
+                        </button>
+
+                        <button
+                          type="button"
+                          className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
+                        >
+                          + Criar
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {visibleCharacters.length === 0 && (
                     <div className="mt-5 rounded-xl border border-white/10 bg-black/35 p-4">
                       <p className="text-sm font-black text-white">
-                        Nenhum personagem ativo
+                        Nenhum personagem visível
                       </p>
 
                       <p className="mt-1 text-xs font-semibold text-white/55">
-                        Quando sua ficha ativa for criada, ela aparecerá aqui.
+                        Quando houver personagens ativos na mesa, eles
+                        aparecerão aqui.
                       </p>
                     </div>
                   )}
 
-                  <div className="mt-5 space-y-5">
-                    {visibleCharacterGroups.players.length > 0 && (
+                  <div className="mt-5 space-y-4">
+                    {myCharacters.length > 0 && (
                       <CharacterGroupSection
-                        title={isGM ? "Meus / Players" : "Meu personagem"}
-                        characters={visibleCharacterGroups.players}
+                        title="Meus personagens"
+                        characters={myCharacters}
                         isGM={isGM}
-                        onAddToken={handleAddTokenToScene}
-                        onOpenSheet={setSelectedCharacter}
+                        canCreateTokenForCharacter={canCreateTokenForCharacter}
+                        canOpenSheet={canOpenCharacterSheet}
+                        onOpenActions={setActionCharacter}
                       />
                     )}
 
-                    {isGM && visibleCharacterGroups.npcs.length > 0 && (
+                    {otherPlayerCharacters.length > 0 && (
+                      <CharacterGroupSection
+                        title="Players"
+                        characters={otherPlayerCharacters}
+                        isGM={isGM}
+                        canCreateTokenForCharacter={canCreateTokenForCharacter}
+                        canOpenSheet={canOpenCharacterSheet}
+                        onOpenActions={setActionCharacter}
+                      />
+                    )}
+
+                    {isGM && npcCharacters.length > 0 && (
                       <CharacterGroupSection
                         title="NPCs"
-                        characters={visibleCharacterGroups.npcs}
+                        characters={npcCharacters}
                         isGM={isGM}
-                        onAddToken={handleAddTokenToScene}
-                        onOpenSheet={setSelectedCharacter}
+                        canCreateTokenForCharacter={canCreateTokenForCharacter}
+                        canOpenSheet={canOpenCharacterSheet}
+                        onOpenActions={setActionCharacter}
                       />
                     )}
 
-                    {isGM && visibleCharacterGroups.creatures.length > 0 && (
+                    {isGM && creatureCharacters.length > 0 && (
                       <CharacterGroupSection
                         title="Criaturas"
-                        characters={visibleCharacterGroups.creatures}
+                        characters={creatureCharacters}
                         isGM={isGM}
-                        onAddToken={handleAddTokenToScene}
-                        onOpenSheet={setSelectedCharacter}
+                        canCreateTokenForCharacter={canCreateTokenForCharacter}
+                        canOpenSheet={canOpenCharacterSheet}
+                        onOpenActions={setActionCharacter}
                       />
                     )}
-
-                    <div className="rounded-xl border border-forge-gold/20 bg-black/25 p-3">
-                      <div className="flex items-center justify-between">
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-forge-gold/80">
-                          Tokens na cena
-                        </p>
-
-                        <span className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[9px] font-black text-white/45">
-                          {sceneTokens.length}
-                        </span>
-                      </div>
-
-                      {sceneTokens.length === 0 ? (
-                        <p className="mt-3 text-xs font-semibold text-white/45">
-                          Nenhum token no grid.
-                        </p>
-                      ) : (
-                        <div className="mt-3 space-y-2">
-                          {sceneTokens.map((token) => (
-                            <div
-                              key={token.id}
-                              className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/35 px-3 py-2"
-                            >
-                              <div className="flex min-w-0 items-center gap-2">
-                                <div
-                                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-[11px] font-black shadow-[3px_3px_0_rgba(0,0,0,0.3)] ${getCharacterTypeStyles(
-                                    token.type,
-                                  )}`}
-                                >
-                                  {token.initials}
-                                </div>
-
-                                <div className="min-w-0">
-                                  <p className="truncate text-xs font-black text-white">
-                                    {token.name}
-                                  </p>
-
-                                  <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
-                                    {getCharacterTypeLabel(token.type)}
-                                  </p>
-                                </div>
-                              </div>
-
-                              {isGM && (
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleRemoveTokenFromScene(token.id)
-                                  }
-                                  className="shrink-0 rounded-md border border-red-500/40 px-2 py-1 text-[9px] font-black text-red-300 transition hover:bg-red-950/40"
-                                >
-                                  Remover
-                                </button>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </section>
               )}
@@ -2058,8 +2141,6 @@ export default function CampaignPlayPage() {
                       <h2 className="text-base font-black text-forge-gold">
                         Mesa
                       </h2>
-
-                      
                     </div>
 
                     <span className="shrink-0 rounded-full border border-forge-gold/30 bg-black/30 px-3 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold">
@@ -2365,6 +2446,30 @@ export default function CampaignPlayPage() {
         </div>
       </div>
 
+      {actionCharacter && (
+        <CharacterActionModal
+          character={actionCharacter}
+          isGM={isGM}
+          canOpenSheet={canOpenCharacterSheet(actionCharacter)}
+          canCreateToken={canCreateTokenForCharacter(actionCharacter)}
+          sceneTokens={sceneTokens.filter(
+            (token) => token.characterId === actionCharacter.id,
+          )}
+          onOpenSheet={() => {
+            setSelectedCharacter(actionCharacter);
+            setActionCharacter(null);
+          }}
+          onAddToken={() => {
+            handleAddTokenToScene(actionCharacter);
+          }}
+          onRemoveToken={handleRemoveTokenFromScene}
+          onReturnToLibrary={() => {
+            handleReturnCharacterToLibrary(actionCharacter);
+          }}
+          onClose={() => setActionCharacter(null)}
+        />
+      )}
+
       {selectedCharacter && (
         <CharacterSheetModal
           character={selectedCharacter}
@@ -2429,73 +2534,269 @@ function CharacterGroupSection({
   title,
   characters,
   isGM,
-  onAddToken,
-  onOpenSheet,
+  canCreateTokenForCharacter,
+  canOpenSheet,
+  onOpenActions,
 }: {
   title: string;
   characters: TableCharacter[];
   isGM: boolean;
-  onAddToken: (character: TableCharacter) => void;
-  onOpenSheet: (character: TableCharacter) => void;
+  canCreateTokenForCharacter: (character: TableCharacter) => boolean;
+  canOpenSheet: (character: TableCharacter) => boolean;
+  onOpenActions: (character: TableCharacter) => void;
 }) {
-  return (
-    <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
-        {title}
-      </p>
+  const [isOpen, setIsOpen] = useState(true);
 
-      <div className="mt-3 space-y-2">
-        {characters.map((character) => (
-          <div
-            key={character.id}
-            className="group rounded-lg border border-white/10 bg-black/35 px-3 py-2 transition hover:border-forge-gold/40 hover:bg-forge-purple/15"
-          >
-            <div className="flex items-center gap-3">
-              {character.portraitUrl ? (
+  return (
+    <div className="overflow-hidden rounded-xl border border-white/10 bg-black/20">
+      <button
+        type="button"
+        onClick={() => setIsOpen((current) => !current)}
+        className="flex w-full items-center justify-between px-3 py-3 text-left transition hover:bg-white/5"
+      >
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-purple-200/70">
+          {title}
+        </p>
+
+        <span className="text-sm font-black text-forge-gold">
+          {isOpen ? "−" : "+"}
+        </span>
+      </button>
+
+      {isOpen && (
+        <div className="space-y-2 border-t border-white/10 p-3">
+          {characters.map((character) => {
+            const canCreateToken = canCreateTokenForCharacter(character);
+            const canViewSheet = canOpenSheet(character);
+
+            return (
+              <button
+                key={character.id}
+                type="button"
+                onClick={() => onOpenActions(character)}
+                className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-black/30 p-3 text-left transition hover:border-forge-gold/50 hover:bg-forge-purple/20"
+              >
                 <div
-                  className="h-10 w-10 shrink-0 rounded-lg border border-forge-gold/35 bg-cover bg-center shadow-[3px_3px_0_rgba(0,0,0,0.3)]"
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border text-sm font-black shadow-[3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
+                    character.type,
+                  )}`}
+                >
+                  {character.portraitUrl ? (
+                    <span
+                      className="h-full w-full bg-cover bg-center"
+                      style={{
+                        backgroundImage: `url(${character.portraitUrl})`,
+                      }}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    character.initials
+                  )}
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-black text-white">
+                    {character.name}
+                  </p>
+
+                  <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
+                    {isGM
+                      ? character.ownerName
+                      : canViewSheet
+                        ? "Seu personagem"
+                        : "Outro player"}
+                  </p>
+                </div>
+
+                <div className="flex shrink-0 items-center gap-1">
+                  {canViewSheet && (
+                    <span className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[8px] font-black uppercase tracking-[0.08em] text-purple-100/60">
+                      Ficha
+                    </span>
+                  )}
+
+                  {canCreateToken && (
+                    <span className="rounded-full border border-forge-gold/30 bg-black/30 px-2 py-1 text-[8px] font-black uppercase tracking-[0.08em] text-forge-gold/80">
+                      Token
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CharacterActionModal({
+  character,
+  isGM,
+  canOpenSheet,
+  canCreateToken,
+  sceneTokens,
+  onOpenSheet,
+  onAddToken,
+  onRemoveToken,
+  onReturnToLibrary,
+  onClose,
+}: {
+  character: TableCharacter;
+  isGM: boolean;
+  canOpenSheet: boolean;
+  canCreateToken: boolean;
+  sceneTokens: SceneToken[];
+  onOpenSheet: () => void;
+  onAddToken: () => void;
+  onRemoveToken: (tokenId: string) => void;
+  onReturnToLibrary: () => void;
+  onClose: () => void;
+}) {
+  const hasAnyAction = canOpenSheet || canCreateToken;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-6 backdrop-blur-sm">
+      <div className="w-full max-w-sm rounded-2xl border border-forge-gold/40 bg-[#120816] p-5 shadow-[14px_14px_0_rgba(0,0,0,0.45)]">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <div
+              className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-base font-black shadow-[4px_4px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
+                character.type,
+              )}`}
+            >
+              {character.portraitUrl ? (
+                <span
+                  className="h-full w-full bg-cover bg-center"
                   style={{
                     backgroundImage: `url(${character.portraitUrl})`,
                   }}
                   aria-hidden="true"
                 />
               ) : (
-                <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border text-sm font-black shadow-[3px_3px_0_rgba(0,0,0,0.3)] ${getCharacterTypeStyles(
-                    character.type,
-                  )}`}
-                >
-                  {character.initials}
-                </div>
+                character.initials
               )}
-
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-black text-white">
-                  {character.name}
-                </p>
-              </div>
             </div>
 
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => onOpenSheet(character)}
-                className="rounded-md border border-white/10 px-3 py-2 text-[10px] font-black text-white/55 transition hover:border-forge-gold hover:text-forge-gold"
-              >
-                Ficha
-              </button>
+            <div className="min-w-0">
+              <p className="truncate text-base font-black text-forge-gold">
+                {character.name}
+              </p>
 
-              <button
-                type="button"
-                onClick={() => onAddToken(character)}
-                disabled={!isGM}
-                className="rounded-md border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/25 disabled:hover:bg-transparent"
-              >
-                Token
-              </button>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">
+                {getCharacterTypeLabel(character.type)}
+              </p>
             </div>
           </div>
-        ))}
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-xl font-black text-white/45 transition hover:text-forge-gold"
+            aria-label="Fechar ações do personagem"
+          >
+            ×
+          </button>
+        </div>
+
+        <p className="mt-4 text-xs font-semibold leading-relaxed text-white/55">
+          {character.description}
+        </p>
+
+        <div className="mt-5 space-y-2">
+          {canOpenSheet && (
+            <button
+              type="button"
+              onClick={onOpenSheet}
+              className="w-full rounded-lg border border-white/15 px-4 py-3 text-sm font-black text-purple-100 transition hover:border-forge-gold hover:text-forge-gold"
+            >
+              Abrir ficha
+            </button>
+          )}
+
+          {canCreateToken && (
+            <button
+              type="button"
+              onClick={onAddToken}
+              className="w-full rounded-lg border border-forge-gold bg-forge-purple px-4 py-3 text-sm font-black text-forge-gold transition hover:bg-[#4d0d63]"
+            >
+              Adicionar token à cena
+            </button>
+          )}
+
+          {isGM && character.type !== "PLAYER" && (
+            <button
+              type="button"
+              onClick={onReturnToLibrary}
+              className="w-full rounded-lg border border-red-500/40 px-4 py-3 text-sm font-black text-red-300 transition hover:bg-red-950/40"
+            >
+              Devolver à biblioteca
+            </button>
+          )}
+
+          {!hasAnyAction && (
+            <div className="rounded-lg border border-white/10 bg-black/30 px-4 py-3">
+              <p className="text-xs font-semibold text-white/55">
+                Você pode ver que este personagem está na mesa, mas não possui
+                ações disponíveis para ele.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {isGM && (
+          <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+                Tokens na cena
+              </p>
+
+              <span className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[9px] font-black text-white/45">
+                {sceneTokens.length}
+              </span>
+            </div>
+
+            {sceneTokens.length === 0 ? (
+              <p className="mt-3 text-xs font-semibold text-white/45">
+                Nenhum token deste personagem está na cena.
+              </p>
+            ) : (
+              <div className="mt-3 space-y-2">
+                {sceneTokens.map((token, index) => (
+                  <div
+                    key={token.id}
+                    className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/30 px-3 py-2"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-black text-white">
+                        {token.name} #{index + 1}
+                      </p>
+
+                      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
+                        x {token.x} · y {token.y}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => onRemoveToken(token.id)}
+                      className="shrink-0 rounded-md border border-red-500/40 px-2 py-1 text-[9px] font-black text-red-300 transition hover:bg-red-950/40"
+                    >
+                      Remover
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {isGM && (
+          <p className="mt-4 text-[10px] font-semibold leading-relaxed text-white/35">
+            Como Mestre, você pode abrir fichas e adicionar tokens dos
+            personagens visíveis nesta mesa.
+          </p>
+        )}
       </div>
     </div>
   );

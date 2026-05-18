@@ -46,6 +46,18 @@ enum SourceOrigin {
   AI
 }
 
+enum CampaignActorType {
+  PLAYER_CHARACTER
+  NPC
+  CREATURE
+}
+
+enum CampaignActorLocation {
+  TABLE
+  LIBRARY
+  ARCHIVED
+}
+
 model User {
   id            String     @id
   name          String
@@ -65,6 +77,7 @@ model User {
   receivedCampaignInvites CampaignInvite[] @relation("CampaignInviteRecipient")
 
   campaignLogs CampaignLog[]
+  campaignActors CampaignActor[]
 
   @@map("user")
 }
@@ -179,6 +192,7 @@ model Campaign {
   sessions     GameSession[]
   invites      CampaignInvite[]
   logs         CampaignLog[]
+  actors       CampaignActor[]
 
   @@index([ownerId])
   @@index([systemId])
@@ -220,6 +234,27 @@ model Participant {
   @@index([status])
 }
 
+model CampaignActor {
+  id          String                @id @default(uuid())
+  campaignId  String
+  ownerId     String?
+  type        CampaignActorType
+  location    CampaignActorLocation @default(TABLE)
+  name        String
+  initials    String
+  description String?
+  portraitUrl String?
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  owner    User?    @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId])
+  @@index([ownerId])
+  @@index([type])
+  @@index([location])
+}
 model CampaignInvite {
   id              String       @id @default(uuid())
   campaignId      String

@@ -64,3 +64,21 @@ export const SourceOrigin = {
 } as const
 
 export type SourceOrigin = (typeof SourceOrigin)[keyof typeof SourceOrigin]
+
+
+export const CampaignActorType = {
+  PLAYER_CHARACTER: 'PLAYER_CHARACTER',
+  NPC: 'NPC',
+  CREATURE: 'CREATURE'
+} as const
+
+export type CampaignActorType = (typeof CampaignActorType)[keyof typeof CampaignActorType]
+
+
+export const CampaignActorLocation = {
+  TABLE: 'TABLE',
+  LIBRARY: 'LIBRARY',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CampaignActorLocation = (typeof CampaignActorLocation)[keyof typeof CampaignActorLocation]

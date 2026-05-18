@@ -394,6 +394,7 @@ export const ModelName = {
   Campaign: 'Campaign',
   GameSession: 'GameSession',
   Participant: 'Participant',
+  CampaignActor: 'CampaignActor',
   CampaignInvite: 'CampaignInvite',
   CampaignLog: 'CampaignLog'
 } as const
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1155,6 +1156,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CampaignActor: {
+      payload: Prisma.$CampaignActorPayload<ExtArgs>
+      fields: Prisma.CampaignActorFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CampaignActorFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CampaignActorFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>
+        }
+        findFirst: {
+          args: Prisma.CampaignActorFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CampaignActorFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>
+        }
+        findMany: {
+          args: Prisma.CampaignActorFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>[]
+        }
+        create: {
+          args: Prisma.CampaignActorCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>
+        }
+        createMany: {
+          args: Prisma.CampaignActorCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CampaignActorCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>[]
+        }
+        delete: {
+          args: Prisma.CampaignActorDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>
+        }
+        update: {
+          args: Prisma.CampaignActorUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>
+        }
+        deleteMany: {
+          args: Prisma.CampaignActorDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CampaignActorUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CampaignActorUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>[]
+        }
+        upsert: {
+          args: Prisma.CampaignActorUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignActorPayload>
+        }
+        aggregate: {
+          args: Prisma.CampaignActorAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCampaignActor>
+        }
+        groupBy: {
+          args: Prisma.CampaignActorGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignActorGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CampaignActorCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignActorCountAggregateOutputType> | number
+        }
+      }
+    }
     CampaignInvite: {
       payload: Prisma.$CampaignInvitePayload<ExtArgs>
       fields: Prisma.CampaignInviteFieldRefs
@@ -1478,6 +1553,23 @@ export const ParticipantScalarFieldEnum = {
 export type ParticipantScalarFieldEnum = (typeof ParticipantScalarFieldEnum)[keyof typeof ParticipantScalarFieldEnum]
 
 
+export const CampaignActorScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  ownerId: 'ownerId',
+  type: 'type',
+  location: 'location',
+  name: 'name',
+  initials: 'initials',
+  description: 'description',
+  portraitUrl: 'portraitUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CampaignActorScalarFieldEnum = (typeof CampaignActorScalarFieldEnum)[keyof typeof CampaignActorScalarFieldEnum]
+
+
 export const CampaignInviteScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
@@ -1628,6 +1720,34 @@ export type ListEnumParticipantStatusFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'CampaignActorType'
+ */
+export type EnumCampaignActorTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignActorType'>
+    
+
+
+/**
+ * Reference to a field of type 'CampaignActorType[]'
+ */
+export type ListEnumCampaignActorTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignActorType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CampaignActorLocation'
+ */
+export type EnumCampaignActorLocationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignActorLocation'>
+    
+
+
+/**
+ * Reference to a field of type 'CampaignActorLocation[]'
+ */
+export type ListEnumCampaignActorLocationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignActorLocation[]'>
+    
+
+
+/**
  * Reference to a field of type 'InviteStatus'
  */
 export type EnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus'>
@@ -1773,6 +1893,7 @@ export type GlobalOmitConfig = {
   campaign?: Prisma.CampaignOmit
   gameSession?: Prisma.GameSessionOmit
   participant?: Prisma.ParticipantOmit
+  campaignActor?: Prisma.CampaignActorOmit
   campaignInvite?: Prisma.CampaignInviteOmit
   campaignLog?: Prisma.CampaignLogOmit
 }

@@ -226,6 +226,40 @@ export type EnumParticipantStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumParticipantStatusFilter<$PrismaModel>
 }
 
+export type EnumCampaignActorTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CampaignActorType | Prisma.EnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CampaignActorType[] | Prisma.ListEnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CampaignActorType[] | Prisma.ListEnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCampaignActorTypeFilter<$PrismaModel> | $Enums.CampaignActorType
+}
+
+export type EnumCampaignActorLocationFilter<$PrismaModel = never> = {
+  equals?: $Enums.CampaignActorLocation | Prisma.EnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  in?: $Enums.CampaignActorLocation[] | Prisma.ListEnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CampaignActorLocation[] | Prisma.ListEnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel> | $Enums.CampaignActorLocation
+}
+
+export type EnumCampaignActorTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CampaignActorType | Prisma.EnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CampaignActorType[] | Prisma.ListEnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CampaignActorType[] | Prisma.ListEnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCampaignActorTypeWithAggregatesFilter<$PrismaModel> | $Enums.CampaignActorType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCampaignActorTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCampaignActorTypeFilter<$PrismaModel>
+}
+
+export type EnumCampaignActorLocationWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CampaignActorLocation | Prisma.EnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  in?: $Enums.CampaignActorLocation[] | Prisma.ListEnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CampaignActorLocation[] | Prisma.ListEnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCampaignActorLocationWithAggregatesFilter<$PrismaModel> | $Enums.CampaignActorLocation
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel>
+}
+
 export type EnumInviteStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.InviteStatus | Prisma.EnumInviteStatusFieldRefInput<$PrismaModel>
   in?: $Enums.InviteStatus[] | Prisma.ListEnumInviteStatusFieldRefInput<$PrismaModel>
@@ -483,6 +517,40 @@ export type NestedEnumParticipantStatusWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumParticipantStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumParticipantStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumCampaignActorTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CampaignActorType | Prisma.EnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CampaignActorType[] | Prisma.ListEnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CampaignActorType[] | Prisma.ListEnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCampaignActorTypeFilter<$PrismaModel> | $Enums.CampaignActorType
+}
+
+export type NestedEnumCampaignActorLocationFilter<$PrismaModel = never> = {
+  equals?: $Enums.CampaignActorLocation | Prisma.EnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  in?: $Enums.CampaignActorLocation[] | Prisma.ListEnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CampaignActorLocation[] | Prisma.ListEnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel> | $Enums.CampaignActorLocation
+}
+
+export type NestedEnumCampaignActorTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CampaignActorType | Prisma.EnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CampaignActorType[] | Prisma.ListEnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CampaignActorType[] | Prisma.ListEnumCampaignActorTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCampaignActorTypeWithAggregatesFilter<$PrismaModel> | $Enums.CampaignActorType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCampaignActorTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCampaignActorTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumCampaignActorLocationWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CampaignActorLocation | Prisma.EnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  in?: $Enums.CampaignActorLocation[] | Prisma.ListEnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CampaignActorLocation[] | Prisma.ListEnumCampaignActorLocationFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCampaignActorLocationWithAggregatesFilter<$PrismaModel> | $Enums.CampaignActorLocation
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel>
 }
 
 export type NestedEnumInviteStatusFilter<$PrismaModel = never> = {
