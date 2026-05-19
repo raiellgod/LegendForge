@@ -320,6 +320,26 @@ async function createSceneToken(
   return responseData.token;
 }
 
+async function deleteSceneToken(campaignId: string, tokenId: string) {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/tokens/${tokenId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao remover token da cena");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.deletedTokenId as string;
+}
+
 async function updateCampaignActor(
   campaignId: string,
   actorId: string,
@@ -1182,11 +1202,32 @@ setSceneTokens(tokens);
     setDraggingTokenId(null);
   }
 
-  function handleRemoveTokenFromScene(tokenId: string) {
+  async function handleRemoveTokenFromScene(tokenId: string) {
+  if (!campaign || !isGM) {
+    return;
+  }
+
+  setActionError("");
+  setActionMessage("");
+
+  try {
+    const deletedTokenId = await deleteSceneToken(campaign.id, tokenId);
+
     setSceneTokens((currentTokens) =>
-      currentTokens.filter((token) => token.id !== tokenId),
+      currentTokens.filter((token) => token.id !== deletedTokenId),
+    );
+
+    setActionMessage("Token removido da cena.");
+  } catch (error) {
+    console.error(error);
+
+    setActionError(
+      error instanceof Error
+        ? error.message
+        : "Não foi possível remover o token da cena.",
     );
   }
+}
 
   async function handleBringActorToTable(actor: CampaignActor) {
     if (!campaign || !isGM || actor.type === "PLAYER_CHARACTER") {
@@ -2938,7 +2979,7 @@ function ActorActionModal({
   sceneTokens: SceneToken[];
   onOpenSheet: () => void;
   onAddToken: () => void | Promise<void>;
-  onRemoveToken: (tokenId: string) => void;
+  onRemoveToken: (tokenId: string) => void | Promise<void>;
   onReturnToLibrary: () => void | Promise<void>;
   onClose: () => void;
 }) {
@@ -3067,8 +3108,10 @@ function ActorActionModal({
                     </div>
 
                     <button
-                      type="button"
-                      onClick={() => onRemoveToken(token.id)}
+  type="button"
+  onClick={async () => {
+    await onRemoveToken(token.id);
+  }}
                       className="shrink-0 rounded-md border border-red-500/40 px-2 py-1 text-[9px] font-black text-red-300 transition hover:bg-red-950/40"
                     >
                       Remover
