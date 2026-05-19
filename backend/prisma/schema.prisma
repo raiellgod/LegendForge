@@ -58,6 +58,15 @@ enum SceneTokenImageFit {
   FILL
 }
 
+enum CreatureSize {
+  TINY
+  SMALL
+  MEDIUM
+  LARGE
+  HUGE
+  GARGANTUAN
+}
+
 enum CampaignActorLocation {
   TABLE
   LIBRARY
@@ -144,9 +153,50 @@ model GameSystem {
   version   Int
   createdAt DateTime @default(now())
 
-  stats     Stat[]
-  skills    Skill[]
-  campaigns Campaign[]
+  stats      Stat[]
+  skills     Skill[]
+  ancestries Ancestry[]
+  classes    CharacterClass[]
+  campaigns  Campaign[]
+}
+
+model Ancestry {
+  id                  String       @id @default(uuid())
+  systemId            String
+  name                String
+  key                 String
+  description         String?
+  defaultSizeCategory CreatureSize @default(MEDIUM)
+  order               Int          @default(0)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+
+  @@unique([systemId, name])
+  @@unique([systemId, key])
+  @@index([systemId])
+  @@index([order])
+}
+
+model CharacterClass {
+  id          String   @id @default(uuid())
+  systemId    String
+  name        String
+  key         String
+  description String?
+  primaryRole String?
+  hitDie      Int?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+
+  @@unique([systemId, name])
+  @@unique([systemId, key])
+  @@index([systemId])
+  @@index([order])
 }
 
 model Stat {
