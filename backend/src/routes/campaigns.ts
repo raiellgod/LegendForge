@@ -467,7 +467,7 @@ export async function campaignRoutes(app: FastifyInstance) {
     },
   });
 
-    app.withTypeProvider<ZodTypeProvider>().route({
+  app.withTypeProvider<ZodTypeProvider>().route({
     method: "GET",
     url: "/campaigns/:id/actors",
     schema: {
@@ -598,7 +598,7 @@ export async function campaignRoutes(app: FastifyInstance) {
     },
   });
 
-    app.withTypeProvider<ZodTypeProvider>().route({
+  app.withTypeProvider<ZodTypeProvider>().route({
     method: "POST",
     url: "/campaigns/:id/actors",
     schema: {
@@ -706,7 +706,7 @@ export async function campaignRoutes(app: FastifyInstance) {
 
       const ownerId =
         request.body.type === "PLAYER_CHARACTER"
-          ? request.body.ownerId ?? session.user.id
+          ? (request.body.ownerId ?? session.user.id)
           : null;
 
       if (!isGM && ownerId !== session.user.id) {
@@ -754,7 +754,161 @@ export async function campaignRoutes(app: FastifyInstance) {
     },
   });
 
-    app.withTypeProvider<ZodTypeProvider>().route({
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/campaigns/:id/tokens",
+    schema: {
+      tags: ["Campaigns"],
+      description: "List campaign scene tokens",
+      params: z.object({
+        id: z.string().uuid("Invalid campaign id"),
+      }),
+      response: {
+        200: z.object({
+          tokens: z.array(
+            z.object({
+              id: z.string(),
+              campaignId: z.string(),
+              actorId: z.string(),
+              name: z.string(),
+              initials: z.string(),
+              type: z.string(),
+              imageUrl: z.string().nullable(),
+              imageFit: z.string(),
+              x: z.number(),
+              y: z.number(),
+              width: z.number(),
+              height: z.number(),
+              createdAt: z.string(),
+              updatedAt: z.string(),
+              actor: z.object({
+                id: z.string(),
+                ownerId: z.string().nullable(),
+                type: z.string(),
+                location: z.string(),
+                name: z.string(),
+                initials: z.string(),
+                portraitUrl: z.string().nullable(),
+              }),
+            }),
+          ),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.id,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const isOwner = campaign.ownerId === session.user.id;
+
+      if (!isOwner) {
+        const participant = await prisma.participant.findFirst({
+          where: {
+            campaignId: campaign.id,
+            userId: session.user.id,
+            status: "APPROVED",
+          },
+        });
+
+        if (!participant) {
+          return reply.status(403).send({
+            message: "Forbidden",
+          });
+        }
+      }
+
+      const tokens = await prisma.sceneToken.findMany({
+        where: {
+          campaignId: campaign.id,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+        include: {
+          actor: {
+            select: {
+              id: true,
+              ownerId: true,
+              type: true,
+              location: true,
+              name: true,
+              initials: true,
+              portraitUrl: true,
+            },
+          },
+        },
+      });
+
+      return reply.status(200).send({
+        tokens: tokens.map((token) => ({
+          id: token.id,
+          campaignId: token.campaignId,
+          actorId: token.actorId,
+          name: token.name,
+          initials: token.initials,
+          type: token.type,
+          imageUrl: token.imageUrl,
+          imageFit: token.imageFit,
+          x: token.x,
+          y: token.y,
+          width: token.width,
+          height: token.height,
+          createdAt: token.createdAt.toISOString(),
+          updatedAt: token.updatedAt.toISOString(),
+          actor: {
+            id: token.actor.id,
+            ownerId: token.actor.ownerId,
+            type: token.actor.type,
+            location: token.actor.location,
+            name: token.actor.name,
+            initials: token.actor.initials,
+            portraitUrl: token.actor.portraitUrl,
+          },
+        })),
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
     method: "PATCH",
     url: "/campaigns/:campaignId/actors/:actorId",
     schema: {
