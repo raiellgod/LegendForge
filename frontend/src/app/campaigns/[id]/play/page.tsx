@@ -340,6 +340,46 @@ async function deleteSceneToken(campaignId: string, tokenId: string) {
   return responseData.deletedTokenId as string;
 }
 
+async function updateSceneToken(
+  campaignId: string,
+  tokenId: string,
+  data: Partial<
+    Pick<
+      SceneToken,
+      | "name"
+      | "initials"
+      | "imageUrl"
+      | "imageFit"
+      | "x"
+      | "y"
+      | "width"
+      | "height"
+    >
+  >,
+): Promise<SceneToken> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/tokens/${tokenId}`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao atualizar token da cena");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.token;
+}
+
 async function updateCampaignActor(
   campaignId: string,
   actorId: string,
@@ -625,6 +665,11 @@ export default function CampaignPlayPage() {
   const [sceneTokens, setSceneTokens] = useState<SceneToken[]>([]);
 
   const [draggingTokenId, setDraggingTokenId] = useState<string | null>(null);
+const [pendingTokenPosition, setPendingTokenPosition] = useState<{
+  tokenId: string;
+  x: number;
+  y: number;
+} | null>(null);
 
   const [actionMessage, setActionMessage] = useState("");
   const [actionError, setActionError] = useState("");
@@ -1183,24 +1228,71 @@ setSceneTokens(tokens);
     const x = Math.round((event.clientX - scene.left) / scale);
     const y = Math.round((event.clientY - scene.top) / scale);
 
+      const nextX = Math.max(0, Math.min(x - draggingToken.width / 2, 1400 - draggingToken.width));
+  const nextY = Math.max(0, Math.min(y - draggingToken.height / 2, 900 - draggingToken.height));
+
+  setPendingTokenPosition({
+    tokenId: draggingToken.id,
+    x: nextX,
+    y: nextY,
+  });
+
+  setSceneTokens((currentTokens) =>
+    currentTokens.map((token) => {
+      if (token.id !== draggingTokenId) {
+        return token;
+      }
+
+      return {
+        ...token,
+        x: nextX,
+        y: nextY,
+      };
+    }),
+  );
+  }
+
+  async function handleStopTokenDrag() {
+  if (!campaign || !pendingTokenPosition) {
+    setDraggingTokenId(null);
+    return;
+  }
+
+  const positionToSave = pendingTokenPosition;
+
+  setDraggingTokenId(null);
+  setPendingTokenPosition(null);
+  setActionError("");
+
+  try {
+    const updatedToken = await updateSceneToken(
+      campaign.id,
+      positionToSave.tokenId,
+      {
+        x: Math.round(positionToSave.x),
+        y: Math.round(positionToSave.y),
+      },
+    );
+
     setSceneTokens((currentTokens) =>
       currentTokens.map((token) => {
-        if (token.id !== draggingTokenId) {
+        if (token.id !== updatedToken.id) {
           return token;
         }
 
-        return {
-          ...token,
-          x: Math.max(0, Math.min(x - 32, 1336)),
-          y: Math.max(0, Math.min(y - 32, 836)),
-        };
+        return updatedToken;
       }),
     );
-  }
+  } catch (error) {
+    console.error(error);
 
-  function handleStopTokenDrag() {
-    setDraggingTokenId(null);
+    setActionError(
+      error instanceof Error
+        ? error.message
+        : "Não foi possível salvar a posição do token.",
+    );
   }
+}
 
   async function handleRemoveTokenFromScene(tokenId: string) {
   if (!campaign || !isGM) {
