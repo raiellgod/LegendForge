@@ -1566,6 +1566,10 @@ export const StatScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
   name: 'name',
+  key: 'key',
+  shortName: 'shortName',
+  description: 'description',
+  order: 'order',
   createdAt: 'createdAt'
 } as const
 
@@ -1577,6 +1581,9 @@ export const SkillScalarFieldEnum = {
   systemId: 'systemId',
   statId: 'statId',
   name: 'name',
+  key: 'key',
+  description: 'description',
+  order: 'order',
   createdAt: 'createdAt'
 } as const
 

@@ -20,14 +20,28 @@ export type StatModel = runtime.Types.Result.DefaultSelection<Prisma.$StatPayloa
 
 export type AggregateStat = {
   _count: StatCountAggregateOutputType | null
+  _avg: StatAvgAggregateOutputType | null
+  _sum: StatSumAggregateOutputType | null
   _min: StatMinAggregateOutputType | null
   _max: StatMaxAggregateOutputType | null
+}
+
+export type StatAvgAggregateOutputType = {
+  order: number | null
+}
+
+export type StatSumAggregateOutputType = {
+  order: number | null
 }
 
 export type StatMinAggregateOutputType = {
   id: string | null
   systemId: string | null
   name: string | null
+  key: string | null
+  shortName: string | null
+  description: string | null
+  order: number | null
   createdAt: Date | null
 }
 
@@ -35,6 +49,10 @@ export type StatMaxAggregateOutputType = {
   id: string | null
   systemId: string | null
   name: string | null
+  key: string | null
+  shortName: string | null
+  description: string | null
+  order: number | null
   createdAt: Date | null
 }
 
@@ -42,15 +60,31 @@ export type StatCountAggregateOutputType = {
   id: number
   systemId: number
   name: number
+  key: number
+  shortName: number
+  description: number
+  order: number
   createdAt: number
   _all: number
 }
 
 
+export type StatAvgAggregateInputType = {
+  order?: true
+}
+
+export type StatSumAggregateInputType = {
+  order?: true
+}
+
 export type StatMinAggregateInputType = {
   id?: true
   systemId?: true
   name?: true
+  key?: true
+  shortName?: true
+  description?: true
+  order?: true
   createdAt?: true
 }
 
@@ -58,6 +92,10 @@ export type StatMaxAggregateInputType = {
   id?: true
   systemId?: true
   name?: true
+  key?: true
+  shortName?: true
+  description?: true
+  order?: true
   createdAt?: true
 }
 
@@ -65,6 +103,10 @@ export type StatCountAggregateInputType = {
   id?: true
   systemId?: true
   name?: true
+  key?: true
+  shortName?: true
+  description?: true
+  order?: true
   createdAt?: true
   _all?: true
 }
@@ -107,6 +149,18 @@ export type StatAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: StatAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: StatSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: StatMinAggregateInputType
@@ -137,6 +191,8 @@ export type StatGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: StatCountAggregateInputType | true
+  _avg?: StatAvgAggregateInputType
+  _sum?: StatSumAggregateInputType
   _min?: StatMinAggregateInputType
   _max?: StatMaxAggregateInputType
 }
@@ -145,8 +201,14 @@ export type StatGroupByOutputType = {
   id: string
   systemId: string
   name: string
+  key: string
+  shortName: string
+  description: string | null
+  order: number
   createdAt: Date
   _count: StatCountAggregateOutputType | null
+  _avg: StatAvgAggregateOutputType | null
+  _sum: StatSumAggregateOutputType | null
   _min: StatMinAggregateOutputType | null
   _max: StatMaxAggregateOutputType | null
 }
@@ -173,6 +235,10 @@ export type StatWhereInput = {
   id?: Prisma.StringFilter<"Stat"> | string
   systemId?: Prisma.StringFilter<"Stat"> | string
   name?: Prisma.StringFilter<"Stat"> | string
+  key?: Prisma.StringFilter<"Stat"> | string
+  shortName?: Prisma.StringFilter<"Stat"> | string
+  description?: Prisma.StringNullableFilter<"Stat"> | string | null
+  order?: Prisma.IntFilter<"Stat"> | number
   createdAt?: Prisma.DateTimeFilter<"Stat"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   skills?: Prisma.SkillListRelationFilter
@@ -182,6 +248,10 @@ export type StatOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   skills?: Prisma.SkillOrderByRelationAggregateInput
@@ -190,24 +260,35 @@ export type StatOrderByWithRelationInput = {
 export type StatWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   systemId_name?: Prisma.StatSystemIdNameCompoundUniqueInput
+  systemId_key?: Prisma.StatSystemIdKeyCompoundUniqueInput
   AND?: Prisma.StatWhereInput | Prisma.StatWhereInput[]
   OR?: Prisma.StatWhereInput[]
   NOT?: Prisma.StatWhereInput | Prisma.StatWhereInput[]
   systemId?: Prisma.StringFilter<"Stat"> | string
   name?: Prisma.StringFilter<"Stat"> | string
+  key?: Prisma.StringFilter<"Stat"> | string
+  shortName?: Prisma.StringFilter<"Stat"> | string
+  description?: Prisma.StringNullableFilter<"Stat"> | string | null
+  order?: Prisma.IntFilter<"Stat"> | number
   createdAt?: Prisma.DateTimeFilter<"Stat"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   skills?: Prisma.SkillListRelationFilter
-}, "id" | "systemId_name">
+}, "id" | "systemId_name" | "systemId_key">
 
 export type StatOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.StatCountOrderByAggregateInput
+  _avg?: Prisma.StatAvgOrderByAggregateInput
   _max?: Prisma.StatMaxOrderByAggregateInput
   _min?: Prisma.StatMinOrderByAggregateInput
+  _sum?: Prisma.StatSumOrderByAggregateInput
 }
 
 export type StatScalarWhereWithAggregatesInput = {
@@ -217,12 +298,20 @@ export type StatScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Stat"> | string
   systemId?: Prisma.StringWithAggregatesFilter<"Stat"> | string
   name?: Prisma.StringWithAggregatesFilter<"Stat"> | string
+  key?: Prisma.StringWithAggregatesFilter<"Stat"> | string
+  shortName?: Prisma.StringWithAggregatesFilter<"Stat"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Stat"> | string | null
+  order?: Prisma.IntWithAggregatesFilter<"Stat"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Stat"> | Date | string
 }
 
 export type StatCreateInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
   skills?: Prisma.SkillCreateNestedManyWithoutStatInput
@@ -232,6 +321,10 @@ export type StatUncheckedCreateInput = {
   id?: string
   systemId: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
 }
@@ -239,6 +332,10 @@ export type StatUncheckedCreateInput = {
 export type StatUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
   skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
@@ -248,6 +345,10 @@ export type StatUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
 }
@@ -256,12 +357,20 @@ export type StatCreateManyInput = {
   id?: string
   systemId: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
 }
 
 export type StatUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -269,6 +378,10 @@ export type StatUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -287,17 +400,34 @@ export type StatSystemIdNameCompoundUniqueInput = {
   name: string
 }
 
+export type StatSystemIdKeyCompoundUniqueInput = {
+  systemId: string
+  key: string
+}
+
 export type StatCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type StatAvgOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type StatMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -305,7 +435,15 @@ export type StatMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type StatSumOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type StatScalarRelationFilter = {
@@ -372,6 +510,10 @@ export type StatUpdateOneRequiredWithoutSkillsNestedInput = {
 export type StatCreateWithoutSystemInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   skills?: Prisma.SkillCreateNestedManyWithoutStatInput
 }
@@ -379,6 +521,10 @@ export type StatCreateWithoutSystemInput = {
 export type StatUncheckedCreateWithoutSystemInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
 }
@@ -416,12 +562,20 @@ export type StatScalarWhereInput = {
   id?: Prisma.StringFilter<"Stat"> | string
   systemId?: Prisma.StringFilter<"Stat"> | string
   name?: Prisma.StringFilter<"Stat"> | string
+  key?: Prisma.StringFilter<"Stat"> | string
+  shortName?: Prisma.StringFilter<"Stat"> | string
+  description?: Prisma.StringNullableFilter<"Stat"> | string | null
+  order?: Prisma.IntFilter<"Stat"> | number
   createdAt?: Prisma.DateTimeFilter<"Stat"> | Date | string
 }
 
 export type StatCreateWithoutSkillsInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
 }
@@ -430,6 +584,10 @@ export type StatUncheckedCreateWithoutSkillsInput = {
   id?: string
   systemId: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
 }
 
@@ -452,6 +610,10 @@ export type StatUpdateToOneWithWhereWithoutSkillsInput = {
 export type StatUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
 }
@@ -460,18 +622,30 @@ export type StatUncheckedUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StatCreateManySystemInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
 }
 
 export type StatUpdateWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
 }
@@ -479,6 +653,10 @@ export type StatUpdateWithoutSystemInput = {
 export type StatUncheckedUpdateWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
 }
@@ -486,6 +664,10 @@ export type StatUncheckedUpdateWithoutSystemInput = {
 export type StatUncheckedUpdateManyWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -524,6 +706,10 @@ export type StatSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   systemId?: boolean
   name?: boolean
+  key?: boolean
+  shortName?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.Stat$skillsArgs<ExtArgs>
@@ -534,6 +720,10 @@ export type StatSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   systemId?: boolean
   name?: boolean
+  key?: boolean
+  shortName?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stat"]>
@@ -542,6 +732,10 @@ export type StatSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   systemId?: boolean
   name?: boolean
+  key?: boolean
+  shortName?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stat"]>
@@ -550,10 +744,14 @@ export type StatSelectScalar = {
   id?: boolean
   systemId?: boolean
   name?: boolean
+  key?: boolean
+  shortName?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
 }
 
-export type StatOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "createdAt", ExtArgs["result"]["stat"]>
+export type StatOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "shortName" | "description" | "order" | "createdAt", ExtArgs["result"]["stat"]>
 export type StatInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.Stat$skillsArgs<ExtArgs>
@@ -576,6 +774,10 @@ export type $StatPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     systemId: string
     name: string
+    key: string
+    shortName: string
+    description: string | null
+    order: number
     createdAt: Date
   }, ExtArgs["result"]["stat"]>
   composites: {}
@@ -1005,6 +1207,10 @@ export interface StatFieldRefs {
   readonly id: Prisma.FieldRef<"Stat", 'String'>
   readonly systemId: Prisma.FieldRef<"Stat", 'String'>
   readonly name: Prisma.FieldRef<"Stat", 'String'>
+  readonly key: Prisma.FieldRef<"Stat", 'String'>
+  readonly shortName: Prisma.FieldRef<"Stat", 'String'>
+  readonly description: Prisma.FieldRef<"Stat", 'String'>
+  readonly order: Prisma.FieldRef<"Stat", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Stat", 'DateTime'>
 }
     

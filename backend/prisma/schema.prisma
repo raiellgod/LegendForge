@@ -82,7 +82,7 @@ model User {
   sentCampaignInvites     CampaignInvite[] @relation("CampaignInviteSender")
   receivedCampaignInvites CampaignInvite[] @relation("CampaignInviteRecipient")
 
-  campaignLogs CampaignLog[]
+  campaignLogs   CampaignLog[]
   campaignActors CampaignActor[]
 
   @@map("user")
@@ -150,31 +150,42 @@ model GameSystem {
 }
 
 model Stat {
-  id        String   @id @default(uuid())
-  systemId  String
-  name      String
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  systemId    String
+  name        String
+  key         String   @default("")
+  shortName   String   @default("")
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
 
   system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
   skills Skill[]
 
   @@unique([systemId, name])
+  @@unique([systemId, key])
   @@index([systemId])
+  @@index([order])
 }
 
 model Skill {
-  id        String   @id @default(uuid())
-  systemId  String
-  statId    String
-  name      String
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  systemId    String
+  statId      String
+  name        String
+  key         String   @default("")
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
 
   system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
   stat   Stat       @relation(fields: [statId], references: [id], onDelete: Cascade)
 
   @@unique([systemId, name])
+  @@unique([systemId, key])
   @@index([systemId])
   @@index([statId])
+  @@index([order])
 }
 
 model Campaign {
@@ -198,7 +209,7 @@ model Campaign {
   sessions     GameSession[]
   invites      CampaignInvite[]
   logs         CampaignLog[]
-    actors       CampaignActor[]
+  actors       CampaignActor[]
   sceneTokens  SceneToken[]
 
   @@index([ownerId])
@@ -254,8 +265,8 @@ model CampaignActor {
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
 
-  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-    owner       User?        @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  campaign    Campaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  owner       User?        @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   sceneTokens SceneToken[]
 
   @@index([campaignId])
@@ -286,6 +297,7 @@ model SceneToken {
   @@index([campaignId])
   @@index([actorId])
 }
+
 model CampaignInvite {
   id              String       @id @default(uuid())
   campaignId      String

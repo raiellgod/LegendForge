@@ -6,12 +6,48 @@ const SYSTEM_NAME = "Meu sistema";
 const SYSTEM_SLUG = "meu-sistema";
 
 const stats = [
-  "Força",
-  "Destreza",
-  "Constituição",
-  "Inteligência",
-  "Sabedoria",
-  "Carisma",
+  {
+    name: "Força",
+    key: "strength",
+    shortName: "FOR",
+    description:
+      "Mede potência física, capacidade atlética bruta, carga e impacto corporal.",
+  },
+  {
+    name: "Destreza",
+    key: "dexterity",
+    shortName: "DES",
+    description:
+      "Mede agilidade, reflexos, precisão manual, equilíbrio e velocidade corporal.",
+  },
+  {
+    name: "Constituição",
+    key: "constitution",
+    shortName: "CON",
+    description:
+      "Mede vigor, resistência física, saúde, fôlego e tolerância a desgaste.",
+  },
+  {
+    name: "Inteligência",
+    key: "intelligence",
+    shortName: "INT",
+    description:
+      "Mede raciocínio, memória, estudo, lógica, análise e conhecimento técnico.",
+  },
+  {
+    name: "Sabedoria",
+    key: "wisdom",
+    shortName: "SAB",
+    description:
+      "Mede percepção, intuição, instinto, leitura emocional e sintonia com o ambiente.",
+  },
+  {
+    name: "Carisma",
+    key: "charisma",
+    shortName: "CAR",
+    description:
+      "Mede presença, força de personalidade, influência social, expressão e liderança.",
+  },
 ] as const;
 
 const skills = [
@@ -109,27 +145,44 @@ async function main() {
 
   const createdStats = new Map<string, string>();
 
-  for (const statName of stats) {
-    const stat = await prisma.stat.upsert({
-      where: {
-        systemId_name: {
-          systemId: system.id,
-          name: statName,
-        },
-      },
-      update: {},
-      create: {
+  for (const [index, statData] of stats.entries()) {
+  const stat = await prisma.stat.upsert({
+    where: {
+      systemId_name: {
         systemId: system.id,
-        name: statName,
+        name: statData.name,
       },
-    });
+    },
+    update: {
+      key: statData.key,
+      shortName: statData.shortName,
+      description: statData.description,
+      order: index + 1,
+    },
+    create: {
+      systemId: system.id,
+      name: statData.name,
+      key: statData.key,
+      shortName: statData.shortName,
+      description: statData.description,
+      order: index + 1,
+    },
+  });
 
-    createdStats.set(stat.name, stat.id);
+  createdStats.set(stat.name, stat.id);
 
-    console.log(`Atributo criado/validado: ${stat.name}`);
-  }
+  console.log(`Atributo criado/validado: ${stat.name}`);
+}
 
   for (const skill of skills) {
+
+    const skillKey = skill.name
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/(^-|-$)/g, "");
+
     const statId = createdStats.get(skill.statName);
 
     if (!statId) {
@@ -145,14 +198,20 @@ async function main() {
           name: skill.name,
         },
       },
-      update: {
-        statId,
-      },
-      create: {
-        systemId: system.id,
-        statId,
-        name: skill.name,
-      },
+     update: {
+  statId,
+  key: skillKey,
+  description: null,
+  order: skills.findIndex((currentSkill) => currentSkill.name === skill.name) + 1,
+},
+create: {
+  systemId: system.id,
+  statId,
+  name: skill.name,
+  key: skillKey,
+  description: null,
+  order: skills.findIndex((currentSkill) => currentSkill.name === skill.name) + 1,
+},
     });
 
     console.log(
