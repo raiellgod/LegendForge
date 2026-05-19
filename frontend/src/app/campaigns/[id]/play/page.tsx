@@ -665,11 +665,11 @@ export default function CampaignPlayPage() {
   const [sceneTokens, setSceneTokens] = useState<SceneToken[]>([]);
 
   const [draggingTokenId, setDraggingTokenId] = useState<string | null>(null);
-const [pendingTokenPosition, setPendingTokenPosition] = useState<{
-  tokenId: string;
-  x: number;
-  y: number;
-} | null>(null);
+  const [pendingTokenPosition, setPendingTokenPosition] = useState<{
+    tokenId: string;
+    x: number;
+    y: number;
+  } | null>(null);
 
   const [actionMessage, setActionMessage] = useState("");
   const [actionError, setActionError] = useState("");
@@ -704,11 +704,11 @@ const [pendingTokenPosition, setPendingTokenPosition] = useState<{
         setUser(loggedUser);
 
         const [campaign, participants, actors, tokens] = await Promise.all([
-  getCampaign(params.id),
-  getCampaignParticipants(params.id),
-  getCampaignActors(params.id),
-  getCampaignTokens(params.id),
-]);
+          getCampaign(params.id),
+          getCampaignParticipants(params.id),
+          getCampaignActors(params.id),
+          getCampaignTokens(params.id),
+        ]);
 
         const currentUserParticipant = participants.find(
           (participant) => participant.userId === loggedUser.id,
@@ -724,9 +724,9 @@ const [pendingTokenPosition, setPendingTokenPosition] = useState<{
         }
 
         setCampaign(campaign);
-setParticipants(participants);
-setCampaignActors(actors);
-setSceneTokens(tokens);
+        setParticipants(participants);
+        setCampaignActors(actors);
+        setSceneTokens(tokens);
       } catch (error) {
         console.error(error);
         setAccessDenied(true);
@@ -815,16 +815,16 @@ setSceneTokens(tokens);
   );
 
   function canMoveToken(token: SceneToken) {
-  if (isGM) {
-    return true;
-  }
+    if (isGM) {
+      return true;
+    }
 
-  if (!user) {
-    return false;
-  }
+    if (!user) {
+      return false;
+    }
 
-  return token.actor.ownerId === user.id;
-}
+    return token.actor.ownerId === user.id;
+  }
 
   function canCreateTokenForActor(actor: CampaignActor) {
     return isGM && actor.location === "TABLE";
@@ -1164,40 +1164,40 @@ setSceneTokens(tokens);
   }
 
   async function handleAddTokenToScene(actor: CampaignActor) {
-  if (!campaign || !canCreateTokenForActor(actor)) {
-    return;
+    if (!campaign || !canCreateTokenForActor(actor)) {
+      return;
+    }
+
+    setActionError("");
+    setActionMessage("");
+
+    const tokenCount = sceneTokens.length;
+    const nextX = 300 + ((tokenCount * 90) % 560);
+    const nextY = 340 + Math.floor(tokenCount / 6) * 90;
+
+    try {
+      const createdToken = await createSceneToken(campaign.id, actor.id, {
+        x: nextX,
+        y: nextY,
+        width: 80,
+        height: 80,
+        imageUrl: actor.portraitUrl,
+        imageFit: "COVER",
+      });
+
+      setSceneTokens((currentTokens) => [...currentTokens, createdToken]);
+
+      setActionMessage(`${createdToken.name} entrou na cena.`);
+    } catch (error) {
+      console.error(error);
+
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível adicionar o token à cena.",
+      );
+    }
   }
-
-  setActionError("");
-  setActionMessage("");
-
-  const tokenCount = sceneTokens.length;
-  const nextX = 300 + ((tokenCount * 90) % 560);
-  const nextY = 340 + Math.floor(tokenCount / 6) * 90;
-
-  try {
-    const createdToken = await createSceneToken(campaign.id, actor.id, {
-      x: nextX,
-      y: nextY,
-      width: 80,
-      height: 80,
-      imageUrl: actor.portraitUrl,
-      imageFit: "COVER",
-    });
-
-    setSceneTokens((currentTokens) => [...currentTokens, createdToken]);
-
-    setActionMessage(`${createdToken.name} entrou na cena.`);
-  } catch (error) {
-    console.error(error);
-
-    setActionError(
-      error instanceof Error
-        ? error.message
-        : "Não foi possível adicionar o token à cena.",
-    );
-  }
-}
 
   function handleStartTokenDrag(tokenId: string) {
     const token = sceneTokens.find((sceneToken) => sceneToken.id === tokenId);
@@ -1228,98 +1228,104 @@ setSceneTokens(tokens);
     const x = Math.round((event.clientX - scene.left) / scale);
     const y = Math.round((event.clientY - scene.top) / scale);
 
-      const nextX = Math.max(0, Math.min(x - draggingToken.width / 2, 1400 - draggingToken.width));
-  const nextY = Math.max(0, Math.min(y - draggingToken.height / 2, 900 - draggingToken.height));
-
-  setPendingTokenPosition({
-    tokenId: draggingToken.id,
-    x: nextX,
-    y: nextY,
-  });
-
-  setSceneTokens((currentTokens) =>
-    currentTokens.map((token) => {
-      if (token.id !== draggingTokenId) {
-        return token;
-      }
-
-      return {
-        ...token,
-        x: nextX,
-        y: nextY,
-      };
-    }),
-  );
-  }
-
-  async function handleStopTokenDrag() {
-  if (!campaign || !pendingTokenPosition) {
-    setDraggingTokenId(null);
-    return;
-  }
-
-  const positionToSave = pendingTokenPosition;
-
-  setDraggingTokenId(null);
-  setPendingTokenPosition(null);
-  setActionError("");
-
-  try {
-    const updatedToken = await updateSceneToken(
-      campaign.id,
-      positionToSave.tokenId,
-      {
-        x: Math.round(positionToSave.x),
-        y: Math.round(positionToSave.y),
-      },
+    const nextX = Math.max(
+      0,
+      Math.min(x - draggingToken.width / 2, 1400 - draggingToken.width),
     );
+    const nextY = Math.max(
+      0,
+      Math.min(y - draggingToken.height / 2, 900 - draggingToken.height),
+    );
+
+    setPendingTokenPosition({
+      tokenId: draggingToken.id,
+      x: nextX,
+      y: nextY,
+    });
 
     setSceneTokens((currentTokens) =>
       currentTokens.map((token) => {
-        if (token.id !== updatedToken.id) {
+        if (token.id !== draggingTokenId) {
           return token;
         }
 
-        return updatedToken;
+        return {
+          ...token,
+          x: nextX,
+          y: nextY,
+        };
       }),
     );
-  } catch (error) {
-    console.error(error);
-
-    setActionError(
-      error instanceof Error
-        ? error.message
-        : "Não foi possível salvar a posição do token.",
-    );
   }
-}
+
+  async function handleStopTokenDrag() {
+    if (!campaign || !pendingTokenPosition) {
+      setDraggingTokenId(null);
+      return;
+    }
+
+    const positionToSave = pendingTokenPosition;
+
+    setDraggingTokenId(null);
+    setPendingTokenPosition(null);
+    setActionError("");
+
+    try {
+      const updatedToken = await updateSceneToken(
+        campaign.id,
+        positionToSave.tokenId,
+        {
+          x: Math.round(positionToSave.x),
+          y: Math.round(positionToSave.y),
+        },
+      );
+
+      setSceneTokens((currentTokens) =>
+        currentTokens.map((token) => {
+          if (token.id !== updatedToken.id) {
+            return token;
+          }
+
+          return updatedToken;
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível salvar a posição do token.",
+      );
+    }
+  }
 
   async function handleRemoveTokenFromScene(tokenId: string) {
-  if (!campaign || !isGM) {
-    return;
+    if (!campaign || !isGM) {
+      return;
+    }
+
+    setActionError("");
+    setActionMessage("");
+
+    try {
+      const deletedTokenId = await deleteSceneToken(campaign.id, tokenId);
+
+      setSceneTokens((currentTokens) =>
+        currentTokens.filter((token) => token.id !== deletedTokenId),
+      );
+
+      setActionMessage("Token removido da cena.");
+    } catch (error) {
+      console.error(error);
+
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível remover o token da cena.",
+      );
+    }
   }
-
-  setActionError("");
-  setActionMessage("");
-
-  try {
-    const deletedTokenId = await deleteSceneToken(campaign.id, tokenId);
-
-    setSceneTokens((currentTokens) =>
-      currentTokens.filter((token) => token.id !== deletedTokenId),
-    );
-
-    setActionMessage("Token removido da cena.");
-  } catch (error) {
-    console.error(error);
-
-    setActionError(
-      error instanceof Error
-        ? error.message
-        : "Não foi possível remover o token da cena.",
-    );
-  }
-}
 
   async function handleBringActorToTable(actor: CampaignActor) {
     if (!campaign || !isGM || actor.type === "PLAYER_CHARACTER") {
@@ -1454,7 +1460,7 @@ setSceneTokens(tokens);
   if (accessDenied || !user || !campaign || !canAccessTable) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#120816] px-6 text-white">
-        <div className="max-w-md rounded-2xl border border-forge-gold/40 bg-black/40 p-6 text-center shadow-[12px_12px_0_rgba(0,0,0,0.35)]">
+        <div className="max-w-md rounded-2xl border border-forge-gold/40 bg-black/40 p-6 text-center shadow-[-12px_12px_0_rgba(0,0,0,0.35)]">
           <h1 className="text-2xl font-black text-forge-gold">Acesso negado</h1>
 
           <p className="mt-3 text-sm font-semibold text-white/65">
@@ -1476,7 +1482,7 @@ setSceneTokens(tokens);
   return (
     <main className="min-h-screen overflow-hidden bg-[#120816] text-white">
       <div className="flex h-screen flex-col">
-        <header className="flex h-[72px] shrink-0 items-center justify-between border-b border-forge-gold/40 bg-[#1a0d20]/95 px-6 shadow-[0_8px_24px_rgba(0,0,0,0.45)]">
+        <header className="flex h-[72px] shrink-0 items-center justify-between border-b border-forge-gold/40 bg-[#1a0d20]/95 px-6 shadow-[-0_8px_24px_rgba(0,0,0,0.45)]">
           <div className="flex items-center gap-4">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/45">
@@ -1529,7 +1535,7 @@ setSceneTokens(tokens);
 
               <button
                 type="button"
-                className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border-2 border-forge-gold bg-forge-purple text-sm font-black text-forge-gold shadow-[5px_5px_0_rgba(0,0,0,0.35)] transition hover:-translate-y-0.5 hover:shadow-[7px_7px_0_rgba(0,0,0,0.35)]"
+                className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border-2 border-forge-gold bg-forge-purple text-sm font-black text-forge-gold shadow-[-5px_5px_0_rgba(0,0,0,0.35)] transition hover:-translate-y-0.5 hover:shadow-[-7px_7px_0_rgba(0,0,0,0.35)]"
                 aria-label="Abrir menu do usuário"
               >
                 {user.image ? (
@@ -1584,7 +1590,7 @@ setSceneTokens(tokens);
                     title={`${item.label} — ${item.description}`}
                     className={`flex h-12 w-12 items-center justify-center rounded-xl border text-lg font-black transition ${
                       isActive
-                        ? "border-forge-gold bg-forge-purple text-forge-gold shadow-[4px_4px_0_rgba(0,0,0,0.45)]"
+                        ? "border-forge-gold bg-forge-purple text-forge-gold shadow-[-4px_4px_0_rgba(0,0,0,0.45)]"
                         : "border-white/10 bg-black/30 text-white/65 hover:border-forge-gold/70 hover:text-forge-gold"
                     }`}
                   >
@@ -1607,7 +1613,7 @@ setSceneTokens(tokens);
           </aside>
 
           <section className="relative min-h-0 overflow-hidden bg-[#24142a]">
-            <div className="absolute left-5 top-5 z-10 rounded-xl border border-forge-gold/35 bg-black/50 px-4 py-3 shadow-[6px_6px_0_rgba(0,0,0,0.35)] backdrop-blur">
+            <div className="absolute left-5 top-5 z-10 rounded-xl border border-forge-gold/35 bg-black/50 px-4 py-3 shadow-[-6px_6px_0_rgba(0,0,0,0.35)] backdrop-blur">
               <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/45">
                 Ferramenta ativa
               </p>
@@ -1622,7 +1628,7 @@ setSceneTokens(tokens);
                 type="button"
                 onClick={() => setIsLeftToolbarOpen(true)}
                 title="Mostrar ferramentas"
-                className="absolute left-3 top-1/2 z-20 flex h-12 w-8 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-forge-gold/40 bg-black/55 text-lg font-black text-forge-gold shadow-[6px_6px_0_rgba(0,0,0,0.35)] transition hover:bg-forge-purple"
+                className="absolute left-3 top-1/2 z-20 flex h-12 w-8 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-forge-gold/40 bg-black/55 text-lg font-black text-forge-gold shadow-[-6px_6px_0_rgba(0,0,0,0.35)] transition hover:bg-forge-purple"
                 aria-label="Mostrar ferramentas"
               >
                 ›
@@ -1643,7 +1649,7 @@ setSceneTokens(tokens);
 
             <div className="absolute inset-0 flex items-center justify-center p-10">
               <div
-                className="relative h-[900px] w-[1400px] origin-center overflow-hidden rounded-2xl border border-forge-gold/35 bg-[#e4d0a3] shadow-[18px_18px_0_rgba(0,0,0,0.35)] transition-transform"
+                className="relative h-[900px] w-[1400px] origin-center overflow-hidden rounded-2xl border border-forge-gold/35 bg-[#e4d0a3] shadow-[-18px_18px_5px_rgba(0,0,0,0.35)] transition-transform"
                 style={{
                   transform: `scale(${zoom / 100})`,
                 }}
@@ -1665,30 +1671,34 @@ setSceneTokens(tokens);
                     }}
                   >
                     <button
-  type="button"
-  title={`${token.name} — ${getCharacterTypeLabel(token.type)}`}
-  onPointerDown={() => handleStartTokenDrag(token.id)}
-  className={`flex items-center justify-center overflow-hidden rounded-full border-2 text-xl font-black shadow-[6px_6px_0_rgba(0,0,0,0.35)] transition ${
-    canMoveToken(token)
-      ? "cursor-grab active:cursor-grabbing"
-      : "cursor-not-allowed opacity-75"
-  } ${getCharacterTypeStyles(token.type)}`}
-  style={{
-    width: token.width,
-    height: token.height,
-  }}
->
-  {token.imageUrl ? (
-    <img
-      src={token.imageUrl}
-      alt={token.name}
-      className={`h-full w-full ${getTokenImageFitClass(token.imageFit)}`}
-      draggable={false}
-    />
-  ) : (
-    token.initials
-  )}
-</button>
+                      type="button"
+                      title={`${token.name} — ${getCharacterTypeLabel(token.type)}`}
+                      onPointerDown={() => handleStartTokenDrag(token.id)}
+                      className={`flex items-center justify-center overflow-hidden rounded-full border-2 text-xl font-black shadow-[-6px_6px_12px_rgba(0,0,0,0.42)] transition ${
+                        draggingTokenId === token.id
+                          ? "scale-105 shadow-[-10px_10px_18px_rgba(0,0,0,0.5)]"
+                          : ""
+                      } ${
+                        canMoveToken(token)
+                          ? "cursor-grab active:cursor-grabbing"
+                          : "cursor-not-allowed opacity-75"
+                      } ${getCharacterTypeStyles(token.type)}`}
+                      style={{
+                        width: token.width,
+                        height: token.height,
+                      }}
+                    >
+                      {token.imageUrl ? (
+                        <img
+                          src={token.imageUrl}
+                          alt={token.name}
+                          className={`h-full w-full ${getTokenImageFitClass(token.imageFit)}`}
+                          draggable={false}
+                        />
+                      ) : (
+                        token.initials
+                      )}
+                    </button>
                   </div>
                 ))}
 
@@ -2234,12 +2244,12 @@ setSceneTokens(tokens);
                     {isGM && (
                       <div className="flex shrink-0 gap-2">
                         <button
-  type="button"
-  onClick={() => setIsLibraryModalOpen(true)}
-  className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
->
-  Biblioteca
-</button>
+                          type="button"
+                          onClick={() => setIsLibraryModalOpen(true)}
+                          className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
+                        >
+                          Biblioteca
+                        </button>
 
                         <button
                           type="button"
@@ -2741,13 +2751,13 @@ setSceneTokens(tokens);
       </div>
 
       {isLibraryModalOpen && (
-  <ActorLibraryModal
-    actors={libraryActors}
-    onBringToTable={handleBringActorToTable}
-    onClose={() => setIsLibraryModalOpen(false)}
-  />
-)}
-      
+        <ActorLibraryModal
+          actors={libraryActors}
+          onBringToTable={handleBringActorToTable}
+          onClose={() => setIsLibraryModalOpen(false)}
+        />
+      )}
+
       {actionActor && (
         <ActorActionModal
           actor={actionActor}
@@ -2762,8 +2772,8 @@ setSceneTokens(tokens);
             setActionActor(null);
           }}
           onAddToken={async () => {
-  await handleAddTokenToScene(actionActor);
-}}
+            await handleAddTokenToScene(actionActor);
+          }}
           onRemoveToken={handleRemoveTokenFromScene}
           onReturnToLibrary={async () => {
             await handleReturnActorToLibrary(actionActor);
@@ -2782,7 +2792,7 @@ setSceneTokens(tokens);
 
       {isExitModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-forge-gold/50 bg-[#120816] p-6 shadow-[16px_16px_0_rgba(0,0,0,0.45)]">
+          <div className="w-full max-w-md rounded-2xl border border-forge-gold/50 bg-[#120816] p-6 shadow-[-16px_16px_0_rgba(0,0,0,0.45)]">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-[11px] font-black uppercase tracking-[0.22em] text-white/40">
@@ -2879,7 +2889,7 @@ function ActorGroupSection({
                 className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-black/30 p-3 text-left transition hover:border-forge-gold/50 hover:bg-forge-purple/20"
               >
                 <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border text-sm font-black shadow-[3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border text-sm font-black shadow-[-3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
                     actor.type,
                   )}`}
                 >
@@ -2943,7 +2953,7 @@ function ActorLibraryModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-6 backdrop-blur-sm">
-      <div className="flex max-h-[82vh] w-full max-w-md flex-col rounded-2xl border border-forge-gold/40 bg-[#120816] shadow-[14px_14px_0_rgba(0,0,0,0.45)]">
+      <div className="flex max-h-[82vh] w-full max-w-md flex-col rounded-2xl border border-forge-gold/40 bg-[#120816] shadow-[-14px_14px_0_rgba(0,0,0,0.45)]">
         <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 p-5">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
@@ -2972,9 +2982,7 @@ function ActorLibraryModal({
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-5">
           {actors.length === 0 ? (
             <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <p className="text-sm font-black text-white">
-                Biblioteca vazia
-              </p>
+              <p className="text-sm font-black text-white">Biblioteca vazia</p>
 
               <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
                 Quando o Mestre devolver NPCs ou criaturas para a biblioteca,
@@ -2989,7 +2997,7 @@ function ActorLibraryModal({
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-sm font-black shadow-[3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-sm font-black shadow-[-3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
                       actor.type,
                     )}`}
                   >
@@ -3079,11 +3087,11 @@ function ActorActionModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-6 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl border border-forge-gold/40 bg-[#120816] p-5 shadow-[14px_14px_0_rgba(0,0,0,0.45)]">
+      <div className="w-full max-w-sm rounded-2xl border border-forge-gold/40 bg-[#120816] p-5 shadow-[-14px_14px_0_rgba(0,0,0,0.45)]">
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-base font-black shadow-[4px_4px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
+              className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-base font-black shadow-[-4px_4px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
                 actor.type,
               )}`}
             >
@@ -3200,10 +3208,10 @@ function ActorActionModal({
                     </div>
 
                     <button
-  type="button"
-  onClick={async () => {
-    await onRemoveToken(token.id);
-  }}
+                      type="button"
+                      onClick={async () => {
+                        await onRemoveToken(token.id);
+                      }}
                       className="shrink-0 rounded-md border border-red-500/40 px-2 py-1 text-[9px] font-black text-red-300 transition hover:bg-red-950/40"
                     >
                       Remover
@@ -3241,12 +3249,12 @@ function ActorSheetModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6 backdrop-blur-sm">
-      <div className="w-full max-w-3xl overflow-hidden rounded-2xl border border-forge-gold/50 bg-[#120816] shadow-[18px_18px_0_rgba(0,0,0,0.5)]">
+      <div className="w-full max-w-3xl overflow-hidden rounded-2xl border border-forge-gold/50 bg-[#120816] shadow-[-18px_18px_0_rgba(0,0,0,0.5)]">
         <div className="flex items-start justify-between gap-4 border-b border-forge-gold/25 bg-[#1a0d20] p-5">
           <div className="flex min-w-0 items-center gap-4">
             {actor.portraitUrl ? (
               <div
-                className="h-16 w-16 shrink-0 rounded-xl border border-forge-gold/40 bg-cover bg-center shadow-[5px_5px_0_rgba(0,0,0,0.35)]"
+                className="h-16 w-16 shrink-0 rounded-xl border border-forge-gold/40 bg-cover bg-center shadow-[-5px_5px_0_rgba(0,0,0,0.35)]"
                 style={{
                   backgroundImage: `url(${actor.portraitUrl})`,
                 }}
@@ -3254,7 +3262,7 @@ function ActorSheetModal({
               />
             ) : (
               <div
-                className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border text-2xl font-black shadow-[5px_5px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
+                className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border text-2xl font-black shadow-[-5px_5px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
                   actor.type,
                 )}`}
               >
