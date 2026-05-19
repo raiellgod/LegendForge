@@ -908,6 +908,427 @@ export async function campaignRoutes(app: FastifyInstance) {
     },
   });
 
+    app.withTypeProvider<ZodTypeProvider>().route({
+    method: "PATCH",
+    url: "/campaigns/:campaignId/tokens/:tokenId",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Update a scene token",
+      params: z.object({
+        campaignId: z.string().uuid("Invalid campaign id"),
+        tokenId: z.string().uuid("Invalid token id"),
+      }),
+      body: z
+        .object({
+          name: z.string().min(1).max(80).optional(),
+          initials: z.string().min(1).max(3).optional(),
+          imageUrl: z.string().nullable().optional(),
+          imageFit: z.enum(["COVER", "CONTAIN", "FILL"]).optional(),
+          x: z.number().int().min(0).optional(),
+          y: z.number().int().min(0).optional(),
+          width: z.number().int().min(24).max(512).optional(),
+          height: z.number().int().min(24).max(512).optional(),
+        })
+        .refine(
+          (data) =>
+            data.name !== undefined ||
+            data.initials !== undefined ||
+            data.imageUrl !== undefined ||
+            data.imageFit !== undefined ||
+            data.x !== undefined ||
+            data.y !== undefined ||
+            data.width !== undefined ||
+            data.height !== undefined,
+          {
+            message: "At least one field must be provided",
+          },
+        ),
+      response: {
+        200: z.object({
+          token: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            actorId: z.string(),
+            name: z.string(),
+            initials: z.string(),
+            type: z.string(),
+            imageUrl: z.string().nullable(),
+            imageFit: z.string(),
+            x: z.number(),
+            y: z.number(),
+            width: z.number(),
+            height: z.number(),
+            createdAt: z.string(),
+            updatedAt: z.string(),
+            actor: z.object({
+              id: z.string(),
+              ownerId: z.string().nullable(),
+              type: z.string(),
+              location: z.string(),
+              name: z.string(),
+              initials: z.string(),
+              portraitUrl: z.string().nullable(),
+            }),
+          }),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.campaignId,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isGM = currentParticipant?.role === "GM";
+
+      const token = await prisma.sceneToken.findFirst({
+        where: {
+          id: request.params.tokenId,
+          campaignId: campaign.id,
+        },
+        include: {
+          actor: {
+            select: {
+              id: true,
+              ownerId: true,
+              type: true,
+              location: true,
+              name: true,
+              initials: true,
+              portraitUrl: true,
+            },
+          },
+        },
+      });
+
+      if (!token) {
+        return reply.status(404).send({
+          message: "Token not found",
+        });
+      }
+
+      if (!isGM) {
+        const isActorOwner = token.actor.ownerId === session.user.id;
+
+        if (!isActorOwner) {
+          return reply.status(403).send({
+            message: "Players can only move their own tokens",
+          });
+        }
+
+        const playerTriedToEditVisualFields =
+          request.body.name !== undefined ||
+          request.body.initials !== undefined ||
+          request.body.imageUrl !== undefined ||
+          request.body.imageFit !== undefined ||
+          request.body.width !== undefined ||
+          request.body.height !== undefined;
+
+        if (playerTriedToEditVisualFields) {
+          return reply.status(403).send({
+            message: "Players can only update token position",
+          });
+        }
+      }
+
+      const updatedToken = await prisma.sceneToken.update({
+        where: {
+          id: token.id,
+        },
+        data: {
+          name: request.body.name,
+          initials: request.body.initials,
+          imageUrl: request.body.imageUrl,
+          imageFit: request.body.imageFit,
+          x: request.body.x,
+          y: request.body.y,
+          width: request.body.width,
+          height: request.body.height,
+        },
+        include: {
+          actor: {
+            select: {
+              id: true,
+              ownerId: true,
+              type: true,
+              location: true,
+              name: true,
+              initials: true,
+              portraitUrl: true,
+            },
+          },
+        },
+      });
+
+      return reply.status(200).send({
+        token: {
+          id: updatedToken.id,
+          campaignId: updatedToken.campaignId,
+          actorId: updatedToken.actorId,
+          name: updatedToken.name,
+          initials: updatedToken.initials,
+          type: updatedToken.type,
+          imageUrl: updatedToken.imageUrl,
+          imageFit: updatedToken.imageFit,
+          x: updatedToken.x,
+          y: updatedToken.y,
+          width: updatedToken.width,
+          height: updatedToken.height,
+          createdAt: updatedToken.createdAt.toISOString(),
+          updatedAt: updatedToken.updatedAt.toISOString(),
+          actor: {
+            id: updatedToken.actor.id,
+            ownerId: updatedToken.actor.ownerId,
+            type: updatedToken.actor.type,
+            location: updatedToken.actor.location,
+            name: updatedToken.actor.name,
+            initials: updatedToken.actor.initials,
+            portraitUrl: updatedToken.actor.portraitUrl,
+          },
+        },
+      });
+    },
+  });
+
+    app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/campaigns/:id/tokens",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Create a scene token",
+      params: z.object({
+        id: z.string().uuid("Invalid campaign id"),
+      }),
+      body: z.object({
+        actorId: z.string().uuid("Invalid actor id"),
+        name: z.string().min(1).max(80).optional(),
+        initials: z.string().min(1).max(3).optional(),
+        imageUrl: z.string().nullable().optional(),
+        imageFit: z.enum(["COVER", "CONTAIN", "FILL"]).optional(),
+        x: z.number().int().min(0).optional(),
+        y: z.number().int().min(0).optional(),
+        width: z.number().int().min(24).max(512).optional(),
+        height: z.number().int().min(24).max(512).optional(),
+      }),
+      response: {
+        201: z.object({
+          token: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            actorId: z.string(),
+            name: z.string(),
+            initials: z.string(),
+            type: z.string(),
+            imageUrl: z.string().nullable(),
+            imageFit: z.string(),
+            x: z.number(),
+            y: z.number(),
+            width: z.number(),
+            height: z.number(),
+            createdAt: z.string(),
+            updatedAt: z.string(),
+            actor: z.object({
+              id: z.string(),
+              ownerId: z.string().nullable(),
+              type: z.string(),
+              location: z.string(),
+              name: z.string(),
+              initials: z.string(),
+              portraitUrl: z.string().nullable(),
+            }),
+          }),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+        409: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.id,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isGM = currentParticipant?.role === "GM";
+
+      if (!isGM) {
+        return reply.status(403).send({
+          message: "Only GMs can create scene tokens",
+        });
+      }
+
+      const actor = await prisma.campaignActor.findFirst({
+        where: {
+          id: request.body.actorId,
+          campaignId: campaign.id,
+        },
+      });
+
+      if (!actor) {
+        return reply.status(404).send({
+          message: "Actor not found",
+        });
+      }
+
+      if (actor.location !== "TABLE") {
+        return reply.status(409).send({
+          message: "Only actors on the table can receive scene tokens",
+        });
+      }
+
+      const token = await prisma.sceneToken.create({
+        data: {
+          campaignId: campaign.id,
+          actorId: actor.id,
+          name: request.body.name ?? actor.name,
+          initials: request.body.initials ?? actor.initials,
+          type: actor.type,
+          imageUrl: request.body.imageUrl ?? actor.portraitUrl,
+          imageFit: request.body.imageFit ?? "COVER",
+          x: request.body.x ?? 300,
+          y: request.body.y ?? 340,
+          width: request.body.width ?? 64,
+          height: request.body.height ?? 64,
+        },
+        include: {
+          actor: {
+            select: {
+              id: true,
+              ownerId: true,
+              type: true,
+              location: true,
+              name: true,
+              initials: true,
+              portraitUrl: true,
+            },
+          },
+        },
+      });
+
+      return reply.status(201).send({
+        token: {
+          id: token.id,
+          campaignId: token.campaignId,
+          actorId: token.actorId,
+          name: token.name,
+          initials: token.initials,
+          type: token.type,
+          imageUrl: token.imageUrl,
+          imageFit: token.imageFit,
+          x: token.x,
+          y: token.y,
+          width: token.width,
+          height: token.height,
+          createdAt: token.createdAt.toISOString(),
+          updatedAt: token.updatedAt.toISOString(),
+          actor: {
+            id: token.actor.id,
+            ownerId: token.actor.ownerId,
+            type: token.actor.type,
+            location: token.actor.location,
+            name: token.actor.name,
+            initials: token.actor.initials,
+            portraitUrl: token.actor.portraitUrl,
+          },
+        },
+      });
+    },
+  });
+
   app.withTypeProvider<ZodTypeProvider>().route({
     method: "PATCH",
     url: "/campaigns/:campaignId/actors/:actorId",
