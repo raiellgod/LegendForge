@@ -62,6 +62,7 @@ export const ModelName = {
   GameSession: 'GameSession',
   Participant: 'Participant',
   CampaignActor: 'CampaignActor',
+  SceneToken: 'SceneToken',
   CampaignInvite: 'CampaignInvite',
   CampaignLog: 'CampaignLog'
 } as const
@@ -233,6 +234,26 @@ export const CampaignActorScalarFieldEnum = {
 } as const
 
 export type CampaignActorScalarFieldEnum = (typeof CampaignActorScalarFieldEnum)[keyof typeof CampaignActorScalarFieldEnum]
+
+
+export const SceneTokenScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  actorId: 'actorId',
+  name: 'name',
+  initials: 'initials',
+  type: 'type',
+  imageUrl: 'imageUrl',
+  imageFit: 'imageFit',
+  x: 'x',
+  y: 'y',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SceneTokenScalarFieldEnum = (typeof SceneTokenScalarFieldEnum)[keyof typeof SceneTokenScalarFieldEnum]
 
 
 export const CampaignInviteScalarFieldEnum = {

@@ -926,8 +926,8 @@ export async function campaignRoutes(app: FastifyInstance) {
           imageFit: z.enum(["COVER", "CONTAIN", "FILL"]).optional(),
           x: z.number().int().min(0).optional(),
           y: z.number().int().min(0).optional(),
-          width: z.number().int().min(24).max(512).optional(),
-          height: z.number().int().min(24).max(512).optional(),
+          width: z.number().int().min(40).max(512).optional(),
+          height: z.number().int().min(40).max(512).optional(),
         })
         .refine(
           (data) =>
@@ -1260,8 +1260,8 @@ export async function campaignRoutes(app: FastifyInstance) {
         imageFit: z.enum(["COVER", "CONTAIN", "FILL"]).optional(),
         x: z.number().int().min(0).optional(),
         y: z.number().int().min(0).optional(),
-        width: z.number().int().min(24).max(512).optional(),
-        height: z.number().int().min(24).max(512).optional(),
+        width: z.number().int().min(40).max(512).optional(),
+        height: z.number().int().min(40).max(512).optional(),
       }),
       response: {
         201: z.object({
@@ -1387,8 +1387,8 @@ export async function campaignRoutes(app: FastifyInstance) {
           imageFit: request.body.imageFit ?? "COVER",
           x: request.body.x ?? 300,
           y: request.body.y ?? 340,
-          width: request.body.width ?? 64,
-          height: request.body.height ?? 64,
+          width: request.body.width ?? 80,
+          height: request.body.height ?? 80,
         },
         include: {
           actor: {

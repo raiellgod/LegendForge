@@ -232,6 +232,7 @@ export type CampaignActorWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"CampaignActor"> | Date | string
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
   owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  sceneTokens?: Prisma.SceneTokenListRelationFilter
 }
 
 export type CampaignActorOrderByWithRelationInput = {
@@ -248,6 +249,7 @@ export type CampaignActorOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   campaign?: Prisma.CampaignOrderByWithRelationInput
   owner?: Prisma.UserOrderByWithRelationInput
+  sceneTokens?: Prisma.SceneTokenOrderByRelationAggregateInput
 }
 
 export type CampaignActorWhereUniqueInput = Prisma.AtLeast<{
@@ -267,6 +269,7 @@ export type CampaignActorWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"CampaignActor"> | Date | string
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
   owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  sceneTokens?: Prisma.SceneTokenListRelationFilter
 }, "id">
 
 export type CampaignActorOrderByWithAggregationInput = {
@@ -315,6 +318,7 @@ export type CampaignActorCreateInput = {
   updatedAt?: Date | string
   campaign: Prisma.CampaignCreateNestedOneWithoutActorsInput
   owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
 }
 
 export type CampaignActorUncheckedCreateInput = {
@@ -329,6 +333,7 @@ export type CampaignActorUncheckedCreateInput = {
   portraitUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type CampaignActorUpdateInput = {
@@ -343,6 +348,7 @@ export type CampaignActorUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutActorsNestedInput
   owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateInput = {
@@ -357,6 +363,7 @@ export type CampaignActorUncheckedUpdateInput = {
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type CampaignActorCreateManyInput = {
@@ -451,6 +458,11 @@ export type CampaignActorMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type CampaignActorScalarRelationFilter = {
+  is?: Prisma.CampaignActorWhereInput
+  isNot?: Prisma.CampaignActorWhereInput
+}
+
 export type CampaignActorCreateNestedManyWithoutOwnerInput = {
   create?: Prisma.XOR<Prisma.CampaignActorCreateWithoutOwnerInput, Prisma.CampaignActorUncheckedCreateWithoutOwnerInput> | Prisma.CampaignActorCreateWithoutOwnerInput[] | Prisma.CampaignActorUncheckedCreateWithoutOwnerInput[]
   connectOrCreate?: Prisma.CampaignActorCreateOrConnectWithoutOwnerInput | Prisma.CampaignActorCreateOrConnectWithoutOwnerInput[]
@@ -543,6 +555,20 @@ export type EnumCampaignActorLocationFieldUpdateOperationsInput = {
   set?: $Enums.CampaignActorLocation
 }
 
+export type CampaignActorCreateNestedOneWithoutSceneTokensInput = {
+  create?: Prisma.XOR<Prisma.CampaignActorCreateWithoutSceneTokensInput, Prisma.CampaignActorUncheckedCreateWithoutSceneTokensInput>
+  connectOrCreate?: Prisma.CampaignActorCreateOrConnectWithoutSceneTokensInput
+  connect?: Prisma.CampaignActorWhereUniqueInput
+}
+
+export type CampaignActorUpdateOneRequiredWithoutSceneTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignActorCreateWithoutSceneTokensInput, Prisma.CampaignActorUncheckedCreateWithoutSceneTokensInput>
+  connectOrCreate?: Prisma.CampaignActorCreateOrConnectWithoutSceneTokensInput
+  upsert?: Prisma.CampaignActorUpsertWithoutSceneTokensInput
+  connect?: Prisma.CampaignActorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignActorUpdateToOneWithWhereWithoutSceneTokensInput, Prisma.CampaignActorUpdateWithoutSceneTokensInput>, Prisma.CampaignActorUncheckedUpdateWithoutSceneTokensInput>
+}
+
 export type CampaignActorCreateWithoutOwnerInput = {
   id?: string
   type: $Enums.CampaignActorType
@@ -554,6 +580,7 @@ export type CampaignActorCreateWithoutOwnerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   campaign: Prisma.CampaignCreateNestedOneWithoutActorsInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
 }
 
 export type CampaignActorUncheckedCreateWithoutOwnerInput = {
@@ -567,6 +594,7 @@ export type CampaignActorUncheckedCreateWithoutOwnerInput = {
   portraitUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type CampaignActorCreateOrConnectWithoutOwnerInput = {
@@ -623,6 +651,7 @@ export type CampaignActorCreateWithoutCampaignInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
 }
 
 export type CampaignActorUncheckedCreateWithoutCampaignInput = {
@@ -636,6 +665,7 @@ export type CampaignActorUncheckedCreateWithoutCampaignInput = {
   portraitUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type CampaignActorCreateOrConnectWithoutCampaignInput = {
@@ -664,6 +694,78 @@ export type CampaignActorUpdateManyWithWhereWithoutCampaignInput = {
   data: Prisma.XOR<Prisma.CampaignActorUpdateManyMutationInput, Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignInput>
 }
 
+export type CampaignActorCreateWithoutSceneTokensInput = {
+  id?: string
+  type: $Enums.CampaignActorType
+  location?: $Enums.CampaignActorLocation
+  name: string
+  initials: string
+  description?: string | null
+  portraitUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  campaign: Prisma.CampaignCreateNestedOneWithoutActorsInput
+  owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
+}
+
+export type CampaignActorUncheckedCreateWithoutSceneTokensInput = {
+  id?: string
+  campaignId: string
+  ownerId?: string | null
+  type: $Enums.CampaignActorType
+  location?: $Enums.CampaignActorLocation
+  name: string
+  initials: string
+  description?: string | null
+  portraitUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CampaignActorCreateOrConnectWithoutSceneTokensInput = {
+  where: Prisma.CampaignActorWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignActorCreateWithoutSceneTokensInput, Prisma.CampaignActorUncheckedCreateWithoutSceneTokensInput>
+}
+
+export type CampaignActorUpsertWithoutSceneTokensInput = {
+  update: Prisma.XOR<Prisma.CampaignActorUpdateWithoutSceneTokensInput, Prisma.CampaignActorUncheckedUpdateWithoutSceneTokensInput>
+  create: Prisma.XOR<Prisma.CampaignActorCreateWithoutSceneTokensInput, Prisma.CampaignActorUncheckedCreateWithoutSceneTokensInput>
+  where?: Prisma.CampaignActorWhereInput
+}
+
+export type CampaignActorUpdateToOneWithWhereWithoutSceneTokensInput = {
+  where?: Prisma.CampaignActorWhereInput
+  data: Prisma.XOR<Prisma.CampaignActorUpdateWithoutSceneTokensInput, Prisma.CampaignActorUncheckedUpdateWithoutSceneTokensInput>
+}
+
+export type CampaignActorUpdateWithoutSceneTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCampaignActorTypeFieldUpdateOperationsInput | $Enums.CampaignActorType
+  location?: Prisma.EnumCampaignActorLocationFieldUpdateOperationsInput | $Enums.CampaignActorLocation
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaign?: Prisma.CampaignUpdateOneRequiredWithoutActorsNestedInput
+  owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
+}
+
+export type CampaignActorUncheckedUpdateWithoutSceneTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumCampaignActorTypeFieldUpdateOperationsInput | $Enums.CampaignActorType
+  location?: Prisma.EnumCampaignActorLocationFieldUpdateOperationsInput | $Enums.CampaignActorLocation
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type CampaignActorCreateManyOwnerInput = {
   id?: string
   campaignId: string
@@ -688,6 +790,7 @@ export type CampaignActorUpdateWithoutOwnerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutActorsNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateWithoutOwnerInput = {
@@ -701,6 +804,7 @@ export type CampaignActorUncheckedUpdateWithoutOwnerInput = {
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateManyWithoutOwnerInput = {
@@ -740,6 +844,7 @@ export type CampaignActorUpdateWithoutCampaignInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateWithoutCampaignInput = {
@@ -753,6 +858,7 @@ export type CampaignActorUncheckedUpdateWithoutCampaignInput = {
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateManyWithoutCampaignInput = {
@@ -769,6 +875,35 @@ export type CampaignActorUncheckedUpdateManyWithoutCampaignInput = {
 }
 
 
+/**
+ * Count Type CampaignActorCountOutputType
+ */
+
+export type CampaignActorCountOutputType = {
+  sceneTokens: number
+}
+
+export type CampaignActorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  sceneTokens?: boolean | CampaignActorCountOutputTypeCountSceneTokensArgs
+}
+
+/**
+ * CampaignActorCountOutputType without action
+ */
+export type CampaignActorCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampaignActorCountOutputType
+   */
+  select?: Prisma.CampaignActorCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CampaignActorCountOutputType without action
+ */
+export type CampaignActorCountOutputTypeCountSceneTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SceneTokenWhereInput
+}
+
 
 export type CampaignActorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -784,6 +919,8 @@ export type CampaignActorSelect<ExtArgs extends runtime.Types.Extensions.Interna
   updatedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   owner?: boolean | Prisma.CampaignActor$ownerArgs<ExtArgs>
+  sceneTokens?: boolean | Prisma.CampaignActor$sceneTokensArgs<ExtArgs>
+  _count?: boolean | Prisma.CampaignActorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaignActor"]>
 
 export type CampaignActorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -836,6 +973,8 @@ export type CampaignActorOmit<ExtArgs extends runtime.Types.Extensions.InternalA
 export type CampaignActorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   owner?: boolean | Prisma.CampaignActor$ownerArgs<ExtArgs>
+  sceneTokens?: boolean | Prisma.CampaignActor$sceneTokensArgs<ExtArgs>
+  _count?: boolean | Prisma.CampaignActorCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CampaignActorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
@@ -851,6 +990,7 @@ export type $CampaignActorPayload<ExtArgs extends runtime.Types.Extensions.Inter
   objects: {
     campaign: Prisma.$CampaignPayload<ExtArgs>
     owner: Prisma.$UserPayload<ExtArgs> | null
+    sceneTokens: Prisma.$SceneTokenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1260,6 +1400,7 @@ export interface Prisma__CampaignActorClient<T, Null = never, ExtArgs extends ru
   readonly [Symbol.toStringTag]: "PrismaPromise"
   campaign<T extends Prisma.CampaignDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignDefaultArgs<ExtArgs>>): Prisma.Prisma__CampaignClient<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   owner<T extends Prisma.CampaignActor$ownerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignActor$ownerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  sceneTokens<T extends Prisma.CampaignActor$sceneTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignActor$sceneTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SceneTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1712,6 +1853,30 @@ export type CampaignActor$ownerArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * CampaignActor.sceneTokens
+ */
+export type CampaignActor$sceneTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SceneToken
+   */
+  select?: Prisma.SceneTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SceneToken
+   */
+  omit?: Prisma.SceneTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SceneTokenInclude<ExtArgs> | null
+  where?: Prisma.SceneTokenWhereInput
+  orderBy?: Prisma.SceneTokenOrderByWithRelationInput | Prisma.SceneTokenOrderByWithRelationInput[]
+  cursor?: Prisma.SceneTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SceneTokenScalarFieldEnum | Prisma.SceneTokenScalarFieldEnum[]
 }
 
 /**

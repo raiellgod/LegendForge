@@ -95,6 +95,11 @@ export type Participant = Prisma.ParticipantModel
  */
 export type CampaignActor = Prisma.CampaignActorModel
 /**
+ * Model SceneToken
+ * 
+ */
+export type SceneToken = Prisma.SceneTokenModel
+/**
  * Model CampaignInvite
  * 
  */

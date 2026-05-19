@@ -275,8 +275,8 @@ model SceneToken {
   imageFit   SceneTokenImageFit @default(COVER)
   x          Int
   y          Int
-  width      Int                @default(64)
-  height     Int                @default(64)
+  width      Int                @default(80)
+  height     Int                @default(80)
   createdAt  DateTime           @default(now())
   updatedAt  DateTime           @updatedAt
 

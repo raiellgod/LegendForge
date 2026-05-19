@@ -75,6 +75,15 @@ export const CampaignActorType = {
 export type CampaignActorType = (typeof CampaignActorType)[keyof typeof CampaignActorType]
 
 
+export const SceneTokenImageFit = {
+  COVER: 'COVER',
+  CONTAIN: 'CONTAIN',
+  FILL: 'FILL'
+} as const
+
+export type SceneTokenImageFit = (typeof SceneTokenImageFit)[keyof typeof SceneTokenImageFit]
+
+
 export const CampaignActorLocation = {
   TABLE: 'TABLE',
   LIBRARY: 'LIBRARY',

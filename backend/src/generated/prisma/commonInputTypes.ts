@@ -260,6 +260,23 @@ export type EnumCampaignActorLocationWithAggregatesFilter<$PrismaModel = never> 
   _max?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel>
 }
 
+export type EnumSceneTokenImageFitFilter<$PrismaModel = never> = {
+  equals?: $Enums.SceneTokenImageFit | Prisma.EnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  in?: $Enums.SceneTokenImageFit[] | Prisma.ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SceneTokenImageFit[] | Prisma.ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSceneTokenImageFitFilter<$PrismaModel> | $Enums.SceneTokenImageFit
+}
+
+export type EnumSceneTokenImageFitWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SceneTokenImageFit | Prisma.EnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  in?: $Enums.SceneTokenImageFit[] | Prisma.ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SceneTokenImageFit[] | Prisma.ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSceneTokenImageFitWithAggregatesFilter<$PrismaModel> | $Enums.SceneTokenImageFit
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSceneTokenImageFitFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSceneTokenImageFitFilter<$PrismaModel>
+}
+
 export type EnumInviteStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.InviteStatus | Prisma.EnumInviteStatusFieldRefInput<$PrismaModel>
   in?: $Enums.InviteStatus[] | Prisma.ListEnumInviteStatusFieldRefInput<$PrismaModel>
@@ -551,6 +568,23 @@ export type NestedEnumCampaignActorLocationWithAggregatesFilter<$PrismaModel = n
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCampaignActorLocationFilter<$PrismaModel>
+}
+
+export type NestedEnumSceneTokenImageFitFilter<$PrismaModel = never> = {
+  equals?: $Enums.SceneTokenImageFit | Prisma.EnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  in?: $Enums.SceneTokenImageFit[] | Prisma.ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SceneTokenImageFit[] | Prisma.ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSceneTokenImageFitFilter<$PrismaModel> | $Enums.SceneTokenImageFit
+}
+
+export type NestedEnumSceneTokenImageFitWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SceneTokenImageFit | Prisma.EnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  in?: $Enums.SceneTokenImageFit[] | Prisma.ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SceneTokenImageFit[] | Prisma.ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSceneTokenImageFitWithAggregatesFilter<$PrismaModel> | $Enums.SceneTokenImageFit
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSceneTokenImageFitFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSceneTokenImageFitFilter<$PrismaModel>
 }
 
 export type NestedEnumInviteStatusFilter<$PrismaModel = never> = {

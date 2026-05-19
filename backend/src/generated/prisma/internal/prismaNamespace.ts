@@ -395,6 +395,7 @@ export const ModelName = {
   GameSession: 'GameSession',
   Participant: 'Participant',
   CampaignActor: 'CampaignActor',
+  SceneToken: 'SceneToken',
   CampaignInvite: 'CampaignInvite',
   CampaignLog: 'CampaignLog'
 } as const
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1230,6 +1231,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SceneToken: {
+      payload: Prisma.$SceneTokenPayload<ExtArgs>
+      fields: Prisma.SceneTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SceneTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SceneTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.SceneTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SceneTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>
+        }
+        findMany: {
+          args: Prisma.SceneTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>[]
+        }
+        create: {
+          args: Prisma.SceneTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>
+        }
+        createMany: {
+          args: Prisma.SceneTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SceneTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.SceneTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>
+        }
+        update: {
+          args: Prisma.SceneTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.SceneTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SceneTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SceneTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.SceneTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SceneTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.SceneTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSceneToken>
+        }
+        groupBy: {
+          args: Prisma.SceneTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SceneTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SceneTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SceneTokenCountAggregateOutputType> | number
+        }
+      }
+    }
     CampaignInvite: {
       payload: Prisma.$CampaignInvitePayload<ExtArgs>
       fields: Prisma.CampaignInviteFieldRefs
@@ -1570,6 +1645,26 @@ export const CampaignActorScalarFieldEnum = {
 export type CampaignActorScalarFieldEnum = (typeof CampaignActorScalarFieldEnum)[keyof typeof CampaignActorScalarFieldEnum]
 
 
+export const SceneTokenScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  actorId: 'actorId',
+  name: 'name',
+  initials: 'initials',
+  type: 'type',
+  imageUrl: 'imageUrl',
+  imageFit: 'imageFit',
+  x: 'x',
+  y: 'y',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SceneTokenScalarFieldEnum = (typeof SceneTokenScalarFieldEnum)[keyof typeof SceneTokenScalarFieldEnum]
+
+
 export const CampaignInviteScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
@@ -1748,6 +1843,20 @@ export type ListEnumCampaignActorLocationFieldRefInput<$PrismaModel> = FieldRefI
 
 
 /**
+ * Reference to a field of type 'SceneTokenImageFit'
+ */
+export type EnumSceneTokenImageFitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SceneTokenImageFit'>
+    
+
+
+/**
+ * Reference to a field of type 'SceneTokenImageFit[]'
+ */
+export type ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SceneTokenImageFit[]'>
+    
+
+
+/**
  * Reference to a field of type 'InviteStatus'
  */
 export type EnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus'>
@@ -1894,6 +2003,7 @@ export type GlobalOmitConfig = {
   gameSession?: Prisma.GameSessionOmit
   participant?: Prisma.ParticipantOmit
   campaignActor?: Prisma.CampaignActorOmit
+  sceneToken?: Prisma.SceneTokenOmit
   campaignInvite?: Prisma.CampaignInviteOmit
   campaignLog?: Prisma.CampaignLogOmit
 }

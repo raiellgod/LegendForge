@@ -280,6 +280,46 @@ async function getCampaignTokens(campaignId: string): Promise<SceneToken[]> {
   return data.tokens;
 }
 
+async function createSceneToken(
+  campaignId: string,
+  actorId: string,
+  data: {
+    name?: string;
+    initials?: string;
+    imageUrl?: string | null;
+    imageFit?: SceneToken["imageFit"];
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+  } = {},
+): Promise<SceneToken> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/tokens`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        actorId,
+        ...data,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao criar token na cena");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.token;
+}
+
 async function updateCampaignActor(
   campaignId: string,
   actorId: string,
@@ -1058,44 +1098,41 @@ setSceneTokens(tokens);
     );
   }
 
-  function handleAddTokenToScene(actor: CampaignActor) {
-    if (!canCreateTokenForActor(actor)) {
-      return;
-    }
-
-    const tokenCount = sceneTokens.length;
-    const nextX = 300 + ((tokenCount * 90) % 560);
-    const nextY = 340 + Math.floor(tokenCount / 6) * 90;
-
-    setSceneTokens((currentTokens) => [
-  ...currentTokens,
-  {
-    id: createId(),
-    campaignId: actor.campaignId,
-    actorId: actor.id,
-    name: actor.name,
-    initials: actor.initials,
-    type: actor.type,
-    imageUrl: actor.portraitUrl,
-    imageFit: "COVER",
-    x: nextX,
-    y: nextY,
-    width: 64,
-    height: 64,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    actor: {
-      id: actor.id,
-      ownerId: actor.ownerId,
-      type: actor.type,
-      location: actor.location,
-      name: actor.name,
-      initials: actor.initials,
-      portraitUrl: actor.portraitUrl,
-    },
-  },
-]);
+  async function handleAddTokenToScene(actor: CampaignActor) {
+  if (!campaign || !canCreateTokenForActor(actor)) {
+    return;
   }
+
+  setActionError("");
+  setActionMessage("");
+
+  const tokenCount = sceneTokens.length;
+  const nextX = 300 + ((tokenCount * 90) % 560);
+  const nextY = 340 + Math.floor(tokenCount / 6) * 90;
+
+  try {
+    const createdToken = await createSceneToken(campaign.id, actor.id, {
+      x: nextX,
+      y: nextY,
+      width: 80,
+      height: 80,
+      imageUrl: actor.portraitUrl,
+      imageFit: "COVER",
+    });
+
+    setSceneTokens((currentTokens) => [...currentTokens, createdToken]);
+
+    setActionMessage(`${createdToken.name} entrou na cena.`);
+  } catch (error) {
+    console.error(error);
+
+    setActionError(
+      error instanceof Error
+        ? error.message
+        : "Não foi possível adicionar o token à cena.",
+    );
+  }
+}
 
   function handleStartTokenDrag(tokenId: string) {
     const token = sceneTokens.find((sceneToken) => sceneToken.id === tokenId);
@@ -2591,9 +2628,9 @@ setSceneTokens(tokens);
             setSelectedActor(actionActor);
             setActionActor(null);
           }}
-          onAddToken={() => {
-            handleAddTokenToScene(actionActor);
-          }}
+          onAddToken={async () => {
+  await handleAddTokenToScene(actionActor);
+}}
           onRemoveToken={handleRemoveTokenFromScene}
           onReturnToLibrary={async () => {
             await handleReturnActorToLibrary(actionActor);
@@ -2900,7 +2937,7 @@ function ActorActionModal({
   canCreateToken: boolean;
   sceneTokens: SceneToken[];
   onOpenSheet: () => void;
-  onAddToken: () => void;
+  onAddToken: () => void | Promise<void>;
   onRemoveToken: (tokenId: string) => void;
   onReturnToLibrary: () => void | Promise<void>;
   onClose: () => void;
