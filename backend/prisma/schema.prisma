@@ -157,6 +157,7 @@ model GameSystem {
   skills     Skill[]
   ancestries Ancestry[]
   classes    CharacterClass[]
+  subclasses CharacterSubclass[]
   campaigns  Campaign[]
 }
 
@@ -191,11 +192,33 @@ model CharacterClass {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  system     GameSystem          @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  subclasses CharacterSubclass[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
   @@index([systemId])
+  @@index([order])
+}
+
+model CharacterSubclass {
+  id          String   @id @default(uuid())
+  systemId    String
+  classId     String
+  name        String
+  key         String
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  system         GameSystem     @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, name])
+  @@unique([classId, key])
+  @@index([systemId])
+  @@index([classId])
   @@index([order])
 }
 
