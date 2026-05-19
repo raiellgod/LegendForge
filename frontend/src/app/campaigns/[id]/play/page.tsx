@@ -130,12 +130,28 @@ type CampaignActor = {
 
 type SceneToken = {
   id: string;
+  campaignId: string;
   actorId: string;
   name: string;
   initials: string;
   type: CharacterType;
+  imageUrl: string | null;
+  imageFit: "COVER" | "CONTAIN" | "FILL";
   x: number;
   y: number;
+  width: number;
+  height: number;
+  createdAt: string;
+  updatedAt: string;
+  actor: {
+    id: string;
+    ownerId: string | null;
+    type: CharacterType;
+    location: ActorLocation;
+    name: string;
+    initials: string;
+    portraitUrl: string | null;
+  };
 };
 
 const DICE_OPTIONS = [4, 6, 8, 10, 12, 20, 100];
@@ -247,6 +263,23 @@ async function getCampaignActors(campaignId: string): Promise<CampaignActor[]> {
   return data.actors;
 }
 
+async function getCampaignTokens(campaignId: string): Promise<SceneToken[]> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/tokens`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar tokens da campanha");
+  }
+
+  const data = await response.json();
+
+  return data.tokens;
+}
+
 async function updateCampaignActor(
   campaignId: string,
   actorId: string,
@@ -344,6 +377,18 @@ function getCharacterTypeStyles(type: CharacterType) {
   }
 
   return "border-red-400/50 bg-red-950 text-red-100";
+}
+
+function getTokenImageFitClass(imageFit: SceneToken["imageFit"]) {
+  if (imageFit === "CONTAIN") {
+    return "object-contain";
+  }
+
+  if (imageFit === "FILL") {
+    return "object-fill";
+  }
+
+  return "object-cover";
 }
 
 function normalizeDiceExpression(expression: string) {
@@ -553,11 +598,12 @@ export default function CampaignPlayPage() {
 
         setUser(loggedUser);
 
-        const [campaign, participants, actors] = await Promise.all([
-          getCampaign(params.id),
-          getCampaignParticipants(params.id),
-          getCampaignActors(params.id),
-        ]);
+        const [campaign, participants, actors, tokens] = await Promise.all([
+  getCampaign(params.id),
+  getCampaignParticipants(params.id),
+  getCampaignActors(params.id),
+  getCampaignTokens(params.id),
+]);
 
         const currentUserParticipant = participants.find(
           (participant) => participant.userId === loggedUser.id,
@@ -573,8 +619,9 @@ export default function CampaignPlayPage() {
         }
 
         setCampaign(campaign);
-        setParticipants(participants);
-        setCampaignActors(actors);
+setParticipants(participants);
+setCampaignActors(actors);
+setSceneTokens(tokens);
       } catch (error) {
         console.error(error);
         setAccessDenied(true);
@@ -663,24 +710,16 @@ export default function CampaignPlayPage() {
   );
 
   function canMoveToken(token: SceneToken) {
-    if (isGM) {
-      return true;
-    }
-
-    if (!user) {
-      return false;
-    }
-
-    const actor = campaignActors.find(
-      (campaignActor) => campaignActor.id === token.actorId,
-    );
-
-    if (!actor) {
-      return false;
-    }
-
-    return actor.ownerId === user.id;
+  if (isGM) {
+    return true;
   }
+
+  if (!user) {
+    return false;
+  }
+
+  return token.actor.ownerId === user.id;
+}
 
   function canCreateTokenForActor(actor: CampaignActor) {
     return isGM && actor.location === "TABLE";
@@ -1029,17 +1068,33 @@ export default function CampaignPlayPage() {
     const nextY = 340 + Math.floor(tokenCount / 6) * 90;
 
     setSceneTokens((currentTokens) => [
-      ...currentTokens,
-      {
-        id: createId(),
-        actorId: actor.id,
-        name: actor.name,
-        initials: actor.initials,
-        type: actor.type,
-        x: nextX,
-        y: nextY,
-      },
-    ]);
+  ...currentTokens,
+  {
+    id: createId(),
+    campaignId: actor.campaignId,
+    actorId: actor.id,
+    name: actor.name,
+    initials: actor.initials,
+    type: actor.type,
+    imageUrl: actor.portraitUrl,
+    imageFit: "COVER",
+    x: nextX,
+    y: nextY,
+    width: 64,
+    height: 64,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    actor: {
+      id: actor.id,
+      ownerId: actor.ownerId,
+      type: actor.type,
+      location: actor.location,
+      name: actor.name,
+      initials: actor.initials,
+      portraitUrl: actor.portraitUrl,
+    },
+  },
+]);
   }
 
   function handleStartTokenDrag(tokenId: string) {
@@ -1440,19 +1495,30 @@ export default function CampaignPlayPage() {
                     }}
                   >
                     <button
-                      type="button"
-                      title={`${token.name} — ${getCharacterTypeLabel(
-                        token.type,
-                      )}`}
-                      onPointerDown={() => handleStartTokenDrag(token.id)}
-                      className={`flex h-16 w-16 items-center justify-center rounded-full border-2 text-xl font-black shadow-[6px_6px_0_rgba(0,0,0,0.35)] transition ${
-                        canMoveToken(token)
-                          ? "cursor-grab active:cursor-grabbing"
-                          : "cursor-not-allowed opacity-75"
-                      } ${getCharacterTypeStyles(token.type)}`}
-                    >
-                      {token.initials}
-                    </button>
+  type="button"
+  title={`${token.name} — ${getCharacterTypeLabel(token.type)}`}
+  onPointerDown={() => handleStartTokenDrag(token.id)}
+  className={`flex items-center justify-center overflow-hidden rounded-full border-2 text-xl font-black shadow-[6px_6px_0_rgba(0,0,0,0.35)] transition ${
+    canMoveToken(token)
+      ? "cursor-grab active:cursor-grabbing"
+      : "cursor-not-allowed opacity-75"
+  } ${getCharacterTypeStyles(token.type)}`}
+  style={{
+    width: token.width,
+    height: token.height,
+  }}
+>
+  {token.imageUrl ? (
+    <img
+      src={token.imageUrl}
+      alt={token.name}
+      className={`h-full w-full ${getTokenImageFitClass(token.imageFit)}`}
+      draggable={false}
+    />
+  ) : (
+    token.initials
+  )}
+</button>
                   </div>
                 ))}
 
