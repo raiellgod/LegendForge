@@ -1138,6 +1138,112 @@ export async function campaignRoutes(app: FastifyInstance) {
   });
 
     app.withTypeProvider<ZodTypeProvider>().route({
+    method: "DELETE",
+    url: "/campaigns/:campaignId/tokens/:tokenId",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Delete a scene token",
+      params: z.object({
+        campaignId: z.string().uuid("Invalid campaign id"),
+        tokenId: z.string().uuid("Invalid token id"),
+      }),
+      response: {
+        200: z.object({
+          message: z.string(),
+          deletedTokenId: z.string(),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.campaignId,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isGM = currentParticipant?.role === "GM";
+
+      if (!isGM) {
+        return reply.status(403).send({
+          message: "Only GMs can delete scene tokens",
+        });
+      }
+
+      const token = await prisma.sceneToken.findFirst({
+        where: {
+          id: request.params.tokenId,
+          campaignId: campaign.id,
+        },
+      });
+
+      if (!token) {
+        return reply.status(404).send({
+          message: "Token not found",
+        });
+      }
+
+      await prisma.sceneToken.delete({
+        where: {
+          id: token.id,
+        },
+      });
+
+      return reply.status(200).send({
+        message: "Scene token deleted",
+        deletedTokenId: token.id,
+      });
+    },
+  });
+
+  
+
+    app.withTypeProvider<ZodTypeProvider>().route({
     method: "POST",
     url: "/campaigns/:id/tokens",
     schema: {
