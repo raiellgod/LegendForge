@@ -52,6 +52,12 @@ enum CampaignActorType {
   CREATURE
 }
 
+enum SceneTokenImageFit {
+  COVER
+  CONTAIN
+  FILL
+}
+
 enum CampaignActorLocation {
   TABLE
   LIBRARY
@@ -192,7 +198,8 @@ model Campaign {
   sessions     GameSession[]
   invites      CampaignInvite[]
   logs         CampaignLog[]
-  actors       CampaignActor[]
+    actors       CampaignActor[]
+  sceneTokens  SceneToken[]
 
   @@index([ownerId])
   @@index([systemId])
@@ -248,12 +255,36 @@ model CampaignActor {
   updatedAt   DateTime              @updatedAt
 
   campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  owner    User?    @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+    owner       User?        @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  sceneTokens SceneToken[]
 
   @@index([campaignId])
   @@index([ownerId])
   @@index([type])
   @@index([location])
+}
+
+model SceneToken {
+  id         String             @id @default(uuid())
+  campaignId String
+  actorId    String
+  name       String
+  initials   String
+  type       CampaignActorType
+  imageUrl   String?
+  imageFit   SceneTokenImageFit @default(COVER)
+  x          Int
+  y          Int
+  width      Int                @default(64)
+  height     Int                @default(64)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  campaign Campaign      @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  actor    CampaignActor @relation(fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([actorId])
 }
 model CampaignInvite {
   id              String       @id @default(uuid())
