@@ -395,6 +395,7 @@ export const ModelName = {
   LevelProgression: 'LevelProgression',
   Feature: 'Feature',
   Spell: 'Spell',
+  Equipment: 'Equipment',
   Stat: 'Stat',
   Skill: 'Skill',
   Campaign: 'Campaign',
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1234,6 +1235,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SpellCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SpellCountAggregateOutputType> | number
+        }
+      }
+    }
+    Equipment: {
+      payload: Prisma.$EquipmentPayload<ExtArgs>
+      fields: Prisma.EquipmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EquipmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EquipmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>
+        }
+        findFirst: {
+          args: Prisma.EquipmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EquipmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>
+        }
+        findMany: {
+          args: Prisma.EquipmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>[]
+        }
+        create: {
+          args: Prisma.EquipmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>
+        }
+        createMany: {
+          args: Prisma.EquipmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EquipmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>[]
+        }
+        delete: {
+          args: Prisma.EquipmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>
+        }
+        update: {
+          args: Prisma.EquipmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.EquipmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EquipmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EquipmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.EquipmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EquipmentPayload>
+        }
+        aggregate: {
+          args: Prisma.EquipmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEquipment>
+        }
+        groupBy: {
+          args: Prisma.EquipmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EquipmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EquipmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EquipmentCountAggregateOutputType> | number
         }
       }
     }
@@ -2113,6 +2188,26 @@ export const SpellScalarFieldEnum = {
 export type SpellScalarFieldEnum = (typeof SpellScalarFieldEnum)[keyof typeof SpellScalarFieldEnum]
 
 
+export const EquipmentScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  category: 'category',
+  description: 'description',
+  cost: 'cost',
+  weight: 'weight',
+  damage: 'damage',
+  defense: 'defense',
+  properties: 'properties',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EquipmentScalarFieldEnum = (typeof EquipmentScalarFieldEnum)[keyof typeof EquipmentScalarFieldEnum]
+
+
 export const StatScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -2387,6 +2482,34 @@ export type ListEnumSpellSchoolFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'EquipmentCategory'
+ */
+export type EnumEquipmentCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EquipmentCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'EquipmentCategory[]'
+ */
+export type ListEnumEquipmentCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EquipmentCategory[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
  * Reference to a field of type 'ParticipantRole'
  */
 export type EnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole'>
@@ -2481,20 +2604,6 @@ export type EnumLogTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
  * Reference to a field of type 'LogType[]'
  */
 export type ListEnumLogTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LogType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -2603,6 +2712,7 @@ export type GlobalOmitConfig = {
   levelProgression?: Prisma.LevelProgressionOmit
   feature?: Prisma.FeatureOmit
   spell?: Prisma.SpellOmit
+  equipment?: Prisma.EquipmentOmit
   stat?: Prisma.StatOmit
   skill?: Prisma.SkillOmit
   campaign?: Prisma.CampaignOmit

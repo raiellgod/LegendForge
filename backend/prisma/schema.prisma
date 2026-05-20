@@ -85,6 +85,16 @@ enum SpellSchool {
   TRANSMUTATION
 }
 
+enum EquipmentCategory {
+  WEAPON
+  ARMOR
+  SHIELD
+  TOOL
+  GEAR
+  CONSUMABLE
+  RELIC
+}
+
 enum CampaignActorLocation {
   TABLE
   LIBRARY
@@ -179,6 +189,7 @@ model GameSystem {
   levelProgressions LevelProgression[]
   features          Feature[]
   spells            Spell[]
+  equipment         Equipment[]
   campaigns         Campaign[]
 }
 
@@ -324,6 +335,31 @@ model Spell {
   @@index([systemId])
   @@index([level])
   @@index([school])
+  @@index([order])
+}
+
+model Equipment {
+  id          String            @id @default(uuid())
+  systemId    String
+  name        String
+  key         String
+  category    EquipmentCategory
+  description String?
+  cost        String?
+  weight      Float?
+  damage      String?
+  defense     Int?
+  properties  String?
+  order       Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+
+  @@unique([systemId, name])
+  @@unique([systemId, key])
+  @@index([systemId])
+  @@index([category])
   @@index([order])
 }
 

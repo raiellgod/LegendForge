@@ -62,6 +62,7 @@ export const ModelName = {
   LevelProgression: 'LevelProgression',
   Feature: 'Feature',
   Spell: 'Spell',
+  Equipment: 'Equipment',
   Stat: 'Stat',
   Skill: 'Skill',
   Campaign: 'Campaign',
@@ -258,6 +259,26 @@ export const SpellScalarFieldEnum = {
 } as const
 
 export type SpellScalarFieldEnum = (typeof SpellScalarFieldEnum)[keyof typeof SpellScalarFieldEnum]
+
+
+export const EquipmentScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  category: 'category',
+  description: 'description',
+  cost: 'cost',
+  weight: 'weight',
+  damage: 'damage',
+  defense: 'defense',
+  properties: 'properties',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EquipmentScalarFieldEnum = (typeof EquipmentScalarFieldEnum)[keyof typeof EquipmentScalarFieldEnum]
 
 
 export const StatScalarFieldEnum = {

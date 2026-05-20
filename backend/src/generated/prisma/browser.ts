@@ -73,6 +73,11 @@ export type Feature = Prisma.FeatureModel
  */
 export type Spell = Prisma.SpellModel
 /**
+ * Model Equipment
+ * 
+ */
+export type Equipment = Prisma.EquipmentModel
+/**
  * Model Stat
  * 
  */

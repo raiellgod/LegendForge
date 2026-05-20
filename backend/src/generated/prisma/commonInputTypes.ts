@@ -270,6 +270,50 @@ export type EnumSpellSchoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel>
 }
 
+export type EnumEquipmentCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentCategory | Prisma.EnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEquipmentCategoryFilter<$PrismaModel> | $Enums.EquipmentCategory
+}
+
+export type FloatNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type EnumEquipmentCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentCategory | Prisma.EnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEquipmentCategoryWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEquipmentCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEquipmentCategoryFilter<$PrismaModel>
+}
+
+export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+}
+
 export type EnumParticipantRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.ParticipantRole | Prisma.EnumParticipantRoleFieldRefInput<$PrismaModel>
   in?: $Enums.ParticipantRole[] | Prisma.ListEnumParticipantRoleFieldRefInput<$PrismaModel>
@@ -656,6 +700,39 @@ export type NestedEnumSpellSchoolWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel>
   _max?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel>
+}
+
+export type NestedEnumEquipmentCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentCategory | Prisma.EnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEquipmentCategoryFilter<$PrismaModel> | $Enums.EquipmentCategory
+}
+
+export type NestedEnumEquipmentCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentCategory | Prisma.EnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEquipmentCategoryWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEquipmentCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEquipmentCategoryFilter<$PrismaModel>
+}
+
+export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumParticipantRoleFilter<$PrismaModel = never> = {

@@ -120,6 +120,19 @@ export const SpellSchool = {
 export type SpellSchool = (typeof SpellSchool)[keyof typeof SpellSchool]
 
 
+export const EquipmentCategory = {
+  WEAPON: 'WEAPON',
+  ARMOR: 'ARMOR',
+  SHIELD: 'SHIELD',
+  TOOL: 'TOOL',
+  GEAR: 'GEAR',
+  CONSUMABLE: 'CONSUMABLE',
+  RELIC: 'RELIC'
+} as const
+
+export type EquipmentCategory = (typeof EquipmentCategory)[keyof typeof EquipmentCategory]
+
+
 export const CampaignActorLocation = {
   TABLE: 'TABLE',
   LIBRARY: 'LIBRARY',

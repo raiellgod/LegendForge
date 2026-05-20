@@ -597,6 +597,141 @@ const spells = [
   },
 ] as const;
 
+const equipment = [
+  {
+    name: "Adaga",
+    key: "dagger",
+    category: "WEAPON",
+    damage: "1d4 perfurante",
+    defense: null,
+    cost: "2 moedas",
+    weight: 0.5,
+    properties: "Leve, arremesso",
+    description:
+      "Lâmina curta e fácil de ocultar, comum entre viajantes, ladinos e sobreviventes urbanos.",
+  },
+  {
+    name: "Espada Longa",
+    key: "longsword",
+    category: "WEAPON",
+    damage: "1d8 cortante",
+    defense: null,
+    cost: "15 moedas",
+    weight: 1.5,
+    properties: "Versátil",
+    description:
+      "Arma marcial equilibrada, usada por guerreiros, juramentados e combatentes treinados.",
+  },
+  {
+    name: "Machado Pesado",
+    key: "heavy-axe",
+    category: "WEAPON",
+    damage: "1d12 cortante",
+    defense: null,
+    cost: "30 moedas",
+    weight: 3,
+    properties: "Duas mãos, pesado",
+    description:
+      "Arma brutal capaz de partir madeira, osso e metal enfraquecido.",
+  },
+  {
+    name: "Arco Curto",
+    key: "shortbow",
+    category: "WEAPON",
+    damage: "1d6 perfurante",
+    defense: null,
+    cost: "25 moedas",
+    weight: 1,
+    properties: "Distância, duas mãos",
+    description:
+      "Arma simples para caça, patrulha e combate à distância.",
+  },
+  {
+    name: "Armadura de Couro",
+    key: "leather-armor",
+    category: "ARMOR",
+    damage: null,
+    defense: 1,
+    cost: "10 moedas",
+    weight: 2,
+    properties: "Leve",
+    description:
+      "Proteção leve feita de couro tratado, comum entre exploradores e viajantes.",
+  },
+  {
+    name: "Cota Reforçada",
+    key: "reinforced-mail",
+    category: "ARMOR",
+    damage: null,
+    defense: 3,
+    cost: "50 moedas",
+    weight: 8,
+    properties: "Média",
+    description:
+      "Armadura reforçada com placas, anéis metálicos e peças reaproveitadas.",
+  },
+  {
+    name: "Escudo Simples",
+    key: "simple-shield",
+    category: "SHIELD",
+    damage: null,
+    defense: 1,
+    cost: "10 moedas",
+    weight: 3,
+    properties: "Uma mão",
+    description:
+      "Escudo comum usado para bloquear golpes, proteger aliados e manter posição.",
+  },
+  {
+    name: "Kit de Sobrevivência",
+    key: "survival-kit",
+    category: "GEAR",
+    damage: null,
+    defense: null,
+    cost: "15 moedas",
+    weight: 2,
+    properties: "Exploração",
+    description:
+      "Conjunto básico com corda, pederneira, anzóis, lâmina pequena e suprimentos simples.",
+  },
+  {
+    name: "Ferramentas de Tecnomante",
+    key: "technomancer-tools",
+    category: "TOOL",
+    damage: null,
+    defense: null,
+    cost: "40 moedas",
+    weight: 3,
+    properties: "Tecnológico, reparo",
+    description:
+      "Instrumentos usados para reparar circuitos antigos, improvisar dispositivos e manipular peças instáveis.",
+  },
+  {
+    name: "Tônico de Campo",
+    key: "field-tonic",
+    category: "CONSUMABLE",
+    damage: null,
+    defense: null,
+    cost: "25 moedas",
+    weight: 0.2,
+    properties: "Uso único, recuperação",
+    description:
+      "Mistura alquímica simples usada para recuperar fôlego e estabilizar ferimentos leves.",
+  },
+  {
+    name: "Relíquia Quebrada",
+    key: "broken-relic",
+    category: "RELIC",
+    damage: null,
+    defense: null,
+    cost: "Variável",
+    weight: 1,
+    properties: "Raro, instável, misterioso",
+    description:
+      "Fragmento de tecnologia ou magia antiga. Seu uso exato depende de estudo, risco e contexto narrativo.",
+  },
+] as const;
+
 async function main() {
   const system = await prisma.gameSystem.upsert({
     where: {
@@ -939,6 +1074,43 @@ async function main() {
     });
 
     console.log(`Magia criada/validada: ${spell.name}`);
+  }
+
+    for (const [index, equipmentData] of equipment.entries()) {
+    const item = await prisma.equipment.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: equipmentData.key,
+        },
+      },
+      update: {
+        name: equipmentData.name,
+        category: equipmentData.category,
+        description: equipmentData.description,
+        cost: equipmentData.cost,
+        weight: equipmentData.weight,
+        damage: equipmentData.damage,
+        defense: equipmentData.defense,
+        properties: equipmentData.properties,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        name: equipmentData.name,
+        key: equipmentData.key,
+        category: equipmentData.category,
+        description: equipmentData.description,
+        cost: equipmentData.cost,
+        weight: equipmentData.weight,
+        damage: equipmentData.damage,
+        defense: equipmentData.defense,
+        properties: equipmentData.properties,
+        order: index + 1,
+      },
+    });
+
+    console.log(`Equipamento criado/validado: ${item.name}`);
   }
   
   console.log("Seed concluído com sucesso.");
