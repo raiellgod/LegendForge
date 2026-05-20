@@ -524,6 +524,79 @@ const features = [
   },
 ] as const;
 
+const spells = [
+  {
+    name: "Luz Menor",
+    key: "minor-light",
+    level: 0,
+    school: "EVOCATION",
+    castingTime: "1 ação",
+    range: "Toque",
+    duration: "1 hora",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Cria uma pequena fonte de luz mágica em um objeto, símbolo ou ponto tocado pelo conjurador.",
+  },
+  {
+    name: "Toque Fúnebre",
+    key: "funeral-touch",
+    level: 0,
+    school: "NECROMANCY",
+    castingTime: "1 ação",
+    range: "Toque",
+    duration: "Instantânea",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Canaliza energia fúnebre pelo toque, perturbando a força vital de uma criatura.",
+  },
+  {
+    name: "Véu Ilusório",
+    key: "illusory-veil",
+    level: 1,
+    school: "ILLUSION",
+    castingTime: "1 ação",
+    range: "Pessoal",
+    duration: "10 minutos",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: true,
+    description:
+      "Distorce a percepção ao redor do conjurador, criando uma camada sutil de disfarce, sombra ou ocultação.",
+  },
+  {
+    name: "Pulso Arcano",
+    key: "arcane-pulse",
+    level: 1,
+    school: "EVOCATION",
+    castingTime: "1 ação",
+    range: "18 metros",
+    duration: "Instantânea",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Libera um impacto de energia arcana instável contra um alvo ou ponto visível.",
+  },
+  {
+    name: "Sussurros dos Mortos",
+    key: "dead-whispers",
+    level: 1,
+    school: "NECROMANCY",
+    castingTime: "1 minuto",
+    range: "Pessoal",
+    duration: "1 minuto",
+    components: "V, S, M",
+    isRitual: true,
+    requiresConcentration: false,
+    description:
+      "Permite ouvir ecos breves deixados por uma alma, cadáver ou lugar marcado pela morte recente.",
+  },
+] as const;
+
 async function main() {
   const system = await prisma.gameSystem.upsert({
     where: {
@@ -827,6 +900,47 @@ async function main() {
     console.log(`Feature criada/validada: ${feature.name}`);
   }
 
+    for (const [index, spellData] of spells.entries()) {
+    const spell = await prisma.spell.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: spellData.key,
+        },
+      },
+      update: {
+        name: spellData.name,
+        description: spellData.description,
+        level: spellData.level,
+        school: spellData.school,
+        castingTime: spellData.castingTime,
+        range: spellData.range,
+        duration: spellData.duration,
+        components: spellData.components,
+        isRitual: spellData.isRitual,
+        requiresConcentration: spellData.requiresConcentration,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        name: spellData.name,
+        key: spellData.key,
+        description: spellData.description,
+        level: spellData.level,
+        school: spellData.school,
+        castingTime: spellData.castingTime,
+        range: spellData.range,
+        duration: spellData.duration,
+        components: spellData.components,
+        isRitual: spellData.isRitual,
+        requiresConcentration: spellData.requiresConcentration,
+        order: index + 1,
+      },
+    });
+
+    console.log(`Magia criada/validada: ${spell.name}`);
+  }
+  
   console.log("Seed concluído com sucesso.");
 }
 

@@ -106,6 +106,20 @@ export const FeatureSourceType = {
 export type FeatureSourceType = (typeof FeatureSourceType)[keyof typeof FeatureSourceType]
 
 
+export const SpellSchool = {
+  ABJURATION: 'ABJURATION',
+  CONJURATION: 'CONJURATION',
+  DIVINATION: 'DIVINATION',
+  ENCHANTMENT: 'ENCHANTMENT',
+  EVOCATION: 'EVOCATION',
+  ILLUSION: 'ILLUSION',
+  NECROMANCY: 'NECROMANCY',
+  TRANSMUTATION: 'TRANSMUTATION'
+} as const
+
+export type SpellSchool = (typeof SpellSchool)[keyof typeof SpellSchool]
+
+
 export const CampaignActorLocation = {
   TABLE: 'TABLE',
   LIBRARY: 'LIBRARY',

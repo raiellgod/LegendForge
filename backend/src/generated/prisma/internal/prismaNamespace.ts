@@ -394,6 +394,7 @@ export const ModelName = {
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
   Feature: 'Feature',
+  Spell: 'Spell',
   Stat: 'Stat',
   Skill: 'Skill',
   Campaign: 'Campaign',
@@ -418,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1159,6 +1160,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.FeatureCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.FeatureCountAggregateOutputType> | number
+        }
+      }
+    }
+    Spell: {
+      payload: Prisma.$SpellPayload<ExtArgs>
+      fields: Prisma.SpellFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SpellFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SpellFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>
+        }
+        findFirst: {
+          args: Prisma.SpellFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SpellFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>
+        }
+        findMany: {
+          args: Prisma.SpellFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>[]
+        }
+        create: {
+          args: Prisma.SpellCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>
+        }
+        createMany: {
+          args: Prisma.SpellCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SpellCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>[]
+        }
+        delete: {
+          args: Prisma.SpellDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>
+        }
+        update: {
+          args: Prisma.SpellUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>
+        }
+        deleteMany: {
+          args: Prisma.SpellDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SpellUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SpellUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>[]
+        }
+        upsert: {
+          args: Prisma.SpellUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SpellPayload>
+        }
+        aggregate: {
+          args: Prisma.SpellAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSpell>
+        }
+        groupBy: {
+          args: Prisma.SpellGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SpellGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SpellCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SpellCountAggregateOutputType> | number
         }
       }
     }
@@ -2016,6 +2091,28 @@ export const FeatureScalarFieldEnum = {
 export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
 
 
+export const SpellScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  level: 'level',
+  school: 'school',
+  castingTime: 'castingTime',
+  range: 'range',
+  duration: 'duration',
+  components: 'components',
+  isRitual: 'isRitual',
+  requiresConcentration: 'requiresConcentration',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SpellScalarFieldEnum = (typeof SpellScalarFieldEnum)[keyof typeof SpellScalarFieldEnum]
+
+
 export const StatScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -2276,6 +2373,20 @@ export type ListEnumFeatureSourceTypeFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'SpellSchool'
+ */
+export type EnumSpellSchoolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpellSchool'>
+    
+
+
+/**
+ * Reference to a field of type 'SpellSchool[]'
+ */
+export type ListEnumSpellSchoolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpellSchool[]'>
+    
+
+
+/**
  * Reference to a field of type 'ParticipantRole'
  */
 export type EnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole'>
@@ -2491,6 +2602,7 @@ export type GlobalOmitConfig = {
   characterSubclass?: Prisma.CharacterSubclassOmit
   levelProgression?: Prisma.LevelProgressionOmit
   feature?: Prisma.FeatureOmit
+  spell?: Prisma.SpellOmit
   stat?: Prisma.StatOmit
   skill?: Prisma.SkillOmit
   campaign?: Prisma.CampaignOmit

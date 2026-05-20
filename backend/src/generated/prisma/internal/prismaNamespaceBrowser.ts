@@ -61,6 +61,7 @@ export const ModelName = {
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
   Feature: 'Feature',
+  Spell: 'Spell',
   Stat: 'Stat',
   Skill: 'Skill',
   Campaign: 'Campaign',
@@ -235,6 +236,28 @@ export const FeatureScalarFieldEnum = {
 } as const
 
 export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
+
+
+export const SpellScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  level: 'level',
+  school: 'school',
+  castingTime: 'castingTime',
+  range: 'range',
+  duration: 'duration',
+  components: 'components',
+  isRitual: 'isRitual',
+  requiresConcentration: 'requiresConcentration',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SpellScalarFieldEnum = (typeof SpellScalarFieldEnum)[keyof typeof SpellScalarFieldEnum]
 
 
 export const StatScalarFieldEnum = {

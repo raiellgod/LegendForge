@@ -253,6 +253,23 @@ export type EnumFeatureSourceTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumFeatureSourceTypeFilter<$PrismaModel>
 }
 
+export type EnumSpellSchoolFilter<$PrismaModel = never> = {
+  equals?: $Enums.SpellSchool | Prisma.EnumSpellSchoolFieldRefInput<$PrismaModel>
+  in?: $Enums.SpellSchool[] | Prisma.ListEnumSpellSchoolFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SpellSchool[] | Prisma.ListEnumSpellSchoolFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel> | $Enums.SpellSchool
+}
+
+export type EnumSpellSchoolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SpellSchool | Prisma.EnumSpellSchoolFieldRefInput<$PrismaModel>
+  in?: $Enums.SpellSchool[] | Prisma.ListEnumSpellSchoolFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SpellSchool[] | Prisma.ListEnumSpellSchoolFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSpellSchoolWithAggregatesFilter<$PrismaModel> | $Enums.SpellSchool
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel>
+}
+
 export type EnumParticipantRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.ParticipantRole | Prisma.EnumParticipantRoleFieldRefInput<$PrismaModel>
   in?: $Enums.ParticipantRole[] | Prisma.ListEnumParticipantRoleFieldRefInput<$PrismaModel>
@@ -622,6 +639,23 @@ export type NestedEnumFeatureSourceTypeWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFeatureSourceTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFeatureSourceTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumSpellSchoolFilter<$PrismaModel = never> = {
+  equals?: $Enums.SpellSchool | Prisma.EnumSpellSchoolFieldRefInput<$PrismaModel>
+  in?: $Enums.SpellSchool[] | Prisma.ListEnumSpellSchoolFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SpellSchool[] | Prisma.ListEnumSpellSchoolFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel> | $Enums.SpellSchool
+}
+
+export type NestedEnumSpellSchoolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SpellSchool | Prisma.EnumSpellSchoolFieldRefInput<$PrismaModel>
+  in?: $Enums.SpellSchool[] | Prisma.ListEnumSpellSchoolFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SpellSchool[] | Prisma.ListEnumSpellSchoolFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSpellSchoolWithAggregatesFilter<$PrismaModel> | $Enums.SpellSchool
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSpellSchoolFilter<$PrismaModel>
 }
 
 export type NestedEnumParticipantRoleFilter<$PrismaModel = never> = {

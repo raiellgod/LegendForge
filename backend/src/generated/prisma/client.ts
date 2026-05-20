@@ -90,6 +90,11 @@ export type LevelProgression = Prisma.LevelProgressionModel
  */
 export type Feature = Prisma.FeatureModel
 /**
+ * Model Spell
+ * 
+ */
+export type Spell = Prisma.SpellModel
+/**
  * Model Stat
  * 
  */
