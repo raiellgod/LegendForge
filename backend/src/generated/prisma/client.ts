@@ -65,6 +65,31 @@ export type Verification = Prisma.VerificationModel
  */
 export type GameSystem = Prisma.GameSystemModel
 /**
+ * Model Ancestry
+ * 
+ */
+export type Ancestry = Prisma.AncestryModel
+/**
+ * Model CharacterClass
+ * 
+ */
+export type CharacterClass = Prisma.CharacterClassModel
+/**
+ * Model CharacterSubclass
+ * 
+ */
+export type CharacterSubclass = Prisma.CharacterSubclassModel
+/**
+ * Model LevelProgression
+ * 
+ */
+export type LevelProgression = Prisma.LevelProgressionModel
+/**
+ * Model Feature
+ * 
+ */
+export type Feature = Prisma.FeatureModel
+/**
  * Model Stat
  * 
  */

@@ -218,6 +218,11 @@ export type GameSystemWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"GameSystem"> | Date | string
   stats?: Prisma.StatListRelationFilter
   skills?: Prisma.SkillListRelationFilter
+  ancestries?: Prisma.AncestryListRelationFilter
+  classes?: Prisma.CharacterClassListRelationFilter
+  subclasses?: Prisma.CharacterSubclassListRelationFilter
+  levelProgressions?: Prisma.LevelProgressionListRelationFilter
+  features?: Prisma.FeatureListRelationFilter
   campaigns?: Prisma.CampaignListRelationFilter
 }
 
@@ -229,6 +234,11 @@ export type GameSystemOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   stats?: Prisma.StatOrderByRelationAggregateInput
   skills?: Prisma.SkillOrderByRelationAggregateInput
+  ancestries?: Prisma.AncestryOrderByRelationAggregateInput
+  classes?: Prisma.CharacterClassOrderByRelationAggregateInput
+  subclasses?: Prisma.CharacterSubclassOrderByRelationAggregateInput
+  levelProgressions?: Prisma.LevelProgressionOrderByRelationAggregateInput
+  features?: Prisma.FeatureOrderByRelationAggregateInput
   campaigns?: Prisma.CampaignOrderByRelationAggregateInput
 }
 
@@ -243,6 +253,11 @@ export type GameSystemWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"GameSystem"> | Date | string
   stats?: Prisma.StatListRelationFilter
   skills?: Prisma.SkillListRelationFilter
+  ancestries?: Prisma.AncestryListRelationFilter
+  classes?: Prisma.CharacterClassListRelationFilter
+  subclasses?: Prisma.CharacterSubclassListRelationFilter
+  levelProgressions?: Prisma.LevelProgressionListRelationFilter
+  features?: Prisma.FeatureListRelationFilter
   campaigns?: Prisma.CampaignListRelationFilter
 }, "id" | "name" | "slug">
 
@@ -278,6 +293,11 @@ export type GameSystemCreateInput = {
   createdAt?: Date | string
   stats?: Prisma.StatCreateNestedManyWithoutSystemInput
   skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -289,6 +309,11 @@ export type GameSystemUncheckedCreateInput = {
   createdAt?: Date | string
   stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -300,6 +325,11 @@ export type GameSystemUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
   skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -311,6 +341,11 @@ export type GameSystemUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -388,6 +423,76 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type GameSystemCreateNestedOneWithoutAncestriesInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutAncestriesInput, Prisma.GameSystemUncheckedCreateWithoutAncestriesInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutAncestriesInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+}
+
+export type GameSystemUpdateOneRequiredWithoutAncestriesNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutAncestriesInput, Prisma.GameSystemUncheckedCreateWithoutAncestriesInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutAncestriesInput
+  upsert?: Prisma.GameSystemUpsertWithoutAncestriesInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutAncestriesInput, Prisma.GameSystemUpdateWithoutAncestriesInput>, Prisma.GameSystemUncheckedUpdateWithoutAncestriesInput>
+}
+
+export type GameSystemCreateNestedOneWithoutClassesInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutClassesInput, Prisma.GameSystemUncheckedCreateWithoutClassesInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutClassesInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+}
+
+export type GameSystemUpdateOneRequiredWithoutClassesNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutClassesInput, Prisma.GameSystemUncheckedCreateWithoutClassesInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutClassesInput
+  upsert?: Prisma.GameSystemUpsertWithoutClassesInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutClassesInput, Prisma.GameSystemUpdateWithoutClassesInput>, Prisma.GameSystemUncheckedUpdateWithoutClassesInput>
+}
+
+export type GameSystemCreateNestedOneWithoutSubclassesInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutSubclassesInput, Prisma.GameSystemUncheckedCreateWithoutSubclassesInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutSubclassesInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+}
+
+export type GameSystemUpdateOneRequiredWithoutSubclassesNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutSubclassesInput, Prisma.GameSystemUncheckedCreateWithoutSubclassesInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutSubclassesInput
+  upsert?: Prisma.GameSystemUpsertWithoutSubclassesInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutSubclassesInput, Prisma.GameSystemUpdateWithoutSubclassesInput>, Prisma.GameSystemUncheckedUpdateWithoutSubclassesInput>
+}
+
+export type GameSystemCreateNestedOneWithoutLevelProgressionsInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutLevelProgressionsInput, Prisma.GameSystemUncheckedCreateWithoutLevelProgressionsInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutLevelProgressionsInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+}
+
+export type GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutLevelProgressionsInput, Prisma.GameSystemUncheckedCreateWithoutLevelProgressionsInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutLevelProgressionsInput
+  upsert?: Prisma.GameSystemUpsertWithoutLevelProgressionsInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutLevelProgressionsInput, Prisma.GameSystemUpdateWithoutLevelProgressionsInput>, Prisma.GameSystemUncheckedUpdateWithoutLevelProgressionsInput>
+}
+
+export type GameSystemCreateNestedOneWithoutFeaturesInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutFeaturesInput, Prisma.GameSystemUncheckedCreateWithoutFeaturesInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutFeaturesInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+}
+
+export type GameSystemUpdateOneRequiredWithoutFeaturesNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutFeaturesInput, Prisma.GameSystemUncheckedCreateWithoutFeaturesInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutFeaturesInput
+  upsert?: Prisma.GameSystemUpsertWithoutFeaturesInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutFeaturesInput, Prisma.GameSystemUpdateWithoutFeaturesInput>, Prisma.GameSystemUncheckedUpdateWithoutFeaturesInput>
+}
+
 export type GameSystemCreateNestedOneWithoutStatsInput = {
   create?: Prisma.XOR<Prisma.GameSystemCreateWithoutStatsInput, Prisma.GameSystemUncheckedCreateWithoutStatsInput>
   connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutStatsInput
@@ -432,6 +537,386 @@ export type GameSystemUpdateOneWithoutCampaignsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutCampaignsInput, Prisma.GameSystemUpdateWithoutCampaignsInput>, Prisma.GameSystemUncheckedUpdateWithoutCampaignsInput>
 }
 
+export type GameSystemCreateWithoutAncestriesInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemUncheckedCreateWithoutAncestriesInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemCreateOrConnectWithoutAncestriesInput = {
+  where: Prisma.GameSystemWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutAncestriesInput, Prisma.GameSystemUncheckedCreateWithoutAncestriesInput>
+}
+
+export type GameSystemUpsertWithoutAncestriesInput = {
+  update: Prisma.XOR<Prisma.GameSystemUpdateWithoutAncestriesInput, Prisma.GameSystemUncheckedUpdateWithoutAncestriesInput>
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutAncestriesInput, Prisma.GameSystemUncheckedCreateWithoutAncestriesInput>
+  where?: Prisma.GameSystemWhereInput
+}
+
+export type GameSystemUpdateToOneWithWhereWithoutAncestriesInput = {
+  where?: Prisma.GameSystemWhereInput
+  data: Prisma.XOR<Prisma.GameSystemUpdateWithoutAncestriesInput, Prisma.GameSystemUncheckedUpdateWithoutAncestriesInput>
+}
+
+export type GameSystemUpdateWithoutAncestriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemUncheckedUpdateWithoutAncestriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemCreateWithoutClassesInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemUncheckedCreateWithoutClassesInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemCreateOrConnectWithoutClassesInput = {
+  where: Prisma.GameSystemWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutClassesInput, Prisma.GameSystemUncheckedCreateWithoutClassesInput>
+}
+
+export type GameSystemUpsertWithoutClassesInput = {
+  update: Prisma.XOR<Prisma.GameSystemUpdateWithoutClassesInput, Prisma.GameSystemUncheckedUpdateWithoutClassesInput>
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutClassesInput, Prisma.GameSystemUncheckedCreateWithoutClassesInput>
+  where?: Prisma.GameSystemWhereInput
+}
+
+export type GameSystemUpdateToOneWithWhereWithoutClassesInput = {
+  where?: Prisma.GameSystemWhereInput
+  data: Prisma.XOR<Prisma.GameSystemUpdateWithoutClassesInput, Prisma.GameSystemUncheckedUpdateWithoutClassesInput>
+}
+
+export type GameSystemUpdateWithoutClassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemUncheckedUpdateWithoutClassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemCreateWithoutSubclassesInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemUncheckedCreateWithoutSubclassesInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemCreateOrConnectWithoutSubclassesInput = {
+  where: Prisma.GameSystemWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutSubclassesInput, Prisma.GameSystemUncheckedCreateWithoutSubclassesInput>
+}
+
+export type GameSystemUpsertWithoutSubclassesInput = {
+  update: Prisma.XOR<Prisma.GameSystemUpdateWithoutSubclassesInput, Prisma.GameSystemUncheckedUpdateWithoutSubclassesInput>
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutSubclassesInput, Prisma.GameSystemUncheckedCreateWithoutSubclassesInput>
+  where?: Prisma.GameSystemWhereInput
+}
+
+export type GameSystemUpdateToOneWithWhereWithoutSubclassesInput = {
+  where?: Prisma.GameSystemWhereInput
+  data: Prisma.XOR<Prisma.GameSystemUpdateWithoutSubclassesInput, Prisma.GameSystemUncheckedUpdateWithoutSubclassesInput>
+}
+
+export type GameSystemUpdateWithoutSubclassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemUncheckedUpdateWithoutSubclassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemCreateWithoutLevelProgressionsInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemUncheckedCreateWithoutLevelProgressionsInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemCreateOrConnectWithoutLevelProgressionsInput = {
+  where: Prisma.GameSystemWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutLevelProgressionsInput, Prisma.GameSystemUncheckedCreateWithoutLevelProgressionsInput>
+}
+
+export type GameSystemUpsertWithoutLevelProgressionsInput = {
+  update: Prisma.XOR<Prisma.GameSystemUpdateWithoutLevelProgressionsInput, Prisma.GameSystemUncheckedUpdateWithoutLevelProgressionsInput>
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutLevelProgressionsInput, Prisma.GameSystemUncheckedCreateWithoutLevelProgressionsInput>
+  where?: Prisma.GameSystemWhereInput
+}
+
+export type GameSystemUpdateToOneWithWhereWithoutLevelProgressionsInput = {
+  where?: Prisma.GameSystemWhereInput
+  data: Prisma.XOR<Prisma.GameSystemUpdateWithoutLevelProgressionsInput, Prisma.GameSystemUncheckedUpdateWithoutLevelProgressionsInput>
+}
+
+export type GameSystemUpdateWithoutLevelProgressionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemUncheckedUpdateWithoutLevelProgressionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemCreateWithoutFeaturesInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemUncheckedCreateWithoutFeaturesInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemCreateOrConnectWithoutFeaturesInput = {
+  where: Prisma.GameSystemWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutFeaturesInput, Prisma.GameSystemUncheckedCreateWithoutFeaturesInput>
+}
+
+export type GameSystemUpsertWithoutFeaturesInput = {
+  update: Prisma.XOR<Prisma.GameSystemUpdateWithoutFeaturesInput, Prisma.GameSystemUncheckedUpdateWithoutFeaturesInput>
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutFeaturesInput, Prisma.GameSystemUncheckedCreateWithoutFeaturesInput>
+  where?: Prisma.GameSystemWhereInput
+}
+
+export type GameSystemUpdateToOneWithWhereWithoutFeaturesInput = {
+  where?: Prisma.GameSystemWhereInput
+  data: Prisma.XOR<Prisma.GameSystemUpdateWithoutFeaturesInput, Prisma.GameSystemUncheckedUpdateWithoutFeaturesInput>
+}
+
+export type GameSystemUpdateWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemUncheckedUpdateWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
+}
+
 export type GameSystemCreateWithoutStatsInput = {
   id?: string
   name: string
@@ -439,6 +924,11 @@ export type GameSystemCreateWithoutStatsInput = {
   version: number
   createdAt?: Date | string
   skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -449,6 +939,11 @@ export type GameSystemUncheckedCreateWithoutStatsInput = {
   version: number
   createdAt?: Date | string
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -475,6 +970,11 @@ export type GameSystemUpdateWithoutStatsInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -485,6 +985,11 @@ export type GameSystemUncheckedUpdateWithoutStatsInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -495,6 +1000,11 @@ export type GameSystemCreateWithoutSkillsInput = {
   version: number
   createdAt?: Date | string
   stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -505,6 +1015,11 @@ export type GameSystemUncheckedCreateWithoutSkillsInput = {
   version: number
   createdAt?: Date | string
   stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -531,6 +1046,11 @@ export type GameSystemUpdateWithoutSkillsInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -541,6 +1061,11 @@ export type GameSystemUncheckedUpdateWithoutSkillsInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -552,6 +1077,11 @@ export type GameSystemCreateWithoutCampaignsInput = {
   createdAt?: Date | string
   stats?: Prisma.StatCreateNestedManyWithoutSystemInput
   skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
 }
 
 export type GameSystemUncheckedCreateWithoutCampaignsInput = {
@@ -562,6 +1092,11 @@ export type GameSystemUncheckedCreateWithoutCampaignsInput = {
   createdAt?: Date | string
   stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
 }
 
 export type GameSystemCreateOrConnectWithoutCampaignsInput = {
@@ -588,6 +1123,11 @@ export type GameSystemUpdateWithoutCampaignsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
   skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
 }
 
 export type GameSystemUncheckedUpdateWithoutCampaignsInput = {
@@ -598,6 +1138,11 @@ export type GameSystemUncheckedUpdateWithoutCampaignsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
 }
 
 
@@ -608,12 +1153,22 @@ export type GameSystemUncheckedUpdateWithoutCampaignsInput = {
 export type GameSystemCountOutputType = {
   stats: number
   skills: number
+  ancestries: number
+  classes: number
+  subclasses: number
+  levelProgressions: number
+  features: number
   campaigns: number
 }
 
 export type GameSystemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stats?: boolean | GameSystemCountOutputTypeCountStatsArgs
   skills?: boolean | GameSystemCountOutputTypeCountSkillsArgs
+  ancestries?: boolean | GameSystemCountOutputTypeCountAncestriesArgs
+  classes?: boolean | GameSystemCountOutputTypeCountClassesArgs
+  subclasses?: boolean | GameSystemCountOutputTypeCountSubclassesArgs
+  levelProgressions?: boolean | GameSystemCountOutputTypeCountLevelProgressionsArgs
+  features?: boolean | GameSystemCountOutputTypeCountFeaturesArgs
   campaigns?: boolean | GameSystemCountOutputTypeCountCampaignsArgs
 }
 
@@ -644,6 +1199,41 @@ export type GameSystemCountOutputTypeCountSkillsArgs<ExtArgs extends runtime.Typ
 /**
  * GameSystemCountOutputType without action
  */
+export type GameSystemCountOutputTypeCountAncestriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AncestryWhereInput
+}
+
+/**
+ * GameSystemCountOutputType without action
+ */
+export type GameSystemCountOutputTypeCountClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterClassWhereInput
+}
+
+/**
+ * GameSystemCountOutputType without action
+ */
+export type GameSystemCountOutputTypeCountSubclassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterSubclassWhereInput
+}
+
+/**
+ * GameSystemCountOutputType without action
+ */
+export type GameSystemCountOutputTypeCountLevelProgressionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LevelProgressionWhereInput
+}
+
+/**
+ * GameSystemCountOutputType without action
+ */
+export type GameSystemCountOutputTypeCountFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeatureWhereInput
+}
+
+/**
+ * GameSystemCountOutputType without action
+ */
 export type GameSystemCountOutputTypeCountCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CampaignWhereInput
 }
@@ -657,6 +1247,11 @@ export type GameSystemSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   createdAt?: boolean
   stats?: boolean | Prisma.GameSystem$statsArgs<ExtArgs>
   skills?: boolean | Prisma.GameSystem$skillsArgs<ExtArgs>
+  ancestries?: boolean | Prisma.GameSystem$ancestriesArgs<ExtArgs>
+  classes?: boolean | Prisma.GameSystem$classesArgs<ExtArgs>
+  subclasses?: boolean | Prisma.GameSystem$subclassesArgs<ExtArgs>
+  levelProgressions?: boolean | Prisma.GameSystem$levelProgressionsArgs<ExtArgs>
+  features?: boolean | Prisma.GameSystem$featuresArgs<ExtArgs>
   campaigns?: boolean | Prisma.GameSystem$campaignsArgs<ExtArgs>
   _count?: boolean | Prisma.GameSystemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gameSystem"]>
@@ -689,6 +1284,11 @@ export type GameSystemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type GameSystemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stats?: boolean | Prisma.GameSystem$statsArgs<ExtArgs>
   skills?: boolean | Prisma.GameSystem$skillsArgs<ExtArgs>
+  ancestries?: boolean | Prisma.GameSystem$ancestriesArgs<ExtArgs>
+  classes?: boolean | Prisma.GameSystem$classesArgs<ExtArgs>
+  subclasses?: boolean | Prisma.GameSystem$subclassesArgs<ExtArgs>
+  levelProgressions?: boolean | Prisma.GameSystem$levelProgressionsArgs<ExtArgs>
+  features?: boolean | Prisma.GameSystem$featuresArgs<ExtArgs>
   campaigns?: boolean | Prisma.GameSystem$campaignsArgs<ExtArgs>
   _count?: boolean | Prisma.GameSystemCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -700,6 +1300,11 @@ export type $GameSystemPayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     stats: Prisma.$StatPayload<ExtArgs>[]
     skills: Prisma.$SkillPayload<ExtArgs>[]
+    ancestries: Prisma.$AncestryPayload<ExtArgs>[]
+    classes: Prisma.$CharacterClassPayload<ExtArgs>[]
+    subclasses: Prisma.$CharacterSubclassPayload<ExtArgs>[]
+    levelProgressions: Prisma.$LevelProgressionPayload<ExtArgs>[]
+    features: Prisma.$FeaturePayload<ExtArgs>[]
     campaigns: Prisma.$CampaignPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1104,6 +1709,11 @@ export interface Prisma__GameSystemClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stats<T extends Prisma.GameSystem$statsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$statsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   skills<T extends Prisma.GameSystem$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ancestries<T extends Prisma.GameSystem$ancestriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$ancestriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AncestryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classes<T extends Prisma.GameSystem$classesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$classesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subclasses<T extends Prisma.GameSystem$subclassesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$subclassesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSubclassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  levelProgressions<T extends Prisma.GameSystem$levelProgressionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$levelProgressionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LevelProgressionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  features<T extends Prisma.GameSystem$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   campaigns<T extends Prisma.GameSystem$campaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1572,6 +2182,126 @@ export type GameSystem$skillsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.SkillScalarFieldEnum | Prisma.SkillScalarFieldEnum[]
+}
+
+/**
+ * GameSystem.ancestries
+ */
+export type GameSystem$ancestriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Ancestry
+   */
+  select?: Prisma.AncestrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Ancestry
+   */
+  omit?: Prisma.AncestryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AncestryInclude<ExtArgs> | null
+  where?: Prisma.AncestryWhereInput
+  orderBy?: Prisma.AncestryOrderByWithRelationInput | Prisma.AncestryOrderByWithRelationInput[]
+  cursor?: Prisma.AncestryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AncestryScalarFieldEnum | Prisma.AncestryScalarFieldEnum[]
+}
+
+/**
+ * GameSystem.classes
+ */
+export type GameSystem$classesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterClass
+   */
+  select?: Prisma.CharacterClassSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterClass
+   */
+  omit?: Prisma.CharacterClassOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterClassInclude<ExtArgs> | null
+  where?: Prisma.CharacterClassWhereInput
+  orderBy?: Prisma.CharacterClassOrderByWithRelationInput | Prisma.CharacterClassOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterClassWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterClassScalarFieldEnum | Prisma.CharacterClassScalarFieldEnum[]
+}
+
+/**
+ * GameSystem.subclasses
+ */
+export type GameSystem$subclassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSubclass
+   */
+  select?: Prisma.CharacterSubclassSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSubclass
+   */
+  omit?: Prisma.CharacterSubclassOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSubclassInclude<ExtArgs> | null
+  where?: Prisma.CharacterSubclassWhereInput
+  orderBy?: Prisma.CharacterSubclassOrderByWithRelationInput | Prisma.CharacterSubclassOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterSubclassWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterSubclassScalarFieldEnum | Prisma.CharacterSubclassScalarFieldEnum[]
+}
+
+/**
+ * GameSystem.levelProgressions
+ */
+export type GameSystem$levelProgressionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LevelProgression
+   */
+  select?: Prisma.LevelProgressionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LevelProgression
+   */
+  omit?: Prisma.LevelProgressionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LevelProgressionInclude<ExtArgs> | null
+  where?: Prisma.LevelProgressionWhereInput
+  orderBy?: Prisma.LevelProgressionOrderByWithRelationInput | Prisma.LevelProgressionOrderByWithRelationInput[]
+  cursor?: Prisma.LevelProgressionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LevelProgressionScalarFieldEnum | Prisma.LevelProgressionScalarFieldEnum[]
+}
+
+/**
+ * GameSystem.features
+ */
+export type GameSystem$featuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Feature
+   */
+  select?: Prisma.FeatureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Feature
+   */
+  omit?: Prisma.FeatureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeatureInclude<ExtArgs> | null
+  where?: Prisma.FeatureWhereInput
+  orderBy?: Prisma.FeatureOrderByWithRelationInput | Prisma.FeatureOrderByWithRelationInput[]
+  cursor?: Prisma.FeatureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FeatureScalarFieldEnum | Prisma.FeatureScalarFieldEnum[]
 }
 
 /**

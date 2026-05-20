@@ -67,6 +67,13 @@ enum CreatureSize {
   GARGANTUAN
 }
 
+enum FeatureSourceType {
+  SYSTEM
+  ANCESTRY
+  CLASS
+  SUBCLASS
+}
+
 enum CampaignActorLocation {
   TABLE
   LIBRARY
@@ -159,6 +166,7 @@ model GameSystem {
   classes           CharacterClass[]
   subclasses        CharacterSubclass[]
   levelProgressions LevelProgression[]
+  features          Feature[]
   campaigns         Campaign[]
 }
 
@@ -173,7 +181,8 @@ model Ancestry {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
-  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  system   GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  features Feature[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -196,6 +205,7 @@ model CharacterClass {
   system            GameSystem          @relation(fields: [systemId], references: [id], onDelete: Cascade)
   subclasses        CharacterSubclass[]
   levelProgressions LevelProgression[]
+  features          Feature[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -216,6 +226,7 @@ model CharacterSubclass {
 
   system         GameSystem     @relation(fields: [systemId], references: [id], onDelete: Cascade)
   characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  features       Feature[]
 
   @@unique([classId, name])
   @@unique([classId, key])
@@ -235,11 +246,45 @@ model LevelProgression {
 
   system         GameSystem     @relation(fields: [systemId], references: [id], onDelete: Cascade)
   characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  features       Feature[]
 
   @@unique([classId, level])
   @@index([systemId])
   @@index([classId])
   @@index([level])
+}
+
+model Feature {
+  id                 String            @id @default(uuid())
+  systemId           String
+  ancestryId         String?
+  classId            String?
+  subclassId         String?
+  levelProgressionId String?
+  sourceType         FeatureSourceType
+  name               String
+  key                String
+  description        String?
+  level              Int?
+  order              Int               @default(0)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  system           GameSystem         @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  ancestry         Ancestry?          @relation(fields: [ancestryId], references: [id], onDelete: Cascade)
+  characterClass   CharacterClass?    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subclass         CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: Cascade)
+  levelProgression LevelProgression?  @relation(fields: [levelProgressionId], references: [id], onDelete: SetNull)
+
+  @@unique([systemId, key])
+  @@index([systemId])
+  @@index([ancestryId])
+  @@index([classId])
+  @@index([subclassId])
+  @@index([levelProgressionId])
+  @@index([sourceType])
+  @@index([level])
+  @@index([order])
 }
 
 model Stat {

@@ -84,6 +84,28 @@ export const SceneTokenImageFit = {
 export type SceneTokenImageFit = (typeof SceneTokenImageFit)[keyof typeof SceneTokenImageFit]
 
 
+export const CreatureSize = {
+  TINY: 'TINY',
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE',
+  HUGE: 'HUGE',
+  GARGANTUAN: 'GARGANTUAN'
+} as const
+
+export type CreatureSize = (typeof CreatureSize)[keyof typeof CreatureSize]
+
+
+export const FeatureSourceType = {
+  SYSTEM: 'SYSTEM',
+  ANCESTRY: 'ANCESTRY',
+  CLASS: 'CLASS',
+  SUBCLASS: 'SUBCLASS'
+} as const
+
+export type FeatureSourceType = (typeof FeatureSourceType)[keyof typeof FeatureSourceType]
+
+
 export const CampaignActorLocation = {
   TABLE: 'TABLE',
   LIBRARY: 'LIBRARY',

@@ -56,6 +56,11 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   GameSystem: 'GameSystem',
+  Ancestry: 'Ancestry',
+  CharacterClass: 'CharacterClass',
+  CharacterSubclass: 'CharacterSubclass',
+  LevelProgression: 'LevelProgression',
+  Feature: 'Feature',
   Stat: 'Stat',
   Skill: 'Skill',
   Campaign: 'Campaign',
@@ -151,6 +156,85 @@ export const GameSystemScalarFieldEnum = {
 } as const
 
 export type GameSystemScalarFieldEnum = (typeof GameSystemScalarFieldEnum)[keyof typeof GameSystemScalarFieldEnum]
+
+
+export const AncestryScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  defaultSizeCategory: 'defaultSizeCategory',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AncestryScalarFieldEnum = (typeof AncestryScalarFieldEnum)[keyof typeof AncestryScalarFieldEnum]
+
+
+export const CharacterClassScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  primaryRole: 'primaryRole',
+  hitDie: 'hitDie',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterClassScalarFieldEnum = (typeof CharacterClassScalarFieldEnum)[keyof typeof CharacterClassScalarFieldEnum]
+
+
+export const CharacterSubclassScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  classId: 'classId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSubclassScalarFieldEnum = (typeof CharacterSubclassScalarFieldEnum)[keyof typeof CharacterSubclassScalarFieldEnum]
+
+
+export const LevelProgressionScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  classId: 'classId',
+  level: 'level',
+  proficiencyBonus: 'proficiencyBonus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LevelProgressionScalarFieldEnum = (typeof LevelProgressionScalarFieldEnum)[keyof typeof LevelProgressionScalarFieldEnum]
+
+
+export const FeatureScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  ancestryId: 'ancestryId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  levelProgressionId: 'levelProgressionId',
+  sourceType: 'sourceType',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  level: 'level',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
 
 
 export const StatScalarFieldEnum = {

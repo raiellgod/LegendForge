@@ -389,6 +389,11 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   GameSystem: 'GameSystem',
+  Ancestry: 'Ancestry',
+  CharacterClass: 'CharacterClass',
+  CharacterSubclass: 'CharacterSubclass',
+  LevelProgression: 'LevelProgression',
+  Feature: 'Feature',
   Stat: 'Stat',
   Skill: 'Skill',
   Campaign: 'Campaign',
@@ -413,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -784,6 +789,376 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.GameSystemCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.GameSystemCountAggregateOutputType> | number
+        }
+      }
+    }
+    Ancestry: {
+      payload: Prisma.$AncestryPayload<ExtArgs>
+      fields: Prisma.AncestryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AncestryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AncestryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>
+        }
+        findFirst: {
+          args: Prisma.AncestryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AncestryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>
+        }
+        findMany: {
+          args: Prisma.AncestryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>[]
+        }
+        create: {
+          args: Prisma.AncestryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>
+        }
+        createMany: {
+          args: Prisma.AncestryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AncestryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>[]
+        }
+        delete: {
+          args: Prisma.AncestryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>
+        }
+        update: {
+          args: Prisma.AncestryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>
+        }
+        deleteMany: {
+          args: Prisma.AncestryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AncestryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AncestryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>[]
+        }
+        upsert: {
+          args: Prisma.AncestryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AncestryPayload>
+        }
+        aggregate: {
+          args: Prisma.AncestryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAncestry>
+        }
+        groupBy: {
+          args: Prisma.AncestryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AncestryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AncestryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AncestryCountAggregateOutputType> | number
+        }
+      }
+    }
+    CharacterClass: {
+      payload: Prisma.$CharacterClassPayload<ExtArgs>
+      fields: Prisma.CharacterClassFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterClassFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterClassFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterClassFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterClassFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>
+        }
+        findMany: {
+          args: Prisma.CharacterClassFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>[]
+        }
+        create: {
+          args: Prisma.CharacterClassCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>
+        }
+        createMany: {
+          args: Prisma.CharacterClassCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterClassCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterClassDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>
+        }
+        update: {
+          args: Prisma.CharacterClassUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterClassDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterClassUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterClassUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterClassUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterClassPayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterClassAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterClass>
+        }
+        groupBy: {
+          args: Prisma.CharacterClassGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterClassGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterClassCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterClassCountAggregateOutputType> | number
+        }
+      }
+    }
+    CharacterSubclass: {
+      payload: Prisma.$CharacterSubclassPayload<ExtArgs>
+      fields: Prisma.CharacterSubclassFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterSubclassFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterSubclassFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterSubclassFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterSubclassFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>
+        }
+        findMany: {
+          args: Prisma.CharacterSubclassFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>[]
+        }
+        create: {
+          args: Prisma.CharacterSubclassCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>
+        }
+        createMany: {
+          args: Prisma.CharacterSubclassCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterSubclassCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterSubclassDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>
+        }
+        update: {
+          args: Prisma.CharacterSubclassUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterSubclassDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterSubclassUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterSubclassUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterSubclassUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSubclassPayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterSubclassAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterSubclass>
+        }
+        groupBy: {
+          args: Prisma.CharacterSubclassGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSubclassGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterSubclassCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSubclassCountAggregateOutputType> | number
+        }
+      }
+    }
+    LevelProgression: {
+      payload: Prisma.$LevelProgressionPayload<ExtArgs>
+      fields: Prisma.LevelProgressionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LevelProgressionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LevelProgressionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>
+        }
+        findFirst: {
+          args: Prisma.LevelProgressionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LevelProgressionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>
+        }
+        findMany: {
+          args: Prisma.LevelProgressionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>[]
+        }
+        create: {
+          args: Prisma.LevelProgressionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>
+        }
+        createMany: {
+          args: Prisma.LevelProgressionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LevelProgressionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>[]
+        }
+        delete: {
+          args: Prisma.LevelProgressionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>
+        }
+        update: {
+          args: Prisma.LevelProgressionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>
+        }
+        deleteMany: {
+          args: Prisma.LevelProgressionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LevelProgressionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LevelProgressionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>[]
+        }
+        upsert: {
+          args: Prisma.LevelProgressionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionPayload>
+        }
+        aggregate: {
+          args: Prisma.LevelProgressionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLevelProgression>
+        }
+        groupBy: {
+          args: Prisma.LevelProgressionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LevelProgressionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LevelProgressionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LevelProgressionCountAggregateOutputType> | number
+        }
+      }
+    }
+    Feature: {
+      payload: Prisma.$FeaturePayload<ExtArgs>
+      fields: Prisma.FeatureFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FeatureFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FeatureFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>
+        }
+        findFirst: {
+          args: Prisma.FeatureFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FeatureFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>
+        }
+        findMany: {
+          args: Prisma.FeatureFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>[]
+        }
+        create: {
+          args: Prisma.FeatureCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>
+        }
+        createMany: {
+          args: Prisma.FeatureCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FeatureCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>[]
+        }
+        delete: {
+          args: Prisma.FeatureDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>
+        }
+        update: {
+          args: Prisma.FeatureUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>
+        }
+        deleteMany: {
+          args: Prisma.FeatureDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FeatureUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FeatureUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>[]
+        }
+        upsert: {
+          args: Prisma.FeatureUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeaturePayload>
+        }
+        aggregate: {
+          args: Prisma.FeatureAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFeature>
+        }
+        groupBy: {
+          args: Prisma.FeatureGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeatureGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FeatureCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeatureCountAggregateOutputType> | number
         }
       }
     }
@@ -1562,6 +1937,85 @@ export const GameSystemScalarFieldEnum = {
 export type GameSystemScalarFieldEnum = (typeof GameSystemScalarFieldEnum)[keyof typeof GameSystemScalarFieldEnum]
 
 
+export const AncestryScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  defaultSizeCategory: 'defaultSizeCategory',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AncestryScalarFieldEnum = (typeof AncestryScalarFieldEnum)[keyof typeof AncestryScalarFieldEnum]
+
+
+export const CharacterClassScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  primaryRole: 'primaryRole',
+  hitDie: 'hitDie',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterClassScalarFieldEnum = (typeof CharacterClassScalarFieldEnum)[keyof typeof CharacterClassScalarFieldEnum]
+
+
+export const CharacterSubclassScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  classId: 'classId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSubclassScalarFieldEnum = (typeof CharacterSubclassScalarFieldEnum)[keyof typeof CharacterSubclassScalarFieldEnum]
+
+
+export const LevelProgressionScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  classId: 'classId',
+  level: 'level',
+  proficiencyBonus: 'proficiencyBonus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LevelProgressionScalarFieldEnum = (typeof LevelProgressionScalarFieldEnum)[keyof typeof LevelProgressionScalarFieldEnum]
+
+
+export const FeatureScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  ancestryId: 'ancestryId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  levelProgressionId: 'levelProgressionId',
+  sourceType: 'sourceType',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  level: 'level',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
+
+
 export const StatScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -1794,6 +2248,34 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'CreatureSize'
+ */
+export type EnumCreatureSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreatureSize'>
+    
+
+
+/**
+ * Reference to a field of type 'CreatureSize[]'
+ */
+export type ListEnumCreatureSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreatureSize[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FeatureSourceType'
+ */
+export type EnumFeatureSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeatureSourceType'>
+    
+
+
+/**
+ * Reference to a field of type 'FeatureSourceType[]'
+ */
+export type ListEnumFeatureSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeatureSourceType[]'>
+    
+
+
+/**
  * Reference to a field of type 'ParticipantRole'
  */
 export type EnumParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ParticipantRole'>
@@ -2004,6 +2486,11 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   gameSystem?: Prisma.GameSystemOmit
+  ancestry?: Prisma.AncestryOmit
+  characterClass?: Prisma.CharacterClassOmit
+  characterSubclass?: Prisma.CharacterSubclassOmit
+  levelProgression?: Prisma.LevelProgressionOmit
+  feature?: Prisma.FeatureOmit
   stat?: Prisma.StatOmit
   skill?: Prisma.SkillOmit
   campaign?: Prisma.CampaignOmit

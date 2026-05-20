@@ -5,6 +5,35 @@ import { prisma } from "../src/lib/prisma.js";
 const SYSTEM_NAME = "Meu sistema";
 const SYSTEM_SLUG = "meu-sistema";
 
+function createKeyFromName(name: string) {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function getProficiencyBonusByLevel(level: number) {
+  if (level >= 17) {
+    return 6;
+  }
+
+  if (level >= 13) {
+    return 5;
+  }
+
+  if (level >= 9) {
+    return 4;
+  }
+
+  if (level >= 5) {
+    return 3;
+  }
+
+  return 2;
+}
+
 const stats = [
   {
     name: "Força",
@@ -51,78 +80,24 @@ const stats = [
 ] as const;
 
 const skills = [
-  {
-    name: "Acrobacia",
-    statName: "Destreza",
-  },
-  {
-    name: "Arcanismo",
-    statName: "Inteligência",
-  },
-  {
-    name: "Atletismo",
-    statName: "Força",
-  },
-  {
-    name: "Atuação",
-    statName: "Carisma",
-  },
-  {
-    name: "Blefar",
-    statName: "Carisma",
-  },
-  {
-    name: "Furtividade",
-    statName: "Destreza",
-  },
-  {
-    name: "História",
-    statName: "Inteligência",
-  },
-  {
-    name: "Intimidação",
-    statName: "Carisma",
-  },
-  {
-    name: "Intuição",
-    statName: "Sabedoria",
-  },
-  {
-    name: "Investigação",
-    statName: "Inteligência",
-  },
-  {
-    name: "Lidar com Animais",
-    statName: "Sabedoria",
-  },
-  {
-    name: "Medicina",
-    statName: "Sabedoria",
-  },
-  {
-    name: "Natureza",
-    statName: "Inteligência",
-  },
-  {
-    name: "Percepção",
-    statName: "Sabedoria",
-  },
-  {
-    name: "Persuasão",
-    statName: "Carisma",
-  },
-  {
-    name: "Prestidigitação",
-    statName: "Destreza",
-  },
-  {
-    name: "Religião",
-    statName: "Inteligência",
-  },
-  {
-    name: "Sobrevivência",
-    statName: "Sabedoria",
-  },
+  { name: "Acrobacia", statName: "Destreza" },
+  { name: "Arcanismo", statName: "Inteligência" },
+  { name: "Atletismo", statName: "Força" },
+  { name: "Atuação", statName: "Carisma" },
+  { name: "Blefar", statName: "Carisma" },
+  { name: "Furtividade", statName: "Destreza" },
+  { name: "História", statName: "Inteligência" },
+  { name: "Intimidação", statName: "Carisma" },
+  { name: "Intuição", statName: "Sabedoria" },
+  { name: "Investigação", statName: "Inteligência" },
+  { name: "Lidar com Animais", statName: "Sabedoria" },
+  { name: "Medicina", statName: "Sabedoria" },
+  { name: "Natureza", statName: "Inteligência" },
+  { name: "Percepção", statName: "Sabedoria" },
+  { name: "Persuasão", statName: "Carisma" },
+  { name: "Prestidigitação", statName: "Destreza" },
+  { name: "Religião", statName: "Inteligência" },
+  { name: "Sobrevivência", statName: "Sabedoria" },
 ] as const;
 
 const ancestries = [
@@ -491,6 +466,64 @@ const subclasses = [
   },
 ] as const;
 
+const features = [
+  {
+    sourceType: "ANCESTRY",
+    ancestryKey: "humanis",
+    classKey: null,
+    subclassKey: null,
+    level: null,
+    name: "Adaptabilidade",
+    key: "humanis-adaptability",
+    description:
+      "Humanis aprendem rápido, improvisam sob pressão e se adaptam a diferentes culturas, perigos e caminhos de vida.",
+  },
+  {
+    sourceType: "ANCESTRY",
+    ancestryKey: "sylvaris",
+    classKey: null,
+    subclassKey: null,
+    level: null,
+    name: "Sentidos Refinados",
+    key: "sylvaris-refined-senses",
+    description:
+      "Sylvaris possuem percepção aguçada e sensibilidade a detalhes sutis do ambiente.",
+  },
+  {
+    sourceType: "CLASS",
+    ancestryKey: null,
+    classKey: "fighter",
+    subclassKey: null,
+    level: 1,
+    name: "Disciplina Marcial",
+    key: "fighter-martial-discipline",
+    description:
+      "Guerreiros iniciam sua jornada com treinamento sólido em armas, armaduras e leitura de combate.",
+  },
+  {
+    sourceType: "CLASS",
+    ancestryKey: null,
+    classKey: "necromancer",
+    subclassKey: null,
+    level: 1,
+    name: "Toque Fúnebre",
+    key: "necromancer-funeral-touch",
+    description:
+      "Necromantes aprendem a sentir, manipular e perturbar a energia que separa vida, morte e memória.",
+  },
+  {
+    sourceType: "SUBCLASS",
+    ancestryKey: null,
+    classKey: "necromancer",
+    subclassKey: "shepherd-of-the-dead",
+    level: 3,
+    name: "Voz dos Túmulos",
+    key: "shepherd-of-the-dead-grave-voice",
+    description:
+      "Pastores dos Mortos conseguem ouvir ecos persistentes dos falecidos e usar esses sussurros como orientação.",
+  },
+] as const;
+
 async function main() {
   const system = await prisma.gameSystem.upsert({
     where: {
@@ -510,82 +543,77 @@ async function main() {
   console.log(`Sistema criado/atualizado: ${system.name}`);
 
   const createdStats = new Map<string, string>();
+  const createdAncestries = new Map<string, string>();
+  const createdClasses = new Map<string, string>();
+  const createdSubclasses = new Map<string, string>();
+  const createdLevelProgressions = new Map<string, string>();
 
   for (const [index, statData] of stats.entries()) {
-  const stat = await prisma.stat.upsert({
-    where: {
-      systemId_name: {
-        systemId: system.id,
-        name: statData.name,
-      },
-    },
-    update: {
-      key: statData.key,
-      shortName: statData.shortName,
-      description: statData.description,
-      order: index + 1,
-    },
-    create: {
-      systemId: system.id,
-      name: statData.name,
-      key: statData.key,
-      shortName: statData.shortName,
-      description: statData.description,
-      order: index + 1,
-    },
-  });
-
-  createdStats.set(stat.name, stat.id);
-
-  console.log(`Atributo criado/validado: ${stat.name}`);
-}
-
-  for (const skill of skills) {
-
-    const skillKey = skill.name
-  .normalize("NFD")
-  .replace(/[\u0300-\u036f]/g, "")
-  .toLowerCase()
-  .replace(/[^a-z0-9]+/g, "-")
-  .replace(/(^-|-$)/g, "");
-
-    const statId = createdStats.get(skill.statName);
-
-    if (!statId) {
-      throw new Error(
-        `Atributo "${skill.statName}" não encontrado para a perícia "${skill.name}".`,
-      );
-    }
-
-    const createdSkill = await prisma.skill.upsert({
+    const stat = await prisma.stat.upsert({
       where: {
         systemId_name: {
           systemId: system.id,
-          name: skill.name,
+          name: statData.name,
         },
       },
-     update: {
-  statId,
-  key: skillKey,
-  description: null,
-  order: skills.findIndex((currentSkill) => currentSkill.name === skill.name) + 1,
-},
-create: {
-  systemId: system.id,
-  statId,
-  name: skill.name,
-  key: skillKey,
-  description: null,
-  order: skills.findIndex((currentSkill) => currentSkill.name === skill.name) + 1,
-},
+      update: {
+        key: statData.key,
+        shortName: statData.shortName,
+        description: statData.description,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        name: statData.name,
+        key: statData.key,
+        shortName: statData.shortName,
+        description: statData.description,
+        order: index + 1,
+      },
     });
 
-    console.log(
-      `Perícia criada/validada: ${createdSkill.name} → ${skill.statName}`,
-    );
+    createdStats.set(stat.name, stat.id);
+
+    console.log(`Atributo criado/validado: ${stat.name}`);
   }
 
-    for (const [index, ancestryData] of ancestries.entries()) {
+  for (const [index, skillData] of skills.entries()) {
+    const skillKey = createKeyFromName(skillData.name);
+    const statId = createdStats.get(skillData.statName);
+
+    if (!statId) {
+      throw new Error(
+        `Atributo "${skillData.statName}" não encontrado para a perícia "${skillData.name}".`,
+      );
+    }
+
+    const skill = await prisma.skill.upsert({
+      where: {
+        systemId_name: {
+          systemId: system.id,
+          name: skillData.name,
+        },
+      },
+      update: {
+        statId,
+        key: skillKey,
+        description: null,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        statId,
+        name: skillData.name,
+        key: skillKey,
+        description: null,
+        order: index + 1,
+      },
+    });
+
+    console.log(`Perícia criada/validada: ${skill.name} → ${skillData.statName}`);
+  }
+
+  for (const [index, ancestryData] of ancestries.entries()) {
     const ancestry = await prisma.ancestry.upsert({
       where: {
         systemId_key: {
@@ -609,10 +637,10 @@ create: {
       },
     });
 
-       console.log(`Ancestralidade criada/validada: ${ancestry.name}`);
-  }
+    createdAncestries.set(ancestryData.key, ancestry.id);
 
-    const createdClasses = new Map<string, string>();
+    console.log(`Ancestralidade criada/validada: ${ancestry.name}`);
+  }
 
   for (const [index, classData] of classes.entries()) {
     const characterClass = await prisma.characterClass.upsert({
@@ -640,30 +668,10 @@ create: {
       },
     });
 
-        createdClasses.set(classData.key, characterClass.id);
+    createdClasses.set(classData.key, characterClass.id);
 
     console.log(`Classe criada/validada: ${characterClass.name}`);
   }
-
-    const getProficiencyBonusByLevel = (level: number) => {
-    if (level >= 17) {
-      return 6;
-    }
-
-    if (level >= 13) {
-      return 5;
-    }
-
-    if (level >= 9) {
-      return 4;
-    }
-
-    if (level >= 5) {
-      return 3;
-    }
-
-    return 2;
-  };
 
   for (const classData of classes) {
     const classId = createdClasses.get(classData.key);
@@ -694,13 +702,15 @@ create: {
         },
       });
 
+      createdLevelProgressions.set(`${classData.key}:${level}`, progression.id);
+
       console.log(
         `Progressão validada: ${classData.name} nível ${progression.level}`,
       );
     }
   }
 
-    for (const [index, subclassData] of subclasses.entries()) {
+  for (const [index, subclassData] of subclasses.entries()) {
     const classId = createdClasses.get(subclassData.classKey);
 
     if (!classId) {
@@ -732,8 +742,92 @@ create: {
       },
     });
 
+    createdSubclasses.set(
+      `${subclassData.classKey}:${subclassData.key}`,
+      subclass.id,
+    );
+
     console.log(`Subclasse criada/validada: ${subclass.name}`);
   }
+
+  for (const [index, featureData] of features.entries()) {
+    const ancestryId = featureData.ancestryKey
+      ? createdAncestries.get(featureData.ancestryKey)
+      : null;
+
+    const classId = featureData.classKey
+      ? createdClasses.get(featureData.classKey)
+      : null;
+
+    const subclassId =
+      featureData.classKey && featureData.subclassKey
+        ? createdSubclasses.get(
+            `${featureData.classKey}:${featureData.subclassKey}`,
+          )
+        : null;
+
+    const levelProgressionId =
+      featureData.classKey && featureData.level
+        ? createdLevelProgressions.get(
+            `${featureData.classKey}:${featureData.level}`,
+          )
+        : null;
+
+    if (featureData.ancestryKey && !ancestryId) {
+      throw new Error(
+        `Ancestralidade "${featureData.ancestryKey}" não encontrada para a feature "${featureData.name}".`,
+      );
+    }
+
+    if (featureData.classKey && !classId) {
+      throw new Error(
+        `Classe "${featureData.classKey}" não encontrada para a feature "${featureData.name}".`,
+      );
+    }
+
+    if (featureData.subclassKey && !subclassId) {
+      throw new Error(
+        `Subclasse "${featureData.subclassKey}" não encontrada para a feature "${featureData.name}".`,
+      );
+    }
+
+    const feature = await prisma.feature.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: featureData.key,
+        },
+      },
+      update: {
+        ancestryId,
+        classId,
+        subclassId,
+        levelProgressionId,
+        sourceType: featureData.sourceType,
+        name: featureData.name,
+        description: featureData.description,
+        level: featureData.level,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        ancestryId,
+        classId,
+        subclassId,
+        levelProgressionId,
+        sourceType: featureData.sourceType,
+        name: featureData.name,
+        key: featureData.key,
+        description: featureData.description,
+        level: featureData.level,
+        order: index + 1,
+      },
+    });
+
+    console.log(`Feature criada/validada: ${feature.name}`);
+  }
+
+  console.log("Seed concluído com sucesso.");
 }
 
 main()
