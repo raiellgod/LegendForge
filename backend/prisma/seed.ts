@@ -645,6 +645,61 @@ create: {
     console.log(`Classe criada/validada: ${characterClass.name}`);
   }
 
+    const getProficiencyBonusByLevel = (level: number) => {
+    if (level >= 17) {
+      return 6;
+    }
+
+    if (level >= 13) {
+      return 5;
+    }
+
+    if (level >= 9) {
+      return 4;
+    }
+
+    if (level >= 5) {
+      return 3;
+    }
+
+    return 2;
+  };
+
+  for (const classData of classes) {
+    const classId = createdClasses.get(classData.key);
+
+    if (!classId) {
+      throw new Error(
+        `Classe "${classData.key}" não encontrada para criar progressão.`,
+      );
+    }
+
+    for (let level = 1; level <= 20; level += 1) {
+      const progression = await prisma.levelProgression.upsert({
+        where: {
+          classId_level: {
+            classId,
+            level,
+          },
+        },
+        update: {
+          systemId: system.id,
+          proficiencyBonus: getProficiencyBonusByLevel(level),
+        },
+        create: {
+          systemId: system.id,
+          classId,
+          level,
+          proficiencyBonus: getProficiencyBonusByLevel(level),
+        },
+      });
+
+      console.log(
+        `Progressão validada: ${classData.name} nível ${progression.level}`,
+      );
+    }
+  }
+
     for (const [index, subclassData] of subclasses.entries()) {
     const classId = createdClasses.get(subclassData.classKey);
 

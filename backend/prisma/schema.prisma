@@ -153,12 +153,13 @@ model GameSystem {
   version   Int
   createdAt DateTime @default(now())
 
-  stats      Stat[]
-  skills     Skill[]
-  ancestries Ancestry[]
-  classes    CharacterClass[]
-  subclasses CharacterSubclass[]
-  campaigns  Campaign[]
+  stats             Stat[]
+  skills            Skill[]
+  ancestries        Ancestry[]
+  classes           CharacterClass[]
+  subclasses        CharacterSubclass[]
+  levelProgressions LevelProgression[]
+  campaigns         Campaign[]
 }
 
 model Ancestry {
@@ -192,8 +193,9 @@ model CharacterClass {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  system     GameSystem          @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  subclasses CharacterSubclass[]
+  system            GameSystem          @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  subclasses        CharacterSubclass[]
+  levelProgressions LevelProgression[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -220,6 +222,24 @@ model CharacterSubclass {
   @@index([systemId])
   @@index([classId])
   @@index([order])
+}
+
+model LevelProgression {
+  id               String   @id @default(uuid())
+  systemId         String
+  classId          String
+  level            Int
+  proficiencyBonus Int?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  system         GameSystem     @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, level])
+  @@index([systemId])
+  @@index([classId])
+  @@index([level])
 }
 
 model Stat {
