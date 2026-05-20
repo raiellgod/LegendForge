@@ -57,6 +57,7 @@ export const ModelName = {
   Verification: 'Verification',
   GameSystem: 'GameSystem',
   Ancestry: 'Ancestry',
+  Background: 'Background',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
@@ -175,6 +176,24 @@ export const AncestryScalarFieldEnum = {
 export type AncestryScalarFieldEnum = (typeof AncestryScalarFieldEnum)[keyof typeof AncestryScalarFieldEnum]
 
 
+export const BackgroundScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  skillKeys: 'skillKeys',
+  toolNames: 'toolNames',
+  languageChoiceCount: 'languageChoiceCount',
+  startingGold: 'startingGold',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BackgroundScalarFieldEnum = (typeof BackgroundScalarFieldEnum)[keyof typeof BackgroundScalarFieldEnum]
+
+
 export const CharacterClassScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -223,6 +242,7 @@ export const FeatureScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
   ancestryId: 'ancestryId',
+  backgroundId: 'backgroundId',
   classId: 'classId',
   subclassId: 'subclassId',
   levelProgressionId: 'levelProgressionId',

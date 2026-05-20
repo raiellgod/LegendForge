@@ -40,6 +40,7 @@ export type FeatureMinAggregateOutputType = {
   id: string | null
   systemId: string | null
   ancestryId: string | null
+  backgroundId: string | null
   classId: string | null
   subclassId: string | null
   levelProgressionId: string | null
@@ -57,6 +58,7 @@ export type FeatureMaxAggregateOutputType = {
   id: string | null
   systemId: string | null
   ancestryId: string | null
+  backgroundId: string | null
   classId: string | null
   subclassId: string | null
   levelProgressionId: string | null
@@ -74,6 +76,7 @@ export type FeatureCountAggregateOutputType = {
   id: number
   systemId: number
   ancestryId: number
+  backgroundId: number
   classId: number
   subclassId: number
   levelProgressionId: number
@@ -103,6 +106,7 @@ export type FeatureMinAggregateInputType = {
   id?: true
   systemId?: true
   ancestryId?: true
+  backgroundId?: true
   classId?: true
   subclassId?: true
   levelProgressionId?: true
@@ -120,6 +124,7 @@ export type FeatureMaxAggregateInputType = {
   id?: true
   systemId?: true
   ancestryId?: true
+  backgroundId?: true
   classId?: true
   subclassId?: true
   levelProgressionId?: true
@@ -137,6 +142,7 @@ export type FeatureCountAggregateInputType = {
   id?: true
   systemId?: true
   ancestryId?: true
+  backgroundId?: true
   classId?: true
   subclassId?: true
   levelProgressionId?: true
@@ -241,6 +247,7 @@ export type FeatureGroupByOutputType = {
   id: string
   systemId: string
   ancestryId: string | null
+  backgroundId: string | null
   classId: string | null
   subclassId: string | null
   levelProgressionId: string | null
@@ -281,6 +288,7 @@ export type FeatureWhereInput = {
   id?: Prisma.StringFilter<"Feature"> | string
   systemId?: Prisma.StringFilter<"Feature"> | string
   ancestryId?: Prisma.StringNullableFilter<"Feature"> | string | null
+  backgroundId?: Prisma.StringNullableFilter<"Feature"> | string | null
   classId?: Prisma.StringNullableFilter<"Feature"> | string | null
   subclassId?: Prisma.StringNullableFilter<"Feature"> | string | null
   levelProgressionId?: Prisma.StringNullableFilter<"Feature"> | string | null
@@ -294,6 +302,7 @@ export type FeatureWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Feature"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   ancestry?: Prisma.XOR<Prisma.AncestryNullableScalarRelationFilter, Prisma.AncestryWhereInput> | null
+  background?: Prisma.XOR<Prisma.BackgroundNullableScalarRelationFilter, Prisma.BackgroundWhereInput> | null
   characterClass?: Prisma.XOR<Prisma.CharacterClassNullableScalarRelationFilter, Prisma.CharacterClassWhereInput> | null
   subclass?: Prisma.XOR<Prisma.CharacterSubclassNullableScalarRelationFilter, Prisma.CharacterSubclassWhereInput> | null
   levelProgression?: Prisma.XOR<Prisma.LevelProgressionNullableScalarRelationFilter, Prisma.LevelProgressionWhereInput> | null
@@ -303,6 +312,7 @@ export type FeatureOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   ancestryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  backgroundId?: Prisma.SortOrderInput | Prisma.SortOrder
   classId?: Prisma.SortOrderInput | Prisma.SortOrder
   subclassId?: Prisma.SortOrderInput | Prisma.SortOrder
   levelProgressionId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -316,6 +326,7 @@ export type FeatureOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   ancestry?: Prisma.AncestryOrderByWithRelationInput
+  background?: Prisma.BackgroundOrderByWithRelationInput
   characterClass?: Prisma.CharacterClassOrderByWithRelationInput
   subclass?: Prisma.CharacterSubclassOrderByWithRelationInput
   levelProgression?: Prisma.LevelProgressionOrderByWithRelationInput
@@ -329,6 +340,7 @@ export type FeatureWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.FeatureWhereInput | Prisma.FeatureWhereInput[]
   systemId?: Prisma.StringFilter<"Feature"> | string
   ancestryId?: Prisma.StringNullableFilter<"Feature"> | string | null
+  backgroundId?: Prisma.StringNullableFilter<"Feature"> | string | null
   classId?: Prisma.StringNullableFilter<"Feature"> | string | null
   subclassId?: Prisma.StringNullableFilter<"Feature"> | string | null
   levelProgressionId?: Prisma.StringNullableFilter<"Feature"> | string | null
@@ -342,6 +354,7 @@ export type FeatureWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Feature"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   ancestry?: Prisma.XOR<Prisma.AncestryNullableScalarRelationFilter, Prisma.AncestryWhereInput> | null
+  background?: Prisma.XOR<Prisma.BackgroundNullableScalarRelationFilter, Prisma.BackgroundWhereInput> | null
   characterClass?: Prisma.XOR<Prisma.CharacterClassNullableScalarRelationFilter, Prisma.CharacterClassWhereInput> | null
   subclass?: Prisma.XOR<Prisma.CharacterSubclassNullableScalarRelationFilter, Prisma.CharacterSubclassWhereInput> | null
   levelProgression?: Prisma.XOR<Prisma.LevelProgressionNullableScalarRelationFilter, Prisma.LevelProgressionWhereInput> | null
@@ -351,6 +364,7 @@ export type FeatureOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   ancestryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  backgroundId?: Prisma.SortOrderInput | Prisma.SortOrder
   classId?: Prisma.SortOrderInput | Prisma.SortOrder
   subclassId?: Prisma.SortOrderInput | Prisma.SortOrder
   levelProgressionId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -376,6 +390,7 @@ export type FeatureScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Feature"> | string
   systemId?: Prisma.StringWithAggregatesFilter<"Feature"> | string
   ancestryId?: Prisma.StringNullableWithAggregatesFilter<"Feature"> | string | null
+  backgroundId?: Prisma.StringNullableWithAggregatesFilter<"Feature"> | string | null
   classId?: Prisma.StringNullableWithAggregatesFilter<"Feature"> | string | null
   subclassId?: Prisma.StringNullableWithAggregatesFilter<"Feature"> | string | null
   levelProgressionId?: Prisma.StringNullableWithAggregatesFilter<"Feature"> | string | null
@@ -401,6 +416,7 @@ export type FeatureCreateInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutFeaturesInput
   ancestry?: Prisma.AncestryCreateNestedOneWithoutFeaturesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutFeaturesInput
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutFeaturesInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
@@ -410,6 +426,7 @@ export type FeatureUncheckedCreateInput = {
   id?: string
   systemId: string
   ancestryId?: string | null
+  backgroundId?: string | null
   classId?: string | null
   subclassId?: string | null
   levelProgressionId?: string | null
@@ -435,6 +452,7 @@ export type FeatureUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutFeaturesNestedInput
   ancestry?: Prisma.AncestryUpdateOneWithoutFeaturesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutFeaturesNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneWithoutFeaturesNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
@@ -444,6 +462,7 @@ export type FeatureUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -461,6 +480,7 @@ export type FeatureCreateManyInput = {
   id?: string
   systemId: string
   ancestryId?: string | null
+  backgroundId?: string | null
   classId?: string | null
   subclassId?: string | null
   levelProgressionId?: string | null
@@ -490,6 +510,7 @@ export type FeatureUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -522,6 +543,7 @@ export type FeatureCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   ancestryId?: Prisma.SortOrder
+  backgroundId?: Prisma.SortOrder
   classId?: Prisma.SortOrder
   subclassId?: Prisma.SortOrder
   levelProgressionId?: Prisma.SortOrder
@@ -544,6 +566,7 @@ export type FeatureMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   ancestryId?: Prisma.SortOrder
+  backgroundId?: Prisma.SortOrder
   classId?: Prisma.SortOrder
   subclassId?: Prisma.SortOrder
   levelProgressionId?: Prisma.SortOrder
@@ -561,6 +584,7 @@ export type FeatureMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   ancestryId?: Prisma.SortOrder
+  backgroundId?: Prisma.SortOrder
   classId?: Prisma.SortOrder
   subclassId?: Prisma.SortOrder
   levelProgressionId?: Prisma.SortOrder
@@ -660,6 +684,48 @@ export type FeatureUncheckedUpdateManyWithoutAncestryNestedInput = {
   connect?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
   update?: Prisma.FeatureUpdateWithWhereUniqueWithoutAncestryInput | Prisma.FeatureUpdateWithWhereUniqueWithoutAncestryInput[]
   updateMany?: Prisma.FeatureUpdateManyWithWhereWithoutAncestryInput | Prisma.FeatureUpdateManyWithWhereWithoutAncestryInput[]
+  deleteMany?: Prisma.FeatureScalarWhereInput | Prisma.FeatureScalarWhereInput[]
+}
+
+export type FeatureCreateNestedManyWithoutBackgroundInput = {
+  create?: Prisma.XOR<Prisma.FeatureCreateWithoutBackgroundInput, Prisma.FeatureUncheckedCreateWithoutBackgroundInput> | Prisma.FeatureCreateWithoutBackgroundInput[] | Prisma.FeatureUncheckedCreateWithoutBackgroundInput[]
+  connectOrCreate?: Prisma.FeatureCreateOrConnectWithoutBackgroundInput | Prisma.FeatureCreateOrConnectWithoutBackgroundInput[]
+  createMany?: Prisma.FeatureCreateManyBackgroundInputEnvelope
+  connect?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+}
+
+export type FeatureUncheckedCreateNestedManyWithoutBackgroundInput = {
+  create?: Prisma.XOR<Prisma.FeatureCreateWithoutBackgroundInput, Prisma.FeatureUncheckedCreateWithoutBackgroundInput> | Prisma.FeatureCreateWithoutBackgroundInput[] | Prisma.FeatureUncheckedCreateWithoutBackgroundInput[]
+  connectOrCreate?: Prisma.FeatureCreateOrConnectWithoutBackgroundInput | Prisma.FeatureCreateOrConnectWithoutBackgroundInput[]
+  createMany?: Prisma.FeatureCreateManyBackgroundInputEnvelope
+  connect?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+}
+
+export type FeatureUpdateManyWithoutBackgroundNestedInput = {
+  create?: Prisma.XOR<Prisma.FeatureCreateWithoutBackgroundInput, Prisma.FeatureUncheckedCreateWithoutBackgroundInput> | Prisma.FeatureCreateWithoutBackgroundInput[] | Prisma.FeatureUncheckedCreateWithoutBackgroundInput[]
+  connectOrCreate?: Prisma.FeatureCreateOrConnectWithoutBackgroundInput | Prisma.FeatureCreateOrConnectWithoutBackgroundInput[]
+  upsert?: Prisma.FeatureUpsertWithWhereUniqueWithoutBackgroundInput | Prisma.FeatureUpsertWithWhereUniqueWithoutBackgroundInput[]
+  createMany?: Prisma.FeatureCreateManyBackgroundInputEnvelope
+  set?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+  disconnect?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+  delete?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+  connect?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+  update?: Prisma.FeatureUpdateWithWhereUniqueWithoutBackgroundInput | Prisma.FeatureUpdateWithWhereUniqueWithoutBackgroundInput[]
+  updateMany?: Prisma.FeatureUpdateManyWithWhereWithoutBackgroundInput | Prisma.FeatureUpdateManyWithWhereWithoutBackgroundInput[]
+  deleteMany?: Prisma.FeatureScalarWhereInput | Prisma.FeatureScalarWhereInput[]
+}
+
+export type FeatureUncheckedUpdateManyWithoutBackgroundNestedInput = {
+  create?: Prisma.XOR<Prisma.FeatureCreateWithoutBackgroundInput, Prisma.FeatureUncheckedCreateWithoutBackgroundInput> | Prisma.FeatureCreateWithoutBackgroundInput[] | Prisma.FeatureUncheckedCreateWithoutBackgroundInput[]
+  connectOrCreate?: Prisma.FeatureCreateOrConnectWithoutBackgroundInput | Prisma.FeatureCreateOrConnectWithoutBackgroundInput[]
+  upsert?: Prisma.FeatureUpsertWithWhereUniqueWithoutBackgroundInput | Prisma.FeatureUpsertWithWhereUniqueWithoutBackgroundInput[]
+  createMany?: Prisma.FeatureCreateManyBackgroundInputEnvelope
+  set?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+  disconnect?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+  delete?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+  connect?: Prisma.FeatureWhereUniqueInput | Prisma.FeatureWhereUniqueInput[]
+  update?: Prisma.FeatureUpdateWithWhereUniqueWithoutBackgroundInput | Prisma.FeatureUpdateWithWhereUniqueWithoutBackgroundInput[]
+  updateMany?: Prisma.FeatureUpdateManyWithWhereWithoutBackgroundInput | Prisma.FeatureUpdateManyWithWhereWithoutBackgroundInput[]
   deleteMany?: Prisma.FeatureScalarWhereInput | Prisma.FeatureScalarWhereInput[]
 }
 
@@ -804,6 +870,7 @@ export type FeatureCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   ancestry?: Prisma.AncestryCreateNestedOneWithoutFeaturesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutFeaturesInput
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutFeaturesInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
@@ -812,6 +879,7 @@ export type FeatureCreateWithoutSystemInput = {
 export type FeatureUncheckedCreateWithoutSystemInput = {
   id?: string
   ancestryId?: string | null
+  backgroundId?: string | null
   classId?: string | null
   subclassId?: string | null
   levelProgressionId?: string | null
@@ -858,6 +926,7 @@ export type FeatureScalarWhereInput = {
   id?: Prisma.StringFilter<"Feature"> | string
   systemId?: Prisma.StringFilter<"Feature"> | string
   ancestryId?: Prisma.StringNullableFilter<"Feature"> | string | null
+  backgroundId?: Prisma.StringNullableFilter<"Feature"> | string | null
   classId?: Prisma.StringNullableFilter<"Feature"> | string | null
   subclassId?: Prisma.StringNullableFilter<"Feature"> | string | null
   levelProgressionId?: Prisma.StringNullableFilter<"Feature"> | string | null
@@ -882,6 +951,7 @@ export type FeatureCreateWithoutAncestryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutFeaturesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutFeaturesInput
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutFeaturesInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
@@ -890,6 +960,7 @@ export type FeatureCreateWithoutAncestryInput = {
 export type FeatureUncheckedCreateWithoutAncestryInput = {
   id?: string
   systemId: string
+  backgroundId?: string | null
   classId?: string | null
   subclassId?: string | null
   levelProgressionId?: string | null
@@ -929,6 +1000,66 @@ export type FeatureUpdateManyWithWhereWithoutAncestryInput = {
   data: Prisma.XOR<Prisma.FeatureUpdateManyMutationInput, Prisma.FeatureUncheckedUpdateManyWithoutAncestryInput>
 }
 
+export type FeatureCreateWithoutBackgroundInput = {
+  id?: string
+  sourceType: $Enums.FeatureSourceType
+  name: string
+  key: string
+  description?: string | null
+  level?: number | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutFeaturesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutFeaturesInput
+  characterClass?: Prisma.CharacterClassCreateNestedOneWithoutFeaturesInput
+  subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
+  levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
+}
+
+export type FeatureUncheckedCreateWithoutBackgroundInput = {
+  id?: string
+  systemId: string
+  ancestryId?: string | null
+  classId?: string | null
+  subclassId?: string | null
+  levelProgressionId?: string | null
+  sourceType: $Enums.FeatureSourceType
+  name: string
+  key: string
+  description?: string | null
+  level?: number | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FeatureCreateOrConnectWithoutBackgroundInput = {
+  where: Prisma.FeatureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FeatureCreateWithoutBackgroundInput, Prisma.FeatureUncheckedCreateWithoutBackgroundInput>
+}
+
+export type FeatureCreateManyBackgroundInputEnvelope = {
+  data: Prisma.FeatureCreateManyBackgroundInput | Prisma.FeatureCreateManyBackgroundInput[]
+  skipDuplicates?: boolean
+}
+
+export type FeatureUpsertWithWhereUniqueWithoutBackgroundInput = {
+  where: Prisma.FeatureWhereUniqueInput
+  update: Prisma.XOR<Prisma.FeatureUpdateWithoutBackgroundInput, Prisma.FeatureUncheckedUpdateWithoutBackgroundInput>
+  create: Prisma.XOR<Prisma.FeatureCreateWithoutBackgroundInput, Prisma.FeatureUncheckedCreateWithoutBackgroundInput>
+}
+
+export type FeatureUpdateWithWhereUniqueWithoutBackgroundInput = {
+  where: Prisma.FeatureWhereUniqueInput
+  data: Prisma.XOR<Prisma.FeatureUpdateWithoutBackgroundInput, Prisma.FeatureUncheckedUpdateWithoutBackgroundInput>
+}
+
+export type FeatureUpdateManyWithWhereWithoutBackgroundInput = {
+  where: Prisma.FeatureScalarWhereInput
+  data: Prisma.XOR<Prisma.FeatureUpdateManyMutationInput, Prisma.FeatureUncheckedUpdateManyWithoutBackgroundInput>
+}
+
 export type FeatureCreateWithoutCharacterClassInput = {
   id?: string
   sourceType: $Enums.FeatureSourceType
@@ -941,6 +1072,7 @@ export type FeatureCreateWithoutCharacterClassInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutFeaturesInput
   ancestry?: Prisma.AncestryCreateNestedOneWithoutFeaturesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutFeaturesInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
 }
@@ -949,6 +1081,7 @@ export type FeatureUncheckedCreateWithoutCharacterClassInput = {
   id?: string
   systemId: string
   ancestryId?: string | null
+  backgroundId?: string | null
   subclassId?: string | null
   levelProgressionId?: string | null
   sourceType: $Enums.FeatureSourceType
@@ -999,6 +1132,7 @@ export type FeatureCreateWithoutSubclassInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutFeaturesInput
   ancestry?: Prisma.AncestryCreateNestedOneWithoutFeaturesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutFeaturesInput
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutFeaturesInput
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
 }
@@ -1007,6 +1141,7 @@ export type FeatureUncheckedCreateWithoutSubclassInput = {
   id?: string
   systemId: string
   ancestryId?: string | null
+  backgroundId?: string | null
   classId?: string | null
   levelProgressionId?: string | null
   sourceType: $Enums.FeatureSourceType
@@ -1057,6 +1192,7 @@ export type FeatureCreateWithoutLevelProgressionInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutFeaturesInput
   ancestry?: Prisma.AncestryCreateNestedOneWithoutFeaturesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutFeaturesInput
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutFeaturesInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
 }
@@ -1065,6 +1201,7 @@ export type FeatureUncheckedCreateWithoutLevelProgressionInput = {
   id?: string
   systemId: string
   ancestryId?: string | null
+  backgroundId?: string | null
   classId?: string | null
   subclassId?: string | null
   sourceType: $Enums.FeatureSourceType
@@ -1106,6 +1243,7 @@ export type FeatureUpdateManyWithWhereWithoutLevelProgressionInput = {
 export type FeatureCreateManySystemInput = {
   id?: string
   ancestryId?: string | null
+  backgroundId?: string | null
   classId?: string | null
   subclassId?: string | null
   levelProgressionId?: string | null
@@ -1130,6 +1268,7 @@ export type FeatureUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ancestry?: Prisma.AncestryUpdateOneWithoutFeaturesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutFeaturesNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneWithoutFeaturesNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
@@ -1138,6 +1277,7 @@ export type FeatureUpdateWithoutSystemInput = {
 export type FeatureUncheckedUpdateWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1154,6 +1294,7 @@ export type FeatureUncheckedUpdateWithoutSystemInput = {
 export type FeatureUncheckedUpdateManyWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1170,6 +1311,7 @@ export type FeatureUncheckedUpdateManyWithoutSystemInput = {
 export type FeatureCreateManyAncestryInput = {
   id?: string
   systemId: string
+  backgroundId?: string | null
   classId?: string | null
   subclassId?: string | null
   levelProgressionId?: string | null
@@ -1194,6 +1336,7 @@ export type FeatureUpdateWithoutAncestryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutFeaturesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutFeaturesNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneWithoutFeaturesNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
@@ -1202,6 +1345,7 @@ export type FeatureUpdateWithoutAncestryInput = {
 export type FeatureUncheckedUpdateWithoutAncestryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1218,6 +1362,75 @@ export type FeatureUncheckedUpdateWithoutAncestryInput = {
 export type FeatureUncheckedUpdateManyWithoutAncestryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FeatureCreateManyBackgroundInput = {
+  id?: string
+  systemId: string
+  ancestryId?: string | null
+  classId?: string | null
+  subclassId?: string | null
+  levelProgressionId?: string | null
+  sourceType: $Enums.FeatureSourceType
+  name: string
+  key: string
+  description?: string | null
+  level?: number | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FeatureUpdateWithoutBackgroundInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutFeaturesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutFeaturesNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneWithoutFeaturesNestedInput
+  subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
+  levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
+}
+
+export type FeatureUncheckedUpdateWithoutBackgroundInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FeatureUncheckedUpdateManyWithoutBackgroundInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1235,6 +1448,7 @@ export type FeatureCreateManyCharacterClassInput = {
   id?: string
   systemId: string
   ancestryId?: string | null
+  backgroundId?: string | null
   subclassId?: string | null
   levelProgressionId?: string | null
   sourceType: $Enums.FeatureSourceType
@@ -1259,6 +1473,7 @@ export type FeatureUpdateWithoutCharacterClassInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutFeaturesNestedInput
   ancestry?: Prisma.AncestryUpdateOneWithoutFeaturesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutFeaturesNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
 }
@@ -1267,6 +1482,7 @@ export type FeatureUncheckedUpdateWithoutCharacterClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
@@ -1283,6 +1499,7 @@ export type FeatureUncheckedUpdateManyWithoutCharacterClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
@@ -1299,6 +1516,7 @@ export type FeatureCreateManySubclassInput = {
   id?: string
   systemId: string
   ancestryId?: string | null
+  backgroundId?: string | null
   classId?: string | null
   levelProgressionId?: string | null
   sourceType: $Enums.FeatureSourceType
@@ -1323,6 +1541,7 @@ export type FeatureUpdateWithoutSubclassInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutFeaturesNestedInput
   ancestry?: Prisma.AncestryUpdateOneWithoutFeaturesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutFeaturesNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneWithoutFeaturesNestedInput
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
 }
@@ -1331,6 +1550,7 @@ export type FeatureUncheckedUpdateWithoutSubclassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
@@ -1347,6 +1567,7 @@ export type FeatureUncheckedUpdateManyWithoutSubclassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
@@ -1363,6 +1584,7 @@ export type FeatureCreateManyLevelProgressionInput = {
   id?: string
   systemId: string
   ancestryId?: string | null
+  backgroundId?: string | null
   classId?: string | null
   subclassId?: string | null
   sourceType: $Enums.FeatureSourceType
@@ -1387,6 +1609,7 @@ export type FeatureUpdateWithoutLevelProgressionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutFeaturesNestedInput
   ancestry?: Prisma.AncestryUpdateOneWithoutFeaturesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutFeaturesNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneWithoutFeaturesNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
 }
@@ -1395,6 +1618,7 @@ export type FeatureUncheckedUpdateWithoutLevelProgressionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
@@ -1411,6 +1635,7 @@ export type FeatureUncheckedUpdateManyWithoutLevelProgressionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
@@ -1429,6 +1654,7 @@ export type FeatureSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   systemId?: boolean
   ancestryId?: boolean
+  backgroundId?: boolean
   classId?: boolean
   subclassId?: boolean
   levelProgressionId?: boolean
@@ -1442,6 +1668,7 @@ export type FeatureSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   ancestry?: boolean | Prisma.Feature$ancestryArgs<ExtArgs>
+  background?: boolean | Prisma.Feature$backgroundArgs<ExtArgs>
   characterClass?: boolean | Prisma.Feature$characterClassArgs<ExtArgs>
   subclass?: boolean | Prisma.Feature$subclassArgs<ExtArgs>
   levelProgression?: boolean | Prisma.Feature$levelProgressionArgs<ExtArgs>
@@ -1451,6 +1678,7 @@ export type FeatureSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   systemId?: boolean
   ancestryId?: boolean
+  backgroundId?: boolean
   classId?: boolean
   subclassId?: boolean
   levelProgressionId?: boolean
@@ -1464,6 +1692,7 @@ export type FeatureSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   ancestry?: boolean | Prisma.Feature$ancestryArgs<ExtArgs>
+  background?: boolean | Prisma.Feature$backgroundArgs<ExtArgs>
   characterClass?: boolean | Prisma.Feature$characterClassArgs<ExtArgs>
   subclass?: boolean | Prisma.Feature$subclassArgs<ExtArgs>
   levelProgression?: boolean | Prisma.Feature$levelProgressionArgs<ExtArgs>
@@ -1473,6 +1702,7 @@ export type FeatureSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   systemId?: boolean
   ancestryId?: boolean
+  backgroundId?: boolean
   classId?: boolean
   subclassId?: boolean
   levelProgressionId?: boolean
@@ -1486,6 +1716,7 @@ export type FeatureSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   ancestry?: boolean | Prisma.Feature$ancestryArgs<ExtArgs>
+  background?: boolean | Prisma.Feature$backgroundArgs<ExtArgs>
   characterClass?: boolean | Prisma.Feature$characterClassArgs<ExtArgs>
   subclass?: boolean | Prisma.Feature$subclassArgs<ExtArgs>
   levelProgression?: boolean | Prisma.Feature$levelProgressionArgs<ExtArgs>
@@ -1495,6 +1726,7 @@ export type FeatureSelectScalar = {
   id?: boolean
   systemId?: boolean
   ancestryId?: boolean
+  backgroundId?: boolean
   classId?: boolean
   subclassId?: boolean
   levelProgressionId?: boolean
@@ -1508,10 +1740,11 @@ export type FeatureSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FeatureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "ancestryId" | "classId" | "subclassId" | "levelProgressionId" | "sourceType" | "name" | "key" | "description" | "level" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["feature"]>
+export type FeatureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "levelProgressionId" | "sourceType" | "name" | "key" | "description" | "level" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["feature"]>
 export type FeatureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   ancestry?: boolean | Prisma.Feature$ancestryArgs<ExtArgs>
+  background?: boolean | Prisma.Feature$backgroundArgs<ExtArgs>
   characterClass?: boolean | Prisma.Feature$characterClassArgs<ExtArgs>
   subclass?: boolean | Prisma.Feature$subclassArgs<ExtArgs>
   levelProgression?: boolean | Prisma.Feature$levelProgressionArgs<ExtArgs>
@@ -1519,6 +1752,7 @@ export type FeatureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type FeatureIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   ancestry?: boolean | Prisma.Feature$ancestryArgs<ExtArgs>
+  background?: boolean | Prisma.Feature$backgroundArgs<ExtArgs>
   characterClass?: boolean | Prisma.Feature$characterClassArgs<ExtArgs>
   subclass?: boolean | Prisma.Feature$subclassArgs<ExtArgs>
   levelProgression?: boolean | Prisma.Feature$levelProgressionArgs<ExtArgs>
@@ -1526,6 +1760,7 @@ export type FeatureIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type FeatureIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   ancestry?: boolean | Prisma.Feature$ancestryArgs<ExtArgs>
+  background?: boolean | Prisma.Feature$backgroundArgs<ExtArgs>
   characterClass?: boolean | Prisma.Feature$characterClassArgs<ExtArgs>
   subclass?: boolean | Prisma.Feature$subclassArgs<ExtArgs>
   levelProgression?: boolean | Prisma.Feature$levelProgressionArgs<ExtArgs>
@@ -1536,6 +1771,7 @@ export type $FeaturePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
     ancestry: Prisma.$AncestryPayload<ExtArgs> | null
+    background: Prisma.$BackgroundPayload<ExtArgs> | null
     characterClass: Prisma.$CharacterClassPayload<ExtArgs> | null
     subclass: Prisma.$CharacterSubclassPayload<ExtArgs> | null
     levelProgression: Prisma.$LevelProgressionPayload<ExtArgs> | null
@@ -1544,6 +1780,7 @@ export type $FeaturePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: string
     systemId: string
     ancestryId: string | null
+    backgroundId: string | null
     classId: string | null
     subclassId: string | null
     levelProgressionId: string | null
@@ -1951,6 +2188,7 @@ export interface Prisma__FeatureClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   ancestry<T extends Prisma.Feature$ancestryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$ancestryArgs<ExtArgs>>): Prisma.Prisma__AncestryClient<runtime.Types.Result.GetResult<Prisma.$AncestryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  background<T extends Prisma.Feature$backgroundArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$backgroundArgs<ExtArgs>>): Prisma.Prisma__BackgroundClient<runtime.Types.Result.GetResult<Prisma.$BackgroundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   characterClass<T extends Prisma.Feature$characterClassArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$characterClassArgs<ExtArgs>>): Prisma.Prisma__CharacterClassClient<runtime.Types.Result.GetResult<Prisma.$CharacterClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   subclass<T extends Prisma.Feature$subclassArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$subclassArgs<ExtArgs>>): Prisma.Prisma__CharacterSubclassClient<runtime.Types.Result.GetResult<Prisma.$CharacterSubclassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   levelProgression<T extends Prisma.Feature$levelProgressionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$levelProgressionArgs<ExtArgs>>): Prisma.Prisma__LevelProgressionClient<runtime.Types.Result.GetResult<Prisma.$LevelProgressionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -1986,6 +2224,7 @@ export interface FeatureFieldRefs {
   readonly id: Prisma.FieldRef<"Feature", 'String'>
   readonly systemId: Prisma.FieldRef<"Feature", 'String'>
   readonly ancestryId: Prisma.FieldRef<"Feature", 'String'>
+  readonly backgroundId: Prisma.FieldRef<"Feature", 'String'>
   readonly classId: Prisma.FieldRef<"Feature", 'String'>
   readonly subclassId: Prisma.FieldRef<"Feature", 'String'>
   readonly levelProgressionId: Prisma.FieldRef<"Feature", 'String'>
@@ -2409,6 +2648,25 @@ export type Feature$ancestryArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.AncestryInclude<ExtArgs> | null
   where?: Prisma.AncestryWhereInput
+}
+
+/**
+ * Feature.background
+ */
+export type Feature$backgroundArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Background
+   */
+  select?: Prisma.BackgroundSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Background
+   */
+  omit?: Prisma.BackgroundOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BackgroundInclude<ExtArgs> | null
+  where?: Prisma.BackgroundWhereInput
 }
 
 /**

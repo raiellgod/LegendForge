@@ -72,6 +72,7 @@ enum FeatureSourceType {
   ANCESTRY
   CLASS
   SUBCLASS
+  BACKGROUND
 }
 
 enum SpellSchool {
@@ -184,6 +185,7 @@ model GameSystem {
   stats             Stat[]
   skills            Skill[]
   ancestries        Ancestry[]
+  backgrounds       Background[]
   classes           CharacterClass[]
   subclasses        CharacterSubclass[]
   levelProgressions LevelProgression[]
@@ -203,6 +205,29 @@ model Ancestry {
   order               Int          @default(0)
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
+
+  system   GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  features Feature[]
+
+  @@unique([systemId, name])
+  @@unique([systemId, key])
+  @@index([systemId])
+  @@index([order])
+}
+
+model Background {
+  id                  String   @id @default(uuid())
+  systemId            String
+  name                String
+  key                 String
+  description         String?
+  skillKeys           String[] @default([])
+  toolNames           String[] @default([])
+  languageChoiceCount Int      @default(0)
+  startingGold        Int      @default(0)
+  order               Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   system   GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
   features Feature[]
@@ -281,6 +306,7 @@ model Feature {
   id                 String            @id @default(uuid())
   systemId           String
   ancestryId         String?
+  backgroundId       String?
   classId            String?
   subclassId         String?
   levelProgressionId String?
@@ -295,6 +321,7 @@ model Feature {
 
   system           GameSystem         @relation(fields: [systemId], references: [id], onDelete: Cascade)
   ancestry         Ancestry?          @relation(fields: [ancestryId], references: [id], onDelete: Cascade)
+  background       Background?        @relation(fields: [backgroundId], references: [id], onDelete: Cascade)
   characterClass   CharacterClass?    @relation(fields: [classId], references: [id], onDelete: Cascade)
   subclass         CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: Cascade)
   levelProgression LevelProgression?  @relation(fields: [levelProgressionId], references: [id], onDelete: SetNull)
@@ -302,6 +329,7 @@ model Feature {
   @@unique([systemId, key])
   @@index([systemId])
   @@index([ancestryId])
+  @@index([backgroundId])
   @@index([classId])
   @@index([subclassId])
   @@index([levelProgressionId])

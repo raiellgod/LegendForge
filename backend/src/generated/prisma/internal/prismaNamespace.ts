@@ -390,6 +390,7 @@ export const ModelName = {
   Verification: 'Verification',
   GameSystem: 'GameSystem',
   Ancestry: 'Ancestry',
+  Background: 'Background',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -865,6 +866,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AncestryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AncestryCountAggregateOutputType> | number
+        }
+      }
+    }
+    Background: {
+      payload: Prisma.$BackgroundPayload<ExtArgs>
+      fields: Prisma.BackgroundFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BackgroundFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BackgroundFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>
+        }
+        findFirst: {
+          args: Prisma.BackgroundFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BackgroundFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>
+        }
+        findMany: {
+          args: Prisma.BackgroundFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>[]
+        }
+        create: {
+          args: Prisma.BackgroundCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>
+        }
+        createMany: {
+          args: Prisma.BackgroundCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BackgroundCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>[]
+        }
+        delete: {
+          args: Prisma.BackgroundDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>
+        }
+        update: {
+          args: Prisma.BackgroundUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>
+        }
+        deleteMany: {
+          args: Prisma.BackgroundDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BackgroundUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BackgroundUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>[]
+        }
+        upsert: {
+          args: Prisma.BackgroundUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BackgroundPayload>
+        }
+        aggregate: {
+          args: Prisma.BackgroundAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBackground>
+        }
+        groupBy: {
+          args: Prisma.BackgroundGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BackgroundGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BackgroundCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BackgroundCountAggregateOutputType> | number
         }
       }
     }
@@ -2102,6 +2177,24 @@ export const AncestryScalarFieldEnum = {
 export type AncestryScalarFieldEnum = (typeof AncestryScalarFieldEnum)[keyof typeof AncestryScalarFieldEnum]
 
 
+export const BackgroundScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  skillKeys: 'skillKeys',
+  toolNames: 'toolNames',
+  languageChoiceCount: 'languageChoiceCount',
+  startingGold: 'startingGold',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BackgroundScalarFieldEnum = (typeof BackgroundScalarFieldEnum)[keyof typeof BackgroundScalarFieldEnum]
+
+
 export const CharacterClassScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -2150,6 +2243,7 @@ export const FeatureScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
   ancestryId: 'ancestryId',
+  backgroundId: 'backgroundId',
   classId: 'classId',
   subclassId: 'subclassId',
   levelProgressionId: 'levelProgressionId',
@@ -2707,6 +2801,7 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   gameSystem?: Prisma.GameSystemOmit
   ancestry?: Prisma.AncestryOmit
+  background?: Prisma.BackgroundOmit
   characterClass?: Prisma.CharacterClassOmit
   characterSubclass?: Prisma.CharacterSubclassOmit
   levelProgression?: Prisma.LevelProgressionOmit

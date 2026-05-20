@@ -100,7 +100,8 @@ export const FeatureSourceType = {
   SYSTEM: 'SYSTEM',
   ANCESTRY: 'ANCESTRY',
   CLASS: 'CLASS',
-  SUBCLASS: 'SUBCLASS'
+  SUBCLASS: 'SUBCLASS',
+  BACKGROUND: 'BACKGROUND'
 } as const
 
 export type FeatureSourceType = (typeof FeatureSourceType)[keyof typeof FeatureSourceType]
