@@ -75,6 +75,12 @@ enum FeatureSourceType {
   BACKGROUND
 }
 
+enum CharacterSheetStatus {
+  DRAFT
+  READY
+  ARCHIVED
+}
+
 enum SpellSchool {
   ABJURATION
   CONJURATION
@@ -192,6 +198,7 @@ model GameSystem {
   features          Feature[]
   spells            Spell[]
   equipment         Equipment[]
+  characterSheets   CharacterSheet[]
   campaigns         Campaign[]
 }
 
@@ -206,8 +213,9 @@ model Ancestry {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
-  system   GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  features Feature[]
+  system          GameSystem       @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  features        Feature[]
+  characterSheets CharacterSheet[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -229,13 +237,82 @@ model Background {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  system   GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  features Feature[]
+  system          GameSystem       @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  features        Feature[]
+  characterSheets CharacterSheet[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
   @@index([systemId])
   @@index([order])
+}
+
+model CharacterSheet {
+  id              String               @id @default(uuid())
+  systemId        String
+  campaignActorId String?              @unique
+  ownerId         String?
+  ancestryId      String?
+  backgroundId    String?
+  classId         String?
+  subclassId      String?
+  status          CharacterSheetStatus @default(DRAFT)
+
+  name          String
+  pronouns      String?
+  concept       String?
+  portraitUrl   String?
+  tokenImageUrl String?
+  tokenImageFit String  @default("COVER")
+
+  level        Int     @default(1)
+  experience   Int     @default(0)
+  hitPoints    Int     @default(0)
+  maxHitPoints Int     @default(0)
+  temporaryHp  Int     @default(0)
+  armorClass   Int     @default(10)
+  speed        Int     @default(30)
+  inspiration  Boolean @default(false)
+
+  alignment String?
+  faith     String?
+  lifestyle String?
+
+  hair   String?
+  skin   String?
+  eyes   String?
+  height String?
+  weight String?
+  age    String?
+  gender String?
+
+  bonds       String?
+  flaws       String?
+  ideals      String?
+  personality String?
+  backstory   String?
+  notes       String?
+  gmNotes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  system         GameSystem         @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  campaignActor  CampaignActor?     @relation(fields: [campaignActorId], references: [id], onDelete: SetNull)
+  ancestry       Ancestry?          @relation(fields: [ancestryId], references: [id], onDelete: SetNull)
+  background     Background?        @relation(fields: [backgroundId], references: [id], onDelete: SetNull)
+  characterClass CharacterClass?    @relation(fields: [classId], references: [id], onDelete: SetNull)
+  subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
+  gameSessions   GameSession[]
+
+  @@index([systemId])
+  @@index([campaignActorId])
+  @@index([ownerId])
+  @@index([ancestryId])
+  @@index([backgroundId])
+  @@index([classId])
+  @@index([subclassId])
+  @@index([status])
 }
 
 model CharacterClass {
@@ -254,6 +331,7 @@ model CharacterClass {
   subclasses        CharacterSubclass[]
   levelProgressions LevelProgression[]
   features          Feature[]
+  characterSheets   CharacterSheet[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -272,9 +350,10 @@ model CharacterSubclass {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  system         GameSystem     @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
-  features       Feature[]
+  system          GameSystem       @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterClass  CharacterClass   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  features        Feature[]
+  characterSheets CharacterSheet[]
 
   @@unique([classId, name])
   @@unique([classId, key])
@@ -469,7 +548,9 @@ model GameSession {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  campaign         Campaign        @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  characterSheet   CharacterSheet? @relation(fields: [characterSheetId], references: [id])
+  characterSheetId String?
 
   @@index([campaignId])
   @@index([scheduledAt])
@@ -507,9 +588,10 @@ model CampaignActor {
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
 
-  campaign    Campaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  owner       User?        @relation(fields: [ownerId], references: [id], onDelete: SetNull)
-  sceneTokens SceneToken[]
+  campaign       Campaign        @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  owner          User?           @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  sceneTokens    SceneToken[]
+  characterSheet CharacterSheet?
 
   @@index([campaignId])
   @@index([ownerId])

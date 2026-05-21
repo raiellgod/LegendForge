@@ -226,6 +226,7 @@ export type GameSystemWhereInput = {
   features?: Prisma.FeatureListRelationFilter
   spells?: Prisma.SpellListRelationFilter
   equipment?: Prisma.EquipmentListRelationFilter
+  characterSheets?: Prisma.CharacterSheetListRelationFilter
   campaigns?: Prisma.CampaignListRelationFilter
 }
 
@@ -245,6 +246,7 @@ export type GameSystemOrderByWithRelationInput = {
   features?: Prisma.FeatureOrderByRelationAggregateInput
   spells?: Prisma.SpellOrderByRelationAggregateInput
   equipment?: Prisma.EquipmentOrderByRelationAggregateInput
+  characterSheets?: Prisma.CharacterSheetOrderByRelationAggregateInput
   campaigns?: Prisma.CampaignOrderByRelationAggregateInput
 }
 
@@ -267,6 +269,7 @@ export type GameSystemWhereUniqueInput = Prisma.AtLeast<{
   features?: Prisma.FeatureListRelationFilter
   spells?: Prisma.SpellListRelationFilter
   equipment?: Prisma.EquipmentListRelationFilter
+  characterSheets?: Prisma.CharacterSheetListRelationFilter
   campaigns?: Prisma.CampaignListRelationFilter
 }, "id" | "name" | "slug">
 
@@ -310,6 +313,7 @@ export type GameSystemCreateInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -329,6 +333,7 @@ export type GameSystemUncheckedCreateInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -348,6 +353,7 @@ export type GameSystemUpdateInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -367,6 +373,7 @@ export type GameSystemUncheckedUpdateInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -470,6 +477,20 @@ export type GameSystemUpdateOneRequiredWithoutBackgroundsNestedInput = {
   upsert?: Prisma.GameSystemUpsertWithoutBackgroundsInput
   connect?: Prisma.GameSystemWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutBackgroundsInput, Prisma.GameSystemUpdateWithoutBackgroundsInput>, Prisma.GameSystemUncheckedUpdateWithoutBackgroundsInput>
+}
+
+export type GameSystemCreateNestedOneWithoutCharacterSheetsInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutCharacterSheetsInput, Prisma.GameSystemUncheckedCreateWithoutCharacterSheetsInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutCharacterSheetsInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+}
+
+export type GameSystemUpdateOneRequiredWithoutCharacterSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutCharacterSheetsInput, Prisma.GameSystemUncheckedCreateWithoutCharacterSheetsInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutCharacterSheetsInput
+  upsert?: Prisma.GameSystemUpsertWithoutCharacterSheetsInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutCharacterSheetsInput, Prisma.GameSystemUpdateWithoutCharacterSheetsInput>, Prisma.GameSystemUncheckedUpdateWithoutCharacterSheetsInput>
 }
 
 export type GameSystemCreateNestedOneWithoutClassesInput = {
@@ -615,6 +636,7 @@ export type GameSystemCreateWithoutAncestriesInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -633,6 +655,7 @@ export type GameSystemUncheckedCreateWithoutAncestriesInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -667,6 +690,7 @@ export type GameSystemUpdateWithoutAncestriesInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -685,6 +709,7 @@ export type GameSystemUncheckedUpdateWithoutAncestriesInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -703,6 +728,7 @@ export type GameSystemCreateWithoutBackgroundsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -721,6 +747,7 @@ export type GameSystemUncheckedCreateWithoutBackgroundsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -755,6 +782,7 @@ export type GameSystemUpdateWithoutBackgroundsInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -767,6 +795,99 @@ export type GameSystemUncheckedUpdateWithoutBackgroundsInput = {
   stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
   ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
+  spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemCreateWithoutCharacterSheetsInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  backgrounds?: Prisma.BackgroundCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
+  spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemUncheckedCreateWithoutCharacterSheetsInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version: number
+  createdAt?: Date | string
+  stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  backgrounds?: Prisma.BackgroundUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
+  spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemCreateOrConnectWithoutCharacterSheetsInput = {
+  where: Prisma.GameSystemWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutCharacterSheetsInput, Prisma.GameSystemUncheckedCreateWithoutCharacterSheetsInput>
+}
+
+export type GameSystemUpsertWithoutCharacterSheetsInput = {
+  update: Prisma.XOR<Prisma.GameSystemUpdateWithoutCharacterSheetsInput, Prisma.GameSystemUncheckedUpdateWithoutCharacterSheetsInput>
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutCharacterSheetsInput, Prisma.GameSystemUncheckedCreateWithoutCharacterSheetsInput>
+  where?: Prisma.GameSystemWhereInput
+}
+
+export type GameSystemUpdateToOneWithWhereWithoutCharacterSheetsInput = {
+  where?: Prisma.GameSystemWhereInput
+  data: Prisma.XOR<Prisma.GameSystemUpdateWithoutCharacterSheetsInput, Prisma.GameSystemUncheckedUpdateWithoutCharacterSheetsInput>
+}
+
+export type GameSystemUpdateWithoutCharacterSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  backgrounds?: Prisma.BackgroundUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
+  spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemUncheckedUpdateWithoutCharacterSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  backgrounds?: Prisma.BackgroundUncheckedUpdateManyWithoutSystemNestedInput
   classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
   subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
@@ -791,6 +912,7 @@ export type GameSystemCreateWithoutClassesInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -809,6 +931,7 @@ export type GameSystemUncheckedCreateWithoutClassesInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -843,6 +966,7 @@ export type GameSystemUpdateWithoutClassesInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -861,6 +985,7 @@ export type GameSystemUncheckedUpdateWithoutClassesInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -879,6 +1004,7 @@ export type GameSystemCreateWithoutSubclassesInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -897,6 +1023,7 @@ export type GameSystemUncheckedCreateWithoutSubclassesInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -931,6 +1058,7 @@ export type GameSystemUpdateWithoutSubclassesInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -949,6 +1077,7 @@ export type GameSystemUncheckedUpdateWithoutSubclassesInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -967,6 +1096,7 @@ export type GameSystemCreateWithoutLevelProgressionsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -985,6 +1115,7 @@ export type GameSystemUncheckedCreateWithoutLevelProgressionsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -1019,6 +1150,7 @@ export type GameSystemUpdateWithoutLevelProgressionsInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -1037,6 +1169,7 @@ export type GameSystemUncheckedUpdateWithoutLevelProgressionsInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -1055,6 +1188,7 @@ export type GameSystemCreateWithoutFeaturesInput = {
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -1073,6 +1207,7 @@ export type GameSystemUncheckedCreateWithoutFeaturesInput = {
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -1107,6 +1242,7 @@ export type GameSystemUpdateWithoutFeaturesInput = {
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -1125,6 +1261,7 @@ export type GameSystemUncheckedUpdateWithoutFeaturesInput = {
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -1143,6 +1280,7 @@ export type GameSystemCreateWithoutSpellsInput = {
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -1161,6 +1299,7 @@ export type GameSystemUncheckedCreateWithoutSpellsInput = {
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -1195,6 +1334,7 @@ export type GameSystemUpdateWithoutSpellsInput = {
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -1213,6 +1353,7 @@ export type GameSystemUncheckedUpdateWithoutSpellsInput = {
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -1231,6 +1372,7 @@ export type GameSystemCreateWithoutEquipmentInput = {
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -1249,6 +1391,7 @@ export type GameSystemUncheckedCreateWithoutEquipmentInput = {
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -1283,6 +1426,7 @@ export type GameSystemUpdateWithoutEquipmentInput = {
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -1301,6 +1445,7 @@ export type GameSystemUncheckedUpdateWithoutEquipmentInput = {
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -1319,6 +1464,7 @@ export type GameSystemCreateWithoutStatsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -1337,6 +1483,7 @@ export type GameSystemUncheckedCreateWithoutStatsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -1371,6 +1518,7 @@ export type GameSystemUpdateWithoutStatsInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -1389,6 +1537,7 @@ export type GameSystemUncheckedUpdateWithoutStatsInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -1407,6 +1556,7 @@ export type GameSystemCreateWithoutSkillsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
 }
 
@@ -1425,6 +1575,7 @@ export type GameSystemUncheckedCreateWithoutSkillsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
 }
 
@@ -1459,6 +1610,7 @@ export type GameSystemUpdateWithoutSkillsInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
 }
 
@@ -1477,6 +1629,7 @@ export type GameSystemUncheckedUpdateWithoutSkillsInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -1496,6 +1649,7 @@ export type GameSystemCreateWithoutCampaignsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
 }
 
 export type GameSystemUncheckedCreateWithoutCampaignsInput = {
@@ -1514,6 +1668,7 @@ export type GameSystemUncheckedCreateWithoutCampaignsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
 }
 
 export type GameSystemCreateOrConnectWithoutCampaignsInput = {
@@ -1548,6 +1703,7 @@ export type GameSystemUpdateWithoutCampaignsInput = {
   features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
 }
 
 export type GameSystemUncheckedUpdateWithoutCampaignsInput = {
@@ -1566,6 +1722,7 @@ export type GameSystemUncheckedUpdateWithoutCampaignsInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
 }
 
 
@@ -1584,6 +1741,7 @@ export type GameSystemCountOutputType = {
   features: number
   spells: number
   equipment: number
+  characterSheets: number
   campaigns: number
 }
 
@@ -1598,6 +1756,7 @@ export type GameSystemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   features?: boolean | GameSystemCountOutputTypeCountFeaturesArgs
   spells?: boolean | GameSystemCountOutputTypeCountSpellsArgs
   equipment?: boolean | GameSystemCountOutputTypeCountEquipmentArgs
+  characterSheets?: boolean | GameSystemCountOutputTypeCountCharacterSheetsArgs
   campaigns?: boolean | GameSystemCountOutputTypeCountCampaignsArgs
 }
 
@@ -1684,6 +1843,13 @@ export type GameSystemCountOutputTypeCountEquipmentArgs<ExtArgs extends runtime.
 /**
  * GameSystemCountOutputType without action
  */
+export type GameSystemCountOutputTypeCountCharacterSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterSheetWhereInput
+}
+
+/**
+ * GameSystemCountOutputType without action
+ */
 export type GameSystemCountOutputTypeCountCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CampaignWhereInput
 }
@@ -1705,6 +1871,7 @@ export type GameSystemSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   features?: boolean | Prisma.GameSystem$featuresArgs<ExtArgs>
   spells?: boolean | Prisma.GameSystem$spellsArgs<ExtArgs>
   equipment?: boolean | Prisma.GameSystem$equipmentArgs<ExtArgs>
+  characterSheets?: boolean | Prisma.GameSystem$characterSheetsArgs<ExtArgs>
   campaigns?: boolean | Prisma.GameSystem$campaignsArgs<ExtArgs>
   _count?: boolean | Prisma.GameSystemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gameSystem"]>
@@ -1745,6 +1912,7 @@ export type GameSystemInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   features?: boolean | Prisma.GameSystem$featuresArgs<ExtArgs>
   spells?: boolean | Prisma.GameSystem$spellsArgs<ExtArgs>
   equipment?: boolean | Prisma.GameSystem$equipmentArgs<ExtArgs>
+  characterSheets?: boolean | Prisma.GameSystem$characterSheetsArgs<ExtArgs>
   campaigns?: boolean | Prisma.GameSystem$campaignsArgs<ExtArgs>
   _count?: boolean | Prisma.GameSystemCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1764,6 +1932,7 @@ export type $GameSystemPayload<ExtArgs extends runtime.Types.Extensions.Internal
     features: Prisma.$FeaturePayload<ExtArgs>[]
     spells: Prisma.$SpellPayload<ExtArgs>[]
     equipment: Prisma.$EquipmentPayload<ExtArgs>[]
+    characterSheets: Prisma.$CharacterSheetPayload<ExtArgs>[]
     campaigns: Prisma.$CampaignPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2176,6 +2345,7 @@ export interface Prisma__GameSystemClient<T, Null = never, ExtArgs extends runti
   features<T extends Prisma.GameSystem$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   spells<T extends Prisma.GameSystem$spellsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$spellsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpellPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   equipment<T extends Prisma.GameSystem$equipmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$equipmentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterSheets<T extends Prisma.GameSystem$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   campaigns<T extends Prisma.GameSystem$campaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2836,6 +3006,30 @@ export type GameSystem$equipmentArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.EquipmentScalarFieldEnum | Prisma.EquipmentScalarFieldEnum[]
+}
+
+/**
+ * GameSystem.characterSheets
+ */
+export type GameSystem$characterSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSheet
+   */
+  select?: Prisma.CharacterSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSheet
+   */
+  omit?: Prisma.CharacterSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSheetInclude<ExtArgs> | null
+  where?: Prisma.CharacterSheetWhereInput
+  orderBy?: Prisma.CharacterSheetOrderByWithRelationInput | Prisma.CharacterSheetOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterSheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterSheetScalarFieldEnum | Prisma.CharacterSheetScalarFieldEnum[]
 }
 
 /**

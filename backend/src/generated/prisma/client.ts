@@ -75,6 +75,11 @@ export type Ancestry = Prisma.AncestryModel
  */
 export type Background = Prisma.BackgroundModel
 /**
+ * Model CharacterSheet
+ * 
+ */
+export type CharacterSheet = Prisma.CharacterSheetModel
+/**
  * Model CharacterClass
  * 
  */

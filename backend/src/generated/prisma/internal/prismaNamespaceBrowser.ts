@@ -58,6 +58,7 @@ export const ModelName = {
   GameSystem: 'GameSystem',
   Ancestry: 'Ancestry',
   Background: 'Background',
+  CharacterSheet: 'CharacterSheet',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
@@ -192,6 +193,54 @@ export const BackgroundScalarFieldEnum = {
 } as const
 
 export type BackgroundScalarFieldEnum = (typeof BackgroundScalarFieldEnum)[keyof typeof BackgroundScalarFieldEnum]
+
+
+export const CharacterSheetScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  campaignActorId: 'campaignActorId',
+  ownerId: 'ownerId',
+  ancestryId: 'ancestryId',
+  backgroundId: 'backgroundId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  status: 'status',
+  name: 'name',
+  pronouns: 'pronouns',
+  concept: 'concept',
+  portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  level: 'level',
+  experience: 'experience',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  armorClass: 'armorClass',
+  speed: 'speed',
+  inspiration: 'inspiration',
+  alignment: 'alignment',
+  faith: 'faith',
+  lifestyle: 'lifestyle',
+  hair: 'hair',
+  skin: 'skin',
+  eyes: 'eyes',
+  height: 'height',
+  weight: 'weight',
+  age: 'age',
+  gender: 'gender',
+  bonds: 'bonds',
+  flaws: 'flaws',
+  ideals: 'ideals',
+  personality: 'personality',
+  backstory: 'backstory',
+  notes: 'notes',
+  gmNotes: 'gmNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetScalarFieldEnum = (typeof CharacterSheetScalarFieldEnum)[keyof typeof CharacterSheetScalarFieldEnum]
 
 
 export const CharacterClassScalarFieldEnum = {
@@ -354,7 +403,8 @@ export const GameSessionScalarFieldEnum = {
   scheduledAt: 'scheduledAt',
   isFinished: 'isFinished',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  characterSheetId: 'characterSheetId'
 } as const
 
 export type GameSessionScalarFieldEnum = (typeof GameSessionScalarFieldEnum)[keyof typeof GameSessionScalarFieldEnum]

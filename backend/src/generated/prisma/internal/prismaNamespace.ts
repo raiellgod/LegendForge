@@ -391,6 +391,7 @@ export const ModelName = {
   GameSystem: 'GameSystem',
   Ancestry: 'Ancestry',
   Background: 'Background',
+  CharacterSheet: 'CharacterSheet',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -940,6 +941,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BackgroundCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BackgroundCountAggregateOutputType> | number
+        }
+      }
+    }
+    CharacterSheet: {
+      payload: Prisma.$CharacterSheetPayload<ExtArgs>
+      fields: Prisma.CharacterSheetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterSheetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterSheetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterSheetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterSheetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>
+        }
+        findMany: {
+          args: Prisma.CharacterSheetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>[]
+        }
+        create: {
+          args: Prisma.CharacterSheetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>
+        }
+        createMany: {
+          args: Prisma.CharacterSheetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterSheetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterSheetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>
+        }
+        update: {
+          args: Prisma.CharacterSheetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterSheetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterSheetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterSheetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterSheetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetPayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterSheetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterSheet>
+        }
+        groupBy: {
+          args: Prisma.CharacterSheetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterSheetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetCountAggregateOutputType> | number
         }
       }
     }
@@ -2195,6 +2270,54 @@ export const BackgroundScalarFieldEnum = {
 export type BackgroundScalarFieldEnum = (typeof BackgroundScalarFieldEnum)[keyof typeof BackgroundScalarFieldEnum]
 
 
+export const CharacterSheetScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  campaignActorId: 'campaignActorId',
+  ownerId: 'ownerId',
+  ancestryId: 'ancestryId',
+  backgroundId: 'backgroundId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  status: 'status',
+  name: 'name',
+  pronouns: 'pronouns',
+  concept: 'concept',
+  portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  level: 'level',
+  experience: 'experience',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  armorClass: 'armorClass',
+  speed: 'speed',
+  inspiration: 'inspiration',
+  alignment: 'alignment',
+  faith: 'faith',
+  lifestyle: 'lifestyle',
+  hair: 'hair',
+  skin: 'skin',
+  eyes: 'eyes',
+  height: 'height',
+  weight: 'weight',
+  age: 'age',
+  gender: 'gender',
+  bonds: 'bonds',
+  flaws: 'flaws',
+  ideals: 'ideals',
+  personality: 'personality',
+  backstory: 'backstory',
+  notes: 'notes',
+  gmNotes: 'gmNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetScalarFieldEnum = (typeof CharacterSheetScalarFieldEnum)[keyof typeof CharacterSheetScalarFieldEnum]
+
+
 export const CharacterClassScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -2355,7 +2478,8 @@ export const GameSessionScalarFieldEnum = {
   scheduledAt: 'scheduledAt',
   isFinished: 'isFinished',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  characterSheetId: 'characterSheetId'
 } as const
 
 export type GameSessionScalarFieldEnum = (typeof GameSessionScalarFieldEnum)[keyof typeof GameSessionScalarFieldEnum]
@@ -2544,6 +2668,20 @@ export type EnumCreatureSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'CreatureSize[]'
  */
 export type ListEnumCreatureSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreatureSize[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CharacterSheetStatus'
+ */
+export type EnumCharacterSheetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CharacterSheetStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CharacterSheetStatus[]'
+ */
+export type ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CharacterSheetStatus[]'>
     
 
 
@@ -2802,6 +2940,7 @@ export type GlobalOmitConfig = {
   gameSystem?: Prisma.GameSystemOmit
   ancestry?: Prisma.AncestryOmit
   background?: Prisma.BackgroundOmit
+  characterSheet?: Prisma.CharacterSheetOmit
   characterClass?: Prisma.CharacterClassOmit
   characterSubclass?: Prisma.CharacterSubclassOmit
   levelProgression?: Prisma.LevelProgressionOmit

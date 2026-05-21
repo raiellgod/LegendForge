@@ -107,6 +107,15 @@ export const FeatureSourceType = {
 export type FeatureSourceType = (typeof FeatureSourceType)[keyof typeof FeatureSourceType]
 
 
+export const CharacterSheetStatus = {
+  DRAFT: 'DRAFT',
+  READY: 'READY',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CharacterSheetStatus = (typeof CharacterSheetStatus)[keyof typeof CharacterSheetStatus]
+
+
 export const SpellSchool = {
   ABJURATION: 'ABJURATION',
   CONJURATION: 'CONJURATION',

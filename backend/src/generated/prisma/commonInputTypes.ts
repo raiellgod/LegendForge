@@ -209,6 +209,23 @@ export type EnumCreatureSizeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumCreatureSizeFilter<$PrismaModel>
 }
 
+export type EnumCharacterSheetStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel> | $Enums.CharacterSheetStatus
+}
+
+export type EnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel> | $Enums.CharacterSheetStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
+}
+
 export type IntNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -639,6 +656,23 @@ export type NestedEnumCreatureSizeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCreatureSizeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCreatureSizeFilter<$PrismaModel>
+}
+
+export type NestedEnumCharacterSheetStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel> | $Enums.CharacterSheetStatus
+}
+
+export type NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel> | $Enums.CharacterSheetStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
 }
 
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
