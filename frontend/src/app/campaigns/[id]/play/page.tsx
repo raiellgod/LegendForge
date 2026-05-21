@@ -615,11 +615,13 @@ function getVisibleActorsForUser(actors: CampaignActor[], isGM: boolean) {
 type CharacterCreationMenuModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  onStartCharacterBuilder: () => void;
 };
 
 function CharacterCreationMenuModal({
   isOpen,
   onClose,
+  onStartCharacterBuilder,
 }: CharacterCreationMenuModalProps) {
   if (!isOpen) {
     return null;
@@ -691,6 +693,11 @@ function CharacterCreationMenuModal({
               key={option.title}
               type="button"
               disabled={!option.isAvailable}
+              onClick={() => {
+                if (option.title === "Criar personagem") {
+                  onStartCharacterBuilder();
+                }
+              }}
               className={[
                 "group relative min-h-40 rounded-2xl border p-5 text-left transition",
                 "shadow-[-6px_6px_0_rgba(0,0,0,0.35)]",
@@ -746,6 +753,310 @@ function CharacterCreationMenuModal({
   );
 }
 
+type CharacterBuilderStep = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+const characterBuilderSteps: CharacterBuilderStep[] = [
+  {
+    id: "concept",
+    title: "Conceito",
+    description: "Nome, ideia central, imagem e direção inicial do personagem.",
+  },
+  {
+    id: "class",
+    title: "Classe",
+    description: "Escolha a função principal do personagem na aventura.",
+  },
+  {
+    id: "ancestry",
+    title: "Ancestralidade",
+    description: "Defina a origem biológica, cultural ou mutada do personagem.",
+  },
+  {
+    id: "background",
+    title: "Antecedente",
+    description: "Escolha de onde o personagem veio antes da aventura começar.",
+  },
+  {
+    id: "attributes",
+    title: "Atributos",
+    description: "Distribua os valores principais da ficha.",
+  },
+  {
+    id: "skills",
+    title: "Perícias",
+    description: "Escolha treinamentos, especialidades e proficiências.",
+  },
+  {
+    id: "spells",
+    title: "Magias",
+    description: "Selecione truques, magias e poderes conhecidos.",
+  },
+  {
+    id: "equipment",
+    title: "Equipamentos",
+    description: "Escolha armas, armaduras, ferramentas e itens iniciais.",
+  },
+  {
+    id: "about",
+    title: "Sobre",
+    description: "Adicione aparência, personalidade, história e notas.",
+  },
+  {
+    id: "review",
+    title: "Revisão",
+    description: "Confira tudo antes de finalizar a ficha.",
+  },
+];
+
+type CharacterBuilderModalProps = {
+  isOpen: boolean;
+  activeStepId: string;
+  onChangeStep: (stepId: string) => void;
+  onClose: () => void;
+};
+
+function CharacterBuilderModal({
+  isOpen,
+  activeStepId,
+  onChangeStep,
+  onClose,
+}: CharacterBuilderModalProps) {
+  if (!isOpen) {
+    return null;
+  }
+
+  const activeStep =
+    characterBuilderSteps.find((step) => step.id === activeStepId) ??
+    characterBuilderSteps[0];
+
+  const activeStepIndex = characterBuilderSteps.findIndex(
+    (step) => step.id === activeStep.id,
+  );
+
+  const previousStep = characterBuilderSteps[activeStepIndex - 1];
+  const nextStep = characterBuilderSteps[activeStepIndex + 1];
+
+  return (
+    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm">
+      <div className="flex h-[min(820px,92vh)] w-full max-w-7xl flex-col overflow-hidden rounded-2xl border border-amber-400/30 bg-[#140719] shadow-[-12px_12px_0_rgba(0,0,0,0.5)]">
+        <header className="flex items-start justify-between gap-4 border-b border-amber-400/20 bg-black/20 px-6 py-5">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.35em] text-amber-300/70">
+              Forja de Personagem
+            </p>
+
+            <h2 className="mt-2 text-2xl font-black text-zinc-100">
+              Criar personagem
+            </h2>
+
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-300">
+              Monte a ficha em etapas. Por enquanto, esta é a estrutura visual
+              do builder; nos próximos micros vamos conectar cada etapa às
+              regras do sistema.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-300 transition hover:border-red-400/70 hover:text-red-200"
+          >
+            Fechar
+          </button>
+        </header>
+
+        <div className="grid min-h-0 flex-1 grid-cols-[280px_1fr]">
+          <aside className="min-h-0 overflow-y-auto border-r border-amber-400/20 bg-black/20 p-4">
+            <p className="px-2 text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">
+              Etapas
+            </p>
+
+            <div className="mt-4 space-y-2">
+              {characterBuilderSteps.map((step, index) => {
+                const isActive = step.id === activeStep.id;
+                const isCompleted = index < activeStepIndex;
+
+                return (
+                  <button
+                    key={step.id}
+                    type="button"
+                    onClick={() => onChangeStep(step.id)}
+                    className={[
+                      "w-full rounded-xl border p-3 text-left transition",
+                      "shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
+                      isActive
+                        ? "border-amber-300 bg-amber-300/10 text-amber-100"
+                        : "border-zinc-800 bg-zinc-950/50 text-zinc-300 hover:border-amber-400/40 hover:bg-zinc-900/70",
+                    ].join(" ")}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={[
+                          "flex h-7 w-7 items-center justify-center rounded-lg text-xs font-black",
+                          isActive
+                            ? "bg-amber-300 text-zinc-950"
+                            : isCompleted
+                              ? "bg-emerald-500 text-zinc-950"
+                              : "bg-zinc-800 text-zinc-400",
+                        ].join(" ")}
+                      >
+                        {isCompleted ? "✓" : index + 1}
+                      </span>
+
+                      <div>
+                        <p className="text-sm font-black">{step.title}</p>
+                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-400">
+                          {step.description}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </aside>
+
+          <main className="min-h-0 overflow-y-auto p-6">
+            <section className="rounded-2xl border border-amber-400/25 bg-zinc-950/50 p-6 shadow-[-8px_8px_0_rgba(0,0,0,0.35)]">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.26em] text-amber-300/70">
+                    Etapa {activeStepIndex + 1} de{" "}
+                    {characterBuilderSteps.length}
+                  </p>
+
+                  <h3 className="mt-2 text-3xl font-black text-zinc-100">
+                    {activeStep.title}
+                  </h3>
+
+                  <p className="mt-3 max-w-3xl text-sm leading-relaxed text-zinc-300">
+                    {activeStep.description}
+                  </p>
+                </div>
+
+                <span className="rounded-full border border-amber-400/30 bg-amber-300/10 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-amber-200">
+                  Rascunho
+                </span>
+              </div>
+
+              <div className="mt-8 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+                <div className="rounded-2xl border border-zinc-800 bg-black/25 p-5">
+                  <p className="text-sm font-black uppercase tracking-[0.22em] text-zinc-400">
+                    Conteúdo da etapa
+                  </p>
+
+                  <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
+                    <p className="text-lg font-black text-zinc-100">
+                      {activeStep.title} será construído aqui
+                    </p>
+
+                    <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">
+                      No próximo micro vamos começar a trocar estes placeholders
+                      por campos reais, cards, listas e seleções conectadas ao
+                      sistema.
+                    </p>
+                  </div>
+                </div>
+
+                <aside className="rounded-2xl border border-zinc-800 bg-black/25 p-5">
+                  <p className="text-sm font-black uppercase tracking-[0.22em] text-zinc-400">
+                    Resumo da ficha
+                  </p>
+
+                  <div className="mt-5 space-y-3 text-sm">
+                    <BuilderSummaryRow label="Nome" value="Não definido" />
+                    <BuilderSummaryRow label="Classe" value="Não definida" />
+                    <BuilderSummaryRow
+                      label="Ancestralidade"
+                      value="Não definida"
+                    />
+                    <BuilderSummaryRow
+                      label="Antecedente"
+                      value="Não definido"
+                    />
+                    <BuilderSummaryRow label="Nível" value="1" />
+                    <BuilderSummaryRow label="Status" value="Rascunho" />
+                  </div>
+                </aside>
+              </div>
+            </section>
+          </main>
+        </div>
+
+        <footer className="flex items-center justify-between gap-4 border-t border-amber-400/20 bg-black/30 px-6 py-4">
+          <button
+            type="button"
+            disabled={!previousStep}
+            onClick={() => {
+              if (previousStep) {
+                onChangeStep(previousStep.id);
+              }
+            }}
+            className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-4 py-2 text-sm font-black text-zinc-300 transition hover:border-amber-400/50 hover:text-amber-200 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ← Anterior
+          </button>
+
+          <div className="hidden items-center gap-2 md:flex">
+            {characterBuilderSteps.map((step, index) => (
+              <button
+                key={step.id}
+                type="button"
+                onClick={() => onChangeStep(step.id)}
+                className={[
+                  "h-3 w-8 rounded-full transition",
+                  step.id === activeStep.id
+                    ? "bg-amber-300"
+                    : index < activeStepIndex
+                      ? "bg-emerald-500"
+                      : "bg-zinc-700",
+                ].join(" ")}
+                aria-label={`Ir para etapa ${step.title}`}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            disabled={!nextStep}
+            onClick={() => {
+              if (nextStep) {
+                onChangeStep(nextStep.id);
+              }
+            }}
+            className="rounded-xl border border-amber-400/40 bg-amber-300 px-4 py-2 text-sm font-black text-zinc-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:border-zinc-700 disabled:bg-zinc-800 disabled:text-zinc-500"
+          >
+            {nextStep ? "Próxima →" : "Finalizar"}
+          </button>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+type BuilderSummaryRowProps = {
+  label: string;
+  value: string;
+};
+
+function BuilderSummaryRow({ label, value }: BuilderSummaryRowProps) {
+  return (
+    <div className="flex items-center justify-between gap-4 rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3">
+      <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">
+        {label}
+      </span>
+
+      <span className="text-right text-sm font-bold text-zinc-200">
+        {value}
+      </span>
+    </div>
+  );
+}
+
 export default function CampaignPlayPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -761,6 +1072,9 @@ export default function CampaignPlayPage() {
   const [activeRightTab, setActiveRightTab] = useState<RightPanelTab>("chat");
   const [isCharacterCreationMenuOpen, setIsCharacterCreationMenuOpen] =
     useState(false);
+  const [isCharacterBuilderOpen, setIsCharacterBuilderOpen] = useState(false);
+  const [activeCharacterBuilderStep, setActiveCharacterBuilderStep] =
+    useState("concept");
   const [zoom, setZoom] = useState(100);
   const [isLeftToolbarOpen, setIsLeftToolbarOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
@@ -2890,6 +3204,18 @@ export default function CampaignPlayPage() {
       <CharacterCreationMenuModal
         isOpen={isCharacterCreationMenuOpen}
         onClose={() => setIsCharacterCreationMenuOpen(false)}
+        onStartCharacterBuilder={() => {
+          setIsCharacterCreationMenuOpen(false);
+          setActiveCharacterBuilderStep("concept");
+          setIsCharacterBuilderOpen(true);
+        }}
+      />
+
+      <CharacterBuilderModal
+        isOpen={isCharacterBuilderOpen}
+        activeStepId={activeCharacterBuilderStep}
+        onChangeStep={setActiveCharacterBuilderStep}
+        onClose={() => setIsCharacterBuilderOpen(false)}
       />
 
       {isLibraryModalOpen && (
