@@ -753,6 +753,16 @@ function CharacterCreationMenuModal({
   );
 }
 
+type CharacterAttributeKey =
+  | "strength"
+  | "dexterity"
+  | "constitution"
+  | "intelligence"
+  | "wisdom"
+  | "charisma";
+
+type CharacterBuilderAttributes = Record<CharacterAttributeKey, number>;
+
 type CharacterBuilderDraft = {
   name: string;
   pronouns: string;
@@ -769,6 +779,8 @@ type CharacterBuilderDraft = {
 
   backgroundId: string;
   backgroundName: string;
+
+  attributes: CharacterBuilderAttributes;
 };
 
 type CharacterBuilderOption = {
@@ -798,6 +810,83 @@ type CharacterBuilderOptions = {
   ancestries: CharacterBuilderAncestryOption[];
   backgrounds: CharacterBuilderBackgroundOption[];
 };
+
+const DEFAULT_CHARACTER_ATTRIBUTES: CharacterBuilderAttributes = {
+  strength: 10,
+  dexterity: 10,
+  constitution: 10,
+  intelligence: 10,
+  wisdom: 10,
+  charisma: 10,
+};
+
+const CHARACTER_ATTRIBUTE_DEFINITIONS: Array<{
+  key: CharacterAttributeKey;
+  name: string;
+  shortName: string;
+  description: string;
+}> = [
+  {
+    key: "strength",
+    name: "Força",
+    shortName: "FOR",
+    description:
+      "Poder físico, empurrões, carga, ataques corpo a corpo e feitos brutos.",
+  },
+  {
+    key: "dexterity",
+    name: "Destreza",
+    shortName: "DES",
+    description:
+      "Reflexos, precisão, furtividade, equilíbrio e agilidade em combate.",
+  },
+  {
+    key: "constitution",
+    name: "Constituição",
+    shortName: "CON",
+    description:
+      "Resistência, vigor, fôlego, saúde e capacidade de suportar dor.",
+  },
+  {
+    key: "intelligence",
+    name: "Inteligência",
+    shortName: "INT",
+    description:
+      "Raciocínio, memória, investigação, conhecimento e lógica arcana.",
+  },
+  {
+    key: "wisdom",
+    name: "Sabedoria",
+    shortName: "SAB",
+    description:
+      "Percepção, instinto, intuição, sobrevivência e leitura do ambiente.",
+  },
+  {
+    key: "charisma",
+    name: "Carisma",
+    shortName: "CAR",
+    description:
+      "Presença, liderança, influência, expressão artística e força de vontade social.",
+  },
+];
+
+function calculateAttributeModifier(value: number) {
+  return Math.floor((value - 10) / 2);
+}
+
+function formatAttributeModifier(value: number) {
+  const modifier = calculateAttributeModifier(value);
+
+  return modifier >= 0 ? `+${modifier}` : `${modifier}`;
+}
+
+function clampAttributeValue(value: number) {
+  if (!Number.isFinite(value)) {
+    return 10;
+  }
+
+  return Math.max(3, Math.min(20, Math.round(value)));
+}
 
 type CharacterBuilderStep = {
   id: string;
@@ -936,6 +1025,22 @@ function CharacterBuilderModal({
     (option) => option.id === draft.backgroundId,
   );
 
+  const attributeTotal = CHARACTER_ATTRIBUTE_DEFINITIONS.reduce(
+    (total, attribute) => total + draft.attributes[attribute.key],
+    0,
+  );
+
+  const strongestAttribute = CHARACTER_ATTRIBUTE_DEFINITIONS.reduce(
+    (strongest, attribute) => {
+      if (draft.attributes[attribute.key] > draft.attributes[strongest.key]) {
+        return attribute;
+      }
+
+      return strongest;
+    },
+    CHARACTER_ATTRIBUTE_DEFINITIONS[0]!,
+  );
+
   function isStepComplete(stepId: string) {
     if (stepId === "concept") {
       return Boolean(draft.name.trim());
@@ -951,6 +1056,14 @@ function CharacterBuilderModal({
 
     if (stepId === "background") {
       return Boolean(draft.backgroundId);
+    }
+
+    if (stepId === "attributes") {
+      return CHARACTER_ATTRIBUTE_DEFINITIONS.every((attribute) => {
+        const value = draft.attributes[attribute.key];
+
+        return value >= 3 && value <= 20;
+      });
     }
 
     return true;
@@ -971,6 +1084,10 @@ function CharacterBuilderModal({
 
     if (stepId === "background" && !draft.backgroundId) {
       return "Escolha um antecedente antes de avançar.";
+    }
+
+    if (stepId === "attributes" && !isStepComplete("attributes")) {
+      return "Revise os atributos. Cada valor precisa ficar entre 3 e 20.";
     }
 
     return null;
@@ -1206,6 +1323,19 @@ function CharacterBuilderModal({
                         onSelectOption("background", option);
                       }}
                     />
+                  ) : activeStep.id === "attributes" ? (
+                    <CharacterAttributesStep
+                      attributes={draft.attributes}
+                      onChangeAttribute={(attributeKey, value) => {
+                        updateDraft("attributes", {
+                          ...draft.attributes,
+                          [attributeKey]: clampAttributeValue(value),
+                        });
+                      }}
+                      onResetAttributes={() => {
+                        updateDraft("attributes", DEFAULT_CHARACTER_ATTRIBUTES);
+                      }}
+                    />
                   ) : (
                     <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
                       <p className="text-lg font-black text-zinc-100">
@@ -1234,17 +1364,38 @@ function CharacterBuilderModal({
 
                     <BuilderSummaryRow
                       label="Classe"
-                      value={(selectedClass?.name ?? draft.className) || "Não definida"}
+                      value={
+                        (selectedClass?.name ?? draft.className) ||
+                        "Não definida"
+                      }
                     />
 
                     <BuilderSummaryRow
                       label="Ancestralidade"
-                      value={(selectedAncestry?.name ?? draft.ancestryName) || "Não definida"}
+                      value={
+                        (selectedAncestry?.name ?? draft.ancestryName) ||
+                        "Não definida"
+                      }
                     />
 
                     <BuilderSummaryRow
                       label="Antecedente"
-                      value={(selectedBackground?.name ?? draft.backgroundName) || "Não definido"}
+                      value={
+                        (selectedBackground?.name ?? draft.backgroundName) ||
+                        "Não definido"
+                      }
+                    />
+
+                    <BuilderSummaryRow
+                      label="Atributos"
+                      value={`Total ${attributeTotal}`}
+                    />
+
+                    <BuilderSummaryRow
+                      label="Maior atributo"
+                      value={`${strongestAttribute.shortName} ${draft.attributes[strongestAttribute.key]} (${formatAttributeModifier(
+                        draft.attributes[strongestAttribute.key],
+                      )})`}
                     />
 
                     <BuilderSummaryRow label="Nível" value="1" />
@@ -1419,6 +1570,150 @@ function CharacterBuilderOptionCards({
                 </span>
               </div>
             </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+type CharacterAttributesStepProps = {
+  attributes: CharacterBuilderAttributes;
+  onChangeAttribute: (
+    attributeKey: CharacterAttributeKey,
+    value: number,
+  ) => void;
+  onResetAttributes: () => void;
+};
+
+function CharacterAttributesStep({
+  attributes,
+  onChangeAttribute,
+  onResetAttributes,
+}: CharacterAttributesStepProps) {
+  const attributeTotal = CHARACTER_ATTRIBUTE_DEFINITIONS.reduce(
+    (total, attribute) => total + attributes[attribute.key],
+    0,
+  );
+
+  return (
+    <div className="mt-5 space-y-5">
+      <div className="rounded-2xl border border-amber-400/20 bg-black/25 p-4">
+        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-forge-gold/80">
+              Distribuição inicial
+            </p>
+
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-300">
+              Ajuste os seis atributos principais do personagem. Nesta etapa os
+              valores ainda ficam somente no builder; o salvamento no banco fica
+              para o próximo micro.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onResetAttributes}
+            className="w-fit rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-300 transition hover:border-amber-400/50 hover:text-amber-200"
+          >
+            Resetar
+          </button>
+        </div>
+
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
+              Total atual
+            </p>
+            <p className="mt-2 text-2xl font-black text-zinc-100">
+              {attributeTotal}
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
+              Valor mínimo
+            </p>
+            <p className="mt-2 text-2xl font-black text-zinc-100">3</p>
+          </div>
+
+          <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
+              Valor máximo
+            </p>
+            <p className="mt-2 text-2xl font-black text-zinc-100">20</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {CHARACTER_ATTRIBUTE_DEFINITIONS.map((attribute) => {
+          const value = attributes[attribute.key];
+          const modifier = formatAttributeModifier(value);
+
+          return (
+            <article
+              key={attribute.key}
+              className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.25)]"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold/80">
+                    {attribute.shortName}
+                  </p>
+
+                  <h4 className="mt-1 text-lg font-black text-zinc-100">
+                    {attribute.name}
+                  </h4>
+
+                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-zinc-400">
+                    {attribute.description}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-amber-400/30 bg-amber-300/10 px-3 py-2 text-center">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-amber-200">
+                    Mod.
+                  </p>
+                  <p className="text-xl font-black text-amber-100">
+                    {modifier}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => onChangeAttribute(attribute.key, value - 1)}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-black/30 text-lg font-black text-zinc-200 transition hover:border-amber-400/50 hover:text-amber-200"
+                  aria-label={`Diminuir ${attribute.name}`}
+                >
+                  −
+                </button>
+
+                <input
+                  type="number"
+                  min={3}
+                  max={20}
+                  value={value}
+                  aria-label={`Valor de ${attribute.name}`}
+                  onChange={(event) =>
+                    onChangeAttribute(attribute.key, Number(event.target.value))
+                  }
+                  className="h-10 min-w-0 flex-1 rounded-xl border border-zinc-700 bg-black/30 px-3 text-center text-lg font-black text-zinc-100 outline-none transition focus:border-amber-300"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => onChangeAttribute(attribute.key, value + 1)}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-black/30 text-lg font-black text-zinc-200 transition hover:border-amber-400/50 hover:text-amber-200"
+                  aria-label={`Aumentar ${attribute.name}`}
+                >
+                  +
+                </button>
+              </div>
+            </article>
           );
         })}
       </div>
@@ -1718,6 +2013,8 @@ export default function CampaignPlayPage() {
 
       backgroundId: "",
       backgroundName: "",
+
+      attributes: DEFAULT_CHARACTER_ATTRIBUTES,
     });
   const [savedCharacterSheetId, setSavedCharacterSheetId] = useState<
     string | null
@@ -2699,6 +2996,8 @@ export default function CampaignPlayPage() {
 
         backgroundId: draftSheet.backgroundId ?? "",
         backgroundName: draftSheet.background?.name ?? "",
+
+        attributes: DEFAULT_CHARACTER_ATTRIBUTES,
       });
 
       setCharacterDraftSaveSuccess("Rascunho carregado.");
@@ -2712,37 +3011,37 @@ export default function CampaignPlayPage() {
   }
 
   function handleSelectCharacterBuilderOption(
-  type: "class" | "ancestry" | "background",
-  option: {
-    id: string;
-    name: string;
-  },
-) {
-  setCharacterBuilderDraft((currentDraft) => {
-    if (type === "class") {
+    type: "class" | "ancestry" | "background",
+    option: {
+      id: string;
+      name: string;
+    },
+  ) {
+    setCharacterBuilderDraft((currentDraft) => {
+      if (type === "class") {
+        return {
+          ...currentDraft,
+          classId: option.id,
+          className: option.name,
+        };
+      }
+
+      if (type === "ancestry") {
+        return {
+          ...currentDraft,
+          ancestryId: option.id,
+          ancestryName: option.name,
+        };
+      }
+
       return {
         ...currentDraft,
-        classId: option.id,
-        className: option.name,
+        backgroundId: option.id,
+        backgroundName: option.name,
       };
-    }
+    });
+  }
 
-    if (type === "ancestry") {
-      return {
-        ...currentDraft,
-        ancestryId: option.id,
-        ancestryName: option.name,
-      };
-    }
-
-    return {
-      ...currentDraft,
-      backgroundId: option.id,
-      backgroundName: option.name,
-    };
-  });
-}
-  
   async function handleSaveCharacterBuilderDraft() {
     if (!campaign) {
       setCharacterDraftSaveError("Campanha não encontrada.");
