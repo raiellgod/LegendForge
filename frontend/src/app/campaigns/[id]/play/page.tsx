@@ -753,6 +753,15 @@ function CharacterCreationMenuModal({
   );
 }
 
+type CharacterBuilderDraft = {
+  name: string;
+  pronouns: string;
+  concept: string;
+  portraitUrl: string;
+  tokenImageUrl: string;
+  tokenImageFit: "FILL" | "CONTAIN" | "COVER";
+};
+
 type CharacterBuilderStep = {
   id: string;
   title: string;
@@ -815,6 +824,13 @@ const characterBuilderSteps: CharacterBuilderStep[] = [
 type CharacterBuilderModalProps = {
   isOpen: boolean;
   activeStepId: string;
+  draft: CharacterBuilderDraft;
+  savedCharacterSheetId: string | null;
+  isSavingDraft: boolean;
+  saveError: string | null;
+  saveSuccess: string | null;
+  onSaveDraft: () => void;
+  onChangeDraft: (draft: CharacterBuilderDraft) => void;
   onChangeStep: (stepId: string) => void;
   onClose: () => void;
 };
@@ -822,6 +838,13 @@ type CharacterBuilderModalProps = {
 function CharacterBuilderModal({
   isOpen,
   activeStepId,
+  draft,
+  savedCharacterSheetId,
+  isSavingDraft,
+  saveError,
+  saveSuccess,
+  onSaveDraft,
+  onChangeDraft,
   onChangeStep,
   onClose,
 }: CharacterBuilderModalProps) {
@@ -839,6 +862,16 @@ function CharacterBuilderModal({
 
   const previousStep = characterBuilderSteps[activeStepIndex - 1];
   const nextStep = characterBuilderSteps[activeStepIndex + 1];
+
+  function updateDraft<K extends keyof CharacterBuilderDraft>(
+    key: K,
+    value: CharacterBuilderDraft[K],
+  ) {
+    onChangeDraft({
+      ...draft,
+      [key]: value,
+    });
+  }
 
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm">
@@ -858,15 +891,40 @@ function CharacterBuilderModal({
               do builder; nos próximos micros vamos conectar cada etapa às
               regras do sistema.
             </p>
+
+            <div className="mt-3 space-y-2">
+              {saveError ? (
+                <p className="rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm font-bold text-red-200">
+                  {saveError}
+                </p>
+              ) : null}
+
+              {saveSuccess ? (
+                <p className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-sm font-bold text-emerald-200">
+                  {saveSuccess}
+                </p>
+              ) : null}
+            </div>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-300 transition hover:border-red-400/70 hover:text-red-200"
-          >
-            Fechar
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onSaveDraft}
+              disabled={isSavingDraft}
+              className="rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-3 py-2 text-sm font-black text-emerald-200 transition hover:border-emerald-300 hover:bg-emerald-500/25 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isSavingDraft ? "Salvando..." : "Salvar rascunho"}
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-300 transition hover:border-red-400/70 hover:text-red-200"
+            >
+              Fechar
+            </button>
+          </div>
         </header>
 
         <div className="grid min-h-0 flex-1 grid-cols-[280px_1fr]">
@@ -938,8 +996,15 @@ function CharacterBuilderModal({
                   </p>
                 </div>
 
-                <span className="rounded-full border border-amber-400/30 bg-amber-300/10 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-amber-200">
-                  Rascunho
+                <span
+                  className={[
+                    "rounded-full border px-3 py-1 text-xs font-black uppercase tracking-[0.2em]",
+                    savedCharacterSheetId
+                      ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-200"
+                      : "border-amber-400/30 bg-amber-300/10 text-amber-200",
+                  ].join(" ")}
+                >
+                  {savedCharacterSheetId ? "Salvo" : "Rascunho"}
                 </span>
               </div>
 
@@ -949,17 +1014,24 @@ function CharacterBuilderModal({
                     Conteúdo da etapa
                   </p>
 
-                  <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
-                    <p className="text-lg font-black text-zinc-100">
-                      {activeStep.title} será construído aqui
-                    </p>
+                  {activeStep.id === "concept" ? (
+                    <CharacterConceptStep
+                      draft={draft}
+                      onChangeDraftField={updateDraft}
+                    />
+                  ) : (
+                    <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
+                      <p className="text-lg font-black text-zinc-100">
+                        {activeStep.title} será construído aqui
+                      </p>
 
-                    <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">
-                      No próximo micro vamos começar a trocar estes placeholders
-                      por campos reais, cards, listas e seleções conectadas ao
-                      sistema.
-                    </p>
-                  </div>
+                      <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">
+                        Esta etapa ainda está em modo visual. Nos próximos micros
+                        vamos trocar este espaço por campos reais, cards, listas e
+                        seleções conectadas ao sistema.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <aside className="rounded-2xl border border-zinc-800 bg-black/25 p-5">
@@ -968,7 +1040,10 @@ function CharacterBuilderModal({
                   </p>
 
                   <div className="mt-5 space-y-3 text-sm">
-                    <BuilderSummaryRow label="Nome" value="Não definido" />
+                    <BuilderSummaryRow
+                      label="Nome"
+                      value={draft.name || "Não definido"}
+                    />
                     <BuilderSummaryRow label="Classe" value="Não definida" />
                     <BuilderSummaryRow
                       label="Ancestralidade"
@@ -979,7 +1054,14 @@ function CharacterBuilderModal({
                       value="Não definido"
                     />
                     <BuilderSummaryRow label="Nível" value="1" />
-                    <BuilderSummaryRow label="Status" value="Rascunho" />
+                    <BuilderSummaryRow
+                      label="Status"
+                      value={savedCharacterSheetId ? "Salvo" : "Rascunho"}
+                    />
+
+                    {savedCharacterSheetId ? (
+                      <BuilderSummaryRow label="Ficha" value="Criada no banco" />
+                    ) : null}
                   </div>
                 </aside>
               </div>
@@ -1038,6 +1120,188 @@ function CharacterBuilderModal({
   );
 }
 
+type CharacterConceptStepProps = {
+  draft: CharacterBuilderDraft;
+  onChangeDraftField: <K extends keyof CharacterBuilderDraft>(
+    key: K,
+    value: CharacterBuilderDraft[K],
+  ) => void;
+};
+
+function CharacterConceptStep({
+  draft,
+  onChangeDraftField,
+}: CharacterConceptStepProps) {
+  return (
+    <div className="mt-5 space-y-5">
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="space-y-2">
+          <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+            Nome do personagem
+          </span>
+
+          <input
+            value={draft.name}
+            onChange={(event) => onChangeDraftField("name", event.target.value)}
+            placeholder="Ex: Hikari Pendragon"
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
+          />
+        </label>
+
+        <label className="space-y-2">
+          <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+            Pronomes
+          </span>
+
+          <input
+            value={draft.pronouns}
+            onChange={(event) =>
+              onChangeDraftField("pronouns", event.target.value)
+            }
+            placeholder="Ex: ela/dela, ele/dele, elu/delu"
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
+          />
+        </label>
+      </div>
+
+      <label className="block space-y-2">
+        <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+          Conceito
+        </span>
+
+        <textarea
+          value={draft.concept}
+          onChange={(event) => onChangeDraftField("concept", event.target.value)}
+          placeholder="Ex: Barda necromante de Nigrum Alvor que usa música para ouvir ecos dos mortos."
+          rows={4}
+          className="w-full resize-none rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold leading-relaxed text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
+        />
+      </label>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="space-y-2">
+          <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+            URL do retrato
+          </span>
+
+          <input
+            value={draft.portraitUrl}
+            onChange={(event) =>
+              onChangeDraftField("portraitUrl", event.target.value)
+            }
+            placeholder="Cole uma URL de imagem para o retrato"
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
+          />
+        </label>
+
+        <label className="space-y-2">
+          <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+            URL do token
+          </span>
+
+          <input
+            value={draft.tokenImageUrl}
+            onChange={(event) =>
+              onChangeDraftField("tokenImageUrl", event.target.value)
+            }
+            placeholder="Cole uma URL de imagem para o token"
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
+          />
+        </label>
+      </div>
+
+      <div className="rounded-2xl border border-amber-400/20 bg-black/25 p-4">
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+          Encaixe da imagem do token
+        </p>
+
+        <div className="mt-3 grid gap-3 md:grid-cols-3">
+          {[
+            {
+              value: "FILL",
+              title: "Preencher",
+              description: "Ocupa todo o espaço, podendo distorcer a imagem.",
+            },
+            {
+              value: "CONTAIN",
+              title: "Conter",
+              description: "Mostra a imagem inteira, podendo sobrar espaço.",
+            },
+            {
+              value: "COVER",
+              title: "Cobrir",
+              description: "Corta as bordas para preencher sem distorcer.",
+            },
+          ].map((fitOption) => {
+            const isSelected = draft.tokenImageFit === fitOption.value;
+
+            return (
+              <button
+                key={fitOption.value}
+                type="button"
+                onClick={() =>
+                  onChangeDraftField(
+                    "tokenImageFit",
+                    fitOption.value as CharacterBuilderDraft["tokenImageFit"],
+                  )
+                }
+                className={[
+                  "rounded-xl border p-4 text-left transition",
+                  "shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
+                  isSelected
+                    ? "border-amber-300 bg-amber-300/10 text-amber-100"
+                    : "border-zinc-800 bg-zinc-950/60 text-zinc-300 hover:border-amber-400/40",
+                ].join(" ")}
+              >
+                <p className="text-sm font-black">{fitOption.title}</p>
+                <p className="mt-2 text-xs leading-relaxed text-zinc-400">
+                  {fitOption.description}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-4">
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+          Prévia rápida
+        </p>
+
+        <div className="mt-4 flex items-center gap-4">
+          <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-amber-400/30 bg-black/40 text-xs font-black uppercase tracking-[0.16em] text-zinc-600">
+            {draft.portraitUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={draft.portraitUrl}
+                alt="Prévia do retrato"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              "Retrato"
+            )}
+          </div>
+
+          <div>
+            <p className="text-lg font-black text-zinc-100">
+              {draft.name || "Personagem sem nome"}
+            </p>
+
+            <p className="mt-1 text-sm text-zinc-400">
+              {draft.pronouns || "Pronomes não definidos"}
+            </p>
+
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-300">
+              {draft.concept ||
+                "O conceito do personagem aparecerá aqui conforme você preencher."}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type BuilderSummaryRowProps = {
   label: string;
   value: string;
@@ -1075,6 +1339,25 @@ export default function CampaignPlayPage() {
   const [isCharacterBuilderOpen, setIsCharacterBuilderOpen] = useState(false);
   const [activeCharacterBuilderStep, setActiveCharacterBuilderStep] =
     useState("concept");
+  const [characterBuilderDraft, setCharacterBuilderDraft] =
+    useState<CharacterBuilderDraft>({
+      name: "",
+      pronouns: "",
+      concept: "",
+      portraitUrl: "",
+      tokenImageUrl: "",
+      tokenImageFit: "FILL",
+    });
+  const [savedCharacterSheetId, setSavedCharacterSheetId] = useState<
+    string | null
+  >(null);
+  const [isSavingCharacterDraft, setIsSavingCharacterDraft] = useState(false);
+  const [characterDraftSaveError, setCharacterDraftSaveError] = useState<
+    string | null
+  >(null);
+  const [characterDraftSaveSuccess, setCharacterDraftSaveSuccess] = useState<
+    string | null
+  >(null);
   const [zoom, setZoom] = useState(100);
   const [isLeftToolbarOpen, setIsLeftToolbarOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
@@ -1894,6 +2177,71 @@ export default function CampaignPlayPage() {
       );
     } finally {
       setIsAssumingGm(false);
+    }
+  }
+
+
+  async function handleSaveCharacterBuilderDraft() {
+    if (!campaign) {
+      setCharacterDraftSaveError("Campanha não encontrada.");
+      return;
+    }
+
+    if (!campaign.systemId) {
+      setCharacterDraftSaveError(
+        "Esta campanha ainda não possui um sistema definido.",
+      );
+      return;
+    }
+
+    const trimmedName = characterBuilderDraft.name.trim();
+
+    if (!trimmedName) {
+      setCharacterDraftSaveError("Informe o nome do personagem antes de salvar.");
+      return;
+    }
+
+    setIsSavingCharacterDraft(true);
+    setCharacterDraftSaveError(null);
+    setCharacterDraftSaveSuccess(null);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8081/campaigns/${campaign.id}/character-sheets`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            systemId: campaign.systemId,
+            name: trimmedName,
+            pronouns: characterBuilderDraft.pronouns.trim() || null,
+            concept: characterBuilderDraft.concept.trim() || null,
+            portraitUrl: characterBuilderDraft.portraitUrl.trim() || null,
+            tokenImageUrl: characterBuilderDraft.tokenImageUrl.trim() || null,
+            tokenImageFit: characterBuilderDraft.tokenImageFit,
+          }),
+        },
+      );
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(data?.message ?? "Não foi possível salvar o rascunho.");
+      }
+
+      setSavedCharacterSheetId(data.characterSheet.id);
+      setCharacterDraftSaveSuccess("Rascunho salvo com sucesso.");
+    } catch (error) {
+      setCharacterDraftSaveError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível salvar o rascunho.",
+      );
+    } finally {
+      setIsSavingCharacterDraft(false);
     }
   }
 
@@ -3214,6 +3562,13 @@ export default function CampaignPlayPage() {
       <CharacterBuilderModal
         isOpen={isCharacterBuilderOpen}
         activeStepId={activeCharacterBuilderStep}
+        draft={characterBuilderDraft}
+        savedCharacterSheetId={savedCharacterSheetId}
+        isSavingDraft={isSavingCharacterDraft}
+        saveError={characterDraftSaveError}
+        saveSuccess={characterDraftSaveSuccess}
+        onSaveDraft={handleSaveCharacterBuilderDraft}
+        onChangeDraft={setCharacterBuilderDraft}
         onChangeStep={setActiveCharacterBuilderStep}
         onClose={() => setIsCharacterBuilderOpen(false)}
       />
