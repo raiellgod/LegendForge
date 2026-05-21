@@ -23,6 +23,7 @@ Virtual Tabletop (VTT)
 - Swagger
 - Scalar API Reference
 - Docker
+- pnpm
 
 ### 🎨 Frontend
 
@@ -35,135 +36,115 @@ Virtual Tabletop (VTT)
 
 ---
 
-## 📊 Current State
+## 📊 Current State — 21/05/2026
 
 - ✅ Backend funcional com Fastify
 - ✅ Docker/PostgreSQL funcionando
 - ✅ Prisma configurado e conectado ao banco
-- ✅ Banco sincronizado com `db push`
-- ✅ Prisma Client gerado
 - ✅ Prisma Studio funcionando
 - ✅ Better Auth integrado ao banco
 - ✅ Registro e login funcionando
 - ✅ Sessões persistidas no banco
-- ✅ Backend lendo sessão por cookie com `auth.api.getSession`
+- ✅ Backend lendo sessão por cookie
 - ✅ Frontend chamando rotas protegidas com `credentials: "include"`
 - ✅ Documentação interativa via Scalar/Swagger
 - ✅ Home logada `/campaigns` funcionando
 - ✅ Criação inicial de campanha funcionando
-- ✅ Tela `/campaigns/[id]/edit` iniciada
-- 🚧 Busca de campanhas pendente
-- 🚧 Página de jogo pendente
+- ✅ Tela `/campaigns/[id]/edit` funcional
+- ✅ Página de jogo `/campaigns/[id]/play` em desenvolvimento avançado
+- ✅ Mesa com atores reais via `CampaignActor`
+- ✅ Tokens/cena com persistência inicial via `SceneToken`
+- ✅ Sistema RPG inicial semeado com classes, ancestralidades, antecedentes, magias e equipamentos
+- ✅ Rotas de ficha em `character-sheets.ts`
+- ✅ Builder visual de personagem iniciado
+- ✅ Rascunho de ficha salva/carrega no banco
+- ✅ Classe, ancestralidade e antecedente carregam, selecionam e persistem
+- ✅ Validação de avanço por etapa no builder
+- ✅ Etapa Atributos criada visualmente/local
+- 🚧 Próximo micro: persistir atributos no banco
 - ⚠️ Backend ainda sem camada de services completa
+- ⚠️ `frontend/src/app/campaigns/[id]/play/page.tsx` está grande e deve ser editado com fonte única da verdade
 
 ---
 
-## 🎯 Next Tasks (FOCO ATUAL)
+## 🎯 Next Tasks — FOCO ATUAL
 
-### 🔥 PRIORIDADE CRÍTICA (AGORA)
+### 🔥 PRIORIDADE CRÍTICA AGORA
 
-- [ ] Consolidar backend de campanhas
-- [ ] Ajustar `GET /campaigns/:id` para retornar `description` e `coverImage`
-- [ ] Ajustar `PATCH /campaigns/:id` para atualizar:
-  - name
-  - description
-  - coverImage
-  - isPublic
-- [ ] Criar rota para campanhas públicas/busca
-- [ ] Validar fluxo:
-  - Login → `/campaigns`
-  - Criar campanha → `/campaigns/:id/edit`
-  - Editar campanha → persistir mudanças
+```txt
+4.15 — Persistir atributos no banco
+```
 
----
+Objetivo:
 
-### 🧠 BACKEND (PRÓXIMA ETAPA)
+- Enviar atributos escolhidos no builder ao salvar rascunho.
+- Criar/atualizar registros em `CharacterSheetStat`.
+- Carregar atributos salvos ao abrir o builder.
+- Manter o resumo lateral atualizado com dados reais persistidos.
 
-- [ ] Criar `GET /campaigns/public`
-- [ ] Melhorar `POST /campaigns/join`
-- [ ] Definir status de participante
-- [ ] Criar camada de services quando regras crescerem
-- [ ] Padronizar responses de erro
-- [ ] Revisar permissões de GM/PLAYER
-- [ ] Preparar upload real de imagem no futuro
+Arquivos esperados:
+
+```txt
+frontend/src/app/campaigns/[id]/play/page.tsx
+backend/src/routes/character-sheets.ts
+backend/prisma/schema.prisma
+```
 
 ---
 
-### 🧩 FEATURES INICIAIS
+## 🧩 Macros do projeto
 
-- [x] Auth real
-- [x] Home logada de campanhas
-- [x] Criar campanha
-- [x] Entrar como GM automaticamente ao criar campanha
-- [x] Tela inicial de edição/finalização da campanha
-- [ ] Buscar campanha
-- [ ] Entrar em campanha pública/por convite
-- [ ] Criar página de jogo
-- [ ] Criar personagens
-
----
-
-### 🔐 AUTENTICAÇÃO
-
-- [x] Registro
-- [x] Login
-- [x] Persistência de sessão
-- [x] Backend usando sessão do Better Auth
-- [x] Frontend enviando cookies
-- [ ] Refinar tratamento de erro de sessão expirada
-- [ ] Revisar logout e redirects finais
+```txt
+[x] Fase 0 — Base inicial
+[x] Fase 1 — Mesa com atores reais
+[x] Fase 2 — Tokens reais na cena
+[x] Fase 3 — Regras base do sistema
+[em andamento] Fase 4 — Criação/ficha de personagem
+[ ] Fase 5 — Biblioteca completa
+[ ] Fase 6 — Diário real
+[ ] Fase 7 — Configurações da campanha/mesa
+[ ] Fase 8 — Sincronização em tempo real
+```
 
 ---
 
-### 🎨 FRONTEND
+## 🧍 Micros da Fase 4
 
-- [x] Home pública
-- [x] Login
-- [x] Registro
-- [x] Header privado
-- [x] Fundo parchment
-- [x] Botão base
-- [x] `/campaigns`
-- [x] `/campaigns/create`
-- [x] `/campaigns/[id]/edit`
-- [ ] `/campaigns/search`
-- [ ] `/campaigns/[id]/play`
-- [ ] Responsividade fina
-- [ ] Upload real de capa
-
----
-
-## ⚡ Quick Context
-
-O projeto saiu da fase de:
-
-❌ planejamento  
-❌ modelagem isolada  
-❌ auth desconectado  
-❌ frontend mockado  
-
-E entrou em:
-
-✅ **fluxo real de campanha funcionando**
+```txt
+[x] 4.1 — Planejar UX/UI da criação de personagem
+[x] 4.2 — Analisar referências e definir fluxo próprio do LegendForge
+[x] 4.3 — Adicionar modelos de CharacterSheet no Prisma
+[x] 4.4 — Relacionar ficha com sistema, atributos, perícias, magias e equipamentos
+[x] 4.5 — Criar rotas backend de CharacterSheet
+[x] 4.6 — Criar menu inicial de criação de personagem
+[x] 4.7 — Criar layout base do builder de personagem
+[x] 4.8 — Transformar etapa Conceito em formulário real
+[x] 4.9 — Salvar rascunho inicial da ficha pelo builder
+[x] 4.10 — Carregar rascunho existente ao abrir o builder
+[x] 4.11 — Carregar opções reais de Classe, Ancestralidade e Antecedente
+[x] 4.12 — Selecionar e persistir Classe, Ancestralidade e Antecedente
+[x] 4.13 — Validar avanço do builder por etapa
+[x] 4.14 — Criar etapa Atributos visual/local
+[próximo] 4.15 — Persistir atributos no banco
+[ ] 4.16 — Etapa Perícias ligada à classe/antecedente
+[ ] 4.17 — Etapa Magias ligada à classe
+[ ] 4.18 — Etapa Equipamentos ligada à classe/antecedente
+[ ] 4.19 — Etapa Sobre com aparência, personalidade e história
+[ ] 4.20 — Etapa Revisão
+[ ] 4.21 — Finalizar ficha e listar na aba Personagens
+```
 
 ---
 
-## 🧠 Foco Atual
+## ⚠️ Regra de trabalho para próxima conversa
 
-- Não avançar features grandes em cima de backend incompleto.
-- Consolidar campanhas.
-- Evitar mock quando já existe API.
-- Manter cada etapa funcional.
+Para arquivos grandes, especialmente `page.tsx` da mesa:
 
----
-
-## ⚠️ Regras Importantes
-
-> Auth é o núcleo do sistema.  
-> Campanhas dependem diretamente de `user.id`.
-
-> Backend é a fonte da verdade.  
-> Frontend deve consumir API real sempre que possível.
+- Sempre usar o arquivo enviado mais recente como fonte da verdade.
+- Não mandar alterações baseadas em código presumido.
+- Se for alteração grande, reescrever arquivo completo.
+- Se for alteração pequena, usar âncoras reais: “Procure este trecho / Troque por este trecho”.
+- Antes de qualquer commit, rodar `git diff --stat`.
 
 ---
 
@@ -203,26 +184,23 @@ rm -rf .next
 pnpm run dev
 ```
 
-### Observação local
+### Commit padrão do usuário
 
-O frontend está usando:
-
-```json
-"dev": "next dev --webpack"
+```bash
+git status
+git diff --stat
+git add <arquivos>
+git commit -m "mensagem"
 ```
-
-para evitar instabilidade local com Turbopack.
 
 ---
 
 ## 🚀 Estado Atual
 
-👉 **AUTH + CAMPAIGN FRONTEND FLOW WORKING**
+👉 **FASE 4 — Character Builder em andamento**
 
-- Auth funcionando
-- Banco integrado
-- API respondendo
-- Home de campanhas conectada
-- Criação de campanha funcionando
-- Tela inicial de edição criada
-- Próximo passo: consolidar backend de campanhas e busca
+O próximo chat deve começar direto no:
+
+```txt
+4.15 — Persistir atributos no banco
+```

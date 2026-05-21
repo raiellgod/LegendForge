@@ -4,20 +4,16 @@
 
 ## 🎯 Project Vision
 
-**LegendForge** é um Virtual Tabletop (VTT) moderno para RPG de mesa.
+**LegendForge** é um Virtual Tabletop (VTT) moderno para RPG de mesa, construído como produto real e como portfólio full-stack.
 
-Inspirado em plataformas como Roll20 e Foundry VTT, mas com foco em:
+O projeto é inspirado em VTTs como Roll20 e Foundry VTT, mas segue uma identidade própria:
 
-- 🧩 Sistema agnóstico (multi-RPG)
+- 🧩 Sistema agnóstico e expansível
 - 🎲 Campanhas customizáveis
 - 👥 Experiência real de jogo entre usuários
+- 📄 Criação de personagens persistida
 - 🧠 Arquitetura real de produto full-stack
-
-Além disso, o projeto é:
-
-- 💼 Portfólio técnico avançado
-- 🧠 Plataforma de aprendizado contínuo
-- ⚙️ Sistema real com mentalidade de produção
+- ⚙️ Desenvolvimento incremental, testável e com mentalidade de produção
 
 ---
 
@@ -25,50 +21,73 @@ Além disso, o projeto é:
 
 ### 1 — Base funcional de VTT
 
-- 🔐 Sistema de autenticação
-- 🧑‍🤝‍🧑 Gestão de usuários
-- 🗺️ Campanhas
-- 📄 Personagens
-- 🎲 Mesa de jogo
+- 🔐 Autenticação real
+- 🧑‍🤝‍🧑 Gestão de campanhas e participantes
+- 🗺️ Mesa de jogo
+- 🎭 Atores de campanha
+- 🧍 Personagens jogáveis
+- 🎲 Rolagens, chat, diário, tokens e cenas
 
 ### 2 — Backend profissional
 
 - 🏗️ Arquitetura escalável
 - 🔒 Integridade de dados forte
 - 📐 Separação clara de responsabilidades
-- ⚡ Estrutura pronta para crescimento
+- ⚡ Rotas reais com validação
+- 🧠 Backend e banco como fonte da verdade
 
 ### 3 — Frontend conectado ao domínio
 
-- Telas baseadas no Figma
+- Telas baseadas em Figma e referências de VTT
 - Integração real com API
 - Auth via sessão/cookie
 - UI incremental sem depender de mock permanente
+- Builder de personagem avançando por etapas reais
 
 ---
 
 ## 💡 Development Philosophy
 
-> Desenvolvimento incremental com mentalidade de produção
+> Desenvolvimento incremental com mentalidade de produção.
 
-### Princípios
+Princípios:
 
 - ✔️ Pequenos passos funcionais
+- ✔️ Cada micro deve ser testável
 - ✔️ Refatoração contínua
 - ✔️ Backend como fonte da verdade
-- ✔️ Simplicidade primeiro, escala depois
+- ✔️ Banco protege integridade
+- ✔️ Frontend consome API real sempre que possível
+- ✔️ Evitar mock circular
 - ✔️ Código serve ao domínio
-- ✔️ Cada tela deve avançar o produto para algo jogável
+- ✔️ Cada tela deve aproximar o produto de algo jogável
 
 ---
 
-## 📦 Repository Structure
+## 🧭 Source-of-truth workflow para código grande
+
+Regra atual de trabalho para arquivos grandes, especialmente:
+
+```txt
+frontend/src/app/campaigns/[id]/play/page.tsx
+```
+
+- Para mudanças grandes: reescrever o arquivo inteiro com base no último arquivo enviado.
+- Para mudanças pequenas: usar apenas âncoras reais do arquivo atual.
+- Não orientar com estrutura presumida de versões anteriores.
+- Tratar o último `page.tsx` enviado como fonte única da verdade.
+- Antes de commit Git, sempre rodar `git diff --stat`.
+
+---
+
+## 📦 Repository Structure — Estado atual
 
 ```txt
 LegendForge/
 ├── backend/
 │   ├── prisma/
-│   │   └── schema.prisma
+│   │   ├── schema.prisma
+│   │   └── seed.ts
 │   ├── src/
 │   │   ├── generated/
 │   │   ├── lib/
@@ -76,7 +95,9 @@ LegendForge/
 │   │   │   ├── get-authenticated-session.ts
 │   │   │   └── prisma.ts
 │   │   ├── routes/
-│   │   │   └── campaigns.ts
+│   │   │   ├── campaigns.ts
+│   │   │   ├── character-sheets.ts
+│   │   │   └── systems.ts
 │   │   └── index.ts
 │   ├── docker-compose.yml
 │   └── package.json
@@ -87,7 +108,10 @@ LegendForge/
 │   │   │   ├── campaigns/
 │   │   │   │   ├── page.tsx
 │   │   │   │   ├── create/page.tsx
-│   │   │   │   └── [id]/edit/page.tsx
+│   │   │   │   ├── search/page.tsx
+│   │   │   │   └── [id]/
+│   │   │   │       ├── edit/page.tsx
+│   │   │   │       └── play/page.tsx
 │   │   │   ├── login/page.tsx
 │   │   │   ├── register/page.tsx
 │   │   │   ├── layout.tsx
@@ -142,15 +166,16 @@ Responsável por:
 - persistência
 - integridade
 - relacionamentos
-- base do domínio
+- regras críticas quando fizer sentido
+- fonte de verdade do domínio
 
 ### 2. Prisma
 
 Responsável por:
 
-- acesso ao banco
-- queries tipadas
-- sincronização do schema
+- acesso tipado ao banco
+- queries relacionais
+- migrations/db push durante desenvolvimento
 - Prisma Studio
 
 ### 3. Better Auth
@@ -168,16 +193,16 @@ Responsável por:
 Responsável por:
 
 - rotas HTTP
-- integração com auth
-- autorização
 - validação com Zod
+- autorização
 - orquestração da API
+- integração com Better Auth
 
 ---
 
 ## 🔐 Sistema de Autenticação
 
-### ✔️ Implementado
+Implementado:
 
 - Better Auth
 - Prisma Adapter
@@ -186,57 +211,64 @@ Responsável por:
 - Frontend com `authClient`
 - Backend com helper `getAuthenticatedSession`
 
-### 🔄 Fluxo atual
+Fluxo atual:
 
-1. Usuário registra ou faz login no frontend.
+1. Usuário registra ou faz login.
 2. Better Auth cria/atualiza sessão no banco.
 3. Browser mantém cookie de sessão.
 4. Frontend chama API com `credentials: "include"`.
-5. Backend usa `auth.api.getSession`.
+5. Backend valida sessão via Better Auth.
 6. Rotas protegidas usam `session.user.id`.
 
-### Decisão importante
+Decisão importante:
 
-> Não usar Bearer token manual/localStorage para sessão principal.  
-> O fluxo atual usa sessão/cookie do Better Auth.
+> Não usar Bearer token manual/localStorage para sessão principal. O fluxo atual usa sessão/cookie do Better Auth.
 
 ---
 
 ## 🧩 Modelagem Atual
 
-### ✔️ Núcleo implementado
+### Núcleo implementado
 
 - User
 - Session
 - Account
 - Verification
 
-### ✔️ Domínio RPG inicial
-
-- GameSystem
-- Stat
-- Skill
-
-### ✔️ Campanhas
+### Campanhas e mesa
 
 - Campaign
 - Participant
 - GameSession
+- CampaignActor
+- SceneToken
 
-### 🔜 Domínio planejado
+### Sistema RPG
 
-- Characters
-- Classes / Subclasses
-- Inventory
-- Logs
-- Permissions refinadas
-- Campaign Invites
+- GameSystem
+- Stat
+- Skill
+- Ancestry
+- Background
+- CharacterClass
+- CharacterSubclass
+- Feature
+- Spell
+- Equipment
+
+### Ficha/personagem
+
+- CharacterSheet
+- CharacterSheetStat
+- CharacterSheetSkill
+- CharacterSheetSpell
+- CharacterSheetEquipment
 
 ---
 
 ## 🗺️ Campanha — Fluxo Atual
 
-### Backend
+Backend:
 
 - `POST /campaigns`
 - `GET /campaigns`
@@ -245,21 +277,52 @@ Responsável por:
 - `DELETE /campaigns/:id`
 - `POST /campaigns/join`
 - rotas de participantes
+- rotas de atores de campanha
+- rotas de tokens de cena
 
-### Frontend
+Frontend:
 
 - `/campaigns`
-  - home logada
-  - estado sem campanhas
-  - estado com campanhas
 - `/campaigns/create`
-  - nomear mundo
-  - selecionar ficha/sistema visualmente
-  - criar campanha
+- `/campaigns/search`
 - `/campaigns/[id]/edit`
-  - finalizar configuração inicial
-  - visualizar nome/capa/owner
-  - preparar descrição e imagem de capa
+- `/campaigns/[id]/play`
+
+---
+
+## 🧍 Character Builder — Arquitetura atual
+
+A criação de personagem está sendo construída dentro de:
+
+```txt
+frontend/src/app/campaigns/[id]/play/page.tsx
+```
+
+Backend relacionado:
+
+```txt
+backend/src/routes/character-sheets.ts
+backend/src/routes/systems.ts
+```
+
+Estado atual:
+
+- Menu de criação de personagem
+- Modal do builder
+- Etapa Conceito real
+- Salvar rascunho
+- Carregar rascunho
+- Carregar opções reais do sistema
+- Selecionar classe, ancestralidade e antecedente
+- Persistir `classId`, `ancestryId`, `backgroundId`
+- Validar avanço por etapa
+- Etapa Atributos visual/local
+
+Próximo passo:
+
+```txt
+4.15 — Persistir atributos no banco
+```
 
 ---
 
@@ -269,7 +332,7 @@ Responsável por:
 
 > Banco é a fonte de verdade.
 
-### Auth como módulo externo confiável
+### Auth como núcleo
 
 - Better Auth controla identidade.
 - Backend consome a sessão.
@@ -278,56 +341,53 @@ Responsável por:
 ### Prisma como camada oficial
 
 - acesso tipado
-- segurança
 - produtividade
+- segurança
+- geração de client
 
 ### Frontend incremental
 
-- Figma guia as telas
-- implementação segue o que já tem no domínio
-- telas mockadas devem ser evitadas quando a API já existir
+- Figma e referências guiam a UI
+- implementação segue domínio real
+- mock permanente deve ser evitado
 
-### Upload de imagem
+### IA no builder
 
-- Estado atual: preview/armazenamento simples via string/base64 em `coverImage`.
-- Futuro: storage real com upload, crop, validação e URL pública.
+A IA do LegendForge deve ser apenas sugestiva, não decisória. Ela pode sugerir classe, magia, truque, subclasse ou caminho de criação quando solicitada, mas a decisão final é sempre do jogador.
 
 ---
 
 ## ⚠️ Pontos de Atenção
 
-- Backend ainda não está modularizado em services.
-- Upload de capa ainda é temporário.
-- Busca de campanhas públicas ainda não está implementada.
-- Página de jogo ainda não existe.
-- Regras avançadas do banco ainda não foram aplicadas via SQL/triggers.
-- Tailwind/Next em dev usa `next dev --webpack` para estabilidade local.
+- `page.tsx` da mesa está grande e precisa de cuidado.
+- Evitar mudanças por trechos imaginados.
+- Rotas ainda estão concentradas; services podem ser criados quando regras crescerem.
+- Upload de imagens ainda usa URL/string; storage real fica para futuro.
+- Builder ainda não finaliza personagem; está na fase de rascunho.
+- Atributos foram criados visualmente, mas ainda não persistem no banco.
 
 ---
 
 ## 🔄 Current Phase
 
-> **AUTH + CAMPAIGN FLOW WORKING — CAMPAIGN BACKEND CONSOLIDATION PHASE**
+> **FASE 4 — Criação/Ficha de Personagem em andamento**
 
 ---
 
 ## 🎯 Direção Atual
 
-Foco em:
+Foco imediato:
 
-- consolidar backend de campanhas
-- implementar busca de campanhas públicas
-- refinar PATCH de campanha
-- preparar página de jogo
-- evoluir armazenamento de capa
-- estruturar services quando as regras crescerem
+- persistir atributos do builder
+- carregar atributos salvos
+- evoluir perícias, magias, equipamentos, sobre e revisão
+- finalizar ficha e listar na aba Personagens
 
 ---
 
 ## 🧠 Regra Fundamental
 
-> Se uma regra é crítica  
-> → ela deve existir no banco ou no backend.
+> Se uma regra é crítica para o jogo, ela deve existir no banco ou no backend.
 
 ---
 
@@ -346,5 +406,7 @@ Foco em:
 ✔ Backend funcional  
 ✔ Prisma operacional  
 ✔ Frontend conectado  
-✔ Campanhas começaram a virar produto real  
-✔ Pronta para próxima expansão do domínio
+✔ Campanhas reais  
+✔ Mesa com atores/tokens persistidos  
+✔ Sistema RPG inicial semeado  
+✔ Builder de personagem em andamento  

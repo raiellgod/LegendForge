@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-campaign%20flow%20working-yellow)
+![Status](https://img.shields.io/badge/status-character%20builder%20in%20progress-yellow)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -8,8 +8,7 @@
 ![Auth](https://img.shields.io/badge/auth-better--auth-green)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen)
 
-> A modern Virtual Tabletop (VTT) built with production-grade backend architecture,
-> focusing on scalability, modularity, and real-world system design.
+> A modern Virtual Tabletop (VTT) built with production-grade backend architecture, focusing on scalability, modularity, and real-world system design.
 
 ---
 
@@ -17,21 +16,20 @@
 
 **LegendForge** is a Virtual Tabletop designed to run tabletop RPG sessions online.
 
-Inspired by tools like Roll20 and Foundry VTT — but with a different philosophy:
+Inspired by tools like Roll20 and Foundry VTT, but with a different philosophy:
 
 - 🧩 System-agnostic
 - 🎲 Focused on custom campaigns
 - 👥 Built for real gameplay with friends
 - 🧠 Designed as a serious full-stack portfolio project
 - ⚙️ Built incrementally with production mindset
+- 📄 Character creation built as a real persisted flow
 
 ---
 
 ## 🎯 What Makes This Project Different
 
-LegendForge is not just a VTT.
-
-It demonstrates:
+LegendForge demonstrates:
 
 - 🏗️ Real backend architecture
 - 🗄️ Production-oriented database modeling
@@ -40,6 +38,7 @@ It demonstrates:
 - 🧠 System design thinking
 - 🎮 Flexible RPG engine foundation
 - 🎨 UI built from a Figma-driven product flow
+- 🧍 Character builder connected to real domain data
 
 ---
 
@@ -79,15 +78,30 @@ LegendForge/
 │   │   ├── generated/prisma/
 │   │   ├── lib/
 │   │   ├── routes/
+│   │   │   ├── campaigns.ts
+│   │   │   ├── character-sheets.ts
+│   │   │   └── systems.ts
 │   │   └── index.ts
 │   ├── prisma/
-│   │   └── schema.prisma
+│   │   ├── schema.prisma
+│   │   └── seed.ts
 │   ├── docker-compose.yml
 │   └── package.json
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
+│   │   │   ├── campaigns/
+│   │   │   │   ├── page.tsx
+│   │   │   │   ├── create/page.tsx
+│   │   │   │   ├── search/page.tsx
+│   │   │   │   └── [id]/
+│   │   │   │       ├── edit/page.tsx
+│   │   │   │       └── play/page.tsx
+│   │   │   ├── login/page.tsx
+│   │   │   ├── register/page.tsx
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
 │   │   ├── components/
 │   │   ├── lib/
 │   │   └── service/
@@ -102,7 +116,7 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟡 Auth + campaign creation flow working
+> 🟡 Character builder in progress
 
 ### ✅ Completed
 
@@ -118,56 +132,71 @@ LegendForge/
 - User registration and login flow
 - Session persistence in database
 - Cookie-based authenticated API calls
-- Initial RPG domain models:
-  - GameSystem
-  - Stat
-  - Skill
-- Campaign domain foundation:
+- Campaign domain:
   - Campaign
   - Participant
   - GameSession
-- Campaign API routes:
-  - create campaign
-  - list user campaigns
-  - get campaign by id
-  - update campaign
-  - delete campaign
-  - join campaign
-  - manage participants
+- Campaign API routes
 - Frontend campaign flow:
   - `/campaigns`
   - `/campaigns/create`
+  - `/campaigns/search`
   - `/campaigns/[id]/edit`
+- Game page:
+  - `/campaigns/[id]/play`
+- Campaign actors and token foundation
+- RPG system foundation:
+  - GameSystem
+  - Stat
+  - Skill
+  - Ancestry
+  - Background
+  - CharacterClass
+  - CharacterSubclass
+  - Feature
+  - Spell
+  - Equipment
+- Character sheet foundation:
+  - CharacterSheet
+  - CharacterSheetStat
+  - CharacterSheetSkill
+  - CharacterSheetSpell
+  - CharacterSheetEquipment
+- Character builder:
+  - creation menu
+  - builder layout
+  - concept step
+  - draft save/load
+  - real class/ancestry/background options
+  - clickable cards
+  - persisted class/ancestry/background choices
+  - step validation
+  - visual/local attributes step
 
 ---
 
 ## 🚧 In Progress
 
-- Campaign backend consolidation
-- Public campaign search
-- Join campaign flow refinement
-- Campaign image cover workflow
-- Campaign edit persistence
-- Page/game room foundation
+- Character builder Phase 4
+- Attribute persistence
+- Skills, spells, equipment and review steps
+- Finalizing sheet and listing it in the Personagens tab
 
 ---
 
-## 🔜 Next Steps
+## 🔜 Next Step
 
-- Implement campaign search:
-  - `GET /campaigns/public`
-  - or `GET /campaigns/search`
-- Improve `PATCH /campaigns/:id`
-- Persist description and cover image more cleanly
-- Replace temporary base64 cover flow with real storage later
-- Create `/campaigns/search`
-- Create `/campaigns/[id]/play`
-- Expand schema with:
-  - Character
-  - Classes
-  - Subclasses
-  - Inventory
-  - Logs
+```txt
+4.15 — Persist attributes in the database
+```
+
+Expected work:
+
+- send attributes with draft save
+- validate attribute values
+- create/update `CharacterSheetStat`
+- include saved stats in character sheet GET routes
+- load saved stats into the builder
 
 ---
 
@@ -182,15 +211,13 @@ Current auth foundation includes:
 - `account`
 - `verification`
 
-Authentication is not a side feature — it is part of the system core.
-
 Current flow:
 
 1. User registers or logs in.
 2. Better Auth persists session in PostgreSQL.
 3. Browser stores the session cookie.
 4. Frontend calls the API with `credentials: "include"`.
-5. Backend reads session via `auth.api.getSession`.
+5. Backend reads session through Better Auth.
 6. Protected routes use `session.user.id`.
 
 ---
@@ -206,9 +233,10 @@ Current state:
 - Database sync is working
 - Auth tables are operational
 - Campaign tables are operational
-- RPG domain is being expanded incrementally
+- RPG domain is expanding incrementally
+- CharacterSheet domain exists and is being connected to the builder
 
-More details are documented in:
+More details:
 
 - `docs/DATABASE_SETUP.md`
 - `docs/ARCHITECTURE.md`
@@ -218,8 +246,6 @@ More details are documented in:
 
 ## 🎨 UI / UX
 
-The project UI is designed in Figma and implemented incrementally.
-
 Current UI progress:
 
 - ✅ Public home
@@ -228,8 +254,10 @@ Current UI progress:
 - ✅ Logged-in campaign home
 - ✅ Create campaign page
 - ✅ Initial edit/finalize campaign page
-- 🟡 Search campaign page
-- 🟡 Tabletop/session screen
+- ✅ Search campaign page started
+- ✅ Tabletop/session screen started
+- ✅ Character builder modal started
+- 🟡 Character sheet creation flow in progress
 
 ---
 
@@ -240,8 +268,10 @@ Current UI progress:
 - No unnecessary overengineering
 - Continuous refinement
 - Production mindset from the start
+- Backend and database protect the domain
+- UI is built around real product flow
 
-> “Build small. Scale right.”
+> Build small. Scale right.
 
 ---
 
@@ -249,7 +279,7 @@ Current UI progress:
 
 The project is documented through **Feature Capsules**, which record small validated steps.
 
-Current capsules include:
+Current capsules now include:
 
 - Capsule 01 — Setup
 - Capsule 02 — Backend Base
@@ -264,6 +294,19 @@ Current capsules include:
 - Capsule 11 — API Integration
 - Capsule 12 — Campaign Domain API
 - Capsule 13 — Campaign Frontend Flow
+- Capsule 14 — Campaign Search & Join Flow
+- Capsule 15 — Game Page Foundation
+- Capsule 16 — Campaign Actors
+- Capsule 17 — Scene Tokens
+- Capsule 18 — RPG System Seed Expansion
+- Capsule 19 — CharacterSheet Backend
+- Capsule 20 — Character Creation Menu
+- Capsule 21 — Character Builder Layout
+- Capsule 22 — Character Builder Draft
+- Capsule 23 — Character Builder Options
+- Capsule 24 — Character Builder Choices Persistence
+- Capsule 25 — Character Builder Step Validation
+- Capsule 26 — Character Builder Attributes UI
 
 See:
 
@@ -329,13 +372,17 @@ rm -rf .next
 pnpm run dev
 ```
 
+Before commits:
+
+```bash
+git diff --stat
+```
+
 ---
 
 ## 🤝 Contributing
 
 This is currently a personal project focused on learning, architecture, and portfolio quality.
-
-Discussions, ideas, and feedback are welcome.
 
 ---
 
@@ -361,8 +408,6 @@ LegendForge aims to become:
 - ⚙️ A modular RPG engine
 - 🔐 A well-architected product
 - 👥 A real multiplayer tabletop experience
-
----
 
 Built step by step.  
 Built to scale.  

@@ -4,7 +4,7 @@
 
 ## 📅 Last Update
 
-06/05/2026
+21/05/2026
 
 ---
 
@@ -20,11 +20,14 @@ LegendForge/
 │   │   │   ├── get-authenticated-session.ts
 │   │   │   └── prisma.ts
 │   │   ├── routes/
-│   │   │   └── campaigns.ts
+│   │   │   ├── campaigns.ts
+│   │   │   ├── character-sheets.ts
+│   │   │   └── systems.ts
 │   │   └── index.ts
 │   │
 │   ├── prisma/
-│   │   └── schema.prisma
+│   │   ├── schema.prisma
+│   │   └── seed.ts
 │   │
 │   ├── docker-compose.yml
 │   └── package.json
@@ -35,17 +38,16 @@ LegendForge/
 │   │   │   ├── campaigns/
 │   │   │   │   ├── page.tsx
 │   │   │   │   ├── create/page.tsx
-│   │   │   │   └── [id]/edit/page.tsx
+│   │   │   │   ├── search/page.tsx
+│   │   │   │   └── [id]/
+│   │   │   │       ├── edit/page.tsx
+│   │   │   │       └── play/page.tsx
 │   │   │   ├── login/page.tsx
 │   │   │   ├── register/page.tsx
 │   │   │   ├── layout.tsx
 │   │   │   └── page.tsx
 │   │   │
 │   │   ├── components/ui/
-│   │   │   ├── button.tsx
-│   │   │   ├── header.tsx
-│   │   │   └── parchment-background.tsx
-│   │   │
 │   │   ├── lib/
 │   │   │   └── auth-client.ts
 │   │   └── service/
@@ -94,17 +96,27 @@ LegendForge/
 
 ### ✅ Implementado
 
-- Better Auth tables:
-  - user
-  - session
-  - account
-  - verification
+- Better Auth tables
 - GameSystem
 - Stat
 - Skill
 - Campaign
 - Participant
 - GameSession
+- CampaignActor
+- SceneToken
+- Ancestry
+- Background
+- CharacterClass
+- CharacterSubclass
+- Feature
+- Spell
+- Equipment
+- CharacterSheet
+- CharacterSheetStat
+- CharacterSheetSkill
+- CharacterSheetSpell
+- CharacterSheetEquipment
 
 ### ✅ Validado
 
@@ -114,14 +126,21 @@ LegendForge/
 - campanhas são criadas com owner
 - criador entra como participante GM
 - home lista campanhas do usuário autenticado
+- página de mesa abre campanha real
+- aba Personagens consome atores reais
+- biblioteca/mesa de atores está persistida
+- rascunho de CharacterSheet cria no banco
+- rascunho carrega ao abrir builder
+- classe/ancestralidade/antecedente persistem na ficha
+- atributos existem visualmente no builder
 
 ### 🚧 Em andamento
 
-- expandir schema completo do domínio RPG
+- persistir atributos do builder em `CharacterSheetStat`
 - refinar constraints
 - aplicar regras SQL avançadas
-- melhorar modelo de convite/status
-- preparar upload real de capa
+- preparar upload real de imagens
+- finalizar fluxo de criação de ficha
 
 ---
 
@@ -134,31 +153,41 @@ LegendForge/
 - Better Auth exposto em `/api/auth/*`
 - Swagger em `/swagger.json`
 - Scalar em `/docs`
-- Helper `getAuthenticatedSession` usando sessão real do Better Auth
-- Rotas de campanha:
-  - `POST /campaigns`
-  - `GET /campaigns`
-  - `GET /campaigns/:id`
-  - `PATCH /campaigns/:id`
-  - `DELETE /campaigns/:id`
-  - `POST /campaigns/join`
-  - `GET /campaigns/:id/participants`
-  - `PATCH /campaigns/:campaignId/participants/:participantId/role`
-  - `DELETE /campaigns/:campaignId/participants/:participantId`
+- Helper de sessão real do Better Auth
+- Rotas de campanha
+- Rotas de participantes
+- Rotas de sistemas
+- Rotas de character sheets
+
+### Rotas importantes atuais
+
+```txt
+GET    /campaigns
+POST   /campaigns
+GET    /campaigns/:id
+PATCH  /campaigns/:id
+DELETE /campaigns/:id
+
+GET    /campaigns/:id/participants
+PATCH  /campaigns/:campaignId/participants/:participantId/role
+DELETE /campaigns/:campaignId/participants/:participantId
+
+GET    /systems
+GET    /systems/:systemId/character-options
+
+GET    /campaigns/:campaignId/character-sheets
+POST   /campaigns/:campaignId/character-sheets
+GET    /campaigns/:campaignId/character-sheets/:sheetId
+PATCH  /campaigns/:campaignId/character-sheets/:sheetId
+```
 
 ### ⚠️ Ajustes pendentes
 
-- garantir que `GET /campaigns/:id` retorna:
-  - description
-  - coverImage
-- garantir que `PATCH /campaigns/:id` atualiza:
-  - name
-  - description
-  - coverImage
-  - isPublic
-- criar endpoint para busca:
-  - `GET /campaigns/public`
-  - ou `GET /campaigns/search`
+- persistência de stats no POST/PATCH de ficha
+- retorno dos stats no GET de ficha
+- talvez criar services quando regras crescerem
+- padronizar erros
+- validar se classe/ancestralidade/antecedente pertencem ao mesmo sistema
 
 ---
 
@@ -171,89 +200,123 @@ LegendForge/
 - Registro
 - Header privado
 - Background parchment
-- Botão base com variants
+- Botão base
 - `/campaigns`
-  - estado sem campanhas
-  - estado com campanhas
-  - cards reais
 - `/campaigns/create`
-  - cria campanha real
-  - redireciona para edição
-- `/campaigns/[id]/edit`
-  - mostra nome da campanha
-  - mostra placeholder/preview de capa
-  - modal de imagem dentro da área da capa
-  - mostra owner
-  - botões de ação
-  - select de sistema/ficha
-  - campo de descrição visual
-
-### 🚧 Próximas telas
-
 - `/campaigns/search`
+- `/campaigns/[id]/edit`
 - `/campaigns/[id]/play`
-- página de conta/assinatura
-- páginas de conteúdo/configurações da campanha
+
+### Página de jogo `/campaigns/[id]/play`
+
+Estado atual:
+
+- header de mesa
+- grid/mapa
+- toolbar lateral
+- abas laterais
+- Chat
+- Rolagens
+- Personagens
+- Diário inicial
+- Mesa/configuração inicial
+- atores reais de campanha
+- tokens/cena iniciais
+- modal de criação de personagem
+- builder de personagem
 
 ---
 
-## 🧠 Campanhas — Fluxo Atual
+## 🧍 Character Builder — Status detalhado
 
-1. Usuário registra/loga.
-2. Frontend redireciona para `/campaigns`.
-3. `/campaigns` chama API com cookie de sessão.
-4. Se não houver campanhas, mostra:
-   - Iniciar uma nova aventura
-   - Buscar uma aventura
-   - Conheça-nos
-5. Ao criar campanha:
-   - usuário informa nome
-   - POST `/campaigns`
-   - backend cria campanha
-   - backend cria participante GM
-   - frontend redireciona para `/campaigns/:id/edit`
-6. Tela de edição mostra:
-   - capa/placeholder
-   - nome do mundo
-   - ações
-   - descrição
-   - owner
+Arquivo principal:
+
+```txt
+frontend/src/app/campaigns/[id]/play/page.tsx
+```
+
+Backend:
+
+```txt
+backend/src/routes/character-sheets.ts
+backend/src/routes/systems.ts
+backend/prisma/schema.prisma
+```
+
+Concluído:
+
+- menu inicial com opções de criação
+- builder em modal
+- etapas:
+  - Conceito
+  - Classe
+  - Ancestralidade
+  - Antecedente
+  - Atributos
+  - Perícias
+  - Magias
+  - Equipamentos
+  - Sobre
+  - Revisão
+- etapa Conceito com campos reais
+- salvar rascunho
+- carregar rascunho
+- carregar opções reais do sistema
+- cards clicáveis para classe, ancestralidade e antecedente
+- resumo lateral
+- validação de avanço
+- etapa Atributos visual/local
+- cálculo de modificador
+
+Pendente imediato:
+
+```txt
+4.15 — Persistir atributos no banco
+```
+
+---
+
+## 🧠 Fluxo atual do Builder
+
+1. Usuário abre mesa.
+2. Clica para criar personagem.
+3. Abre menu de criação.
+4. Escolhe “Criar personagem”.
+5. Builder abre.
+6. Carrega rascunho existente, se houver.
+7. Carrega opções do sistema.
+8. Usuário preenche conceito.
+9. Usuário escolhe classe, ancestralidade e antecedente.
+10. Usuário ajusta atributos visualmente.
+11. Rascunho salva no banco.
+12. Próximo: atributos também precisam salvar/carregar.
 
 ---
 
 ## ⚠️ Pontos de Atenção
 
+### Unidade de trabalho
+
+- `page.tsx` é grande.
+- Não trabalhar com suposição.
+- Na próxima conversa, usar o último `page.tsx` enviado como fonte da verdade.
+- Mudança grande = reescrever arquivo completo.
+- Mudança pequena = âncora real do arquivo atual.
+
 ### Tailwind/Next
 
 - Em dev local, usar `next dev --webpack`.
-- Cache `.next` pode precisar ser limpo em mudanças de configuração.
-- Tailwind v4 usa:
+- Cache `.next` pode precisar ser limpo.
 
-```css
-@import "tailwindcss";
-```
+### Imagens
 
-e `postcss.config.mjs` com:
-
-```js
-"@tailwindcss/postcss": {}
-```
-
-### Imagem de capa
-
-- Implementação atual usa string/base64 temporária.
-- Futuro:
-  - storage real
-  - upload controlado
-  - crop
-  - validação de tamanho
-  - remoção segura
+- `portraitUrl` e `tokenImageUrl` ainda são strings/URLs.
+- Storage real fica para futuro.
 
 ### Backend
 
-- Ainda sem camada de services.
-- Rotas estão concentradas em `routes/campaigns.ts`.
-- Próximo passo deve consolidar regras antes de crescer frontend.
+- Rotas ainda concentram lógica.
+- Services podem ser criados quando regras crescerem.
 
 ---
 
@@ -266,8 +329,15 @@ e `postcss.config.mjs` com:
 - Criação de campanha
 - Participante GM automático
 - Edição inicial da campanha
-- Upload visual/placeholder de capa
-- Prisma Studio validando dados
+- Busca/entrada de campanha iniciada
+- Página de mesa
+- Atores reais na mesa
+- Tokens/cena com persistência inicial
+- Sistema RPG base
+- Builder visual de personagem
+- Rascunho de ficha persistido
+- Seleção de classe/ancestralidade/antecedente persistida
+- Atributos visuais no builder
 
 ---
 
@@ -275,51 +345,38 @@ e `postcss.config.mjs` com:
 
 ### 🔥 FASE ATUAL
 
-👉 **Campaign Backend Consolidation**
+👉 **Fase 4 — Criação/ficha de personagem**
 
-Agora o foco é:
+Micro atual:
 
-- consolidar `GET /campaigns/:id`
-- consolidar `PATCH /campaigns/:id`
-- criar busca de campanhas
-- preparar entrada em campanha
-- depois criar tela `/campaigns/search`
+```txt
+4.15 — Persistir atributos no banco
+```
 
 ---
 
 ## 🚀 Next Steps
 
-### 🔴 Crítico
+### Próximo micro exato
 
-- [ ] Finalizar resposta completa de `GET /campaigns/:id`
-- [ ] Finalizar update de campanha via `PATCH /campaigns/:id`
-- [ ] Criar endpoint de busca pública
-- [ ] Testar criação → edição → retorno à home
-- [ ] Confirmar que card aparece na home após criar campanha
+- [ ] enviar atributos no `handleSaveCharacterBuilderDraft`
+- [ ] aceitar atributos no `character-sheets.ts`
+- [ ] validar atributos entre 3 e 20
+- [ ] criar/atualizar `CharacterSheetStat`
+- [ ] incluir stats no GET
+- [ ] popular builder com stats salvos
 
-### 🟠 Backend
+### Depois
 
-- [ ] Criar service de campaigns quando regras aumentarem
-- [ ] Padronizar erros
-- [ ] Refinar permissões owner/GM/player
-- [ ] Melhorar join por inviteCode
-
-### 🟡 Frontend
-
-- [ ] Criar `/campaigns/search`
-- [ ] Criar estados de loading/empty/error melhores
-- [ ] Ajustar proporção da capa
-- [ ] Refinar responsividade
+- [ ] 4.16 — Perícias ligada à classe/antecedente
+- [ ] 4.17 — Magias ligada à classe
+- [ ] 4.18 — Equipamentos ligada à classe/antecedente
+- [ ] 4.19 — Sobre
+- [ ] 4.20 — Revisão
+- [ ] 4.21 — Finalizar ficha e listar na aba Personagens
 
 ---
 
 ## 🏁 Estado Atual
 
-👉 **AUTH + CAMPAIGN FLOW FUNCIONANDO**
-
-- Backend ativo
-- Banco ativo
-- Auth validado
-- Frontend conectado
-- Criação de campanha funcional
-- Próximo foco: busca e regras de campanha
+👉 **Character Builder em andamento, pronto para persistir atributos.**
