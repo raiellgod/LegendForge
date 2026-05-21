@@ -936,6 +936,63 @@ function CharacterBuilderModal({
     (option) => option.id === draft.backgroundId,
   );
 
+  function isStepComplete(stepId: string) {
+    if (stepId === "concept") {
+      return Boolean(draft.name.trim());
+    }
+
+    if (stepId === "class") {
+      return Boolean(draft.classId);
+    }
+
+    if (stepId === "ancestry") {
+      return Boolean(draft.ancestryId);
+    }
+
+    if (stepId === "background") {
+      return Boolean(draft.backgroundId);
+    }
+
+    return true;
+  }
+
+  function getStepValidationMessage(stepId: string) {
+    if (stepId === "concept" && !draft.name.trim()) {
+      return "Informe o nome do personagem antes de avançar.";
+    }
+
+    if (stepId === "class" && !draft.classId) {
+      return "Escolha uma classe antes de avançar.";
+    }
+
+    if (stepId === "ancestry" && !draft.ancestryId) {
+      return "Escolha uma ancestralidade antes de avançar.";
+    }
+
+    if (stepId === "background" && !draft.backgroundId) {
+      return "Escolha um antecedente antes de avançar.";
+    }
+
+    return null;
+  }
+
+  function canEnterStep(stepId: string) {
+    const targetStepIndex = characterBuilderSteps.findIndex(
+      (step) => step.id === stepId,
+    );
+
+    if (targetStepIndex <= 0) {
+      return true;
+    }
+
+    return characterBuilderSteps
+      .slice(0, targetStepIndex)
+      .every((step) => isStepComplete(step.id));
+  }
+
+  const currentStepValidationMessage = getStepValidationMessage(activeStep.id);
+  const canGoToNextStep = !currentStepValidationMessage;
+
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm">
       <div className="flex h-[min(820px,92vh)] w-full max-w-7xl flex-col overflow-hidden rounded-2xl border border-amber-400/30 bg-[#140719] shadow-[-12px_12px_0_rgba(0,0,0,0.5)]">
@@ -1004,18 +1061,26 @@ function CharacterBuilderModal({
               {characterBuilderSteps.map((step, index) => {
                 const isActive = step.id === activeStep.id;
                 const isCompleted = index < activeStepIndex;
+                const canEnterThisStep = canEnterStep(step.id);
 
                 return (
                   <button
                     key={step.id}
                     type="button"
-                    onClick={() => onChangeStep(step.id)}
+                    disabled={!canEnterThisStep}
+                    onClick={() => {
+                      if (canEnterThisStep) {
+                        onChangeStep(step.id);
+                      }
+                    }}
                     className={[
                       "w-full rounded-xl border p-3 text-left transition",
                       "shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
-                      isActive
-                        ? "border-amber-300 bg-amber-300/10 text-amber-100"
-                        : "border-zinc-800 bg-zinc-950/50 text-zinc-300 hover:border-amber-400/40 hover:bg-zinc-900/70",
+                      !canEnterThisStep
+                        ? "cursor-not-allowed border-zinc-900 bg-zinc-950/30 text-zinc-600 opacity-55"
+                        : isActive
+                          ? "border-amber-300 bg-amber-300/10 text-amber-100"
+                          : "border-zinc-800 bg-zinc-950/50 text-zinc-300 hover:border-amber-400/40 hover:bg-zinc-900/70",
                     ].join(" ")}
                   >
                     <div className="flex items-center gap-3">
@@ -1061,6 +1126,16 @@ function CharacterBuilderModal({
                   <p className="mt-3 max-w-3xl text-sm leading-relaxed text-zinc-300">
                     {activeStep.description}
                   </p>
+
+                  {currentStepValidationMessage ? (
+                    <p className="mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-sm font-bold text-amber-100">
+                      {currentStepValidationMessage}
+                    </p>
+                  ) : (
+                    <p className="mt-3 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-sm font-bold text-emerald-100">
+                      Etapa pronta para avançar.
+                    </p>
+                  )}
                 </div>
 
                 <span
@@ -1227,9 +1302,9 @@ function CharacterBuilderModal({
 
           <button
             type="button"
-            disabled={!nextStep}
+            disabled={!nextStep || !canGoToNextStep}
             onClick={() => {
-              if (nextStep) {
+              if (nextStep && canGoToNextStep) {
                 onChangeStep(nextStep.id);
               }
             }}
