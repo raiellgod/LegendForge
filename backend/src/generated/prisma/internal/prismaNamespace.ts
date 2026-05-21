@@ -2572,6 +2572,7 @@ export type BackgroundScalarFieldEnum = (typeof BackgroundScalarFieldEnum)[keyof
 
 export const CharacterSheetScalarFieldEnum = {
   id: 'id',
+  campaignId: 'campaignId',
   systemId: 'systemId',
   campaignActorId: 'campaignActorId',
   ownerId: 'ownerId',

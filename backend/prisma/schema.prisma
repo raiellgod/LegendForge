@@ -249,6 +249,7 @@ model Background {
 
 model CharacterSheet {
   id              String               @id @default(uuid())
+  campaignId      String
   systemId        String
   campaignActorId String?              @unique
   ownerId         String?
@@ -297,6 +298,7 @@ model CharacterSheet {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  campaign       Campaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   system         GameSystem         @relation(fields: [systemId], references: [id], onDelete: Cascade)
   campaignActor  CampaignActor?     @relation(fields: [campaignActorId], references: [id], onDelete: SetNull)
   ancestry       Ancestry?          @relation(fields: [ancestryId], references: [id], onDelete: SetNull)
@@ -310,6 +312,7 @@ model CharacterSheet {
   spells    CharacterSheetSpell[]
   equipment CharacterSheetEquipment[]
 
+  @@index([campaignId])
   @@index([systemId])
   @@index([campaignActorId])
   @@index([ownerId])
@@ -618,12 +621,13 @@ model Campaign {
   owner  User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   system GameSystem? @relation(fields: [systemId], references: [id], onDelete: SetNull)
 
-  participants Participant[]
-  sessions     GameSession[]
-  invites      CampaignInvite[]
-  logs         CampaignLog[]
-  actors       CampaignActor[]
-  sceneTokens  SceneToken[]
+  participants    Participant[]
+  sessions        GameSession[]
+  invites         CampaignInvite[]
+  logs            CampaignLog[]
+  actors          CampaignActor[]
+  characterSheets CharacterSheet[]
+  sceneTokens     SceneToken[]
 
   @@index([ownerId])
   @@index([systemId])
