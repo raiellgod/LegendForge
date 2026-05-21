@@ -305,6 +305,9 @@ model CharacterSheet {
   subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
   gameSessions   GameSession[]
 
+  stats  CharacterSheetStat[]
+  skills CharacterSheetSkill[]
+
   @@index([systemId])
   @@index([campaignActorId])
   @@index([ownerId])
@@ -313,6 +316,46 @@ model CharacterSheet {
   @@index([classId])
   @@index([subclassId])
   @@index([status])
+}
+
+model CharacterSheetStat {
+  id                      String   @id @default(uuid())
+  characterSheetId        String
+  statId                  String
+  baseValue               Int      @default(10)
+  bonusValue              Int      @default(0)
+  overrideValue           Int?
+  isSavingThrowProficient Boolean  @default(false)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  characterSheet CharacterSheet @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  stat           Stat           @relation(fields: [statId], references: [id], onDelete: Cascade)
+
+  @@unique([characterSheetId, statId])
+  @@index([characterSheetId])
+  @@index([statId])
+}
+
+model CharacterSheetSkill {
+  id               String   @id @default(uuid())
+  characterSheetId String
+  skillId          String
+  isProficient     Boolean  @default(false)
+  expertiseLevel   Int      @default(0)
+  bonusValue       Int      @default(0)
+  overrideValue    Int?
+  source           String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  characterSheet CharacterSheet @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  skill          Skill          @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([characterSheetId, skillId])
+  @@index([characterSheetId])
+  @@index([skillId])
+  @@index([isProficient])
 }
 
 model CharacterClass {
@@ -480,8 +523,9 @@ model Stat {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
 
-  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  skills Skill[]
+  system         GameSystem           @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  skills         Skill[]
+  characterStats CharacterSheetStat[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -499,8 +543,9 @@ model Skill {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
 
-  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  stat   Stat       @relation(fields: [statId], references: [id], onDelete: Cascade)
+  system          GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  stat            Stat                  @relation(fields: [statId], references: [id], onDelete: Cascade)
+  characterSkills CharacterSheetSkill[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])

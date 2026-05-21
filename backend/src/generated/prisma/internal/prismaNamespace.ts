@@ -392,6 +392,8 @@ export const ModelName = {
   Ancestry: 'Ancestry',
   Background: 'Background',
   CharacterSheet: 'CharacterSheet',
+  CharacterSheetStat: 'CharacterSheetStat',
+  CharacterSheetSkill: 'CharacterSheetSkill',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "characterSheetStat" | "characterSheetSkill" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1015,6 +1017,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CharacterSheetCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CharacterSheetCountAggregateOutputType> | number
+        }
+      }
+    }
+    CharacterSheetStat: {
+      payload: Prisma.$CharacterSheetStatPayload<ExtArgs>
+      fields: Prisma.CharacterSheetStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterSheetStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterSheetStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterSheetStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterSheetStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>
+        }
+        findMany: {
+          args: Prisma.CharacterSheetStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>[]
+        }
+        create: {
+          args: Prisma.CharacterSheetStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>
+        }
+        createMany: {
+          args: Prisma.CharacterSheetStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterSheetStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterSheetStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>
+        }
+        update: {
+          args: Prisma.CharacterSheetStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterSheetStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterSheetStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterSheetStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterSheetStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetStatPayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterSheetStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterSheetStat>
+        }
+        groupBy: {
+          args: Prisma.CharacterSheetStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterSheetStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetStatCountAggregateOutputType> | number
+        }
+      }
+    }
+    CharacterSheetSkill: {
+      payload: Prisma.$CharacterSheetSkillPayload<ExtArgs>
+      fields: Prisma.CharacterSheetSkillFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterSheetSkillFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterSheetSkillFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterSheetSkillFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterSheetSkillFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>
+        }
+        findMany: {
+          args: Prisma.CharacterSheetSkillFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>[]
+        }
+        create: {
+          args: Prisma.CharacterSheetSkillCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>
+        }
+        createMany: {
+          args: Prisma.CharacterSheetSkillCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterSheetSkillCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterSheetSkillDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>
+        }
+        update: {
+          args: Prisma.CharacterSheetSkillUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterSheetSkillDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterSheetSkillUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterSheetSkillUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterSheetSkillUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetSkillPayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterSheetSkillAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterSheetSkill>
+        }
+        groupBy: {
+          args: Prisma.CharacterSheetSkillGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetSkillGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterSheetSkillCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetSkillCountAggregateOutputType> | number
         }
       }
     }
@@ -2318,6 +2468,37 @@ export const CharacterSheetScalarFieldEnum = {
 export type CharacterSheetScalarFieldEnum = (typeof CharacterSheetScalarFieldEnum)[keyof typeof CharacterSheetScalarFieldEnum]
 
 
+export const CharacterSheetStatScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetStatScalarFieldEnum = (typeof CharacterSheetStatScalarFieldEnum)[keyof typeof CharacterSheetStatScalarFieldEnum]
+
+
+export const CharacterSheetSkillScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetSkillScalarFieldEnum = (typeof CharacterSheetSkillScalarFieldEnum)[keyof typeof CharacterSheetSkillScalarFieldEnum]
+
+
 export const CharacterClassScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -2941,6 +3122,8 @@ export type GlobalOmitConfig = {
   ancestry?: Prisma.AncestryOmit
   background?: Prisma.BackgroundOmit
   characterSheet?: Prisma.CharacterSheetOmit
+  characterSheetStat?: Prisma.CharacterSheetStatOmit
+  characterSheetSkill?: Prisma.CharacterSheetSkillOmit
   characterClass?: Prisma.CharacterClassOmit
   characterSubclass?: Prisma.CharacterSubclassOmit
   levelProgression?: Prisma.LevelProgressionOmit

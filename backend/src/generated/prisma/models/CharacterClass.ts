@@ -585,14 +585,6 @@ export type CharacterClassUpdateOneWithoutCharacterSheetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CharacterClassUpdateToOneWithWhereWithoutCharacterSheetsInput, Prisma.CharacterClassUpdateWithoutCharacterSheetsInput>, Prisma.CharacterClassUncheckedUpdateWithoutCharacterSheetsInput>
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type CharacterClassCreateNestedOneWithoutSubclassesInput = {
   create?: Prisma.XOR<Prisma.CharacterClassCreateWithoutSubclassesInput, Prisma.CharacterClassUncheckedCreateWithoutSubclassesInput>
   connectOrCreate?: Prisma.CharacterClassCreateOrConnectWithoutSubclassesInput

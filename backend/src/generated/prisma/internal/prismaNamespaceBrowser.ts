@@ -59,6 +59,8 @@ export const ModelName = {
   Ancestry: 'Ancestry',
   Background: 'Background',
   CharacterSheet: 'CharacterSheet',
+  CharacterSheetStat: 'CharacterSheetStat',
+  CharacterSheetSkill: 'CharacterSheetSkill',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
@@ -241,6 +243,37 @@ export const CharacterSheetScalarFieldEnum = {
 } as const
 
 export type CharacterSheetScalarFieldEnum = (typeof CharacterSheetScalarFieldEnum)[keyof typeof CharacterSheetScalarFieldEnum]
+
+
+export const CharacterSheetStatScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetStatScalarFieldEnum = (typeof CharacterSheetStatScalarFieldEnum)[keyof typeof CharacterSheetStatScalarFieldEnum]
+
+
+export const CharacterSheetSkillScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetSkillScalarFieldEnum = (typeof CharacterSheetSkillScalarFieldEnum)[keyof typeof CharacterSheetSkillScalarFieldEnum]
 
 
 export const CharacterClassScalarFieldEnum = {

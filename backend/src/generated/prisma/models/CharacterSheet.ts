@@ -543,6 +543,8 @@ export type CharacterSheetWhereInput = {
   characterClass?: Prisma.XOR<Prisma.CharacterClassNullableScalarRelationFilter, Prisma.CharacterClassWhereInput> | null
   subclass?: Prisma.XOR<Prisma.CharacterSubclassNullableScalarRelationFilter, Prisma.CharacterSubclassWhereInput> | null
   gameSessions?: Prisma.GameSessionListRelationFilter
+  stats?: Prisma.CharacterSheetStatListRelationFilter
+  skills?: Prisma.CharacterSheetSkillListRelationFilter
 }
 
 export type CharacterSheetOrderByWithRelationInput = {
@@ -595,6 +597,8 @@ export type CharacterSheetOrderByWithRelationInput = {
   characterClass?: Prisma.CharacterClassOrderByWithRelationInput
   subclass?: Prisma.CharacterSubclassOrderByWithRelationInput
   gameSessions?: Prisma.GameSessionOrderByRelationAggregateInput
+  stats?: Prisma.CharacterSheetStatOrderByRelationAggregateInput
+  skills?: Prisma.CharacterSheetSkillOrderByRelationAggregateInput
 }
 
 export type CharacterSheetWhereUniqueInput = Prisma.AtLeast<{
@@ -650,6 +654,8 @@ export type CharacterSheetWhereUniqueInput = Prisma.AtLeast<{
   characterClass?: Prisma.XOR<Prisma.CharacterClassNullableScalarRelationFilter, Prisma.CharacterClassWhereInput> | null
   subclass?: Prisma.XOR<Prisma.CharacterSubclassNullableScalarRelationFilter, Prisma.CharacterSubclassWhereInput> | null
   gameSessions?: Prisma.GameSessionListRelationFilter
+  stats?: Prisma.CharacterSheetStatListRelationFilter
+  skills?: Prisma.CharacterSheetSkillListRelationFilter
 }, "id" | "campaignActorId">
 
 export type CharacterSheetOrderByWithAggregationInput = {
@@ -794,6 +800,8 @@ export type CharacterSheetCreateInput = {
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUncheckedCreateInput = {
@@ -840,6 +848,8 @@ export type CharacterSheetUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUpdateInput = {
@@ -886,6 +896,8 @@ export type CharacterSheetUpdateInput = {
   characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateInput = {
@@ -932,6 +944,8 @@ export type CharacterSheetUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetCreateManyInput = {
@@ -1228,6 +1242,11 @@ export type CharacterSheetSumOrderByAggregateInput = {
   speed?: Prisma.SortOrder
 }
 
+export type CharacterSheetScalarRelationFilter = {
+  is?: Prisma.CharacterSheetWhereInput
+  isNot?: Prisma.CharacterSheetWhereInput
+}
+
 export type CharacterSheetNullableScalarRelationFilter = {
   is?: Prisma.CharacterSheetWhereInput | null
   isNot?: Prisma.CharacterSheetWhereInput | null
@@ -1361,6 +1380,34 @@ export type CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput = {
 
 export type EnumCharacterSheetStatusFieldUpdateOperationsInput = {
   set?: $Enums.CharacterSheetStatus
+}
+
+export type CharacterSheetCreateNestedOneWithoutStatsInput = {
+  create?: Prisma.XOR<Prisma.CharacterSheetCreateWithoutStatsInput, Prisma.CharacterSheetUncheckedCreateWithoutStatsInput>
+  connectOrCreate?: Prisma.CharacterSheetCreateOrConnectWithoutStatsInput
+  connect?: Prisma.CharacterSheetWhereUniqueInput
+}
+
+export type CharacterSheetUpdateOneRequiredWithoutStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.CharacterSheetCreateWithoutStatsInput, Prisma.CharacterSheetUncheckedCreateWithoutStatsInput>
+  connectOrCreate?: Prisma.CharacterSheetCreateOrConnectWithoutStatsInput
+  upsert?: Prisma.CharacterSheetUpsertWithoutStatsInput
+  connect?: Prisma.CharacterSheetWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CharacterSheetUpdateToOneWithWhereWithoutStatsInput, Prisma.CharacterSheetUpdateWithoutStatsInput>, Prisma.CharacterSheetUncheckedUpdateWithoutStatsInput>
+}
+
+export type CharacterSheetCreateNestedOneWithoutSkillsInput = {
+  create?: Prisma.XOR<Prisma.CharacterSheetCreateWithoutSkillsInput, Prisma.CharacterSheetUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.CharacterSheetCreateOrConnectWithoutSkillsInput
+  connect?: Prisma.CharacterSheetWhereUniqueInput
+}
+
+export type CharacterSheetUpdateOneRequiredWithoutSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.CharacterSheetCreateWithoutSkillsInput, Prisma.CharacterSheetUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.CharacterSheetCreateOrConnectWithoutSkillsInput
+  upsert?: Prisma.CharacterSheetUpsertWithoutSkillsInput
+  connect?: Prisma.CharacterSheetWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CharacterSheetUpdateToOneWithWhereWithoutSkillsInput, Prisma.CharacterSheetUpdateWithoutSkillsInput>, Prisma.CharacterSheetUncheckedUpdateWithoutSkillsInput>
 }
 
 export type CharacterSheetCreateNestedManyWithoutCharacterClassInput = {
@@ -1538,6 +1585,8 @@ export type CharacterSheetCreateWithoutSystemInput = {
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUncheckedCreateWithoutSystemInput = {
@@ -1583,6 +1632,8 @@ export type CharacterSheetUncheckedCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetCreateOrConnectWithoutSystemInput = {
@@ -1702,6 +1753,8 @@ export type CharacterSheetCreateWithoutAncestryInput = {
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUncheckedCreateWithoutAncestryInput = {
@@ -1747,6 +1800,8 @@ export type CharacterSheetUncheckedCreateWithoutAncestryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetCreateOrConnectWithoutAncestryInput = {
@@ -1818,6 +1873,8 @@ export type CharacterSheetCreateWithoutBackgroundInput = {
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUncheckedCreateWithoutBackgroundInput = {
@@ -1863,6 +1920,8 @@ export type CharacterSheetUncheckedCreateWithoutBackgroundInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetCreateOrConnectWithoutBackgroundInput = {
@@ -1889,6 +1948,414 @@ export type CharacterSheetUpdateWithWhereUniqueWithoutBackgroundInput = {
 export type CharacterSheetUpdateManyWithWhereWithoutBackgroundInput = {
   where: Prisma.CharacterSheetScalarWhereInput
   data: Prisma.XOR<Prisma.CharacterSheetUpdateManyMutationInput, Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundInput>
+}
+
+export type CharacterSheetCreateWithoutStatsInput = {
+  id?: string
+  ownerId?: string | null
+  status?: $Enums.CharacterSheetStatus
+  name: string
+  pronouns?: string | null
+  concept?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: string
+  level?: number
+  experience?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  armorClass?: number
+  speed?: number
+  inspiration?: boolean
+  alignment?: string | null
+  faith?: string | null
+  lifestyle?: string | null
+  hair?: string | null
+  skin?: string | null
+  eyes?: string | null
+  height?: string | null
+  weight?: string | null
+  age?: string | null
+  gender?: string | null
+  bonds?: string | null
+  flaws?: string | null
+  ideals?: string | null
+  personality?: string | null
+  backstory?: string | null
+  notes?: string | null
+  gmNotes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCharacterSheetsInput
+  campaignActor?: Prisma.CampaignActorCreateNestedOneWithoutCharacterSheetInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutCharacterSheetsInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutCharacterSheetsInput
+  characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
+  subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
+  gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
+}
+
+export type CharacterSheetUncheckedCreateWithoutStatsInput = {
+  id?: string
+  systemId: string
+  campaignActorId?: string | null
+  ownerId?: string | null
+  ancestryId?: string | null
+  backgroundId?: string | null
+  classId?: string | null
+  subclassId?: string | null
+  status?: $Enums.CharacterSheetStatus
+  name: string
+  pronouns?: string | null
+  concept?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: string
+  level?: number
+  experience?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  armorClass?: number
+  speed?: number
+  inspiration?: boolean
+  alignment?: string | null
+  faith?: string | null
+  lifestyle?: string | null
+  hair?: string | null
+  skin?: string | null
+  eyes?: string | null
+  height?: string | null
+  weight?: string | null
+  age?: string | null
+  gender?: string | null
+  bonds?: string | null
+  flaws?: string | null
+  ideals?: string | null
+  personality?: string | null
+  backstory?: string | null
+  notes?: string | null
+  gmNotes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
+}
+
+export type CharacterSheetCreateOrConnectWithoutStatsInput = {
+  where: Prisma.CharacterSheetWhereUniqueInput
+  create: Prisma.XOR<Prisma.CharacterSheetCreateWithoutStatsInput, Prisma.CharacterSheetUncheckedCreateWithoutStatsInput>
+}
+
+export type CharacterSheetUpsertWithoutStatsInput = {
+  update: Prisma.XOR<Prisma.CharacterSheetUpdateWithoutStatsInput, Prisma.CharacterSheetUncheckedUpdateWithoutStatsInput>
+  create: Prisma.XOR<Prisma.CharacterSheetCreateWithoutStatsInput, Prisma.CharacterSheetUncheckedCreateWithoutStatsInput>
+  where?: Prisma.CharacterSheetWhereInput
+}
+
+export type CharacterSheetUpdateToOneWithWhereWithoutStatsInput = {
+  where?: Prisma.CharacterSheetWhereInput
+  data: Prisma.XOR<Prisma.CharacterSheetUpdateWithoutStatsInput, Prisma.CharacterSheetUncheckedUpdateWithoutStatsInput>
+}
+
+export type CharacterSheetUpdateWithoutStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCharacterSheetStatusFieldUpdateOperationsInput | $Enums.CharacterSheetStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  concept?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hair?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eyes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  height?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bonds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  flaws?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCharacterSheetsNestedInput
+  campaignActor?: Prisma.CampaignActorUpdateOneWithoutCharacterSheetNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutCharacterSheetsNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutCharacterSheetsNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
+  subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
+  gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
+}
+
+export type CharacterSheetUncheckedUpdateWithoutStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignActorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCharacterSheetStatusFieldUpdateOperationsInput | $Enums.CharacterSheetStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  concept?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hair?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eyes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  height?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bonds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  flaws?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
+}
+
+export type CharacterSheetCreateWithoutSkillsInput = {
+  id?: string
+  ownerId?: string | null
+  status?: $Enums.CharacterSheetStatus
+  name: string
+  pronouns?: string | null
+  concept?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: string
+  level?: number
+  experience?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  armorClass?: number
+  speed?: number
+  inspiration?: boolean
+  alignment?: string | null
+  faith?: string | null
+  lifestyle?: string | null
+  hair?: string | null
+  skin?: string | null
+  eyes?: string | null
+  height?: string | null
+  weight?: string | null
+  age?: string | null
+  gender?: string | null
+  bonds?: string | null
+  flaws?: string | null
+  ideals?: string | null
+  personality?: string | null
+  backstory?: string | null
+  notes?: string | null
+  gmNotes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCharacterSheetsInput
+  campaignActor?: Prisma.CampaignActorCreateNestedOneWithoutCharacterSheetInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutCharacterSheetsInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutCharacterSheetsInput
+  characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
+  subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
+  gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+}
+
+export type CharacterSheetUncheckedCreateWithoutSkillsInput = {
+  id?: string
+  systemId: string
+  campaignActorId?: string | null
+  ownerId?: string | null
+  ancestryId?: string | null
+  backgroundId?: string | null
+  classId?: string | null
+  subclassId?: string | null
+  status?: $Enums.CharacterSheetStatus
+  name: string
+  pronouns?: string | null
+  concept?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: string
+  level?: number
+  experience?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  armorClass?: number
+  speed?: number
+  inspiration?: boolean
+  alignment?: string | null
+  faith?: string | null
+  lifestyle?: string | null
+  hair?: string | null
+  skin?: string | null
+  eyes?: string | null
+  height?: string | null
+  weight?: string | null
+  age?: string | null
+  gender?: string | null
+  bonds?: string | null
+  flaws?: string | null
+  ideals?: string | null
+  personality?: string | null
+  backstory?: string | null
+  notes?: string | null
+  gmNotes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+}
+
+export type CharacterSheetCreateOrConnectWithoutSkillsInput = {
+  where: Prisma.CharacterSheetWhereUniqueInput
+  create: Prisma.XOR<Prisma.CharacterSheetCreateWithoutSkillsInput, Prisma.CharacterSheetUncheckedCreateWithoutSkillsInput>
+}
+
+export type CharacterSheetUpsertWithoutSkillsInput = {
+  update: Prisma.XOR<Prisma.CharacterSheetUpdateWithoutSkillsInput, Prisma.CharacterSheetUncheckedUpdateWithoutSkillsInput>
+  create: Prisma.XOR<Prisma.CharacterSheetCreateWithoutSkillsInput, Prisma.CharacterSheetUncheckedCreateWithoutSkillsInput>
+  where?: Prisma.CharacterSheetWhereInput
+}
+
+export type CharacterSheetUpdateToOneWithWhereWithoutSkillsInput = {
+  where?: Prisma.CharacterSheetWhereInput
+  data: Prisma.XOR<Prisma.CharacterSheetUpdateWithoutSkillsInput, Prisma.CharacterSheetUncheckedUpdateWithoutSkillsInput>
+}
+
+export type CharacterSheetUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCharacterSheetStatusFieldUpdateOperationsInput | $Enums.CharacterSheetStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  concept?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hair?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eyes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  height?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bonds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  flaws?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCharacterSheetsNestedInput
+  campaignActor?: Prisma.CampaignActorUpdateOneWithoutCharacterSheetNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutCharacterSheetsNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutCharacterSheetsNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
+  subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
+  gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+}
+
+export type CharacterSheetUncheckedUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignActorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCharacterSheetStatusFieldUpdateOperationsInput | $Enums.CharacterSheetStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  concept?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hair?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eyes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  height?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bonds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  flaws?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetCreateWithoutCharacterClassInput = {
@@ -1934,6 +2401,8 @@ export type CharacterSheetCreateWithoutCharacterClassInput = {
   background?: Prisma.BackgroundCreateNestedOneWithoutCharacterSheetsInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUncheckedCreateWithoutCharacterClassInput = {
@@ -1979,6 +2448,8 @@ export type CharacterSheetUncheckedCreateWithoutCharacterClassInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetCreateOrConnectWithoutCharacterClassInput = {
@@ -2050,6 +2521,8 @@ export type CharacterSheetCreateWithoutSubclassInput = {
   background?: Prisma.BackgroundCreateNestedOneWithoutCharacterSheetsInput
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUncheckedCreateWithoutSubclassInput = {
@@ -2095,6 +2568,8 @@ export type CharacterSheetUncheckedCreateWithoutSubclassInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetCreateOrConnectWithoutSubclassInput = {
@@ -2166,6 +2641,8 @@ export type CharacterSheetCreateWithoutGameSessionsInput = {
   background?: Prisma.BackgroundCreateNestedOneWithoutCharacterSheetsInput
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUncheckedCreateWithoutGameSessionsInput = {
@@ -2211,6 +2688,8 @@ export type CharacterSheetUncheckedCreateWithoutGameSessionsInput = {
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetCreateOrConnectWithoutGameSessionsInput = {
@@ -2272,6 +2751,8 @@ export type CharacterSheetUpdateWithoutGameSessionsInput = {
   background?: Prisma.BackgroundUpdateOneWithoutCharacterSheetsNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateWithoutGameSessionsInput = {
@@ -2317,6 +2798,8 @@ export type CharacterSheetUncheckedUpdateWithoutGameSessionsInput = {
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetCreateWithoutCampaignActorInput = {
@@ -2362,6 +2845,8 @@ export type CharacterSheetCreateWithoutCampaignActorInput = {
   characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetsInput
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutCharacterSheetsInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetUncheckedCreateWithoutCampaignActorInput = {
@@ -2407,6 +2892,8 @@ export type CharacterSheetUncheckedCreateWithoutCampaignActorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput
+  stats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutCharacterSheetInput
+  skills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutCharacterSheetInput
 }
 
 export type CharacterSheetCreateOrConnectWithoutCampaignActorInput = {
@@ -2468,6 +2955,8 @@ export type CharacterSheetUpdateWithoutCampaignActorInput = {
   characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateWithoutCampaignActorInput = {
@@ -2513,6 +3002,8 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignActorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetCreateManySystemInput = {
@@ -2602,6 +3093,8 @@ export type CharacterSheetUpdateWithoutSystemInput = {
   characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateWithoutSystemInput = {
@@ -2647,6 +3140,8 @@ export type CharacterSheetUncheckedUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateManyWithoutSystemInput = {
@@ -2780,6 +3275,8 @@ export type CharacterSheetUpdateWithoutAncestryInput = {
   characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateWithoutAncestryInput = {
@@ -2825,6 +3322,8 @@ export type CharacterSheetUncheckedUpdateWithoutAncestryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateManyWithoutAncestryInput = {
@@ -2958,6 +3457,8 @@ export type CharacterSheetUpdateWithoutBackgroundInput = {
   characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateWithoutBackgroundInput = {
@@ -3003,6 +3504,8 @@ export type CharacterSheetUncheckedUpdateWithoutBackgroundInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateManyWithoutBackgroundInput = {
@@ -3136,6 +3639,8 @@ export type CharacterSheetUpdateWithoutCharacterClassInput = {
   background?: Prisma.BackgroundUpdateOneWithoutCharacterSheetsNestedInput
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateWithoutCharacterClassInput = {
@@ -3181,6 +3686,8 @@ export type CharacterSheetUncheckedUpdateWithoutCharacterClassInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateManyWithoutCharacterClassInput = {
@@ -3314,6 +3821,8 @@ export type CharacterSheetUpdateWithoutSubclassInput = {
   background?: Prisma.BackgroundUpdateOneWithoutCharacterSheetsNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetsNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateWithoutSubclassInput = {
@@ -3359,6 +3868,8 @@ export type CharacterSheetUncheckedUpdateWithoutSubclassInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  stats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInput
+  skills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutCharacterSheetNestedInput
 }
 
 export type CharacterSheetUncheckedUpdateManyWithoutSubclassInput = {
@@ -3412,10 +3923,14 @@ export type CharacterSheetUncheckedUpdateManyWithoutSubclassInput = {
 
 export type CharacterSheetCountOutputType = {
   gameSessions: number
+  stats: number
+  skills: number
 }
 
 export type CharacterSheetCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gameSessions?: boolean | CharacterSheetCountOutputTypeCountGameSessionsArgs
+  stats?: boolean | CharacterSheetCountOutputTypeCountStatsArgs
+  skills?: boolean | CharacterSheetCountOutputTypeCountSkillsArgs
 }
 
 /**
@@ -3433,6 +3948,20 @@ export type CharacterSheetCountOutputTypeDefaultArgs<ExtArgs extends runtime.Typ
  */
 export type CharacterSheetCountOutputTypeCountGameSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.GameSessionWhereInput
+}
+
+/**
+ * CharacterSheetCountOutputType without action
+ */
+export type CharacterSheetCountOutputTypeCountStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterSheetStatWhereInput
+}
+
+/**
+ * CharacterSheetCountOutputType without action
+ */
+export type CharacterSheetCountOutputTypeCountSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterSheetSkillWhereInput
 }
 
 
@@ -3486,6 +4015,8 @@ export type CharacterSheetSelect<ExtArgs extends runtime.Types.Extensions.Intern
   characterClass?: boolean | Prisma.CharacterSheet$characterClassArgs<ExtArgs>
   subclass?: boolean | Prisma.CharacterSheet$subclassArgs<ExtArgs>
   gameSessions?: boolean | Prisma.CharacterSheet$gameSessionsArgs<ExtArgs>
+  stats?: boolean | Prisma.CharacterSheet$statsArgs<ExtArgs>
+  skills?: boolean | Prisma.CharacterSheet$skillsArgs<ExtArgs>
   _count?: boolean | Prisma.CharacterSheetCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["characterSheet"]>
 
@@ -3645,6 +4176,8 @@ export type CharacterSheetInclude<ExtArgs extends runtime.Types.Extensions.Inter
   characterClass?: boolean | Prisma.CharacterSheet$characterClassArgs<ExtArgs>
   subclass?: boolean | Prisma.CharacterSheet$subclassArgs<ExtArgs>
   gameSessions?: boolean | Prisma.CharacterSheet$gameSessionsArgs<ExtArgs>
+  stats?: boolean | Prisma.CharacterSheet$statsArgs<ExtArgs>
+  skills?: boolean | Prisma.CharacterSheet$skillsArgs<ExtArgs>
   _count?: boolean | Prisma.CharacterSheetCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CharacterSheetIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3674,6 +4207,8 @@ export type $CharacterSheetPayload<ExtArgs extends runtime.Types.Extensions.Inte
     characterClass: Prisma.$CharacterClassPayload<ExtArgs> | null
     subclass: Prisma.$CharacterSubclassPayload<ExtArgs> | null
     gameSessions: Prisma.$GameSessionPayload<ExtArgs>[]
+    stats: Prisma.$CharacterSheetStatPayload<ExtArgs>[]
+    skills: Prisma.$CharacterSheetSkillPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4119,6 +4654,8 @@ export interface Prisma__CharacterSheetClient<T, Null = never, ExtArgs extends r
   characterClass<T extends Prisma.CharacterSheet$characterClassArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSheet$characterClassArgs<ExtArgs>>): Prisma.Prisma__CharacterClassClient<runtime.Types.Result.GetResult<Prisma.$CharacterClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   subclass<T extends Prisma.CharacterSheet$subclassArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSheet$subclassArgs<ExtArgs>>): Prisma.Prisma__CharacterSubclassClient<runtime.Types.Result.GetResult<Prisma.$CharacterSubclassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   gameSessions<T extends Prisma.CharacterSheet$gameSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSheet$gameSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GameSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stats<T extends Prisma.CharacterSheet$statsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSheet$statsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  skills<T extends Prisma.CharacterSheet$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSheet$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4702,6 +5239,54 @@ export type CharacterSheet$gameSessionsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.GameSessionScalarFieldEnum | Prisma.GameSessionScalarFieldEnum[]
+}
+
+/**
+ * CharacterSheet.stats
+ */
+export type CharacterSheet$statsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSheetStat
+   */
+  select?: Prisma.CharacterSheetStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSheetStat
+   */
+  omit?: Prisma.CharacterSheetStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSheetStatInclude<ExtArgs> | null
+  where?: Prisma.CharacterSheetStatWhereInput
+  orderBy?: Prisma.CharacterSheetStatOrderByWithRelationInput | Prisma.CharacterSheetStatOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterSheetStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterSheetStatScalarFieldEnum | Prisma.CharacterSheetStatScalarFieldEnum[]
+}
+
+/**
+ * CharacterSheet.skills
+ */
+export type CharacterSheet$skillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSheetSkill
+   */
+  select?: Prisma.CharacterSheetSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSheetSkill
+   */
+  omit?: Prisma.CharacterSheetSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSheetSkillInclude<ExtArgs> | null
+  where?: Prisma.CharacterSheetSkillWhereInput
+  orderBy?: Prisma.CharacterSheetSkillOrderByWithRelationInput | Prisma.CharacterSheetSkillOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterSheetSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterSheetSkillScalarFieldEnum | Prisma.CharacterSheetSkillScalarFieldEnum[]
 }
 
 /**

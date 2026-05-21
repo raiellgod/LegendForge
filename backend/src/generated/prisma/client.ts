@@ -80,6 +80,16 @@ export type Background = Prisma.BackgroundModel
  */
 export type CharacterSheet = Prisma.CharacterSheetModel
 /**
+ * Model CharacterSheetStat
+ * 
+ */
+export type CharacterSheetStat = Prisma.CharacterSheetStatModel
+/**
+ * Model CharacterSheetSkill
+ * 
+ */
+export type CharacterSheetSkill = Prisma.CharacterSheetSkillModel
+/**
  * Model CharacterClass
  * 
  */
