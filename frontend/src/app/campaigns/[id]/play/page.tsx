@@ -914,7 +914,11 @@ function CharacterBuilderModal({
               disabled={isSavingDraft}
               className="rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-3 py-2 text-sm font-black text-emerald-200 transition hover:border-emerald-300 hover:bg-emerald-500/25 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isSavingDraft ? "Salvando..." : "Salvar rascunho"}
+              {isSavingDraft
+                ? "Salvando..."
+                : savedCharacterSheetId
+                  ? "Atualizar rascunho"
+                  : "Salvar rascunho"}
             </button>
 
             <button
@@ -1026,9 +1030,9 @@ function CharacterBuilderModal({
                       </p>
 
                       <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">
-                        Esta etapa ainda está em modo visual. Nos próximos micros
-                        vamos trocar este espaço por campos reais, cards, listas e
-                        seleções conectadas ao sistema.
+                        Esta etapa ainda está em modo visual. Nos próximos
+                        micros vamos trocar este espaço por campos reais, cards,
+                        listas e seleções conectadas ao sistema.
                       </p>
                     </div>
                   )}
@@ -1060,7 +1064,10 @@ function CharacterBuilderModal({
                     />
 
                     {savedCharacterSheetId ? (
-                      <BuilderSummaryRow label="Ficha" value="Criada no banco" />
+                      <BuilderSummaryRow
+                        label="Ficha"
+                        value="Criada no banco"
+                      />
                     ) : null}
                   </div>
                 </aside>
@@ -1171,7 +1178,9 @@ function CharacterConceptStep({
 
         <textarea
           value={draft.concept}
-          onChange={(event) => onChangeDraftField("concept", event.target.value)}
+          onChange={(event) =>
+            onChangeDraftField("concept", event.target.value)
+          }
           placeholder="Ex: Barda necromante de Nigrum Alvor que usa música para ouvir ecos dos mortos."
           rows={4}
           className="w-full resize-none rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold leading-relaxed text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
@@ -2180,6 +2189,88 @@ export default function CampaignPlayPage() {
     }
   }
 
+  async function handleLoadCharacterBuilderDraft() {
+    if (!campaign) {
+      return;
+    }
+
+    setCharacterDraftSaveError(null);
+    setCharacterDraftSaveSuccess(null);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8081/campaigns/${campaign.id}/character-sheets`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          data?.message ?? "Não foi possível carregar rascunhos.",
+        );
+      }
+
+      const draftSheet = data.characterSheets
+        ?.filter(
+          (sheet: {
+            id: string;
+            status: string;
+            name: string;
+            pronouns: string | null;
+            concept: string | null;
+            portraitUrl: string | null;
+            tokenImageUrl: string | null;
+            tokenImageFit: "FILL" | "CONTAIN" | "COVER";
+            updatedAt?: string;
+            createdAt?: string;
+          }) => sheet.status === "DRAFT",
+        )
+        .sort(
+          (
+            a: {
+              updatedAt?: string;
+              createdAt?: string;
+            },
+            b: {
+              updatedAt?: string;
+              createdAt?: string;
+            },
+          ) => {
+            const dateA = new Date(a.updatedAt ?? a.createdAt ?? 0).getTime();
+            const dateB = new Date(b.updatedAt ?? b.createdAt ?? 0).getTime();
+
+            return dateB - dateA;
+          },
+        )[0];
+
+      if (!draftSheet) {
+        return;
+      }
+
+      setSavedCharacterSheetId(draftSheet.id);
+
+      setCharacterBuilderDraft({
+        name: draftSheet.name ?? "",
+        pronouns: draftSheet.pronouns ?? "",
+        concept: draftSheet.concept ?? "",
+        portraitUrl: draftSheet.portraitUrl ?? "",
+        tokenImageUrl: draftSheet.tokenImageUrl ?? "",
+        tokenImageFit: draftSheet.tokenImageFit ?? "FILL",
+      });
+
+      setCharacterDraftSaveSuccess("Rascunho carregado.");
+    } catch (error) {
+      setCharacterDraftSaveError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível carregar rascunhos.",
+      );
+    }
+  }
 
   async function handleSaveCharacterBuilderDraft() {
     if (!campaign) {
@@ -2197,7 +2288,9 @@ export default function CampaignPlayPage() {
     const trimmedName = characterBuilderDraft.name.trim();
 
     if (!trimmedName) {
-      setCharacterDraftSaveError("Informe o nome do personagem antes de salvar.");
+      setCharacterDraftSaveError(
+        "Informe o nome do personagem antes de salvar.",
+      );
       return;
     }
 
@@ -2206,25 +2299,28 @@ export default function CampaignPlayPage() {
     setCharacterDraftSaveSuccess(null);
 
     try {
-      const response = await fetch(
-        `http://localhost:8081/campaigns/${campaign.id}/character-sheets`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            systemId: campaign.systemId,
-            name: trimmedName,
-            pronouns: characterBuilderDraft.pronouns.trim() || null,
-            concept: characterBuilderDraft.concept.trim() || null,
-            portraitUrl: characterBuilderDraft.portraitUrl.trim() || null,
-            tokenImageUrl: characterBuilderDraft.tokenImageUrl.trim() || null,
-            tokenImageFit: characterBuilderDraft.tokenImageFit,
-          }),
+      const requestUrl = savedCharacterSheetId
+        ? `http://localhost:8081/campaigns/${campaign.id}/character-sheets/${savedCharacterSheetId}`
+        : `http://localhost:8081/campaigns/${campaign.id}/character-sheets`;
+
+      const requestMethod = savedCharacterSheetId ? "PATCH" : "POST";
+
+      const response = await fetch(requestUrl, {
+        method: requestMethod,
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          systemId: campaign.systemId,
+          name: trimmedName,
+          pronouns: characterBuilderDraft.pronouns.trim(),
+          concept: characterBuilderDraft.concept.trim(),
+          portraitUrl: characterBuilderDraft.portraitUrl.trim(),
+          tokenImageUrl: characterBuilderDraft.tokenImageUrl.trim(),
+          tokenImageFit: characterBuilderDraft.tokenImageFit,
+        }),
+      });
 
       const data = await response.json().catch(() => null);
 
@@ -2233,7 +2329,11 @@ export default function CampaignPlayPage() {
       }
 
       setSavedCharacterSheetId(data.characterSheet.id);
-      setCharacterDraftSaveSuccess("Rascunho salvo com sucesso.");
+      setCharacterDraftSaveSuccess(
+        savedCharacterSheetId
+          ? "Rascunho atualizado com sucesso."
+          : "Rascunho salvo com sucesso.",
+      );
     } catch (error) {
       setCharacterDraftSaveError(
         error instanceof Error
@@ -3556,6 +3656,7 @@ export default function CampaignPlayPage() {
           setIsCharacterCreationMenuOpen(false);
           setActiveCharacterBuilderStep("concept");
           setIsCharacterBuilderOpen(true);
+          void handleLoadCharacterBuilderDraft();
         }}
       />
 
