@@ -305,8 +305,10 @@ model CharacterSheet {
   subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
   gameSessions   GameSession[]
 
-  stats  CharacterSheetStat[]
-  skills CharacterSheetSkill[]
+  stats     CharacterSheetStat[]
+  skills    CharacterSheetSkill[]
+  spells    CharacterSheetSpell[]
+  equipment CharacterSheetEquipment[]
 
   @@index([systemId])
   @@index([campaignActorId])
@@ -356,6 +358,49 @@ model CharacterSheetSkill {
   @@index([characterSheetId])
   @@index([skillId])
   @@index([isProficient])
+}
+
+model CharacterSheetSpell {
+  id               String   @id @default(uuid())
+  characterSheetId String
+  spellId          String
+  source           String?
+  isPrepared       Boolean  @default(false)
+  isAlwaysPrepared Boolean  @default(false)
+  uses             Int?
+  maxUses          Int?
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  characterSheet CharacterSheet @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  spell          Spell          @relation(fields: [spellId], references: [id], onDelete: Cascade)
+
+  @@unique([characterSheetId, spellId])
+  @@index([characterSheetId])
+  @@index([spellId])
+  @@index([isPrepared])
+}
+
+model CharacterSheetEquipment {
+  id               String   @id @default(uuid())
+  characterSheetId String
+  equipmentId      String
+  quantity         Int      @default(1)
+  isEquipped       Boolean  @default(false)
+  isAttuned        Boolean  @default(false)
+  source           String?
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  characterSheet CharacterSheet @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  equipment      Equipment      @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+
+  @@unique([characterSheetId, equipmentId])
+  @@index([characterSheetId])
+  @@index([equipmentId])
+  @@index([isEquipped])
 }
 
 model CharacterClass {
@@ -478,7 +523,8 @@ model Spell {
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
 
-  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  system          GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterSpells CharacterSheetSpell[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -504,7 +550,8 @@ model Equipment {
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 
-  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  system             GameSystem                @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterEquipment CharacterSheetEquipment[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])

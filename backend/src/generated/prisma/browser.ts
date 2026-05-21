@@ -68,6 +68,16 @@ export type CharacterSheetStat = Prisma.CharacterSheetStatModel
  */
 export type CharacterSheetSkill = Prisma.CharacterSheetSkillModel
 /**
+ * Model CharacterSheetSpell
+ * 
+ */
+export type CharacterSheetSpell = Prisma.CharacterSheetSpellModel
+/**
+ * Model CharacterSheetEquipment
+ * 
+ */
+export type CharacterSheetEquipment = Prisma.CharacterSheetEquipmentModel
+/**
  * Model CharacterClass
  * 
  */
