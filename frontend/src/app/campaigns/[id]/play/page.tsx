@@ -612,6 +612,140 @@ function getVisibleActorsForUser(actors: CampaignActor[], isGM: boolean) {
   );
 }
 
+type CharacterCreationMenuModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+function CharacterCreationMenuModal({
+  isOpen,
+  onClose,
+}: CharacterCreationMenuModalProps) {
+  if (!isOpen) {
+    return null;
+  }
+
+  const creationOptions = [
+    {
+      title: "Criar personagem",
+      description:
+        "Construa uma ficha passo a passo escolhendo ancestralidade, antecedente, classe, atributos, perícias, magias e equipamentos.",
+      label: "Recomendado",
+      isAvailable: true,
+    },
+    {
+      title: "Criar NPC",
+      description:
+        "Crie uma ficha mais rápida para aliados, rivais, criaturas importantes ou personagens controlados pelo mestre.",
+      label: "Em breve",
+      isAvailable: false,
+    },
+    {
+      title: "Editar ficha diretamente",
+      description:
+        "Abra uma ficha vazia e preencha os campos manualmente, sem passar pelo assistente guiado.",
+      label: "Em breve",
+      isAvailable: false,
+    },
+    {
+      title: "Personagem pronto",
+      description:
+        "Escolha um personagem pré-montado para entrar rapidamente na aventura.",
+      label: "Em breve",
+      isAvailable: false,
+    },
+  ];
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
+      <div className="w-full max-w-5xl rounded-2xl border border-forge-gold/35 bg-[#18091f] shadow-[-10px_10px_0_rgba(0,0,0,0.45)]">
+        <div className="flex items-start justify-between gap-4 border-b border-forge-gold/20 px-6 py-5">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-forge-gold/70">
+              LegendForge
+            </p>
+
+            <h2 className="mt-2 text-2xl font-black text-zinc-100">
+              Como deseja criar sua ficha?
+            </h2>
+
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-300">
+              Escolha um caminho inicial. Nesta fase, estamos preparando a base
+              visual da criação de personagem antes de ligar cada etapa às
+              regras do sistema.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-300 transition hover:border-red-400/70 hover:text-red-200"
+          >
+            Fechar
+          </button>
+        </div>
+
+        <div className="grid gap-4 p-6 md:grid-cols-2">
+          {creationOptions.map((option) => (
+            <button
+              key={option.title}
+              type="button"
+              disabled={!option.isAvailable}
+              className={[
+                "group relative min-h-40 rounded-2xl border p-5 text-left transition",
+                "shadow-[-6px_6px_0_rgba(0,0,0,0.35)]",
+                option.isAvailable
+                  ? "border-forge-gold/45 bg-gradient-to-br from-zinc-950/95 to-[#2a1233] hover:-translate-y-0.5 hover:border-forge-gold hover:shadow-[-8px_8px_0_rgba(0,0,0,0.5)]"
+                  : "cursor-not-allowed border-zinc-800 bg-zinc-950/50 opacity-55",
+              ].join(" ")}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-black text-zinc-100">
+                    {option.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-300">
+                    {option.description}
+                  </p>
+                </div>
+
+                <span
+                  className={[
+                    "shrink-0 rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em]",
+                    option.isAvailable
+                      ? "bg-forge-gold text-zinc-950"
+                      : "bg-zinc-800 text-zinc-400",
+                  ].join(" ")}
+                >
+                  {option.label}
+                </span>
+              </div>
+
+              <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+                <span className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">
+                  {option.isAvailable ? "Disponível agora" : "Planejado"}
+                </span>
+
+                <span
+                  className={[
+                    "text-sm font-black",
+                    option.isAvailable
+                      ? "text-forge-gold group-hover:text-amber-200"
+                      : "text-zinc-600",
+                  ].join(" ")}
+                >
+                  Entrar →
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CampaignPlayPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -625,6 +759,8 @@ export default function CampaignPlayPage() {
 
   const [activeTool, setActiveTool] = useState<ToolMode>("select");
   const [activeRightTab, setActiveRightTab] = useState<RightPanelTab>("chat");
+  const [isCharacterCreationMenuOpen, setIsCharacterCreationMenuOpen] =
+    useState(false);
   const [zoom, setZoom] = useState(100);
   const [isLeftToolbarOpen, setIsLeftToolbarOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
@@ -2253,6 +2389,7 @@ export default function CampaignPlayPage() {
 
                         <button
                           type="button"
+                          onClick={() => setIsCharacterCreationMenuOpen(true)}
                           className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
                         >
                           + Criar
@@ -2749,6 +2886,11 @@ export default function CampaignPlayPage() {
           </aside>
         </div>
       </div>
+
+      <CharacterCreationMenuModal
+        isOpen={isCharacterCreationMenuOpen}
+        onClose={() => setIsCharacterCreationMenuOpen(false)}
+      />
 
       {isLibraryModalOpen && (
         <ActorLibraryModal
@@ -3307,7 +3449,10 @@ function ActorSheetModal({
                 value={getCharacterTypeLabel(actor.type)}
               />
 
-              <SheetStat label="Dono" value={actor.ownerName} />
+              <SheetStat
+                label="Dono"
+                value={actor.ownerId ? "Vinculado a jogador" : "Sem dono"}
+              />
 
               <SheetStat
                 label="Nível"
