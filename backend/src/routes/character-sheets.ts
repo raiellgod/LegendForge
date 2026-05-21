@@ -186,12 +186,26 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             .string()
             .uuid("Invalid campaign actor id")
             .optional(),
+
           systemId: z.string().uuid("Invalid system id"),
+
+          classId: z.string().uuid("Invalid class id").nullable().optional(),
+          ancestryId: z
+            .string()
+            .uuid("Invalid ancestry id")
+            .nullable()
+            .optional(),
+          backgroundId: z
+            .string()
+            .uuid("Invalid background id")
+            .nullable()
+            .optional(),
+
           name: z.string().min(1).max(120),
           pronouns: z.string().max(80).optional(),
           concept: z.string().max(500).optional(),
-          portraitUrl: z.string().url().optional(),
-          tokenImageUrl: z.string().url().optional(),
+          portraitUrl: z.string().trim().optional(),
+          tokenImageUrl: z.string().trim().optional(),
           tokenImageFit: z.enum(["COVER", "CONTAIN", "FILL"]).optional(),
         }),
       },
@@ -206,9 +220,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       const { campaignId } = request.params;
+
       const {
         campaignActorId,
         systemId,
+        classId,
+        ancestryId,
+        backgroundId,
         name,
         pronouns,
         concept,
@@ -298,19 +316,68 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      if (classId) {
+        const characterClass = await prisma.characterClass.findFirst({
+          where: {
+            id: classId,
+            systemId,
+          },
+        });
+
+        if (!characterClass) {
+          return reply.status(404).send({
+            message: "Character class not found for this system",
+          });
+        }
+      }
+
+      if (ancestryId) {
+        const ancestry = await prisma.ancestry.findFirst({
+          where: {
+            id: ancestryId,
+            systemId,
+          },
+        });
+
+        if (!ancestry) {
+          return reply.status(404).send({
+            message: "Ancestry not found for this system",
+          });
+        }
+      }
+
+      if (backgroundId) {
+        const background = await prisma.background.findFirst({
+          where: {
+            id: backgroundId,
+            systemId,
+          },
+        });
+
+        if (!background) {
+          return reply.status(404).send({
+            message: "Background not found for this system",
+          });
+        }
+      }
+
       const characterSheet = await prisma.characterSheet.create({
         data: {
           campaignId,
-          campaignActorId,
           systemId,
+          campaignActorId: campaignActorId ?? null,
           ownerId: session.user.id,
+
+          classId: classId ?? null,
+          ancestryId: ancestryId ?? null,
+          backgroundId: backgroundId ?? null,
+
           name,
-          pronouns,
-          concept,
-          portraitUrl,
-          tokenImageUrl,
-          tokenImageFit: tokenImageFit ?? "COVER",
-          status: "DRAFT",
+          pronouns: pronouns?.trim() || null,
+          concept: concept?.trim() || null,
+          portraitUrl: portraitUrl?.trim() || null,
+          tokenImageUrl: tokenImageUrl?.trim() || null,
+          tokenImageFit: tokenImageFit ?? "FILL",
         },
         include: {
           campaignActor: true,
@@ -338,17 +405,29 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         }),
         body: z
           .object({
+            classId: z.string().uuid("Invalid class id").nullable().optional(),
+            ancestryId: z
+              .string()
+              .uuid("Invalid ancestry id")
+              .nullable()
+              .optional(),
+            backgroundId: z
+              .string()
+              .uuid("Invalid background id")
+              .nullable()
+              .optional(),
+            subclassId: z
+              .string()
+              .uuid("Invalid subclass id")
+              .nullable()
+              .optional(),
+
             name: z.string().min(1).max(120).optional(),
             pronouns: z.string().max(80).nullable().optional(),
             concept: z.string().max(500).nullable().optional(),
-            portraitUrl: z.string().url().nullable().optional(),
-            tokenImageUrl: z.string().url().nullable().optional(),
+            portraitUrl: z.string().trim().nullable().optional(),
+            tokenImageUrl: z.string().trim().nullable().optional(),
             tokenImageFit: z.enum(["COVER", "CONTAIN", "FILL"]).optional(),
-
-            ancestryId: z.string().uuid().nullable().optional(),
-            backgroundId: z.string().uuid().nullable().optional(),
-            classId: z.string().uuid().nullable().optional(),
-            subclassId: z.string().uuid().nullable().optional(),
 
             level: z.number().int().min(1).max(20).optional(),
             experience: z.number().int().min(0).optional(),
@@ -459,11 +538,127 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      if (data.classId) {
+        const characterClass = await prisma.characterClass.findFirst({
+          where: {
+            id: data.classId,
+            systemId: characterSheet.systemId,
+          },
+        });
+
+        if (!characterClass) {
+          return reply.status(404).send({
+            message: "Character class not found for this system",
+          });
+        }
+      }
+
+      if (data.ancestryId) {
+        const ancestry = await prisma.ancestry.findFirst({
+          where: {
+            id: data.ancestryId,
+            systemId: characterSheet.systemId,
+          },
+        });
+
+        if (!ancestry) {
+          return reply.status(404).send({
+            message: "Ancestry not found for this system",
+          });
+        }
+      }
+
+      if (data.backgroundId) {
+        const background = await prisma.background.findFirst({
+          where: {
+            id: data.backgroundId,
+            systemId: characterSheet.systemId,
+          },
+        });
+
+        if (!background) {
+          return reply.status(404).send({
+            message: "Background not found for this system",
+          });
+        }
+      }
+
+      if (data.subclassId) {
+        const subclass = await prisma.characterSubclass.findFirst({
+          where: {
+            id: data.subclassId,
+            systemId: characterSheet.systemId,
+          },
+        });
+
+        if (!subclass) {
+          return reply.status(404).send({
+            message: "Subclass not found for this system",
+          });
+        }
+      }
+
+      const sanitizedData = {
+        ...data,
+        pronouns:
+          data.pronouns === undefined
+            ? undefined
+            : data.pronouns?.trim() || null,
+        concept:
+          data.concept === undefined ? undefined : data.concept?.trim() || null,
+        portraitUrl:
+          data.portraitUrl === undefined
+            ? undefined
+            : data.portraitUrl?.trim() || null,
+        tokenImageUrl:
+          data.tokenImageUrl === undefined
+            ? undefined
+            : data.tokenImageUrl?.trim() || null,
+        alignment:
+          data.alignment === undefined
+            ? undefined
+            : data.alignment?.trim() || null,
+        faith:
+          data.faith === undefined ? undefined : data.faith?.trim() || null,
+        lifestyle:
+          data.lifestyle === undefined
+            ? undefined
+            : data.lifestyle?.trim() || null,
+        hair: data.hair === undefined ? undefined : data.hair?.trim() || null,
+        skin: data.skin === undefined ? undefined : data.skin?.trim() || null,
+        eyes: data.eyes === undefined ? undefined : data.eyes?.trim() || null,
+        height:
+          data.height === undefined ? undefined : data.height?.trim() || null,
+        weight:
+          data.weight === undefined ? undefined : data.weight?.trim() || null,
+        age: data.age === undefined ? undefined : data.age?.trim() || null,
+        gender:
+          data.gender === undefined ? undefined : data.gender?.trim() || null,
+        bonds:
+          data.bonds === undefined ? undefined : data.bonds?.trim() || null,
+        flaws:
+          data.flaws === undefined ? undefined : data.flaws?.trim() || null,
+        ideals:
+          data.ideals === undefined ? undefined : data.ideals?.trim() || null,
+        personality:
+          data.personality === undefined
+            ? undefined
+            : data.personality?.trim() || null,
+        backstory:
+          data.backstory === undefined
+            ? undefined
+            : data.backstory?.trim() || null,
+        notes:
+          data.notes === undefined ? undefined : data.notes?.trim() || null,
+        gmNotes:
+          data.gmNotes === undefined ? undefined : data.gmNotes?.trim() || null,
+      };
+
       const updatedCharacterSheet = await prisma.characterSheet.update({
         where: {
           id: sheetId,
         },
-        data,
+        data: sanitizedData,
         include: {
           campaignActor: true,
           system: true,

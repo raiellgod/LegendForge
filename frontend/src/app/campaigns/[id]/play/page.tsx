@@ -760,6 +760,43 @@ type CharacterBuilderDraft = {
   portraitUrl: string;
   tokenImageUrl: string;
   tokenImageFit: "FILL" | "CONTAIN" | "COVER";
+
+  classId: string;
+  className: string;
+
+  ancestryId: string;
+  ancestryName: string;
+
+  backgroundId: string;
+  backgroundName: string;
+};
+
+type CharacterBuilderOption = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+};
+
+type CharacterBuilderClassOption = CharacterBuilderOption & {
+  hitDie: number;
+};
+
+type CharacterBuilderAncestryOption = CharacterBuilderOption & {
+  defaultSizeCategory: string;
+};
+
+type CharacterBuilderBackgroundOption = CharacterBuilderOption & {
+  skillKeys: string[];
+  toolNames: string[];
+  languageChoiceCount: number;
+  startingGold: number;
+};
+
+type CharacterBuilderOptions = {
+  classes: CharacterBuilderClassOption[];
+  ancestries: CharacterBuilderAncestryOption[];
+  backgrounds: CharacterBuilderBackgroundOption[];
 };
 
 type CharacterBuilderStep = {
@@ -825,12 +862,22 @@ type CharacterBuilderModalProps = {
   isOpen: boolean;
   activeStepId: string;
   draft: CharacterBuilderDraft;
+  options: CharacterBuilderOptions;
+  isLoadingOptions: boolean;
+  optionsError: string | null;
   savedCharacterSheetId: string | null;
   isSavingDraft: boolean;
   saveError: string | null;
   saveSuccess: string | null;
   onSaveDraft: () => void;
   onChangeDraft: (draft: CharacterBuilderDraft) => void;
+  onSelectOption: (
+    type: "class" | "ancestry" | "background",
+    option: {
+      id: string;
+      name: string;
+    },
+  ) => void;
   onChangeStep: (stepId: string) => void;
   onClose: () => void;
 };
@@ -839,12 +886,16 @@ function CharacterBuilderModal({
   isOpen,
   activeStepId,
   draft,
+  options,
+  isLoadingOptions,
+  optionsError,
   savedCharacterSheetId,
   isSavingDraft,
   saveError,
   saveSuccess,
   onSaveDraft,
   onChangeDraft,
+  onSelectOption,
   onChangeStep,
   onClose,
 }: CharacterBuilderModalProps) {
@@ -873,6 +924,18 @@ function CharacterBuilderModal({
     });
   }
 
+  const selectedClass = options.classes.find(
+    (option) => option.id === draft.classId,
+  );
+
+  const selectedAncestry = options.ancestries.find(
+    (option) => option.id === draft.ancestryId,
+  );
+
+  const selectedBackground = options.backgrounds.find(
+    (option) => option.id === draft.backgroundId,
+  );
+
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm">
       <div className="flex h-[min(820px,92vh)] w-full max-w-7xl flex-col overflow-hidden rounded-2xl border border-amber-400/30 bg-[#140719] shadow-[-12px_12px_0_rgba(0,0,0,0.5)]">
@@ -887,9 +950,9 @@ function CharacterBuilderModal({
             </h2>
 
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-300">
-              Monte a ficha em etapas. Por enquanto, esta é a estrutura visual
-              do builder; nos próximos micros vamos conectar cada etapa às
-              regras do sistema.
+              Monte a ficha em etapas. A etapa de conceito já salva o rascunho,
+              e as etapas de classe, ancestralidade e antecedente agora usam
+              opções reais do sistema.
             </p>
 
             <div className="mt-3 space-y-2">
@@ -1023,6 +1086,51 @@ function CharacterBuilderModal({
                       draft={draft}
                       onChangeDraftField={updateDraft}
                     />
+                  ) : activeStep.id === "class" ? (
+                    <CharacterBuilderOptionCards
+                      title="Classes disponíveis"
+                      description="Escolha a função principal do personagem na aventura."
+                      options={options.classes}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      emptyMessage="Nenhuma classe encontrada para este sistema."
+                      selectedId={draft.classId}
+                      onSelect={(option) => {
+                        updateDraft("classId", option.id);
+                        updateDraft("className", option.name);
+                        onSelectOption("class", option);
+                      }}
+                    />
+                  ) : activeStep.id === "ancestry" ? (
+                    <CharacterBuilderOptionCards
+                      title="Ancestralidades disponíveis"
+                      description="Escolha a origem biológica, cultural ou mutada do personagem."
+                      options={options.ancestries}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      emptyMessage="Nenhuma ancestralidade encontrada para este sistema."
+                      selectedId={draft.ancestryId}
+                      onSelect={(option) => {
+                        updateDraft("ancestryId", option.id);
+                        updateDraft("ancestryName", option.name);
+                        onSelectOption("ancestry", option);
+                      }}
+                    />
+                  ) : activeStep.id === "background" ? (
+                    <CharacterBuilderOptionCards
+                      title="Antecedentes disponíveis"
+                      description="Escolha de onde o personagem veio antes da aventura começar."
+                      options={options.backgrounds}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      emptyMessage="Nenhum antecedente encontrado para este sistema."
+                      selectedId={draft.backgroundId}
+                      onSelect={(option) => {
+                        updateDraft("backgroundId", option.id);
+                        updateDraft("backgroundName", option.name);
+                        onSelectOption("background", option);
+                      }}
+                    />
                   ) : (
                     <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
                       <p className="text-lg font-black text-zinc-100">
@@ -1048,16 +1156,24 @@ function CharacterBuilderModal({
                       label="Nome"
                       value={draft.name || "Não definido"}
                     />
-                    <BuilderSummaryRow label="Classe" value="Não definida" />
+
+                    <BuilderSummaryRow
+                      label="Classe"
+                      value={(selectedClass?.name ?? draft.className) || "Não definida"}
+                    />
+
                     <BuilderSummaryRow
                       label="Ancestralidade"
-                      value="Não definida"
+                      value={(selectedAncestry?.name ?? draft.ancestryName) || "Não definida"}
                     />
+
                     <BuilderSummaryRow
                       label="Antecedente"
-                      value="Não definido"
+                      value={(selectedBackground?.name ?? draft.backgroundName) || "Não definido"}
                     />
+
                     <BuilderSummaryRow label="Nível" value="1" />
+
                     <BuilderSummaryRow
                       label="Status"
                       value={savedCharacterSheetId ? "Salvo" : "Rascunho"}
@@ -1122,6 +1238,114 @@ function CharacterBuilderModal({
             {nextStep ? "Próxima →" : "Finalizar"}
           </button>
         </footer>
+      </div>
+    </div>
+  );
+}
+
+type CharacterBuilderSelectableOption = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+};
+
+function CharacterBuilderOptionCards({
+  title,
+  description,
+  options,
+  isLoading,
+  error,
+  emptyMessage,
+  selectedId,
+  onSelect,
+}: {
+  title: string;
+  description: string;
+  options: CharacterBuilderSelectableOption[];
+  isLoading: boolean;
+  error: string | null;
+  emptyMessage: string;
+  selectedId: string;
+  onSelect: (option: CharacterBuilderSelectableOption) => void;
+}) {
+  if (isLoading) {
+    return (
+      <div className="mt-5 rounded-2xl border border-forge-gold/20 bg-black/20 p-5 text-sm font-bold text-zinc-300">
+        Carregando opções...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-5 text-sm font-bold text-red-200">
+        {error}
+      </div>
+    );
+  }
+
+  if (options.length === 0) {
+    return (
+      <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
+        {emptyMessage}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-5 space-y-4">
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold/80">
+          {title}
+        </p>
+
+        <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+          {description}
+        </p>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        {options.map((option) => {
+          const isSelected = selectedId === option.id;
+
+          return (
+            <button
+              key={option.id}
+              type="button"
+              onClick={() => onSelect(option)}
+              className={[
+                "group rounded-2xl border p-4 text-left transition hover:-translate-y-0.5",
+                isSelected
+                  ? "border-forge-gold bg-forge-gold/10 shadow-[-4px_4px_0_rgba(234,179,8,0.20)]"
+                  : "border-forge-gold/15 bg-zinc-950/50 hover:border-forge-gold/70 hover:bg-forge-purple/20",
+              ].join(" ")}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h4 className="text-base font-black text-zinc-100 group-hover:text-forge-gold">
+                    {option.name}
+                  </h4>
+
+                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-zinc-400">
+                    {option.description ?? "Sem descrição cadastrada."}
+                  </p>
+                </div>
+
+                <span
+                  className={[
+                    "rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em]",
+                    isSelected
+                      ? "border-forge-gold bg-forge-gold text-black"
+                      : "border-forge-gold/30 bg-forge-gold/10 text-forge-gold",
+                  ].join(" ")}
+                >
+                  {isSelected ? "Selecionado" : option.key}
+                </span>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -1316,6 +1540,60 @@ type BuilderSummaryRowProps = {
   value: string;
 };
 
+function BuilderOptionCard({
+  title,
+  description,
+  isSelected,
+  onClick,
+}: {
+  title: string;
+  description?: string | null;
+  isSelected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={[
+        "group w-full rounded-2xl border p-4 text-left transition",
+        "bg-black/25 hover:-translate-y-0.5 hover:bg-white/10",
+        "shadow-[-6px_6px_18px_rgba(0,0,0,0.35)]",
+        isSelected
+          ? "border-yellow-300 bg-yellow-300/10"
+          : "border-white/10 hover:border-yellow-300/50",
+      ].join(" ")}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-black text-white">{title}</p>
+
+          {description ? (
+            <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-white/55">
+              {description}
+            </p>
+          ) : (
+            <p className="mt-2 text-xs italic text-white/35">
+              Sem descrição cadastrada.
+            </p>
+          )}
+        </div>
+
+        <span
+          className={[
+            "shrink-0 rounded-full border px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em]",
+            isSelected
+              ? "border-yellow-300 bg-yellow-300 text-black"
+              : "border-white/10 text-white/35 group-hover:border-yellow-300/50 group-hover:text-yellow-200",
+          ].join(" ")}
+        >
+          {isSelected ? "Escolhido" : "Escolher"}
+        </span>
+      </div>
+    </button>
+  );
+}
+
 function BuilderSummaryRow({ label, value }: BuilderSummaryRowProps) {
   return (
     <div className="flex items-center justify-between gap-4 rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3">
@@ -1356,6 +1634,15 @@ export default function CampaignPlayPage() {
       portraitUrl: "",
       tokenImageUrl: "",
       tokenImageFit: "FILL",
+
+      classId: "",
+      className: "",
+
+      ancestryId: "",
+      ancestryName: "",
+
+      backgroundId: "",
+      backgroundName: "",
     });
   const [savedCharacterSheetId, setSavedCharacterSheetId] = useState<
     string | null
@@ -1367,6 +1654,18 @@ export default function CampaignPlayPage() {
   const [characterDraftSaveSuccess, setCharacterDraftSaveSuccess] = useState<
     string | null
   >(null);
+  const [characterBuilderOptions, setCharacterBuilderOptions] =
+    useState<CharacterBuilderOptions>({
+      classes: [],
+      ancestries: [],
+      backgrounds: [],
+    });
+  const [
+    isLoadingCharacterBuilderOptions,
+    setIsLoadingCharacterBuilderOptions,
+  ] = useState(false);
+  const [characterBuilderOptionsError, setCharacterBuilderOptionsError] =
+    useState<string | null>(null);
   const [zoom, setZoom] = useState(100);
   const [isLeftToolbarOpen, setIsLeftToolbarOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
@@ -2189,6 +2488,50 @@ export default function CampaignPlayPage() {
     }
   }
 
+  async function handleLoadCharacterBuilderOptions() {
+    if (!campaign?.systemId) {
+      setCharacterBuilderOptionsError(
+        "Esta campanha ainda não possui um sistema definido.",
+      );
+      return;
+    }
+
+    setIsLoadingCharacterBuilderOptions(true);
+    setCharacterBuilderOptionsError(null);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8081/systems/${campaign.systemId}/character-options`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          data?.message ?? "Não foi possível carregar as opções do sistema.",
+        );
+      }
+
+      setCharacterBuilderOptions({
+        classes: data.classes ?? [],
+        ancestries: data.ancestries ?? [],
+        backgrounds: data.backgrounds ?? [],
+      });
+    } catch (error) {
+      setCharacterBuilderOptionsError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível carregar as opções do sistema.",
+      );
+    } finally {
+      setIsLoadingCharacterBuilderOptions(false);
+    }
+  }
+
   async function handleLoadCharacterBuilderDraft() {
     if (!campaign) {
       return;
@@ -2225,6 +2568,18 @@ export default function CampaignPlayPage() {
             portraitUrl: string | null;
             tokenImageUrl: string | null;
             tokenImageFit: "FILL" | "CONTAIN" | "COVER";
+            classId: string | null;
+            ancestryId: string | null;
+            backgroundId: string | null;
+            characterClass?: {
+              name: string;
+            } | null;
+            ancestry?: {
+              name: string;
+            } | null;
+            background?: {
+              name: string;
+            } | null;
             updatedAt?: string;
             createdAt?: string;
           }) => sheet.status === "DRAFT",
@@ -2260,6 +2615,15 @@ export default function CampaignPlayPage() {
         portraitUrl: draftSheet.portraitUrl ?? "",
         tokenImageUrl: draftSheet.tokenImageUrl ?? "",
         tokenImageFit: draftSheet.tokenImageFit ?? "FILL",
+
+        classId: draftSheet.classId ?? "",
+        className: draftSheet.characterClass?.name ?? "",
+
+        ancestryId: draftSheet.ancestryId ?? "",
+        ancestryName: draftSheet.ancestry?.name ?? "",
+
+        backgroundId: draftSheet.backgroundId ?? "",
+        backgroundName: draftSheet.background?.name ?? "",
       });
 
       setCharacterDraftSaveSuccess("Rascunho carregado.");
@@ -2272,6 +2636,38 @@ export default function CampaignPlayPage() {
     }
   }
 
+  function handleSelectCharacterBuilderOption(
+  type: "class" | "ancestry" | "background",
+  option: {
+    id: string;
+    name: string;
+  },
+) {
+  setCharacterBuilderDraft((currentDraft) => {
+    if (type === "class") {
+      return {
+        ...currentDraft,
+        classId: option.id,
+        className: option.name,
+      };
+    }
+
+    if (type === "ancestry") {
+      return {
+        ...currentDraft,
+        ancestryId: option.id,
+        ancestryName: option.name,
+      };
+    }
+
+    return {
+      ...currentDraft,
+      backgroundId: option.id,
+      backgroundName: option.name,
+    };
+  });
+}
+  
   async function handleSaveCharacterBuilderDraft() {
     if (!campaign) {
       setCharacterDraftSaveError("Campanha não encontrada.");
@@ -2316,9 +2712,16 @@ export default function CampaignPlayPage() {
           name: trimmedName,
           pronouns: characterBuilderDraft.pronouns.trim(),
           concept: characterBuilderDraft.concept.trim(),
-          portraitUrl: characterBuilderDraft.portraitUrl.trim(),
-          tokenImageUrl: characterBuilderDraft.tokenImageUrl.trim(),
+          portraitUrl: savedCharacterSheetId
+            ? characterBuilderDraft.portraitUrl.trim() || null
+            : characterBuilderDraft.portraitUrl.trim(),
+          tokenImageUrl: savedCharacterSheetId
+            ? characterBuilderDraft.tokenImageUrl.trim() || null
+            : characterBuilderDraft.tokenImageUrl.trim(),
           tokenImageFit: characterBuilderDraft.tokenImageFit,
+          classId: characterBuilderDraft.classId || null,
+          ancestryId: characterBuilderDraft.ancestryId || null,
+          backgroundId: characterBuilderDraft.backgroundId || null,
         }),
       });
 
@@ -3657,6 +4060,7 @@ export default function CampaignPlayPage() {
           setActiveCharacterBuilderStep("concept");
           setIsCharacterBuilderOpen(true);
           void handleLoadCharacterBuilderDraft();
+          void handleLoadCharacterBuilderOptions();
         }}
       />
 
@@ -3664,12 +4068,16 @@ export default function CampaignPlayPage() {
         isOpen={isCharacterBuilderOpen}
         activeStepId={activeCharacterBuilderStep}
         draft={characterBuilderDraft}
+        options={characterBuilderOptions}
+        isLoadingOptions={isLoadingCharacterBuilderOptions}
+        optionsError={characterBuilderOptionsError}
         savedCharacterSheetId={savedCharacterSheetId}
         isSavingDraft={isSavingCharacterDraft}
         saveError={characterDraftSaveError}
         saveSuccess={characterDraftSaveSuccess}
         onSaveDraft={handleSaveCharacterBuilderDraft}
         onChangeDraft={setCharacterBuilderDraft}
+        onSelectOption={handleSelectCharacterBuilderOption}
         onChangeStep={setActiveCharacterBuilderStep}
         onClose={() => setIsCharacterBuilderOpen(false)}
       />
