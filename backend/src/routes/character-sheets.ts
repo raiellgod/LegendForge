@@ -1389,4 +1389,221 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       });
     },
   );
+  function getActorInitialsFromName(name: string) {
+    const initials = name
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+
+    return initials || "PC";
+  }
+
+  function getReadyValidationErrors(characterSheet: {
+    name: string;
+    classId: string | null;
+    ancestryId: string | null;
+    backgroundId: string | null;
+    stats: Array<{
+      stat: {
+        key: string;
+      };
+    }>;
+    skills: Array<unknown>;
+  }) {
+    const errors: string[] = [];
+
+    if (!characterSheet.name.trim()) {
+      errors.push("Informe o nome do personagem.");
+    }
+
+    if (!characterSheet.classId) {
+      errors.push("Escolha uma classe.");
+    }
+
+    if (!characterSheet.ancestryId) {
+      errors.push("Escolha uma ancestralidade.");
+    }
+
+    if (!characterSheet.backgroundId) {
+      errors.push("Escolha um antecedente.");
+    }
+
+    const requiredStatKeys = [
+      "strength",
+      "dexterity",
+      "constitution",
+      "intelligence",
+      "wisdom",
+      "charisma",
+    ];
+
+    const sheetStatKeys = new Set(
+      characterSheet.stats.map((sheetStat) => sheetStat.stat.key),
+    );
+
+    const hasAllRequiredStats = requiredStatKeys.every((statKey) =>
+      sheetStatKeys.has(statKey),
+    );
+
+    if (!hasAllRequiredStats) {
+      errors.push("Distribua todos os seis atributos.");
+    }
+
+    if (characterSheet.skills.length === 0) {
+      errors.push("Escolha pelo menos uma perícia.");
+    }
+
+    return errors;
+  }
+
+  server.post(
+    "/campaigns/:campaignId/character-sheets/:sheetId/finalize",
+    {
+      schema: {
+        tags: ["Character Sheets"],
+        description: "Finalize a draft character sheet and ensure it has a campaign actor",
+        params: z.object({
+          campaignId: z.string().uuid("Invalid campaign id"),
+          sheetId: z.string().uuid("Invalid character sheet id"),
+        }),
+      },
+    },
+    async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const { campaignId, sheetId } = request.params;
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: campaignId,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const characterSheet = await prisma.characterSheet.findFirst({
+        where: {
+          id: sheetId,
+          campaignId,
+        },
+        include: characterSheetInclude,
+      });
+
+      if (!characterSheet) {
+        return reply.status(404).send({
+          message: "Character sheet not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = currentParticipant?.role === "GM";
+      const isSheetOwner = characterSheet.ownerId === session.user.id;
+
+      if (!isOwner && !isGM && !isSheetOwner) {
+        return reply.status(403).send({
+          message: "You cannot finalize this character sheet",
+        });
+      }
+
+      const validationErrors = getReadyValidationErrors(characterSheet);
+
+      if (validationErrors.length > 0) {
+        return reply.status(400).send({
+          message: "A ficha ainda não possui os dados mínimos para ser finalizada.",
+          errors: validationErrors,
+        });
+      }
+
+      const actorName = characterSheet.name.trim();
+      const actorInitials = getActorInitialsFromName(actorName);
+      const actorOwnerId = characterSheet.ownerId ?? session.user.id;
+      const actorDescription = characterSheet.concept?.trim() || null;
+      const actorPortraitUrl =
+        characterSheet.portraitUrl?.trim() ||
+        characterSheet.tokenImageUrl?.trim() ||
+        null;
+
+      const finalizedCharacterSheet = await prisma.$transaction(async (tx) => {
+        const campaignActor = characterSheet.campaignActorId
+          ? await tx.campaignActor.update({
+              where: {
+                id: characterSheet.campaignActorId,
+              },
+              data: {
+                name: actorName,
+                initials: actorInitials,
+                description: actorDescription,
+                portraitUrl: actorPortraitUrl,
+                type: "PLAYER_CHARACTER",
+                location: "TABLE",
+                ownerId: actorOwnerId,
+              },
+            })
+          : await tx.campaignActor.create({
+              data: {
+                campaignId,
+                ownerId: actorOwnerId,
+                type: "PLAYER_CHARACTER",
+                location: "TABLE",
+                name: actorName,
+                initials: actorInitials,
+                description: actorDescription,
+                portraitUrl: actorPortraitUrl,
+              },
+            });
+
+        return tx.characterSheet.update({
+          where: {
+            id: sheetId,
+          },
+          data: {
+            status: "READY",
+            campaignActorId: campaignActor.id,
+          },
+          include: characterSheetInclude,
+        });
+      });
+
+      return reply.status(200).send({
+        characterSheet: finalizedCharacterSheet,
+      });
+    },
+  );
+
 }

@@ -491,6 +491,20 @@ function getTokenImageFitClass(imageFit: SceneToken["imageFit"]) {
   return "object-cover";
 }
 
+function getCharacterTokenImageFitClass(
+  imageFit: CharacterBuilderDraft["tokenImageFit"],
+) {
+  if (imageFit === "CONTAIN") {
+    return "object-contain";
+  }
+
+  if (imageFit === "FILL") {
+    return "object-fill";
+  }
+
+  return "object-cover";
+}
+
 function normalizeDiceExpression(expression: string) {
   return expression.toLowerCase().replace(/\s+/g, "").replace(/d%/g, "d100");
 }
@@ -764,6 +778,8 @@ type CharacterAttributeKey =
 type CharacterBuilderAttributes = Record<CharacterAttributeKey, number | null>;
 
 type CharacterBuilderEquipmentMode = "PACKAGE" | "GOLD";
+
+type CharacterSheetStatus = "DRAFT" | "READY" | "ARCHIVED";
 
 type CharacterBuilderEquipmentDraftItem = {
   key: string;
@@ -1735,10 +1751,13 @@ type CharacterBuilderModalProps = {
   isLoadingOptions: boolean;
   optionsError: string | null;
   savedCharacterSheetId: string | null;
+  savedCharacterSheetStatus: CharacterSheetStatus | null;
   isSavingDraft: boolean;
+  isFinalizingSheet: boolean;
   saveError: string | null;
   saveSuccess: string | null;
   onSaveDraft: () => void;
+  onFinalizeSheet: () => void;
   onChangeDraft: (draft: CharacterBuilderDraft) => void;
   onSelectOption: (
     type: "class" | "ancestry" | "background",
@@ -1760,10 +1779,13 @@ function CharacterBuilderModal({
   isLoadingOptions,
   optionsError,
   savedCharacterSheetId,
+  savedCharacterSheetStatus,
   isSavingDraft,
+  isFinalizingSheet,
   saveError,
   saveSuccess,
   onSaveDraft,
+  onFinalizeSheet,
   onChangeDraft,
   onSelectOption,
   onChangeStep,
@@ -1976,14 +1998,16 @@ function CharacterBuilderModal({
             <button
               type="button"
               onClick={onSaveDraft}
-              disabled={isSavingDraft}
+              disabled={isSavingDraft || savedCharacterSheetStatus === "READY"}
               className="rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-3 py-2 text-sm font-black text-emerald-200 transition hover:border-emerald-300 hover:bg-emerald-500/25 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isSavingDraft
-                ? "Salvando..."
-                : savedCharacterSheetId
-                  ? "Atualizar rascunho"
-                  : "Salvar rascunho"}
+              {savedCharacterSheetStatus === "READY"
+                ? "Ficha finalizada"
+                : isSavingDraft
+                  ? "Salvando..."
+                  : savedCharacterSheetId
+                    ? "Atualizar rascunho"
+                    : "Salvar rascunho"}
             </button>
 
             <button
@@ -2091,7 +2115,7 @@ function CharacterBuilderModal({
                       : "border-amber-400/30 bg-amber-300/10 text-amber-200",
                   ].join(" ")}
                 >
-                  {savedCharacterSheetId ? "Salvo" : "Rascunho"}
+                  {savedCharacterSheetStatus === "READY" ? "Pronta" : savedCharacterSheetId ? "Salvo" : "Rascunho"}
                 </span>
               </div>
 
@@ -2257,6 +2281,14 @@ function CharacterBuilderModal({
                       draft={draft}
                       onChangeDraftField={updateDraft}
                     />
+                  ) : activeStep.id === "review" ? (
+                    <CharacterReviewStep
+                      draft={draft}
+                      options={options}
+                      selectedClass={selectedClass}
+                      selectedAncestry={selectedAncestry}
+                      selectedBackground={selectedBackground}
+                    />
                   ) : (
                     <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
                       <p className="text-lg font-black text-zinc-100">
@@ -2372,7 +2404,7 @@ function CharacterBuilderModal({
 
                     <BuilderSummaryRow
                       label="Status"
-                      value={savedCharacterSheetId ? "Salvo" : "Rascunho"}
+                      value={savedCharacterSheetStatus === "READY" ? "Pronta" : savedCharacterSheetId ? "Salvo" : "Rascunho"}
                     />
 
                     {savedCharacterSheetId ? (
@@ -2423,15 +2455,30 @@ function CharacterBuilderModal({
 
           <button
             type="button"
-            disabled={!nextStep || !canGoToNextStep}
+            disabled={
+              nextStep
+                ? !canGoToNextStep
+                : isFinalizingSheet || savedCharacterSheetStatus === "READY"
+            }
             onClick={() => {
               if (nextStep && canGoToNextStep) {
                 onChangeStep(nextStep.id);
+                return;
+              }
+
+              if (!nextStep) {
+                onFinalizeSheet();
               }
             }}
             className="rounded-xl border border-amber-400/40 bg-amber-300 px-4 py-2 text-sm font-black text-zinc-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:border-zinc-700 disabled:bg-zinc-800 disabled:text-zinc-500"
           >
-            {nextStep ? "Próxima →" : "Finalizar"}
+            {nextStep
+              ? "Próxima →"
+              : savedCharacterSheetStatus === "READY"
+                ? "Ficha pronta"
+                : isFinalizingSheet
+                  ? "Finalizando..."
+                  : "Finalizar ficha"}
           </button>
         </footer>
       </div>
@@ -4783,6 +4830,596 @@ function CharacterConceptStep({
   );
 }
 
+
+type CharacterReviewStepProps = {
+  draft: CharacterBuilderDraft;
+  options: CharacterBuilderOptions;
+  selectedClass: CharacterBuilderClassOption | undefined;
+  selectedAncestry: CharacterBuilderAncestryOption | undefined;
+  selectedBackground: CharacterBuilderBackgroundOption | undefined;
+};
+
+function CharacterReviewStep({
+  draft,
+  options,
+  selectedClass,
+  selectedAncestry,
+  selectedBackground,
+}: CharacterReviewStepProps) {
+  const selectedSkills = draft.skillKeys
+    .map((skillKey) => {
+      return options.skills.find((skill) => skill.key === skillKey);
+    })
+    .filter((skill): skill is CharacterBuilderSkillOption => Boolean(skill));
+
+  const selectedSpells = draft.spellKeys
+    .map((spellKey) => {
+      return options.spells.find((spell) => spell.key === spellKey);
+    })
+    .filter((spell): spell is CharacterBuilderSpellOption => Boolean(spell));
+
+  const selectedCantrips = selectedSpells.filter(isCantrip);
+  const selectedLeveledSpells = selectedSpells.filter(isLeveledSpell);
+
+  const startingEquipmentItems = getStartingEquipmentItemsFromDraft(
+    draft,
+    options,
+  );
+
+  const startingGold = getStartingGoldFromDraft(draft, options);
+
+  const aboutFieldsCount = countFilledAboutFields(draft);
+
+  const assignedAttributesCount = CHARACTER_ATTRIBUTE_DEFINITIONS.filter(
+    (attribute) => draft.attributes[attribute.key] !== null,
+  ).length;
+
+  return (
+    <div className="mt-5 space-y-5">
+      <section className="rounded-2xl border border-forge-gold/25 bg-gradient-to-br from-[#211027] to-black/40 p-5 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]">
+        <div className="p-5">
+  <div className="flex flex-wrap items-center gap-2">
+    <p className="text-[10px] font-black uppercase tracking-[0.28em] text-forge-gold">
+      Revisão da ficha
+    </p>
+
+    <span
+      className="flex h-5 w-5 items-center justify-center rounded-full border border-zinc-700 bg-black/30 text-[10px] font-black text-zinc-500"
+      title="Confira os principais dados antes de finalizar a ficha."
+      aria-label="Informação sobre revisão da ficha"
+    >
+      i
+    </span>
+  </div>
+
+  <h3 className="mt-4 max-w-2xl text-2xl font-black leading-tight text-zinc-100">
+    Confira {draft.name || "o personagem"} antes de finalizar
+  </h3>
+</div>
+      </section>
+
+            <CharacterReviewSection
+        title="Identidade visual"
+        description="Retrato, token, nome, pronomes e conceito do personagem."
+      >
+        <div className="grid gap-4 2xl:grid-cols-[240px_minmax(0,1fr)]">
+          <div className="space-y-3">
+            <div
+              className="overflow-hidden rounded-2xl border border-forge-gold/25 bg-zinc-950/70 shadow-[-4px_4px_0_rgba(0,0,0,0.28)]"
+              title={
+                draft.portraitUrl ||
+                "Nenhuma URL de retrato foi informada para este personagem."
+              }
+            >
+              <div className="flex aspect-[4/5] items-center justify-center bg-black/40 text-xs font-black uppercase tracking-[0.18em] text-zinc-600">
+                {draft.portraitUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={draft.portraitUrl}
+                    alt={`Retrato de ${draft.name || "personagem"}`}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  "Sem retrato"
+                )}
+              </div>
+
+              <div className="border-t border-zinc-800 px-4 py-3">
+                <p className="text-sm font-black leading-tight text-zinc-100">
+                  {draft.name || "Personagem sem nome"}
+                </p>
+
+                <p className="mt-1 text-xs font-bold text-zinc-500">
+                  {draft.pronouns || "Pronomes não definidos"}
+                </p>
+              </div>
+            </div>
+
+            <div
+              className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-3"
+              title={
+                draft.tokenImageUrl ||
+                "Nenhuma URL de token foi informada para este personagem."
+              }
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-forge-gold/25 bg-black/40 text-[9px] font-black uppercase tracking-[0.12em] text-zinc-600">
+                  {draft.tokenImageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={draft.tokenImageUrl}
+                      alt={`Token de ${draft.name || "personagem"}`}
+                      className={`h-full w-full ${getCharacterTokenImageFitClass(
+                        draft.tokenImageFit,
+                      )}`}
+                    />
+                  ) : (
+                    "Token"
+                  )}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-zinc-500">
+                    Token de mesa
+                  </p>
+
+                  <p className="mt-1 text-sm font-black text-zinc-100">
+                    {draft.tokenImageUrl ? "Imagem informada" : "Não informado"}
+                  </p>
+
+                  <p className="mt-1 text-xs font-bold text-zinc-500">
+                    Encaixe: {draft.tokenImageFit}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="grid gap-3 md:grid-cols-2">
+              <CharacterReviewFact
+                label="Nome"
+                value={draft.name || "Não definido"}
+              />
+
+              <CharacterReviewFact
+                label="Pronomes"
+                value={draft.pronouns || "Não definido"}
+              />
+            </div>
+
+            <CharacterReviewTextBlock
+              label="Conceito"
+              value={draft.concept || "Conceito ainda não preenchido."}
+            />
+
+            <div className="grid gap-3">
+              <CharacterReviewFact
+                label="Classe"
+                value={
+                  (selectedClass?.name ?? draft.className) || "Não definida"
+                }
+                title={
+                  selectedClass?.description ??
+                  "Classe escolhida para o personagem."
+                }
+              />
+
+              <CharacterReviewFact
+                label="Ancestralidade"
+                value={
+                  (selectedAncestry?.name ?? draft.ancestryName) ||
+                  "Não definida"
+                }
+                title={
+                  selectedAncestry?.description ??
+                  "Ancestralidade escolhida para o personagem."
+                }
+              />
+
+              <CharacterReviewFact
+                label="Antecedente"
+                value={
+                  (selectedBackground?.name ?? draft.backgroundName) ||
+                  "Não definido"
+                }
+                title={
+                  selectedBackground?.description ??
+                  "Antecedente escolhido para o personagem."
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Atributos"
+        description="Valores distribuídos e modificadores calculados."
+      >
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {CHARACTER_ATTRIBUTE_DEFINITIONS.map((attribute) => {
+            const value = draft.attributes[attribute.key];
+
+            return (
+              <div
+                key={attribute.key}
+                className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-3"
+                title={attribute.description}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
+                      {attribute.shortName}
+                    </p>
+
+                    <p className="mt-1 text-sm font-black text-zinc-100">
+                      {attribute.name}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-lg font-black leading-none text-forge-gold">
+                      {value ?? "—"}
+                    </p>
+
+                    <p className="mt-1 text-xs font-bold text-zinc-400">
+                      {formatAttributeModifier(value)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <p className="text-xs font-bold text-zinc-500">
+          {assignedAttributesCount}/6 atributos preenchidos.
+        </p>
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Perícias"
+        description="Perícias treinadas e seus atributos-base."
+      >
+        {selectedSkills.length > 0 ? (
+          <div className="grid gap-3 md:grid-cols-2">
+            {selectedSkills.map((skill) => {
+              const calculation = getSkillCalculation({
+                attributes: draft.attributes,
+                statKey: skill.stat.key,
+                isProficient: true,
+                level: CHARACTER_BUILDER_LEVEL,
+              });
+
+              return (
+                <CharacterReviewFact
+                  key={skill.key}
+                  label={skill.stat.shortName}
+                  value={`${skill.name} ${calculation.formattedTotal}`}
+                  title={`Atributo: ${skill.stat.name}. Bônus de proficiência: ${calculation.formattedProficiencyBonus}.`}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <CharacterReviewEmptyText>
+            Nenhuma perícia escolhida.
+          </CharacterReviewEmptyText>
+        )}
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Magias"
+        description="Truques e magias selecionadas para o personagem."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <CharacterReviewSpellList
+            title="Truques"
+            spells={selectedCantrips}
+            emptyMessage="Nenhum truque escolhido."
+          />
+
+          <CharacterReviewSpellList
+            title="Magias"
+            spells={selectedLeveledSpells}
+            emptyMessage="Nenhuma magia escolhida."
+          />
+        </div>
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Equipamentos iniciais"
+        description="Itens e moedas que serão usados como inventário inicial."
+      >
+        <div className="rounded-xl border border-forge-gold/25 bg-forge-gold/10 px-4 py-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold">
+            Moedas iniciais
+          </p>
+
+          <p className="mt-1 text-xl font-black text-zinc-100">
+            {startingGold} moedas
+          </p>
+        </div>
+
+        {startingEquipmentItems.length > 0 ? (
+          <div className="grid gap-3 md:grid-cols-2">
+            {startingEquipmentItems.map((item) => {
+              const equipmentItem = options.equipment.find(
+                (currentItem) => currentItem.key === item.key,
+              );
+
+              const mainInfo = equipmentItem
+                ? getEquipmentMainInfo(equipmentItem)
+                : null;
+
+              const title = equipmentItem
+                ? `${equipmentItem.name}. ${
+                    equipmentItem.description ?? "Sem descrição cadastrada."
+                  } ${mainInfo ? `${mainInfo.label}: ${mainInfo.value}.` : ""} Peso: ${formatEquipmentWeight(
+                    equipmentItem.weight,
+                  )}.`
+                : item.key;
+
+              return (
+                <div
+                  key={`${item.source}-${item.key}`}
+                  className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-3"
+                  title={title}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-black text-zinc-100">
+                        {equipmentItem?.name ?? item.key}
+                      </p>
+
+                      <p className="mt-1 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                        {item.source === "background"
+                          ? "Antecedente"
+                          : "Classe"}
+                      </p>
+                    </div>
+
+                    <span className="rounded-full border border-zinc-700 bg-black/30 px-2 py-1 text-xs font-black text-zinc-200">
+                      ×{item.quantity}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <CharacterReviewEmptyText>
+            Nenhum item inicial. O personagem começará apenas com moedas.
+          </CharacterReviewEmptyText>
+        )}
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Sobre"
+        description="Identidade, aparência, personalidade, história e notas."
+      >
+        <div className="grid gap-3 md:grid-cols-2">
+          <CharacterReviewFact
+            label="Alinhamento"
+            value={draft.alignment || "Não definido"}
+          />
+
+          <CharacterReviewFact
+            label="Estilo de vida"
+            value={draft.lifestyle || "Não definido"}
+          />
+
+          <CharacterReviewFact
+            label="Gênero"
+            value={draft.gender || "Não definido"}
+          />
+
+          <CharacterReviewFact
+            label="Campos preenchidos"
+            value={`${aboutFieldsCount} campos`}
+          />
+        </div>
+
+        <CharacterReviewTextBlock
+          label="Aparência"
+          value={getPhysicalSummary(draft)}
+        />
+
+        <CharacterReviewTextBlock
+          label="Personalidade"
+          value={[
+            draft.bonds ? `Vínculos: ${draft.bonds}` : "",
+            draft.flaws ? `Defeitos: ${draft.flaws}` : "",
+            draft.ideals ? `Ideais: ${draft.ideals}` : "",
+            draft.personality ? `Traços: ${draft.personality}` : "",
+          ]
+            .filter(Boolean)
+            .join(" • ") || "Personalidade ainda não preenchida."}
+        />
+
+        <CharacterReviewTextBlock
+          label="História"
+          value={draft.backstory || "História ainda não preenchida."}
+        />
+      </CharacterReviewSection>
+    </div>
+  );
+}
+
+function CharacterReviewMetricCard({
+  label,
+  value,
+  title,
+}: {
+  label: string;
+  value: string;
+  title: string;
+}) {
+  return (
+    <div
+      className="rounded-xl border border-forge-gold/20 bg-black/30 px-4 py-3"
+      title={title}
+    >
+      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+        {label}
+      </p>
+
+      <p className="mt-1 text-base font-black leading-tight text-forge-gold">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function CharacterReviewSection({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description: string;
+  children: ReactNode;
+}) {
+  return (
+    <section
+      className="rounded-2xl border border-zinc-800 bg-black/20 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
+      title={description}
+    >
+      <div className="flex items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <h4 className="text-sm font-black uppercase tracking-[0.22em] text-forge-gold">
+              {title}
+            </h4>
+
+            <span
+              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+              title={description}
+              aria-label={`Informação sobre ${title}`}
+            >
+              i
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 space-y-3">{children}</div>
+    </section>
+  );
+}
+
+function CharacterReviewFact({
+  label,
+  value,
+  title,
+}: {
+  label: string;
+  value: string;
+  title?: string;
+}) {
+  return (
+    <div
+      className="rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3"
+      title={title ?? value}
+    >
+      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
+        {label}
+      </p>
+
+      <p className="mt-1 text-sm font-black leading-relaxed text-zinc-100">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function CharacterReviewTextBlock({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div
+      className="rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3"
+      title={value}
+    >
+      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
+        {label}
+      </p>
+
+      <p className="mt-1 line-clamp-4 text-sm font-bold leading-relaxed text-zinc-200">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function CharacterReviewSpellList({
+  title,
+  spells,
+  emptyMessage,
+}: {
+  title: string;
+  spells: CharacterBuilderSpellOption[];
+  emptyMessage: string;
+}) {
+  if (spells.length === 0) {
+    return (
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+          {title}
+        </p>
+
+        <CharacterReviewEmptyText>{emptyMessage}</CharacterReviewEmptyText>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+        {title}
+      </p>
+
+      <div className="mt-2 space-y-2">
+        {spells.map((spell) => (
+          <div
+            key={spell.key}
+            className="rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3"
+            title={`${spell.name}. ${spell.description ?? "Sem descrição cadastrada."}`}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-sm font-black leading-relaxed text-zinc-100">
+                {spell.name}
+              </p>
+
+              <span className="shrink-0 rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold">
+                {getSpellLevelLabel(spell.level)}
+              </span>
+            </div>
+
+            <p className="mt-1 text-xs font-bold text-zinc-500">
+              {spell.school}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CharacterReviewEmptyText({ children }: { children: ReactNode }) {
+  return (
+    <p className="rounded-xl border border-dashed border-zinc-800 bg-zinc-950/30 px-4 py-3 text-sm font-bold text-zinc-500">
+      {children}
+    </p>
+  );
+}
+
+
 type BuilderSummaryRowProps = {
   label: string;
   value: string;
@@ -5006,7 +5643,11 @@ export default function CampaignPlayPage() {
   const [savedCharacterSheetId, setSavedCharacterSheetId] = useState<
     string | null
   >(null);
+  const [savedCharacterSheetStatus, setSavedCharacterSheetStatus] =
+    useState<CharacterSheetStatus | null>(null);
   const [isSavingCharacterDraft, setIsSavingCharacterDraft] = useState(false);
+  const [isFinalizingCharacterSheet, setIsFinalizingCharacterSheet] =
+    useState(false);
   const [characterDraftSaveError, setCharacterDraftSaveError] = useState<
     string | null
   >(null);
@@ -5926,7 +6567,7 @@ export default function CampaignPlayPage() {
         ?.filter(
           (sheet: {
             id: string;
-            status: string;
+            status: CharacterSheetStatus;
             name: string;
             pronouns: string | null;
             concept: string | null;
@@ -6012,10 +6653,13 @@ export default function CampaignPlayPage() {
         )[0];
 
       if (!draftSheet) {
+        setSavedCharacterSheetId(null);
+        setSavedCharacterSheetStatus(null);
         return;
       }
 
       setSavedCharacterSheetId(draftSheet.id);
+      setSavedCharacterSheetStatus(draftSheet.status);
 
       setCharacterBuilderDraft({
         name: draftSheet.name ?? "",
@@ -6218,6 +6862,7 @@ export default function CampaignPlayPage() {
       }
 
       setSavedCharacterSheetId(data.characterSheet.id);
+      setSavedCharacterSheetStatus(data.characterSheet.status ?? "DRAFT");
       setCharacterDraftSaveSuccess(
         savedCharacterSheetId
           ? "Rascunho atualizado com sucesso."
@@ -6231,6 +6876,56 @@ export default function CampaignPlayPage() {
       );
     } finally {
       setIsSavingCharacterDraft(false);
+    }
+  }
+
+  async function handleFinalizeCharacterSheet() {
+    if (!campaign) {
+      setCharacterDraftSaveError("Campanha não encontrada.");
+      return;
+    }
+
+    if (!savedCharacterSheetId) {
+      setCharacterDraftSaveError(
+        "Salve o rascunho antes de finalizar a ficha.",
+      );
+      return;
+    }
+
+    setIsFinalizingCharacterSheet(true);
+    setCharacterDraftSaveError(null);
+    setCharacterDraftSaveSuccess(null);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8081/campaigns/${campaign.id}/character-sheets/${savedCharacterSheetId}/finalize`,
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(data?.message ?? "Não foi possível finalizar a ficha.");
+      }
+
+      setSavedCharacterSheetStatus("READY");
+      setCharacterDraftSaveSuccess("Ficha finalizada e enviada para Personagens.");
+      setActiveRightTab("characters");
+      setIsCharacterBuilderOpen(false);
+
+      const refreshedActors = await getCampaignActors(campaign.id);
+      setCampaignActors(refreshedActors);
+    } catch (error) {
+      setCharacterDraftSaveError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível finalizar a ficha.",
+      );
+    } finally {
+      setIsFinalizingCharacterSheet(false);
     }
   }
 
@@ -7558,10 +8253,13 @@ export default function CampaignPlayPage() {
         isLoadingOptions={isLoadingCharacterBuilderOptions}
         optionsError={characterBuilderOptionsError}
         savedCharacterSheetId={savedCharacterSheetId}
+        savedCharacterSheetStatus={savedCharacterSheetStatus}
         isSavingDraft={isSavingCharacterDraft}
+        isFinalizingSheet={isFinalizingCharacterSheet}
         saveError={characterDraftSaveError}
         saveSuccess={characterDraftSaveSuccess}
         onSaveDraft={handleSaveCharacterBuilderDraft}
+        onFinalizeSheet={handleFinalizeCharacterSheet}
         onChangeDraft={setCharacterBuilderDraft}
         onSelectOption={handleSelectCharacterBuilderOption}
         onChangeStep={setActiveCharacterBuilderStep}
