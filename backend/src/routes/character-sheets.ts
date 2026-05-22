@@ -8,6 +8,323 @@ import { prisma } from "../lib/prisma.js";
 export async function characterSheetsRoutes(app: FastifyInstance) {
   const server = app.withTypeProvider<ZodTypeProvider>();
 
+  const characterAttributesSchema = z
+    .object({
+      strength: z.number().int().min(3).max(20).optional(),
+      dexterity: z.number().int().min(3).max(20).optional(),
+      constitution: z.number().int().min(3).max(20).optional(),
+      intelligence: z.number().int().min(3).max(20).optional(),
+      wisdom: z.number().int().min(3).max(20).optional(),
+      charisma: z.number().int().min(3).max(20).optional(),
+    })
+    .optional();
+
+  const characterSkillKeysSchema = z.array(z.string()).optional();
+  const characterSpellKeysSchema = z.array(z.string()).optional();
+
+  type CharacterAttributeKey =
+    | "strength"
+    | "dexterity"
+    | "constitution"
+    | "intelligence"
+    | "wisdom"
+    | "charisma";
+
+  async function getCharacterAttributeEntries(
+    systemId: string,
+    attributes: z.infer<typeof characterAttributesSchema>,
+  ) {
+    if (!attributes) {
+      return {
+        entries: [] as Array<{
+          value: number;
+          statId: string;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const attributeEntries = Object.entries(attributes).filter(
+      ([, value]) => value !== undefined,
+    ) as Array<[CharacterAttributeKey, number]>;
+
+    if (attributeEntries.length === 0) {
+      return {
+        entries: [] as Array<{
+          value: number;
+          statId: string;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const stats = await prisma.stat.findMany({
+      where: {
+        systemId,
+        key: {
+          in: attributeEntries.map(([key]) => key),
+        },
+      },
+      select: {
+        id: true,
+        key: true,
+      },
+    });
+
+    const statsByKey = new Map(stats.map((stat) => [stat.key, stat]));
+
+    const missingAttribute = attributeEntries.find(
+      ([key]) => !statsByKey.has(key),
+    );
+
+    if (missingAttribute) {
+      return {
+        entries: [],
+        error: `Attribute ${missingAttribute[0]} not found for this system`,
+      };
+    }
+
+    return {
+      entries: attributeEntries.map(([key, value]) => ({
+        value,
+        statId: statsByKey.get(key)!.id,
+      })),
+      error: null,
+    };
+  }
+
+  async function upsertCharacterSheetStats(
+    characterSheetId: string,
+    entries: Array<{
+      value: number;
+      statId: string;
+    }>,
+  ) {
+    if (entries.length === 0) {
+      return;
+    }
+
+    await prisma.$transaction(
+      entries.map((entry) =>
+        prisma.characterSheetStat.upsert({
+          where: {
+            characterSheetId_statId: {
+              characterSheetId,
+              statId: entry.statId,
+            },
+          },
+          create: {
+            characterSheetId,
+            statId: entry.statId,
+            baseValue: entry.value,
+          },
+          update: {
+            baseValue: entry.value,
+          },
+        }),
+      ),
+    );
+  }
+
+  async function getCharacterSkillEntries(
+    systemId: string,
+    skillKeys: z.infer<typeof characterSkillKeysSchema>,
+  ) {
+    if (!skillKeys) {
+      return {
+        entries: [] as Array<{
+          skillId: string;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const uniqueSkillKeys = Array.from(new Set(skillKeys));
+
+    if (uniqueSkillKeys.length === 0) {
+      return {
+        entries: [] as Array<{
+          skillId: string;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const skills = await prisma.skill.findMany({
+      where: {
+        systemId,
+        key: {
+          in: uniqueSkillKeys,
+        },
+      },
+      select: {
+        id: true,
+        key: true,
+      },
+    });
+
+    const skillsByKey = new Map(skills.map((skill) => [skill.key, skill]));
+
+    const missingSkillKey = uniqueSkillKeys.find(
+      (skillKey) => !skillsByKey.has(skillKey),
+    );
+
+    if (missingSkillKey) {
+      return {
+        entries: [],
+        error: `Skill ${missingSkillKey} not found for this system`,
+      };
+    }
+
+    return {
+      entries: uniqueSkillKeys.map((key) => ({
+        skillId: skillsByKey.get(key)!.id,
+      })),
+      error: null,
+    };
+  }
+
+  async function replaceCharacterSheetSkills(
+    characterSheetId: string,
+    entries: Array<{
+      skillId: string;
+    }>,
+  ) {
+    await prisma.$transaction([
+      prisma.characterSheetSkill.deleteMany({
+        where: {
+          characterSheetId,
+        },
+      }),
+
+      ...entries.map((entry) =>
+        prisma.characterSheetSkill.create({
+          data: {
+            characterSheetId,
+            skillId: entry.skillId,
+            isProficient: true,
+          },
+        }),
+      ),
+    ]);
+  }
+
+  async function getCharacterSpellEntries(
+    systemId: string,
+    spellKeys: z.infer<typeof characterSpellKeysSchema>,
+  ) {
+    if (!spellKeys) {
+      return {
+        entries: [] as Array<{
+          spellId: string;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const uniqueSpellKeys = Array.from(new Set(spellKeys));
+
+    if (uniqueSpellKeys.length === 0) {
+      return {
+        entries: [] as Array<{
+          spellId: string;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const spells = await prisma.spell.findMany({
+      where: {
+        systemId,
+        key: {
+          in: uniqueSpellKeys,
+        },
+      },
+      select: {
+        id: true,
+        key: true,
+      },
+    });
+
+    const spellsByKey = new Map(spells.map((spell) => [spell.key, spell]));
+
+    const missingSpellKey = uniqueSpellKeys.find(
+      (spellKey) => !spellsByKey.has(spellKey),
+    );
+
+    if (missingSpellKey) {
+      return {
+        entries: [],
+        error: `Spell ${missingSpellKey} not found for this system`,
+      };
+    }
+
+    return {
+      entries: uniqueSpellKeys.map((key) => ({
+        spellId: spellsByKey.get(key)!.id,
+      })),
+      error: null,
+    };
+  }
+
+  async function replaceCharacterSheetSpells(
+    characterSheetId: string,
+    entries: Array<{
+      spellId: string;
+    }>,
+  ) {
+    await prisma.$transaction([
+      prisma.characterSheetSpell.deleteMany({
+        where: {
+          characterSheetId,
+        },
+      }),
+
+      ...entries.map((entry) =>
+        prisma.characterSheetSpell.create({
+          data: {
+            characterSheetId,
+            spellId: entry.spellId,
+            source: "builder",
+          },
+        }),
+      ),
+    ]);
+  }
+
+  const characterSheetInclude = {
+    campaignActor: true,
+    system: true,
+    ancestry: true,
+    background: true,
+    characterClass: true,
+    subclass: true,
+    stats: {
+      include: {
+        stat: true,
+      },
+    },
+    skills: {
+      include: {
+        skill: {
+          include: {
+            stat: true,
+          },
+        },
+      },
+    },
+    spells: {
+      include: {
+        spell: true,
+      },
+    },
+    equipment: {
+      include: {
+        equipment: true,
+      },
+    },
+  };
+
   server.get(
     "/campaigns/:campaignId/character-sheets",
     {
@@ -65,6 +382,25 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           background: true,
           characterClass: true,
           subclass: true,
+          stats: {
+            include: {
+              stat: true,
+            },
+          },
+          skills: {
+            include: {
+              skill: {
+                include: {
+                  stat: true,
+                },
+              },
+            },
+          },
+          spells: {
+            include: {
+              spell: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -128,38 +464,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           id: sheetId,
           campaignId,
         },
-        include: {
-          campaignActor: true,
-          system: true,
-          ancestry: true,
-          background: true,
-          characterClass: true,
-          subclass: true,
-          stats: {
-            include: {
-              stat: true,
-            },
-          },
-          skills: {
-            include: {
-              skill: {
-                include: {
-                  stat: true,
-                },
-              },
-            },
-          },
-          spells: {
-            include: {
-              spell: true,
-            },
-          },
-          equipment: {
-            include: {
-              equipment: true,
-            },
-          },
-        },
+        include: characterSheetInclude,
       });
 
       if (!characterSheet) {
@@ -207,6 +512,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           portraitUrl: z.string().trim().optional(),
           tokenImageUrl: z.string().trim().optional(),
           tokenImageFit: z.enum(["COVER", "CONTAIN", "FILL"]).optional(),
+
+          attributes: characterAttributesSchema,
+          skillKeys: characterSkillKeysSchema,
+          spellKeys: characterSpellKeysSchema,
         }),
       },
     },
@@ -233,6 +542,9 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         portraitUrl,
         tokenImageUrl,
         tokenImageFit,
+        attributes,
+        skillKeys,
+        spellKeys,
       } = request.body;
 
       const campaign = await prisma.campaign.findFirst({
@@ -361,6 +673,39 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         }
       }
 
+      const attributeEntriesResult = await getCharacterAttributeEntries(
+        systemId,
+        attributes,
+      );
+
+      if (attributeEntriesResult.error) {
+        return reply.status(400).send({
+          message: attributeEntriesResult.error,
+        });
+      }
+
+      const skillEntriesResult = await getCharacterSkillEntries(
+        systemId,
+        skillKeys,
+      );
+
+      if (skillEntriesResult.error) {
+        return reply.status(400).send({
+          message: skillEntriesResult.error,
+        });
+      }
+
+      const spellEntriesResult = await getCharacterSpellEntries(
+        systemId,
+        spellKeys,
+      );
+
+      if (spellEntriesResult.error) {
+        return reply.status(400).send({
+          message: spellEntriesResult.error,
+        });
+      }
+
       const characterSheet = await prisma.characterSheet.create({
         data: {
           campaignId,
@@ -379,17 +724,38 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           tokenImageUrl: tokenImageUrl?.trim() || null,
           tokenImageFit: tokenImageFit ?? "FILL",
         },
-        include: {
-          campaignActor: true,
-          system: true,
-          ancestry: true,
-          background: true,
-          characterClass: true,
-          subclass: true,
-        },
       });
 
-      return reply.status(201).send({ characterSheet });
+      await upsertCharacterSheetStats(
+        characterSheet.id,
+        attributeEntriesResult.entries,
+      );
+
+      if (skillKeys !== undefined) {
+        await replaceCharacterSheetSkills(
+          characterSheet.id,
+          skillEntriesResult.entries,
+        );
+      }
+
+      if (spellKeys !== undefined) {
+        await replaceCharacterSheetSpells(
+          characterSheet.id,
+          spellEntriesResult.entries,
+        );
+      }
+
+      const characterSheetWithRelations =
+        await prisma.characterSheet.findUniqueOrThrow({
+          where: {
+            id: characterSheet.id,
+          },
+          include: characterSheetInclude,
+        });
+
+      return reply.status(201).send({
+        characterSheet: characterSheetWithRelations,
+      });
     },
   );
 
@@ -428,6 +794,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             portraitUrl: z.string().trim().nullable().optional(),
             tokenImageUrl: z.string().trim().nullable().optional(),
             tokenImageFit: z.enum(["COVER", "CONTAIN", "FILL"]).optional(),
+
+            attributes: characterAttributesSchema,
+            skillKeys: characterSkillKeysSchema,
+            spellKeys: characterSpellKeysSchema,
 
             level: z.number().int().min(1).max(20).optional(),
             experience: z.number().int().min(0).optional(),
@@ -475,7 +845,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       const { campaignId, sheetId } = request.params;
-      const data = request.body;
+      const { attributes, skillKeys, spellKeys, ...sheetData } = request.body;
 
       const campaign = await prisma.campaign.findFirst({
         where: {
@@ -538,10 +908,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      if (data.classId) {
+      if (sheetData.classId) {
         const characterClass = await prisma.characterClass.findFirst({
           where: {
-            id: data.classId,
+            id: sheetData.classId,
             systemId: characterSheet.systemId,
           },
         });
@@ -553,10 +923,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         }
       }
 
-      if (data.ancestryId) {
+      if (sheetData.ancestryId) {
         const ancestry = await prisma.ancestry.findFirst({
           where: {
-            id: data.ancestryId,
+            id: sheetData.ancestryId,
             systemId: characterSheet.systemId,
           },
         });
@@ -568,10 +938,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         }
       }
 
-      if (data.backgroundId) {
+      if (sheetData.backgroundId) {
         const background = await prisma.background.findFirst({
           where: {
-            id: data.backgroundId,
+            id: sheetData.backgroundId,
             systemId: characterSheet.systemId,
           },
         });
@@ -583,10 +953,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         }
       }
 
-      if (data.subclassId) {
+      if (sheetData.subclassId) {
         const subclass = await prisma.characterSubclass.findFirst({
           where: {
-            id: data.subclassId,
+            id: sheetData.subclassId,
             systemId: characterSheet.systemId,
           },
         });
@@ -598,100 +968,160 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         }
       }
 
+      const attributeEntriesResult = await getCharacterAttributeEntries(
+        characterSheet.systemId,
+        attributes,
+      );
+
+      if (attributeEntriesResult.error) {
+        return reply.status(400).send({
+          message: attributeEntriesResult.error,
+        });
+      }
+
+      const skillEntriesResult = await getCharacterSkillEntries(
+        characterSheet.systemId,
+        skillKeys,
+      );
+
+      if (skillEntriesResult.error) {
+        return reply.status(400).send({
+          message: skillEntriesResult.error,
+        });
+      }
+
+      const spellEntriesResult = await getCharacterSpellEntries(
+        characterSheet.systemId,
+        spellKeys,
+      );
+
+      if (spellEntriesResult.error) {
+        return reply.status(400).send({
+          message: spellEntriesResult.error,
+        });
+      }
+
       const sanitizedData = {
-        ...data,
+        ...sheetData,
         pronouns:
-          data.pronouns === undefined
+          sheetData.pronouns === undefined
             ? undefined
-            : data.pronouns?.trim() || null,
+            : sheetData.pronouns?.trim() || null,
         concept:
-          data.concept === undefined ? undefined : data.concept?.trim() || null,
+          sheetData.concept === undefined
+            ? undefined
+            : sheetData.concept?.trim() || null,
         portraitUrl:
-          data.portraitUrl === undefined
+          sheetData.portraitUrl === undefined
             ? undefined
-            : data.portraitUrl?.trim() || null,
+            : sheetData.portraitUrl?.trim() || null,
         tokenImageUrl:
-          data.tokenImageUrl === undefined
+          sheetData.tokenImageUrl === undefined
             ? undefined
-            : data.tokenImageUrl?.trim() || null,
+            : sheetData.tokenImageUrl?.trim() || null,
         alignment:
-          data.alignment === undefined
+          sheetData.alignment === undefined
             ? undefined
-            : data.alignment?.trim() || null,
+            : sheetData.alignment?.trim() || null,
         faith:
-          data.faith === undefined ? undefined : data.faith?.trim() || null,
+          sheetData.faith === undefined
+            ? undefined
+            : sheetData.faith?.trim() || null,
         lifestyle:
-          data.lifestyle === undefined
+          sheetData.lifestyle === undefined
             ? undefined
-            : data.lifestyle?.trim() || null,
-        hair: data.hair === undefined ? undefined : data.hair?.trim() || null,
-        skin: data.skin === undefined ? undefined : data.skin?.trim() || null,
-        eyes: data.eyes === undefined ? undefined : data.eyes?.trim() || null,
+            : sheetData.lifestyle?.trim() || null,
+        hair:
+          sheetData.hair === undefined ? undefined : sheetData.hair?.trim() || null,
+        skin:
+          sheetData.skin === undefined ? undefined : sheetData.skin?.trim() || null,
+        eyes:
+          sheetData.eyes === undefined ? undefined : sheetData.eyes?.trim() || null,
         height:
-          data.height === undefined ? undefined : data.height?.trim() || null,
+          sheetData.height === undefined
+            ? undefined
+            : sheetData.height?.trim() || null,
         weight:
-          data.weight === undefined ? undefined : data.weight?.trim() || null,
-        age: data.age === undefined ? undefined : data.age?.trim() || null,
+          sheetData.weight === undefined
+            ? undefined
+            : sheetData.weight?.trim() || null,
+        age:
+          sheetData.age === undefined ? undefined : sheetData.age?.trim() || null,
         gender:
-          data.gender === undefined ? undefined : data.gender?.trim() || null,
+          sheetData.gender === undefined
+            ? undefined
+            : sheetData.gender?.trim() || null,
         bonds:
-          data.bonds === undefined ? undefined : data.bonds?.trim() || null,
+          sheetData.bonds === undefined
+            ? undefined
+            : sheetData.bonds?.trim() || null,
         flaws:
-          data.flaws === undefined ? undefined : data.flaws?.trim() || null,
+          sheetData.flaws === undefined
+            ? undefined
+            : sheetData.flaws?.trim() || null,
         ideals:
-          data.ideals === undefined ? undefined : data.ideals?.trim() || null,
+          sheetData.ideals === undefined
+            ? undefined
+            : sheetData.ideals?.trim() || null,
         personality:
-          data.personality === undefined
+          sheetData.personality === undefined
             ? undefined
-            : data.personality?.trim() || null,
+            : sheetData.personality?.trim() || null,
         backstory:
-          data.backstory === undefined
+          sheetData.backstory === undefined
             ? undefined
-            : data.backstory?.trim() || null,
+            : sheetData.backstory?.trim() || null,
         notes:
-          data.notes === undefined ? undefined : data.notes?.trim() || null,
+          sheetData.notes === undefined
+            ? undefined
+            : sheetData.notes?.trim() || null,
         gmNotes:
-          data.gmNotes === undefined ? undefined : data.gmNotes?.trim() || null,
+          sheetData.gmNotes === undefined
+            ? undefined
+            : sheetData.gmNotes?.trim() || null,
       };
 
-      const updatedCharacterSheet = await prisma.characterSheet.update({
-        where: {
-          id: sheetId,
-        },
-        data: sanitizedData,
-        include: {
-          campaignActor: true,
-          system: true,
-          ancestry: true,
-          background: true,
-          characterClass: true,
-          subclass: true,
-          stats: {
-            include: {
-              stat: true,
-            },
+      const shouldUpdateCharacterSheet = Object.values(sanitizedData).some(
+        (value) => value !== undefined,
+      );
+
+      if (shouldUpdateCharacterSheet) {
+        await prisma.characterSheet.update({
+          where: {
+            id: sheetId,
           },
-          skills: {
-            include: {
-              skill: {
-                include: {
-                  stat: true,
-                },
-              },
-            },
+          data: sanitizedData,
+        });
+      }
+
+      if (attributes !== undefined) {
+        await upsertCharacterSheetStats(
+          sheetId,
+          attributeEntriesResult.entries,
+        );
+      }
+
+      if (skillKeys !== undefined) {
+        await replaceCharacterSheetSkills(
+          sheetId,
+          skillEntriesResult.entries,
+        );
+      }
+
+      if (spellKeys !== undefined) {
+        await replaceCharacterSheetSpells(
+          sheetId,
+          spellEntriesResult.entries,
+        );
+      }
+
+      const updatedCharacterSheet =
+        await prisma.characterSheet.findUniqueOrThrow({
+          where: {
+            id: sheetId,
           },
-          spells: {
-            include: {
-              spell: true,
-            },
-          },
-          equipment: {
-            include: {
-              equipment: true,
-            },
-          },
-        },
-      });
+          include: characterSheetInclude,
+        });
 
       return reply.status(200).send({
         characterSheet: updatedCharacterSheet,

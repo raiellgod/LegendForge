@@ -149,6 +149,37 @@ export async function systemRoutes(app: FastifyInstance) {
               startingGold: z.number(),
             }),
           ),
+          skills: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              statId: z.string(),
+              stat: z.object({
+                id: z.string(),
+                key: z.string(),
+                name: z.string(),
+                shortName: z.string(),
+              }),
+            }),
+          ),
+          spells: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              level: z.number(),
+              school: z.string(),
+              castingTime: z.string().nullable(),
+              range: z.string().nullable(),
+              duration: z.string().nullable(),
+              components: z.array(z.string()),
+              isRitual: z.boolean(),
+              requiresConcentration: z.boolean(),
+            }),
+          ),
         }),
         401: z.object({
           message: z.string(),
@@ -187,64 +218,144 @@ export async function systemRoutes(app: FastifyInstance) {
         });
       }
 
-      const [classes, ancestries, backgrounds] = await Promise.all([
-        prisma.characterClass.findMany({
-          where: {
-            systemId,
-          },
-          orderBy: {
-            order: "asc",
-          },
-          select: {
-            id: true,
-            key: true,
-            name: true,
-            description: true,
-            hitDie: true,
-          },
-        }),
+      const [classes, ancestries, backgrounds, skills, spells] =
+        await Promise.all([
+          prisma.characterClass.findMany({
+            where: {
+              systemId,
+            },
+            orderBy: {
+              order: "asc",
+            },
+            select: {
+              id: true,
+              key: true,
+              name: true,
+              description: true,
+              hitDie: true,
+            },
+          }),
 
-        prisma.ancestry.findMany({
-          where: {
-            systemId,
-          },
-          orderBy: {
-            order: "asc",
-          },
-          select: {
-            id: true,
-            key: true,
-            name: true,
-            description: true,
-            defaultSizeCategory: true,
-          },
-        }),
+          prisma.ancestry.findMany({
+            where: {
+              systemId,
+            },
+            orderBy: {
+              order: "asc",
+            },
+            select: {
+              id: true,
+              key: true,
+              name: true,
+              description: true,
+              defaultSizeCategory: true,
+            },
+          }),
 
-        prisma.background.findMany({
-          where: {
-            systemId,
-          },
-          orderBy: {
-            order: "asc",
-          },
-          select: {
-            id: true,
-            key: true,
-            name: true,
-            description: true,
-            skillKeys: true,
-            toolNames: true,
-            languageChoiceCount: true,
-            startingGold: true,
-          },
-        }),
-      ]);
+          prisma.background.findMany({
+            where: {
+              systemId,
+            },
+            orderBy: {
+              order: "asc",
+            },
+            select: {
+              id: true,
+              key: true,
+              name: true,
+              description: true,
+              skillKeys: true,
+              toolNames: true,
+              languageChoiceCount: true,
+              startingGold: true,
+            },
+          }),
+
+          prisma.skill.findMany({
+            where: {
+              systemId,
+            },
+            orderBy: {
+              name: "asc",
+            },
+            select: {
+              id: true,
+              key: true,
+              name: true,
+              description: true,
+              statId: true,
+              stat: {
+                select: {
+                  id: true,
+                  key: true,
+                  name: true,
+                  shortName: true,
+                },
+              },
+            },
+          }),
+
+          prisma.spell.findMany({
+            where: {
+              systemId,
+            },
+            orderBy: [
+              {
+                level: "asc",
+              },
+              {
+                name: "asc",
+              },
+            ],
+            select: {
+              id: true,
+              key: true,
+              name: true,
+              description: true,
+              level: true,
+              school: true,
+              castingTime: true,
+              range: true,
+              duration: true,
+              components: true,
+              isRitual: true,
+              requiresConcentration: true,
+            },
+          }),
+        ]);
+
+      const normalizedSpells = spells.map((spell) => {
+        const components =
+          typeof spell.components === "string"
+            ? spell.components
+                .split(",")
+                .map((component) => component.trim())
+                .filter(Boolean)
+            : [];
+
+        return {
+          id: spell.id,
+          key: spell.key,
+          name: spell.name,
+          description: spell.description,
+          level: spell.level,
+          school: String(spell.school),
+          castingTime: spell.castingTime,
+          range: spell.range,
+          duration: spell.duration,
+          components,
+          isRitual: spell.isRitual,
+          requiresConcentration: spell.requiresConcentration,
+        };
+      });
 
       return reply.status(200).send({
         system,
         classes,
         ancestries,
         backgrounds,
+        skills,
+        spells: normalizedSpells,
       });
     },
   });

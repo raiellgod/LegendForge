@@ -761,7 +761,7 @@ type CharacterAttributeKey =
   | "wisdom"
   | "charisma";
 
-type CharacterBuilderAttributes = Record<CharacterAttributeKey, number>;
+type CharacterBuilderAttributes = Record<CharacterAttributeKey, number | null>;
 
 type CharacterBuilderDraft = {
   name: string;
@@ -781,6 +781,8 @@ type CharacterBuilderDraft = {
   backgroundName: string;
 
   attributes: CharacterBuilderAttributes;
+  skillKeys: string[];
+  spellKeys: string[];
 };
 
 type CharacterBuilderOption = {
@@ -805,19 +807,76 @@ type CharacterBuilderBackgroundOption = CharacterBuilderOption & {
   startingGold: number;
 };
 
+type CharacterBuilderSkillOption = CharacterBuilderOption & {
+  statId: string;
+  stat: {
+    id: string;
+    key: string;
+    name: string;
+    shortName: string;
+  };
+};
+
+type CharacterBuilderSpellOption = CharacterBuilderOption & {
+  level: number;
+  school: string;
+  castingTime: string | null;
+  range: string | null;
+  duration: string | null;
+  components: string[];
+  isRitual: boolean;
+  requiresConcentration: boolean;
+};
+
 type CharacterBuilderOptions = {
   classes: CharacterBuilderClassOption[];
   ancestries: CharacterBuilderAncestryOption[];
   backgrounds: CharacterBuilderBackgroundOption[];
+  skills: CharacterBuilderSkillOption[];
+  spells: CharacterBuilderSpellOption[];
 };
 
+function isCantrip(spell: CharacterBuilderSpellOption) {
+  return spell.level === 0;
+}
+
+function isLeveledSpell(spell: CharacterBuilderSpellOption) {
+  return spell.level > 0;
+}
+
+function getSpellLevelLabel(level: number) {
+  if (level === 0) {
+    return "Truque";
+  }
+
+  return `Nível ${level}`;
+}
+
+function getCompactSpellDetail(value: string | null) {
+  if (!value) {
+    return "—";
+  }
+
+  return value
+    .replace(/\bmetros\b/gi, "m")
+    .replace(/\bmetro\b/gi, "m")
+    .replace(/\bminutos\b/gi, "min.")
+    .replace(/\bminuto\b/gi, "min.")
+    .replace(/\binstantâneo\b/gi, "insta")
+    .replace(/\binstantanea\b/gi, "insta")
+    .replace(/\binstantânea\b/gi, "insta")
+    .replace(/\binstantaneo\b/gi, "insta");
+}
+
+const STANDARD_ARRAY_ATTRIBUTE_VALUES = [15, 14, 13, 12, 10, 8];
+
 const DEFAULT_CHARACTER_ATTRIBUTES: CharacterBuilderAttributes = {
-  strength: 10,
-  dexterity: 10,
-  constitution: 10,
-  intelligence: 10,
-  wisdom: 10,
-  charisma: 10,
+  strength: null,
+  dexterity: null,
+  constitution: null,
+  intelligence: null,
+  wisdom: null,
+  charisma: null,
 };
 
 const CHARACTER_ATTRIBUTE_DEFINITIONS: Array<{
@@ -874,7 +933,11 @@ function calculateAttributeModifier(value: number) {
   return Math.floor((value - 10) / 2);
 }
 
-function formatAttributeModifier(value: number) {
+function formatAttributeModifier(value: number | null) {
+  if (value === null) {
+    return "—";
+  }
+
   const modifier = calculateAttributeModifier(value);
 
   return modifier >= 0 ? `+${modifier}` : `${modifier}`;
@@ -882,10 +945,150 @@ function formatAttributeModifier(value: number) {
 
 function clampAttributeValue(value: number) {
   if (!Number.isFinite(value)) {
-    return 10;
+    return null;
   }
 
   return Math.max(3, Math.min(20, Math.round(value)));
+}
+
+function getPersistableCharacterAttributes(
+  attributes: CharacterBuilderAttributes,
+) {
+  return Object.fromEntries(
+    Object.entries(attributes).filter(([, value]) => value !== null),
+  );
+}
+
+type CharacterSheetStatResponse = {
+  baseValue: number;
+  stat: {
+    key: string;
+  };
+};
+
+function isCharacterAttributeKey(key: string): key is CharacterAttributeKey {
+  return CHARACTER_ATTRIBUTE_DEFINITIONS.some(
+    (attribute) => attribute.key === key,
+  );
+}
+
+const CHARACTER_BUILDER_LEVEL = 1;
+
+function formatNumberModifier(value: number) {
+  return value >= 0 ? `+${value}` : `${value}`;
+}
+
+function getProficiencyBonusByLevel(level: number) {
+  if (level >= 17) {
+    return 6;
+  }
+
+  if (level >= 13) {
+    return 5;
+  }
+
+  if (level >= 9) {
+    return 4;
+  }
+
+  if (level >= 5) {
+    return 3;
+  }
+
+  return 2;
+}
+
+function getAttributeValueByStatKey(
+  attributes: CharacterBuilderAttributes,
+  statKey: string,
+) {
+  if (!isCharacterAttributeKey(statKey)) {
+    return null;
+  }
+
+  return attributes[statKey];
+}
+
+function getSkillCalculation({
+  attributes,
+  statKey,
+  isProficient,
+  level,
+}: {
+  attributes: CharacterBuilderAttributes;
+  statKey: string;
+  isProficient: boolean;
+  level: number;
+}) {
+  const attributeValue = getAttributeValueByStatKey(attributes, statKey);
+  const proficiencyBonus = isProficient ? getProficiencyBonusByLevel(level) : 0;
+
+  if (attributeValue === null) {
+    return {
+      attributeModifier: null as number | null,
+      proficiencyBonus,
+      total: null as number | null,
+      formattedAttributeModifier: "—",
+      formattedProficiencyBonus: isProficient
+        ? formatNumberModifier(proficiencyBonus)
+        : "—",
+      formattedTotal: "—",
+    };
+  }
+
+  const attributeModifier = calculateAttributeModifier(attributeValue);
+  const total = attributeModifier + proficiencyBonus;
+
+  return {
+    attributeModifier,
+    proficiencyBonus,
+    total,
+    formattedAttributeModifier: formatNumberModifier(attributeModifier),
+    formattedProficiencyBonus: isProficient
+      ? formatNumberModifier(proficiencyBonus)
+      : "—",
+    formattedTotal: formatNumberModifier(total),
+  };
+}
+
+function getCharacterSkillKeysFromSkills(
+  skills?: Array<{
+    skill: {
+      key: string;
+    };
+  }> | null,
+) {
+  return skills?.map((sheetSkill) => sheetSkill.skill.key) ?? [];
+}
+
+function getCharacterSpellKeysFromSpells(
+  spells?: Array<{
+    spell: {
+      key: string;
+    };
+  }> | null,
+) {
+  return spells?.map((sheetSpell) => sheetSpell.spell.key) ?? [];
+}
+
+function getCharacterAttributesFromStats(
+  stats?: CharacterSheetStatResponse[] | null,
+): CharacterBuilderAttributes {
+  const attributes = {
+    ...DEFAULT_CHARACTER_ATTRIBUTES,
+  };
+
+  stats?.forEach((sheetStat) => {
+    const key = sheetStat.stat.key;
+
+    if (!isCharacterAttributeKey(key)) {
+      return;
+    }
+
+    attributes[key] = clampAttributeValue(sheetStat.baseValue);
+  });
+
+  return attributes;
 }
 
 type CharacterBuilderStep = {
@@ -965,6 +1168,7 @@ type CharacterBuilderModalProps = {
     option: {
       id: string;
       name: string;
+      skillKeys?: string[];
     },
   ) => void;
   onChangeStep: (stepId: string) => void;
@@ -1025,21 +1229,45 @@ function CharacterBuilderModal({
     (option) => option.id === draft.backgroundId,
   );
 
-  const attributeTotal = CHARACTER_ATTRIBUTE_DEFINITIONS.reduce(
-    (total, attribute) => total + draft.attributes[attribute.key],
+  const requiredSkillChoiceCount = selectedBackground?.skillKeys.length ?? 2;
+
+  const selectedSkillCount = draft.skillKeys.length;
+  const selectedSpellCount = draft.spellKeys.length;
+  const selectedCantripCount = draft.spellKeys.filter((spellKey) => {
+    const spell = options.spells.find(
+      (currentSpell) => currentSpell.key === spellKey,
+    );
+
+    return spell ? isCantrip(spell) : false;
+  }).length;
+  const selectedLeveledSpellCount = selectedSpellCount - selectedCantripCount;
+
+  const assignedAttributeValues = CHARACTER_ATTRIBUTE_DEFINITIONS.map(
+    (attribute) => draft.attributes[attribute.key],
+  ).filter((value): value is number => value !== null);
+
+  const attributeTotal = assignedAttributeValues.reduce(
+    (total, value) => total + value,
     0,
   );
 
-  const strongestAttribute = CHARACTER_ATTRIBUTE_DEFINITIONS.reduce(
-    (strongest, attribute) => {
-      if (draft.attributes[attribute.key] > draft.attributes[strongest.key]) {
-        return attribute;
-      }
+  const strongestAttribute =
+    assignedAttributeValues.length > 0
+      ? CHARACTER_ATTRIBUTE_DEFINITIONS.reduce((strongest, attribute) => {
+          const currentValue = draft.attributes[attribute.key];
+          const strongestValue = draft.attributes[strongest.key];
 
-      return strongest;
-    },
-    CHARACTER_ATTRIBUTE_DEFINITIONS[0]!,
-  );
+          if (currentValue === null) {
+            return strongest;
+          }
+
+          if (strongestValue === null || currentValue > strongestValue) {
+            return attribute;
+          }
+
+          return strongest;
+        }, CHARACTER_ATTRIBUTE_DEFINITIONS[0]!)
+      : null;
 
   function isStepComplete(stepId: string) {
     if (stepId === "concept") {
@@ -1059,11 +1287,31 @@ function CharacterBuilderModal({
     }
 
     if (stepId === "attributes") {
-      return CHARACTER_ATTRIBUTE_DEFINITIONS.every((attribute) => {
-        const value = draft.attributes[attribute.key];
+      const attributeValues = CHARACTER_ATTRIBUTE_DEFINITIONS.map(
+        (attribute) => draft.attributes[attribute.key],
+      );
 
-        return value >= 3 && value <= 20;
-      });
+      const allAttributesWereChosen = attributeValues.every(
+        (value): value is number => value !== null,
+      );
+
+      if (!allAttributesWereChosen) {
+        return false;
+      }
+
+      const usesOnlyStandardArrayValues = attributeValues.every((value) =>
+        STANDARD_ARRAY_ATTRIBUTE_VALUES.includes(value),
+      );
+
+      const usesEachValueOnlyOnce =
+        new Set(attributeValues).size ===
+        STANDARD_ARRAY_ATTRIBUTE_VALUES.length;
+
+      return usesOnlyStandardArrayValues && usesEachValueOnlyOnce;
+    }
+
+    if (stepId === "skills") {
+      return draft.skillKeys.length >= requiredSkillChoiceCount;
     }
 
     return true;
@@ -1087,7 +1335,11 @@ function CharacterBuilderModal({
     }
 
     if (stepId === "attributes" && !isStepComplete("attributes")) {
-      return "Revise os atributos. Cada valor precisa ficar entre 3 e 20.";
+      return "Distribua os valores fixos 15, 14, 13, 12, 10 e 8 sem repetir nenhum valor.";
+    }
+
+    if (stepId === "skills" && !isStepComplete("skills")) {
+      return `Escolha pelo menos ${requiredSkillChoiceCount} perícias. Atualmente você escolheu ${selectedSkillCount}.`;
     }
 
     return null;
@@ -1124,9 +1376,8 @@ function CharacterBuilderModal({
             </h2>
 
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-300">
-              Monte a ficha em etapas. A etapa de conceito já salva o rascunho,
-              e as etapas de classe, ancestralidade e antecedente agora usam
-              opções reais do sistema.
+              Monte a ficha em etapas. Conceito, classe, ancestralidade,
+              antecedente e atributos já podem ser salvos no rascunho da ficha.
             </p>
 
             <div className="mt-3 space-y-2">
@@ -1287,6 +1538,15 @@ function CharacterBuilderModal({
                       error={optionsError}
                       emptyMessage="Nenhuma classe encontrada para este sistema."
                       selectedId={draft.classId}
+                      getOptionTitle={(option) => {
+                        const hitDieText = option.hitDie
+                          ? `Dado de vida: d${option.hitDie}.`
+                          : "Dado de vida: em breve.";
+
+                        return `${option.name}: ${
+                          option.description ?? "Sem descrição cadastrada."
+                        } ${hitDieText} Stats importantes: em breve. Features da classe: em breve.`;
+                      }}
                       onSelect={(option) => {
                         updateDraft("classId", option.id);
                         updateDraft("className", option.name);
@@ -1302,6 +1562,15 @@ function CharacterBuilderModal({
                       error={optionsError}
                       emptyMessage="Nenhuma ancestralidade encontrada para este sistema."
                       selectedId={draft.ancestryId}
+                      getOptionTitle={(option) => {
+                        const sizeText = option.defaultSizeCategory
+                          ? `Tamanho padrão: ${option.defaultSizeCategory}.`
+                          : "Tamanho padrão: em breve.";
+
+                        return `${option.name}: ${
+                          option.description ?? "Sem descrição cadastrada."
+                        } ${sizeText} Features da ancestralidade: em breve.`;
+                      }}
                       onSelect={(option) => {
                         updateDraft("ancestryId", option.id);
                         updateDraft("ancestryName", option.name);
@@ -1317,6 +1586,22 @@ function CharacterBuilderModal({
                       error={optionsError}
                       emptyMessage="Nenhum antecedente encontrado para este sistema."
                       selectedId={draft.backgroundId}
+                      getOptionTitle={(option) => {
+                        const suggestedSkillNames =
+                          option.skillKeys
+                            ?.map((skillKey) => {
+                              const skill = options.skills.find(
+                                (currentSkill) => currentSkill.key === skillKey,
+                              );
+
+                              return skill?.name ?? skillKey;
+                            })
+                            .join(", ") || "nenhuma perícia sugerida";
+
+                        return `${option.name}: ${
+                          option.description ?? "Sem descrição cadastrada."
+                        } Perícias sugeridas: ${suggestedSkillNames}. Features do antecedente: em breve.`;
+                      }}
                       onSelect={(option) => {
                         updateDraft("backgroundId", option.id);
                         updateDraft("backgroundName", option.name);
@@ -1329,11 +1614,53 @@ function CharacterBuilderModal({
                       onChangeAttribute={(attributeKey, value) => {
                         updateDraft("attributes", {
                           ...draft.attributes,
-                          [attributeKey]: clampAttributeValue(value),
+                          [attributeKey]: value,
                         });
                       }}
                       onResetAttributes={() => {
                         updateDraft("attributes", DEFAULT_CHARACTER_ATTRIBUTES);
+                      }}
+                    />
+                  ) : activeStep.id === "skills" ? (
+                    <CharacterSkillsStep
+                      skills={options.skills}
+                      selectedBackground={selectedBackground}
+                      attributes={draft.attributes}
+                      selectedSkillKeys={draft.skillKeys}
+                      requiredSkillChoiceCount={requiredSkillChoiceCount}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      onToggleSkill={(skillKey) => {
+                        const isSelected = draft.skillKeys.includes(skillKey);
+
+                        updateDraft(
+                          "skillKeys",
+                          isSelected
+                            ? draft.skillKeys.filter((currentSkillKey) => {
+                                return currentSkillKey !== skillKey;
+                              })
+                            : [...draft.skillKeys, skillKey],
+                        );
+                      }}
+                    />
+                  ) : activeStep.id === "spells" ? (
+                    <CharacterSpellsStep
+                      spells={options.spells}
+                      selectedClass={selectedClass}
+                      selectedSpellKeys={draft.spellKeys}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      onToggleSpell={(spellKey) => {
+                        const isSelected = draft.spellKeys.includes(spellKey);
+
+                        updateDraft(
+                          "spellKeys",
+                          isSelected
+                            ? draft.spellKeys.filter((currentSpellKey) => {
+                                return currentSpellKey !== spellKey;
+                              })
+                            : [...draft.spellKeys, spellKey],
+                        );
                       }}
                     />
                   ) : (
@@ -1388,14 +1715,39 @@ function CharacterBuilderModal({
 
                     <BuilderSummaryRow
                       label="Atributos"
-                      value={`Total ${attributeTotal}`}
+                      value={
+                        assignedAttributeValues.length > 0
+                          ? `Total ${attributeTotal}`
+                          : "Não distribuídos"
+                      }
                     />
 
                     <BuilderSummaryRow
                       label="Maior atributo"
-                      value={`${strongestAttribute.shortName} ${draft.attributes[strongestAttribute.key]} (${formatAttributeModifier(
-                        draft.attributes[strongestAttribute.key],
-                      )})`}
+                      value={
+                        strongestAttribute
+                          ? `${strongestAttribute.shortName} ${
+                              draft.attributes[strongestAttribute.key]
+                            } (${formatAttributeModifier(
+                              draft.attributes[strongestAttribute.key],
+                            )})`
+                          : "Não definido"
+                      }
+                    />
+
+                    <BuilderSummaryRow
+                      label="Perícias"
+                      value={`${selectedSkillCount}/${requiredSkillChoiceCount} escolhidas`}
+                    />
+
+                    <BuilderSummaryRow
+                      label="Magias"
+                      value={`${selectedSpellCount} escolhidas`}
+                    />
+
+                    <BuilderSummaryRow
+                      label="Truques/Magias"
+                      value={`${selectedCantripCount}/${selectedLeveledSpellCount}`}
                     />
 
                     <BuilderSummaryRow label="Nível" value="1" />
@@ -1474,6 +1826,9 @@ type CharacterBuilderSelectableOption = {
   key: string;
   name: string;
   description: string | null;
+  hitDie?: number;
+  defaultSizeCategory?: string;
+  skillKeys?: string[];
 };
 
 function CharacterBuilderOptionCards({
@@ -1484,6 +1839,7 @@ function CharacterBuilderOptionCards({
   error,
   emptyMessage,
   selectedId,
+  getOptionTitle,
   onSelect,
 }: {
   title: string;
@@ -1493,6 +1849,7 @@ function CharacterBuilderOptionCards({
   error: string | null;
   emptyMessage: string;
   selectedId: string;
+  getOptionTitle?: (option: CharacterBuilderSelectableOption) => string;
   onSelect: (option: CharacterBuilderSelectableOption) => void;
 }) {
   if (isLoading) {
@@ -1521,53 +1878,75 @@ function CharacterBuilderOptionCards({
 
   return (
     <div className="mt-5 space-y-4">
-      <div>
+      <div className="flex items-center gap-2" title={description}>
         <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold/80">
           {title}
         </p>
 
-        <p className="mt-2 text-sm leading-relaxed text-zinc-300">
-          {description}
-        </p>
+        <span
+          className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+          title={description}
+          aria-label={`Informação sobre ${title}`}
+        >
+          i
+        </span>
       </div>
 
       <div className="grid gap-3 md:grid-cols-2">
         {options.map((option) => {
           const isSelected = selectedId === option.id;
+          const optionDescription =
+            option.description ?? "Sem descrição cadastrada.";
+
+          const titleText =
+            getOptionTitle?.(option) ?? `${option.name}: ${optionDescription}`;
 
           return (
             <button
               key={option.id}
               type="button"
               onClick={() => onSelect(option)}
+              title={titleText}
               className={[
-                "group rounded-2xl border p-4 text-left transition hover:-translate-y-0.5",
+                "group min-h-28 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5",
                 isSelected
                   ? "border-forge-gold bg-forge-gold/10 shadow-[-4px_4px_0_rgba(234,179,8,0.20)]"
                   : "border-forge-gold/15 bg-zinc-950/50 hover:border-forge-gold/70 hover:bg-forge-purple/20",
               ].join(" ")}
             >
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h4 className="text-base font-black text-zinc-100 group-hover:text-forge-gold">
-                    {option.name}
-                  </h4>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4
+                      className={[
+                        "text-base font-black leading-tight",
+                        isSelected
+                          ? "text-forge-gold"
+                          : "text-zinc-100 group-hover:text-forge-gold",
+                      ].join(" ")}
+                      title={option.name}
+                    >
+                      {option.name}
+                    </h4>
 
-                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-zinc-400">
-                    {option.description ?? "Sem descrição cadastrada."}
-                  </p>
+                    <span
+                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+                      title={titleText}
+                      aria-label={`Informação sobre ${option.name}`}
+                    >
+                      i
+                    </span>
+                  </div>
                 </div>
 
-                <span
-                  className={[
-                    "rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em]",
-                    isSelected
-                      ? "border-forge-gold bg-forge-gold text-black"
-                      : "border-forge-gold/30 bg-forge-gold/10 text-forge-gold",
-                  ].join(" ")}
-                >
-                  {isSelected ? "Selecionado" : option.key}
-                </span>
+                {isSelected ? (
+                  <span
+                    className="shrink-0 rounded-full border border-forge-gold bg-forge-gold px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-black"
+                    title="Opção selecionada"
+                  >
+                    Selecionado
+                  </span>
+                ) : null}
               </div>
             </button>
           );
@@ -1581,7 +1960,7 @@ type CharacterAttributesStepProps = {
   attributes: CharacterBuilderAttributes;
   onChangeAttribute: (
     attributeKey: CharacterAttributeKey,
-    value: number,
+    value: number | null,
   ) => void;
   onResetAttributes: () => void;
 };
@@ -1591,58 +1970,85 @@ function CharacterAttributesStep({
   onChangeAttribute,
   onResetAttributes,
 }: CharacterAttributesStepProps) {
-  const attributeTotal = CHARACTER_ATTRIBUTE_DEFINITIONS.reduce(
-    (total, attribute) => total + attributes[attribute.key],
-    0,
+  const selectedValues = CHARACTER_ATTRIBUTE_DEFINITIONS.map(
+    (attribute) => attributes[attribute.key],
+  ).filter((value): value is number => value !== null);
+
+  const remainingValues = STANDARD_ARRAY_ATTRIBUTE_VALUES.filter(
+    (value) => !selectedValues.includes(value),
   );
+
+  const isComplete =
+    selectedValues.length === STANDARD_ARRAY_ATTRIBUTE_VALUES.length;
+
+  const statusTitle = isComplete
+    ? "Distribuição completa. Você já pode seguir para a próxima etapa."
+    : remainingValues.length > 0
+      ? `Ainda faltam: ${remainingValues.join(", ")}`
+      : "Revise a distribuição dos atributos.";
 
   return (
     <div className="mt-5 space-y-5">
-      <div className="rounded-2xl border border-amber-400/20 bg-black/25 p-4">
-        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+      <div
+        className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
+        title="Escolha onde cada valor será usado. Cada número pode entrar em apenas um atributo."
+      >
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-forge-gold/80">
-              Distribuição inicial
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-forge-gold/80">
+                Forja padrão
+              </p>
 
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-300">
-              Ajuste os seis atributos principais do personagem. Nesta etapa os
-              valores ainda ficam somente no builder; o salvamento no banco fica
-              para o próximo micro.
-            </p>
+              <span
+                className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+                title="Distribua 15, 14, 13, 12, 10 e 8 sem repetir valores."
+                aria-label="Informação sobre distribuição de atributos"
+              >
+                i
+              </span>
+            </div>
+
+            <h3 className="mt-2 text-xl font-black text-zinc-100">
+              Distribua seus valores de atributo
+            </h3>
           </div>
 
-          <button
-            type="button"
-            onClick={onResetAttributes}
-            className="w-fit rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-300 transition hover:border-amber-400/50 hover:text-amber-200"
+          <div
+            className="flex flex-wrap items-center gap-2"
+            title={statusTitle}
           >
-            Resetar
-          </button>
-        </div>
+            {STANDARD_ARRAY_ATTRIBUTE_VALUES.map((value) => {
+              const isUsed = selectedValues.includes(value);
 
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
-              Total atual
-            </p>
-            <p className="mt-2 text-2xl font-black text-zinc-100">
-              {attributeTotal}
-            </p>
-          </div>
+              return (
+                <span
+                  key={value}
+                  className={[
+                    "rounded-xl border px-3 py-2 text-sm font-black",
+                    isUsed
+                      ? "border-emerald-400/40 bg-emerald-500/15 text-emerald-200"
+                      : "border-forge-gold/40 bg-forge-gold/10 text-forge-gold",
+                  ].join(" ")}
+                  title={
+                    isUsed
+                      ? `Valor ${value} já distribuído.`
+                      : `Valor ${value} ainda disponível.`
+                  }
+                >
+                  {value}
+                </span>
+              );
+            })}
 
-          <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
-              Valor mínimo
-            </p>
-            <p className="mt-2 text-2xl font-black text-zinc-100">3</p>
-          </div>
-
-          <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
-              Valor máximo
-            </p>
-            <p className="mt-2 text-2xl font-black text-zinc-100">20</p>
+            <button
+              type="button"
+              onClick={onResetAttributes}
+              title="Limpar distribuição de atributos"
+              className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-xs font-black uppercase tracking-[0.16em] text-zinc-300 transition hover:border-red-400/60 hover:text-red-200"
+            >
+              Limpar
+            </button>
           </div>
         </div>
       </div>
@@ -1655,68 +2061,1017 @@ function CharacterAttributesStep({
           return (
             <article
               key={attribute.key}
-              className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.25)]"
+              className={[
+                "rounded-2xl border bg-zinc-950/50 p-4 transition shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
+                value === null
+                  ? "border-zinc-800"
+                  : "border-forge-gold/45 bg-forge-gold/5",
+              ].join(" ")}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold/80">
-                    {attribute.shortName}
-                  </p>
+              <div
+                className="grid grid-cols-[minmax(0,1fr)_80px] items-start gap-3"
+                title={attribute.description}
+              >
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-forge-gold/80">
+                      {attribute.shortName}
+                    </p>
 
-                  <h4 className="mt-1 text-lg font-black text-zinc-100">
+                    <span
+                      className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+                      title={attribute.description}
+                      aria-label={`Informação sobre ${attribute.name}`}
+                    >
+                      i
+                    </span>
+                  </div>
+
+                  <h4
+                    className="mt-1 whitespace-nowrap text-[13px] font-black leading-tight text-zinc-100"
+                    title={attribute.name}
+                  >
                     {attribute.name}
                   </h4>
-
-                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-zinc-400">
-                    {attribute.description}
-                  </p>
                 </div>
 
-                <div className="rounded-xl border border-amber-400/30 bg-amber-300/10 px-3 py-2 text-center">
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-amber-200">
-                    Mod.
+                <div
+                  className="w-20 shrink-0 rounded-2xl border border-forge-gold/30 bg-black/35 px-2 py-2 text-center"
+                  title={`${attribute.name}: valor ${
+                    value ?? "não definido"
+                  }, modificador ${modifier}`}
+                >
+                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-zinc-500">
+                    Valor
                   </p>
-                  <p className="text-xl font-black text-amber-100">
-                    {modifier}
+
+                  <p className="text-xl font-black leading-none text-zinc-100">
+                    {value ?? "—"}
+                  </p>
+
+                  <p className="mt-1 whitespace-nowrap text-[10px] font-black uppercase tracking-[0.08em] text-forge-gold">
+                    Mod. {modifier}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => onChangeAttribute(attribute.key, value - 1)}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-black/30 text-lg font-black text-zinc-200 transition hover:border-amber-400/50 hover:text-amber-200"
-                  aria-label={`Diminuir ${attribute.name}`}
-                >
-                  −
-                </button>
+              <div
+                className="mt-4 grid grid-cols-6 gap-2"
+                title={`Escolha um valor fixo para ${attribute.name}. Valores já usados em outros atributos ficam bloqueados.`}
+              >
+                {STANDARD_ARRAY_ATTRIBUTE_VALUES.map((optionValue) => {
+                  const usedByOtherAttribute =
+                    CHARACTER_ATTRIBUTE_DEFINITIONS.find((definition) => {
+                      return (
+                        definition.key !== attribute.key &&
+                        attributes[definition.key] === optionValue
+                      );
+                    });
 
-                <input
-                  type="number"
-                  min={3}
-                  max={20}
-                  value={value}
-                  aria-label={`Valor de ${attribute.name}`}
-                  onChange={(event) =>
-                    onChangeAttribute(attribute.key, Number(event.target.value))
-                  }
-                  className="h-10 min-w-0 flex-1 rounded-xl border border-zinc-700 bg-black/30 px-3 text-center text-lg font-black text-zinc-100 outline-none transition focus:border-amber-300"
-                />
+                  const isSelected = value === optionValue;
+                  const isUnavailable = Boolean(usedByOtherAttribute);
 
-                <button
-                  type="button"
-                  onClick={() => onChangeAttribute(attribute.key, value + 1)}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-black/30 text-lg font-black text-zinc-200 transition hover:border-amber-400/50 hover:text-amber-200"
-                  aria-label={`Aumentar ${attribute.name}`}
-                >
-                  +
-                </button>
+                  return (
+                    <button
+                      key={optionValue}
+                      type="button"
+                      disabled={isUnavailable}
+                      onClick={() =>
+                        onChangeAttribute(attribute.key, optionValue)
+                      }
+                      className={[
+                        "h-10 rounded-xl border text-sm font-black transition",
+                        isSelected
+                          ? "border-forge-gold bg-forge-gold text-zinc-950 shadow-[-3px_3px_0_rgba(0,0,0,0.35)]"
+                          : isUnavailable
+                            ? "cursor-not-allowed border-zinc-800 bg-black/20 text-zinc-700"
+                            : "border-zinc-700 bg-black/30 text-zinc-200 hover:border-forge-gold/70 hover:bg-forge-gold/10 hover:text-forge-gold",
+                      ].join(" ")}
+                      title={
+                        usedByOtherAttribute
+                          ? `Já usado em ${usedByOtherAttribute.name}`
+                          : `Escolher ${optionValue} para ${attribute.name}`
+                      }
+                    >
+                      {optionValue}
+                    </button>
+                  );
+                })}
               </div>
+
+              {value !== null ? (
+                <button
+                  type="button"
+                  onClick={() => onChangeAttribute(attribute.key, null)}
+                  title={`Remover valor de ${attribute.name}`}
+                  className="mt-3 text-[10px] font-black uppercase tracking-[0.16em] text-zinc-600 transition hover:text-red-300"
+                >
+                  Limpar
+                </button>
+              ) : null}
             </article>
           );
         })}
       </div>
+    </div>
+  );
+}
+
+type CharacterSkillsStepProps = {
+  skills: CharacterBuilderSkillOption[];
+  selectedBackground: CharacterBuilderBackgroundOption | undefined;
+  attributes: CharacterBuilderAttributes;
+  selectedSkillKeys: string[];
+  requiredSkillChoiceCount: number;
+  isLoading: boolean;
+  error: string | null;
+  onToggleSkill: (skillKey: string) => void;
+};
+
+function CharacterSkillsStep({
+  skills,
+  selectedBackground,
+  attributes,
+  selectedSkillKeys,
+  requiredSkillChoiceCount,
+  isLoading,
+  error,
+  onToggleSkill,
+}: CharacterSkillsStepProps) {
+  const suggestedSkillKeys = selectedBackground?.skillKeys ?? [];
+  const selectedCount = selectedSkillKeys.length;
+  const isComplete = selectedCount >= requiredSkillChoiceCount;
+  const proficiencyBonus = getProficiencyBonusByLevel(CHARACTER_BUILDER_LEVEL);
+
+  if (isLoading) {
+    return (
+      <div className="mt-5 rounded-2xl border border-forge-gold/20 bg-black/20 p-5 text-sm font-bold text-zinc-300">
+        Carregando perícias...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-5 text-sm font-bold text-red-200">
+        {error}
+      </div>
+    );
+  }
+
+  if (skills.length === 0) {
+    return (
+      <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
+        Nenhuma perícia encontrada para este sistema.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-5 space-y-5">
+      <div
+        className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
+        title="Clique nas perícias para marcar seus treinamentos. O total soma o modificador do atributo-base com o bônus de proficiência quando a perícia está selecionada."
+      >
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-start">
+          <div>
+            <div className="flex items-center gap-2">
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-forge-gold/80">
+                Treinamentos
+              </p>
+
+              <span
+                className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+                title="As perícias selecionadas recebem bônus de proficiência no total final."
+                aria-label="Informação sobre perícias"
+              >
+                i
+              </span>
+            </div>
+
+            <h3 className="mt-2 text-xl font-black text-zinc-100">
+              Escolha suas perícias
+            </h3>
+          </div>
+
+          <div className="flex flex-col gap-2 sm:flex-row xl:flex-col">
+            <div
+              className={[
+                "min-w-28 rounded-xl border px-4 py-3",
+                isComplete
+                  ? "border-emerald-400/30 bg-emerald-500/10"
+                  : "border-amber-400/25 bg-amber-300/10",
+              ].join(" ")}
+              title={`Selecionadas: ${selectedCount}. Necessárias: ${requiredSkillChoiceCount}.`}
+            >
+              <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                Selecionadas
+              </p>
+
+              <p
+                className={[
+                  "mt-1 text-2xl font-black leading-none",
+                  isComplete ? "text-emerald-200" : "text-amber-100",
+                ].join(" ")}
+              >
+                {selectedCount}/{requiredSkillChoiceCount}
+              </p>
+            </div>
+
+            <div
+              className="min-w-28 rounded-xl border border-forge-gold/30 bg-black/25 px-4 py-3"
+              title={`Bônus de proficiência atual no nível ${CHARACTER_BUILDER_LEVEL}: ${formatNumberModifier(
+                proficiencyBonus,
+              )}.`}
+            >
+              <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                Proficiência
+              </p>
+
+              <p className="mt-1 text-2xl font-black leading-none text-forge-gold">
+                {formatNumberModifier(proficiencyBonus)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {selectedBackground ? (
+          <div
+            className="mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-100"
+            title={`Antecedente selecionado: ${selectedBackground.name}. As sugestões iniciais foram aplicadas.`}
+          >
+            Antecedente selecionado: {selectedBackground.name}
+          </div>
+        ) : (
+          <div
+            className="mt-4 rounded-xl border border-amber-400/25 bg-amber-300/10 px-4 py-3 text-sm font-bold text-amber-100"
+            title="Escolha um antecedente para receber sugestões automáticas."
+          >
+            Sem antecedente selecionado
+          </div>
+        )}
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-1 xl:grid-cols-2">
+        {skills.map((skill) => {
+          const isSuggestedByBackground = suggestedSkillKeys.includes(
+            skill.key,
+          );
+          const isSelected = selectedSkillKeys.includes(skill.key);
+
+          const skillCalculation = getSkillCalculation({
+            attributes,
+            statKey: skill.stat.key,
+            isProficient: isSelected,
+            level: CHARACTER_BUILDER_LEVEL,
+          });
+
+          return (
+            <button
+              key={skill.id}
+              type="button"
+              onClick={() => onToggleSkill(skill.key)}
+              className={[
+                "rounded-2xl border p-4 text-left transition shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
+                isSelected
+                  ? "border-forge-gold bg-forge-gold/10"
+                  : isSuggestedByBackground
+                    ? "border-emerald-400/45 bg-emerald-500/10"
+                    : "border-zinc-800 bg-zinc-950/50 hover:border-forge-gold/40 hover:bg-forge-gold/5",
+              ].join(" ")}
+              title={
+                skill.description
+                  ? `${skill.name}: ${skill.description}`
+                  : `${skill.name}. Usa ${skill.stat.name} como atributo-base.`
+              }
+            >
+              <div className="space-y-4">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p
+                      className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold/80"
+                      title={`Atributo-base: ${skill.stat.name}`}
+                    >
+                      {skill.stat.shortName}
+                    </p>
+
+                    {skill.description ? (
+                      <span
+                        className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+                        title={skill.description}
+                        aria-label={`Informação sobre ${skill.name}`}
+                      >
+                        i
+                      </span>
+                    ) : null}
+
+                    {isSuggestedByBackground ? (
+                      <span
+                        className="rounded-full border border-emerald-400/50 bg-emerald-500/20 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-emerald-200"
+                        title="Sugerida pelo antecedente selecionado"
+                      >
+                        Sugerida
+                      </span>
+                    ) : null}
+
+                    {isSelected ? (
+                      <span
+                        className="rounded-full border border-forge-gold/60 bg-forge-gold/20 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-forge-gold"
+                        title="Perícia selecionada"
+                      >
+                        Selecionada
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <h4
+                    className="mt-2 text-[15px] font-black leading-tight text-zinc-100"
+                    title={skill.name}
+                  >
+                    {skill.name}
+                  </h4>
+                </div>
+
+                <div
+                  className="rounded-xl border border-forge-gold/30 bg-black/35 px-4 py-3"
+                  title={`Cálculo: ${skill.stat.shortName} ${skillCalculation.formattedAttributeModifier} + Proficiência ${skillCalculation.formattedProficiencyBonus} = Total ${skillCalculation.formattedTotal}.`}
+                >
+                  <div className="grid grid-cols-4 gap-2 text-center">
+                    <div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                        Base
+                      </p>
+                      <p className="mt-1 text-sm font-black leading-none text-zinc-100">
+                        {skill.stat.shortName}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                        Mod.
+                      </p>
+                      <p className="mt-1 text-sm font-black leading-none text-zinc-100">
+                        {skillCalculation.formattedAttributeModifier}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                        Prof.
+                      </p>
+                      <p
+                        className={[
+                          "mt-1 text-sm font-black leading-none",
+                          isSelected ? "text-emerald-200" : "text-zinc-600",
+                        ].join(" ")}
+                      >
+                        {skillCalculation.formattedProficiencyBonus}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                        Total
+                      </p>
+                      <p
+                        className={[
+                          "mt-1 text-base font-black leading-none",
+                          isSelected ? "text-forge-gold" : "text-zinc-400",
+                        ].join(" ")}
+                      >
+                        {skillCalculation.formattedTotal}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+type CharacterSpellsStepProps = {
+  spells: CharacterBuilderSpellOption[];
+  selectedClass: CharacterBuilderClassOption | undefined;
+  selectedSpellKeys: string[];
+  isLoading: boolean;
+  error: string | null;
+  onToggleSpell: (spellKey: string) => void;
+};
+
+type SpellTypeFilter = "all" | "cantrips" | "spells";
+
+function getSpellTitle(spell: CharacterBuilderSpellOption) {
+  const description = spell.description ?? "Sem descrição cadastrada.";
+  const components =
+    spell.components.length > 0 ? spell.components.join(", ") : "não informado";
+  const castingTime = spell.castingTime ?? "não informado";
+  const range = spell.range ?? "não informado";
+  const duration = spell.duration ?? "não informado";
+  const ritualText = spell.isRitual ? "Sim" : "Não";
+  const concentrationText = spell.requiresConcentration ? "Sim" : "Não";
+
+  return `${spell.name}: ${description} Tipo: ${getSpellLevelLabel(spell.level)}. Escola: ${spell.school}. Tempo de conjuração: ${castingTime}. Alcance: ${range}. Duração: ${duration}. Componentes: ${components}. Ritual: ${ritualText}. Concentração: ${concentrationText}. Features/efeitos avançados da magia: em breve. Filtro por classe e progressão de truques/magias por nível: em breve.`;
+}
+
+function getSpellSearchContent(spell: CharacterBuilderSpellOption) {
+  return [
+    spell.name,
+    spell.description,
+    spell.school,
+    getSpellLevelLabel(spell.level),
+    spell.castingTime,
+    spell.range,
+    spell.duration,
+    spell.components.join(" "),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+function filterSpellByType(
+  spell: CharacterBuilderSpellOption,
+  typeFilter: SpellTypeFilter,
+) {
+  if (typeFilter === "cantrips") {
+    return isCantrip(spell);
+  }
+
+  if (typeFilter === "spells") {
+    return isLeveledSpell(spell);
+  }
+
+  return true;
+}
+
+function CharacterSpellCard({
+  spell,
+  isSelected,
+  onToggleSpell,
+}: {
+  spell: CharacterBuilderSpellOption;
+  isSelected: boolean;
+  onToggleSpell: (spellKey: string) => void;
+}) {
+  const spellTitle = getSpellTitle(spell);
+  const componentsText =
+    spell.components.length > 0 ? spell.components.join(", ") : "—";
+
+  return (
+    <button
+      type="button"
+      onClick={() => onToggleSpell(spell.key)}
+      className={[
+        "w-full rounded-2xl border p-4 text-left shadow-[-4px_4px_0_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5",
+        isSelected
+          ? "border-forge-gold bg-forge-gold/10"
+          : "border-zinc-800 bg-zinc-950/50 hover:border-forge-gold/50 hover:bg-forge-purple/15",
+      ].join(" ")}
+      title={spellTitle}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold/80">
+              {getSpellLevelLabel(spell.level)}
+            </p>
+
+            <span
+              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+              title={spellTitle}
+              aria-label={`Informação sobre ${spell.name}`}
+            >
+              i
+            </span>
+
+            {spell.requiresConcentration ? (
+              <span
+                className="rounded-full border border-purple-300/40 bg-purple-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-purple-200"
+                title="Esta magia exige concentração."
+              >
+                Concentração
+              </span>
+            ) : null}
+
+            {spell.isRitual ? (
+              <span
+                className="rounded-full border border-sky-300/40 bg-sky-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-sky-200"
+                title="Esta magia pode ser conjurada como ritual."
+              >
+                Ritual
+              </span>
+            ) : null}
+
+            {isSelected ? (
+              <span
+                className="rounded-full border border-forge-gold bg-forge-gold px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-black"
+                title="Magia selecionada para o rascunho."
+              >
+                Selecionada
+              </span>
+            ) : null}
+          </div>
+
+          <h4
+            className="mt-2 break-words text-[15px] font-black leading-tight text-zinc-100"
+            title={spell.name}
+          >
+            {spell.name}
+          </h4>
+        </div>
+      </div>
+
+      <div
+        className="mt-4 grid gap-2 rounded-xl border border-forge-gold/25 bg-black/30 p-3 text-xs"
+        title={spellTitle}
+      >
+        <div className="grid grid-cols-2 gap-2">
+          <div className="min-w-0">
+            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
+              Escola
+            </p>
+
+            <p
+              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
+              title={spell.school}
+            >
+              {spell.school}
+            </p>
+          </div>
+
+          <div className="min-w-0">
+            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
+              Componentes
+            </p>
+
+            <p
+              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
+              title={
+                spell.components.length > 0
+                  ? spell.components.join(", ")
+                  : "Não informado"
+              }
+            >
+              {componentsText}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 border-t border-forge-gold/10 pt-2">
+          <div className="min-w-0">
+            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
+              Tempo
+            </p>
+
+            <p
+              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
+              title={spell.castingTime ?? "Não informado"}
+            >
+              {getCompactSpellDetail(spell.castingTime)}
+            </p>
+          </div>
+
+          <div className="min-w-0">
+            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
+              Alcance
+            </p>
+
+            <p
+              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
+              title={spell.range ?? "Não informado"}
+            >
+              {getCompactSpellDetail(spell.range)}
+            </p>
+          </div>
+
+          <div className="min-w-0">
+            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
+              Duração
+            </p>
+
+            <p
+              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
+              title={spell.duration ?? "Não informado"}
+            >
+              {getCompactSpellDetail(spell.duration)}
+            </p>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function CharacterSpellsStep({
+  spells,
+  selectedClass,
+  selectedSpellKeys,
+  isLoading,
+  error,
+  onToggleSpell,
+}: CharacterSpellsStepProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [typeFilter, setTypeFilter] = useState<SpellTypeFilter>("all");
+  const [schoolFilter, setSchoolFilter] = useState("all");
+
+  const spellSchools = useMemo(() => {
+    return Array.from(new Set(spells.map((spell) => spell.school))).sort(
+      (a, b) => a.localeCompare(b),
+    );
+  }, [spells]);
+
+  const filteredSpells = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+
+    return spells.filter((spell) => {
+      const matchesType = filterSpellByType(spell, typeFilter);
+      const matchesSchool =
+        schoolFilter === "all" || spell.school === schoolFilter;
+      const matchesSearch =
+        normalizedSearch.length === 0 ||
+        getSpellSearchContent(spell).includes(normalizedSearch);
+
+      return matchesType && matchesSchool && matchesSearch;
+    });
+  }, [schoolFilter, searchTerm, spells, typeFilter]);
+
+  const filteredCantrips = filteredSpells.filter(isCantrip);
+  const filteredLeveledSpells = filteredSpells.filter(isLeveledSpell);
+
+  const spellsByLevel = filteredLeveledSpells.reduce<
+    Record<number, CharacterBuilderSpellOption[]>
+  >((groups, spell) => {
+    groups[spell.level] = [...(groups[spell.level] ?? []), spell];
+
+    return groups;
+  }, {});
+
+  const spellLevels = Object.keys(spellsByLevel)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const totalCantrips = spells.filter(isCantrip).length;
+  const totalLeveledSpells = spells.filter(isLeveledSpell).length;
+  const selectedClassName = selectedClass?.name ?? "classe não selecionada";
+
+  const selectedSpells = spells.filter((spell) =>
+    selectedSpellKeys.includes(spell.key),
+  );
+
+  const selectedCantrips = selectedSpells.filter(isCantrip);
+  const selectedLeveledSpells = selectedSpells.filter(isLeveledSpell);
+  const hasSelectedSpells = selectedSpells.length > 0;
+
+  const hasActiveFilters =
+    searchTerm.trim().length > 0 ||
+    typeFilter !== "all" ||
+    schoolFilter !== "all";
+
+  const temporaryValidationTitle = hasSelectedSpells
+    ? "Seleção preparada"
+    : "Etapa opcional por enquanto";
+
+  const temporaryValidationDescription = hasSelectedSpells
+    ? `Você marcou ${selectedCantrips.length} truque(s) e ${selectedLeveledSpells.length} magia(s). Ao atualizar o rascunho, essas escolhas são gravadas na ficha.`
+    : "Nenhuma magia foi escolhida. A etapa continua liberada porque ainda não temos a progressão real por classe.";
+
+  if (isLoading) {
+    return (
+      <div className="mt-5 rounded-2xl border border-forge-gold/20 bg-black/20 p-5 text-sm font-bold text-zinc-300">
+        Carregando magias...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-5 text-sm font-bold text-red-200">
+        {error}
+      </div>
+    );
+  }
+
+  if (spells.length === 0) {
+    return (
+      <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
+        Nenhuma magia encontrada para este sistema.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-5 space-y-5">
+      <div className="space-y-4">
+        <div
+          className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
+          title="Nesta etapa, truques e magias já aparecem separados. A seleção já pode ser persistida no rascunho; limites por classe e nível entram em uma etapa futura."
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <p className="text-xs font-black uppercase tracking-[0.28em] text-forge-gold/80">
+                  Grimório inicial
+                </p>
+
+                <span
+                  className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+                  title="Truques são magias de nível 0. Magias são poderes de nível 1 ou maior. Seleção por classe vem em breve."
+                  aria-label="Informação sobre magias"
+                >
+                  i
+                </span>
+              </div>
+
+              <h3 className="mt-2 text-xl font-black text-zinc-100">
+                Truques e magias do sistema
+              </h3>
+
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-300">
+                Por enquanto esta lista mostra as magias do sistema. O filtro
+                real por classe e a progressão de truques/magias por nível
+                entram em uma etapa futura.
+              </p>
+            </div>
+          </div>
+
+          <p
+            className="mt-4 rounded-xl border border-amber-400/20 bg-amber-300/10 px-3 py-2 text-xs font-bold text-amber-100"
+            title="Mais tarde, esta etapa deve mostrar apenas magias que a classe selecionada pode aprender/conjurar."
+          >
+            Classe atual: {selectedClassName}. Filtro por classe: em breve.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+          <div
+            className="rounded-2xl border border-forge-gold/30 bg-black/25 p-4"
+            title={`Total de truques disponíveis no sistema atual: ${totalCantrips}.`}
+          >
+            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+              Truques disponíveis
+            </p>
+
+            <p className="mt-2 text-2xl font-black leading-none text-forge-gold">
+              {totalCantrips}
+            </p>
+          </div>
+
+          <div
+            className="rounded-2xl border border-purple-300/30 bg-purple-500/10 p-4"
+            title={`Total de magias disponíveis no sistema atual: ${totalLeveledSpells}.`}
+          >
+            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+              Magias disponíveis
+            </p>
+
+            <p className="mt-2 text-2xl font-black leading-none text-purple-200">
+              {totalLeveledSpells}
+            </p>
+          </div>
+
+          <div
+            className="rounded-2xl border border-forge-gold/30 bg-forge-gold/10 p-4"
+            title={`Truques escolhidos: ${selectedCantrips.length}. Limites por classe virão depois.`}
+          >
+            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+              Truques escolhidos
+            </p>
+
+            <p className="mt-2 text-2xl font-black leading-none text-forge-gold">
+              {selectedCantrips.length}
+            </p>
+          </div>
+
+          <div
+            className="rounded-2xl border border-purple-300/30 bg-purple-500/10 p-4"
+            title={`Magias escolhidas: ${selectedLeveledSpells.length}. Limites por classe virão depois.`}
+          >
+            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+              Magias escolhidas
+            </p>
+
+            <p className="mt-2 text-2xl font-black leading-none text-purple-200">
+              {selectedLeveledSpells.length}
+            </p>
+          </div>
+        </div>
+
+        <div
+          className={[
+            "rounded-2xl border px-4 py-3 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]",
+            hasSelectedSpells
+              ? "border-emerald-400/30 bg-emerald-500/10"
+              : "border-zinc-700 bg-black/25",
+          ].join(" ")}
+          title="Validação temporária: esta etapa ainda não bloqueia avanço por quantidade de magias. Os limites reais virão da classe e do nível em uma etapa futura."
+        >
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
+                  Validação temporária
+                </p>
+
+                <span
+                  className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+                  title="A etapa de Magias continua opcional por enquanto. Depois, a classe vai informar quantos truques e magias podem ser escolhidos por nível."
+                  aria-label="Informação sobre validação temporária de magias"
+                >
+                  i
+                </span>
+              </div>
+
+              <p
+                className={[
+                  "mt-1 text-sm font-black",
+                  hasSelectedSpells ? "text-emerald-100" : "text-zinc-200",
+                ].join(" ")}
+              >
+                {temporaryValidationTitle}
+              </p>
+
+              <p className="mt-1 text-xs leading-relaxed text-zinc-400">
+                {temporaryValidationDescription}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 sm:min-w-60">
+              <div
+                className="rounded-xl border border-forge-gold/20 bg-black/25 px-3 py-2 text-center"
+                title="Quantidade de truques selecionados."
+              >
+                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                  Truques
+                </p>
+
+                <p className="mt-1 text-xl font-black text-forge-gold">
+                  {selectedCantrips.length}
+                </p>
+              </div>
+
+              <div
+                className="rounded-xl border border-purple-300/20 bg-black/25 px-3 py-2 text-center"
+                title="Quantidade de magias de nível 1 ou maior selecionadas."
+              >
+                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                  Magias
+                </p>
+
+                <p className="mt-1 text-xl font-black text-purple-200">
+                  {selectedLeveledSpells.length}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="rounded-2xl border border-zinc-800 bg-black/25 p-4"
+          title="Use os filtros para encontrar magias por nome, tipo ou escola."
+        >
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_180px_180px]">
+            <label className="block md:col-span-2 xl:col-span-1">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
+                Buscar
+              </span>
+
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Buscar por nome, escola, nível..."
+                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-forge-gold/70"
+              />
+            </label>
+
+            <label className="block">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
+                Tipo
+              </span>
+
+              <select
+                value={typeFilter}
+                onChange={(event) =>
+                  setTypeFilter(event.target.value as SpellTypeFilter)
+                }
+                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-100 outline-none transition focus:border-forge-gold/70"
+              >
+                <option value="all">Todos</option>
+                <option value="cantrips">Truques</option>
+                <option value="spells">Magias</option>
+              </select>
+            </label>
+
+            <label className="block">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
+                Escola
+              </span>
+
+              <select
+                value={schoolFilter}
+                onChange={(event) => setSchoolFilter(event.target.value)}
+                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-100 outline-none transition focus:border-forge-gold/70"
+              >
+                <option value="all">Todas</option>
+                {spellSchools.map((school) => (
+                  <option key={school} value={school}>
+                    {school}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <p
+            className="mt-3 text-xs font-bold text-zinc-500"
+            title={`Os filtros atuais exibem ${filteredSpells.length} de ${spells.length} opções totais. Truques visíveis: ${filteredCantrips.length}. Magias visíveis: ${filteredLeveledSpells.length}.`}
+          >
+            Exibindo {filteredSpells.length} de {spells.length} opção
+            {spells.length === 1 ? "" : "ões"}.
+            {hasActiveFilters
+              ? " Limpe os filtros para ver todas as magias."
+              : " Use os filtros para reduzir a lista quando ela crescer."}
+          </p>
+        </div>
+      </div>
+
+      {filteredSpells.length === 0 ? (
+        <div className="rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
+          Nenhuma magia encontrada com os filtros atuais.
+        </div>
+      ) : null}
+
+      {filteredCantrips.length > 0 ? (
+        <section className="space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-forge-gold/80">
+                Truques
+              </p>
+
+              <h4 className="text-lg font-black text-zinc-100">
+                Magias de nível 0
+              </h4>
+            </div>
+
+            <span
+              className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold"
+              title="Quantidade de truques visíveis depois dos filtros."
+            >
+              {filteredCantrips.length}
+            </span>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            {filteredCantrips.map((spell) => (
+              <CharacterSpellCard
+                key={spell.id}
+                spell={spell}
+                isSelected={selectedSpellKeys.includes(spell.key)}
+                onToggleSpell={onToggleSpell}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {spellLevels.map((level) => (
+        <section key={level} className="space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-200">
+                {getSpellLevelLabel(level)}
+              </p>
+
+              <h4 className="text-lg font-black text-zinc-100">
+                Magias de {getSpellLevelLabel(level).toLowerCase()}
+              </h4>
+            </div>
+
+            <span
+              className="rounded-full border border-purple-300/30 bg-purple-500/10 px-3 py-1 text-xs font-black text-purple-200"
+              title={`Quantidade de magias de nível ${level} visíveis depois dos filtros.`}
+            >
+              {spellsByLevel[level]?.length ?? 0}
+            </span>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            {spellsByLevel[level]?.map((spell) => (
+              <CharacterSpellCard
+                key={spell.id}
+                spell={spell}
+                isSelected={selectedSpellKeys.includes(spell.key)}
+                onToggleSpell={onToggleSpell}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }
@@ -1813,10 +3168,23 @@ function CharacterConceptStep({
         </label>
       </div>
 
-      <div className="rounded-2xl border border-amber-400/20 bg-black/25 p-4">
-        <p className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-          Encaixe da imagem do token
-        </p>
+      <div
+        className="rounded-2xl border border-amber-400/20 bg-black/25 p-4"
+        title="Defina como a imagem do token deve preencher o espaço no tabuleiro."
+      >
+        <div className="flex items-center gap-2">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+            Encaixe da imagem do token
+          </p>
+
+          <span
+            className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+            title="Preencher pode distorcer. Conter mostra a imagem inteira. Cobrir corta bordas para preencher sem distorcer."
+            aria-label="Informação sobre encaixe da imagem do token"
+          >
+            i
+          </span>
+        </div>
 
         <div className="mt-3 grid gap-3 md:grid-cols-3">
           {[
@@ -1842,6 +3210,7 @@ function CharacterConceptStep({
               <button
                 key={fitOption.value}
                 type="button"
+                title={fitOption.description}
                 onClick={() =>
                   onChangeDraftField(
                     "tokenImageFit",
@@ -1849,7 +3218,7 @@ function CharacterConceptStep({
                   )
                 }
                 className={[
-                  "rounded-xl border p-4 text-left transition",
+                  "rounded-xl border px-4 py-3 text-left transition",
                   "shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
                   isSelected
                     ? "border-amber-300 bg-amber-300/10 text-amber-100"
@@ -1857,9 +3226,6 @@ function CharacterConceptStep({
                 ].join(" ")}
               >
                 <p className="text-sm font-black">{fitOption.title}</p>
-                <p className="mt-2 text-xs leading-relaxed text-zinc-400">
-                  {fitOption.description}
-                </p>
               </button>
             );
           })}
@@ -2015,6 +3381,8 @@ export default function CampaignPlayPage() {
       backgroundName: "",
 
       attributes: DEFAULT_CHARACTER_ATTRIBUTES,
+      skillKeys: [],
+      spellKeys: [],
     });
   const [savedCharacterSheetId, setSavedCharacterSheetId] = useState<
     string | null
@@ -2031,6 +3399,8 @@ export default function CampaignPlayPage() {
       classes: [],
       ancestries: [],
       backgrounds: [],
+      skills: [],
+      spells: [],
     });
   const [
     isLoadingCharacterBuilderOptions,
@@ -2892,6 +4262,8 @@ export default function CampaignPlayPage() {
         classes: data.classes ?? [],
         ancestries: data.ancestries ?? [],
         backgrounds: data.backgrounds ?? [],
+        skills: data.skills ?? [],
+        spells: data.spells ?? [],
       });
     } catch (error) {
       setCharacterBuilderOptionsError(
@@ -2952,6 +4324,17 @@ export default function CampaignPlayPage() {
             background?: {
               name: string;
             } | null;
+            stats?: CharacterSheetStatResponse[];
+            skills?: Array<{
+              skill: {
+                key: string;
+              };
+            }>;
+            spells?: Array<{
+              spell: {
+                key: string;
+              };
+            }>;
             updatedAt?: string;
             createdAt?: string;
           }) => sheet.status === "DRAFT",
@@ -2997,7 +4380,9 @@ export default function CampaignPlayPage() {
         backgroundId: draftSheet.backgroundId ?? "",
         backgroundName: draftSheet.background?.name ?? "",
 
-        attributes: DEFAULT_CHARACTER_ATTRIBUTES,
+        attributes: getCharacterAttributesFromStats(draftSheet.stats),
+        skillKeys: getCharacterSkillKeysFromSkills(draftSheet.skills),
+        spellKeys: getCharacterSpellKeysFromSpells(draftSheet.spells),
       });
 
       setCharacterDraftSaveSuccess("Rascunho carregado.");
@@ -3015,6 +4400,7 @@ export default function CampaignPlayPage() {
     option: {
       id: string;
       name: string;
+      skillKeys?: string[];
     },
   ) {
     setCharacterBuilderDraft((currentDraft) => {
@@ -3023,6 +4409,7 @@ export default function CampaignPlayPage() {
           ...currentDraft,
           classId: option.id,
           className: option.name,
+          spellKeys: [],
         };
       }
 
@@ -3034,11 +4421,16 @@ export default function CampaignPlayPage() {
         };
       }
 
-      return {
-        ...currentDraft,
-        backgroundId: option.id,
-        backgroundName: option.name,
-      };
+      if (type === "background") {
+        return {
+          ...currentDraft,
+          backgroundId: option.id,
+          backgroundName: option.name,
+          skillKeys: option.skillKeys ?? [],
+        };
+      }
+
+      return currentDraft;
     });
   }
 
@@ -3096,6 +4488,11 @@ export default function CampaignPlayPage() {
           classId: characterBuilderDraft.classId || null,
           ancestryId: characterBuilderDraft.ancestryId || null,
           backgroundId: characterBuilderDraft.backgroundId || null,
+          attributes: getPersistableCharacterAttributes(
+            characterBuilderDraft.attributes,
+          ),
+          skillKeys: characterBuilderDraft.skillKeys,
+          spellKeys: characterBuilderDraft.spellKeys,
         }),
       });
 
