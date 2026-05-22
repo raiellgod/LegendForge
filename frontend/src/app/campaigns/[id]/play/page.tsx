@@ -763,6 +763,16 @@ type CharacterAttributeKey =
 
 type CharacterBuilderAttributes = Record<CharacterAttributeKey, number | null>;
 
+type CharacterBuilderEquipmentMode = "PACKAGE" | "GOLD";
+
+type CharacterBuilderEquipmentDraftItem = {
+  key: string;
+  quantity: number;
+  source: "class" | "background";
+  notes?: string;
+  isEquipped?: boolean;
+};
+
 type CharacterBuilderDraft = {
   name: string;
   pronouns: string;
@@ -783,6 +793,10 @@ type CharacterBuilderDraft = {
   attributes: CharacterBuilderAttributes;
   skillKeys: string[];
   spellKeys: string[];
+  equipmentItems: CharacterBuilderEquipmentDraftItem[];
+  classEquipmentMode: CharacterBuilderEquipmentMode;
+  backgroundEquipmentMode: CharacterBuilderEquipmentMode;
+  startingGold: number;
 };
 
 type CharacterBuilderOption = {
@@ -828,12 +842,22 @@ type CharacterBuilderSpellOption = CharacterBuilderOption & {
   requiresConcentration: boolean;
 };
 
+type CharacterBuilderEquipmentOption = CharacterBuilderOption & {
+  category: string;
+  damage: string | null;
+  defense: number | null;
+  cost: string | null;
+  weight: number | null;
+  properties: string | null;
+};
+
 type CharacterBuilderOptions = {
   classes: CharacterBuilderClassOption[];
   ancestries: CharacterBuilderAncestryOption[];
   backgrounds: CharacterBuilderBackgroundOption[];
   skills: CharacterBuilderSkillOption[];
   spells: CharacterBuilderSpellOption[];
+  equipment: CharacterBuilderEquipmentOption[];
 };
 
 function isCantrip(spell: CharacterBuilderSpellOption) {
@@ -866,6 +890,113 @@ function getCompactSpellDetail(value: string | null) {
     .replace(/\binstantanea\b/gi, "insta")
     .replace(/\binstantânea\b/gi, "insta")
     .replace(/\binstantaneo\b/gi, "insta");
+}
+
+function getEquipmentCategoryLabel(category: string) {
+  const labels: Record<string, string> = {
+    WEAPON: "Arma",
+    ARMOR: "Armadura",
+    SHIELD: "Escudo",
+    GEAR: "Item",
+    TOOL: "Ferramenta",
+    CONSUMABLE: "Consumível",
+    RELIC: "Relíquia",
+  };
+
+  return labels[category] ?? category;
+}
+
+function getEquipmentMainInfo(item: CharacterBuilderEquipmentOption) {
+  if (item.damage) {
+    return {
+      label: "Dano",
+      value: item.damage,
+    };
+  }
+
+  if (item.defense !== null) {
+    return {
+      label: "Defesa",
+      value: `+${item.defense}`,
+    };
+  }
+
+  if (item.properties) {
+    return {
+      label: "Propriedades",
+      value: item.properties,
+    };
+  }
+
+  return {
+    label: "Tipo",
+    value: getEquipmentCategoryLabel(item.category),
+  };
+}
+
+function formatEquipmentWeight(weight: number | null) {
+  if (weight === null) {
+    return "—";
+  }
+
+  return `${weight} kg`;
+}
+
+const EQUIPMENT_CATEGORY_ORDER = [
+  "WEAPON",
+  "ARMOR",
+  "SHIELD",
+  "TOOL",
+  "GEAR",
+  "CONSUMABLE",
+  "RELIC",
+] as const;
+
+function getEquipmentCategoryDescription(category: string) {
+  const descriptions: Record<string, string> = {
+    WEAPON: "Armas usadas para ataques corpo a corpo ou à distância.",
+    ARMOR: "Proteções vestidas para reduzir risco e aumentar defesa.",
+    SHIELD: "Proteções empunhadas para bloquear golpes e proteger posição.",
+    TOOL: "Ferramentas usadas em testes, ofícios, reparos ou especialidades.",
+    GEAR: "Itens gerais de exploração, sobrevivência e aventura.",
+    CONSUMABLE:
+      "Itens de uso limitado, como tônicos, poções e recursos gastos.",
+    RELIC:
+      "Objetos raros, instáveis ou misteriosos ligados a magia e tecnologia antiga.",
+  };
+
+  return descriptions[category] ?? "Equipamentos variados deste sistema.";
+}
+
+function groupEquipmentByCategory(
+  equipment: CharacterBuilderEquipmentOption[],
+) {
+  const categories = Array.from(
+    new Set(equipment.map((item) => item.category)),
+  ).sort((firstCategory, secondCategory) => {
+    const firstIndex = EQUIPMENT_CATEGORY_ORDER.indexOf(
+      firstCategory as (typeof EQUIPMENT_CATEGORY_ORDER)[number],
+    );
+
+    const secondIndex = EQUIPMENT_CATEGORY_ORDER.indexOf(
+      secondCategory as (typeof EQUIPMENT_CATEGORY_ORDER)[number],
+    );
+
+    const normalizedFirstIndex =
+      firstIndex === -1 ? EQUIPMENT_CATEGORY_ORDER.length : firstIndex;
+
+    const normalizedSecondIndex =
+      secondIndex === -1 ? EQUIPMENT_CATEGORY_ORDER.length : secondIndex;
+
+    return normalizedFirstIndex - normalizedSecondIndex;
+  });
+
+  return categories.map((category) => ({
+    category,
+    label: getEquipmentCategoryLabel(category),
+    description: getEquipmentCategoryDescription(category),
+    items: equipment.filter((item) => item.category === category),
+  }));
 }
 
 const STANDARD_ARRAY_ATTRIBUTE_VALUES = [15, 14, 13, 12, 10, 8];
@@ -1069,6 +1200,432 @@ function getCharacterSpellKeysFromSpells(
   }> | null,
 ) {
   return spells?.map((sheetSpell) => sheetSpell.spell.key) ?? [];
+}
+
+function normalizeCharacterEquipmentMode(
+  value?: string | null,
+): CharacterBuilderEquipmentMode {
+  return value === "GOLD" ? "GOLD" : "PACKAGE";
+}
+
+function getCharacterEquipmentItemsFromEquipment(
+  equipment?: Array<{
+    quantity: number;
+    source: string | null;
+    notes: string | null;
+    isEquipped: boolean;
+    equipment: {
+      key: string;
+    };
+  }> | null,
+): CharacterBuilderEquipmentDraftItem[] {
+  return (
+    equipment?.map((sheetEquipment) => ({
+      key: sheetEquipment.equipment.key,
+      quantity: sheetEquipment.quantity,
+      source: sheetEquipment.source === "background" ? "background" : "class",
+      notes: sheetEquipment.notes ?? undefined,
+      isEquipped: sheetEquipment.isEquipped,
+    })) ?? []
+  );
+}
+
+type StartingEquipmentPlan = {
+  label: string;
+  description: string;
+  gold: number;
+  items: CharacterBuilderEquipmentDraftItem[];
+  proficiencies: string[];
+};
+
+function getClassStartingEquipmentPlan(
+  selectedClass: CharacterBuilderClassOption | undefined,
+): StartingEquipmentPlan {
+  if (!selectedClass) {
+    return {
+      label: "Classe não selecionada",
+      description:
+        "Escolha uma classe para ver o pacote inicial e a alternativa em moedas.",
+      gold: 0,
+      items: [],
+      proficiencies: [],
+    };
+  }
+
+  const plans: Record<string, StartingEquipmentPlan> = {
+    barbarian: {
+      label: "Pacote do Bárbaro",
+      description:
+        "Um conjunto bruto para combate direto e exploração em regiões perigosas.",
+      gold: 20,
+      proficiencies: ["Armas marciais", "Armaduras leves", "Escudos"],
+      items: [
+        {
+          key: "heavy-axe",
+          quantity: 1,
+          source: "class",
+          notes: "Arma inicial da classe",
+          isEquipped: true,
+        },
+        {
+          key: "shortbow",
+          quantity: 1,
+          source: "class",
+          notes: "Opção simples de ataque à distância",
+        },
+        {
+          key: "survival-kit",
+          quantity: 1,
+          source: "class",
+          notes: "Pacote de sobrevivência",
+        },
+      ],
+    },
+    bard: {
+      label: "Pacote do Bardo",
+      description: "Equipamento leve para estrada, atuação e defesa básica.",
+      gold: 20,
+      proficiencies: ["Armas simples", "Instrumentos musicais", "Atuação"],
+      items: [
+        {
+          key: "dagger",
+          quantity: 1,
+          source: "class",
+          notes: "Arma leve inicial",
+          isEquipped: true,
+        },
+        {
+          key: "leather-armor",
+          quantity: 1,
+          source: "class",
+          notes: "Proteção leve",
+          isEquipped: true,
+        },
+        {
+          key: "adventurer-pouch",
+          quantity: 1,
+          source: "class",
+          notes: "Bolsa de viagem",
+        },
+      ],
+    },
+    rogue: {
+      label: "Pacote do Ladino",
+      description:
+        "Ferramentas discretas para infiltração, mobilidade e sobrevivência urbana.",
+      gold: 18,
+      proficiencies: ["Armas simples", "Ferramentas de ladrão", "Furtividade"],
+      items: [
+        {
+          key: "dagger",
+          quantity: 2,
+          source: "class",
+          notes: "Armas leves iniciais",
+          isEquipped: true,
+        },
+        {
+          key: "leather-armor",
+          quantity: 1,
+          source: "class",
+          notes: "Proteção leve",
+          isEquipped: true,
+        },
+        {
+          key: "thieves-tools",
+          quantity: 1,
+          source: "class",
+          notes: "Ferramenta de classe",
+        },
+      ],
+    },
+    fighter: {
+      label: "Pacote do Guerreiro",
+      description: "Equipamento marcial equilibrado para linha de frente.",
+      gold: 25,
+      proficiencies: ["Armas simples", "Armas marciais", "Armaduras"],
+      items: [
+        {
+          key: "longsword",
+          quantity: 1,
+          source: "class",
+          notes: "Arma marcial inicial",
+          isEquipped: true,
+        },
+        {
+          key: "reinforced-mail",
+          quantity: 1,
+          source: "class",
+          notes: "Armadura inicial",
+          isEquipped: true,
+        },
+        {
+          key: "simple-shield",
+          quantity: 1,
+          source: "class",
+          notes: "Defesa inicial",
+          isEquipped: true,
+        },
+      ],
+    },
+    technomancer: {
+      label: "Pacote do Tecnomante",
+      description:
+        "Ferramentas e itens para reparos, improviso e tecnologia antiga.",
+      gold: 22,
+      proficiencies: ["Ferramentas tecnológicas", "Reparo", "Dispositivos"],
+      items: [
+        {
+          key: "technomancer-tools",
+          quantity: 1,
+          source: "class",
+          notes: "Ferramenta principal da classe",
+        },
+        {
+          key: "field-tonic",
+          quantity: 1,
+          source: "class",
+          notes: "Consumível inicial",
+        },
+        {
+          key: "adventurer-pouch",
+          quantity: 1,
+          source: "class",
+          notes: "Bolsa de componentes",
+        },
+      ],
+    },
+    necromancer: {
+      label: "Pacote do Necromante",
+      description:
+        "Recursos sombrios e proteção mínima para um conjurador iniciante.",
+      gold: 18,
+      proficiencies: ["Armas simples", "Relíquias fúnebres", "Ocultismo"],
+      items: [
+        {
+          key: "dagger",
+          quantity: 1,
+          source: "class",
+          notes: "Arma simples inicial",
+          isEquipped: true,
+        },
+        {
+          key: "broken-relic",
+          quantity: 1,
+          source: "class",
+          notes: "Foco narrativo inicial",
+        },
+        {
+          key: "adventurer-pouch",
+          quantity: 1,
+          source: "class",
+          notes: "Bolsa de componentes",
+        },
+      ],
+    },
+  };
+
+  return (
+    plans[selectedClass.key] ?? {
+      label: `Pacote de ${selectedClass.name}`,
+      description:
+        "Pacote inicial genérico enquanto as regras específicas desta classe são refinadas.",
+      gold: 15,
+      proficiencies: [
+        "Proficiências específicas da classe serão refinadas depois",
+      ],
+      items: [
+        {
+          key: "dagger",
+          quantity: 1,
+          source: "class",
+          notes: "Arma simples inicial",
+          isEquipped: true,
+        },
+        {
+          key: "adventurer-pouch",
+          quantity: 1,
+          source: "class",
+          notes: "Bolsa inicial",
+        },
+      ],
+    }
+  );
+}
+
+function getBackgroundStartingEquipmentPlan(
+  selectedBackground: CharacterBuilderBackgroundOption | undefined,
+): StartingEquipmentPlan {
+  if (!selectedBackground) {
+    return {
+      label: "Antecedente não selecionado",
+      description:
+        "Escolha um antecedente para ver os itens de origem e a alternativa em moedas.",
+      gold: 0,
+      items: [],
+      proficiencies: [],
+    };
+  }
+
+  const commonItemsByBackgroundKey: Record<
+    string,
+    CharacterBuilderEquipmentDraftItem[]
+  > = {
+    "alley-blade": [
+      {
+        key: "crowbar",
+        quantity: 1,
+        source: "background",
+        notes: "Item do antecedente",
+      },
+      {
+        key: "dagger",
+        quantity: 1,
+        source: "background",
+        notes: "Item do antecedente",
+      },
+    ],
+    "gutter-child": [
+      {
+        key: "thieves-tools",
+        quantity: 1,
+        source: "background",
+        notes: "Ferramenta do antecedente",
+      },
+      {
+        key: "dagger",
+        quantity: 1,
+        source: "background",
+        notes: "Item do antecedente",
+      },
+    ],
+    "relic-hunter": [
+      {
+        key: "crowbar",
+        quantity: 1,
+        source: "background",
+        notes: "Ferramenta de exploração",
+      },
+      {
+        key: "broken-relic",
+        quantity: 1,
+        source: "background",
+        notes: "Relíquia inicial",
+      },
+    ],
+    "frontier-walker": [
+      {
+        key: "survival-kit",
+        quantity: 1,
+        source: "background",
+        notes: "Kit de fronteira",
+      },
+      {
+        key: "shortbow",
+        quantity: 1,
+        source: "background",
+        notes: "Arma de caça",
+      },
+    ],
+    "collapse-survivor": [
+      {
+        key: "survival-kit",
+        quantity: 1,
+        source: "background",
+        notes: "Kit de sobrevivente",
+      },
+      {
+        key: "field-tonic",
+        quantity: 1,
+        source: "background",
+        notes: "Consumível inicial",
+      },
+    ],
+  };
+
+  return {
+    label: `Origem: ${selectedBackground.name}`,
+    description:
+      selectedBackground.description ??
+      "Itens recebidos pela história do personagem antes da aventura.",
+    gold: selectedBackground.startingGold,
+    proficiencies: selectedBackground.toolNames,
+    items: commonItemsByBackgroundKey[selectedBackground.key] ?? [
+      {
+        key: "adventurer-pouch",
+        quantity: 1,
+        source: "background",
+        notes: `Item inicial de ${selectedBackground.name}`,
+      },
+    ],
+  };
+}
+
+function mergeStartingEquipmentItems(
+  items: CharacterBuilderEquipmentDraftItem[],
+) {
+  const mergedItems = new Map<string, CharacterBuilderEquipmentDraftItem>();
+
+  for (const item of items) {
+    const currentItem = mergedItems.get(item.key);
+
+    if (currentItem) {
+      mergedItems.set(item.key, {
+        ...currentItem,
+        quantity: currentItem.quantity + item.quantity,
+        isEquipped: currentItem.isEquipped || item.isEquipped,
+      });
+
+      continue;
+    }
+
+    mergedItems.set(item.key, item);
+  }
+
+  return Array.from(mergedItems.values());
+}
+
+function getStartingEquipmentItemsFromDraft(
+  draft: CharacterBuilderDraft,
+  options: CharacterBuilderOptions,
+) {
+  const selectedClass = options.classes.find(
+    (option) => option.id === draft.classId,
+  );
+
+  const selectedBackground = options.backgrounds.find(
+    (option) => option.id === draft.backgroundId,
+  );
+
+  const classPlan = getClassStartingEquipmentPlan(selectedClass);
+  const backgroundPlan = getBackgroundStartingEquipmentPlan(selectedBackground);
+
+  return mergeStartingEquipmentItems([
+    ...(draft.classEquipmentMode === "PACKAGE" ? classPlan.items : []),
+    ...(draft.backgroundEquipmentMode === "PACKAGE"
+      ? backgroundPlan.items
+      : []),
+  ]);
+}
+
+function getStartingGoldFromDraft(
+  draft: CharacterBuilderDraft,
+  options: CharacterBuilderOptions,
+) {
+  const selectedClass = options.classes.find(
+    (option) => option.id === draft.classId,
+  );
+
+  const selectedBackground = options.backgrounds.find(
+    (option) => option.id === draft.backgroundId,
+  );
+
+  const classPlan = getClassStartingEquipmentPlan(selectedClass);
+  const backgroundPlan = getBackgroundStartingEquipmentPlan(selectedBackground);
+
+  return (
+    (draft.classEquipmentMode === "GOLD" ? classPlan.gold : 0) +
+    (draft.backgroundEquipmentMode === "GOLD" ? backgroundPlan.gold : 0)
+  );
 }
 
 function getCharacterAttributesFromStats(
@@ -1518,7 +2075,7 @@ function CharacterBuilderModal({
                 </span>
               </div>
 
-              <div className="mt-8 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+              <div className="mt-8 grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
                 <div className="rounded-2xl border border-zinc-800 bg-black/25 p-5">
                   <p className="text-sm font-black uppercase tracking-[0.22em] text-zinc-400">
                     Conteúdo da etapa
@@ -1663,6 +2220,18 @@ function CharacterBuilderModal({
                         );
                       }}
                     />
+                  ) : activeStep.id === "equipment" ? (
+                    <CharacterEquipmentStep
+                      equipment={options.equipment}
+                      selectedClass={selectedClass}
+                      selectedBackground={selectedBackground}
+                      draft={draft}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      onChangeEquipmentMode={(key, value) => {
+                        updateDraft(key, value);
+                      }}
+                    />
                   ) : (
                     <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
                       <p className="text-lg font-black text-zinc-100">
@@ -1749,6 +2318,26 @@ function CharacterBuilderModal({
                       label="Truques/Magias"
                       value={`${selectedCantripCount}/${selectedLeveledSpellCount}`}
                     />
+
+                    <BuilderSummaryRow
+                      label="Equipamentos"
+                      value={`${
+                        getStartingEquipmentItemsFromDraft(draft, options)
+                          .length
+                      } tipos`}
+                    />
+
+                    <BuilderSummaryRow
+                      label="Moedas iniciais"
+                      value={`${getStartingGoldFromDraft(draft, options)} moedas`}
+                    />
+
+                    {activeStep.id === "equipment" ? (
+                      <StartingEquipmentSummaryPanel
+                        draft={draft}
+                        options={options}
+                      />
+                    ) : null}
 
                     <BuilderSummaryRow label="Nível" value="1" />
 
@@ -2666,6 +3255,383 @@ function CharacterSpellCard({
   );
 }
 
+type CharacterEquipmentStepProps = {
+  equipment: CharacterBuilderEquipmentOption[];
+  selectedClass: CharacterBuilderClassOption | undefined;
+  selectedBackground: CharacterBuilderBackgroundOption | undefined;
+  draft: CharacterBuilderDraft;
+  isLoading: boolean;
+  error: string | null;
+  onChangeEquipmentMode: (
+    key: "classEquipmentMode" | "backgroundEquipmentMode",
+    value: CharacterBuilderEquipmentMode,
+  ) => void;
+};
+
+function CharacterEquipmentStep({
+  equipment,
+  selectedClass,
+  selectedBackground,
+  draft,
+  isLoading,
+  error,
+  onChangeEquipmentMode,
+}: CharacterEquipmentStepProps) {
+  const equipmentByKey = new Map(equipment.map((item) => [item.key, item]));
+  const classPlan = getClassStartingEquipmentPlan(selectedClass);
+  const backgroundPlan = getBackgroundStartingEquipmentPlan(selectedBackground);
+  const previewItems = getStartingEquipmentItemsFromDraft(draft, {
+    classes: selectedClass ? [selectedClass] : [],
+    ancestries: [],
+    backgrounds: selectedBackground ? [selectedBackground] : [],
+    skills: [],
+    spells: [],
+    equipment,
+  });
+  const previewGold = getStartingGoldFromDraft(draft, {
+    classes: selectedClass ? [selectedClass] : [],
+    ancestries: [],
+    backgrounds: selectedBackground ? [selectedBackground] : [],
+    skills: [],
+    spells: [],
+    equipment,
+  });
+
+  const missingPreviewItemKeys = previewItems
+    .map((item) => item.key)
+    .filter((key) => !equipmentByKey.has(key));
+
+  const classModeLabel =
+    draft.classEquipmentMode === "PACKAGE" ? "Pacote" : "Moedas";
+
+  const backgroundModeLabel =
+    draft.backgroundEquipmentMode === "PACKAGE" ? "Pacote" : "Moedas";
+
+  if (isLoading) {
+    return (
+      <div className="mt-5 rounded-2xl border border-forge-gold/20 bg-black/20 p-5 text-sm font-bold text-zinc-300">
+        Carregando equipamento inicial...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-5 text-sm font-bold text-red-200">
+        {error}
+      </div>
+    );
+  }
+
+  if (!selectedClass || !selectedBackground) {
+    return (
+      <div className="mt-5 rounded-2xl border border-amber-400/25 bg-amber-500/10 p-5 text-sm font-bold text-amber-100">
+        Escolha classe e antecedente antes de definir equipamento inicial.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-5 space-y-5">
+      <section
+        className="overflow-hidden rounded-2xl border border-forge-gold/25 bg-gradient-to-br from-[#1b0b22] via-[#130719] to-black shadow-[-6px_6px_0_rgba(0,0,0,0.32)]"
+        title="Esta etapa não é uma loja nem um catálogo livre. Aqui o personagem escolhe apenas equipamento inicial concedido pela classe e pelo antecedente. Itens gerais da campanha ficam para lojas, recompensas e inventário futuro."
+      >
+        <div className="grid gap-5 p-5 xl:grid-cols-[minmax(0,1fr)_220px] xl:items-center">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className="flex h-5 w-5 items-center justify-center rounded-full border border-zinc-700 bg-black/30 text-[10px] font-black text-zinc-500"
+                title="Você pode aceitar os pacotes iniciais recomendados pela classe e pelo antecedente, ou trocar uma dessas partes por moedas iniciais."
+                aria-label="Informação sobre equipamento inicial"
+              >
+                i
+              </span>
+            </div>
+
+            <h3 className="mt-3 max-w-2xl text-2xl font-black leading-tight text-zinc-100">
+              Defina como {draft.name || "o personagem"} começa a aventura
+            </h3>
+          </div>
+
+          <div className="grid gap-2">
+            <StartingEquipmentMetricCard
+              label="Classe"
+              value={classModeLabel}
+              title={`Escolha atual da classe: ${classModeLabel}.`}
+            />
+
+            <StartingEquipmentMetricCard
+              label="Antecedente"
+              value={backgroundModeLabel}
+              title={`Escolha atual do antecedente: ${backgroundModeLabel}.`}
+            />
+
+            <StartingEquipmentMetricCard
+              label="Moedas iniciais"
+              value={previewGold.toString()}
+              title={`${previewGold} moedas iniciais serão salvas na ficha.`}
+            />
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-4">
+        <StartingEquipmentChoiceCard
+          title="Classe"
+          subtitle={classPlan.label}
+          description={classPlan.description}
+          mode={draft.classEquipmentMode}
+          packageLabel="Pacote da classe"
+          goldLabel={`${classPlan.gold} moedas`}
+          onChangeMode={(mode) =>
+            onChangeEquipmentMode("classEquipmentMode", mode)
+          }
+        />
+
+        <StartingEquipmentChoiceCard
+          title="Antecedente"
+          subtitle={backgroundPlan.label}
+          description={backgroundPlan.description}
+          mode={draft.backgroundEquipmentMode}
+          packageLabel="Pacote do antecedente"
+          goldLabel={`${backgroundPlan.gold} moedas`}
+          onChangeMode={(mode) =>
+            onChangeEquipmentMode("backgroundEquipmentMode", mode)
+          }
+        />
+      </div>
+
+      <div className="grid gap-5 xl:grid-cols-2">
+        <StartingEquipmentReceiveCard
+          title="Pacote da classe"
+          items={classPlan.items}
+          proficiencies={classPlan.proficiencies}
+          equipmentByKey={equipmentByKey}
+          isMuted={draft.classEquipmentMode === "GOLD"}
+        />
+
+        <StartingEquipmentReceiveCard
+          title="Pacote do antecedente"
+          items={backgroundPlan.items}
+          proficiencies={backgroundPlan.proficiencies}
+          equipmentByKey={equipmentByKey}
+          isMuted={draft.backgroundEquipmentMode === "GOLD"}
+        />
+      </div>
+
+      {missingPreviewItemKeys.length > 0 ? (
+        <p className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-xs font-bold leading-relaxed text-red-200">
+          Alguns itens do pacote não foram encontrados no sistema:{" "}
+          {missingPreviewItemKeys.join(", ")}. Rode o seed atualizado antes de
+          testar a persistência.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function StartingEquipmentMetricCard({
+  label,
+  value,
+  title,
+}: {
+  label: string;
+  value: string;
+  title: string;
+}) {
+  return (
+    <div
+      className="min-w-0 rounded-xl border border-forge-gold/20 bg-black/30 px-4 py-3"
+      title={title}
+    >
+      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+        {label}
+      </p>
+
+      <p className="mt-1 text-base font-black leading-tight text-forge-gold">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function StartingEquipmentChoiceCard({
+  title,
+  subtitle,
+  description,
+  mode,
+  packageLabel,
+  goldLabel,
+  onChangeMode,
+}: {
+  title: string;
+  subtitle: string;
+  description: string;
+  mode: CharacterBuilderEquipmentMode;
+  packageLabel: string;
+  goldLabel: string;
+  onChangeMode: (mode: CharacterBuilderEquipmentMode) => void;
+}) {
+  const selectLabel =
+    title === "Classe" ? "Escolha da classe" : "Escolha do antecedente";
+
+  return (
+    <section
+      className="rounded-2xl border border-zinc-800 bg-black/20 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
+      title={description}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-forge-gold/80">
+              {selectLabel}
+            </p>
+
+            <span
+              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+              title={description}
+              aria-label={`Informação sobre ${selectLabel.toLowerCase()}`}
+            >
+              i
+            </span>
+          </div>
+
+          <h4 className="mt-2 text-lg font-black leading-tight text-zinc-100">
+            {title === "Classe"
+              ? "Como receber o pacote da classe"
+              : "Como receber o pacote do antecedente"}
+          </h4>
+        </div>
+      </div>
+
+      <label className="mt-4 block">
+        <span className="sr-only">Modo de equipamento de {title}</span>
+
+        <select
+          value={mode}
+          onChange={(event) => {
+            onChangeMode(event.target.value as CharacterBuilderEquipmentMode);
+          }}
+          className="w-full rounded-xl border border-forge-gold/40 bg-zinc-950 px-4 py-3 text-sm font-black text-zinc-100 outline-none transition hover:border-forge-gold/60 focus:border-forge-gold"
+          title="Escolha se esta parte será recebida como pacote inicial ou convertida em moedas."
+        >
+          <option value="PACKAGE">{packageLabel}</option>
+          <option value="GOLD">{goldLabel}</option>
+        </select>
+      </label>
+    </section>
+  );
+}
+
+function StartingEquipmentReceiveCard({
+  title,
+  items,
+  proficiencies,
+  equipmentByKey,
+  isMuted,
+}: {
+  title: string;
+  items: CharacterBuilderEquipmentDraftItem[];
+  proficiencies: string[];
+  equipmentByKey: Map<string, CharacterBuilderEquipmentOption>;
+  isMuted: boolean;
+}) {
+  return (
+    <section
+      className={[
+        "overflow-hidden rounded-2xl border shadow-[-4px_4px_0_rgba(0,0,0,0.22)] transition",
+        isMuted
+          ? "border-zinc-900 bg-black/10 opacity-60"
+          : "border-zinc-800 bg-black/20",
+      ].join(" ")}
+      title={
+        isMuted
+          ? `${title} não será aplicado porque a opção atual está em moedas.`
+          : `${title} será adicionado ao inventário inicial.`
+      }
+    >
+      <div className="flex items-center justify-between gap-3 border-b border-zinc-800 bg-zinc-950/35 px-4 py-3">
+        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-300">
+          {title}
+        </h4>
+      </div>
+
+      <div className="p-4">
+        {isMuted ? (
+          <p className="rounded-xl border border-zinc-800 bg-zinc-950/45 px-4 py-3 text-sm font-bold text-zinc-500">
+            Este pacote não será aplicado. A escolha atual converte esta parte
+            em moedas iniciais.
+          </p>
+        ) : items.length === 0 ? (
+          <p className="text-sm font-bold text-zinc-500">
+            Nenhum item cadastrado para este pacote.
+          </p>
+        ) : (
+          <div className="grid gap-2">
+            {items.map((item) => {
+              const equipmentItem = equipmentByKey.get(item.key);
+              const mainInfo = equipmentItem
+                ? getEquipmentMainInfo(equipmentItem)
+                : null;
+              const itemTitle = `${equipmentItem?.name ?? item.key}. ${
+                equipmentItem?.description ??
+                item.notes ??
+                "Equipamento inicial."
+              }${mainInfo ? ` ${mainInfo.label}: ${mainInfo.value}.` : ""}${
+                equipmentItem?.weight !== null &&
+                equipmentItem?.weight !== undefined
+                  ? ` Peso: ${formatEquipmentWeight(equipmentItem.weight)}.`
+                  : ""
+              }`;
+
+              return (
+                <div
+                  key={`${item.source}-${item.key}`}
+                  className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3"
+                  title={itemTitle}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-black leading-tight text-zinc-100">
+                        {equipmentItem?.name ?? item.key}
+                      </p>
+
+                      {mainInfo ? (
+                        <p
+                          className="mt-1 line-clamp-2 text-[11px] font-bold uppercase tracking-[0.12em] text-forge-gold/80"
+                          title={`${mainInfo.label}: ${mainInfo.value}`}
+                        >
+                          {mainInfo.label}: {mainInfo.value}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <span className="rounded-full border border-zinc-700 bg-black/40 px-3 py-1 text-xs font-black text-zinc-200">
+                      ×{item.quantity}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {!isMuted && proficiencies.length > 0 ? (
+          <div
+            className="mt-4 rounded-xl border border-forge-gold/20 bg-forge-gold/10 px-4 py-3"
+            title={proficiencies.join(", ")}
+          >
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-forge-gold/80">
+              Proficiências / observações
+            </p>
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
 function CharacterSpellsStep({
   spells,
   selectedClass,
@@ -3330,6 +4296,89 @@ function BuilderOptionCard({
   );
 }
 
+function StartingEquipmentSummaryPanel({
+  draft,
+  options,
+}: {
+  draft: CharacterBuilderDraft;
+  options: CharacterBuilderOptions;
+}) {
+  const previewItems = getStartingEquipmentItemsFromDraft(draft, options);
+  const previewGold = getStartingGoldFromDraft(draft, options);
+  const equipmentByKey = new Map(
+    options.equipment.map((item) => [item.key, item]),
+  );
+
+  return (
+    <div className="rounded-2xl border border-forge-gold/20 bg-black/25 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-forge-gold/80">
+            Inventário inicial
+          </p>
+
+          <p className="mt-1 text-xs font-bold text-zinc-500">
+            {previewGold} moedas
+          </p>
+        </div>
+
+        <span className="shrink-0 rounded-full border border-forge-gold/25 bg-forge-gold/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold">
+          {previewItems.length} item{previewItems.length === 1 ? "" : "s"}
+        </span>
+      </div>
+
+      <div className="mt-3 space-y-2">
+        {previewItems.length === 0 ? (
+          <p className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-3 py-2 text-xs font-bold text-zinc-500">
+            Sem itens. O personagem inicia com moedas.
+          </p>
+        ) : (
+          previewItems.slice(0, 5).map((item) => {
+            const equipmentItem = equipmentByKey.get(item.key);
+            const sourceLabel =
+              item.source === "class" ? "Classe" : "Antecedente";
+
+            return (
+              <div
+                key={`${item.source}-${item.key}`}
+                className="rounded-xl border border-zinc-800 bg-zinc-950/55 px-3 py-2"
+                title={
+                  equipmentItem?.description ??
+                  item.notes ??
+                  "Equipamento inicial."
+                }
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-xs font-black text-zinc-100">
+                      {equipmentItem?.name ?? item.key}
+                    </p>
+
+                    <p className="mt-1 text-[9px] font-black uppercase tracking-[0.12em] text-zinc-600">
+                      {sourceLabel}
+                    </p>
+                  </div>
+
+                  <span className="shrink-0 rounded-full bg-zinc-800 px-2 py-1 text-[10px] font-black text-zinc-200">
+                    ×{item.quantity}
+                  </span>
+                </div>
+              </div>
+            );
+          })
+        )}
+
+        {previewItems.length > 5 ? (
+          <p className="text-xs font-bold text-zinc-500">
+            +{previewItems.length - 5} item
+            {previewItems.length - 5 === 1 ? "" : "s"}
+          </p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 function BuilderSummaryRow({ label, value }: BuilderSummaryRowProps) {
   return (
     <div className="flex items-center justify-between gap-4 rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3">
@@ -3383,6 +4432,10 @@ export default function CampaignPlayPage() {
       attributes: DEFAULT_CHARACTER_ATTRIBUTES,
       skillKeys: [],
       spellKeys: [],
+      equipmentItems: [],
+      classEquipmentMode: "PACKAGE",
+      backgroundEquipmentMode: "PACKAGE",
+      startingGold: 0,
     });
   const [savedCharacterSheetId, setSavedCharacterSheetId] = useState<
     string | null
@@ -3401,6 +4454,7 @@ export default function CampaignPlayPage() {
       backgrounds: [],
       skills: [],
       spells: [],
+      equipment: [],
     });
   const [
     isLoadingCharacterBuilderOptions,
@@ -4264,6 +5318,7 @@ export default function CampaignPlayPage() {
         backgrounds: data.backgrounds ?? [],
         skills: data.skills ?? [],
         spells: data.spells ?? [],
+        equipment: data.equipment ?? [],
       });
     } catch (error) {
       setCharacterBuilderOptionsError(
@@ -4335,6 +5390,18 @@ export default function CampaignPlayPage() {
                 key: string;
               };
             }>;
+            equipment?: Array<{
+              quantity: number;
+              source: string | null;
+              notes: string | null;
+              isEquipped: boolean;
+              equipment: {
+                key: string;
+              };
+            }>;
+            classEquipmentMode?: string | null;
+            backgroundEquipmentMode?: string | null;
+            startingGold?: number | null;
             updatedAt?: string;
             createdAt?: string;
           }) => sheet.status === "DRAFT",
@@ -4383,6 +5450,16 @@ export default function CampaignPlayPage() {
         attributes: getCharacterAttributesFromStats(draftSheet.stats),
         skillKeys: getCharacterSkillKeysFromSkills(draftSheet.skills),
         spellKeys: getCharacterSpellKeysFromSpells(draftSheet.spells),
+        equipmentItems: getCharacterEquipmentItemsFromEquipment(
+          draftSheet.equipment,
+        ),
+        classEquipmentMode: normalizeCharacterEquipmentMode(
+          draftSheet.classEquipmentMode,
+        ),
+        backgroundEquipmentMode: normalizeCharacterEquipmentMode(
+          draftSheet.backgroundEquipmentMode,
+        ),
+        startingGold: draftSheet.startingGold ?? 0,
       });
 
       setCharacterDraftSaveSuccess("Rascunho carregado.");
@@ -4493,6 +5570,17 @@ export default function CampaignPlayPage() {
           ),
           skillKeys: characterBuilderDraft.skillKeys,
           spellKeys: characterBuilderDraft.spellKeys,
+          equipmentItems: getStartingEquipmentItemsFromDraft(
+            characterBuilderDraft,
+            characterBuilderOptions,
+          ),
+          classEquipmentMode: characterBuilderDraft.classEquipmentMode,
+          backgroundEquipmentMode:
+            characterBuilderDraft.backgroundEquipmentMode,
+          startingGold: getStartingGoldFromDraft(
+            characterBuilderDraft,
+            characterBuilderOptions,
+          ),
         }),
       });
 

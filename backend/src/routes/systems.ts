@@ -180,6 +180,20 @@ export async function systemRoutes(app: FastifyInstance) {
               requiresConcentration: z.boolean(),
             }),
           ),
+          equipment: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              category: z.string(),
+              damage: z.string().nullable(),
+              defense: z.number().nullable(),
+              cost: z.string().nullable(),
+              weight: z.number().nullable(),
+              properties: z.string().nullable(),
+            }),
+          ),
         }),
         401: z.object({
           message: z.string(),
@@ -218,7 +232,7 @@ export async function systemRoutes(app: FastifyInstance) {
         });
       }
 
-      const [classes, ancestries, backgrounds, skills, spells] =
+      const [classes, ancestries, backgrounds, skills, spells, equipment] =
         await Promise.all([
           prisma.characterClass.findMany({
             where: {
@@ -322,6 +336,35 @@ export async function systemRoutes(app: FastifyInstance) {
               requiresConcentration: true,
             },
           }),
+
+          prisma.equipment.findMany({
+            where: {
+              systemId,
+            },
+            orderBy: [
+              {
+                category: "asc",
+              },
+              {
+                order: "asc",
+              },
+              {
+                name: "asc",
+              },
+            ],
+            select: {
+              id: true,
+              key: true,
+              name: true,
+              description: true,
+              category: true,
+              damage: true,
+              defense: true,
+              cost: true,
+              weight: true,
+              properties: true,
+            },
+          }),
         ]);
 
       const normalizedSpells = spells.map((spell) => {
@@ -349,6 +392,21 @@ export async function systemRoutes(app: FastifyInstance) {
         };
       });
 
+      const normalizedEquipment = equipment.map((item) => {
+        return {
+          id: item.id,
+          key: item.key,
+          name: item.name,
+          description: item.description,
+          category: String(item.category),
+          damage: item.damage,
+          defense: item.defense,
+          cost: item.cost,
+          weight: item.weight,
+          properties: item.properties,
+        };
+      });
+
       return reply.status(200).send({
         system,
         classes,
@@ -356,6 +414,7 @@ export async function systemRoutes(app: FastifyInstance) {
         backgrounds,
         skills,
         spells: normalizedSpells,
+        equipment: normalizedEquipment,
       });
     },
   });

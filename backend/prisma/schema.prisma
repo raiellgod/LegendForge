@@ -271,9 +271,12 @@ model CharacterSheet {
   hitPoints    Int     @default(0)
   maxHitPoints Int     @default(0)
   temporaryHp  Int     @default(0)
-  armorClass   Int     @default(10)
-  speed        Int     @default(30)
-  inspiration  Boolean @default(false)
+  armorClass              Int     @default(10)
+  speed                   Int     @default(30)
+  inspiration             Boolean @default(false)
+  classEquipmentMode      String  @default("PACKAGE")
+  backgroundEquipmentMode String  @default("PACKAGE")
+  startingGold            Int     @default(0)
 
   alignment String?
   faith     String?

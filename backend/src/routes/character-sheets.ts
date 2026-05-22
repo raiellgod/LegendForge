@@ -21,6 +21,17 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
   const characterSkillKeysSchema = z.array(z.string()).optional();
   const characterSpellKeysSchema = z.array(z.string()).optional();
+  const characterEquipmentItemsSchema = z
+    .array(
+      z.object({
+        key: z.string().min(1),
+        quantity: z.number().int().min(1).max(99).default(1),
+        source: z.string().max(80).optional(),
+        notes: z.string().max(200).optional(),
+        isEquipped: z.boolean().optional(),
+      }),
+    )
+    .optional();
 
   type CharacterAttributeKey =
     | "strength"
@@ -292,6 +303,142 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ]);
   }
 
+  async function getCharacterEquipmentEntries(
+    systemId: string,
+    equipmentItems: z.infer<typeof characterEquipmentItemsSchema>,
+  ) {
+    if (!equipmentItems) {
+      return {
+        entries: [] as Array<{
+          equipmentId: string;
+          quantity: number;
+          source: string | null;
+          notes: string | null;
+          isEquipped: boolean;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const normalizedItems = equipmentItems.map((item) => ({
+      key: item.key,
+      quantity: item.quantity,
+      source: item.source?.trim() || "builder",
+      notes: item.notes?.trim() || null,
+      isEquipped: item.isEquipped ?? false,
+    }));
+
+    if (normalizedItems.length === 0) {
+      return {
+        entries: [] as Array<{
+          equipmentId: string;
+          quantity: number;
+          source: string | null;
+          notes: string | null;
+          isEquipped: boolean;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const uniqueEquipmentKeys = Array.from(
+      new Set(normalizedItems.map((item) => item.key)),
+    );
+
+    const equipment = await prisma.equipment.findMany({
+      where: {
+        systemId,
+        key: {
+          in: uniqueEquipmentKeys,
+        },
+      },
+      select: {
+        id: true,
+        key: true,
+      },
+    });
+
+    const equipmentByKey = new Map(equipment.map((item) => [item.key, item]));
+
+    const missingEquipmentKey = uniqueEquipmentKeys.find(
+      (equipmentKey) => !equipmentByKey.has(equipmentKey),
+    );
+
+    if (missingEquipmentKey) {
+      return {
+        entries: [],
+        error: `Equipment ${missingEquipmentKey} not found for this system`,
+      };
+    }
+
+    const groupedItems = new Map<
+      string,
+      {
+        equipmentId: string;
+        quantity: number;
+        source: string | null;
+        notes: string | null;
+        isEquipped: boolean;
+      }
+    >();
+
+    for (const item of normalizedItems) {
+      const equipmentId = equipmentByKey.get(item.key)!.id;
+      const currentItem = groupedItems.get(equipmentId);
+
+      if (currentItem) {
+        currentItem.quantity += item.quantity;
+        currentItem.isEquipped = currentItem.isEquipped || item.isEquipped;
+        continue;
+      }
+
+      groupedItems.set(equipmentId, {
+        equipmentId,
+        quantity: item.quantity,
+        source: item.source,
+        notes: item.notes,
+        isEquipped: item.isEquipped,
+      });
+    }
+
+    return {
+      entries: Array.from(groupedItems.values()),
+      error: null,
+    };
+  }
+
+  async function replaceCharacterSheetEquipment(
+    characterSheetId: string,
+    entries: Array<{
+      equipmentId: string;
+      quantity: number;
+      source: string | null;
+      notes: string | null;
+      isEquipped: boolean;
+    }>,
+  ) {
+    await prisma.$transaction([
+      prisma.characterSheetEquipment.deleteMany({
+        where: {
+          characterSheetId,
+        },
+      }),
+
+      ...entries.map((entry) =>
+        prisma.characterSheetEquipment.create({
+          data: {
+            characterSheetId,
+            equipmentId: entry.equipmentId,
+            quantity: entry.quantity,
+            source: entry.source,
+            notes: entry.notes,
+            isEquipped: entry.isEquipped,
+          },
+        }),
+      ),
+    ]);
+  }
+
   const characterSheetInclude = {
     campaignActor: true,
     system: true,
@@ -399,6 +546,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           spells: {
             include: {
               spell: true,
+            },
+          },
+          equipment: {
+            include: {
+              equipment: true,
             },
           },
         },
@@ -516,6 +668,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           attributes: characterAttributesSchema,
           skillKeys: characterSkillKeysSchema,
           spellKeys: characterSpellKeysSchema,
+          equipmentItems: characterEquipmentItemsSchema,
+          classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
+          backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
+          startingGold: z.number().int().min(0).optional(),
         }),
       },
     },
@@ -545,6 +701,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         attributes,
         skillKeys,
         spellKeys,
+        equipmentItems,
+        classEquipmentMode,
+        backgroundEquipmentMode,
+        startingGold,
       } = request.body;
 
       const campaign = await prisma.campaign.findFirst({
@@ -706,6 +866,17 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const equipmentEntriesResult = await getCharacterEquipmentEntries(
+        systemId,
+        equipmentItems,
+      );
+
+      if (equipmentEntriesResult.error) {
+        return reply.status(400).send({
+          message: equipmentEntriesResult.error,
+        });
+      }
+
       const characterSheet = await prisma.characterSheet.create({
         data: {
           campaignId,
@@ -723,6 +894,9 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           portraitUrl: portraitUrl?.trim() || null,
           tokenImageUrl: tokenImageUrl?.trim() || null,
           tokenImageFit: tokenImageFit ?? "FILL",
+          classEquipmentMode: classEquipmentMode ?? "PACKAGE",
+          backgroundEquipmentMode: backgroundEquipmentMode ?? "PACKAGE",
+          startingGold: startingGold ?? 0,
         },
       });
 
@@ -742,6 +916,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         await replaceCharacterSheetSpells(
           characterSheet.id,
           spellEntriesResult.entries,
+        );
+      }
+
+      if (equipmentItems !== undefined) {
+        await replaceCharacterSheetEquipment(
+          characterSheet.id,
+          equipmentEntriesResult.entries,
         );
       }
 
@@ -798,6 +979,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             attributes: characterAttributesSchema,
             skillKeys: characterSkillKeysSchema,
             spellKeys: characterSpellKeysSchema,
+            equipmentItems: characterEquipmentItemsSchema,
+            classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
+            backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
+            startingGold: z.number().int().min(0).optional(),
 
             level: z.number().int().min(1).max(20).optional(),
             experience: z.number().int().min(0).optional(),
@@ -845,7 +1030,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       const { campaignId, sheetId } = request.params;
-      const { attributes, skillKeys, spellKeys, ...sheetData } = request.body;
+      const { attributes, skillKeys, spellKeys, equipmentItems, ...sheetData } =
+        request.body;
 
       const campaign = await prisma.campaign.findFirst({
         where: {
@@ -1001,6 +1187,17 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const equipmentEntriesResult = await getCharacterEquipmentEntries(
+        characterSheet.systemId,
+        equipmentItems,
+      );
+
+      if (equipmentEntriesResult.error) {
+        return reply.status(400).send({
+          message: equipmentEntriesResult.error,
+        });
+      }
+
       const sanitizedData = {
         ...sheetData,
         pronouns:
@@ -1112,6 +1309,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         await replaceCharacterSheetSpells(
           sheetId,
           spellEntriesResult.entries,
+        );
+      }
+
+      if (equipmentItems !== undefined) {
+        await replaceCharacterSheetEquipment(
+          sheetId,
+          equipmentEntriesResult.entries,
         );
       }
 
