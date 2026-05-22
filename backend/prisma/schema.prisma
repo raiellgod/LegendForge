@@ -266,11 +266,11 @@ model CharacterSheet {
   tokenImageUrl String?
   tokenImageFit String  @default("COVER")
 
-  level        Int     @default(1)
-  experience   Int     @default(0)
-  hitPoints    Int     @default(0)
-  maxHitPoints Int     @default(0)
-  temporaryHp  Int     @default(0)
+  level                   Int     @default(1)
+  experience              Int     @default(0)
+  hitPoints               Int     @default(0)
+  maxHitPoints            Int     @default(0)
+  temporaryHp             Int     @default(0)
   armorClass              Int     @default(10)
   speed                   Int     @default(30)
   inspiration             Boolean @default(false)

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, PointerEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, PointerEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -797,6 +797,26 @@ type CharacterBuilderDraft = {
   classEquipmentMode: CharacterBuilderEquipmentMode;
   backgroundEquipmentMode: CharacterBuilderEquipmentMode;
   startingGold: number;
+
+  alignment: string;
+  faith: string;
+  lifestyle: string;
+
+  hair: string;
+  skin: string;
+  eyes: string;
+  height: string;
+  weight: string;
+  age: string;
+  gender: string;
+
+  bonds: string;
+  flaws: string;
+  ideals: string;
+  personality: string;
+  backstory: string;
+  notes: string;
+  gmNotes: string;
 };
 
 type CharacterBuilderOption = {
@@ -2232,6 +2252,11 @@ function CharacterBuilderModal({
                         updateDraft(key, value);
                       }}
                     />
+                  ) : activeStep.id === "about" ? (
+                    <CharacterAboutStep
+                      draft={draft}
+                      onChangeDraftField={updateDraft}
+                    />
                   ) : (
                     <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
                       <p className="text-lg font-black text-zinc-100">
@@ -2337,6 +2362,10 @@ function CharacterBuilderModal({
                         draft={draft}
                         options={options}
                       />
+                    ) : null}
+
+                    {activeStep.id === "about" ? (
+                      <CharacterAboutSummaryPanel draft={draft} />
                     ) : null}
 
                     <BuilderSummaryRow label="Nível" value="1" />
@@ -3255,6 +3284,515 @@ function CharacterSpellCard({
   );
 }
 
+
+const PRONOUN_OPTIONS = ["ela / dela", "ele / dele", "elu / delu"];
+
+const ALIGNMENT_OPTIONS = [
+  "Lawful Good",
+  "Neutral Good",
+  "Chaotic Good",
+  "Lawful Neutral",
+  "True Neutral",
+  "Chaotic Neutral",
+  "Lawful Evil",
+  "Neutral Evil",
+  "Chaotic Evil",
+];
+
+const GENDER_OPTIONS = ["Masculino", "Feminino", "Não binário"];
+
+const LIFESTYLE_OPTIONS = [
+  "Miserável",
+  "Pobre",
+  "Modesto",
+  "Confortável",
+  "Rico",
+  "Aristocrático",
+  "Nômade",
+  "Militar",
+  "Clandestino",
+];
+
+function hasAboutValue(value: string) {
+  return value.trim().length > 0;
+}
+
+function countFilledAboutFields(draft: CharacterBuilderDraft) {
+  const fields = [
+    draft.pronouns,
+    draft.concept,
+    draft.alignment,
+    draft.faith,
+    draft.lifestyle,
+    draft.hair,
+    draft.skin,
+    draft.eyes,
+    draft.height,
+    draft.weight,
+    draft.age,
+    draft.gender,
+    draft.bonds,
+    draft.flaws,
+    draft.ideals,
+    draft.personality,
+    draft.backstory,
+    draft.notes,
+    draft.gmNotes,
+  ];
+
+  return fields.filter(hasAboutValue).length;
+}
+
+function getPhysicalSummary(draft: CharacterBuilderDraft) {
+  const values = [
+    draft.hair ? `Cabelo: ${draft.hair}` : "",
+    draft.skin ? `Pele: ${draft.skin}` : "",
+    draft.eyes ? `Olhos: ${draft.eyes}` : "",
+    draft.height ? `Altura: ${draft.height}` : "",
+    draft.weight ? `Peso: ${draft.weight}` : "",
+    draft.age ? `Idade: ${draft.age}` : "",
+    draft.gender ? `Gênero: ${draft.gender}` : "",
+  ].filter(Boolean);
+
+  return values.length > 0 ? values.join(" • ") : "Não definida";
+}
+
+function getNarrativeSummary(draft: CharacterBuilderDraft) {
+  const values = [
+    draft.alignment ? `Alinhamento: ${draft.alignment}` : "",
+    draft.faith ? `Fé: ${draft.faith}` : "",
+    draft.lifestyle ? `Estilo: ${draft.lifestyle}` : "",
+  ].filter(Boolean);
+
+  return values.length > 0 ? values.join(" • ") : "Não definida";
+}
+
+function CharacterAboutSummaryPanel({
+  draft,
+}: {
+  draft: CharacterBuilderDraft;
+}) {
+  const filledFieldsCount = countFilledAboutFields(draft);
+
+  return (
+    <div className="rounded-2xl border border-forge-gold/25 bg-black/25 p-4">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold">
+          Sobre
+        </p>
+
+        <span
+          className="rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold"
+          title={`${filledFieldsCount} campos narrativos preenchidos.`}
+        >
+          {filledFieldsCount} campos
+        </span>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        <div
+          className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-3 py-3"
+          title={getNarrativeSummary(draft)}
+        >
+          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
+            Identidade
+          </p>
+
+          <p className="mt-1 text-xs font-bold leading-relaxed text-zinc-200">
+            {getNarrativeSummary(draft)}
+          </p>
+        </div>
+
+        <div
+          className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-3 py-3"
+          title={getPhysicalSummary(draft)}
+        >
+          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
+            Aparência
+          </p>
+
+          <p className="mt-1 text-xs font-bold leading-relaxed text-zinc-200">
+            {getPhysicalSummary(draft)}
+          </p>
+        </div>
+
+        <div
+          className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-3 py-3"
+          title={draft.backstory || "História ainda não preenchida."}
+        >
+          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
+            História
+          </p>
+
+          <p className="mt-1 line-clamp-4 text-xs font-bold leading-relaxed text-zinc-200">
+            {draft.backstory || "Ainda sem história."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type CharacterAboutInputFieldProps = {
+  label: string;
+  value: string;
+  placeholder: string;
+  title: string;
+  onChange: (value: string) => void;
+};
+
+function CharacterAboutInputField({
+  label,
+  value,
+  placeholder,
+  title,
+  onChange,
+}: CharacterAboutInputFieldProps) {
+  return (
+    <label className="block" title={title}>
+      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500">
+        {label}
+      </span>
+
+      <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-sm font-bold text-zinc-100 outline-none transition placeholder:text-zinc-600 hover:border-forge-gold/40 focus:border-forge-gold"
+      />
+    </label>
+  );
+}
+
+type CharacterAboutTextareaFieldProps = {
+  label: string;
+  value: string;
+  placeholder: string;
+  title: string;
+  rows?: number;
+  onChange: (value: string) => void;
+};
+
+function CharacterAboutTextareaField({
+  label,
+  value,
+  placeholder,
+  title,
+  rows = 4,
+  onChange,
+}: CharacterAboutTextareaFieldProps) {
+  return (
+    <label className="block" title={title}>
+      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500">
+        {label}
+      </span>
+
+      <textarea
+        value={value}
+        rows={rows}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        className="mt-2 w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-sm font-bold leading-relaxed text-zinc-100 outline-none transition placeholder:text-zinc-600 hover:border-forge-gold/40 focus:border-forge-gold"
+      />
+    </label>
+  );
+}
+
+function CharacterAboutSelectField({
+  label,
+  value,
+  placeholder,
+  title,
+  options,
+  optionTitles,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  placeholder: string;
+  title: string;
+  options: string[];
+  optionTitles?: Record<string, string>;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="block" title={title}>
+      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500">
+        {label}
+      </span>
+
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-sm font-bold text-zinc-100 outline-none transition hover:border-forge-gold/40 focus:border-forge-gold"
+      >
+        <option value="">{placeholder}</option>
+
+        {options.map((option) => (
+          <option key={option} value={option} title={optionTitles?.[option]}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function CharacterAboutSection({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description: string;
+  children: ReactNode;
+}) {
+  return (
+    <section
+      className="rounded-2xl border border-zinc-800 bg-black/20 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
+      title={description}
+    >
+      <div className="flex items-center gap-2 border-b border-zinc-800 pb-3">
+        <h4 className="text-sm font-black uppercase tracking-[0.22em] text-forge-gold">
+          {title}
+        </h4>
+
+        <span
+          className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+          title={description}
+          aria-label={`Informação sobre ${title}`}
+        >
+          i
+        </span>
+      </div>
+
+      <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+type CharacterAboutStepProps = {
+  draft: CharacterBuilderDraft;
+  onChangeDraftField: <K extends keyof CharacterBuilderDraft>(
+    key: K,
+    value: CharacterBuilderDraft[K],
+  ) => void;
+};
+
+function CharacterAboutStep({
+  draft,
+  onChangeDraftField,
+}: CharacterAboutStepProps) {
+  return (
+    <div className="mt-5 space-y-4">
+      <CharacterAboutSection
+        title="Identidade"
+        description="Campos para definir a identidade social, crenças e modo de vida do personagem."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <CharacterAboutSelectField
+            label="Pronomes"
+            value={draft.pronouns}
+            placeholder="Escolha os pronomes"
+            title="Como o personagem prefere ser chamado."
+            options={PRONOUN_OPTIONS}
+            onChange={(value) => onChangeDraftField("pronouns", value)}
+          />
+
+                   <CharacterAboutSelectField
+            label="Alinhamento"
+            value={draft.alignment}
+            placeholder="Choose an alignment"
+            title="Tendência moral e ética geral do personagem. Lawful = leal/ordeiro; Neutral = neutro; Chaotic = caótico; Good = bom; Evil = mau."
+            options={ALIGNMENT_OPTIONS}
+            optionTitles={{
+              "Lawful Good": "Leal e Bom: segue códigos, honra e busca fazer o bem.",
+              "Neutral Good": "Neutro e Bom: faz o bem sem depender tanto de leis ou caos.",
+              "Chaotic Good": "Caótico e Bom: valoriza liberdade e faz o bem fora das regras.",
+              "Lawful Neutral": "Leal e Neutro: prioriza ordem, tradição ou código.",
+              "True Neutral": "Neutro: busca equilíbrio, pragmatismo ou distância moral.",
+              "Chaotic Neutral": "Caótico e Neutro: prioriza liberdade, impulso ou independência.",
+              "Lawful Evil": "Leal e Mau: usa ordem, poder e regras para benefício próprio.",
+              "Neutral Evil": "Neutro e Mau: age por interesse próprio sem grande código moral.",
+              "Chaotic Evil": "Caótico e Mau: destrutivo, cruel ou guiado por impulsos sombrios.",
+            }}
+            onChange={(value) => onChangeDraftField("alignment", value)}
+          />
+
+          <CharacterAboutInputField
+            label="Fé"
+            value={draft.faith}
+            placeholder="Divindade, ideal, ordem ou crença..."
+            title="Crença, fé, filosofia ou força simbólica que guia o personagem."
+            onChange={(value) => onChangeDraftField("faith", value)}
+          />
+
+                    <CharacterAboutSelectField
+            label="Estilo de vida"
+            value={draft.lifestyle}
+            placeholder="Escolha um estilo de vida"
+            title="Condição social e modo de vida predominante do personagem. Exemplo: Pobre vive com poucos recursos; Confortável tem rotina estável; Aristocrático circula entre elites."
+            options={LIFESTYLE_OPTIONS}
+            optionTitles={{
+              Miserável: "Vive no limite da sobrevivência, sem moradia ou recursos estáveis.",
+              Pobre: "Tem poucos recursos e precisa escolher bem onde gastar.",
+              Modesto: "Vida simples, funcional e sem luxo.",
+              Confortável: "Rotina estável, abrigo seguro e recursos suficientes.",
+              Rico: "Acesso constante a conforto, contatos e recursos.",
+              Aristocrático: "Ligado a nobreza, elite, títulos ou círculos de poder.",
+              Nômade: "Vive em movimento, sem residência fixa.",
+              Militar: "Vida estruturada por hierarquia, disciplina ou serviço armado.",
+              Clandestino: "Vive escondido, à margem da lei ou sob identidade discreta.",
+            }}
+            onChange={(value) => onChangeDraftField("lifestyle", value)}
+          />
+        </div>
+      </CharacterAboutSection>
+
+      <CharacterAboutSection
+        title="Aparência"
+        description="Características físicas usadas para descrever o personagem na mesa."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <CharacterAboutInputField
+            label="Cabelo"
+            value={draft.hair}
+            placeholder="Cor, corte, textura..."
+            title="Descrição do cabelo ou ausência dele."
+            onChange={(value) => onChangeDraftField("hair", value)}
+          />
+
+          <CharacterAboutInputField
+            label="Pele"
+            value={draft.skin}
+            placeholder="Tom, marcas, cicatrizes..."
+            title="Descrição da pele, marcas visíveis ou características de mutação."
+            onChange={(value) => onChangeDraftField("skin", value)}
+          />
+
+          <CharacterAboutInputField
+            label="Olhos"
+            value={draft.eyes}
+            placeholder="Cor, brilho, anomalias..."
+            title="Descrição dos olhos do personagem."
+            onChange={(value) => onChangeDraftField("eyes", value)}
+          />
+
+          <CharacterAboutInputField
+            label="Altura"
+            value={draft.height}
+            placeholder="Ex.: 1,78 m"
+            title="Altura aproximada do personagem."
+            onChange={(value) => onChangeDraftField("height", value)}
+          />
+
+          <CharacterAboutInputField
+            label="Peso"
+            value={draft.weight}
+            placeholder="Ex.: 78 kg"
+            title="Peso aproximado do personagem."
+            onChange={(value) => onChangeDraftField("weight", value)}
+          />
+
+          <CharacterAboutInputField
+            label="Idade"
+            value={draft.age}
+            placeholder="Ex.: 28 anos"
+            title="Idade aparente ou real do personagem."
+            onChange={(value) => onChangeDraftField("age", value)}
+          />
+
+          <CharacterAboutSelectField
+            label="Gênero"
+            value={draft.gender}
+            placeholder="Escolha um gênero"
+            title="Gênero, identidade ou apresentação do personagem."
+            options={GENDER_OPTIONS}
+            onChange={(value) => onChangeDraftField("gender", value)}
+          />
+        </div>
+      </CharacterAboutSection>
+
+      <CharacterAboutSection
+        title="Personalidade"
+        description="Traços narrativos usados para interpretar vínculos, ideais, defeitos e comportamento."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <CharacterAboutTextareaField
+            label="Vínculos"
+            value={draft.bonds}
+            placeholder="Pessoas, lugares, promessas ou deveres importantes..."
+            title="Laços que conectam o personagem ao mundo."
+            rows={3}
+            onChange={(value) => onChangeDraftField("bonds", value)}
+          />
+
+          <CharacterAboutTextareaField
+            label="Defeitos"
+            value={draft.flaws}
+            placeholder="Medos, vícios, fraquezas ou conflitos internos..."
+            title="Falhas que podem gerar conflito dramático."
+            rows={3}
+            onChange={(value) => onChangeDraftField("flaws", value)}
+          />
+
+          <CharacterAboutTextareaField
+            label="Ideais"
+            value={draft.ideals}
+            placeholder="Princípios, sonhos ou causas..."
+            title="Valores que guiam as decisões do personagem."
+            rows={3}
+            onChange={(value) => onChangeDraftField("ideals", value)}
+          />
+
+          <CharacterAboutTextareaField
+            label="Traços"
+            value={draft.personality}
+            placeholder="Como o personagem age, fala e reage..."
+            title="Traços de personalidade usados na interpretação."
+            rows={3}
+            onChange={(value) => onChangeDraftField("personality", value)}
+          />
+        </div>
+      </CharacterAboutSection>
+
+      <CharacterAboutSection
+        title="História e notas"
+        description="Campos narrativos longos para história, observações e anotações reservadas."
+      >
+        <div className="space-y-4">
+          <CharacterAboutTextareaField
+            label="História"
+            value={draft.backstory}
+            placeholder="Conte a origem, perdas, objetivos e conflitos do personagem..."
+            title="História principal do personagem antes da campanha."
+            rows={5}
+            onChange={(value) => onChangeDraftField("backstory", value)}
+          />
+
+          <CharacterAboutTextareaField
+            label="Notas"
+            value={draft.notes}
+            placeholder="Anotações públicas ou úteis para jogar..."
+            title="Notas gerais da ficha."
+            rows={4}
+            onChange={(value) => onChangeDraftField("notes", value)}
+          />
+
+          <CharacterAboutTextareaField
+            label="Notas do mestre"
+            value={draft.gmNotes}
+            placeholder="Segredos, ganchos ou informações reservadas..."
+            title="Notas reservadas para o mestre ou para desenvolvimento futuro."
+            rows={4}
+            onChange={(value) => onChangeDraftField("gmNotes", value)}
+          />
+        </div>
+      </CharacterAboutSection>
+    </div>
+  );
+}
+
 type CharacterEquipmentStepProps = {
   equipment: CharacterBuilderEquipmentOption[];
   selectedClass: CharacterBuilderClassOption | undefined;
@@ -4070,20 +4608,28 @@ function CharacterConceptStep({
           />
         </label>
 
-        <label className="space-y-2">
-          <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-            Pronomes
-          </span>
+<label className="block space-y-2">
+  <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
+    Pronomes
+  </span>
 
-          <input
-            value={draft.pronouns}
-            onChange={(event) =>
-              onChangeDraftField("pronouns", event.target.value)
-            }
-            placeholder="Ex: ela/dela, ele/dele, elu/delu"
-            className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
-          />
-        </label>
+  <select
+    value={draft.pronouns}
+    onChange={(event) =>
+      onChangeDraftField("pronouns", event.target.value)
+    }
+    title="Como o personagem prefere ser chamado."
+    className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition hover:border-forge-gold/40 focus:border-amber-300"
+  >
+    <option value="">Escolha os pronomes</option>
+
+    {PRONOUN_OPTIONS.map((option) => (
+      <option key={option} value={option}>
+        {option}
+      </option>
+    ))}
+  </select>
+</label>
       </div>
 
       <label className="block space-y-2">
@@ -4436,6 +4982,26 @@ export default function CampaignPlayPage() {
       classEquipmentMode: "PACKAGE",
       backgroundEquipmentMode: "PACKAGE",
       startingGold: 0,
+
+      alignment: "",
+      faith: "",
+      lifestyle: "",
+
+      hair: "",
+      skin: "",
+      eyes: "",
+      height: "",
+      weight: "",
+      age: "",
+      gender: "",
+
+      bonds: "",
+      flaws: "",
+      ideals: "",
+      personality: "",
+      backstory: "",
+      notes: "",
+      gmNotes: "",
     });
   const [savedCharacterSheetId, setSavedCharacterSheetId] = useState<
     string | null
@@ -5402,6 +5968,27 @@ export default function CampaignPlayPage() {
             classEquipmentMode?: string | null;
             backgroundEquipmentMode?: string | null;
             startingGold?: number | null;
+
+            alignment?: string | null;
+            faith?: string | null;
+            lifestyle?: string | null;
+
+            hair?: string | null;
+            skin?: string | null;
+            eyes?: string | null;
+            height?: string | null;
+            weight?: string | null;
+            age?: string | null;
+            gender?: string | null;
+
+            bonds?: string | null;
+            flaws?: string | null;
+            ideals?: string | null;
+            personality?: string | null;
+            backstory?: string | null;
+            notes?: string | null;
+            gmNotes?: string | null;
+
             updatedAt?: string;
             createdAt?: string;
           }) => sheet.status === "DRAFT",
@@ -5460,6 +6047,26 @@ export default function CampaignPlayPage() {
           draftSheet.backgroundEquipmentMode,
         ),
         startingGold: draftSheet.startingGold ?? 0,
+
+        alignment: draftSheet.alignment ?? "",
+        faith: draftSheet.faith ?? "",
+        lifestyle: draftSheet.lifestyle ?? "",
+
+        hair: draftSheet.hair ?? "",
+        skin: draftSheet.skin ?? "",
+        eyes: draftSheet.eyes ?? "",
+        height: draftSheet.height ?? "",
+        weight: draftSheet.weight ?? "",
+        age: draftSheet.age ?? "",
+        gender: draftSheet.gender ?? "",
+
+        bonds: draftSheet.bonds ?? "",
+        flaws: draftSheet.flaws ?? "",
+        ideals: draftSheet.ideals ?? "",
+        personality: draftSheet.personality ?? "",
+        backstory: draftSheet.backstory ?? "",
+        notes: draftSheet.notes ?? "",
+        gmNotes: draftSheet.gmNotes ?? "",
       });
 
       setCharacterDraftSaveSuccess("Rascunho carregado.");
@@ -5581,6 +6188,26 @@ export default function CampaignPlayPage() {
             characterBuilderDraft,
             characterBuilderOptions,
           ),
+
+          alignment: characterBuilderDraft.alignment.trim(),
+          faith: characterBuilderDraft.faith.trim(),
+          lifestyle: characterBuilderDraft.lifestyle.trim(),
+
+          hair: characterBuilderDraft.hair.trim(),
+          skin: characterBuilderDraft.skin.trim(),
+          eyes: characterBuilderDraft.eyes.trim(),
+          height: characterBuilderDraft.height.trim(),
+          weight: characterBuilderDraft.weight.trim(),
+          age: characterBuilderDraft.age.trim(),
+          gender: characterBuilderDraft.gender.trim(),
+
+          bonds: characterBuilderDraft.bonds.trim(),
+          flaws: characterBuilderDraft.flaws.trim(),
+          ideals: characterBuilderDraft.ideals.trim(),
+          personality: characterBuilderDraft.personality.trim(),
+          backstory: characterBuilderDraft.backstory.trim(),
+          notes: characterBuilderDraft.notes.trim(),
+          gmNotes: characterBuilderDraft.gmNotes.trim(),
         }),
       });
 

@@ -34,6 +34,7 @@ export type CharacterSheetAvgAggregateOutputType = {
   temporaryHp: number | null
   armorClass: number | null
   speed: number | null
+  startingGold: number | null
 }
 
 export type CharacterSheetSumAggregateOutputType = {
@@ -44,6 +45,7 @@ export type CharacterSheetSumAggregateOutputType = {
   temporaryHp: number | null
   armorClass: number | null
   speed: number | null
+  startingGold: number | null
 }
 
 export type CharacterSheetMinAggregateOutputType = {
@@ -71,6 +73,9 @@ export type CharacterSheetMinAggregateOutputType = {
   armorClass: number | null
   speed: number | null
   inspiration: boolean | null
+  classEquipmentMode: string | null
+  backgroundEquipmentMode: string | null
+  startingGold: number | null
   alignment: string | null
   faith: string | null
   lifestyle: string | null
@@ -117,6 +122,9 @@ export type CharacterSheetMaxAggregateOutputType = {
   armorClass: number | null
   speed: number | null
   inspiration: boolean | null
+  classEquipmentMode: string | null
+  backgroundEquipmentMode: string | null
+  startingGold: number | null
   alignment: string | null
   faith: string | null
   lifestyle: string | null
@@ -163,6 +171,9 @@ export type CharacterSheetCountAggregateOutputType = {
   armorClass: number
   speed: number
   inspiration: number
+  classEquipmentMode: number
+  backgroundEquipmentMode: number
+  startingGold: number
   alignment: number
   faith: number
   lifestyle: number
@@ -194,6 +205,7 @@ export type CharacterSheetAvgAggregateInputType = {
   temporaryHp?: true
   armorClass?: true
   speed?: true
+  startingGold?: true
 }
 
 export type CharacterSheetSumAggregateInputType = {
@@ -204,6 +216,7 @@ export type CharacterSheetSumAggregateInputType = {
   temporaryHp?: true
   armorClass?: true
   speed?: true
+  startingGold?: true
 }
 
 export type CharacterSheetMinAggregateInputType = {
@@ -231,6 +244,9 @@ export type CharacterSheetMinAggregateInputType = {
   armorClass?: true
   speed?: true
   inspiration?: true
+  classEquipmentMode?: true
+  backgroundEquipmentMode?: true
+  startingGold?: true
   alignment?: true
   faith?: true
   lifestyle?: true
@@ -277,6 +293,9 @@ export type CharacterSheetMaxAggregateInputType = {
   armorClass?: true
   speed?: true
   inspiration?: true
+  classEquipmentMode?: true
+  backgroundEquipmentMode?: true
+  startingGold?: true
   alignment?: true
   faith?: true
   lifestyle?: true
@@ -323,6 +342,9 @@ export type CharacterSheetCountAggregateInputType = {
   armorClass?: true
   speed?: true
   inspiration?: true
+  classEquipmentMode?: true
+  backgroundEquipmentMode?: true
+  startingGold?: true
   alignment?: true
   faith?: true
   lifestyle?: true
@@ -456,6 +478,9 @@ export type CharacterSheetGroupByOutputType = {
   armorClass: number
   speed: number
   inspiration: boolean
+  classEquipmentMode: string
+  backgroundEquipmentMode: string
+  startingGold: number
   alignment: string | null
   faith: string | null
   lifestyle: string | null
@@ -525,6 +550,9 @@ export type CharacterSheetWhereInput = {
   armorClass?: Prisma.IntFilter<"CharacterSheet"> | number
   speed?: Prisma.IntFilter<"CharacterSheet"> | number
   inspiration?: Prisma.BoolFilter<"CharacterSheet"> | boolean
+  classEquipmentMode?: Prisma.StringFilter<"CharacterSheet"> | string
+  backgroundEquipmentMode?: Prisma.StringFilter<"CharacterSheet"> | string
+  startingGold?: Prisma.IntFilter<"CharacterSheet"> | number
   alignment?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   faith?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   lifestyle?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
@@ -583,6 +611,9 @@ export type CharacterSheetOrderByWithRelationInput = {
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
+  classEquipmentMode?: Prisma.SortOrder
+  backgroundEquipmentMode?: Prisma.SortOrder
+  startingGold?: Prisma.SortOrder
   alignment?: Prisma.SortOrderInput | Prisma.SortOrder
   faith?: Prisma.SortOrderInput | Prisma.SortOrder
   lifestyle?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -644,6 +675,9 @@ export type CharacterSheetWhereUniqueInput = Prisma.AtLeast<{
   armorClass?: Prisma.IntFilter<"CharacterSheet"> | number
   speed?: Prisma.IntFilter<"CharacterSheet"> | number
   inspiration?: Prisma.BoolFilter<"CharacterSheet"> | boolean
+  classEquipmentMode?: Prisma.StringFilter<"CharacterSheet"> | string
+  backgroundEquipmentMode?: Prisma.StringFilter<"CharacterSheet"> | string
+  startingGold?: Prisma.IntFilter<"CharacterSheet"> | number
   alignment?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   faith?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   lifestyle?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
@@ -702,6 +736,9 @@ export type CharacterSheetOrderByWithAggregationInput = {
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
+  classEquipmentMode?: Prisma.SortOrder
+  backgroundEquipmentMode?: Prisma.SortOrder
+  startingGold?: Prisma.SortOrder
   alignment?: Prisma.SortOrderInput | Prisma.SortOrder
   faith?: Prisma.SortOrderInput | Prisma.SortOrder
   lifestyle?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -756,6 +793,9 @@ export type CharacterSheetScalarWhereWithAggregatesInput = {
   armorClass?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   speed?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   inspiration?: Prisma.BoolWithAggregatesFilter<"CharacterSheet"> | boolean
+  classEquipmentMode?: Prisma.StringWithAggregatesFilter<"CharacterSheet"> | string
+  backgroundEquipmentMode?: Prisma.StringWithAggregatesFilter<"CharacterSheet"> | string
+  startingGold?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   alignment?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
   faith?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
   lifestyle?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
@@ -795,6 +835,9 @@ export type CharacterSheetCreateInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -853,6 +896,9 @@ export type CharacterSheetUncheckedCreateInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -897,6 +943,9 @@ export type CharacterSheetUpdateInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -955,6 +1004,9 @@ export type CharacterSheetUncheckedUpdateInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1006,6 +1058,9 @@ export type CharacterSheetCreateManyInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -1045,6 +1100,9 @@ export type CharacterSheetUpdateManyMutationInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1091,6 +1149,9 @@ export type CharacterSheetUncheckedUpdateManyInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1147,6 +1208,9 @@ export type CharacterSheetCountOrderByAggregateInput = {
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
+  classEquipmentMode?: Prisma.SortOrder
+  backgroundEquipmentMode?: Prisma.SortOrder
+  startingGold?: Prisma.SortOrder
   alignment?: Prisma.SortOrder
   faith?: Prisma.SortOrder
   lifestyle?: Prisma.SortOrder
@@ -1176,6 +1240,7 @@ export type CharacterSheetAvgOrderByAggregateInput = {
   temporaryHp?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
+  startingGold?: Prisma.SortOrder
 }
 
 export type CharacterSheetMaxOrderByAggregateInput = {
@@ -1203,6 +1268,9 @@ export type CharacterSheetMaxOrderByAggregateInput = {
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
+  classEquipmentMode?: Prisma.SortOrder
+  backgroundEquipmentMode?: Prisma.SortOrder
+  startingGold?: Prisma.SortOrder
   alignment?: Prisma.SortOrder
   faith?: Prisma.SortOrder
   lifestyle?: Prisma.SortOrder
@@ -1249,6 +1317,9 @@ export type CharacterSheetMinOrderByAggregateInput = {
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
+  classEquipmentMode?: Prisma.SortOrder
+  backgroundEquipmentMode?: Prisma.SortOrder
+  startingGold?: Prisma.SortOrder
   alignment?: Prisma.SortOrder
   faith?: Prisma.SortOrder
   lifestyle?: Prisma.SortOrder
@@ -1278,6 +1349,7 @@ export type CharacterSheetSumOrderByAggregateInput = {
   temporaryHp?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
+  startingGold?: Prisma.SortOrder
 }
 
 export type CharacterSheetScalarRelationFilter = {
@@ -1668,6 +1740,9 @@ export type CharacterSheetCreateWithoutSystemInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -1724,6 +1799,9 @@ export type CharacterSheetUncheckedCreateWithoutSystemInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -1804,6 +1882,9 @@ export type CharacterSheetScalarWhereInput = {
   armorClass?: Prisma.IntFilter<"CharacterSheet"> | number
   speed?: Prisma.IntFilter<"CharacterSheet"> | number
   inspiration?: Prisma.BoolFilter<"CharacterSheet"> | boolean
+  classEquipmentMode?: Prisma.StringFilter<"CharacterSheet"> | string
+  backgroundEquipmentMode?: Prisma.StringFilter<"CharacterSheet"> | string
+  startingGold?: Prisma.IntFilter<"CharacterSheet"> | number
   alignment?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   faith?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   lifestyle?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
@@ -1843,6 +1924,9 @@ export type CharacterSheetCreateWithoutAncestryInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -1899,6 +1983,9 @@ export type CharacterSheetUncheckedCreateWithoutAncestryInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -1969,6 +2056,9 @@ export type CharacterSheetCreateWithoutBackgroundInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2025,6 +2115,9 @@ export type CharacterSheetUncheckedCreateWithoutBackgroundInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2095,6 +2188,9 @@ export type CharacterSheetCreateWithoutStatsInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2152,6 +2248,9 @@ export type CharacterSheetUncheckedCreateWithoutStatsInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2211,6 +2310,9 @@ export type CharacterSheetUpdateWithoutStatsInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2268,6 +2370,9 @@ export type CharacterSheetUncheckedUpdateWithoutStatsInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2311,6 +2416,9 @@ export type CharacterSheetCreateWithoutSkillsInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2368,6 +2476,9 @@ export type CharacterSheetUncheckedCreateWithoutSkillsInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2427,6 +2538,9 @@ export type CharacterSheetUpdateWithoutSkillsInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2484,6 +2598,9 @@ export type CharacterSheetUncheckedUpdateWithoutSkillsInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2527,6 +2644,9 @@ export type CharacterSheetCreateWithoutSpellsInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2584,6 +2704,9 @@ export type CharacterSheetUncheckedCreateWithoutSpellsInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2643,6 +2766,9 @@ export type CharacterSheetUpdateWithoutSpellsInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2700,6 +2826,9 @@ export type CharacterSheetUncheckedUpdateWithoutSpellsInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2743,6 +2872,9 @@ export type CharacterSheetCreateWithoutEquipmentInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2800,6 +2932,9 @@ export type CharacterSheetUncheckedCreateWithoutEquipmentInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -2859,6 +2994,9 @@ export type CharacterSheetUpdateWithoutEquipmentInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2916,6 +3054,9 @@ export type CharacterSheetUncheckedUpdateWithoutEquipmentInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2959,6 +3100,9 @@ export type CharacterSheetCreateWithoutCharacterClassInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3015,6 +3159,9 @@ export type CharacterSheetUncheckedCreateWithoutCharacterClassInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3085,6 +3232,9 @@ export type CharacterSheetCreateWithoutSubclassInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3141,6 +3291,9 @@ export type CharacterSheetUncheckedCreateWithoutSubclassInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3211,6 +3364,9 @@ export type CharacterSheetCreateWithoutCampaignInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3267,6 +3423,9 @@ export type CharacterSheetUncheckedCreateWithoutCampaignInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3337,6 +3496,9 @@ export type CharacterSheetCreateWithoutGameSessionsInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3394,6 +3556,9 @@ export type CharacterSheetUncheckedCreateWithoutGameSessionsInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3453,6 +3618,9 @@ export type CharacterSheetUpdateWithoutGameSessionsInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3510,6 +3678,9 @@ export type CharacterSheetUncheckedUpdateWithoutGameSessionsInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3553,6 +3724,9 @@ export type CharacterSheetCreateWithoutCampaignActorInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3609,6 +3783,9 @@ export type CharacterSheetUncheckedCreateWithoutCampaignActorInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3669,6 +3846,9 @@ export type CharacterSheetUpdateWithoutCampaignActorInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3725,6 +3905,9 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignActorInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3775,6 +3958,9 @@ export type CharacterSheetCreateManySystemInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -3814,6 +4000,9 @@ export type CharacterSheetUpdateWithoutSystemInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3870,6 +4059,9 @@ export type CharacterSheetUncheckedUpdateWithoutSystemInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3920,6 +4112,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutSystemInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3965,6 +4160,9 @@ export type CharacterSheetCreateManyAncestryInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -4004,6 +4202,9 @@ export type CharacterSheetUpdateWithoutAncestryInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4060,6 +4261,9 @@ export type CharacterSheetUncheckedUpdateWithoutAncestryInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4110,6 +4314,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutAncestryInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4155,6 +4362,9 @@ export type CharacterSheetCreateManyBackgroundInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -4194,6 +4404,9 @@ export type CharacterSheetUpdateWithoutBackgroundInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4250,6 +4463,9 @@ export type CharacterSheetUncheckedUpdateWithoutBackgroundInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4300,6 +4516,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutBackgroundInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4345,6 +4564,9 @@ export type CharacterSheetCreateManyCharacterClassInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -4384,6 +4606,9 @@ export type CharacterSheetUpdateWithoutCharacterClassInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4440,6 +4665,9 @@ export type CharacterSheetUncheckedUpdateWithoutCharacterClassInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4490,6 +4718,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutCharacterClassInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4535,6 +4766,9 @@ export type CharacterSheetCreateManySubclassInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -4574,6 +4808,9 @@ export type CharacterSheetUpdateWithoutSubclassInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4630,6 +4867,9 @@ export type CharacterSheetUncheckedUpdateWithoutSubclassInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4680,6 +4920,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutSubclassInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4725,6 +4968,9 @@ export type CharacterSheetCreateManyCampaignInput = {
   armorClass?: number
   speed?: number
   inspiration?: boolean
+  classEquipmentMode?: string
+  backgroundEquipmentMode?: string
+  startingGold?: number
   alignment?: string | null
   faith?: string | null
   lifestyle?: string | null
@@ -4764,6 +5010,9 @@ export type CharacterSheetUpdateWithoutCampaignInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4820,6 +5069,9 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4870,6 +5122,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutCampaignInput = {
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  classEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  backgroundEquipmentMode?: Prisma.StringFieldUpdateOperationsInput | string
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   alignment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   faith?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lifestyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4983,6 +5238,9 @@ export type CharacterSheetSelect<ExtArgs extends runtime.Types.Extensions.Intern
   armorClass?: boolean
   speed?: boolean
   inspiration?: boolean
+  classEquipmentMode?: boolean
+  backgroundEquipmentMode?: boolean
+  startingGold?: boolean
   alignment?: boolean
   faith?: boolean
   lifestyle?: boolean
@@ -5042,6 +5300,9 @@ export type CharacterSheetSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   armorClass?: boolean
   speed?: boolean
   inspiration?: boolean
+  classEquipmentMode?: boolean
+  backgroundEquipmentMode?: boolean
+  startingGold?: boolean
   alignment?: boolean
   faith?: boolean
   lifestyle?: boolean
@@ -5095,6 +5356,9 @@ export type CharacterSheetSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   armorClass?: boolean
   speed?: boolean
   inspiration?: boolean
+  classEquipmentMode?: boolean
+  backgroundEquipmentMode?: boolean
+  startingGold?: boolean
   alignment?: boolean
   faith?: boolean
   lifestyle?: boolean
@@ -5148,6 +5412,9 @@ export type CharacterSheetSelectScalar = {
   armorClass?: boolean
   speed?: boolean
   inspiration?: boolean
+  classEquipmentMode?: boolean
+  backgroundEquipmentMode?: boolean
+  startingGold?: boolean
   alignment?: boolean
   faith?: boolean
   lifestyle?: boolean
@@ -5169,7 +5436,7 @@ export type CharacterSheetSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CharacterSheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "systemId" | "campaignActorId" | "ownerId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "status" | "name" | "pronouns" | "concept" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "level" | "experience" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "armorClass" | "speed" | "inspiration" | "alignment" | "faith" | "lifestyle" | "hair" | "skin" | "eyes" | "height" | "weight" | "age" | "gender" | "bonds" | "flaws" | "ideals" | "personality" | "backstory" | "notes" | "gmNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheet"]>
+export type CharacterSheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "systemId" | "campaignActorId" | "ownerId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "status" | "name" | "pronouns" | "concept" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "level" | "experience" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "armorClass" | "speed" | "inspiration" | "classEquipmentMode" | "backgroundEquipmentMode" | "startingGold" | "alignment" | "faith" | "lifestyle" | "hair" | "skin" | "eyes" | "height" | "weight" | "age" | "gender" | "bonds" | "flaws" | "ideals" | "personality" | "backstory" | "notes" | "gmNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheet"]>
 export type CharacterSheetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -5245,6 +5512,9 @@ export type $CharacterSheetPayload<ExtArgs extends runtime.Types.Extensions.Inte
     armorClass: number
     speed: number
     inspiration: boolean
+    classEquipmentMode: string
+    backgroundEquipmentMode: string
+    startingGold: number
     alignment: string | null
     faith: string | null
     lifestyle: string | null
@@ -5723,6 +5993,9 @@ export interface CharacterSheetFieldRefs {
   readonly armorClass: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly speed: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly inspiration: Prisma.FieldRef<"CharacterSheet", 'Boolean'>
+  readonly classEquipmentMode: Prisma.FieldRef<"CharacterSheet", 'String'>
+  readonly backgroundEquipmentMode: Prisma.FieldRef<"CharacterSheet", 'String'>
+  readonly startingGold: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly alignment: Prisma.FieldRef<"CharacterSheet", 'String'>
   readonly faith: Prisma.FieldRef<"CharacterSheet", 'String'>
   readonly lifestyle: Prisma.FieldRef<"CharacterSheet", 'String'>
