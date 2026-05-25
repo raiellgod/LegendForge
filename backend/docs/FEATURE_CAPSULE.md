@@ -58,10 +58,6 @@ Definir domínio do sistema antes da implementação.
 
 # ⚡ Capsule 04 — Database Design (Core)
 
-## 🎯 Goal
-
-Criar estrutura completa do banco.
-
 ## ✅ Result
 
 - banco modelado com qualidade profissional
@@ -73,10 +69,6 @@ Criar estrutura completa do banco.
 
 # ⚡ Capsule 05 — Figma UI
 
-## 🎯 Goal
-
-Criar interface visual do sistema.
-
 ## ✅ Result
 
 - fluxo de login/registro
@@ -84,21 +76,17 @@ Criar interface visual do sistema.
 - home logada de campanhas
 - fluxo inicial de criação de mundo
 - tela de edição/finalização da campanha
-- base visual para a mesa e criação de personagem
+- base visual para mesa e criação de personagem
 
 ---
 
 # ⚡ Capsule 06 — System Design (RPG)
 
-## 🎯 Goal
-
-Criar sistema próprio de RPG.
-
 ## ✅ Result
 
 - classes definidas
 - subclasses definidas
-- progressão 1–20
+- progressão 1–20 planejada
 - talentos/features
 - atributos e perícias
 - base para múltiplos sistemas
@@ -106,10 +94,6 @@ Criar sistema próprio de RPG.
 ---
 
 # ⚡ Capsule 07 — Database Refinement
-
-## 🎯 Goal
-
-Elevar o banco para nível produção real.
 
 ## ✅ Result
 
@@ -120,10 +104,6 @@ Elevar o banco para nível produção real.
 
 # ⚡ Capsule 08 — Production Constraints & Integrity
 
-## 🎯 Goal
-
-Definir regras críticas de integridade.
-
 ## ✅ Result
 
 - limites de atributos
@@ -133,10 +113,6 @@ Definir regras críticas de integridade.
 ---
 
 # ⚡ Capsule 09 — Prisma Integration
-
-## 🎯 Goal
-
-Conectar modelagem ao sistema real.
 
 ## ✅ Result
 
@@ -149,10 +125,6 @@ Conectar modelagem ao sistema real.
 ---
 
 # ⚡ Capsule 10 — Authentication (Better Auth)
-
-## 🎯 Goal
-
-Implementar autenticação real.
 
 ## ✅ Result
 
@@ -167,10 +139,6 @@ Implementar autenticação real.
 
 # ⚡ Capsule 11 — API Integration
 
-## 🎯 Goal
-
-Validar sistema funcionando end-to-end.
-
 ## ✅ Result
 
 - API funcional
@@ -182,10 +150,6 @@ Validar sistema funcionando end-to-end.
 ---
 
 # ⚡ Capsule 12 — Campaign Domain API
-
-## 🎯 Goal
-
-Criar primeiras rotas reais de campanha.
 
 ## ✅ Result
 
@@ -199,10 +163,6 @@ Criar primeiras rotas reais de campanha.
 
 # ⚡ Capsule 13 — Campaign Frontend Flow
 
-## 🎯 Goal
-
-Implementar fluxo inicial real de campanhas no frontend.
-
 ## ✅ Result
 
 - `/campaigns`
@@ -215,24 +175,15 @@ Implementar fluxo inicial real de campanhas no frontend.
 
 # ⚡ Capsule 14 — Campaign Search & Join Flow
 
-## 🎯 Goal
-
-Criar busca/entrada em campanha.
-
 ## ✅ Result
 
 - página de busca iniciada
 - fluxo de entrada por código/convite discutido
 - decisão: solicitação de entrada deve depender de aprovação futura
-- owner/GM terão controle de participantes
 
 ---
 
 # ⚡ Capsule 15 — Game Page Foundation
-
-## 🎯 Goal
-
-Criar base da mesa de jogo.
 
 ## ✅ Result
 
@@ -250,10 +201,6 @@ Criar base da mesa de jogo.
 
 # ⚡ Capsule 16 — Campaign Actors
 
-## 🎯 Goal
-
-Substituir mock de personagens por atores reais de campanha.
-
 ## ✅ Result
 
 - `CampaignActor` criado
@@ -267,10 +214,6 @@ Substituir mock de personagens por atores reais de campanha.
 
 # ⚡ Capsule 17 — Scene Tokens
 
-## 🎯 Goal
-
-Persistir tokens reais na cena.
-
 ## ✅ Result
 
 - base de `SceneToken`
@@ -281,10 +224,6 @@ Persistir tokens reais na cena.
 ---
 
 # ⚡ Capsule 18 — RPG System Seed Expansion
-
-## 🎯 Goal
-
-Popular sistema RPG base.
 
 ## ✅ Result
 
@@ -297,15 +236,10 @@ Popular sistema RPG base.
 - magias
 - equipamentos
 - features iniciais
-- decisões sobre seed: conteúdos grandes podem começar no seed e evoluir depois
 
 ---
 
 # ⚡ Capsule 19 — CharacterSheet Backend
-
-## 🎯 Goal
-
-Criar base backend para fichas de personagem.
 
 ## ✅ Result
 
@@ -323,10 +257,6 @@ Criar base backend para fichas de personagem.
 
 # ⚡ Capsule 20 — Character Creation Menu
 
-## 🎯 Goal
-
-Adicionar entrada visual para criação de personagem na mesa.
-
 ## ✅ Result
 
 - menu com opções:
@@ -341,10 +271,6 @@ Adicionar entrada visual para criação de personagem na mesa.
 
 # ⚡ Capsule 21 — Character Builder Layout
 
-## 🎯 Goal
-
-Criar layout base do builder.
-
 ## ✅ Result
 
 - modal grande de criação
@@ -352,25 +278,11 @@ Criar layout base do builder.
 - área central
 - resumo lateral
 - navegação anterior/próxima
-- etapas planejadas:
-  - Conceito
-  - Classe
-  - Ancestralidade
-  - Antecedente
-  - Atributos
-  - Perícias
-  - Magias
-  - Equipamentos
-  - Sobre
-  - Revisão
+- etapas planejadas do builder
 
 ---
 
 # ⚡ Capsule 22 — Character Builder Draft
-
-## 🎯 Goal
-
-Salvar e carregar rascunho da ficha.
 
 ## ✅ Result
 
@@ -378,16 +290,11 @@ Salvar e carregar rascunho da ficha.
 - campos de nome, pronomes, conceito, retrato, token e encaixe do token
 - salvar rascunho via API
 - carregar rascunho ao abrir builder
-- corrigidos casos de `null`/string vazia no backend
 - feedback visual de sucesso/erro
 
 ---
 
 # ⚡ Capsule 23 — Character Builder Options
-
-## 🎯 Goal
-
-Carregar opções reais do sistema para criação de personagem.
 
 ## ✅ Result
 
@@ -395,15 +302,10 @@ Carregar opções reais do sistema para criação de personagem.
 - retorna classes, ancestralidades e antecedentes
 - cards no builder usam dados reais
 - resumo lateral mostra nomes escolhidos
-- `systems.ts` ajustado para response compatível
 
 ---
 
 # ⚡ Capsule 24 — Character Builder Choices Persistence
-
-## 🎯 Goal
-
-Selecionar e persistir escolhas principais da ficha.
 
 ## ✅ Result
 
@@ -412,15 +314,10 @@ Selecionar e persistir escolhas principais da ficha.
 - seleção clicável de antecedente
 - salvamento de `classId`, `ancestryId`, `backgroundId`
 - carregamento posterior preserva escolhas
-- resumo lateral atualizado
 
 ---
 
 # ⚡ Capsule 25 — Character Builder Step Validation
-
-## 🎯 Goal
-
-Validar avanço do builder por etapa.
 
 ## ✅ Result
 
@@ -430,63 +327,105 @@ Validar avanço do builder por etapa.
 - Antecedente exige antecedente
 - botão Próxima bloqueia quando falta algo
 - mensagem visual explica o que falta
-- fluxo ficou mais seguro e guiado
 
 ---
 
-# ⚡ Capsule 26 — Character Builder Attributes UI
-
-## 🎯 Goal
-
-Criar etapa visual de atributos.
+# ⚡ Capsule 26 — Character Builder Attributes
 
 ## ✅ Result
 
-- 6 atributos:
-  - Força
-  - Destreza
-  - Constituição
-  - Inteligência
-  - Sabedoria
-  - Carisma
-- valor inicial editável
-- botões + e -
-- input numérico
+- 6 atributos
+- Standard Array
 - cálculo automático de modificador
-- total de atributos
-- reset visual
-- resumo lateral mostra total/maior atributo
-- aviso de acessibilidade resolvido com `aria-label`
+- resumo lateral com total/maior atributo
+- persistência em `CharacterSheetStat`
+- carregamento posterior preserva atributos
 
-## ⚠️ Próximo passo
+---
 
-A etapa é visual/local. Ainda falta persistir em `CharacterSheetStat`.
+# ⚡ Capsule 27 — Character Builder Skills
+
+## ✅ Result
+
+- perícias reais do sistema
+- cálculo por atributo
+- seleção manual
+- sugestões do antecedente sem auto-seleção
+- persistência em `CharacterSheetSkill`
+- limite temporário de escolhas
+- regra futura definida: classe limita lista/quantidade e antecedente sugere escolhas
+
+---
+
+# ⚡ Capsule 28 — Character Builder Spells
+
+## ✅ Result
+
+- etapa de magias/truques
+- seleção persistida
+- separação visual entre truques e magias
+- filtros por tipo/escola/busca
+- regra futura definida: classe deve filtrar magias e progressão por nível
+
+---
+
+# ⚡ Capsule 29 — Character Builder Equipment
+
+## ✅ Result
+
+- equipamento inicial por classe/antecedente
+- escolha entre pacote inicial ou moedas
+- inventário inicial calculado
+- persistência de equipamentos/moedas
+- regra futura definida: itens gerais virão de lojas, não de listagem livre
+
+---
+
+# ⚡ Capsule 30 — Character Builder About
+
+## ✅ Result
+
+- etapa Sobre com identidade, aparência, personalidade, história e notas
+- resumo lateral da etapa Sobre
+- persistência dos campos narrativos
+
+---
+
+# ⚡ Capsule 31 — Character Builder Review
+
+## ⚠️ Status
+
+Em andamento / não marcar como concluída.
+
+## 🎯 Goal
+
+Extrair e estabilizar a etapa Revisão, corrigindo também o fluxo de criação de personagem vazio.
+
+## Parcialmente feito
+
+- componentes de revisão criados
+- revisão visual exibida
+- parte da etapa foi extraída
+
+## Pendente
+
+- corrigir fluxo “Criar personagem” para não carregar rascunho antigo
+- validar `CharacterReviewStep`
+- implementar ou confirmar:
+  - `4.22.18.3 — Limpar valores padrão do rascunho inicial`
+  - `4.22.18.4 — Linguagem dinâmica por pronome`
+  - `4.22.18.5 — Sincronizar pronome com gênero inicial`
 
 ---
 
 # 🧠 Estado Atual do Projeto
 
-O projeto está em:
+👉 **Fase 4.22.18 — Refatoração/revisão do Character Builder em andamento.**
 
-👉 **Fase 4 — Criação/Ficha de Personagem**
-
-Estado:
-
-- Auth funcional
-- Banco integrado
-- API funcionando
-- Campanhas reais
-- Mesa de jogo em andamento
-- Atores/tokens persistidos
-- Sistema RPG base
-- Builder de personagem em andamento
-
----
-
-# 🚧 Próxima fase imediata
+Próximo foco:
 
 ```txt
-4.15 — Persistir atributos no banco
+Corrigir criação de personagem do zero para abrir rascunho vazio.
 ```
 
 ---

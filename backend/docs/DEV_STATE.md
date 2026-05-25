@@ -4,7 +4,7 @@
 
 ## 📅 Last Update
 
-21/05/2026
+24/05/2026
 
 ---
 
@@ -16,43 +16,33 @@ LegendForge/
 │   ├── src/
 │   │   ├── generated/prisma/
 │   │   ├── lib/
-│   │   │   ├── auth.ts
-│   │   │   ├── get-authenticated-session.ts
-│   │   │   └── prisma.ts
 │   │   ├── routes/
 │   │   │   ├── campaigns.ts
 │   │   │   ├── character-sheets.ts
 │   │   │   └── systems.ts
 │   │   └── index.ts
-│   │
 │   ├── prisma/
 │   │   ├── schema.prisma
 │   │   └── seed.ts
-│   │
 │   ├── docker-compose.yml
 │   └── package.json
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── campaigns/
-│   │   │   │   ├── page.tsx
-│   │   │   │   ├── create/page.tsx
-│   │   │   │   ├── search/page.tsx
-│   │   │   │   └── [id]/
-│   │   │   │       ├── edit/page.tsx
-│   │   │   │       └── play/page.tsx
-│   │   │   ├── login/page.tsx
-│   │   │   ├── register/page.tsx
-│   │   │   ├── layout.tsx
-│   │   │   └── page.tsx
-│   │   │
-│   │   ├── components/ui/
+│   │   │   └── campaigns/[id]/play/page.tsx
+│   │   ├── features/
+│   │   │   └── character-builder/
+│   │   │       ├── components/
+│   │   │       ├── constants/
+│   │   │       ├── review/
+│   │   │       ├── steps/
+│   │   │       ├── summary/
+│   │   │       ├── types/
+│   │   │       └── utils/
+│   │   ├── components/
 │   │   ├── lib/
-│   │   │   └── auth-client.ts
 │   │   └── service/
-│   │
-│   ├── public/
 │   └── package.json
 │
 ├── docs/
@@ -129,18 +119,24 @@ LegendForge/
 - página de mesa abre campanha real
 - aba Personagens consome atores reais
 - biblioteca/mesa de atores está persistida
+- tokens de cena persistem
 - rascunho de CharacterSheet cria no banco
-- rascunho carrega ao abrir builder
-- classe/ancestralidade/antecedente persistem na ficha
-- atributos existem visualmente no builder
+- rascunho carrega
+- classe/ancestralidade/antecedente persistem
+- atributos persistem
+- perícias persistem
+- magias persistem
+- equipamentos persistem
+- campos de sobre persistem
 
 ### 🚧 Em andamento
 
-- persistir atributos do builder em `CharacterSheetStat`
-- refinar constraints
-- aplicar regras SQL avançadas
+- refatoração do Character Builder
+- correção do fluxo “Criar personagem do zero”
+- limpeza final do `page.tsx`
+- teste regressivo completo
 - preparar upload real de imagens
-- finalizar fluxo de criação de ficha
+- finalizar fluxo estável de ficha
 
 ---
 
@@ -150,14 +146,16 @@ LegendForge/
 
 - Fastify configurado
 - CORS funcionando para frontend local
-- Better Auth exposto em `/api/auth/*`
+- Better Auth em `/api/auth/*`
 - Swagger em `/swagger.json`
 - Scalar em `/docs`
-- Helper de sessão real do Better Auth
+- Helper de sessão real
 - Rotas de campanha
 - Rotas de participantes
 - Rotas de sistemas
 - Rotas de character sheets
+- Rotas de atores de campanha
+- Rotas de tokens de cena
 
 ### Rotas importantes atuais
 
@@ -172,6 +170,15 @@ GET    /campaigns/:id/participants
 PATCH  /campaigns/:campaignId/participants/:participantId/role
 DELETE /campaigns/:campaignId/participants/:participantId
 
+GET    /campaigns/:campaignId/actors
+POST   /campaigns/:campaignId/actors
+PATCH  /campaigns/:campaignId/actors/:actorId
+
+GET    /campaigns/:campaignId/tokens
+POST   /campaigns/:campaignId/tokens
+PATCH  /campaigns/:campaignId/tokens/:tokenId
+DELETE /campaigns/:campaignId/tokens/:tokenId
+
 GET    /systems
 GET    /systems/:systemId/character-options
 
@@ -180,14 +187,6 @@ POST   /campaigns/:campaignId/character-sheets
 GET    /campaigns/:campaignId/character-sheets/:sheetId
 PATCH  /campaigns/:campaignId/character-sheets/:sheetId
 ```
-
-### ⚠️ Ajustes pendentes
-
-- persistência de stats no POST/PATCH de ficha
-- retorno dos stats no GET de ficha
-- talvez criar services quando regras crescerem
-- padronizar erros
-- validar se classe/ancestralidade/antecedente pertencem ao mesmo sistema
 
 ---
 
@@ -200,7 +199,6 @@ PATCH  /campaigns/:campaignId/character-sheets/:sheetId
 - Registro
 - Header privado
 - Background parchment
-- Botão base
 - `/campaigns`
 - `/campaigns/create`
 - `/campaigns/search`
@@ -220,8 +218,8 @@ Estado atual:
 - Personagens
 - Diário inicial
 - Mesa/configuração inicial
-- atores reais de campanha
-- tokens/cena iniciais
+- atores reais
+- tokens/cena
 - modal de criação de personagem
 - builder de personagem
 
@@ -229,154 +227,172 @@ Estado atual:
 
 ## 🧍 Character Builder — Status detalhado
 
-Arquivo principal:
+Arquivo principal ainda grande:
 
 ```txt
 frontend/src/app/campaigns/[id]/play/page.tsx
 ```
 
-Backend:
+Pasta criada para refatoração:
 
 ```txt
-backend/src/routes/character-sheets.ts
-backend/src/routes/systems.ts
-backend/prisma/schema.prisma
+frontend/src/features/character-builder/
 ```
 
-Concluído:
+Etapas/componentes já extraídos ou parcialmente extraídos:
 
-- menu inicial com opções de criação
-- builder em modal
-- etapas:
-  - Conceito
-  - Classe
-  - Ancestralidade
-  - Antecedente
-  - Atributos
-  - Perícias
-  - Magias
-  - Equipamentos
-  - Sobre
-  - Revisão
-- etapa Conceito com campos reais
-- salvar rascunho
-- carregar rascunho
-- carregar opções reais do sistema
-- cards clicáveis para classe, ancestralidade e antecedente
-- resumo lateral
-- validação de avanço
-- etapa Atributos visual/local
-- cálculo de modificador
+- types
+- constants
+- steps config
+- utils de atributos
+- utils de perícias
+- utils de magias
+- utils de equipamentos
+- utils de sobre/about
+- componentes genéricos
+- componentes da revisão
+- etapa Conceito
+- etapa Atributos
+- etapa Perícias
+- etapa Magias
+- etapa Equipamentos
+- etapa Sobre
+- etapa Revisão
 
-Pendente imediato:
+---
+
+## ⚠️ Problema atual
+
+O fluxo abaixo ainda precisa ser corrigido/validado:
 
 ```txt
-4.15 — Persistir atributos no banco
++ Criar → Criar personagem
+```
+
+Comportamento esperado:
+
+- abrir ficha vazia
+- não carregar Hikari ou qualquer rascunho antigo
+- nome/pronomes/conceito vazios
+- sem classe/ancestralidade/antecedente selecionados
+- sem savedCharacterSheetId
+- status como rascunho novo
+
+Comportamento observado recentemente:
+
+- abriu com dados antigos de uma ficha/rascunho existente
+
+---
+
+## 🧠 Plano imediato
+
+```txt
+4.22.18.3 — Limpar valores padrão do rascunho inicial
+```
+
+Tarefas:
+
+- [ ] encontrar função chamada pelo botão “Criar personagem”
+- [ ] remover chamada de `handleLoadCharacterBuilderDraft()` desse fluxo
+- [ ] criar/usar `createEmptyCharacterBuilderDraft()`
+- [ ] limpar `savedCharacterSheetId`
+- [ ] limpar `savedCharacterSheetStatus`
+- [ ] limpar erro/sucesso
+- [ ] manter `handleLoadCharacterBuilderDraft()` para fluxo futuro “continuar rascunho”
+- [ ] testar abrindo do zero
+
+Depois:
+
+```txt
+4.22.18.4 — Linguagem dinâmica por pronome
+4.22.18.5 — Sincronizar pronome com gênero inicial
 ```
 
 ---
 
-## 🧠 Fluxo atual do Builder
+## 🧩 Micros atuais
 
-1. Usuário abre mesa.
-2. Clica para criar personagem.
-3. Abre menu de criação.
-4. Escolhe “Criar personagem”.
-5. Builder abre.
-6. Carrega rascunho existente, se houver.
-7. Carrega opções do sistema.
-8. Usuário preenche conceito.
-9. Usuário escolhe classe, ancestralidade e antecedente.
-10. Usuário ajusta atributos visualmente.
-11. Rascunho salva no banco.
-12. Próximo: atributos também precisam salvar/carregar.
+```txt
+[x] 4.22.1 — Criar estrutura features/character-builder
+[x] 4.22.2 — Extrair types
+[x] 4.22.3 — Extrair constants
+[x] 4.22.4 — Extrair steps config
+[x] 4.22.5 — Extrair utils de atributos
+[x] 4.22.6 — Extrair utils de perícias
+[x] 4.22.7 — Extrair utils de magias
+[x] 4.22.8 — Extrair utils de equipamentos
+[x] 4.22.9 — Extrair utils de sobre/about
+[x] 4.22.10 — Extrair componentes genéricos do builder
+[x] 4.22.11 — Extrair componentes da revisão
+[x] 4.22.12 — Extrair etapa Conceito
+[x] 4.22.13 — Extrair etapa Atributos
+[x] 4.22.14 — Extrair etapa Perícias
+[x] 4.22.15 — Extrair etapa Magias
+[x] 4.22.16 — Extrair etapa Equipamentos
+[x] 4.22.17 — Extrair etapa Sobre
+[em andamento] 4.22.18 — Revisão + correções finais
+[ ] 4.22.18.3 — Limpar valores padrão do rascunho inicial
+[ ] 4.22.18.4 — Linguagem dinâmica por pronome
+[ ] 4.22.18.5 — Sincronizar pronome com gênero inicial
+[ ] 4.22.19 — Limpeza final de imports/funções mortas
+[ ] 4.22.20 — Teste regressivo completo
+[ ] 4.22.21 — Commit
+```
 
 ---
 
-## ⚠️ Pontos de Atenção
+## 🔮 Backlog confirmado
 
-### Unidade de trabalho
+### Fase 4.23 — Refatoração da mesa
+
+- extrair layout/header/toolbar/painéis/abas
+- refatorar camada de tokens
+- adicionar edição de tamanho de token
+
+### Fase 4.24 — Personagens ativos/biblioteca/exclusão
+
+- NPCs/criaturas podem ir para biblioteca
+- personagens de player têm regra própria
+- limitar 1 personagem ativo por player por campanha
+- GM pode ter vários NPCs/criaturas, mas só 1 personagem próprio ativo
+
+### Fase 4.25 — Ficha pronta/imagens
+
+- página/modal de ficha pronta
+- upload de retrato direto do computador
+- upload de token direto do computador
+- preview/fit/crop
+- persistência de URL
+
+### Fase 4.27 — Regras avançadas
+
+- seed mais robusto
+- progressão por nível
+- magias por classe/nível
+- perícias por classe/antecedente
+- salvaguardas
+- proficiências editáveis pelo GM
+- defesa/armadura como camada mecânica
+
+### Fase 4.28 — Multiclasse
+
+- múltiplas classes por ficha
+- nível por classe
+- impacto em perícias, proficiências, magias e equipamentos
+
+---
+
+## ⚠️ Regra de trabalho
 
 - `page.tsx` é grande.
-- Não trabalhar com suposição.
-- Na próxima conversa, usar o último `page.tsx` enviado como fonte da verdade.
-- Mudança grande = reescrever arquivo completo.
-- Mudança pequena = âncora real do arquivo atual.
-
-### Tailwind/Next
-
-- Em dev local, usar `next dev --webpack`.
-- Cache `.next` pode precisar ser limpo.
-
-### Imagens
-
-- `portraitUrl` e `tokenImageUrl` ainda são strings/URLs.
-- Storage real fica para futuro.
-
-### Backend
-
-- Rotas ainda concentram lógica.
-- Services podem ser criados quando regras crescerem.
-
----
-
-## ✅ Implemented Features
-
-- Auth real
-- Sessão real com cookie
-- Backend protegido por usuário autenticado
-- Home logada de campanhas
-- Criação de campanha
-- Participante GM automático
-- Edição inicial da campanha
-- Busca/entrada de campanha iniciada
-- Página de mesa
-- Atores reais na mesa
-- Tokens/cena com persistência inicial
-- Sistema RPG base
-- Builder visual de personagem
-- Rascunho de ficha persistido
-- Seleção de classe/ancestralidade/antecedente persistida
-- Atributos visuais no builder
-
----
-
-## 🎯 Current Focus
-
-### 🔥 FASE ATUAL
-
-👉 **Fase 4 — Criação/ficha de personagem**
-
-Micro atual:
-
-```txt
-4.15 — Persistir atributos no banco
-```
-
----
-
-## 🚀 Next Steps
-
-### Próximo micro exato
-
-- [ ] enviar atributos no `handleSaveCharacterBuilderDraft`
-- [ ] aceitar atributos no `character-sheets.ts`
-- [ ] validar atributos entre 3 e 20
-- [ ] criar/atualizar `CharacterSheetStat`
-- [ ] incluir stats no GET
-- [ ] popular builder com stats salvos
-
-### Depois
-
-- [ ] 4.16 — Perícias ligada à classe/antecedente
-- [ ] 4.17 — Magias ligada à classe
-- [ ] 4.18 — Equipamentos ligada à classe/antecedente
-- [ ] 4.19 — Sobre
-- [ ] 4.20 — Revisão
-- [ ] 4.21 — Finalizar ficha e listar na aba Personagens
+- Usar sempre o último arquivo enviado como fonte da verdade.
+- Mudança grande = arquivo completo.
+- Mudança pequena = âncora real.
+- Não presumir estrutura antiga.
+- Antes de commit: `git diff --stat`.
 
 ---
 
 ## 🏁 Estado Atual
 
-👉 **Character Builder em andamento, pronto para persistir atributos.**
+👉 **Fase 4.22.18 em andamento. Próximo passo: corrigir criação de personagem do zero para não carregar rascunho antigo.**

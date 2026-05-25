@@ -1,0 +1,191 @@
+export type CharacterAttributeKey =
+  | "strength"
+  | "dexterity"
+  | "constitution"
+  | "intelligence"
+  | "wisdom"
+  | "charisma";
+
+export type CharacterBuilderAttributes = Record<
+  CharacterAttributeKey,
+  number | null
+>;
+
+export type CharacterBuilderEquipmentMode = "PACKAGE" | "GOLD";
+
+export type CharacterSheetStatus = "DRAFT" | "READY" | "ARCHIVED";
+
+export type CharacterBuilderEquipmentDraftItem = {
+  key: string;
+  quantity: number;
+  source: "class" | "background";
+  notes?: string;
+  isEquipped?: boolean;
+};
+
+export type CharacterBuilderDraft = {
+  name: string;
+  pronouns: string;
+  concept: string;
+  portraitUrl: string;
+  tokenImageUrl: string;
+  tokenImageFit: "FILL" | "CONTAIN" | "COVER";
+
+  classId: string;
+  className: string;
+
+  ancestryId: string;
+  ancestryName: string;
+
+  backgroundId: string;
+  backgroundName: string;
+
+  attributes: CharacterBuilderAttributes;
+  skillKeys: string[];
+  spellKeys: string[];
+  equipmentItems: CharacterBuilderEquipmentDraftItem[];
+  classEquipmentMode: CharacterBuilderEquipmentMode;
+  backgroundEquipmentMode: CharacterBuilderEquipmentMode;
+  startingGold: number;
+
+  alignment: string;
+  faith: string;
+  lifestyle: string;
+
+  hair: string;
+  skin: string;
+  eyes: string;
+  height: string;
+  weight: string;
+  age: string;
+  gender: string;
+
+  bonds: string;
+  flaws: string;
+  ideals: string;
+  personality: string;
+  backstory: string;
+  notes: string;
+  gmNotes: string;
+};
+
+export type CharacterBuilderOption = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+};
+
+export type CharacterBuilderClassOption = CharacterBuilderOption & {
+  hitDie: number;
+};
+
+export type CharacterBuilderAncestryOption = CharacterBuilderOption & {
+  defaultSizeCategory: string;
+};
+
+export type CharacterBuilderBackgroundOption = CharacterBuilderOption & {
+  skillKeys: string[];
+  toolNames: string[];
+  languageChoiceCount: number;
+  startingGold: number;
+};
+
+export type CharacterBuilderSkillOption = CharacterBuilderOption & {
+  statId: string;
+  stat: {
+    id: string;
+    key: string;
+    name: string;
+    shortName: string;
+  };
+};
+
+export type CharacterBuilderSpellOption = CharacterBuilderOption & {
+  level: number;
+  school: string;
+  castingTime: string | null;
+  range: string | null;
+  duration: string | null;
+  components: string[];
+  isRitual: boolean;
+  requiresConcentration: boolean;
+};
+
+export type CharacterBuilderEquipmentOption = CharacterBuilderOption & {
+  category: string;
+  damage: string | null;
+  defense: number | null;
+  cost: string | null;
+  weight: number | null;
+  properties: string | null;
+};
+
+export type CharacterBuilderOptions = {
+  classes: CharacterBuilderClassOption[];
+  ancestries: CharacterBuilderAncestryOption[];
+  backgrounds: CharacterBuilderBackgroundOption[];
+  skills: CharacterBuilderSkillOption[];
+  spells: CharacterBuilderSpellOption[];
+  equipment: CharacterBuilderEquipmentOption[];
+};
+
+export type CharacterSheetStatResponse = {
+  baseValue: number;
+  stat: {
+    key: string;
+  };
+};
+
+export type StartingEquipmentPlan = {
+  label: string;
+  description: string;
+  gold: number;
+  items: CharacterBuilderEquipmentDraftItem[];
+  proficiencies: string[];
+};
+
+export type CharacterBuilderStep = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+export type CharacterBuilderSelectableOption = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+  hitDie?: number;
+  defaultSizeCategory?: string;
+  skillKeys?: string[];
+};
+
+export type CharacterBuilderModalProps = {
+  isOpen: boolean;
+  activeStepId: string;
+  draft: CharacterBuilderDraft;
+  options: CharacterBuilderOptions;
+  isLoadingOptions: boolean;
+  optionsError: string | null;
+  savedCharacterSheetId: string | null;
+  savedCharacterSheetStatus: CharacterSheetStatus | null;
+  isSavingDraft: boolean;
+  isFinalizingSheet: boolean;
+  saveError: string | null;
+  saveSuccess: string | null;
+  onSaveDraft: () => void;
+  onFinalizeSheet: () => void;
+  onChangeDraft: (draft: CharacterBuilderDraft) => void;
+  onSelectOption: (
+    type: "class" | "ancestry" | "background",
+    option: {
+      id: string;
+      name: string;
+      skillKeys?: string[];
+    },
+  ) => void;
+  onChangeStep: (stepId: string) => void;
+  onClose: () => void;
+};
+

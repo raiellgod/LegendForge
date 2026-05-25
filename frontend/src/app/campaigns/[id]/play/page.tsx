@@ -1,10 +1,75 @@
 "use client";
 
-import { FormEvent, PointerEvent, ReactNode, useEffect, useMemo, useState } from "react";
+import {
+  FormEvent,
+  PointerEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 import { authClient } from "@/lib/auth-client";
+
+import type {
+  CharacterBuilderDraft,
+  CharacterBuilderModalProps,
+  CharacterBuilderOptions,
+  CharacterBuilderSelectableOption,
+  CharacterSheetStatResponse,
+  CharacterSheetStatus,
+} from "@/features/character-builder/types/character-builder-types";
+
+import {
+  CHARACTER_ATTRIBUTE_DEFINITIONS,
+  DEFAULT_CHARACTER_ATTRIBUTES,
+  STANDARD_ARRAY_ATTRIBUTE_VALUES,
+} from "@/features/character-builder/constants/character-builder-constants";
+
+import { characterBuilderSteps } from "@/features/character-builder/constants/character-builder-steps";
+
+import {
+  countFilledAboutFields,
+  getNarrativeSummary,
+  getPersonalitySummary,
+  getPhysicalSummary,
+} from "@/features/character-builder/utils/about";
+
+import {
+  formatAttributeModifier,
+  getCharacterAttributesFromStats,
+  getPersistableCharacterAttributes,
+} from "@/features/character-builder/utils/attributes";
+
+import {
+  getCharacterSkillKeysFromSkills,
+} from "@/features/character-builder/utils/skills";
+
+import {
+  getCharacterSpellKeysFromSpells,
+  isCantrip,
+} from "@/features/character-builder/utils/spells";
+
+import {
+  getCharacterEquipmentItemsFromEquipment,
+  getStartingEquipmentItemsFromDraft,
+  getStartingGoldFromDraft,
+  normalizeCharacterEquipmentMode,
+} from "@/features/character-builder/utils/equipment";
+
+
+import { CharacterBuilderInfoIcon } from "@/features/character-builder/components/CharacterBuilderInfoIcon";
+import { BuilderSummaryRow } from "@/features/character-builder/summary/BuilderSummaryRow";
+import { StartingEquipmentSummaryPanel } from "@/features/character-builder/summary/StartingEquipmentSummaryPanel";
+import { CharacterAboutSummaryPanel } from "@/features/character-builder/summary/CharacterAboutSummaryPanel";
+import { CharacterConceptStep } from "@/features/character-builder/steps/CharacterConceptStep";
+import { CharacterAttributesStep } from "@/features/character-builder/steps/CharacterAttributesStep";
+import { CharacterSkillsStep } from "@/features/character-builder/steps/CharacterSkillsStep";
+import { CharacterSpellsStep } from "@/features/character-builder/steps/CharacterSpellsStep";
+import { CharacterEquipmentStep } from "@/features/character-builder/steps/CharacterEquipmentStep";
+import { CharacterAboutStep } from "@/features/character-builder/steps/CharacterAboutStep";
+import { CharacterReviewStep } from "@/features/character-builder/steps/CharacterReviewStep";
 
 type ToolMode = "select" | "pan" | "measure" | "draw" | "fog";
 
@@ -212,6 +277,375 @@ const QUICK_ROLLS: QuickRoll[] = [
     kind: "coin",
   },
 ];
+
+function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
+  return {
+    name: "",
+    pronouns: "",
+    concept: "",
+    portraitUrl: "",
+    tokenImageUrl: "",
+    tokenImageFit: "FILL",
+
+    classId: "",
+    className: "",
+
+    ancestryId: "",
+    ancestryName: "",
+
+    backgroundId: "",
+    backgroundName: "",
+
+    attributes: { ...DEFAULT_CHARACTER_ATTRIBUTES },
+    skillKeys: [],
+    spellKeys: [],
+    equipmentItems: [],
+    classEquipmentMode: "PACKAGE",
+    backgroundEquipmentMode: "PACKAGE",
+    startingGold: 0,
+
+    alignment: "",
+    faith: "",
+    lifestyle: "",
+
+    hair: "",
+    skin: "",
+    eyes: "",
+    height: "",
+    weight: "",
+    age: "",
+    gender: "",
+
+    bonds: "",
+    flaws: "",
+    ideals: "",
+    personality: "",
+    backstory: "",
+    notes: "",
+    gmNotes: "",
+  };
+}
+
+type CharacterBuilderGrammaticalGender = "masculine" | "feminine" | "neutral";
+
+type GenderedCharacterOptionName = {
+  masculine: string;
+  feminine: string;
+  neutral: string;
+};
+
+function normalizeCharacterOptionName(value: string) {
+  return value
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+const GENDERED_CHARACTER_OPTION_NAMES_BY_KEY: Record<
+  string,
+  GenderedCharacterOptionName
+> = {
+  // Classes
+  barbarian: {
+    masculine: "Bárbaro",
+    feminine: "Bárbara",
+    neutral: "Bárbare",
+  },
+  bard: {
+    masculine: "Bardo",
+    feminine: "Barda",
+    neutral: "Barde",
+  },
+  warlock: {
+    masculine: "Bruxo",
+    feminine: "Bruxa",
+    neutral: "Bruxe",
+  },
+  devotee: {
+    masculine: "Devoto",
+    feminine: "Devota",
+    neutral: "Devote",
+  },
+  druid: {
+    masculine: "Druida",
+    feminine: "Druida",
+    neutral: "Druide",
+  },
+  sorcerer: {
+    masculine: "Feiticeiro",
+    feminine: "Feiticeira",
+    neutral: "Feiticeire",
+  },
+  fighter: {
+    masculine: "Guerreiro",
+    feminine: "Guerreira",
+    neutral: "Guerreire",
+  },
+  rogue: {
+    masculine: "Ladino",
+    feminine: "Ladina",
+    neutral: "Ladine",
+  },
+  wizard: {
+    masculine: "Mago",
+    feminine: "Maga",
+    neutral: "Mague",
+  },
+  monk: {
+    masculine: "Monge",
+    feminine: "Monja",
+    neutral: "Monje",
+  },
+  oathbound: {
+    masculine: "Juramentado",
+    feminine: "Juramentada",
+    neutral: "Juramentade",
+  },
+  ranger: {
+    masculine: "Patrulheiro",
+    feminine: "Patrulheira",
+    neutral: "Patrulheire",
+  },
+  technomancer: {
+    masculine: "Tecnomante",
+    feminine: "Tecnomante",
+    neutral: "Tecnomante",
+  },
+  necromancer: {
+    masculine: "Necromante",
+    feminine: "Necromante",
+    neutral: "Necromante",
+  },
+
+  // Ancestralidades: nomes de povos/linhagens do sistema, mantidos como nomes próprios.
+  humanis: {
+    masculine: "Humanis",
+    feminine: "Humanis",
+    neutral: "Humanis",
+  },
+  sylvaris: {
+    masculine: "Sylvaris",
+    feminine: "Sylvaris",
+    neutral: "Sylvaris",
+  },
+  durandir: {
+    masculine: "Durandir",
+    feminine: "Durandir",
+    neutral: "Durandir",
+  },
+  brutakar: {
+    masculine: "Brutakar",
+    feminine: "Brutakar",
+    neutral: "Brutakar",
+  },
+  faunari: {
+    masculine: "Faunari",
+    feminine: "Faunari",
+    neutral: "Faunari",
+  },
+  sinteticos: {
+    masculine: "Sintéticos",
+    feminine: "Sintéticos",
+    neutral: "Sintéticos",
+  },
+  minuri: {
+    masculine: "Minuri",
+    feminine: "Minuri",
+    neutral: "Minuri",
+  },
+
+  // Antecedentes
+  "veil-devotee": {
+    masculine: "Devoto do Véu",
+    feminine: "Devota do Véu",
+    neutral: "Devote do Véu",
+  },
+  "omen-marked": {
+    masculine: "Marcado pelo Agouro",
+    feminine: "Marcada pelo Agouro",
+    neutral: "Marcade pelo Agouro",
+  },
+  "guild-artisan": {
+    masculine: "Artesão de Guilda",
+    feminine: "Artesã de Guilda",
+    neutral: "Artesane de Guilda",
+  },
+  "wandering-minstrel": {
+    masculine: "Menestrel Errante",
+    feminine: "Menestrel Errante",
+    neutral: "Menestrel Errante",
+  },
+  "court-fraud": {
+    masculine: "Farsante de Corte",
+    feminine: "Farsante de Corte",
+    neutral: "Farsante de Corte",
+  },
+  "alley-blade": {
+    masculine: "Lâmina de Beco",
+    feminine: "Lâmina de Beco",
+    neutral: "Lâmina de Beco",
+  },
+  "wilds-recluse": {
+    masculine: "Recluso dos Ermos",
+    feminine: "Reclusa dos Ermos",
+    neutral: "Recluse dos Ermos",
+  },
+  "frontier-walker": {
+    masculine: "Andarilho das Fronteiras",
+    feminine: "Andarilha das Fronteiras",
+    neutral: "Andarilhe das Fronteiras",
+  },
+  "village-champion": {
+    masculine: "Campeão da Aldeia",
+    feminine: "Campeã da Aldeia",
+    neutral: "Campeane da Aldeia",
+  },
+  "black-tide-navigator": {
+    masculine: "Navegante de Marés Negras",
+    feminine: "Navegante de Marés Negras",
+    neutral: "Navegante de Marés Negras",
+  },
+  "crest-blood": {
+    masculine: "Sangue de Brasão",
+    feminine: "Sangue de Brasão",
+    neutral: "Sangue de Brasão",
+  },
+  "gutter-child": {
+    masculine: "Filho da Sarjeta",
+    feminine: "Filha da Sarjeta",
+    neutral: "Filhe da Sarjeta",
+  },
+  "arcane-archivist": {
+    masculine: "Arquivista Arcano",
+    feminine: "Arquivista Arcana",
+    neutral: "Arquivista Arcane",
+  },
+  "ash-veteran-background": {
+    masculine: "Veterano da Cinza",
+    feminine: "Veterana da Cinza",
+    neutral: "Veterane da Cinza",
+  },
+  "distant-lands-pilgrim": {
+    masculine: "Peregrino de Terras Distantes",
+    feminine: "Peregrina de Terras Distantes",
+    neutral: "Peregrine de Terras Distantes",
+  },
+  "relic-hunter": {
+    masculine: "Caçador de Relíquias",
+    feminine: "Caçadora de Relíquias",
+    neutral: "Caçadore de Relíquias",
+  },
+  "collapse-survivor": {
+    masculine: "Sobrevivente do Colapso",
+    feminine: "Sobrevivente do Colapso",
+    neutral: "Sobrevivente do Colapso",
+  },
+  "masterless-squire": {
+    masculine: "Escudeiro Sem Senhor",
+    feminine: "Escudeira Sem Senhor",
+    neutral: "Escudeire Sem Senhor",
+  },
+};
+
+const GENDERED_CHARACTER_OPTION_NAMES_BY_NORMALIZED_NAME = Object.fromEntries(
+  Object.values(GENDERED_CHARACTER_OPTION_NAMES_BY_KEY).flatMap((genderedName) =>
+    [genderedName.masculine, genderedName.feminine, genderedName.neutral].map(
+      (name) => [normalizeCharacterOptionName(name), genderedName],
+    ),
+  ),
+) as Record<string, GenderedCharacterOptionName>;
+
+function getCharacterBuilderGrammaticalGender(
+  pronouns: string,
+): CharacterBuilderGrammaticalGender {
+  const normalizedPronouns = pronouns.trim().toLowerCase();
+
+  if (normalizedPronouns === "ela / dela" || normalizedPronouns === "ela/dela") {
+    return "feminine";
+  }
+
+  if (normalizedPronouns === "elu / delu" || normalizedPronouns === "elu/delu") {
+    return "neutral";
+  }
+
+  return "masculine";
+}
+
+function getGenderedCharacterOptionName({
+  key,
+  name,
+  pronouns,
+}: {
+  key?: string | null;
+  name: string;
+  pronouns: string;
+}) {
+  const grammaticalGender = getCharacterBuilderGrammaticalGender(pronouns);
+  const genderedNameByKey = key
+    ? GENDERED_CHARACTER_OPTION_NAMES_BY_KEY[key]
+    : undefined;
+
+  if (genderedNameByKey) {
+    return genderedNameByKey[grammaticalGender];
+  }
+
+  const genderedNameByFallbackName =
+    GENDERED_CHARACTER_OPTION_NAMES_BY_NORMALIZED_NAME[
+      normalizeCharacterOptionName(name)
+    ];
+
+  if (genderedNameByFallbackName) {
+    return genderedNameByFallbackName[grammaticalGender];
+  }
+
+  return name;
+}
+
+function getDefaultGenderFromPronouns(pronouns: string) {
+  const normalizedPronouns = pronouns.trim().toLowerCase();
+
+  if (normalizedPronouns === "ele / dele" || normalizedPronouns === "ele/dele") {
+    return "Masculino";
+  }
+
+  if (normalizedPronouns === "ela / dela" || normalizedPronouns === "ela/dela") {
+    return "Feminino";
+  }
+
+  if (normalizedPronouns === "elu / delu" || normalizedPronouns === "elu/delu") {
+    return "Não binário";
+  }
+
+  return "";
+}
+
+function shouldReplaceGenderAutomatically(currentGender: string) {
+  const normalizedGender = currentGender.trim().toLowerCase();
+
+  return (
+    normalizedGender === "" ||
+    normalizedGender === "masculino" ||
+    normalizedGender === "feminino" ||
+    normalizedGender === "não binário" ||
+    normalizedGender === "nao binario" ||
+    normalizedGender === "neutro"
+  );
+}
+
+function getSelectedOptionLabelByPronouns(pronouns: string) {
+  const grammaticalGender = getCharacterBuilderGrammaticalGender(pronouns);
+
+  if (grammaticalGender === "feminine") {
+    return "Selecionada";
+  }
+
+  if (grammaticalGender === "neutral") {
+    return "Selecionade";
+  }
+
+  return "Selecionado";
+}
 
 async function getCampaign(id: string): Promise<Campaign> {
   const response = await fetch(`http://localhost:8081/campaigns/${id}`, {
@@ -767,1010 +1201,6 @@ function CharacterCreationMenuModal({
   );
 }
 
-type CharacterAttributeKey =
-  | "strength"
-  | "dexterity"
-  | "constitution"
-  | "intelligence"
-  | "wisdom"
-  | "charisma";
-
-type CharacterBuilderAttributes = Record<CharacterAttributeKey, number | null>;
-
-type CharacterBuilderEquipmentMode = "PACKAGE" | "GOLD";
-
-type CharacterSheetStatus = "DRAFT" | "READY" | "ARCHIVED";
-
-type CharacterBuilderEquipmentDraftItem = {
-  key: string;
-  quantity: number;
-  source: "class" | "background";
-  notes?: string;
-  isEquipped?: boolean;
-};
-
-type CharacterBuilderDraft = {
-  name: string;
-  pronouns: string;
-  concept: string;
-  portraitUrl: string;
-  tokenImageUrl: string;
-  tokenImageFit: "FILL" | "CONTAIN" | "COVER";
-
-  classId: string;
-  className: string;
-
-  ancestryId: string;
-  ancestryName: string;
-
-  backgroundId: string;
-  backgroundName: string;
-
-  attributes: CharacterBuilderAttributes;
-  skillKeys: string[];
-  spellKeys: string[];
-  equipmentItems: CharacterBuilderEquipmentDraftItem[];
-  classEquipmentMode: CharacterBuilderEquipmentMode;
-  backgroundEquipmentMode: CharacterBuilderEquipmentMode;
-  startingGold: number;
-
-  alignment: string;
-  faith: string;
-  lifestyle: string;
-
-  hair: string;
-  skin: string;
-  eyes: string;
-  height: string;
-  weight: string;
-  age: string;
-  gender: string;
-
-  bonds: string;
-  flaws: string;
-  ideals: string;
-  personality: string;
-  backstory: string;
-  notes: string;
-  gmNotes: string;
-};
-
-type CharacterBuilderOption = {
-  id: string;
-  key: string;
-  name: string;
-  description: string | null;
-};
-
-type CharacterBuilderClassOption = CharacterBuilderOption & {
-  hitDie: number;
-};
-
-type CharacterBuilderAncestryOption = CharacterBuilderOption & {
-  defaultSizeCategory: string;
-};
-
-type CharacterBuilderBackgroundOption = CharacterBuilderOption & {
-  skillKeys: string[];
-  toolNames: string[];
-  languageChoiceCount: number;
-  startingGold: number;
-};
-
-type CharacterBuilderSkillOption = CharacterBuilderOption & {
-  statId: string;
-  stat: {
-    id: string;
-    key: string;
-    name: string;
-    shortName: string;
-  };
-};
-
-type CharacterBuilderSpellOption = CharacterBuilderOption & {
-  level: number;
-  school: string;
-  castingTime: string | null;
-  range: string | null;
-  duration: string | null;
-  components: string[];
-  isRitual: boolean;
-  requiresConcentration: boolean;
-};
-
-type CharacterBuilderEquipmentOption = CharacterBuilderOption & {
-  category: string;
-  damage: string | null;
-  defense: number | null;
-  cost: string | null;
-  weight: number | null;
-  properties: string | null;
-};
-
-type CharacterBuilderOptions = {
-  classes: CharacterBuilderClassOption[];
-  ancestries: CharacterBuilderAncestryOption[];
-  backgrounds: CharacterBuilderBackgroundOption[];
-  skills: CharacterBuilderSkillOption[];
-  spells: CharacterBuilderSpellOption[];
-  equipment: CharacterBuilderEquipmentOption[];
-};
-
-function isCantrip(spell: CharacterBuilderSpellOption) {
-  return spell.level === 0;
-}
-
-function isLeveledSpell(spell: CharacterBuilderSpellOption) {
-  return spell.level > 0;
-}
-
-function getSpellLevelLabel(level: number) {
-  if (level === 0) {
-    return "Truque";
-  }
-
-  return `Nível ${level}`;
-}
-
-function getCompactSpellDetail(value: string | null) {
-  if (!value) {
-    return "—";
-  }
-
-  return value
-    .replace(/\bmetros\b/gi, "m")
-    .replace(/\bmetro\b/gi, "m")
-    .replace(/\bminutos\b/gi, "min.")
-    .replace(/\bminuto\b/gi, "min.")
-    .replace(/\binstantâneo\b/gi, "insta")
-    .replace(/\binstantanea\b/gi, "insta")
-    .replace(/\binstantânea\b/gi, "insta")
-    .replace(/\binstantaneo\b/gi, "insta");
-}
-
-function getEquipmentCategoryLabel(category: string) {
-  const labels: Record<string, string> = {
-    WEAPON: "Arma",
-    ARMOR: "Armadura",
-    SHIELD: "Escudo",
-    GEAR: "Item",
-    TOOL: "Ferramenta",
-    CONSUMABLE: "Consumível",
-    RELIC: "Relíquia",
-  };
-
-  return labels[category] ?? category;
-}
-
-function getEquipmentMainInfo(item: CharacterBuilderEquipmentOption) {
-  if (item.damage) {
-    return {
-      label: "Dano",
-      value: item.damage,
-    };
-  }
-
-  if (item.defense !== null) {
-    return {
-      label: "Defesa",
-      value: `+${item.defense}`,
-    };
-  }
-
-  if (item.properties) {
-    return {
-      label: "Propriedades",
-      value: item.properties,
-    };
-  }
-
-  return {
-    label: "Tipo",
-    value: getEquipmentCategoryLabel(item.category),
-  };
-}
-
-function formatEquipmentWeight(weight: number | null) {
-  if (weight === null) {
-    return "—";
-  }
-
-  return `${weight} kg`;
-}
-
-const EQUIPMENT_CATEGORY_ORDER = [
-  "WEAPON",
-  "ARMOR",
-  "SHIELD",
-  "TOOL",
-  "GEAR",
-  "CONSUMABLE",
-  "RELIC",
-] as const;
-
-function getEquipmentCategoryDescription(category: string) {
-  const descriptions: Record<string, string> = {
-    WEAPON: "Armas usadas para ataques corpo a corpo ou à distância.",
-    ARMOR: "Proteções vestidas para reduzir risco e aumentar defesa.",
-    SHIELD: "Proteções empunhadas para bloquear golpes e proteger posição.",
-    TOOL: "Ferramentas usadas em testes, ofícios, reparos ou especialidades.",
-    GEAR: "Itens gerais de exploração, sobrevivência e aventura.",
-    CONSUMABLE:
-      "Itens de uso limitado, como tônicos, poções e recursos gastos.",
-    RELIC:
-      "Objetos raros, instáveis ou misteriosos ligados a magia e tecnologia antiga.",
-  };
-
-  return descriptions[category] ?? "Equipamentos variados deste sistema.";
-}
-
-function groupEquipmentByCategory(
-  equipment: CharacterBuilderEquipmentOption[],
-) {
-  const categories = Array.from(
-    new Set(equipment.map((item) => item.category)),
-  ).sort((firstCategory, secondCategory) => {
-    const firstIndex = EQUIPMENT_CATEGORY_ORDER.indexOf(
-      firstCategory as (typeof EQUIPMENT_CATEGORY_ORDER)[number],
-    );
-
-    const secondIndex = EQUIPMENT_CATEGORY_ORDER.indexOf(
-      secondCategory as (typeof EQUIPMENT_CATEGORY_ORDER)[number],
-    );
-
-    const normalizedFirstIndex =
-      firstIndex === -1 ? EQUIPMENT_CATEGORY_ORDER.length : firstIndex;
-
-    const normalizedSecondIndex =
-      secondIndex === -1 ? EQUIPMENT_CATEGORY_ORDER.length : secondIndex;
-
-    return normalizedFirstIndex - normalizedSecondIndex;
-  });
-
-  return categories.map((category) => ({
-    category,
-    label: getEquipmentCategoryLabel(category),
-    description: getEquipmentCategoryDescription(category),
-    items: equipment.filter((item) => item.category === category),
-  }));
-}
-
-const STANDARD_ARRAY_ATTRIBUTE_VALUES = [15, 14, 13, 12, 10, 8];
-
-const DEFAULT_CHARACTER_ATTRIBUTES: CharacterBuilderAttributes = {
-  strength: null,
-  dexterity: null,
-  constitution: null,
-  intelligence: null,
-  wisdom: null,
-  charisma: null,
-};
-
-const CHARACTER_ATTRIBUTE_DEFINITIONS: Array<{
-  key: CharacterAttributeKey;
-  name: string;
-  shortName: string;
-  description: string;
-}> = [
-  {
-    key: "strength",
-    name: "Força",
-    shortName: "FOR",
-    description:
-      "Poder físico, empurrões, carga, ataques corpo a corpo e feitos brutos.",
-  },
-  {
-    key: "dexterity",
-    name: "Destreza",
-    shortName: "DES",
-    description:
-      "Reflexos, precisão, furtividade, equilíbrio e agilidade em combate.",
-  },
-  {
-    key: "constitution",
-    name: "Constituição",
-    shortName: "CON",
-    description:
-      "Resistência, vigor, fôlego, saúde e capacidade de suportar dor.",
-  },
-  {
-    key: "intelligence",
-    name: "Inteligência",
-    shortName: "INT",
-    description:
-      "Raciocínio, memória, investigação, conhecimento e lógica arcana.",
-  },
-  {
-    key: "wisdom",
-    name: "Sabedoria",
-    shortName: "SAB",
-    description:
-      "Percepção, instinto, intuição, sobrevivência e leitura do ambiente.",
-  },
-  {
-    key: "charisma",
-    name: "Carisma",
-    shortName: "CAR",
-    description:
-      "Presença, liderança, influência, expressão artística e força de vontade social.",
-  },
-];
-
-function calculateAttributeModifier(value: number) {
-  return Math.floor((value - 10) / 2);
-}
-
-function formatAttributeModifier(value: number | null) {
-  if (value === null) {
-    return "—";
-  }
-
-  const modifier = calculateAttributeModifier(value);
-
-  return modifier >= 0 ? `+${modifier}` : `${modifier}`;
-}
-
-function clampAttributeValue(value: number) {
-  if (!Number.isFinite(value)) {
-    return null;
-  }
-
-  return Math.max(3, Math.min(20, Math.round(value)));
-}
-
-function getPersistableCharacterAttributes(
-  attributes: CharacterBuilderAttributes,
-) {
-  return Object.fromEntries(
-    Object.entries(attributes).filter(([, value]) => value !== null),
-  );
-}
-
-type CharacterSheetStatResponse = {
-  baseValue: number;
-  stat: {
-    key: string;
-  };
-};
-
-function isCharacterAttributeKey(key: string): key is CharacterAttributeKey {
-  return CHARACTER_ATTRIBUTE_DEFINITIONS.some(
-    (attribute) => attribute.key === key,
-  );
-}
-
-const CHARACTER_BUILDER_LEVEL = 1;
-
-function formatNumberModifier(value: number) {
-  return value >= 0 ? `+${value}` : `${value}`;
-}
-
-function getProficiencyBonusByLevel(level: number) {
-  if (level >= 17) {
-    return 6;
-  }
-
-  if (level >= 13) {
-    return 5;
-  }
-
-  if (level >= 9) {
-    return 4;
-  }
-
-  if (level >= 5) {
-    return 3;
-  }
-
-  return 2;
-}
-
-function getAttributeValueByStatKey(
-  attributes: CharacterBuilderAttributes,
-  statKey: string,
-) {
-  if (!isCharacterAttributeKey(statKey)) {
-    return null;
-  }
-
-  return attributes[statKey];
-}
-
-function getSkillCalculation({
-  attributes,
-  statKey,
-  isProficient,
-  level,
-}: {
-  attributes: CharacterBuilderAttributes;
-  statKey: string;
-  isProficient: boolean;
-  level: number;
-}) {
-  const attributeValue = getAttributeValueByStatKey(attributes, statKey);
-  const proficiencyBonus = isProficient ? getProficiencyBonusByLevel(level) : 0;
-
-  if (attributeValue === null) {
-    return {
-      attributeModifier: null as number | null,
-      proficiencyBonus,
-      total: null as number | null,
-      formattedAttributeModifier: "—",
-      formattedProficiencyBonus: isProficient
-        ? formatNumberModifier(proficiencyBonus)
-        : "—",
-      formattedTotal: "—",
-    };
-  }
-
-  const attributeModifier = calculateAttributeModifier(attributeValue);
-  const total = attributeModifier + proficiencyBonus;
-
-  return {
-    attributeModifier,
-    proficiencyBonus,
-    total,
-    formattedAttributeModifier: formatNumberModifier(attributeModifier),
-    formattedProficiencyBonus: isProficient
-      ? formatNumberModifier(proficiencyBonus)
-      : "—",
-    formattedTotal: formatNumberModifier(total),
-  };
-}
-
-function getCharacterSkillKeysFromSkills(
-  skills?: Array<{
-    skill: {
-      key: string;
-    };
-  }> | null,
-) {
-  return skills?.map((sheetSkill) => sheetSkill.skill.key) ?? [];
-}
-
-function getCharacterSpellKeysFromSpells(
-  spells?: Array<{
-    spell: {
-      key: string;
-    };
-  }> | null,
-) {
-  return spells?.map((sheetSpell) => sheetSpell.spell.key) ?? [];
-}
-
-function normalizeCharacterEquipmentMode(
-  value?: string | null,
-): CharacterBuilderEquipmentMode {
-  return value === "GOLD" ? "GOLD" : "PACKAGE";
-}
-
-function getCharacterEquipmentItemsFromEquipment(
-  equipment?: Array<{
-    quantity: number;
-    source: string | null;
-    notes: string | null;
-    isEquipped: boolean;
-    equipment: {
-      key: string;
-    };
-  }> | null,
-): CharacterBuilderEquipmentDraftItem[] {
-  return (
-    equipment?.map((sheetEquipment) => ({
-      key: sheetEquipment.equipment.key,
-      quantity: sheetEquipment.quantity,
-      source: sheetEquipment.source === "background" ? "background" : "class",
-      notes: sheetEquipment.notes ?? undefined,
-      isEquipped: sheetEquipment.isEquipped,
-    })) ?? []
-  );
-}
-
-type StartingEquipmentPlan = {
-  label: string;
-  description: string;
-  gold: number;
-  items: CharacterBuilderEquipmentDraftItem[];
-  proficiencies: string[];
-};
-
-function getClassStartingEquipmentPlan(
-  selectedClass: CharacterBuilderClassOption | undefined,
-): StartingEquipmentPlan {
-  if (!selectedClass) {
-    return {
-      label: "Classe não selecionada",
-      description:
-        "Escolha uma classe para ver o pacote inicial e a alternativa em moedas.",
-      gold: 0,
-      items: [],
-      proficiencies: [],
-    };
-  }
-
-  const plans: Record<string, StartingEquipmentPlan> = {
-    barbarian: {
-      label: "Pacote do Bárbaro",
-      description:
-        "Um conjunto bruto para combate direto e exploração em regiões perigosas.",
-      gold: 20,
-      proficiencies: ["Armas marciais", "Armaduras leves", "Escudos"],
-      items: [
-        {
-          key: "heavy-axe",
-          quantity: 1,
-          source: "class",
-          notes: "Arma inicial da classe",
-          isEquipped: true,
-        },
-        {
-          key: "shortbow",
-          quantity: 1,
-          source: "class",
-          notes: "Opção simples de ataque à distância",
-        },
-        {
-          key: "survival-kit",
-          quantity: 1,
-          source: "class",
-          notes: "Pacote de sobrevivência",
-        },
-      ],
-    },
-    bard: {
-      label: "Pacote do Bardo",
-      description: "Equipamento leve para estrada, atuação e defesa básica.",
-      gold: 20,
-      proficiencies: ["Armas simples", "Instrumentos musicais", "Atuação"],
-      items: [
-        {
-          key: "dagger",
-          quantity: 1,
-          source: "class",
-          notes: "Arma leve inicial",
-          isEquipped: true,
-        },
-        {
-          key: "leather-armor",
-          quantity: 1,
-          source: "class",
-          notes: "Proteção leve",
-          isEquipped: true,
-        },
-        {
-          key: "adventurer-pouch",
-          quantity: 1,
-          source: "class",
-          notes: "Bolsa de viagem",
-        },
-      ],
-    },
-    rogue: {
-      label: "Pacote do Ladino",
-      description:
-        "Ferramentas discretas para infiltração, mobilidade e sobrevivência urbana.",
-      gold: 18,
-      proficiencies: ["Armas simples", "Ferramentas de ladrão", "Furtividade"],
-      items: [
-        {
-          key: "dagger",
-          quantity: 2,
-          source: "class",
-          notes: "Armas leves iniciais",
-          isEquipped: true,
-        },
-        {
-          key: "leather-armor",
-          quantity: 1,
-          source: "class",
-          notes: "Proteção leve",
-          isEquipped: true,
-        },
-        {
-          key: "thieves-tools",
-          quantity: 1,
-          source: "class",
-          notes: "Ferramenta de classe",
-        },
-      ],
-    },
-    fighter: {
-      label: "Pacote do Guerreiro",
-      description: "Equipamento marcial equilibrado para linha de frente.",
-      gold: 25,
-      proficiencies: ["Armas simples", "Armas marciais", "Armaduras"],
-      items: [
-        {
-          key: "longsword",
-          quantity: 1,
-          source: "class",
-          notes: "Arma marcial inicial",
-          isEquipped: true,
-        },
-        {
-          key: "reinforced-mail",
-          quantity: 1,
-          source: "class",
-          notes: "Armadura inicial",
-          isEquipped: true,
-        },
-        {
-          key: "simple-shield",
-          quantity: 1,
-          source: "class",
-          notes: "Defesa inicial",
-          isEquipped: true,
-        },
-      ],
-    },
-    technomancer: {
-      label: "Pacote do Tecnomante",
-      description:
-        "Ferramentas e itens para reparos, improviso e tecnologia antiga.",
-      gold: 22,
-      proficiencies: ["Ferramentas tecnológicas", "Reparo", "Dispositivos"],
-      items: [
-        {
-          key: "technomancer-tools",
-          quantity: 1,
-          source: "class",
-          notes: "Ferramenta principal da classe",
-        },
-        {
-          key: "field-tonic",
-          quantity: 1,
-          source: "class",
-          notes: "Consumível inicial",
-        },
-        {
-          key: "adventurer-pouch",
-          quantity: 1,
-          source: "class",
-          notes: "Bolsa de componentes",
-        },
-      ],
-    },
-    necromancer: {
-      label: "Pacote do Necromante",
-      description:
-        "Recursos sombrios e proteção mínima para um conjurador iniciante.",
-      gold: 18,
-      proficiencies: ["Armas simples", "Relíquias fúnebres", "Ocultismo"],
-      items: [
-        {
-          key: "dagger",
-          quantity: 1,
-          source: "class",
-          notes: "Arma simples inicial",
-          isEquipped: true,
-        },
-        {
-          key: "broken-relic",
-          quantity: 1,
-          source: "class",
-          notes: "Foco narrativo inicial",
-        },
-        {
-          key: "adventurer-pouch",
-          quantity: 1,
-          source: "class",
-          notes: "Bolsa de componentes",
-        },
-      ],
-    },
-  };
-
-  return (
-    plans[selectedClass.key] ?? {
-      label: `Pacote de ${selectedClass.name}`,
-      description:
-        "Pacote inicial genérico enquanto as regras específicas desta classe são refinadas.",
-      gold: 15,
-      proficiencies: [
-        "Proficiências específicas da classe serão refinadas depois",
-      ],
-      items: [
-        {
-          key: "dagger",
-          quantity: 1,
-          source: "class",
-          notes: "Arma simples inicial",
-          isEquipped: true,
-        },
-        {
-          key: "adventurer-pouch",
-          quantity: 1,
-          source: "class",
-          notes: "Bolsa inicial",
-        },
-      ],
-    }
-  );
-}
-
-function getBackgroundStartingEquipmentPlan(
-  selectedBackground: CharacterBuilderBackgroundOption | undefined,
-): StartingEquipmentPlan {
-  if (!selectedBackground) {
-    return {
-      label: "Antecedente não selecionado",
-      description:
-        "Escolha um antecedente para ver os itens de origem e a alternativa em moedas.",
-      gold: 0,
-      items: [],
-      proficiencies: [],
-    };
-  }
-
-  const commonItemsByBackgroundKey: Record<
-    string,
-    CharacterBuilderEquipmentDraftItem[]
-  > = {
-    "alley-blade": [
-      {
-        key: "crowbar",
-        quantity: 1,
-        source: "background",
-        notes: "Item do antecedente",
-      },
-      {
-        key: "dagger",
-        quantity: 1,
-        source: "background",
-        notes: "Item do antecedente",
-      },
-    ],
-    "gutter-child": [
-      {
-        key: "thieves-tools",
-        quantity: 1,
-        source: "background",
-        notes: "Ferramenta do antecedente",
-      },
-      {
-        key: "dagger",
-        quantity: 1,
-        source: "background",
-        notes: "Item do antecedente",
-      },
-    ],
-    "relic-hunter": [
-      {
-        key: "crowbar",
-        quantity: 1,
-        source: "background",
-        notes: "Ferramenta de exploração",
-      },
-      {
-        key: "broken-relic",
-        quantity: 1,
-        source: "background",
-        notes: "Relíquia inicial",
-      },
-    ],
-    "frontier-walker": [
-      {
-        key: "survival-kit",
-        quantity: 1,
-        source: "background",
-        notes: "Kit de fronteira",
-      },
-      {
-        key: "shortbow",
-        quantity: 1,
-        source: "background",
-        notes: "Arma de caça",
-      },
-    ],
-    "collapse-survivor": [
-      {
-        key: "survival-kit",
-        quantity: 1,
-        source: "background",
-        notes: "Kit de sobrevivente",
-      },
-      {
-        key: "field-tonic",
-        quantity: 1,
-        source: "background",
-        notes: "Consumível inicial",
-      },
-    ],
-  };
-
-  return {
-    label: `Origem: ${selectedBackground.name}`,
-    description:
-      selectedBackground.description ??
-      "Itens recebidos pela história do personagem antes da aventura.",
-    gold: selectedBackground.startingGold,
-    proficiencies: selectedBackground.toolNames,
-    items: commonItemsByBackgroundKey[selectedBackground.key] ?? [
-      {
-        key: "adventurer-pouch",
-        quantity: 1,
-        source: "background",
-        notes: `Item inicial de ${selectedBackground.name}`,
-      },
-    ],
-  };
-}
-
-function mergeStartingEquipmentItems(
-  items: CharacterBuilderEquipmentDraftItem[],
-) {
-  const mergedItems = new Map<string, CharacterBuilderEquipmentDraftItem>();
-
-  for (const item of items) {
-    const currentItem = mergedItems.get(item.key);
-
-    if (currentItem) {
-      mergedItems.set(item.key, {
-        ...currentItem,
-        quantity: currentItem.quantity + item.quantity,
-        isEquipped: currentItem.isEquipped || item.isEquipped,
-      });
-
-      continue;
-    }
-
-    mergedItems.set(item.key, item);
-  }
-
-  return Array.from(mergedItems.values());
-}
-
-function getStartingEquipmentItemsFromDraft(
-  draft: CharacterBuilderDraft,
-  options: CharacterBuilderOptions,
-) {
-  const selectedClass = options.classes.find(
-    (option) => option.id === draft.classId,
-  );
-
-  const selectedBackground = options.backgrounds.find(
-    (option) => option.id === draft.backgroundId,
-  );
-
-  const classPlan = getClassStartingEquipmentPlan(selectedClass);
-  const backgroundPlan = getBackgroundStartingEquipmentPlan(selectedBackground);
-
-  return mergeStartingEquipmentItems([
-    ...(draft.classEquipmentMode === "PACKAGE" ? classPlan.items : []),
-    ...(draft.backgroundEquipmentMode === "PACKAGE"
-      ? backgroundPlan.items
-      : []),
-  ]);
-}
-
-function getStartingGoldFromDraft(
-  draft: CharacterBuilderDraft,
-  options: CharacterBuilderOptions,
-) {
-  const selectedClass = options.classes.find(
-    (option) => option.id === draft.classId,
-  );
-
-  const selectedBackground = options.backgrounds.find(
-    (option) => option.id === draft.backgroundId,
-  );
-
-  const classPlan = getClassStartingEquipmentPlan(selectedClass);
-  const backgroundPlan = getBackgroundStartingEquipmentPlan(selectedBackground);
-
-  return (
-    (draft.classEquipmentMode === "GOLD" ? classPlan.gold : 0) +
-    (draft.backgroundEquipmentMode === "GOLD" ? backgroundPlan.gold : 0)
-  );
-}
-
-function getCharacterAttributesFromStats(
-  stats?: CharacterSheetStatResponse[] | null,
-): CharacterBuilderAttributes {
-  const attributes = {
-    ...DEFAULT_CHARACTER_ATTRIBUTES,
-  };
-
-  stats?.forEach((sheetStat) => {
-    const key = sheetStat.stat.key;
-
-    if (!isCharacterAttributeKey(key)) {
-      return;
-    }
-
-    attributes[key] = clampAttributeValue(sheetStat.baseValue);
-  });
-
-  return attributes;
-}
-
-type CharacterBuilderStep = {
-  id: string;
-  title: string;
-  description: string;
-};
-
-const characterBuilderSteps: CharacterBuilderStep[] = [
-  {
-    id: "concept",
-    title: "Conceito",
-    description: "Nome, ideia central, imagem e direção inicial do personagem.",
-  },
-  {
-    id: "class",
-    title: "Classe",
-    description: "Escolha a função principal do personagem na aventura.",
-  },
-  {
-    id: "ancestry",
-    title: "Ancestralidade",
-    description: "Defina a origem biológica, cultural ou mutada do personagem.",
-  },
-  {
-    id: "background",
-    title: "Antecedente",
-    description: "Escolha de onde o personagem veio antes da aventura começar.",
-  },
-  {
-    id: "attributes",
-    title: "Atributos",
-    description: "Distribua os valores principais da ficha.",
-  },
-  {
-    id: "skills",
-    title: "Perícias",
-    description: "Escolha treinamentos, especialidades e proficiências.",
-  },
-  {
-    id: "spells",
-    title: "Magias",
-    description: "Selecione truques, magias e poderes conhecidos.",
-  },
-  {
-    id: "equipment",
-    title: "Equipamentos",
-    description: "Escolha armas, armaduras, ferramentas e itens iniciais.",
-  },
-  {
-    id: "about",
-    title: "Sobre",
-    description: "Adicione aparência, personalidade, história e notas.",
-  },
-  {
-    id: "review",
-    title: "Revisão",
-    description: "Confira tudo antes de finalizar a ficha.",
-  },
-];
-
-type CharacterBuilderModalProps = {
-  isOpen: boolean;
-  activeStepId: string;
-  draft: CharacterBuilderDraft;
-  options: CharacterBuilderOptions;
-  isLoadingOptions: boolean;
-  optionsError: string | null;
-  savedCharacterSheetId: string | null;
-  savedCharacterSheetStatus: CharacterSheetStatus | null;
-  isSavingDraft: boolean;
-  isFinalizingSheet: boolean;
-  saveError: string | null;
-  saveSuccess: string | null;
-  onSaveDraft: () => void;
-  onFinalizeSheet: () => void;
-  onChangeDraft: (draft: CharacterBuilderDraft) => void;
-  onSelectOption: (
-    type: "class" | "ancestry" | "background",
-    option: {
-      id: string;
-      name: string;
-      skillKeys?: string[];
-    },
-  ) => void;
-  onChangeStep: (stepId: string) => void;
-  onClose: () => void;
-};
-
 function CharacterBuilderModal({
   isOpen,
   activeStepId,
@@ -1810,10 +1240,20 @@ function CharacterBuilderModal({
     key: K,
     value: CharacterBuilderDraft[K],
   ) {
-    onChangeDraft({
+    const nextDraft: CharacterBuilderDraft = {
       ...draft,
       [key]: value,
-    });
+    };
+
+    if (key === "pronouns" && typeof value === "string") {
+      const nextGender = getDefaultGenderFromPronouns(value);
+
+      if (shouldReplaceGenderAutomatically(draft.gender)) {
+        nextDraft.gender = nextGender;
+      }
+    }
+
+    onChangeDraft(nextDraft);
   }
 
   const selectedClass = options.classes.find(
@@ -1828,7 +1268,73 @@ function CharacterBuilderModal({
     (option) => option.id === draft.backgroundId,
   );
 
-  const requiredSkillChoiceCount = selectedBackground?.skillKeys.length ?? 2;
+  const selectedClassDisplayName = selectedClass
+    ? getGenderedCharacterOptionName({
+        key: selectedClass.key,
+        name: selectedClass.name,
+        pronouns: draft.pronouns,
+      })
+    : draft.className
+      ? getGenderedCharacterOptionName({
+          name: draft.className,
+          pronouns: draft.pronouns,
+        })
+      : "";
+
+  const selectedAncestryDisplayName = selectedAncestry
+    ? getGenderedCharacterOptionName({
+        key: selectedAncestry.key,
+        name: selectedAncestry.name,
+        pronouns: draft.pronouns,
+      })
+    : draft.ancestryName
+      ? getGenderedCharacterOptionName({
+          name: draft.ancestryName,
+          pronouns: draft.pronouns,
+        })
+      : "";
+
+  const selectedBackgroundDisplayName = selectedBackground
+    ? getGenderedCharacterOptionName({
+        key: selectedBackground.key,
+        name: selectedBackground.name,
+        pronouns: draft.pronouns,
+      })
+    : draft.backgroundName
+      ? getGenderedCharacterOptionName({
+          name: draft.backgroundName,
+          pronouns: draft.pronouns,
+        })
+      : "";
+
+  const genderedSelectedClass = selectedClass
+    ? {
+        ...selectedClass,
+        name: selectedClassDisplayName,
+      }
+    : undefined;
+
+  const genderedSelectedAncestry = selectedAncestry
+    ? {
+        ...selectedAncestry,
+        name: selectedAncestryDisplayName,
+      }
+    : undefined;
+
+  const genderedSelectedBackground = selectedBackground
+    ? {
+        ...selectedBackground,
+        name: selectedBackgroundDisplayName,
+      }
+    : undefined;
+
+  const selectedOptionLabel = getSelectedOptionLabelByPronouns(draft.pronouns);
+
+  const temporaryClassSkillChoiceCount = selectedClass ? 2 : 0;
+  const backgroundSkillChoiceCount = selectedBackground?.skillKeys.length ?? 0;
+
+  const requiredSkillChoiceCount =
+    temporaryClassSkillChoiceCount + backgroundSkillChoiceCount;
 
   const selectedSkillCount = draft.skillKeys.length;
   const selectedSpellCount = draft.spellKeys.length;
@@ -1938,7 +1444,7 @@ function CharacterBuilderModal({
     }
 
     if (stepId === "skills" && !isStepComplete("skills")) {
-      return `Escolha pelo menos ${requiredSkillChoiceCount} perícias. Atualmente você escolheu ${selectedSkillCount}.`;
+      return `Escolha ${requiredSkillChoiceCount} perícias no total, somando classe e antecedente. Atualmente você escolheu ${selectedSkillCount}.`;
     }
 
     return null;
@@ -2115,7 +1621,11 @@ function CharacterBuilderModal({
                       : "border-amber-400/30 bg-amber-300/10 text-amber-200",
                   ].join(" ")}
                 >
-                  {savedCharacterSheetStatus === "READY" ? "Pronta" : savedCharacterSheetId ? "Salvo" : "Rascunho"}
+                  {savedCharacterSheetStatus === "READY"
+                    ? "Pronta"
+                    : savedCharacterSheetId
+                      ? "Salvo"
+                      : "Rascunho"}
                 </span>
               </div>
 
@@ -2139,12 +1649,25 @@ function CharacterBuilderModal({
                       error={optionsError}
                       emptyMessage="Nenhuma classe encontrada para este sistema."
                       selectedId={draft.classId}
+                      selectedLabel={selectedOptionLabel}
+                      getOptionName={(option) =>
+                        getGenderedCharacterOptionName({
+                          key: option.key,
+                          name: option.name,
+                          pronouns: draft.pronouns,
+                        })
+                      }
                       getOptionTitle={(option) => {
                         const hitDieText = option.hitDie
                           ? `Dado de vida: d${option.hitDie}.`
                           : "Dado de vida: em breve.";
+                        const optionName = getGenderedCharacterOptionName({
+                          key: option.key,
+                          name: option.name,
+                          pronouns: draft.pronouns,
+                        });
 
-                        return `${option.name}: ${
+                        return `${optionName}: ${
                           option.description ?? "Sem descrição cadastrada."
                         } ${hitDieText} Stats importantes: em breve. Features da classe: em breve.`;
                       }}
@@ -2163,12 +1686,25 @@ function CharacterBuilderModal({
                       error={optionsError}
                       emptyMessage="Nenhuma ancestralidade encontrada para este sistema."
                       selectedId={draft.ancestryId}
+                      selectedLabel={selectedOptionLabel}
+                      getOptionName={(option) =>
+                        getGenderedCharacterOptionName({
+                          key: option.key,
+                          name: option.name,
+                          pronouns: draft.pronouns,
+                        })
+                      }
                       getOptionTitle={(option) => {
                         const sizeText = option.defaultSizeCategory
                           ? `Tamanho padrão: ${option.defaultSizeCategory}.`
                           : "Tamanho padrão: em breve.";
+                        const optionName = getGenderedCharacterOptionName({
+                          key: option.key,
+                          name: option.name,
+                          pronouns: draft.pronouns,
+                        });
 
-                        return `${option.name}: ${
+                        return `${optionName}: ${
                           option.description ?? "Sem descrição cadastrada."
                         } ${sizeText} Features da ancestralidade: em breve.`;
                       }}
@@ -2187,6 +1723,14 @@ function CharacterBuilderModal({
                       error={optionsError}
                       emptyMessage="Nenhum antecedente encontrado para este sistema."
                       selectedId={draft.backgroundId}
+                      selectedLabel={selectedOptionLabel}
+                      getOptionName={(option) =>
+                        getGenderedCharacterOptionName({
+                          key: option.key,
+                          name: option.name,
+                          pronouns: draft.pronouns,
+                        })
+                      }
                       getOptionTitle={(option) => {
                         const suggestedSkillNames =
                           option.skillKeys
@@ -2198,8 +1742,13 @@ function CharacterBuilderModal({
                               return skill?.name ?? skillKey;
                             })
                             .join(", ") || "nenhuma perícia sugerida";
+                        const optionName = getGenderedCharacterOptionName({
+                          key: option.key,
+                          name: option.name,
+                          pronouns: draft.pronouns,
+                        });
 
-                        return `${option.name}: ${
+                        return `${optionName}: ${
                           option.description ?? "Sem descrição cadastrada."
                         } Perícias sugeridas: ${suggestedSkillNames}. Features do antecedente: em breve.`;
                       }}
@@ -2225,7 +1774,7 @@ function CharacterBuilderModal({
                   ) : activeStep.id === "skills" ? (
                     <CharacterSkillsStep
                       skills={options.skills}
-                      selectedBackground={selectedBackground}
+                      selectedBackground={genderedSelectedBackground}
                       attributes={draft.attributes}
                       selectedSkillKeys={draft.skillKeys}
                       requiredSkillChoiceCount={requiredSkillChoiceCount}
@@ -2233,6 +1782,13 @@ function CharacterBuilderModal({
                       error={optionsError}
                       onToggleSkill={(skillKey) => {
                         const isSelected = draft.skillKeys.includes(skillKey);
+
+                        if (
+                          !isSelected &&
+                          draft.skillKeys.length >= requiredSkillChoiceCount
+                        ) {
+                          return;
+                        }
 
                         updateDraft(
                           "skillKeys",
@@ -2247,7 +1803,7 @@ function CharacterBuilderModal({
                   ) : activeStep.id === "spells" ? (
                     <CharacterSpellsStep
                       spells={options.spells}
-                      selectedClass={selectedClass}
+                      selectedClass={genderedSelectedClass}
                       selectedSpellKeys={draft.spellKeys}
                       isLoading={isLoadingOptions}
                       error={optionsError}
@@ -2267,8 +1823,8 @@ function CharacterBuilderModal({
                   ) : activeStep.id === "equipment" ? (
                     <CharacterEquipmentStep
                       equipment={options.equipment}
-                      selectedClass={selectedClass}
-                      selectedBackground={selectedBackground}
+                      selectedClass={genderedSelectedClass}
+                      selectedBackground={genderedSelectedBackground}
                       draft={draft}
                       isLoading={isLoadingOptions}
                       error={optionsError}
@@ -2285,9 +1841,9 @@ function CharacterBuilderModal({
                     <CharacterReviewStep
                       draft={draft}
                       options={options}
-                      selectedClass={selectedClass}
-                      selectedAncestry={selectedAncestry}
-                      selectedBackground={selectedBackground}
+                      selectedClass={genderedSelectedClass}
+                      selectedAncestry={genderedSelectedAncestry}
+                      selectedBackground={genderedSelectedBackground}
                     />
                   ) : (
                     <div className="mt-5 rounded-xl border border-dashed border-amber-400/25 bg-[#1f0d27]/60 p-8 text-center">
@@ -2318,24 +1874,21 @@ function CharacterBuilderModal({
                     <BuilderSummaryRow
                       label="Classe"
                       value={
-                        (selectedClass?.name ?? draft.className) ||
-                        "Não definida"
+                        selectedClassDisplayName || "Não definida"
                       }
                     />
 
                     <BuilderSummaryRow
                       label="Ancestralidade"
                       value={
-                        (selectedAncestry?.name ?? draft.ancestryName) ||
-                        "Não definida"
+                        selectedAncestryDisplayName || "Não definida"
                       }
                     />
 
                     <BuilderSummaryRow
                       label="Antecedente"
                       value={
-                        (selectedBackground?.name ?? draft.backgroundName) ||
-                        "Não definido"
+                        selectedBackgroundDisplayName || "Não definido"
                       }
                     />
 
@@ -2404,7 +1957,13 @@ function CharacterBuilderModal({
 
                     <BuilderSummaryRow
                       label="Status"
-                      value={savedCharacterSheetStatus === "READY" ? "Pronta" : savedCharacterSheetId ? "Salvo" : "Rascunho"}
+                      value={
+                        savedCharacterSheetStatus === "READY"
+                          ? "Pronta"
+                          : savedCharacterSheetId
+                            ? "Salvo"
+                            : "Rascunho"
+                      }
                     />
 
                     {savedCharacterSheetId ? (
@@ -2486,16 +2045,6 @@ function CharacterBuilderModal({
   );
 }
 
-type CharacterBuilderSelectableOption = {
-  id: string;
-  key: string;
-  name: string;
-  description: string | null;
-  hitDie?: number;
-  defaultSizeCategory?: string;
-  skillKeys?: string[];
-};
-
 function CharacterBuilderOptionCards({
   title,
   description,
@@ -2504,6 +2053,8 @@ function CharacterBuilderOptionCards({
   error,
   emptyMessage,
   selectedId,
+  selectedLabel = "Selecionado",
+  getOptionName,
   getOptionTitle,
   onSelect,
 }: {
@@ -2514,6 +2065,8 @@ function CharacterBuilderOptionCards({
   error: string | null;
   emptyMessage: string;
   selectedId: string;
+  selectedLabel?: string;
+  getOptionName?: (option: CharacterBuilderSelectableOption) => string;
   getOptionTitle?: (option: CharacterBuilderSelectableOption) => string;
   onSelect: (option: CharacterBuilderSelectableOption) => void;
 }) {
@@ -2563,8 +2116,10 @@ function CharacterBuilderOptionCards({
           const optionDescription =
             option.description ?? "Sem descrição cadastrada.";
 
+          const optionName = getOptionName?.(option) ?? option.name;
+
           const titleText =
-            getOptionTitle?.(option) ?? `${option.name}: ${optionDescription}`;
+            getOptionTitle?.(option) ?? `${optionName}: ${optionDescription}`;
 
           return (
             <button
@@ -2589,18 +2144,15 @@ function CharacterBuilderOptionCards({
                           ? "text-forge-gold"
                           : "text-zinc-100 group-hover:text-forge-gold",
                       ].join(" ")}
-                      title={option.name}
+                      title={optionName}
                     >
-                      {option.name}
+                      {optionName}
                     </h4>
 
-                    <span
-                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
+                    <CharacterBuilderInfoIcon
                       title={titleText}
-                      aria-label={`Informação sobre ${option.name}`}
-                    >
-                      i
-                    </span>
+                      ariaLabel={`Informação sobre ${optionName}`}
+                    />
                   </div>
                 </div>
 
@@ -2609,7 +2161,7 @@ function CharacterBuilderOptionCards({
                     className="shrink-0 rounded-full border border-forge-gold bg-forge-gold px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-black"
                     title="Opção selecionada"
                   >
-                    Selecionado
+                    {selectedLabel}
                   </span>
                 ) : null}
               </div>
@@ -2617,2961 +2169,6 @@ function CharacterBuilderOptionCards({
           );
         })}
       </div>
-    </div>
-  );
-}
-
-type CharacterAttributesStepProps = {
-  attributes: CharacterBuilderAttributes;
-  onChangeAttribute: (
-    attributeKey: CharacterAttributeKey,
-    value: number | null,
-  ) => void;
-  onResetAttributes: () => void;
-};
-
-function CharacterAttributesStep({
-  attributes,
-  onChangeAttribute,
-  onResetAttributes,
-}: CharacterAttributesStepProps) {
-  const selectedValues = CHARACTER_ATTRIBUTE_DEFINITIONS.map(
-    (attribute) => attributes[attribute.key],
-  ).filter((value): value is number => value !== null);
-
-  const remainingValues = STANDARD_ARRAY_ATTRIBUTE_VALUES.filter(
-    (value) => !selectedValues.includes(value),
-  );
-
-  const isComplete =
-    selectedValues.length === STANDARD_ARRAY_ATTRIBUTE_VALUES.length;
-
-  const statusTitle = isComplete
-    ? "Distribuição completa. Você já pode seguir para a próxima etapa."
-    : remainingValues.length > 0
-      ? `Ainda faltam: ${remainingValues.join(", ")}`
-      : "Revise a distribuição dos atributos.";
-
-  return (
-    <div className="mt-5 space-y-5">
-      <div
-        className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
-        title="Escolha onde cada valor será usado. Cada número pode entrar em apenas um atributo."
-      >
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-forge-gold/80">
-                Forja padrão
-              </p>
-
-              <span
-                className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                title="Distribua 15, 14, 13, 12, 10 e 8 sem repetir valores."
-                aria-label="Informação sobre distribuição de atributos"
-              >
-                i
-              </span>
-            </div>
-
-            <h3 className="mt-2 text-xl font-black text-zinc-100">
-              Distribua seus valores de atributo
-            </h3>
-          </div>
-
-          <div
-            className="flex flex-wrap items-center gap-2"
-            title={statusTitle}
-          >
-            {STANDARD_ARRAY_ATTRIBUTE_VALUES.map((value) => {
-              const isUsed = selectedValues.includes(value);
-
-              return (
-                <span
-                  key={value}
-                  className={[
-                    "rounded-xl border px-3 py-2 text-sm font-black",
-                    isUsed
-                      ? "border-emerald-400/40 bg-emerald-500/15 text-emerald-200"
-                      : "border-forge-gold/40 bg-forge-gold/10 text-forge-gold",
-                  ].join(" ")}
-                  title={
-                    isUsed
-                      ? `Valor ${value} já distribuído.`
-                      : `Valor ${value} ainda disponível.`
-                  }
-                >
-                  {value}
-                </span>
-              );
-            })}
-
-            <button
-              type="button"
-              onClick={onResetAttributes}
-              title="Limpar distribuição de atributos"
-              className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-xs font-black uppercase tracking-[0.16em] text-zinc-300 transition hover:border-red-400/60 hover:text-red-200"
-            >
-              Limpar
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        {CHARACTER_ATTRIBUTE_DEFINITIONS.map((attribute) => {
-          const value = attributes[attribute.key];
-          const modifier = formatAttributeModifier(value);
-
-          return (
-            <article
-              key={attribute.key}
-              className={[
-                "rounded-2xl border bg-zinc-950/50 p-4 transition shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
-                value === null
-                  ? "border-zinc-800"
-                  : "border-forge-gold/45 bg-forge-gold/5",
-              ].join(" ")}
-            >
-              <div
-                className="grid grid-cols-[minmax(0,1fr)_80px] items-start gap-3"
-                title={attribute.description}
-              >
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-forge-gold/80">
-                      {attribute.shortName}
-                    </p>
-
-                    <span
-                      className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                      title={attribute.description}
-                      aria-label={`Informação sobre ${attribute.name}`}
-                    >
-                      i
-                    </span>
-                  </div>
-
-                  <h4
-                    className="mt-1 whitespace-nowrap text-[13px] font-black leading-tight text-zinc-100"
-                    title={attribute.name}
-                  >
-                    {attribute.name}
-                  </h4>
-                </div>
-
-                <div
-                  className="w-20 shrink-0 rounded-2xl border border-forge-gold/30 bg-black/35 px-2 py-2 text-center"
-                  title={`${attribute.name}: valor ${
-                    value ?? "não definido"
-                  }, modificador ${modifier}`}
-                >
-                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-zinc-500">
-                    Valor
-                  </p>
-
-                  <p className="text-xl font-black leading-none text-zinc-100">
-                    {value ?? "—"}
-                  </p>
-
-                  <p className="mt-1 whitespace-nowrap text-[10px] font-black uppercase tracking-[0.08em] text-forge-gold">
-                    Mod. {modifier}
-                  </p>
-                </div>
-              </div>
-
-              <div
-                className="mt-4 grid grid-cols-6 gap-2"
-                title={`Escolha um valor fixo para ${attribute.name}. Valores já usados em outros atributos ficam bloqueados.`}
-              >
-                {STANDARD_ARRAY_ATTRIBUTE_VALUES.map((optionValue) => {
-                  const usedByOtherAttribute =
-                    CHARACTER_ATTRIBUTE_DEFINITIONS.find((definition) => {
-                      return (
-                        definition.key !== attribute.key &&
-                        attributes[definition.key] === optionValue
-                      );
-                    });
-
-                  const isSelected = value === optionValue;
-                  const isUnavailable = Boolean(usedByOtherAttribute);
-
-                  return (
-                    <button
-                      key={optionValue}
-                      type="button"
-                      disabled={isUnavailable}
-                      onClick={() =>
-                        onChangeAttribute(attribute.key, optionValue)
-                      }
-                      className={[
-                        "h-10 rounded-xl border text-sm font-black transition",
-                        isSelected
-                          ? "border-forge-gold bg-forge-gold text-zinc-950 shadow-[-3px_3px_0_rgba(0,0,0,0.35)]"
-                          : isUnavailable
-                            ? "cursor-not-allowed border-zinc-800 bg-black/20 text-zinc-700"
-                            : "border-zinc-700 bg-black/30 text-zinc-200 hover:border-forge-gold/70 hover:bg-forge-gold/10 hover:text-forge-gold",
-                      ].join(" ")}
-                      title={
-                        usedByOtherAttribute
-                          ? `Já usado em ${usedByOtherAttribute.name}`
-                          : `Escolher ${optionValue} para ${attribute.name}`
-                      }
-                    >
-                      {optionValue}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {value !== null ? (
-                <button
-                  type="button"
-                  onClick={() => onChangeAttribute(attribute.key, null)}
-                  title={`Remover valor de ${attribute.name}`}
-                  className="mt-3 text-[10px] font-black uppercase tracking-[0.16em] text-zinc-600 transition hover:text-red-300"
-                >
-                  Limpar
-                </button>
-              ) : null}
-            </article>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-type CharacterSkillsStepProps = {
-  skills: CharacterBuilderSkillOption[];
-  selectedBackground: CharacterBuilderBackgroundOption | undefined;
-  attributes: CharacterBuilderAttributes;
-  selectedSkillKeys: string[];
-  requiredSkillChoiceCount: number;
-  isLoading: boolean;
-  error: string | null;
-  onToggleSkill: (skillKey: string) => void;
-};
-
-function CharacterSkillsStep({
-  skills,
-  selectedBackground,
-  attributes,
-  selectedSkillKeys,
-  requiredSkillChoiceCount,
-  isLoading,
-  error,
-  onToggleSkill,
-}: CharacterSkillsStepProps) {
-  const suggestedSkillKeys = selectedBackground?.skillKeys ?? [];
-  const selectedCount = selectedSkillKeys.length;
-  const isComplete = selectedCount >= requiredSkillChoiceCount;
-  const proficiencyBonus = getProficiencyBonusByLevel(CHARACTER_BUILDER_LEVEL);
-
-  if (isLoading) {
-    return (
-      <div className="mt-5 rounded-2xl border border-forge-gold/20 bg-black/20 p-5 text-sm font-bold text-zinc-300">
-        Carregando perícias...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="mt-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-5 text-sm font-bold text-red-200">
-        {error}
-      </div>
-    );
-  }
-
-  if (skills.length === 0) {
-    return (
-      <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
-        Nenhuma perícia encontrada para este sistema.
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-5 space-y-5">
-      <div
-        className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
-        title="Clique nas perícias para marcar seus treinamentos. O total soma o modificador do atributo-base com o bônus de proficiência quando a perícia está selecionada."
-      >
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-start">
-          <div>
-            <div className="flex items-center gap-2">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-forge-gold/80">
-                Treinamentos
-              </p>
-
-              <span
-                className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                title="As perícias selecionadas recebem bônus de proficiência no total final."
-                aria-label="Informação sobre perícias"
-              >
-                i
-              </span>
-            </div>
-
-            <h3 className="mt-2 text-xl font-black text-zinc-100">
-              Escolha suas perícias
-            </h3>
-          </div>
-
-          <div className="flex flex-col gap-2 sm:flex-row xl:flex-col">
-            <div
-              className={[
-                "min-w-28 rounded-xl border px-4 py-3",
-                isComplete
-                  ? "border-emerald-400/30 bg-emerald-500/10"
-                  : "border-amber-400/25 bg-amber-300/10",
-              ].join(" ")}
-              title={`Selecionadas: ${selectedCount}. Necessárias: ${requiredSkillChoiceCount}.`}
-            >
-              <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                Selecionadas
-              </p>
-
-              <p
-                className={[
-                  "mt-1 text-2xl font-black leading-none",
-                  isComplete ? "text-emerald-200" : "text-amber-100",
-                ].join(" ")}
-              >
-                {selectedCount}/{requiredSkillChoiceCount}
-              </p>
-            </div>
-
-            <div
-              className="min-w-28 rounded-xl border border-forge-gold/30 bg-black/25 px-4 py-3"
-              title={`Bônus de proficiência atual no nível ${CHARACTER_BUILDER_LEVEL}: ${formatNumberModifier(
-                proficiencyBonus,
-              )}.`}
-            >
-              <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                Proficiência
-              </p>
-
-              <p className="mt-1 text-2xl font-black leading-none text-forge-gold">
-                {formatNumberModifier(proficiencyBonus)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {selectedBackground ? (
-          <div
-            className="mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-100"
-            title={`Antecedente selecionado: ${selectedBackground.name}. As sugestões iniciais foram aplicadas.`}
-          >
-            Antecedente selecionado: {selectedBackground.name}
-          </div>
-        ) : (
-          <div
-            className="mt-4 rounded-xl border border-amber-400/25 bg-amber-300/10 px-4 py-3 text-sm font-bold text-amber-100"
-            title="Escolha um antecedente para receber sugestões automáticas."
-          >
-            Sem antecedente selecionado
-          </div>
-        )}
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-1 xl:grid-cols-2">
-        {skills.map((skill) => {
-          const isSuggestedByBackground = suggestedSkillKeys.includes(
-            skill.key,
-          );
-          const isSelected = selectedSkillKeys.includes(skill.key);
-
-          const skillCalculation = getSkillCalculation({
-            attributes,
-            statKey: skill.stat.key,
-            isProficient: isSelected,
-            level: CHARACTER_BUILDER_LEVEL,
-          });
-
-          return (
-            <button
-              key={skill.id}
-              type="button"
-              onClick={() => onToggleSkill(skill.key)}
-              className={[
-                "rounded-2xl border p-4 text-left transition shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
-                isSelected
-                  ? "border-forge-gold bg-forge-gold/10"
-                  : isSuggestedByBackground
-                    ? "border-emerald-400/45 bg-emerald-500/10"
-                    : "border-zinc-800 bg-zinc-950/50 hover:border-forge-gold/40 hover:bg-forge-gold/5",
-              ].join(" ")}
-              title={
-                skill.description
-                  ? `${skill.name}: ${skill.description}`
-                  : `${skill.name}. Usa ${skill.stat.name} como atributo-base.`
-              }
-            >
-              <div className="space-y-4">
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p
-                      className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold/80"
-                      title={`Atributo-base: ${skill.stat.name}`}
-                    >
-                      {skill.stat.shortName}
-                    </p>
-
-                    {skill.description ? (
-                      <span
-                        className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                        title={skill.description}
-                        aria-label={`Informação sobre ${skill.name}`}
-                      >
-                        i
-                      </span>
-                    ) : null}
-
-                    {isSuggestedByBackground ? (
-                      <span
-                        className="rounded-full border border-emerald-400/50 bg-emerald-500/20 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-emerald-200"
-                        title="Sugerida pelo antecedente selecionado"
-                      >
-                        Sugerida
-                      </span>
-                    ) : null}
-
-                    {isSelected ? (
-                      <span
-                        className="rounded-full border border-forge-gold/60 bg-forge-gold/20 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-forge-gold"
-                        title="Perícia selecionada"
-                      >
-                        Selecionada
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <h4
-                    className="mt-2 text-[15px] font-black leading-tight text-zinc-100"
-                    title={skill.name}
-                  >
-                    {skill.name}
-                  </h4>
-                </div>
-
-                <div
-                  className="rounded-xl border border-forge-gold/30 bg-black/35 px-4 py-3"
-                  title={`Cálculo: ${skill.stat.shortName} ${skillCalculation.formattedAttributeModifier} + Proficiência ${skillCalculation.formattedProficiencyBonus} = Total ${skillCalculation.formattedTotal}.`}
-                >
-                  <div className="grid grid-cols-4 gap-2 text-center">
-                    <div>
-                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                        Base
-                      </p>
-                      <p className="mt-1 text-sm font-black leading-none text-zinc-100">
-                        {skill.stat.shortName}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                        Mod.
-                      </p>
-                      <p className="mt-1 text-sm font-black leading-none text-zinc-100">
-                        {skillCalculation.formattedAttributeModifier}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                        Prof.
-                      </p>
-                      <p
-                        className={[
-                          "mt-1 text-sm font-black leading-none",
-                          isSelected ? "text-emerald-200" : "text-zinc-600",
-                        ].join(" ")}
-                      >
-                        {skillCalculation.formattedProficiencyBonus}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                        Total
-                      </p>
-                      <p
-                        className={[
-                          "mt-1 text-base font-black leading-none",
-                          isSelected ? "text-forge-gold" : "text-zinc-400",
-                        ].join(" ")}
-                      >
-                        {skillCalculation.formattedTotal}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-type CharacterSpellsStepProps = {
-  spells: CharacterBuilderSpellOption[];
-  selectedClass: CharacterBuilderClassOption | undefined;
-  selectedSpellKeys: string[];
-  isLoading: boolean;
-  error: string | null;
-  onToggleSpell: (spellKey: string) => void;
-};
-
-type SpellTypeFilter = "all" | "cantrips" | "spells";
-
-function getSpellTitle(spell: CharacterBuilderSpellOption) {
-  const description = spell.description ?? "Sem descrição cadastrada.";
-  const components =
-    spell.components.length > 0 ? spell.components.join(", ") : "não informado";
-  const castingTime = spell.castingTime ?? "não informado";
-  const range = spell.range ?? "não informado";
-  const duration = spell.duration ?? "não informado";
-  const ritualText = spell.isRitual ? "Sim" : "Não";
-  const concentrationText = spell.requiresConcentration ? "Sim" : "Não";
-
-  return `${spell.name}: ${description} Tipo: ${getSpellLevelLabel(spell.level)}. Escola: ${spell.school}. Tempo de conjuração: ${castingTime}. Alcance: ${range}. Duração: ${duration}. Componentes: ${components}. Ritual: ${ritualText}. Concentração: ${concentrationText}. Features/efeitos avançados da magia: em breve. Filtro por classe e progressão de truques/magias por nível: em breve.`;
-}
-
-function getSpellSearchContent(spell: CharacterBuilderSpellOption) {
-  return [
-    spell.name,
-    spell.description,
-    spell.school,
-    getSpellLevelLabel(spell.level),
-    spell.castingTime,
-    spell.range,
-    spell.duration,
-    spell.components.join(" "),
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-}
-
-function filterSpellByType(
-  spell: CharacterBuilderSpellOption,
-  typeFilter: SpellTypeFilter,
-) {
-  if (typeFilter === "cantrips") {
-    return isCantrip(spell);
-  }
-
-  if (typeFilter === "spells") {
-    return isLeveledSpell(spell);
-  }
-
-  return true;
-}
-
-function CharacterSpellCard({
-  spell,
-  isSelected,
-  onToggleSpell,
-}: {
-  spell: CharacterBuilderSpellOption;
-  isSelected: boolean;
-  onToggleSpell: (spellKey: string) => void;
-}) {
-  const spellTitle = getSpellTitle(spell);
-  const componentsText =
-    spell.components.length > 0 ? spell.components.join(", ") : "—";
-
-  return (
-    <button
-      type="button"
-      onClick={() => onToggleSpell(spell.key)}
-      className={[
-        "w-full rounded-2xl border p-4 text-left shadow-[-4px_4px_0_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5",
-        isSelected
-          ? "border-forge-gold bg-forge-gold/10"
-          : "border-zinc-800 bg-zinc-950/50 hover:border-forge-gold/50 hover:bg-forge-purple/15",
-      ].join(" ")}
-      title={spellTitle}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold/80">
-              {getSpellLevelLabel(spell.level)}
-            </p>
-
-            <span
-              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-              title={spellTitle}
-              aria-label={`Informação sobre ${spell.name}`}
-            >
-              i
-            </span>
-
-            {spell.requiresConcentration ? (
-              <span
-                className="rounded-full border border-purple-300/40 bg-purple-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-purple-200"
-                title="Esta magia exige concentração."
-              >
-                Concentração
-              </span>
-            ) : null}
-
-            {spell.isRitual ? (
-              <span
-                className="rounded-full border border-sky-300/40 bg-sky-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-sky-200"
-                title="Esta magia pode ser conjurada como ritual."
-              >
-                Ritual
-              </span>
-            ) : null}
-
-            {isSelected ? (
-              <span
-                className="rounded-full border border-forge-gold bg-forge-gold px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-black"
-                title="Magia selecionada para o rascunho."
-              >
-                Selecionada
-              </span>
-            ) : null}
-          </div>
-
-          <h4
-            className="mt-2 break-words text-[15px] font-black leading-tight text-zinc-100"
-            title={spell.name}
-          >
-            {spell.name}
-          </h4>
-        </div>
-      </div>
-
-      <div
-        className="mt-4 grid gap-2 rounded-xl border border-forge-gold/25 bg-black/30 p-3 text-xs"
-        title={spellTitle}
-      >
-        <div className="grid grid-cols-2 gap-2">
-          <div className="min-w-0">
-            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
-              Escola
-            </p>
-
-            <p
-              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
-              title={spell.school}
-            >
-              {spell.school}
-            </p>
-          </div>
-
-          <div className="min-w-0">
-            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
-              Componentes
-            </p>
-
-            <p
-              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
-              title={
-                spell.components.length > 0
-                  ? spell.components.join(", ")
-                  : "Não informado"
-              }
-            >
-              {componentsText}
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-2 border-t border-forge-gold/10 pt-2">
-          <div className="min-w-0">
-            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
-              Tempo
-            </p>
-
-            <p
-              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
-              title={spell.castingTime ?? "Não informado"}
-            >
-              {getCompactSpellDetail(spell.castingTime)}
-            </p>
-          </div>
-
-          <div className="min-w-0">
-            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
-              Alcance
-            </p>
-
-            <p
-              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
-              title={spell.range ?? "Não informado"}
-            >
-              {getCompactSpellDetail(spell.range)}
-            </p>
-          </div>
-
-          <div className="min-w-0">
-            <p className="text-[8px] font-black uppercase tracking-[0.1em] text-zinc-500">
-              Duração
-            </p>
-
-            <p
-              className="mt-1 break-words text-[10px] font-black leading-tight text-zinc-100"
-              title={spell.duration ?? "Não informado"}
-            >
-              {getCompactSpellDetail(spell.duration)}
-            </p>
-          </div>
-        </div>
-      </div>
-    </button>
-  );
-}
-
-
-const PRONOUN_OPTIONS = ["ela / dela", "ele / dele", "elu / delu"];
-
-const ALIGNMENT_OPTIONS = [
-  "Lawful Good",
-  "Neutral Good",
-  "Chaotic Good",
-  "Lawful Neutral",
-  "True Neutral",
-  "Chaotic Neutral",
-  "Lawful Evil",
-  "Neutral Evil",
-  "Chaotic Evil",
-];
-
-const GENDER_OPTIONS = ["Masculino", "Feminino", "Não binário"];
-
-const LIFESTYLE_OPTIONS = [
-  "Miserável",
-  "Pobre",
-  "Modesto",
-  "Confortável",
-  "Rico",
-  "Aristocrático",
-  "Nômade",
-  "Militar",
-  "Clandestino",
-];
-
-function hasAboutValue(value: string) {
-  return value.trim().length > 0;
-}
-
-function countFilledAboutFields(draft: CharacterBuilderDraft) {
-  const fields = [
-    draft.pronouns,
-    draft.concept,
-    draft.alignment,
-    draft.faith,
-    draft.lifestyle,
-    draft.hair,
-    draft.skin,
-    draft.eyes,
-    draft.height,
-    draft.weight,
-    draft.age,
-    draft.gender,
-    draft.bonds,
-    draft.flaws,
-    draft.ideals,
-    draft.personality,
-    draft.backstory,
-    draft.notes,
-    draft.gmNotes,
-  ];
-
-  return fields.filter(hasAboutValue).length;
-}
-
-function getPhysicalSummary(draft: CharacterBuilderDraft) {
-  const values = [
-    draft.hair ? `Cabelo: ${draft.hair}` : "",
-    draft.skin ? `Pele: ${draft.skin}` : "",
-    draft.eyes ? `Olhos: ${draft.eyes}` : "",
-    draft.height ? `Altura: ${draft.height}` : "",
-    draft.weight ? `Peso: ${draft.weight}` : "",
-    draft.age ? `Idade: ${draft.age}` : "",
-    draft.gender ? `Gênero: ${draft.gender}` : "",
-  ].filter(Boolean);
-
-  return values.length > 0 ? values.join(" • ") : "Não definida";
-}
-
-function getNarrativeSummary(draft: CharacterBuilderDraft) {
-  const values = [
-    draft.alignment ? `Alinhamento: ${draft.alignment}` : "",
-    draft.faith ? `Fé: ${draft.faith}` : "",
-    draft.lifestyle ? `Estilo: ${draft.lifestyle}` : "",
-  ].filter(Boolean);
-
-  return values.length > 0 ? values.join(" • ") : "Não definida";
-}
-
-function CharacterAboutSummaryPanel({
-  draft,
-}: {
-  draft: CharacterBuilderDraft;
-}) {
-  const filledFieldsCount = countFilledAboutFields(draft);
-
-  return (
-    <div className="rounded-2xl border border-forge-gold/25 bg-black/25 p-4">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold">
-          Sobre
-        </p>
-
-        <span
-          className="rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold"
-          title={`${filledFieldsCount} campos narrativos preenchidos.`}
-        >
-          {filledFieldsCount} campos
-        </span>
-      </div>
-
-      <div className="mt-4 space-y-3">
-        <div
-          className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-3 py-3"
-          title={getNarrativeSummary(draft)}
-        >
-          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
-            Identidade
-          </p>
-
-          <p className="mt-1 text-xs font-bold leading-relaxed text-zinc-200">
-            {getNarrativeSummary(draft)}
-          </p>
-        </div>
-
-        <div
-          className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-3 py-3"
-          title={getPhysicalSummary(draft)}
-        >
-          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
-            Aparência
-          </p>
-
-          <p className="mt-1 text-xs font-bold leading-relaxed text-zinc-200">
-            {getPhysicalSummary(draft)}
-          </p>
-        </div>
-
-        <div
-          className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-3 py-3"
-          title={draft.backstory || "História ainda não preenchida."}
-        >
-          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
-            História
-          </p>
-
-          <p className="mt-1 line-clamp-4 text-xs font-bold leading-relaxed text-zinc-200">
-            {draft.backstory || "Ainda sem história."}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-type CharacterAboutInputFieldProps = {
-  label: string;
-  value: string;
-  placeholder: string;
-  title: string;
-  onChange: (value: string) => void;
-};
-
-function CharacterAboutInputField({
-  label,
-  value,
-  placeholder,
-  title,
-  onChange,
-}: CharacterAboutInputFieldProps) {
-  return (
-    <label className="block" title={title}>
-      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500">
-        {label}
-      </span>
-
-      <input
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-sm font-bold text-zinc-100 outline-none transition placeholder:text-zinc-600 hover:border-forge-gold/40 focus:border-forge-gold"
-      />
-    </label>
-  );
-}
-
-type CharacterAboutTextareaFieldProps = {
-  label: string;
-  value: string;
-  placeholder: string;
-  title: string;
-  rows?: number;
-  onChange: (value: string) => void;
-};
-
-function CharacterAboutTextareaField({
-  label,
-  value,
-  placeholder,
-  title,
-  rows = 4,
-  onChange,
-}: CharacterAboutTextareaFieldProps) {
-  return (
-    <label className="block" title={title}>
-      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500">
-        {label}
-      </span>
-
-      <textarea
-        value={value}
-        rows={rows}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        className="mt-2 w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-sm font-bold leading-relaxed text-zinc-100 outline-none transition placeholder:text-zinc-600 hover:border-forge-gold/40 focus:border-forge-gold"
-      />
-    </label>
-  );
-}
-
-function CharacterAboutSelectField({
-  label,
-  value,
-  placeholder,
-  title,
-  options,
-  optionTitles,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  placeholder: string;
-  title: string;
-  options: string[];
-  optionTitles?: Record<string, string>;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <label className="block" title={title}>
-      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500">
-        {label}
-      </span>
-
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-sm font-bold text-zinc-100 outline-none transition hover:border-forge-gold/40 focus:border-forge-gold"
-      >
-        <option value="">{placeholder}</option>
-
-        {options.map((option) => (
-          <option key={option} value={option} title={optionTitles?.[option]}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function CharacterAboutSection({
-  title,
-  description,
-  children,
-}: {
-  title: string;
-  description: string;
-  children: ReactNode;
-}) {
-  return (
-    <section
-      className="rounded-2xl border border-zinc-800 bg-black/20 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
-      title={description}
-    >
-      <div className="flex items-center gap-2 border-b border-zinc-800 pb-3">
-        <h4 className="text-sm font-black uppercase tracking-[0.22em] text-forge-gold">
-          {title}
-        </h4>
-
-        <span
-          className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-          title={description}
-          aria-label={`Informação sobre ${title}`}
-        >
-          i
-        </span>
-      </div>
-
-      <div className="mt-4">{children}</div>
-    </section>
-  );
-}
-
-type CharacterAboutStepProps = {
-  draft: CharacterBuilderDraft;
-  onChangeDraftField: <K extends keyof CharacterBuilderDraft>(
-    key: K,
-    value: CharacterBuilderDraft[K],
-  ) => void;
-};
-
-function CharacterAboutStep({
-  draft,
-  onChangeDraftField,
-}: CharacterAboutStepProps) {
-  return (
-    <div className="mt-5 space-y-4">
-      <CharacterAboutSection
-        title="Identidade"
-        description="Campos para definir a identidade social, crenças e modo de vida do personagem."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <CharacterAboutSelectField
-            label="Pronomes"
-            value={draft.pronouns}
-            placeholder="Escolha os pronomes"
-            title="Como o personagem prefere ser chamado."
-            options={PRONOUN_OPTIONS}
-            onChange={(value) => onChangeDraftField("pronouns", value)}
-          />
-
-                   <CharacterAboutSelectField
-            label="Alinhamento"
-            value={draft.alignment}
-            placeholder="Choose an alignment"
-            title="Tendência moral e ética geral do personagem. Lawful = leal/ordeiro; Neutral = neutro; Chaotic = caótico; Good = bom; Evil = mau."
-            options={ALIGNMENT_OPTIONS}
-            optionTitles={{
-              "Lawful Good": "Leal e Bom: segue códigos, honra e busca fazer o bem.",
-              "Neutral Good": "Neutro e Bom: faz o bem sem depender tanto de leis ou caos.",
-              "Chaotic Good": "Caótico e Bom: valoriza liberdade e faz o bem fora das regras.",
-              "Lawful Neutral": "Leal e Neutro: prioriza ordem, tradição ou código.",
-              "True Neutral": "Neutro: busca equilíbrio, pragmatismo ou distância moral.",
-              "Chaotic Neutral": "Caótico e Neutro: prioriza liberdade, impulso ou independência.",
-              "Lawful Evil": "Leal e Mau: usa ordem, poder e regras para benefício próprio.",
-              "Neutral Evil": "Neutro e Mau: age por interesse próprio sem grande código moral.",
-              "Chaotic Evil": "Caótico e Mau: destrutivo, cruel ou guiado por impulsos sombrios.",
-            }}
-            onChange={(value) => onChangeDraftField("alignment", value)}
-          />
-
-          <CharacterAboutInputField
-            label="Fé"
-            value={draft.faith}
-            placeholder="Divindade, ideal, ordem ou crença..."
-            title="Crença, fé, filosofia ou força simbólica que guia o personagem."
-            onChange={(value) => onChangeDraftField("faith", value)}
-          />
-
-                    <CharacterAboutSelectField
-            label="Estilo de vida"
-            value={draft.lifestyle}
-            placeholder="Escolha um estilo de vida"
-            title="Condição social e modo de vida predominante do personagem. Exemplo: Pobre vive com poucos recursos; Confortável tem rotina estável; Aristocrático circula entre elites."
-            options={LIFESTYLE_OPTIONS}
-            optionTitles={{
-              Miserável: "Vive no limite da sobrevivência, sem moradia ou recursos estáveis.",
-              Pobre: "Tem poucos recursos e precisa escolher bem onde gastar.",
-              Modesto: "Vida simples, funcional e sem luxo.",
-              Confortável: "Rotina estável, abrigo seguro e recursos suficientes.",
-              Rico: "Acesso constante a conforto, contatos e recursos.",
-              Aristocrático: "Ligado a nobreza, elite, títulos ou círculos de poder.",
-              Nômade: "Vive em movimento, sem residência fixa.",
-              Militar: "Vida estruturada por hierarquia, disciplina ou serviço armado.",
-              Clandestino: "Vive escondido, à margem da lei ou sob identidade discreta.",
-            }}
-            onChange={(value) => onChangeDraftField("lifestyle", value)}
-          />
-        </div>
-      </CharacterAboutSection>
-
-      <CharacterAboutSection
-        title="Aparência"
-        description="Características físicas usadas para descrever o personagem na mesa."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <CharacterAboutInputField
-            label="Cabelo"
-            value={draft.hair}
-            placeholder="Cor, corte, textura..."
-            title="Descrição do cabelo ou ausência dele."
-            onChange={(value) => onChangeDraftField("hair", value)}
-          />
-
-          <CharacterAboutInputField
-            label="Pele"
-            value={draft.skin}
-            placeholder="Tom, marcas, cicatrizes..."
-            title="Descrição da pele, marcas visíveis ou características de mutação."
-            onChange={(value) => onChangeDraftField("skin", value)}
-          />
-
-          <CharacterAboutInputField
-            label="Olhos"
-            value={draft.eyes}
-            placeholder="Cor, brilho, anomalias..."
-            title="Descrição dos olhos do personagem."
-            onChange={(value) => onChangeDraftField("eyes", value)}
-          />
-
-          <CharacterAboutInputField
-            label="Altura"
-            value={draft.height}
-            placeholder="Ex.: 1,78 m"
-            title="Altura aproximada do personagem."
-            onChange={(value) => onChangeDraftField("height", value)}
-          />
-
-          <CharacterAboutInputField
-            label="Peso"
-            value={draft.weight}
-            placeholder="Ex.: 78 kg"
-            title="Peso aproximado do personagem."
-            onChange={(value) => onChangeDraftField("weight", value)}
-          />
-
-          <CharacterAboutInputField
-            label="Idade"
-            value={draft.age}
-            placeholder="Ex.: 28 anos"
-            title="Idade aparente ou real do personagem."
-            onChange={(value) => onChangeDraftField("age", value)}
-          />
-
-          <CharacterAboutSelectField
-            label="Gênero"
-            value={draft.gender}
-            placeholder="Escolha um gênero"
-            title="Gênero, identidade ou apresentação do personagem."
-            options={GENDER_OPTIONS}
-            onChange={(value) => onChangeDraftField("gender", value)}
-          />
-        </div>
-      </CharacterAboutSection>
-
-      <CharacterAboutSection
-        title="Personalidade"
-        description="Traços narrativos usados para interpretar vínculos, ideais, defeitos e comportamento."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <CharacterAboutTextareaField
-            label="Vínculos"
-            value={draft.bonds}
-            placeholder="Pessoas, lugares, promessas ou deveres importantes..."
-            title="Laços que conectam o personagem ao mundo."
-            rows={3}
-            onChange={(value) => onChangeDraftField("bonds", value)}
-          />
-
-          <CharacterAboutTextareaField
-            label="Defeitos"
-            value={draft.flaws}
-            placeholder="Medos, vícios, fraquezas ou conflitos internos..."
-            title="Falhas que podem gerar conflito dramático."
-            rows={3}
-            onChange={(value) => onChangeDraftField("flaws", value)}
-          />
-
-          <CharacterAboutTextareaField
-            label="Ideais"
-            value={draft.ideals}
-            placeholder="Princípios, sonhos ou causas..."
-            title="Valores que guiam as decisões do personagem."
-            rows={3}
-            onChange={(value) => onChangeDraftField("ideals", value)}
-          />
-
-          <CharacterAboutTextareaField
-            label="Traços"
-            value={draft.personality}
-            placeholder="Como o personagem age, fala e reage..."
-            title="Traços de personalidade usados na interpretação."
-            rows={3}
-            onChange={(value) => onChangeDraftField("personality", value)}
-          />
-        </div>
-      </CharacterAboutSection>
-
-      <CharacterAboutSection
-        title="História e notas"
-        description="Campos narrativos longos para história, observações e anotações reservadas."
-      >
-        <div className="space-y-4">
-          <CharacterAboutTextareaField
-            label="História"
-            value={draft.backstory}
-            placeholder="Conte a origem, perdas, objetivos e conflitos do personagem..."
-            title="História principal do personagem antes da campanha."
-            rows={5}
-            onChange={(value) => onChangeDraftField("backstory", value)}
-          />
-
-          <CharacterAboutTextareaField
-            label="Notas"
-            value={draft.notes}
-            placeholder="Anotações públicas ou úteis para jogar..."
-            title="Notas gerais da ficha."
-            rows={4}
-            onChange={(value) => onChangeDraftField("notes", value)}
-          />
-
-          <CharacterAboutTextareaField
-            label="Notas do mestre"
-            value={draft.gmNotes}
-            placeholder="Segredos, ganchos ou informações reservadas..."
-            title="Notas reservadas para o mestre ou para desenvolvimento futuro."
-            rows={4}
-            onChange={(value) => onChangeDraftField("gmNotes", value)}
-          />
-        </div>
-      </CharacterAboutSection>
-    </div>
-  );
-}
-
-type CharacterEquipmentStepProps = {
-  equipment: CharacterBuilderEquipmentOption[];
-  selectedClass: CharacterBuilderClassOption | undefined;
-  selectedBackground: CharacterBuilderBackgroundOption | undefined;
-  draft: CharacterBuilderDraft;
-  isLoading: boolean;
-  error: string | null;
-  onChangeEquipmentMode: (
-    key: "classEquipmentMode" | "backgroundEquipmentMode",
-    value: CharacterBuilderEquipmentMode,
-  ) => void;
-};
-
-function CharacterEquipmentStep({
-  equipment,
-  selectedClass,
-  selectedBackground,
-  draft,
-  isLoading,
-  error,
-  onChangeEquipmentMode,
-}: CharacterEquipmentStepProps) {
-  const equipmentByKey = new Map(equipment.map((item) => [item.key, item]));
-  const classPlan = getClassStartingEquipmentPlan(selectedClass);
-  const backgroundPlan = getBackgroundStartingEquipmentPlan(selectedBackground);
-  const previewItems = getStartingEquipmentItemsFromDraft(draft, {
-    classes: selectedClass ? [selectedClass] : [],
-    ancestries: [],
-    backgrounds: selectedBackground ? [selectedBackground] : [],
-    skills: [],
-    spells: [],
-    equipment,
-  });
-  const previewGold = getStartingGoldFromDraft(draft, {
-    classes: selectedClass ? [selectedClass] : [],
-    ancestries: [],
-    backgrounds: selectedBackground ? [selectedBackground] : [],
-    skills: [],
-    spells: [],
-    equipment,
-  });
-
-  const missingPreviewItemKeys = previewItems
-    .map((item) => item.key)
-    .filter((key) => !equipmentByKey.has(key));
-
-  const classModeLabel =
-    draft.classEquipmentMode === "PACKAGE" ? "Pacote" : "Moedas";
-
-  const backgroundModeLabel =
-    draft.backgroundEquipmentMode === "PACKAGE" ? "Pacote" : "Moedas";
-
-  if (isLoading) {
-    return (
-      <div className="mt-5 rounded-2xl border border-forge-gold/20 bg-black/20 p-5 text-sm font-bold text-zinc-300">
-        Carregando equipamento inicial...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="mt-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-5 text-sm font-bold text-red-200">
-        {error}
-      </div>
-    );
-  }
-
-  if (!selectedClass || !selectedBackground) {
-    return (
-      <div className="mt-5 rounded-2xl border border-amber-400/25 bg-amber-500/10 p-5 text-sm font-bold text-amber-100">
-        Escolha classe e antecedente antes de definir equipamento inicial.
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-5 space-y-5">
-      <section
-        className="overflow-hidden rounded-2xl border border-forge-gold/25 bg-gradient-to-br from-[#1b0b22] via-[#130719] to-black shadow-[-6px_6px_0_rgba(0,0,0,0.32)]"
-        title="Esta etapa não é uma loja nem um catálogo livre. Aqui o personagem escolhe apenas equipamento inicial concedido pela classe e pelo antecedente. Itens gerais da campanha ficam para lojas, recompensas e inventário futuro."
-      >
-        <div className="grid gap-5 p-5 xl:grid-cols-[minmax(0,1fr)_220px] xl:items-center">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className="flex h-5 w-5 items-center justify-center rounded-full border border-zinc-700 bg-black/30 text-[10px] font-black text-zinc-500"
-                title="Você pode aceitar os pacotes iniciais recomendados pela classe e pelo antecedente, ou trocar uma dessas partes por moedas iniciais."
-                aria-label="Informação sobre equipamento inicial"
-              >
-                i
-              </span>
-            </div>
-
-            <h3 className="mt-3 max-w-2xl text-2xl font-black leading-tight text-zinc-100">
-              Defina como {draft.name || "o personagem"} começa a aventura
-            </h3>
-          </div>
-
-          <div className="grid gap-2">
-            <StartingEquipmentMetricCard
-              label="Classe"
-              value={classModeLabel}
-              title={`Escolha atual da classe: ${classModeLabel}.`}
-            />
-
-            <StartingEquipmentMetricCard
-              label="Antecedente"
-              value={backgroundModeLabel}
-              title={`Escolha atual do antecedente: ${backgroundModeLabel}.`}
-            />
-
-            <StartingEquipmentMetricCard
-              label="Moedas iniciais"
-              value={previewGold.toString()}
-              title={`${previewGold} moedas iniciais serão salvas na ficha.`}
-            />
-          </div>
-        </div>
-      </section>
-
-      <div className="grid gap-4">
-        <StartingEquipmentChoiceCard
-          title="Classe"
-          subtitle={classPlan.label}
-          description={classPlan.description}
-          mode={draft.classEquipmentMode}
-          packageLabel="Pacote da classe"
-          goldLabel={`${classPlan.gold} moedas`}
-          onChangeMode={(mode) =>
-            onChangeEquipmentMode("classEquipmentMode", mode)
-          }
-        />
-
-        <StartingEquipmentChoiceCard
-          title="Antecedente"
-          subtitle={backgroundPlan.label}
-          description={backgroundPlan.description}
-          mode={draft.backgroundEquipmentMode}
-          packageLabel="Pacote do antecedente"
-          goldLabel={`${backgroundPlan.gold} moedas`}
-          onChangeMode={(mode) =>
-            onChangeEquipmentMode("backgroundEquipmentMode", mode)
-          }
-        />
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-2">
-        <StartingEquipmentReceiveCard
-          title="Pacote da classe"
-          items={classPlan.items}
-          proficiencies={classPlan.proficiencies}
-          equipmentByKey={equipmentByKey}
-          isMuted={draft.classEquipmentMode === "GOLD"}
-        />
-
-        <StartingEquipmentReceiveCard
-          title="Pacote do antecedente"
-          items={backgroundPlan.items}
-          proficiencies={backgroundPlan.proficiencies}
-          equipmentByKey={equipmentByKey}
-          isMuted={draft.backgroundEquipmentMode === "GOLD"}
-        />
-      </div>
-
-      {missingPreviewItemKeys.length > 0 ? (
-        <p className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-xs font-bold leading-relaxed text-red-200">
-          Alguns itens do pacote não foram encontrados no sistema:{" "}
-          {missingPreviewItemKeys.join(", ")}. Rode o seed atualizado antes de
-          testar a persistência.
-        </p>
-      ) : null}
-    </div>
-  );
-}
-
-function StartingEquipmentMetricCard({
-  label,
-  value,
-  title,
-}: {
-  label: string;
-  value: string;
-  title: string;
-}) {
-  return (
-    <div
-      className="min-w-0 rounded-xl border border-forge-gold/20 bg-black/30 px-4 py-3"
-      title={title}
-    >
-      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-        {label}
-      </p>
-
-      <p className="mt-1 text-base font-black leading-tight text-forge-gold">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function StartingEquipmentChoiceCard({
-  title,
-  subtitle,
-  description,
-  mode,
-  packageLabel,
-  goldLabel,
-  onChangeMode,
-}: {
-  title: string;
-  subtitle: string;
-  description: string;
-  mode: CharacterBuilderEquipmentMode;
-  packageLabel: string;
-  goldLabel: string;
-  onChangeMode: (mode: CharacterBuilderEquipmentMode) => void;
-}) {
-  const selectLabel =
-    title === "Classe" ? "Escolha da classe" : "Escolha do antecedente";
-
-  return (
-    <section
-      className="rounded-2xl border border-zinc-800 bg-black/20 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
-      title={description}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-forge-gold/80">
-              {selectLabel}
-            </p>
-
-            <span
-              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-              title={description}
-              aria-label={`Informação sobre ${selectLabel.toLowerCase()}`}
-            >
-              i
-            </span>
-          </div>
-
-          <h4 className="mt-2 text-lg font-black leading-tight text-zinc-100">
-            {title === "Classe"
-              ? "Como receber o pacote da classe"
-              : "Como receber o pacote do antecedente"}
-          </h4>
-        </div>
-      </div>
-
-      <label className="mt-4 block">
-        <span className="sr-only">Modo de equipamento de {title}</span>
-
-        <select
-          value={mode}
-          onChange={(event) => {
-            onChangeMode(event.target.value as CharacterBuilderEquipmentMode);
-          }}
-          className="w-full rounded-xl border border-forge-gold/40 bg-zinc-950 px-4 py-3 text-sm font-black text-zinc-100 outline-none transition hover:border-forge-gold/60 focus:border-forge-gold"
-          title="Escolha se esta parte será recebida como pacote inicial ou convertida em moedas."
-        >
-          <option value="PACKAGE">{packageLabel}</option>
-          <option value="GOLD">{goldLabel}</option>
-        </select>
-      </label>
-    </section>
-  );
-}
-
-function StartingEquipmentReceiveCard({
-  title,
-  items,
-  proficiencies,
-  equipmentByKey,
-  isMuted,
-}: {
-  title: string;
-  items: CharacterBuilderEquipmentDraftItem[];
-  proficiencies: string[];
-  equipmentByKey: Map<string, CharacterBuilderEquipmentOption>;
-  isMuted: boolean;
-}) {
-  return (
-    <section
-      className={[
-        "overflow-hidden rounded-2xl border shadow-[-4px_4px_0_rgba(0,0,0,0.22)] transition",
-        isMuted
-          ? "border-zinc-900 bg-black/10 opacity-60"
-          : "border-zinc-800 bg-black/20",
-      ].join(" ")}
-      title={
-        isMuted
-          ? `${title} não será aplicado porque a opção atual está em moedas.`
-          : `${title} será adicionado ao inventário inicial.`
-      }
-    >
-      <div className="flex items-center justify-between gap-3 border-b border-zinc-800 bg-zinc-950/35 px-4 py-3">
-        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-300">
-          {title}
-        </h4>
-      </div>
-
-      <div className="p-4">
-        {isMuted ? (
-          <p className="rounded-xl border border-zinc-800 bg-zinc-950/45 px-4 py-3 text-sm font-bold text-zinc-500">
-            Este pacote não será aplicado. A escolha atual converte esta parte
-            em moedas iniciais.
-          </p>
-        ) : items.length === 0 ? (
-          <p className="text-sm font-bold text-zinc-500">
-            Nenhum item cadastrado para este pacote.
-          </p>
-        ) : (
-          <div className="grid gap-2">
-            {items.map((item) => {
-              const equipmentItem = equipmentByKey.get(item.key);
-              const mainInfo = equipmentItem
-                ? getEquipmentMainInfo(equipmentItem)
-                : null;
-              const itemTitle = `${equipmentItem?.name ?? item.key}. ${
-                equipmentItem?.description ??
-                item.notes ??
-                "Equipamento inicial."
-              }${mainInfo ? ` ${mainInfo.label}: ${mainInfo.value}.` : ""}${
-                equipmentItem?.weight !== null &&
-                equipmentItem?.weight !== undefined
-                  ? ` Peso: ${formatEquipmentWeight(equipmentItem.weight)}.`
-                  : ""
-              }`;
-
-              return (
-                <div
-                  key={`${item.source}-${item.key}`}
-                  className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3"
-                  title={itemTitle}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="text-sm font-black leading-tight text-zinc-100">
-                        {equipmentItem?.name ?? item.key}
-                      </p>
-
-                      {mainInfo ? (
-                        <p
-                          className="mt-1 line-clamp-2 text-[11px] font-bold uppercase tracking-[0.12em] text-forge-gold/80"
-                          title={`${mainInfo.label}: ${mainInfo.value}`}
-                        >
-                          {mainInfo.label}: {mainInfo.value}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <span className="rounded-full border border-zinc-700 bg-black/40 px-3 py-1 text-xs font-black text-zinc-200">
-                      ×{item.quantity}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {!isMuted && proficiencies.length > 0 ? (
-          <div
-            className="mt-4 rounded-xl border border-forge-gold/20 bg-forge-gold/10 px-4 py-3"
-            title={proficiencies.join(", ")}
-          >
-            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-forge-gold/80">
-              Proficiências / observações
-            </p>
-          </div>
-        ) : null}
-      </div>
-    </section>
-  );
-}
-
-function CharacterSpellsStep({
-  spells,
-  selectedClass,
-  selectedSpellKeys,
-  isLoading,
-  error,
-  onToggleSpell,
-}: CharacterSpellsStepProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [typeFilter, setTypeFilter] = useState<SpellTypeFilter>("all");
-  const [schoolFilter, setSchoolFilter] = useState("all");
-
-  const spellSchools = useMemo(() => {
-    return Array.from(new Set(spells.map((spell) => spell.school))).sort(
-      (a, b) => a.localeCompare(b),
-    );
-  }, [spells]);
-
-  const filteredSpells = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase();
-
-    return spells.filter((spell) => {
-      const matchesType = filterSpellByType(spell, typeFilter);
-      const matchesSchool =
-        schoolFilter === "all" || spell.school === schoolFilter;
-      const matchesSearch =
-        normalizedSearch.length === 0 ||
-        getSpellSearchContent(spell).includes(normalizedSearch);
-
-      return matchesType && matchesSchool && matchesSearch;
-    });
-  }, [schoolFilter, searchTerm, spells, typeFilter]);
-
-  const filteredCantrips = filteredSpells.filter(isCantrip);
-  const filteredLeveledSpells = filteredSpells.filter(isLeveledSpell);
-
-  const spellsByLevel = filteredLeveledSpells.reduce<
-    Record<number, CharacterBuilderSpellOption[]>
-  >((groups, spell) => {
-    groups[spell.level] = [...(groups[spell.level] ?? []), spell];
-
-    return groups;
-  }, {});
-
-  const spellLevels = Object.keys(spellsByLevel)
-    .map(Number)
-    .sort((a, b) => a - b);
-
-  const totalCantrips = spells.filter(isCantrip).length;
-  const totalLeveledSpells = spells.filter(isLeveledSpell).length;
-  const selectedClassName = selectedClass?.name ?? "classe não selecionada";
-
-  const selectedSpells = spells.filter((spell) =>
-    selectedSpellKeys.includes(spell.key),
-  );
-
-  const selectedCantrips = selectedSpells.filter(isCantrip);
-  const selectedLeveledSpells = selectedSpells.filter(isLeveledSpell);
-  const hasSelectedSpells = selectedSpells.length > 0;
-
-  const hasActiveFilters =
-    searchTerm.trim().length > 0 ||
-    typeFilter !== "all" ||
-    schoolFilter !== "all";
-
-  const temporaryValidationTitle = hasSelectedSpells
-    ? "Seleção preparada"
-    : "Etapa opcional por enquanto";
-
-  const temporaryValidationDescription = hasSelectedSpells
-    ? `Você marcou ${selectedCantrips.length} truque(s) e ${selectedLeveledSpells.length} magia(s). Ao atualizar o rascunho, essas escolhas são gravadas na ficha.`
-    : "Nenhuma magia foi escolhida. A etapa continua liberada porque ainda não temos a progressão real por classe.";
-
-  if (isLoading) {
-    return (
-      <div className="mt-5 rounded-2xl border border-forge-gold/20 bg-black/20 p-5 text-sm font-bold text-zinc-300">
-        Carregando magias...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="mt-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-5 text-sm font-bold text-red-200">
-        {error}
-      </div>
-    );
-  }
-
-  if (spells.length === 0) {
-    return (
-      <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
-        Nenhuma magia encontrada para este sistema.
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-5 space-y-5">
-      <div className="space-y-4">
-        <div
-          className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
-          title="Nesta etapa, truques e magias já aparecem separados. A seleção já pode ser persistida no rascunho; limites por classe e nível entram em uma etapa futura."
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <p className="text-xs font-black uppercase tracking-[0.28em] text-forge-gold/80">
-                  Grimório inicial
-                </p>
-
-                <span
-                  className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                  title="Truques são magias de nível 0. Magias são poderes de nível 1 ou maior. Seleção por classe vem em breve."
-                  aria-label="Informação sobre magias"
-                >
-                  i
-                </span>
-              </div>
-
-              <h3 className="mt-2 text-xl font-black text-zinc-100">
-                Truques e magias do sistema
-              </h3>
-
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-300">
-                Por enquanto esta lista mostra as magias do sistema. O filtro
-                real por classe e a progressão de truques/magias por nível
-                entram em uma etapa futura.
-              </p>
-            </div>
-          </div>
-
-          <p
-            className="mt-4 rounded-xl border border-amber-400/20 bg-amber-300/10 px-3 py-2 text-xs font-bold text-amber-100"
-            title="Mais tarde, esta etapa deve mostrar apenas magias que a classe selecionada pode aprender/conjurar."
-          >
-            Classe atual: {selectedClassName}. Filtro por classe: em breve.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-          <div
-            className="rounded-2xl border border-forge-gold/30 bg-black/25 p-4"
-            title={`Total de truques disponíveis no sistema atual: ${totalCantrips}.`}
-          >
-            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-              Truques disponíveis
-            </p>
-
-            <p className="mt-2 text-2xl font-black leading-none text-forge-gold">
-              {totalCantrips}
-            </p>
-          </div>
-
-          <div
-            className="rounded-2xl border border-purple-300/30 bg-purple-500/10 p-4"
-            title={`Total de magias disponíveis no sistema atual: ${totalLeveledSpells}.`}
-          >
-            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-              Magias disponíveis
-            </p>
-
-            <p className="mt-2 text-2xl font-black leading-none text-purple-200">
-              {totalLeveledSpells}
-            </p>
-          </div>
-
-          <div
-            className="rounded-2xl border border-forge-gold/30 bg-forge-gold/10 p-4"
-            title={`Truques escolhidos: ${selectedCantrips.length}. Limites por classe virão depois.`}
-          >
-            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-              Truques escolhidos
-            </p>
-
-            <p className="mt-2 text-2xl font-black leading-none text-forge-gold">
-              {selectedCantrips.length}
-            </p>
-          </div>
-
-          <div
-            className="rounded-2xl border border-purple-300/30 bg-purple-500/10 p-4"
-            title={`Magias escolhidas: ${selectedLeveledSpells.length}. Limites por classe virão depois.`}
-          >
-            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-              Magias escolhidas
-            </p>
-
-            <p className="mt-2 text-2xl font-black leading-none text-purple-200">
-              {selectedLeveledSpells.length}
-            </p>
-          </div>
-        </div>
-
-        <div
-          className={[
-            "rounded-2xl border px-4 py-3 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]",
-            hasSelectedSpells
-              ? "border-emerald-400/30 bg-emerald-500/10"
-              : "border-zinc-700 bg-black/25",
-          ].join(" ")}
-          title="Validação temporária: esta etapa ainda não bloqueia avanço por quantidade de magias. Os limites reais virão da classe e do nível em uma etapa futura."
-        >
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <div className="flex items-center gap-2">
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
-                  Validação temporária
-                </p>
-
-                <span
-                  className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                  title="A etapa de Magias continua opcional por enquanto. Depois, a classe vai informar quantos truques e magias podem ser escolhidos por nível."
-                  aria-label="Informação sobre validação temporária de magias"
-                >
-                  i
-                </span>
-              </div>
-
-              <p
-                className={[
-                  "mt-1 text-sm font-black",
-                  hasSelectedSpells ? "text-emerald-100" : "text-zinc-200",
-                ].join(" ")}
-              >
-                {temporaryValidationTitle}
-              </p>
-
-              <p className="mt-1 text-xs leading-relaxed text-zinc-400">
-                {temporaryValidationDescription}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 sm:min-w-60">
-              <div
-                className="rounded-xl border border-forge-gold/20 bg-black/25 px-3 py-2 text-center"
-                title="Quantidade de truques selecionados."
-              >
-                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                  Truques
-                </p>
-
-                <p className="mt-1 text-xl font-black text-forge-gold">
-                  {selectedCantrips.length}
-                </p>
-              </div>
-
-              <div
-                className="rounded-xl border border-purple-300/20 bg-black/25 px-3 py-2 text-center"
-                title="Quantidade de magias de nível 1 ou maior selecionadas."
-              >
-                <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                  Magias
-                </p>
-
-                <p className="mt-1 text-xl font-black text-purple-200">
-                  {selectedLeveledSpells.length}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="rounded-2xl border border-zinc-800 bg-black/25 p-4"
-          title="Use os filtros para encontrar magias por nome, tipo ou escola."
-        >
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_180px_180px]">
-            <label className="block md:col-span-2 xl:col-span-1">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
-                Buscar
-              </span>
-
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Buscar por nome, escola, nível..."
-                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-forge-gold/70"
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
-                Tipo
-              </span>
-
-              <select
-                value={typeFilter}
-                onChange={(event) =>
-                  setTypeFilter(event.target.value as SpellTypeFilter)
-                }
-                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-100 outline-none transition focus:border-forge-gold/70"
-              >
-                <option value="all">Todos</option>
-                <option value="cantrips">Truques</option>
-                <option value="spells">Magias</option>
-              </select>
-            </label>
-
-            <label className="block">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
-                Escola
-              </span>
-
-              <select
-                value={schoolFilter}
-                onChange={(event) => setSchoolFilter(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-100 outline-none transition focus:border-forge-gold/70"
-              >
-                <option value="all">Todas</option>
-                {spellSchools.map((school) => (
-                  <option key={school} value={school}>
-                    {school}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <p
-            className="mt-3 text-xs font-bold text-zinc-500"
-            title={`Os filtros atuais exibem ${filteredSpells.length} de ${spells.length} opções totais. Truques visíveis: ${filteredCantrips.length}. Magias visíveis: ${filteredLeveledSpells.length}.`}
-          >
-            Exibindo {filteredSpells.length} de {spells.length} opção
-            {spells.length === 1 ? "" : "ões"}.
-            {hasActiveFilters
-              ? " Limpe os filtros para ver todas as magias."
-              : " Use os filtros para reduzir a lista quando ela crescer."}
-          </p>
-        </div>
-      </div>
-
-      {filteredSpells.length === 0 ? (
-        <div className="rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
-          Nenhuma magia encontrada com os filtros atuais.
-        </div>
-      ) : null}
-
-      {filteredCantrips.length > 0 ? (
-        <section className="space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-forge-gold/80">
-                Truques
-              </p>
-
-              <h4 className="text-lg font-black text-zinc-100">
-                Magias de nível 0
-              </h4>
-            </div>
-
-            <span
-              className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold"
-              title="Quantidade de truques visíveis depois dos filtros."
-            >
-              {filteredCantrips.length}
-            </span>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-2">
-            {filteredCantrips.map((spell) => (
-              <CharacterSpellCard
-                key={spell.id}
-                spell={spell}
-                isSelected={selectedSpellKeys.includes(spell.key)}
-                onToggleSpell={onToggleSpell}
-              />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {spellLevels.map((level) => (
-        <section key={level} className="space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-200">
-                {getSpellLevelLabel(level)}
-              </p>
-
-              <h4 className="text-lg font-black text-zinc-100">
-                Magias de {getSpellLevelLabel(level).toLowerCase()}
-              </h4>
-            </div>
-
-            <span
-              className="rounded-full border border-purple-300/30 bg-purple-500/10 px-3 py-1 text-xs font-black text-purple-200"
-              title={`Quantidade de magias de nível ${level} visíveis depois dos filtros.`}
-            >
-              {spellsByLevel[level]?.length ?? 0}
-            </span>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-2">
-            {spellsByLevel[level]?.map((spell) => (
-              <CharacterSpellCard
-                key={spell.id}
-                spell={spell}
-                isSelected={selectedSpellKeys.includes(spell.key)}
-                onToggleSpell={onToggleSpell}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
-  );
-}
-
-type CharacterConceptStepProps = {
-  draft: CharacterBuilderDraft;
-  onChangeDraftField: <K extends keyof CharacterBuilderDraft>(
-    key: K,
-    value: CharacterBuilderDraft[K],
-  ) => void;
-};
-
-function CharacterConceptStep({
-  draft,
-  onChangeDraftField,
-}: CharacterConceptStepProps) {
-  return (
-    <div className="mt-5 space-y-5">
-      <div className="grid gap-4 md:grid-cols-2">
-        <label className="space-y-2">
-          <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-            Nome do personagem
-          </span>
-
-          <input
-            value={draft.name}
-            onChange={(event) => onChangeDraftField("name", event.target.value)}
-            placeholder="Ex: Hikari Pendragon"
-            className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
-          />
-        </label>
-
-<label className="block space-y-2">
-  <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-    Pronomes
-  </span>
-
-  <select
-    value={draft.pronouns}
-    onChange={(event) =>
-      onChangeDraftField("pronouns", event.target.value)
-    }
-    title="Como o personagem prefere ser chamado."
-    className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition hover:border-forge-gold/40 focus:border-amber-300"
-  >
-    <option value="">Escolha os pronomes</option>
-
-    {PRONOUN_OPTIONS.map((option) => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ))}
-  </select>
-</label>
-      </div>
-
-      <label className="block space-y-2">
-        <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-          Conceito
-        </span>
-
-        <textarea
-          value={draft.concept}
-          onChange={(event) =>
-            onChangeDraftField("concept", event.target.value)
-          }
-          placeholder="Ex: Barda necromante de Nigrum Alvor que usa música para ouvir ecos dos mortos."
-          rows={4}
-          className="w-full resize-none rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold leading-relaxed text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
-        />
-      </label>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <label className="space-y-2">
-          <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-            URL do retrato
-          </span>
-
-          <input
-            value={draft.portraitUrl}
-            onChange={(event) =>
-              onChangeDraftField("portraitUrl", event.target.value)
-            }
-            placeholder="Cole uma URL de imagem para o retrato"
-            className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
-          />
-        </label>
-
-        <label className="space-y-2">
-          <span className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-            URL do token
-          </span>
-
-          <input
-            value={draft.tokenImageUrl}
-            onChange={(event) =>
-              onChangeDraftField("tokenImageUrl", event.target.value)
-            }
-            placeholder="Cole uma URL de imagem para o token"
-            className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-sm font-semibold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-amber-300"
-          />
-        </label>
-      </div>
-
-      <div
-        className="rounded-2xl border border-amber-400/20 bg-black/25 p-4"
-        title="Defina como a imagem do token deve preencher o espaço no tabuleiro."
-      >
-        <div className="flex items-center gap-2">
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-            Encaixe da imagem do token
-          </p>
-
-          <span
-            className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-            title="Preencher pode distorcer. Conter mostra a imagem inteira. Cobrir corta bordas para preencher sem distorcer."
-            aria-label="Informação sobre encaixe da imagem do token"
-          >
-            i
-          </span>
-        </div>
-
-        <div className="mt-3 grid gap-3 md:grid-cols-3">
-          {[
-            {
-              value: "FILL",
-              title: "Preencher",
-              description: "Ocupa todo o espaço, podendo distorcer a imagem.",
-            },
-            {
-              value: "CONTAIN",
-              title: "Conter",
-              description: "Mostra a imagem inteira, podendo sobrar espaço.",
-            },
-            {
-              value: "COVER",
-              title: "Cobrir",
-              description: "Corta as bordas para preencher sem distorcer.",
-            },
-          ].map((fitOption) => {
-            const isSelected = draft.tokenImageFit === fitOption.value;
-
-            return (
-              <button
-                key={fitOption.value}
-                type="button"
-                title={fitOption.description}
-                onClick={() =>
-                  onChangeDraftField(
-                    "tokenImageFit",
-                    fitOption.value as CharacterBuilderDraft["tokenImageFit"],
-                  )
-                }
-                className={[
-                  "rounded-xl border px-4 py-3 text-left transition",
-                  "shadow-[-4px_4px_0_rgba(0,0,0,0.25)]",
-                  isSelected
-                    ? "border-amber-300 bg-amber-300/10 text-amber-100"
-                    : "border-zinc-800 bg-zinc-950/60 text-zinc-300 hover:border-amber-400/40",
-                ].join(" ")}
-              >
-                <p className="text-sm font-black">{fitOption.title}</p>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-4">
-        <p className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">
-          Prévia rápida
-        </p>
-
-        <div className="mt-4 flex items-center gap-4">
-          <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-amber-400/30 bg-black/40 text-xs font-black uppercase tracking-[0.16em] text-zinc-600">
-            {draft.portraitUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={draft.portraitUrl}
-                alt="Prévia do retrato"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              "Retrato"
-            )}
-          </div>
-
-          <div>
-            <p className="text-lg font-black text-zinc-100">
-              {draft.name || "Personagem sem nome"}
-            </p>
-
-            <p className="mt-1 text-sm text-zinc-400">
-              {draft.pronouns || "Pronomes não definidos"}
-            </p>
-
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-300">
-              {draft.concept ||
-                "O conceito do personagem aparecerá aqui conforme você preencher."}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-type CharacterReviewStepProps = {
-  draft: CharacterBuilderDraft;
-  options: CharacterBuilderOptions;
-  selectedClass: CharacterBuilderClassOption | undefined;
-  selectedAncestry: CharacterBuilderAncestryOption | undefined;
-  selectedBackground: CharacterBuilderBackgroundOption | undefined;
-};
-
-function CharacterReviewStep({
-  draft,
-  options,
-  selectedClass,
-  selectedAncestry,
-  selectedBackground,
-}: CharacterReviewStepProps) {
-  const selectedSkills = draft.skillKeys
-    .map((skillKey) => {
-      return options.skills.find((skill) => skill.key === skillKey);
-    })
-    .filter((skill): skill is CharacterBuilderSkillOption => Boolean(skill));
-
-  const selectedSpells = draft.spellKeys
-    .map((spellKey) => {
-      return options.spells.find((spell) => spell.key === spellKey);
-    })
-    .filter((spell): spell is CharacterBuilderSpellOption => Boolean(spell));
-
-  const selectedCantrips = selectedSpells.filter(isCantrip);
-  const selectedLeveledSpells = selectedSpells.filter(isLeveledSpell);
-
-  const startingEquipmentItems = getStartingEquipmentItemsFromDraft(
-    draft,
-    options,
-  );
-
-  const startingGold = getStartingGoldFromDraft(draft, options);
-
-  const aboutFieldsCount = countFilledAboutFields(draft);
-
-  const assignedAttributesCount = CHARACTER_ATTRIBUTE_DEFINITIONS.filter(
-    (attribute) => draft.attributes[attribute.key] !== null,
-  ).length;
-
-  return (
-    <div className="mt-5 space-y-5">
-      <section className="rounded-2xl border border-forge-gold/25 bg-gradient-to-br from-[#211027] to-black/40 p-5 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]">
-        <div className="p-5">
-  <div className="flex flex-wrap items-center gap-2">
-    <p className="text-[10px] font-black uppercase tracking-[0.28em] text-forge-gold">
-      Revisão da ficha
-    </p>
-
-    <span
-      className="flex h-5 w-5 items-center justify-center rounded-full border border-zinc-700 bg-black/30 text-[10px] font-black text-zinc-500"
-      title="Confira os principais dados antes de finalizar a ficha."
-      aria-label="Informação sobre revisão da ficha"
-    >
-      i
-    </span>
-  </div>
-
-  <h3 className="mt-4 max-w-2xl text-2xl font-black leading-tight text-zinc-100">
-    Confira {draft.name || "o personagem"} antes de finalizar
-  </h3>
-</div>
-      </section>
-
-            <CharacterReviewSection
-        title="Identidade visual"
-        description="Retrato, token, nome, pronomes e conceito do personagem."
-      >
-        <div className="grid gap-4 2xl:grid-cols-[240px_minmax(0,1fr)]">
-          <div className="space-y-3">
-            <div
-              className="overflow-hidden rounded-2xl border border-forge-gold/25 bg-zinc-950/70 shadow-[-4px_4px_0_rgba(0,0,0,0.28)]"
-              title={
-                draft.portraitUrl ||
-                "Nenhuma URL de retrato foi informada para este personagem."
-              }
-            >
-              <div className="flex aspect-[4/5] items-center justify-center bg-black/40 text-xs font-black uppercase tracking-[0.18em] text-zinc-600">
-                {draft.portraitUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={draft.portraitUrl}
-                    alt={`Retrato de ${draft.name || "personagem"}`}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  "Sem retrato"
-                )}
-              </div>
-
-              <div className="border-t border-zinc-800 px-4 py-3">
-                <p className="text-sm font-black leading-tight text-zinc-100">
-                  {draft.name || "Personagem sem nome"}
-                </p>
-
-                <p className="mt-1 text-xs font-bold text-zinc-500">
-                  {draft.pronouns || "Pronomes não definidos"}
-                </p>
-              </div>
-            </div>
-
-            <div
-              className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-3"
-              title={
-                draft.tokenImageUrl ||
-                "Nenhuma URL de token foi informada para este personagem."
-              }
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-forge-gold/25 bg-black/40 text-[9px] font-black uppercase tracking-[0.12em] text-zinc-600">
-                  {draft.tokenImageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={draft.tokenImageUrl}
-                      alt={`Token de ${draft.name || "personagem"}`}
-                      className={`h-full w-full ${getCharacterTokenImageFitClass(
-                        draft.tokenImageFit,
-                      )}`}
-                    />
-                  ) : (
-                    "Token"
-                  )}
-                </div>
-
-                <div className="min-w-0">
-                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-zinc-500">
-                    Token de mesa
-                  </p>
-
-                  <p className="mt-1 text-sm font-black text-zinc-100">
-                    {draft.tokenImageUrl ? "Imagem informada" : "Não informado"}
-                  </p>
-
-                  <p className="mt-1 text-xs font-bold text-zinc-500">
-                    Encaixe: {draft.tokenImageFit}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <div className="grid gap-3 md:grid-cols-2">
-              <CharacterReviewFact
-                label="Nome"
-                value={draft.name || "Não definido"}
-              />
-
-              <CharacterReviewFact
-                label="Pronomes"
-                value={draft.pronouns || "Não definido"}
-              />
-            </div>
-
-            <CharacterReviewTextBlock
-              label="Conceito"
-              value={draft.concept || "Conceito ainda não preenchido."}
-            />
-
-            <div className="grid gap-3">
-              <CharacterReviewFact
-                label="Classe"
-                value={
-                  (selectedClass?.name ?? draft.className) || "Não definida"
-                }
-                title={
-                  selectedClass?.description ??
-                  "Classe escolhida para o personagem."
-                }
-              />
-
-              <CharacterReviewFact
-                label="Ancestralidade"
-                value={
-                  (selectedAncestry?.name ?? draft.ancestryName) ||
-                  "Não definida"
-                }
-                title={
-                  selectedAncestry?.description ??
-                  "Ancestralidade escolhida para o personagem."
-                }
-              />
-
-              <CharacterReviewFact
-                label="Antecedente"
-                value={
-                  (selectedBackground?.name ?? draft.backgroundName) ||
-                  "Não definido"
-                }
-                title={
-                  selectedBackground?.description ??
-                  "Antecedente escolhido para o personagem."
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </CharacterReviewSection>
-
-      <CharacterReviewSection
-        title="Atributos"
-        description="Valores distribuídos e modificadores calculados."
-      >
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {CHARACTER_ATTRIBUTE_DEFINITIONS.map((attribute) => {
-            const value = draft.attributes[attribute.key];
-
-            return (
-              <div
-                key={attribute.key}
-                className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-3"
-                title={attribute.description}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
-                      {attribute.shortName}
-                    </p>
-
-                    <p className="mt-1 text-sm font-black text-zinc-100">
-                      {attribute.name}
-                    </p>
-                  </div>
-
-                  <div className="text-right">
-                    <p className="text-lg font-black leading-none text-forge-gold">
-                      {value ?? "—"}
-                    </p>
-
-                    <p className="mt-1 text-xs font-bold text-zinc-400">
-                      {formatAttributeModifier(value)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <p className="text-xs font-bold text-zinc-500">
-          {assignedAttributesCount}/6 atributos preenchidos.
-        </p>
-      </CharacterReviewSection>
-
-      <CharacterReviewSection
-        title="Perícias"
-        description="Perícias treinadas e seus atributos-base."
-      >
-        {selectedSkills.length > 0 ? (
-          <div className="grid gap-3 md:grid-cols-2">
-            {selectedSkills.map((skill) => {
-              const calculation = getSkillCalculation({
-                attributes: draft.attributes,
-                statKey: skill.stat.key,
-                isProficient: true,
-                level: CHARACTER_BUILDER_LEVEL,
-              });
-
-              return (
-                <CharacterReviewFact
-                  key={skill.key}
-                  label={skill.stat.shortName}
-                  value={`${skill.name} ${calculation.formattedTotal}`}
-                  title={`Atributo: ${skill.stat.name}. Bônus de proficiência: ${calculation.formattedProficiencyBonus}.`}
-                />
-              );
-            })}
-          </div>
-        ) : (
-          <CharacterReviewEmptyText>
-            Nenhuma perícia escolhida.
-          </CharacterReviewEmptyText>
-        )}
-      </CharacterReviewSection>
-
-      <CharacterReviewSection
-        title="Magias"
-        description="Truques e magias selecionadas para o personagem."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <CharacterReviewSpellList
-            title="Truques"
-            spells={selectedCantrips}
-            emptyMessage="Nenhum truque escolhido."
-          />
-
-          <CharacterReviewSpellList
-            title="Magias"
-            spells={selectedLeveledSpells}
-            emptyMessage="Nenhuma magia escolhida."
-          />
-        </div>
-      </CharacterReviewSection>
-
-      <CharacterReviewSection
-        title="Equipamentos iniciais"
-        description="Itens e moedas que serão usados como inventário inicial."
-      >
-        <div className="rounded-xl border border-forge-gold/25 bg-forge-gold/10 px-4 py-3">
-          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold">
-            Moedas iniciais
-          </p>
-
-          <p className="mt-1 text-xl font-black text-zinc-100">
-            {startingGold} moedas
-          </p>
-        </div>
-
-        {startingEquipmentItems.length > 0 ? (
-          <div className="grid gap-3 md:grid-cols-2">
-            {startingEquipmentItems.map((item) => {
-              const equipmentItem = options.equipment.find(
-                (currentItem) => currentItem.key === item.key,
-              );
-
-              const mainInfo = equipmentItem
-                ? getEquipmentMainInfo(equipmentItem)
-                : null;
-
-              const title = equipmentItem
-                ? `${equipmentItem.name}. ${
-                    equipmentItem.description ?? "Sem descrição cadastrada."
-                  } ${mainInfo ? `${mainInfo.label}: ${mainInfo.value}.` : ""} Peso: ${formatEquipmentWeight(
-                    equipmentItem.weight,
-                  )}.`
-                : item.key;
-
-              return (
-                <div
-                  key={`${item.source}-${item.key}`}
-                  className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-3"
-                  title={title}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-black text-zinc-100">
-                        {equipmentItem?.name ?? item.key}
-                      </p>
-
-                      <p className="mt-1 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                        {item.source === "background"
-                          ? "Antecedente"
-                          : "Classe"}
-                      </p>
-                    </div>
-
-                    <span className="rounded-full border border-zinc-700 bg-black/30 px-2 py-1 text-xs font-black text-zinc-200">
-                      ×{item.quantity}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <CharacterReviewEmptyText>
-            Nenhum item inicial. O personagem começará apenas com moedas.
-          </CharacterReviewEmptyText>
-        )}
-      </CharacterReviewSection>
-
-      <CharacterReviewSection
-        title="Sobre"
-        description="Identidade, aparência, personalidade, história e notas."
-      >
-        <div className="grid gap-3 md:grid-cols-2">
-          <CharacterReviewFact
-            label="Alinhamento"
-            value={draft.alignment || "Não definido"}
-          />
-
-          <CharacterReviewFact
-            label="Estilo de vida"
-            value={draft.lifestyle || "Não definido"}
-          />
-
-          <CharacterReviewFact
-            label="Gênero"
-            value={draft.gender || "Não definido"}
-          />
-
-          <CharacterReviewFact
-            label="Campos preenchidos"
-            value={`${aboutFieldsCount} campos`}
-          />
-        </div>
-
-        <CharacterReviewTextBlock
-          label="Aparência"
-          value={getPhysicalSummary(draft)}
-        />
-
-        <CharacterReviewTextBlock
-          label="Personalidade"
-          value={[
-            draft.bonds ? `Vínculos: ${draft.bonds}` : "",
-            draft.flaws ? `Defeitos: ${draft.flaws}` : "",
-            draft.ideals ? `Ideais: ${draft.ideals}` : "",
-            draft.personality ? `Traços: ${draft.personality}` : "",
-          ]
-            .filter(Boolean)
-            .join(" • ") || "Personalidade ainda não preenchida."}
-        />
-
-        <CharacterReviewTextBlock
-          label="História"
-          value={draft.backstory || "História ainda não preenchida."}
-        />
-      </CharacterReviewSection>
-    </div>
-  );
-}
-
-function CharacterReviewMetricCard({
-  label,
-  value,
-  title,
-}: {
-  label: string;
-  value: string;
-  title: string;
-}) {
-  return (
-    <div
-      className="rounded-xl border border-forge-gold/20 bg-black/30 px-4 py-3"
-      title={title}
-    >
-      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-        {label}
-      </p>
-
-      <p className="mt-1 text-base font-black leading-tight text-forge-gold">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function CharacterReviewSection({
-  title,
-  description,
-  children,
-}: {
-  title: string;
-  description: string;
-  children: ReactNode;
-}) {
-  return (
-    <section
-      className="rounded-2xl border border-zinc-800 bg-black/20 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
-      title={description}
-    >
-      <div className="flex items-center justify-between gap-3 border-b border-zinc-800 pb-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h4 className="text-sm font-black uppercase tracking-[0.22em] text-forge-gold">
-              {title}
-            </h4>
-
-            <span
-              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-              title={description}
-              aria-label={`Informação sobre ${title}`}
-            >
-              i
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-4 space-y-3">{children}</div>
-    </section>
-  );
-}
-
-function CharacterReviewFact({
-  label,
-  value,
-  title,
-}: {
-  label: string;
-  value: string;
-  title?: string;
-}) {
-  return (
-    <div
-      className="rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3"
-      title={title ?? value}
-    >
-      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
-        {label}
-      </p>
-
-      <p className="mt-1 text-sm font-black leading-relaxed text-zinc-100">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function CharacterReviewTextBlock({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div
-      className="rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3"
-      title={value}
-    >
-      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
-        {label}
-      </p>
-
-      <p className="mt-1 line-clamp-4 text-sm font-bold leading-relaxed text-zinc-200">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function CharacterReviewSpellList({
-  title,
-  spells,
-  emptyMessage,
-}: {
-  title: string;
-  spells: CharacterBuilderSpellOption[];
-  emptyMessage: string;
-}) {
-  if (spells.length === 0) {
-    return (
-      <div>
-        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
-          {title}
-        </p>
-
-        <CharacterReviewEmptyText>{emptyMessage}</CharacterReviewEmptyText>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
-        {title}
-      </p>
-
-      <div className="mt-2 space-y-2">
-        {spells.map((spell) => (
-          <div
-            key={spell.key}
-            className="rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3"
-            title={`${spell.name}. ${spell.description ?? "Sem descrição cadastrada."}`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <p className="text-sm font-black leading-relaxed text-zinc-100">
-                {spell.name}
-              </p>
-
-              <span className="shrink-0 rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold">
-                {getSpellLevelLabel(spell.level)}
-              </span>
-            </div>
-
-            <p className="mt-1 text-xs font-bold text-zinc-500">
-              {spell.school}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function CharacterReviewEmptyText({ children }: { children: ReactNode }) {
-  return (
-    <p className="rounded-xl border border-dashed border-zinc-800 bg-zinc-950/30 px-4 py-3 text-sm font-bold text-zinc-500">
-      {children}
-    </p>
-  );
-}
-
-
-type BuilderSummaryRowProps = {
-  label: string;
-  value: string;
-};
-
-function BuilderOptionCard({
-  title,
-  description,
-  isSelected,
-  onClick,
-}: {
-  title: string;
-  description?: string | null;
-  isSelected: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={[
-        "group w-full rounded-2xl border p-4 text-left transition",
-        "bg-black/25 hover:-translate-y-0.5 hover:bg-white/10",
-        "shadow-[-6px_6px_18px_rgba(0,0,0,0.35)]",
-        isSelected
-          ? "border-yellow-300 bg-yellow-300/10"
-          : "border-white/10 hover:border-yellow-300/50",
-      ].join(" ")}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-black text-white">{title}</p>
-
-          {description ? (
-            <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-white/55">
-              {description}
-            </p>
-          ) : (
-            <p className="mt-2 text-xs italic text-white/35">
-              Sem descrição cadastrada.
-            </p>
-          )}
-        </div>
-
-        <span
-          className={[
-            "shrink-0 rounded-full border px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em]",
-            isSelected
-              ? "border-yellow-300 bg-yellow-300 text-black"
-              : "border-white/10 text-white/35 group-hover:border-yellow-300/50 group-hover:text-yellow-200",
-          ].join(" ")}
-        >
-          {isSelected ? "Escolhido" : "Escolher"}
-        </span>
-      </div>
-    </button>
-  );
-}
-
-function StartingEquipmentSummaryPanel({
-  draft,
-  options,
-}: {
-  draft: CharacterBuilderDraft;
-  options: CharacterBuilderOptions;
-}) {
-  const previewItems = getStartingEquipmentItemsFromDraft(draft, options);
-  const previewGold = getStartingGoldFromDraft(draft, options);
-  const equipmentByKey = new Map(
-    options.equipment.map((item) => [item.key, item]),
-  );
-
-  return (
-    <div className="rounded-2xl border border-forge-gold/20 bg-black/25 p-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-forge-gold/80">
-            Inventário inicial
-          </p>
-
-          <p className="mt-1 text-xs font-bold text-zinc-500">
-            {previewGold} moedas
-          </p>
-        </div>
-
-        <span className="shrink-0 rounded-full border border-forge-gold/25 bg-forge-gold/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold">
-          {previewItems.length} item{previewItems.length === 1 ? "" : "s"}
-        </span>
-      </div>
-
-      <div className="mt-3 space-y-2">
-        {previewItems.length === 0 ? (
-          <p className="rounded-xl border border-zinc-800 bg-zinc-950/50 px-3 py-2 text-xs font-bold text-zinc-500">
-            Sem itens. O personagem inicia com moedas.
-          </p>
-        ) : (
-          previewItems.slice(0, 5).map((item) => {
-            const equipmentItem = equipmentByKey.get(item.key);
-            const sourceLabel =
-              item.source === "class" ? "Classe" : "Antecedente";
-
-            return (
-              <div
-                key={`${item.source}-${item.key}`}
-                className="rounded-xl border border-zinc-800 bg-zinc-950/55 px-3 py-2"
-                title={
-                  equipmentItem?.description ??
-                  item.notes ??
-                  "Equipamento inicial."
-                }
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="truncate text-xs font-black text-zinc-100">
-                      {equipmentItem?.name ?? item.key}
-                    </p>
-
-                    <p className="mt-1 text-[9px] font-black uppercase tracking-[0.12em] text-zinc-600">
-                      {sourceLabel}
-                    </p>
-                  </div>
-
-                  <span className="shrink-0 rounded-full bg-zinc-800 px-2 py-1 text-[10px] font-black text-zinc-200">
-                    ×{item.quantity}
-                  </span>
-                </div>
-              </div>
-            );
-          })
-        )}
-
-        {previewItems.length > 5 ? (
-          <p className="text-xs font-bold text-zinc-500">
-            +{previewItems.length - 5} item
-            {previewItems.length - 5 === 1 ? "" : "s"}
-          </p>
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function BuilderSummaryRow({ label, value }: BuilderSummaryRowProps) {
-  return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3">
-      <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">
-        {label}
-      </span>
-
-      <span className="text-right text-sm font-bold text-zinc-200">
-        {value}
-      </span>
     </div>
   );
 }
@@ -5595,51 +2192,7 @@ export default function CampaignPlayPage() {
   const [activeCharacterBuilderStep, setActiveCharacterBuilderStep] =
     useState("concept");
   const [characterBuilderDraft, setCharacterBuilderDraft] =
-    useState<CharacterBuilderDraft>({
-      name: "",
-      pronouns: "",
-      concept: "",
-      portraitUrl: "",
-      tokenImageUrl: "",
-      tokenImageFit: "FILL",
-
-      classId: "",
-      className: "",
-
-      ancestryId: "",
-      ancestryName: "",
-
-      backgroundId: "",
-      backgroundName: "",
-
-      attributes: DEFAULT_CHARACTER_ATTRIBUTES,
-      skillKeys: [],
-      spellKeys: [],
-      equipmentItems: [],
-      classEquipmentMode: "PACKAGE",
-      backgroundEquipmentMode: "PACKAGE",
-      startingGold: 0,
-
-      alignment: "",
-      faith: "",
-      lifestyle: "",
-
-      hair: "",
-      skin: "",
-      eyes: "",
-      height: "",
-      weight: "",
-      age: "",
-      gender: "",
-
-      bonds: "",
-      flaws: "",
-      ideals: "",
-      personality: "",
-      backstory: "",
-      notes: "",
-      gmNotes: "",
-    });
+    useState<CharacterBuilderDraft>(() => createEmptyCharacterBuilderDraft());
   const [savedCharacterSheetId, setSavedCharacterSheetId] = useState<
     string | null
   >(null);
@@ -6678,7 +3231,10 @@ export default function CampaignPlayPage() {
         backgroundId: draftSheet.backgroundId ?? "",
         backgroundName: draftSheet.background?.name ?? "",
 
-        attributes: getCharacterAttributesFromStats(draftSheet.stats),
+        attributes: getCharacterAttributesFromStats(
+          draftSheet.stats,
+          DEFAULT_CHARACTER_ATTRIBUTES,
+        ),
         skillKeys: getCharacterSkillKeysFromSkills(draftSheet.skills),
         spellKeys: getCharacterSpellKeysFromSpells(draftSheet.spells),
         equipmentItems: getCharacterEquipmentItemsFromEquipment(
@@ -6750,11 +3306,13 @@ export default function CampaignPlayPage() {
       }
 
       if (type === "background") {
+        const isChangingBackground = currentDraft.backgroundId !== option.id;
+
         return {
           ...currentDraft,
           backgroundId: option.id,
           backgroundName: option.name,
-          skillKeys: option.skillKeys ?? [],
+          skillKeys: isChangingBackground ? [] : currentDraft.skillKeys,
         };
       }
 
@@ -6912,7 +3470,9 @@ export default function CampaignPlayPage() {
       }
 
       setSavedCharacterSheetStatus("READY");
-      setCharacterDraftSaveSuccess("Ficha finalizada e enviada para Personagens.");
+      setCharacterDraftSaveSuccess(
+        "Ficha finalizada e enviada para Personagens.",
+      );
       setActiveRightTab("characters");
       setIsCharacterBuilderOpen(false);
 
@@ -8237,10 +4797,19 @@ export default function CampaignPlayPage() {
         isOpen={isCharacterCreationMenuOpen}
         onClose={() => setIsCharacterCreationMenuOpen(false)}
         onStartCharacterBuilder={() => {
+          setCharacterBuilderDraft(createEmptyCharacterBuilderDraft());
+          setSavedCharacterSheetId(null);
+          setSavedCharacterSheetStatus(null);
+          setCharacterDraftSaveError(null);
+          setCharacterDraftSaveSuccess(null);
+          setIsSavingCharacterDraft(false);
+          setIsFinalizingCharacterSheet(false);
+          setCharacterBuilderOptionsError(null);
+
           setIsCharacterCreationMenuOpen(false);
           setActiveCharacterBuilderStep("concept");
           setIsCharacterBuilderOpen(true);
-          void handleLoadCharacterBuilderDraft();
+
           void handleLoadCharacterBuilderOptions();
         }}
       />

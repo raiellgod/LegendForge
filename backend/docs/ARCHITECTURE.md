@@ -17,66 +17,35 @@ O projeto é inspirado em VTTs como Roll20 e Foundry VTT, mas segue uma identida
 
 ---
 
-## 🎯 Main Goals
-
-### 1 — Base funcional de VTT
-
-- 🔐 Autenticação real
-- 🧑‍🤝‍🧑 Gestão de campanhas e participantes
-- 🗺️ Mesa de jogo
-- 🎭 Atores de campanha
-- 🧍 Personagens jogáveis
-- 🎲 Rolagens, chat, diário, tokens e cenas
-
-### 2 — Backend profissional
-
-- 🏗️ Arquitetura escalável
-- 🔒 Integridade de dados forte
-- 📐 Separação clara de responsabilidades
-- ⚡ Rotas reais com validação
-- 🧠 Backend e banco como fonte da verdade
-
-### 3 — Frontend conectado ao domínio
-
-- Telas baseadas em Figma e referências de VTT
-- Integração real com API
-- Auth via sessão/cookie
-- UI incremental sem depender de mock permanente
-- Builder de personagem avançando por etapas reais
-
----
-
 ## 💡 Development Philosophy
 
 > Desenvolvimento incremental com mentalidade de produção.
 
 Princípios:
 
-- ✔️ Pequenos passos funcionais
-- ✔️ Cada micro deve ser testável
-- ✔️ Refatoração contínua
-- ✔️ Backend como fonte da verdade
-- ✔️ Banco protege integridade
-- ✔️ Frontend consome API real sempre que possível
-- ✔️ Evitar mock circular
-- ✔️ Código serve ao domínio
-- ✔️ Cada tela deve aproximar o produto de algo jogável
+- Pequenos passos funcionais.
+- Cada micro deve ser testável.
+- Refatoração contínua.
+- Backend e banco como fonte de verdade.
+- Evitar mock circular.
+- Código deve servir ao domínio.
+- UI deve aproximar o produto de algo jogável.
+- Arquivos grandes exigem fonte única da verdade.
 
 ---
 
 ## 🧭 Source-of-truth workflow para código grande
 
-Regra atual de trabalho para arquivos grandes, especialmente:
+Regra atual para arquivos grandes, principalmente:
 
 ```txt
 frontend/src/app/campaigns/[id]/play/page.tsx
 ```
 
-- Para mudanças grandes: reescrever o arquivo inteiro com base no último arquivo enviado.
-- Para mudanças pequenas: usar apenas âncoras reais do arquivo atual.
-- Não orientar com estrutura presumida de versões anteriores.
-- Tratar o último `page.tsx` enviado como fonte única da verdade.
-- Antes de commit Git, sempre rodar `git diff --stat`.
+- Para mudança grande: reescrever o arquivo inteiro baseado no último arquivo enviado pelo usuário.
+- Para mudança pequena: usar âncoras reais do arquivo atual no estilo “Procure este trecho / Troque por este trecho”.
+- Não usar código presumido de versões antigas.
+- Antes de qualquer commit Git: sempre rodar `git diff --stat`.
 
 ---
 
@@ -117,9 +86,17 @@ LegendForge/
 │   │   │   ├── layout.tsx
 │   │   │   └── page.tsx
 │   │   ├── components/
-│   │   │   └── ui/
+│   │   ├── features/
+│   │   │   └── character-builder/
+│   │   │       ├── components/
+│   │   │       ├── constants/
+│   │   │       ├── review/
+│   │   │       ├── services/
+│   │   │       ├── steps/
+│   │   │       ├── summary/
+│   │   │       ├── types/
+│   │   │       └── utils/
 │   │   ├── lib/
-│   │   │   └── auth-client.ts
 │   │   └── service/
 │   ├── public/
 │   └── package.json
@@ -132,7 +109,7 @@ LegendForge/
 
 ## ⚙️ Tech Stack
 
-### 🖥️ Backend
+### Backend
 
 - Node.js
 - Fastify
@@ -146,7 +123,7 @@ LegendForge/
 - pnpm
 - Docker
 
-### 🎨 Frontend
+### Frontend
 
 - Next.js
 - React
@@ -159,44 +136,21 @@ LegendForge/
 
 ## 🏗️ Backend Architecture
 
-### 1. Banco de Dados — PostgreSQL
+### PostgreSQL
 
-Responsável por:
+Responsável por persistência, integridade, relacionamentos e regras críticas quando fizer sentido.
 
-- persistência
-- integridade
-- relacionamentos
-- regras críticas quando fizer sentido
-- fonte de verdade do domínio
+### Prisma
 
-### 2. Prisma
+Responsável pelo acesso tipado ao banco, queries relacionais, migrations/db push durante desenvolvimento e Prisma Studio.
 
-Responsável por:
+### Better Auth
 
-- acesso tipado ao banco
-- queries relacionais
-- migrations/db push durante desenvolvimento
-- Prisma Studio
+Responsável por registro, login, sessões e cookies de autenticação.
 
-### 3. Better Auth
+### Fastify
 
-Responsável por:
-
-- registro
-- login
-- sessões
-- cookies de autenticação
-- tabelas oficiais de identidade
-
-### 4. Fastify
-
-Responsável por:
-
-- rotas HTTP
-- validação com Zod
-- autorização
-- orquestração da API
-- integração com Better Auth
+Responsável por rotas HTTP, validação com Zod, autorização e integração com Better Auth.
 
 ---
 
@@ -211,15 +165,6 @@ Implementado:
 - Frontend com `authClient`
 - Backend com helper `getAuthenticatedSession`
 
-Fluxo atual:
-
-1. Usuário registra ou faz login.
-2. Better Auth cria/atualiza sessão no banco.
-3. Browser mantém cookie de sessão.
-4. Frontend chama API com `credentials: "include"`.
-5. Backend valida sessão via Better Auth.
-6. Rotas protegidas usam `session.user.id`.
-
 Decisão importante:
 
 > Não usar Bearer token manual/localStorage para sessão principal. O fluxo atual usa sessão/cookie do Better Auth.
@@ -228,7 +173,7 @@ Decisão importante:
 
 ## 🧩 Modelagem Atual
 
-### Núcleo implementado
+### Núcleo
 
 - User
 - Session
@@ -266,122 +211,108 @@ Decisão importante:
 
 ---
 
-## 🗺️ Campanha — Fluxo Atual
-
-Backend:
-
-- `POST /campaigns`
-- `GET /campaigns`
-- `GET /campaigns/:id`
-- `PATCH /campaigns/:id`
-- `DELETE /campaigns/:id`
-- `POST /campaigns/join`
-- rotas de participantes
-- rotas de atores de campanha
-- rotas de tokens de cena
-
-Frontend:
-
-- `/campaigns`
-- `/campaigns/create`
-- `/campaigns/search`
-- `/campaigns/[id]/edit`
-- `/campaigns/[id]/play`
-
----
-
 ## 🧍 Character Builder — Arquitetura atual
 
-A criação de personagem está sendo construída dentro de:
+Arquivos principais:
 
 ```txt
 frontend/src/app/campaigns/[id]/play/page.tsx
-```
-
-Backend relacionado:
-
-```txt
+frontend/src/features/character-builder/
 backend/src/routes/character-sheets.ts
 backend/src/routes/systems.ts
+backend/prisma/schema.prisma
+backend/prisma/seed.ts
 ```
 
-Estado atual:
+O builder foi parcialmente extraído de `page.tsx` para `frontend/src/features/character-builder/`.
 
-- Menu de criação de personagem
-- Modal do builder
-- Etapa Conceito real
-- Salvar rascunho
-- Carregar rascunho
-- Carregar opções reais do sistema
-- Selecionar classe, ancestralidade e antecedente
-- Persistir `classId`, `ancestryId`, `backgroundId`
-- Validar avanço por etapa
-- Etapa Atributos visual/local
-
-Próximo passo:
+Estrutura extraída:
 
 ```txt
-4.15 — Persistir atributos no banco
+features/character-builder/
+├── components/
+├── constants/
+├── review/
+├── steps/
+├── summary/
+├── types/
+└── utils/
 ```
 
----
+Etapas extraídas ou em refatoração:
 
-## ⚙️ Decisões Arquiteturais
-
-### DB-first mindset
-
-> Banco é a fonte de verdade.
-
-### Auth como núcleo
-
-- Better Auth controla identidade.
-- Backend consome a sessão.
-- Sistema não reimplementa segurança.
-
-### Prisma como camada oficial
-
-- acesso tipado
-- produtividade
-- segurança
-- geração de client
-
-### Frontend incremental
-
-- Figma e referências guiam a UI
-- implementação segue domínio real
-- mock permanente deve ser evitado
-
-### IA no builder
-
-A IA do LegendForge deve ser apenas sugestiva, não decisória. Ela pode sugerir classe, magia, truque, subclasse ou caminho de criação quando solicitada, mas a decisão final é sempre do jogador.
+- Conceito
+- Atributos
+- Perícias
+- Magias
+- Equipamentos
+- Sobre
+- Revisão
 
 ---
 
-## ⚠️ Pontos de Atenção
+## ⚠️ Estado importante da refatoração 4.22
 
-- `page.tsx` da mesa está grande e precisa de cuidado.
-- Evitar mudanças por trechos imaginados.
-- Rotas ainda estão concentradas; services podem ser criados quando regras crescerem.
-- Upload de imagens ainda usa URL/string; storage real fica para futuro.
-- Builder ainda não finaliza personagem; está na fase de rascunho.
-- Atributos foram criados visualmente, mas ainda não persistem no banco.
+A Fase 4.22 está em andamento. Não marcar a etapa como concluída ainda.
+
+Último ponto conhecido:
+
+```txt
+4.22.18 — Extração/Revisão e ajustes finais do builder ainda precisam ser validados.
+```
+
+Problemas observados recentemente:
+
+- O fluxo “Criar personagem” ainda pode carregar rascunho antigo em vez de abrir ficha vazia.
+- A correção de `page.tsx` enviada ainda não foi confirmada como funcionando.
+- Linguagem dinâmica por pronome e sincronização pronome → gênero foram planejadas, mas não devem ser marcadas como concluídas até teste real.
+- Antes de seguir para commit, validar build, abrir builder do zero e testar todas as etapas.
+
+---
+
+## 🧠 Regras futuras importantes
+
+### Perícias e proficiências
+
+- Classe deve fornecer lista pré-definida de perícias permitidas e quantidade de escolhas.
+- Antecedente deve fornecer quantidade de perícias com sugestões, mas usuário escolhe manualmente.
+- Sistema deve impedir duplicidade da mesma perícia.
+- Proficiências de armas, escudos, ferramentas e similares devem ser editáveis pelo GM durante a campanha.
+
+### Armadura/defesa
+
+- Armaduras devem ser principalmente visuais/cosméticas.
+- Defesa deve vir de camada mecânica aplicada à roupa/equipamento, permitindo trocar aparência sem perder defesa.
+
+### Personagens ativos
+
+- Player comum: 1 personagem ativo por campanha.
+- GM: pode ter vários NPCs/criaturas, mas só 1 personagem próprio ativo.
+- NPCs/criaturas podem ir para biblioteca.
+- Personagens de player/GM precisam de fluxo próprio de remover/inativar/excluir.
+
+### Linguagem dinâmica
+
+- Implementar linguagem baseada em pronomes.
+- Primeiro masculino/feminino.
+- Neutro será adaptado caso a caso depois.
+
+### Upload de imagem
+
+- Upload direto do computador entra na Fase 4.25.
+- Inclui retrato, token, preview/fit/crop simples e persistência da URL no banco.
 
 ---
 
 ## 🔄 Current Phase
 
-> **FASE 4 — Criação/Ficha de Personagem em andamento**
+> **FASE 4 — Criação/Ficha de Personagem**
 
----
+Micro em aberto:
 
-## 🎯 Direção Atual
-
-Foco imediato:
-
-- persistir atributos do builder
-- carregar atributos salvos
-- evoluir perícias, magias, equipamentos, sobre e revisão
-- finalizar ficha e listar na aba Personagens
+```txt
+4.22.18 — Finalizar extração/revisão do builder e corrigir criação de personagem vazio
+```
 
 ---
 
@@ -391,22 +322,13 @@ Foco imediato:
 
 ---
 
-## 📄 Referências
-
-- DATABASE_SETUP.md
-- DEV_STATE.md
-- FEATURE_CAPSULE.md
-- BOOT.md
-
----
-
 ## 🏆 Estado da Arquitetura
 
-✔ Auth resolvido  
-✔ Backend funcional  
-✔ Prisma operacional  
-✔ Frontend conectado  
-✔ Campanhas reais  
-✔ Mesa com atores/tokens persistidos  
-✔ Sistema RPG inicial semeado  
-✔ Builder de personagem em andamento  
+- Auth resolvido.
+- Backend funcional.
+- Prisma operacional.
+- Frontend conectado.
+- Campanhas reais.
+- Mesa com atores/tokens persistidos.
+- Sistema RPG inicial semeado.
+- Builder de personagem avançado, mas refatoração atual ainda precisa validação.
