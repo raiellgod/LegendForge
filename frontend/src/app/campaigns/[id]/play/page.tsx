@@ -29,12 +29,6 @@ import {
 
 import { characterBuilderSteps } from "@/features/character-builder/constants/character-builder-steps";
 
-import {
-  countFilledAboutFields,
-  getNarrativeSummary,
-  getPersonalitySummary,
-  getPhysicalSummary,
-} from "@/features/character-builder/utils/about";
 
 import {
   formatAttributeModifier,
@@ -42,9 +36,7 @@ import {
   getPersistableCharacterAttributes,
 } from "@/features/character-builder/utils/attributes";
 
-import {
-  getCharacterSkillKeysFromSkills,
-} from "@/features/character-builder/utils/skills";
+import { getCharacterSkillKeysFromSkills } from "@/features/character-builder/utils/skills";
 
 import {
   getCharacterSpellKeysFromSpells,
@@ -57,7 +49,6 @@ import {
   getStartingGoldFromDraft,
   normalizeCharacterEquipmentMode,
 } from "@/features/character-builder/utils/equipment";
-
 
 import { CharacterBuilderInfoIcon } from "@/features/character-builder/components/CharacterBuilderInfoIcon";
 import { BuilderSummaryRow } from "@/features/character-builder/summary/BuilderSummaryRow";
@@ -925,19 +916,6 @@ function getTokenImageFitClass(imageFit: SceneToken["imageFit"]) {
   return "object-cover";
 }
 
-function getCharacterTokenImageFitClass(
-  imageFit: CharacterBuilderDraft["tokenImageFit"],
-) {
-  if (imageFit === "CONTAIN") {
-    return "object-contain";
-  }
-
-  if (imageFit === "FILL") {
-    return "object-fill";
-  }
-
-  return "object-cover";
-}
 
 function normalizeDiceExpression(expression: string) {
   return expression.toLowerCase().replace(/\s+/g, "").replace(/d%/g, "d100");
