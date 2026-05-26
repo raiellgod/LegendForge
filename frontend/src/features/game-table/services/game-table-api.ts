@@ -1,0 +1,213 @@
+import type {
+  Campaign,
+  CampaignActor,
+  CampaignParticipant,
+  SceneToken,
+} from "../types/game-table-types";
+
+export async function getCampaign(id: string): Promise<Campaign> {
+  const response = await fetch(`http://localhost:8081/campaigns/${id}`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar campanha");
+  }
+
+  const data = await response.json();
+
+  return data.campaign;
+}
+
+export async function getCampaignParticipants(
+  campaignId: string,
+): Promise<CampaignParticipant[]> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/participants`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar participantes");
+  }
+
+  const data = await response.json();
+
+  return data.participants;
+}
+
+export async function getCampaignActors(
+  campaignId: string,
+): Promise<CampaignActor[]> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/actors`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar atores da campanha");
+  }
+
+  const data = await response.json();
+
+  return data.actors;
+}
+
+export async function getCampaignTokens(
+  campaignId: string,
+): Promise<SceneToken[]> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/tokens`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar tokens da campanha");
+  }
+
+  const data = await response.json();
+
+  return data.tokens;
+}
+
+export async function createSceneToken(
+  campaignId: string,
+  actorId: string,
+  data: {
+    name?: string;
+    initials?: string;
+    imageUrl?: string | null;
+    imageFit?: SceneToken["imageFit"];
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+  } = {},
+): Promise<SceneToken> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/tokens`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        actorId,
+        ...data,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao criar token na cena");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.token;
+}
+
+export async function deleteSceneToken(
+  campaignId: string,
+  tokenId: string,
+) {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/tokens/${tokenId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao remover token da cena");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.deletedTokenId as string;
+}
+
+export async function updateSceneToken(
+  campaignId: string,
+  tokenId: string,
+  data: Partial<
+    Pick<
+      SceneToken,
+      | "name"
+      | "initials"
+      | "imageUrl"
+      | "imageFit"
+      | "x"
+      | "y"
+      | "width"
+      | "height"
+    >
+  >,
+): Promise<SceneToken> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/tokens/${tokenId}`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao atualizar token da cena");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.token;
+}
+
+export async function updateCampaignActor(
+  campaignId: string,
+  actorId: string,
+  data: Partial<
+    Pick<
+      CampaignActor,
+      "location" | "name" | "initials" | "description" | "portraitUrl"
+    >
+  >,
+): Promise<CampaignActor> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/actors/${actorId}`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao atualizar ator da campanha");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.actor;
+}

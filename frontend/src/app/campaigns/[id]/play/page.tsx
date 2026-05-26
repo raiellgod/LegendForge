@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  FormEvent,
-  PointerEvent,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { FormEvent, PointerEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -17,7 +11,6 @@ import type {
   CharacterBuilderModalProps,
   CharacterBuilderOptions,
   CharacterBuilderSelectableOption,
-  CharacterSheetStatResponse,
   CharacterSheetStatus,
 } from "@/features/character-builder/types/character-builder-types";
 
@@ -29,25 +22,16 @@ import {
 
 import { characterBuilderSteps } from "@/features/character-builder/constants/character-builder-steps";
 
-
 import {
   formatAttributeModifier,
-  getCharacterAttributesFromStats,
   getPersistableCharacterAttributes,
 } from "@/features/character-builder/utils/attributes";
 
-import { getCharacterSkillKeysFromSkills } from "@/features/character-builder/utils/skills";
+import { isCantrip } from "@/features/character-builder/utils/spells";
 
 import {
-  getCharacterSpellKeysFromSpells,
-  isCantrip,
-} from "@/features/character-builder/utils/spells";
-
-import {
-  getCharacterEquipmentItemsFromEquipment,
   getStartingEquipmentItemsFromDraft,
   getStartingGoldFromDraft,
-  normalizeCharacterEquipmentMode,
 } from "@/features/character-builder/utils/equipment";
 
 import { CharacterBuilderInfoIcon } from "@/features/character-builder/components/CharacterBuilderInfoIcon";
@@ -62,212 +46,101 @@ import { CharacterEquipmentStep } from "@/features/character-builder/steps/Chara
 import { CharacterAboutStep } from "@/features/character-builder/steps/CharacterAboutStep";
 import { CharacterReviewStep } from "@/features/character-builder/steps/CharacterReviewStep";
 
-type ToolMode = "select" | "pan" | "measure" | "draw" | "fog";
+import type {
+  Campaign,
+  CampaignActor,
+  CampaignParticipant,
+  ChatMessage,
+  ChatMode,
+  DiceTerm,
+  RightPanelTab,
+  RollResult,
+  RollVisibility,
+  SceneToken,
+  ToolMode,
+  User,
+} from "@/features/game-table/types/game-table-types";
 
-type RightPanelTab = "chat" | "rolls" | "characters" | "journal" | "settings";
-type RollVisibility = "public" | "private";
-type ChatMode = "public" | "whisper";
-type CharacterType = "PLAYER_CHARACTER" | "NPC" | "CREATURE";
-type ActorLocation = "TABLE" | "LIBRARY" | "ARCHIVED";
+import {
+  getDisplayName,
+  getInitials,
+  getParticipantDisplayName,
+} from "@/features/game-table/utils/user-utils";
 
-type User = {
-  id: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-};
+import {
+  getCharacterTypeLabel,
+  getCharacterTypeStyles,
+  getVisibleActorsForUser,
+} from "@/features/game-table/utils/actor-utils";
 
-type Campaign = {
-  id: string;
-  name: string;
-  description: string | null;
-  coverImage: string | null;
-  ownerId: string;
-  systemId: string | null;
-  isActive: boolean;
-  isPublic: boolean;
-  maxPlayers: number;
-  inviteCode: string | null;
-};
+import {
+  DICE_OPTIONS,
+  QUICK_ROLLS,
+} from "@/features/game-table/constants/dice-constants";
 
-type CampaignParticipant = {
-  id: string;
-  campaignId: string;
-  userId: string;
-  role: "GM" | "PLAYER" | string;
-  status: "PENDING" | "APPROVED" | "REJECTED" | "REMOVED" | string;
-  joinedAt: string;
-  removedAt: string | null;
-  createdAt: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    image: string | null;
-  };
-};
+import {
+  buildExpressionFromTerms,
+  createId,
+  rollDiceExpression,
+} from "@/features/game-table/utils/dice-utils";
 
-type SidebarItem = {
-  id: ToolMode;
-  label: string;
-  icon: string;
-  description: string;
-  visible: boolean;
-};
+import {
+  createSceneToken,
+  deleteSceneToken,
+  getCampaign,
+  getCampaignActors,
+  getCampaignParticipants,
+  getCampaignTokens,
+  updateCampaignActor,
+  updateSceneToken,
+} from "@/features/game-table/services/game-table-api";
 
-type RightTabItem = {
-  id: RightPanelTab;
-  label: string;
-  visible: boolean;
-};
+import {
+  getRightTabs,
+  getToolbarItems,
+} from "@/features/game-table/constants/table-ui-constants";
 
-type ChatMessage = {
-  id: string;
-  author: string;
-  kind: "system" | "user" | "roll" | "whisper";
-  content: string;
-  dice?: string;
-  result?: number;
-  displayResult?: string;
-  breakdown?: string;
-  recipientId?: string;
-  recipientName?: string;
-};
+import { TableLeftToolbar } from "@/features/game-table/components/TableLeftToolbar";
+import { TableRightPanel } from "@/features/game-table/components/TableRightPanel";
+import { TableChatPanel } from "@/features/game-table/components/TableChatPanel";
+import { TableRollsPanel } from "@/features/game-table/components/TableRollsPanel";
+import { TableCharactersPanel } from "@/features/game-table/components/TableCharactersPanel";
+import { TableJournalPanel } from "@/features/game-table/components/TableJournalPanel";
+import { TableSettingsPanel } from "@/features/game-table/components/TableSettingsPanel";
+import { TableSceneCanvas } from "@/features/game-table/components/TableSceneCanvas";
 
-type RollResult = {
-  id: string;
-  author: string;
-  expression: string;
-  total: number;
-  displayResult?: string;
-  breakdown: string;
-  createdAt: Date;
-};
+const TOKEN_GRID_SIZE_IN_PIXELS = 40;
 
-type DiceTerm = {
-  id: string;
-  quantity: number;
-  sides: number;
-};
-
-type QuickRoll =
-  | {
-      id: string;
-      label: string;
-      expression: string;
-      kind: "dice";
-    }
-  | {
-      id: string;
-      label: string;
-      expression: string;
-      kind: "tens";
-    }
-  | {
-      id: string;
-      label: string;
-      expression: string;
-      kind: "coin";
-    };
-
-type CampaignActor = {
-  id: string;
-  campaignId: string;
-  ownerId: string | null;
-  type: CharacterType;
-  location: ActorLocation;
-  name: string;
-  initials: string;
-  description: string | null;
-  portraitUrl: string | null;
-  createdAt: string;
-  updatedAt: string;
-};
-
-type SceneToken = {
-  id: string;
-  campaignId: string;
-  actorId: string;
-  name: string;
-  initials: string;
-  type: CharacterType;
-  imageUrl: string | null;
-  imageFit: "COVER" | "CONTAIN" | "FILL";
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  createdAt: string;
-  updatedAt: string;
-  actor: {
-    id: string;
-    ownerId: string | null;
-    type: CharacterType;
-    location: ActorLocation;
-    name: string;
-    initials: string;
-    portraitUrl: string | null;
-  };
-};
-
-const DICE_OPTIONS = [4, 6, 8, 10, 12, 20, 100];
-
-const QUICK_ROLLS: QuickRoll[] = [
+const TOKEN_SIZE_OPTIONS = [
   {
-    id: "d4",
-    label: "d4",
-    expression: "1d4",
-    kind: "dice",
+    id: "small-medium",
+    label: "Pequeno / Médio",
+    description: "Ocupa 1 quadrado. Ideal para personagens comuns.",
+    gridSize: 1,
   },
   {
-    id: "d6",
-    label: "d6",
-    expression: "1d6",
-    kind: "dice",
+    id: "large",
+    label: "Grande",
+    description: "Ocupa 2x2 quadrados.",
+    gridSize: 2,
   },
   {
-    id: "d8",
-    label: "d8",
-    expression: "1d8",
-    kind: "dice",
+    id: "huge",
+    label: "Enorme",
+    description: "Ocupa 3x3 quadrados.",
+    gridSize: 3,
   },
   {
-    id: "d10",
-    label: "d10",
-    expression: "1d10",
-    kind: "dice",
+    id: "gargantuan",
+    label: "Colossal",
+    description: "Ocupa 4x4 quadrados.",
+    gridSize: 4,
   },
-  {
-    id: "d10-tens",
-    label: "d10 dez.",
-    expression: "1d10t",
-    kind: "tens",
-  },
-  {
-    id: "d12",
-    label: "d12",
-    expression: "1d12",
-    kind: "dice",
-  },
-  {
-    id: "d20",
-    label: "d20",
-    expression: "1d20",
-    kind: "dice",
-  },
-  {
-    id: "d100",
-    label: "d100",
-    expression: "1d100",
-    kind: "dice",
-  },
-  {
-    id: "coin",
-    label: "Moeda",
-    expression: "moeda",
-    kind: "coin",
-  },
-];
+] as const;
+
+function getTokenSizeInPixels(gridSize: number) {
+  return gridSize * TOKEN_GRID_SIZE_IN_PIXELS;
+}
 
 function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
   return {
@@ -540,10 +413,11 @@ const GENDERED_CHARACTER_OPTION_NAMES_BY_KEY: Record<
 };
 
 const GENDERED_CHARACTER_OPTION_NAMES_BY_NORMALIZED_NAME = Object.fromEntries(
-  Object.values(GENDERED_CHARACTER_OPTION_NAMES_BY_KEY).flatMap((genderedName) =>
-    [genderedName.masculine, genderedName.feminine, genderedName.neutral].map(
-      (name) => [normalizeCharacterOptionName(name), genderedName],
-    ),
+  Object.values(GENDERED_CHARACTER_OPTION_NAMES_BY_KEY).flatMap(
+    (genderedName) =>
+      [genderedName.masculine, genderedName.feminine, genderedName.neutral].map(
+        (name) => [normalizeCharacterOptionName(name), genderedName],
+      ),
   ),
 ) as Record<string, GenderedCharacterOptionName>;
 
@@ -552,11 +426,17 @@ function getCharacterBuilderGrammaticalGender(
 ): CharacterBuilderGrammaticalGender {
   const normalizedPronouns = pronouns.trim().toLowerCase();
 
-  if (normalizedPronouns === "ela / dela" || normalizedPronouns === "ela/dela") {
+  if (
+    normalizedPronouns === "ela / dela" ||
+    normalizedPronouns === "ela/dela"
+  ) {
     return "feminine";
   }
 
-  if (normalizedPronouns === "elu / delu" || normalizedPronouns === "elu/delu") {
+  if (
+    normalizedPronouns === "elu / delu" ||
+    normalizedPronouns === "elu/delu"
+  ) {
     return "neutral";
   }
 
@@ -596,15 +476,24 @@ function getGenderedCharacterOptionName({
 function getDefaultGenderFromPronouns(pronouns: string) {
   const normalizedPronouns = pronouns.trim().toLowerCase();
 
-  if (normalizedPronouns === "ele / dele" || normalizedPronouns === "ele/dele") {
+  if (
+    normalizedPronouns === "ele / dele" ||
+    normalizedPronouns === "ele/dele"
+  ) {
     return "Masculino";
   }
 
-  if (normalizedPronouns === "ela / dela" || normalizedPronouns === "ela/dela") {
+  if (
+    normalizedPronouns === "ela / dela" ||
+    normalizedPronouns === "ela/dela"
+  ) {
     return "Feminino";
   }
 
-  if (normalizedPronouns === "elu / delu" || normalizedPronouns === "elu/delu") {
+  if (
+    normalizedPronouns === "elu / delu" ||
+    normalizedPronouns === "elu/delu"
+  ) {
     return "Não binário";
   }
 
@@ -637,407 +526,6 @@ function getSelectedOptionLabelByPronouns(pronouns: string) {
 
   return "Selecionado";
 }
-
-async function getCampaign(id: string): Promise<Campaign> {
-  const response = await fetch(`http://localhost:8081/campaigns/${id}`, {
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    throw new Error("Erro ao buscar campanha");
-  }
-
-  const data = await response.json();
-
-  return data.campaign;
-}
-
-async function getCampaignParticipants(
-  campaignId: string,
-): Promise<CampaignParticipant[]> {
-  const response = await fetch(
-    `http://localhost:8081/campaigns/${campaignId}/participants`,
-    {
-      credentials: "include",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error("Erro ao buscar participantes");
-  }
-
-  const data = await response.json();
-
-  return data.participants;
-}
-
-async function getCampaignActors(campaignId: string): Promise<CampaignActor[]> {
-  const response = await fetch(
-    `http://localhost:8081/campaigns/${campaignId}/actors`,
-    {
-      credentials: "include",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error("Erro ao buscar atores da campanha");
-  }
-
-  const data = await response.json();
-
-  return data.actors;
-}
-
-async function getCampaignTokens(campaignId: string): Promise<SceneToken[]> {
-  const response = await fetch(
-    `http://localhost:8081/campaigns/${campaignId}/tokens`,
-    {
-      credentials: "include",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error("Erro ao buscar tokens da campanha");
-  }
-
-  const data = await response.json();
-
-  return data.tokens;
-}
-
-async function createSceneToken(
-  campaignId: string,
-  actorId: string,
-  data: {
-    name?: string;
-    initials?: string;
-    imageUrl?: string | null;
-    imageFit?: SceneToken["imageFit"];
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
-  } = {},
-): Promise<SceneToken> {
-  const response = await fetch(
-    `http://localhost:8081/campaigns/${campaignId}/tokens`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        actorId,
-        ...data,
-      }),
-    },
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    throw new Error(errorData?.message ?? "Erro ao criar token na cena");
-  }
-
-  const responseData = await response.json();
-
-  return responseData.token;
-}
-
-async function deleteSceneToken(campaignId: string, tokenId: string) {
-  const response = await fetch(
-    `http://localhost:8081/campaigns/${campaignId}/tokens/${tokenId}`,
-    {
-      method: "DELETE",
-      credentials: "include",
-    },
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    throw new Error(errorData?.message ?? "Erro ao remover token da cena");
-  }
-
-  const responseData = await response.json();
-
-  return responseData.deletedTokenId as string;
-}
-
-async function updateSceneToken(
-  campaignId: string,
-  tokenId: string,
-  data: Partial<
-    Pick<
-      SceneToken,
-      | "name"
-      | "initials"
-      | "imageUrl"
-      | "imageFit"
-      | "x"
-      | "y"
-      | "width"
-      | "height"
-    >
-  >,
-): Promise<SceneToken> {
-  const response = await fetch(
-    `http://localhost:8081/campaigns/${campaignId}/tokens/${tokenId}`,
-    {
-      method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    },
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    throw new Error(errorData?.message ?? "Erro ao atualizar token da cena");
-  }
-
-  const responseData = await response.json();
-
-  return responseData.token;
-}
-
-async function updateCampaignActor(
-  campaignId: string,
-  actorId: string,
-  data: Partial<
-    Pick<
-      CampaignActor,
-      "location" | "name" | "initials" | "description" | "portraitUrl"
-    >
-  >,
-): Promise<CampaignActor> {
-  const response = await fetch(
-    `http://localhost:8081/campaigns/${campaignId}/actors/${actorId}`,
-    {
-      method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    },
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-
-    throw new Error(errorData?.message ?? "Erro ao atualizar ator da campanha");
-  }
-
-  const responseData = await response.json();
-
-  return responseData.actor;
-}
-
-function createId() {
-  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-}
-
-function getInitials(user: User | null) {
-  const name = user?.name?.trim();
-
-  if (name) {
-    return name
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
-  }
-
-  return user?.email?.slice(0, 2).toUpperCase() ?? "U";
-}
-
-function getParticipantInitials(participant: CampaignParticipant) {
-  const name = participant.user.name?.trim();
-
-  if (name) {
-    return name
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
-  }
-
-  return participant.user.email.slice(0, 2).toUpperCase();
-}
-
-function getDisplayName(user: User | null) {
-  return user?.name ?? user?.email ?? "Usuário";
-}
-
-function getParticipantDisplayName(participant: CampaignParticipant) {
-  return participant.user.name || participant.user.email || "Usuário";
-}
-
-function getCharacterTypeLabel(type: CharacterType) {
-  if (type === "PLAYER_CHARACTER") {
-    return "Personagem";
-  }
-
-  if (type === "NPC") {
-    return "NPC";
-  }
-
-  return "Criatura";
-}
-
-function getCharacterTypeStyles(type: CharacterType) {
-  if (type === "PLAYER_CHARACTER") {
-    return "border-forge-gold bg-forge-purple text-forge-gold";
-  }
-
-  if (type === "NPC") {
-    return "border-purple-300/50 bg-purple-950 text-purple-100";
-  }
-
-  return "border-red-400/50 bg-red-950 text-red-100";
-}
-
-function getTokenImageFitClass(imageFit: SceneToken["imageFit"]) {
-  if (imageFit === "CONTAIN") {
-    return "object-contain";
-  }
-
-  if (imageFit === "FILL") {
-    return "object-fill";
-  }
-
-  return "object-cover";
-}
-
-
-function normalizeDiceExpression(expression: string) {
-  return expression.toLowerCase().replace(/\s+/g, "").replace(/d%/g, "d100");
-}
-
-function rollDiceExpression(expression: string, author: string): RollResult {
-  const normalizedExpression = normalizeDiceExpression(expression);
-
-  if (!normalizedExpression) {
-    throw new Error("Digite uma rolagem. Exemplo: 1d20 + 3d4");
-  }
-
-  const terms = normalizedExpression.split("+").filter(Boolean);
-
-  if (terms.length === 0) {
-    throw new Error("Digite uma rolagem válida.");
-  }
-
-  let total = 0;
-  const breakdownParts: string[] = [];
-  const displayParts: string[] = [];
-
-  for (const term of terms) {
-    if (term === "moeda" || term === "coin" || term === "caraoucoroa") {
-      const value = Math.floor(Math.random() * 2);
-      const face = value === 1 ? "Cara" : "Coroa";
-
-      total += value;
-      breakdownParts.push(`Moeda [${face}]`);
-      displayParts.push(face);
-
-      continue;
-    }
-
-    const tensMatch = term.match(/^(\d*)d10t$/);
-
-    if (tensMatch) {
-      const quantity = tensMatch[1] ? Number(tensMatch[1]) : 1;
-
-      if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100) {
-        throw new Error("A quantidade de dados deve estar entre 1 e 100.");
-      }
-
-      const rolls = Array.from({ length: quantity }, () => {
-        return Math.floor(Math.random() * 10) * 10;
-      });
-
-      const subtotal = rolls.reduce((sum, roll) => sum + roll, 0);
-      const formattedRolls = rolls.map((roll) =>
-        roll.toString().padStart(2, "0"),
-      );
-
-      total += subtotal;
-
-      breakdownParts.push(
-        `${quantity}d10 dezenas [${formattedRolls.join(", ")}]`,
-      );
-
-      displayParts.push(formattedRolls.join(", "));
-
-      continue;
-    }
-
-    const match = term.match(/^(\d*)d(\d+)$/);
-
-    if (!match) {
-      throw new Error(
-        "Use apenas dados no formato XdY. Exemplos: 1d20, 3d4, d100, d10t, moeda.",
-      );
-    }
-
-    const quantity = match[1] ? Number(match[1]) : 1;
-    const sides = Number(match[2]);
-
-    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100) {
-      throw new Error("A quantidade de dados deve estar entre 1 e 100.");
-    }
-
-    if (!Number.isInteger(sides) || sides < 2 || sides > 1000) {
-      throw new Error("O dado precisa ter entre 2 e 1000 lados.");
-    }
-
-    const rolls = Array.from({ length: quantity }, () => {
-      return Math.floor(Math.random() * sides) + 1;
-    });
-
-    const subtotal = rolls.reduce((sum, roll) => sum + roll, 0);
-
-    total += subtotal;
-
-    breakdownParts.push(`${quantity}d${sides} [${rolls.join(", ")}]`);
-    displayParts.push(rolls.join(", "));
-  }
-
-  return {
-    id: createId(),
-    author,
-    expression: normalizedExpression,
-    total,
-    displayResult: displayParts.length === 1 ? displayParts[0] : undefined,
-    breakdown: breakdownParts.join(" + "),
-    createdAt: new Date(),
-  };
-}
-
-function buildExpressionFromTerms(terms: DiceTerm[]) {
-  return terms
-    .filter((term) => term.quantity > 0 && term.sides > 1)
-    .map((term) => `${term.quantity}d${term.sides}`)
-    .join(" + ");
-}
-
-function getVisibleActorsForUser(actors: CampaignActor[], isGM: boolean) {
-  if (isGM) {
-    return actors;
-  }
-
-  return actors.filter(
-    (actor) => actor.type === "PLAYER_CHARACTER" && actor.location === "TABLE",
-  );
-}
-
 type CharacterCreationMenuModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -1851,23 +1339,17 @@ function CharacterBuilderModal({
 
                     <BuilderSummaryRow
                       label="Classe"
-                      value={
-                        selectedClassDisplayName || "Não definida"
-                      }
+                      value={selectedClassDisplayName || "Não definida"}
                     />
 
                     <BuilderSummaryRow
                       label="Ancestralidade"
-                      value={
-                        selectedAncestryDisplayName || "Não definida"
-                      }
+                      value={selectedAncestryDisplayName || "Não definida"}
                     />
 
                     <BuilderSummaryRow
                       label="Antecedente"
-                      value={
-                        selectedBackgroundDisplayName || "Não definido"
-                      }
+                      value={selectedBackgroundDisplayName || "Não definido"}
                     />
 
                     <BuilderSummaryRow
@@ -2201,6 +1683,67 @@ export default function CampaignPlayPage() {
   const [characterBuilderOptionsError, setCharacterBuilderOptionsError] =
     useState<string | null>(null);
   const [zoom, setZoom] = useState(100);
+  const [scenePan, setScenePan] = useState({ x: 0, y: 0 });
+  const [scenePanStart, setScenePanStart] = useState<{
+    pointerX: number;
+    pointerY: number;
+    panX: number;
+    panY: number;
+  } | null>(null);
+  const [measureStart, setMeasureStart] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const [measureEnd, setMeasureEnd] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const [isMeasuring, setIsMeasuring] = useState(false);
+  const [measureMode, setMeasureMode] = useState<"line" | "circle">("line");
+  const [drawStrokes, setDrawStrokes] = useState<
+    {
+      id: string;
+      points: {
+        x: number;
+        y: number;
+      }[];
+    }[]
+  >([]);
+
+  const [currentDrawStroke, setCurrentDrawStroke] = useState<{
+    id: string;
+    points: {
+      x: number;
+      y: number;
+    }[];
+  } | null>(null);
+  const [fogReveals, setFogReveals] = useState<
+    {
+      id: string;
+      start: {
+        x: number;
+        y: number;
+      };
+      end: {
+        x: number;
+        y: number;
+      };
+    }[]
+  >([]);
+
+  const [currentFogReveal, setCurrentFogReveal] = useState<{
+    id: string;
+    start: {
+      x: number;
+      y: number;
+    };
+    end: {
+      x: number;
+      y: number;
+    };
+  } | null>(null);
   const [isLeftToolbarOpen, setIsLeftToolbarOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
@@ -2240,14 +1783,19 @@ export default function CampaignPlayPage() {
   const [sceneTokens, setSceneTokens] = useState<SceneToken[]>([]);
 
   const [draggingTokenId, setDraggingTokenId] = useState<string | null>(null);
+  const [dragOffset, setDragOffset] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [pendingTokenPosition, setPendingTokenPosition] = useState<{
     tokenId: string;
     x: number;
     y: number;
   } | null>(null);
 
-  const [actionMessage, setActionMessage] = useState("");
-  const [actionError, setActionError] = useState("");
+  const [, setActionMessage] = useState("");
+  const [, setActionError] = useState("");
+
   const [isAssumingGm, setIsAssumingGm] = useState(false);
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
@@ -2312,6 +1860,16 @@ export default function CampaignPlayPage() {
 
     loadTable();
   }, [params.id, router]);
+
+  function handleChangeTool(nextTool: ToolMode) {
+    if (nextTool !== "measure") {
+      setMeasureStart(null);
+      setMeasureEnd(null);
+      setIsMeasuring(false);
+    }
+
+    setActiveTool(nextTool);
+  }
 
   async function reloadParticipants() {
     if (!campaign) {
@@ -2401,6 +1959,10 @@ export default function CampaignPlayPage() {
     return token.actor.ownerId === user.id;
   }
 
+  function canInteractWithToken(token: SceneToken) {
+    return activeTool === "select" && canMoveToken(token);
+  }
+
   function canCreateTokenForActor(actor: CampaignActor) {
     return isGM && actor.location === "TABLE";
   }
@@ -2461,77 +2023,12 @@ export default function CampaignPlayPage() {
     user,
   ]);
 
-  const toolbarItems: SidebarItem[] = useMemo(
-    () => [
-      {
-        id: "select",
-        label: "Selecionar",
-        icon: "↖",
-        description: "Selecionar e interagir com elementos da mesa.",
-        visible: true,
-      },
-      {
-        id: "pan",
-        label: "Mover visão",
-        icon: "✋",
-        description: "Mover a visão pelo mapa.",
-        visible: true,
-      },
-      {
-        id: "measure",
-        label: "Medir",
-        icon: "📏",
-        description: "Medir distância no grid.",
-        visible: true,
-      },
-      {
-        id: "draw",
-        label: "Desenhar",
-        icon: "✎",
-        description: "Desenhar marcações na cena.",
-        visible: canSeeGmTools,
-      },
-      {
-        id: "fog",
-        label: "Névoa",
-        icon: "◐",
-        description: "Ocultar ou revelar áreas do mapa.",
-        visible: canSeeGmTools,
-      },
-    ],
+  const toolbarItems = useMemo(
+    () => getToolbarItems({ canSeeGmTools }),
     [canSeeGmTools],
   );
 
-  const rightTabs: RightTabItem[] = useMemo(
-    () => [
-      {
-        id: "chat",
-        label: "Chat",
-        visible: true,
-      },
-      {
-        id: "rolls",
-        label: "Rolagens",
-        visible: true,
-      },
-      {
-        id: "characters",
-        label: "Personagens",
-        visible: true,
-      },
-      {
-        id: "journal",
-        label: "Diário",
-        visible: true,
-      },
-      {
-        id: "settings",
-        label: "Mesa",
-        visible: true,
-      },
-    ],
-    [],
-  );
+  const rightTabs = useMemo(() => getRightTabs(), []);
 
   const customExpression = buildExpressionFromTerms(diceTerms);
 
@@ -2541,6 +2038,198 @@ export default function CampaignPlayPage() {
   const lastRoll = [...chatMessages]
     .reverse()
     .find((message) => message.kind === "roll");
+
+  function handleStartScenePan(event: PointerEvent<HTMLDivElement>) {
+    if (activeTool !== "pan") {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+
+    setScenePanStart({
+      pointerX: event.clientX,
+      pointerY: event.clientY,
+      panX: scenePan.x,
+      panY: scenePan.y,
+    });
+  }
+
+  function handleMoveScenePan(event: PointerEvent<HTMLDivElement>) {
+    if (activeTool !== "pan" || !scenePanStart) {
+      return;
+    }
+
+    const nextX = scenePanStart.panX + event.clientX - scenePanStart.pointerX;
+    const nextY = scenePanStart.panY + event.clientY - scenePanStart.pointerY;
+
+    setScenePan({
+      x: nextX,
+      y: nextY,
+    });
+  }
+
+  function handleStopScenePan() {
+    setScenePanStart(null);
+  }
+
+  function getScenePointFromPointer(event: PointerEvent<HTMLDivElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const scale = zoom / 100;
+
+    return {
+      x: Math.round((event.clientX - rect.left) / scale),
+      y: Math.round((event.clientY - rect.top) / scale),
+    };
+  }
+
+  function handleStartMeasure(event: PointerEvent<HTMLDivElement>) {
+    if (activeTool !== "measure") {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+
+    const point = getScenePointFromPointer(event);
+
+    setMeasureStart(point);
+    setMeasureEnd(point);
+    setIsMeasuring(true);
+  }
+
+  function handleMoveMeasure(event: PointerEvent<HTMLDivElement>) {
+    if (activeTool !== "measure" || !isMeasuring || !measureStart) {
+      return;
+    }
+
+    setMeasureEnd(getScenePointFromPointer(event));
+  }
+
+  function handleStopMeasure() {
+    if (activeTool !== "measure") {
+      return;
+    }
+
+    setIsMeasuring(false);
+  }
+
+  function handleStartDraw(event: PointerEvent<HTMLDivElement>) {
+    if (activeTool !== "draw" || !isGM) {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+
+    const point = getScenePointFromPointer(event);
+
+    setCurrentDrawStroke({
+      id: createId(),
+      points: [point],
+    });
+  }
+
+  function handleMoveDraw(event: PointerEvent<HTMLDivElement>) {
+    if (activeTool !== "draw" || !isGM || !currentDrawStroke) {
+      return;
+    }
+
+    const point = getScenePointFromPointer(event);
+
+    setCurrentDrawStroke((currentStroke) => {
+      if (!currentStroke) {
+        return currentStroke;
+      }
+
+      return {
+        ...currentStroke,
+        points: [...currentStroke.points, point],
+      };
+    });
+  }
+
+  function handleStopDraw() {
+    if (!currentDrawStroke) {
+      return;
+    }
+
+    if (currentDrawStroke.points.length > 1) {
+      setDrawStrokes((currentStrokes) => [
+        ...currentStrokes,
+        currentDrawStroke,
+      ]);
+    }
+
+    setCurrentDrawStroke(null);
+  }
+
+  function handleUndoLastDrawing() {
+    setDrawStrokes((currentStrokes) => currentStrokes.slice(0, -1));
+    setCurrentDrawStroke(null);
+  }
+
+  function handleClearDrawings() {
+    setDrawStrokes([]);
+    setCurrentDrawStroke(null);
+  }
+
+  function handleStartFogReveal(event: PointerEvent<HTMLDivElement>) {
+    if (activeTool !== "fog" || !isGM) {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+
+    const point = getScenePointFromPointer(event);
+
+    setCurrentFogReveal({
+      id: createId(),
+      start: point,
+      end: point,
+    });
+  }
+
+  function handleMoveFogReveal(event: PointerEvent<HTMLDivElement>) {
+    if (activeTool !== "fog" || !isGM || !currentFogReveal) {
+      return;
+    }
+
+    const point = getScenePointFromPointer(event);
+
+    setCurrentFogReveal((currentReveal) => {
+      if (!currentReveal) {
+        return currentReveal;
+      }
+
+      return {
+        ...currentReveal,
+        end: point,
+      };
+    });
+  }
+
+  function handleStopFogReveal() {
+    if (!currentFogReveal) {
+      return;
+    }
+
+    const width = Math.abs(currentFogReveal.end.x - currentFogReveal.start.x);
+    const height = Math.abs(currentFogReveal.end.y - currentFogReveal.start.y);
+
+    if (width > 8 && height > 8) {
+      setFogReveals((currentReveals) => [...currentReveals, currentFogReveal]);
+    }
+
+    setCurrentFogReveal(null);
+  }
+
+  function handleUndoLastFogReveal() {
+    setFogReveals((currentReveals) => currentReveals.slice(0, -1));
+    setCurrentFogReveal(null);
+  }
+
+  function handleClearFogReveals() {
+    setFogReveals([]);
+    setCurrentFogReveal(null);
+  }
 
   function increaseZoom() {
     setZoom((currentZoom) => Math.min(currentZoom + 10, 200));
@@ -2774,12 +2463,23 @@ export default function CampaignPlayPage() {
     }
   }
 
-  function handleStartTokenDrag(tokenId: string) {
+  function handleStartTokenDrag(
+    tokenId: string,
+    event: PointerEvent<HTMLButtonElement>,
+  ) {
     const token = sceneTokens.find((sceneToken) => sceneToken.id === tokenId);
 
-    if (!token || !canMoveToken(token)) {
+    if (!token || !canInteractWithToken(token)) {
       return;
     }
+
+    const scale = zoom / 100;
+    const tokenRect = event.currentTarget.getBoundingClientRect();
+
+    setDragOffset({
+      x: (event.clientX - tokenRect.left) / scale,
+      y: (event.clientY - tokenRect.top) / scale,
+    });
 
     setDraggingTokenId(tokenId);
   }
@@ -2793,7 +2493,7 @@ export default function CampaignPlayPage() {
       (sceneToken) => sceneToken.id === draggingTokenId,
     );
 
-    if (!draggingToken || !canMoveToken(draggingToken)) {
+    if (!draggingToken || !canInteractWithToken(draggingToken)) {
       return;
     }
 
@@ -2803,13 +2503,16 @@ export default function CampaignPlayPage() {
     const x = Math.round((event.clientX - scene.left) / scale);
     const y = Math.round((event.clientY - scene.top) / scale);
 
+    const offsetX = dragOffset?.x ?? draggingToken.width / 2;
+    const offsetY = dragOffset?.y ?? draggingToken.height / 2;
+
     const nextX = Math.max(
       0,
-      Math.min(x - draggingToken.width / 2, 1400 - draggingToken.width),
+      Math.min(x - offsetX, 1400 - draggingToken.width),
     );
     const nextY = Math.max(
       0,
-      Math.min(y - draggingToken.height / 2, 900 - draggingToken.height),
+      Math.min(y - offsetY, 900 - draggingToken.height),
     );
 
     setPendingTokenPosition({
@@ -2836,12 +2539,14 @@ export default function CampaignPlayPage() {
   async function handleStopTokenDrag() {
     if (!campaign || !pendingTokenPosition) {
       setDraggingTokenId(null);
+      setDragOffset(null);
       return;
     }
 
     const positionToSave = pendingTokenPosition;
 
     setDraggingTokenId(null);
+    setDragOffset(null);
     setPendingTokenPosition(null);
     setActionError("");
 
@@ -2898,6 +2603,72 @@ export default function CampaignPlayPage() {
         error instanceof Error
           ? error.message
           : "Não foi possível remover o token da cena.",
+      );
+    }
+  }
+
+  async function handleChangeActorTokenSize(
+    actor: CampaignActor,
+    gridSize: number,
+  ) {
+    if (!campaign || !isGM) {
+      return;
+    }
+
+    const token = sceneTokens.find(
+      (sceneToken) => sceneToken.actorId === actor.id,
+    );
+
+    if (!token) {
+      setActionError("Este ator ainda não possui token na cena.");
+      return;
+    }
+
+    const tokenSize = getTokenSizeInPixels(gridSize);
+
+    setActionError("");
+    setActionMessage("");
+
+    setSceneTokens((currentTokens) =>
+      currentTokens.map((currentToken) => {
+        if (currentToken.id !== token.id) {
+          return currentToken;
+        }
+
+        return {
+          ...currentToken,
+          width: tokenSize,
+          height: tokenSize,
+        };
+      }),
+    );
+
+    try {
+      const updatedToken = await updateSceneToken(campaign.id, token.id, {
+        width: tokenSize,
+        height: tokenSize,
+      });
+
+      setSceneTokens((currentTokens) =>
+        currentTokens.map((currentToken) => {
+          if (currentToken.id !== updatedToken.id) {
+            return currentToken;
+          }
+
+          return updatedToken;
+        }),
+      );
+
+      setActionMessage(
+        `Tamanho do token de ${actor.name} atualizado para ${gridSize}x${gridSize}.`,
+      );
+    } catch (error) {
+      console.error(error);
+
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível atualizar o tamanho do token.",
       );
     }
   }
@@ -3068,195 +2839,6 @@ export default function CampaignPlayPage() {
       setIsLoadingCharacterBuilderOptions(false);
     }
   }
-
-  async function handleLoadCharacterBuilderDraft() {
-    if (!campaign) {
-      return;
-    }
-
-    setCharacterDraftSaveError(null);
-    setCharacterDraftSaveSuccess(null);
-
-    try {
-      const response = await fetch(
-        `http://localhost:8081/campaigns/${campaign.id}/character-sheets`,
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      );
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        throw new Error(
-          data?.message ?? "Não foi possível carregar rascunhos.",
-        );
-      }
-
-      const draftSheet = data.characterSheets
-        ?.filter(
-          (sheet: {
-            id: string;
-            status: CharacterSheetStatus;
-            name: string;
-            pronouns: string | null;
-            concept: string | null;
-            portraitUrl: string | null;
-            tokenImageUrl: string | null;
-            tokenImageFit: "FILL" | "CONTAIN" | "COVER";
-            classId: string | null;
-            ancestryId: string | null;
-            backgroundId: string | null;
-            characterClass?: {
-              name: string;
-            } | null;
-            ancestry?: {
-              name: string;
-            } | null;
-            background?: {
-              name: string;
-            } | null;
-            stats?: CharacterSheetStatResponse[];
-            skills?: Array<{
-              skill: {
-                key: string;
-              };
-            }>;
-            spells?: Array<{
-              spell: {
-                key: string;
-              };
-            }>;
-            equipment?: Array<{
-              quantity: number;
-              source: string | null;
-              notes: string | null;
-              isEquipped: boolean;
-              equipment: {
-                key: string;
-              };
-            }>;
-            classEquipmentMode?: string | null;
-            backgroundEquipmentMode?: string | null;
-            startingGold?: number | null;
-
-            alignment?: string | null;
-            faith?: string | null;
-            lifestyle?: string | null;
-
-            hair?: string | null;
-            skin?: string | null;
-            eyes?: string | null;
-            height?: string | null;
-            weight?: string | null;
-            age?: string | null;
-            gender?: string | null;
-
-            bonds?: string | null;
-            flaws?: string | null;
-            ideals?: string | null;
-            personality?: string | null;
-            backstory?: string | null;
-            notes?: string | null;
-            gmNotes?: string | null;
-
-            updatedAt?: string;
-            createdAt?: string;
-          }) => sheet.status === "DRAFT",
-        )
-        .sort(
-          (
-            a: {
-              updatedAt?: string;
-              createdAt?: string;
-            },
-            b: {
-              updatedAt?: string;
-              createdAt?: string;
-            },
-          ) => {
-            const dateA = new Date(a.updatedAt ?? a.createdAt ?? 0).getTime();
-            const dateB = new Date(b.updatedAt ?? b.createdAt ?? 0).getTime();
-
-            return dateB - dateA;
-          },
-        )[0];
-
-      if (!draftSheet) {
-        setSavedCharacterSheetId(null);
-        setSavedCharacterSheetStatus(null);
-        return;
-      }
-
-      setSavedCharacterSheetId(draftSheet.id);
-      setSavedCharacterSheetStatus(draftSheet.status);
-
-      setCharacterBuilderDraft({
-        name: draftSheet.name ?? "",
-        pronouns: draftSheet.pronouns ?? "",
-        concept: draftSheet.concept ?? "",
-        portraitUrl: draftSheet.portraitUrl ?? "",
-        tokenImageUrl: draftSheet.tokenImageUrl ?? "",
-        tokenImageFit: draftSheet.tokenImageFit ?? "FILL",
-
-        classId: draftSheet.classId ?? "",
-        className: draftSheet.characterClass?.name ?? "",
-
-        ancestryId: draftSheet.ancestryId ?? "",
-        ancestryName: draftSheet.ancestry?.name ?? "",
-
-        backgroundId: draftSheet.backgroundId ?? "",
-        backgroundName: draftSheet.background?.name ?? "",
-
-        attributes: getCharacterAttributesFromStats(
-          draftSheet.stats,
-          DEFAULT_CHARACTER_ATTRIBUTES,
-        ),
-        skillKeys: getCharacterSkillKeysFromSkills(draftSheet.skills),
-        spellKeys: getCharacterSpellKeysFromSpells(draftSheet.spells),
-        equipmentItems: getCharacterEquipmentItemsFromEquipment(
-          draftSheet.equipment,
-        ),
-        classEquipmentMode: normalizeCharacterEquipmentMode(
-          draftSheet.classEquipmentMode,
-        ),
-        backgroundEquipmentMode: normalizeCharacterEquipmentMode(
-          draftSheet.backgroundEquipmentMode,
-        ),
-        startingGold: draftSheet.startingGold ?? 0,
-
-        alignment: draftSheet.alignment ?? "",
-        faith: draftSheet.faith ?? "",
-        lifestyle: draftSheet.lifestyle ?? "",
-
-        hair: draftSheet.hair ?? "",
-        skin: draftSheet.skin ?? "",
-        eyes: draftSheet.eyes ?? "",
-        height: draftSheet.height ?? "",
-        weight: draftSheet.weight ?? "",
-        age: draftSheet.age ?? "",
-        gender: draftSheet.gender ?? "",
-
-        bonds: draftSheet.bonds ?? "",
-        flaws: draftSheet.flaws ?? "",
-        ideals: draftSheet.ideals ?? "",
-        personality: draftSheet.personality ?? "",
-        backstory: draftSheet.backstory ?? "",
-        notes: draftSheet.notes ?? "",
-        gmNotes: draftSheet.gmNotes ?? "",
-      });
-
-      setCharacterDraftSaveSuccess("Rascunho carregado.");
-    } catch (error) {
-      setCharacterDraftSaveError(
-        error instanceof Error
-          ? error.message
-          : "Não foi possível carregar rascunhos.",
-      );
-    }
-  }
-
   function handleSelectCharacterBuilderOption(
     type: "class" | "ancestry" | "background",
     option: {
@@ -3582,1192 +3164,165 @@ export default function CampaignPlayPage() {
             }`,
           }}
         >
-          <aside
-            className={`relative flex flex-col items-center gap-3 overflow-hidden border-r border-forge-gold/25 bg-[#160a1b] py-4 transition-all duration-300 ${
-              isLeftToolbarOpen ? "px-3 opacity-100" : "px-0 opacity-0"
-            }`}
+          <TableLeftToolbar
+            isOpen={isLeftToolbarOpen}
+            activeTool={activeTool}
+            toolbarItems={toolbarItems}
+            onClose={() => setIsLeftToolbarOpen(false)}
+            onChangeTool={handleChangeTool}
+          />
+
+          <TableSceneCanvas
+            activeToolLabel={activeToolLabel}
+            zoom={zoom}
+            scenePan={scenePan}
+            isLeftToolbarOpen={isLeftToolbarOpen}
+            isRightPanelOpen={isRightPanelOpen}
+            isPanToolActive={activeTool === "pan"}
+            isPanningScene={Boolean(scenePanStart)}
+            isMeasureToolActive={activeTool === "measure"}
+            isDrawToolActive={activeTool === "draw" && isGM}
+            isFogToolActive={activeTool === "fog" && isGM}
+            measureMode={measureMode}
+            measureStart={measureStart}
+            measureEnd={measureEnd}
+            drawStrokes={drawStrokes}
+            currentDrawStroke={currentDrawStroke}
+            fogReveals={fogReveals}
+            currentFogReveal={currentFogReveal}
+            sceneTokens={sceneTokens}
+            draggingTokenId={draggingTokenId}
+            canMoveToken={canInteractWithToken}
+            onShowLeftToolbar={() => setIsLeftToolbarOpen(true)}
+            onShowRightPanel={() => setIsRightPanelOpen(true)}
+            onStartTokenDrag={handleStartTokenDrag}
+            onMoveTokenOnScene={handleMoveTokenOnScene}
+            onStopTokenDrag={handleStopTokenDrag}
+            onStartScenePan={handleStartScenePan}
+            onMoveScenePan={handleMoveScenePan}
+            onStopScenePan={handleStopScenePan}
+            onStartMeasure={handleStartMeasure}
+            onMoveMeasure={handleMoveMeasure}
+            onStopMeasure={handleStopMeasure}
+            onChangeMeasureMode={setMeasureMode}
+            onStartDraw={handleStartDraw}
+            onMoveDraw={handleMoveDraw}
+            onStopDraw={handleStopDraw}
+            onUndoLastDrawing={handleUndoLastDrawing}
+            onClearDrawings={handleClearDrawings}
+            onStartFogReveal={handleStartFogReveal}
+            onMoveFogReveal={handleMoveFogReveal}
+            onStopFogReveal={handleStopFogReveal}
+            onUndoLastFogReveal={handleUndoLastFogReveal}
+            onClearFogReveals={handleClearFogReveals}
+          />
+
+          <TableRightPanel
+            isOpen={isRightPanelOpen}
+            activeTab={activeRightTab}
+            tabs={rightTabs}
+            onChangeTab={setActiveRightTab}
+            onClose={() => setIsRightPanelOpen(false)}
           >
-            <button
-              type="button"
-              onClick={() => setIsLeftToolbarOpen(false)}
-              title="Ocultar ferramentas"
-              className="mb-1 flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-black/25 text-sm font-black text-white/45 transition hover:border-forge-gold/60 hover:text-forge-gold"
-              aria-label="Ocultar ferramentas"
-            >
-              ‹
-            </button>
-
-            {toolbarItems
-              .filter((item) => item.visible)
-              .map((item) => {
-                const isActive = activeTool === item.id;
-
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setActiveTool(item.id)}
-                    title={`${item.label} — ${item.description}`}
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl border text-lg font-black transition ${
-                      isActive
-                        ? "border-forge-gold bg-forge-purple text-forge-gold shadow-[-4px_4px_0_rgba(0,0,0,0.45)]"
-                        : "border-white/10 bg-black/30 text-white/65 hover:border-forge-gold/70 hover:text-forge-gold"
-                    }`}
-                  >
-                    {item.icon}
-                  </button>
-                );
-              })}
-
-            <div className="mt-auto flex flex-col items-center gap-2">
-              <div className="h-px w-10 bg-white/10" />
-
-              <button
-                type="button"
-                title="Configurações rápidas"
-                className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-black/30 text-lg font-black text-white/65 transition hover:border-forge-gold/70 hover:text-forge-gold"
-              >
-                ⚙
-              </button>
-            </div>
-          </aside>
-
-          <section className="relative min-h-0 overflow-hidden bg-[#24142a]">
-            <div className="absolute left-5 top-5 z-10 rounded-xl border border-forge-gold/35 bg-black/50 px-4 py-3 shadow-[-6px_6px_0_rgba(0,0,0,0.35)] backdrop-blur">
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/45">
-                Ferramenta ativa
-              </p>
-
-              <p className="mt-1 text-xs font-black text-forge-gold">
-                {activeToolLabel}
-              </p>
-            </div>
-
-            {!isLeftToolbarOpen && (
-              <button
-                type="button"
-                onClick={() => setIsLeftToolbarOpen(true)}
-                title="Mostrar ferramentas"
-                className="absolute left-3 top-1/2 z-20 flex h-12 w-8 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-forge-gold/40 bg-black/55 text-lg font-black text-forge-gold shadow-[-6px_6px_0_rgba(0,0,0,0.35)] transition hover:bg-forge-purple"
-                aria-label="Mostrar ferramentas"
-              >
-                ›
-              </button>
-            )}
-
-            {!isRightPanelOpen && (
-              <button
-                type="button"
-                onClick={() => setIsRightPanelOpen(true)}
-                title="Mostrar painel"
-                className="absolute right-3 top-1/2 z-20 flex h-12 w-8 -translate-y-1/2 items-center justify-center rounded-l-xl border border-r-0 border-forge-gold/40 bg-black/55 text-lg font-black text-forge-gold shadow-[-6px_6px_0_rgba(0,0,0,0.35)] transition hover:bg-forge-purple"
-                aria-label="Mostrar painel"
-              >
-                ‹
-              </button>
-            )}
-
-            <div className="absolute inset-0 flex items-center justify-center p-10">
-              <div
-                className="relative h-[900px] w-[1400px] origin-center overflow-hidden rounded-2xl border border-forge-gold/35 bg-[#e4d0a3] shadow-[-18px_18px_5px_rgba(0,0,0,0.35)] transition-transform"
-                style={{
-                  transform: `scale(${zoom / 100})`,
-                }}
-                onPointerMove={handleMoveTokenOnScene}
-                onPointerUp={handleStopTokenDrag}
-                onPointerLeave={handleStopTokenDrag}
-              >
-                <div className="absolute inset-0 opacity-70 [background-image:linear-gradient(rgba(64,32,75,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(64,32,75,0.18)_1px,transparent_1px)] [background-size:40px_40px]" />
-
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,214,102,0.22),transparent_28%),radial-gradient(circle_at_20%_80%,rgba(64,0,80,0.18),transparent_32%)]" />
-
-                {sceneTokens.map((token) => (
-                  <div
-                    key={token.id}
-                    className="absolute"
-                    style={{
-                      left: token.x,
-                      top: token.y,
-                    }}
-                  >
-                    <button
-                      type="button"
-                      title={`${token.name} — ${getCharacterTypeLabel(token.type)}`}
-                      onPointerDown={() => handleStartTokenDrag(token.id)}
-                      className={`flex items-center justify-center overflow-hidden rounded-full border-2 text-xl font-black shadow-[-6px_6px_12px_rgba(0,0,0,0.42)] transition ${
-                        draggingTokenId === token.id
-                          ? "scale-105 shadow-[-10px_10px_18px_rgba(0,0,0,0.5)]"
-                          : ""
-                      } ${
-                        canMoveToken(token)
-                          ? "cursor-grab active:cursor-grabbing"
-                          : "cursor-not-allowed opacity-75"
-                      } ${getCharacterTypeStyles(token.type)}`}
-                      style={{
-                        width: token.width,
-                        height: token.height,
-                      }}
-                    >
-                      {token.imageUrl ? (
-                        <img
-                          src={token.imageUrl}
-                          alt={token.name}
-                          className={`h-full w-full ${getTokenImageFitClass(token.imageFit)}`}
-                          draggable={false}
-                        />
-                      ) : (
-                        token.initials
-                      )}
-                    </button>
-                  </div>
-                ))}
-
-                <div className="absolute bottom-5 right-5 rounded-lg border border-black/20 bg-black/30 px-3 py-2 text-xs font-bold text-white/80">
-                  Grid inicial da cena
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <aside
-            className={`flex min-h-0 flex-col overflow-hidden border-l border-forge-gold/25 bg-[#160a1b] transition-all duration-300 ${
-              isRightPanelOpen ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <div className="flex shrink-0 items-center border-b border-forge-gold/25">
-              <div className="flex min-w-0 flex-1">
-                {rightTabs
-                  .filter((tab) => tab.visible)
-                  .map((tab) => {
-                    const isActive = activeRightTab === tab.id;
-
-                    return (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => setActiveRightTab(tab.id)}
-                        className={`min-w-0 flex-1 border-r border-white/10 px-1.5 py-3 text-[9px] font-black uppercase tracking-[0.06em] transition last:border-r-0 ${
-                          isActive
-                            ? "bg-forge-purple text-forge-gold"
-                            : "bg-black/25 text-white/50 hover:text-forge-gold"
-                        }`}
-                      >
-                        <span className="block truncate">{tab.label}</span>
-                      </button>
-                    );
-                  })}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setIsRightPanelOpen(false)}
-                title="Ocultar painel"
-                className="flex h-full w-8 shrink-0 items-center justify-center border-l border-white/10 bg-black/25 text-sm font-black text-white/45 transition hover:text-forge-gold"
-                aria-label="Ocultar painel"
-              >
-                ›
-              </button>
-            </div>
-
             <div className="min-h-0 flex-1 overflow-y-auto p-4 text-[13px]">
-              {activeRightTab === "chat" && (
-                <section>
-                  <h2 className="text-base font-black text-forge-gold">Chat</h2>
-
-                  <p className="mt-1 text-xs font-semibold text-white/55">
-                    Conversas da mesa, avisos do sistema, rolagens públicas e
-                    sussurros.
-                  </p>
-
-                  <div className="mt-5 space-y-3">
-                    {chatMessages.map((message) => {
-                      const isSelfWhisper =
-                        message.kind === "whisper" &&
-                        message.recipientId === user.id;
-
-                      return (
-                        <div
-                          key={message.id}
-                          className={`rounded-xl border p-3 ${
-                            message.kind === "roll"
-                              ? "border-forge-gold/40 bg-forge-purple/30"
-                              : message.kind === "whisper"
-                                ? isSelfWhisper
-                                  ? "border-forge-gold/35 bg-forge-gold/10"
-                                  : "border-purple-300/35 bg-purple-950/30"
-                                : "border-white/10 bg-black/35"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <p
-                              className={`text-[11px] font-black ${
-                                message.kind === "system"
-                                  ? "text-forge-gold"
-                                  : message.kind === "whisper"
-                                    ? isSelfWhisper
-                                      ? "text-forge-gold"
-                                      : "text-purple-200"
-                                    : "text-purple-200"
-                              }`}
-                            >
-                              {message.author}
-                            </p>
-
-                            {message.kind === "whisper" && (
-                              <span
-                                className={`rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] ${
-                                  isSelfWhisper
-                                    ? "border-forge-gold/40 bg-black/30 text-forge-gold"
-                                    : "border-purple-300/30 bg-purple-950/50 text-purple-100"
-                                }`}
-                              >
-                                {isSelfWhisper ? "Nota pessoal" : "Sussurro"}
-                              </span>
-                            )}
-                          </div>
-
-                          {message.kind === "roll" ? (
-                            <div className="mt-2">
-                              <p className="text-xs text-white/75">
-                                {message.content}
-                              </p>
-
-                              <p className="mt-2 text-4xl font-black text-forge-gold">
-                                {message.displayResult ?? message.result}
-                              </p>
-
-                              <p className="text-xs font-semibold text-white/55">
-                                {message.breakdown}
-                              </p>
-                            </div>
-                          ) : message.kind === "whisper" ? (
-                            <div className="mt-2">
-                              <p className="text-[11px] font-bold text-purple-100/65">
-                                Para: {message.recipientName}
-                              </p>
-
-                              <p className="mt-1 text-xs text-white/80">
-                                {message.content}
-                              </p>
-                            </div>
-                          ) : (
-                            <p className="mt-1 text-xs text-white/75">
-                              {message.content}
-                            </p>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </section>
+              {activeRightTab === "chat" && user && (
+                <TableChatPanel
+                  user={user}
+                  chatMessages={chatMessages}
+                  chatMode={chatMode}
+                  whisperTargets={whisperTargets}
+                  whisperTargetId={whisperTargetId}
+                  chatInput={chatInput}
+                  chatError={chatError}
+                  onChangeChatMode={setChatMode}
+                  onChangeWhisperTargetId={setWhisperTargetId}
+                  onChangeChatInput={setChatInput}
+                  onSubmitMessage={handleSendMessage}
+                />
               )}
 
               {activeRightTab === "rolls" && (
-                <section>
-                  <h2 className="text-base font-black text-forge-gold">
-                    Rolagens
-                  </h2>
-
-                  <p className="mt-1 text-xs font-semibold text-white/55">
-                    Role dados simples ou combine múltiplos dados.
-                  </p>
-
-                  {isGM && (
-                    <div className="mt-4 grid grid-cols-2 overflow-hidden rounded-xl border border-forge-gold/35 bg-black/25">
-                      <button
-                        type="button"
-                        onClick={() => setRollVisibility("public")}
-                        className={`px-3 py-3 text-xs font-black transition ${
-                          rollVisibility === "public"
-                            ? "bg-forge-purple text-forge-gold"
-                            : "text-white/50 hover:text-forge-gold"
-                        }`}
-                      >
-                        Pública
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setRollVisibility("private")}
-                        className={`px-3 py-3 text-xs font-black transition ${
-                          rollVisibility === "private"
-                            ? "bg-forge-purple text-forge-gold"
-                            : "text-white/50 hover:text-forge-gold"
-                        }`}
-                      >
-                        Privada GM
-                      </button>
-                    </div>
-                  )}
-
-                  <div className="mt-5">
-                    <p className="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
-                      Rolagem rápida
-                    </p>
-
-                    <div className="grid grid-cols-3 gap-2">
-                      {QUICK_ROLLS.map((roll) => (
-                        <button
-                          key={roll.id}
-                          type="button"
-                          onClick={() => handleQuickRoll(roll.expression)}
-                          className="rounded-lg border border-forge-gold/40 bg-black/35 px-3 py-3 text-xs font-black text-forge-gold transition hover:bg-forge-purple"
-                        >
-                          {roll.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-5 rounded-xl border border-white/10 bg-black/35 p-4">
-                    {isGM && rollVisibility === "private" ? (
-                      <>
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-purple-200/70">
-                          Última rolagem privada do GM
-                        </p>
-
-                        {privateRolls.length > 0 ? (
-                          <div className="mt-3 rounded-lg border border-purple-400/25 bg-purple-950/20 p-3">
-                            <div className="flex items-start justify-between gap-3">
-                              <div>
-                                <p className="text-xs font-black text-white">
-                                  {privateRolls[0].expression}
-                                </p>
-
-                                <p className="mt-2 text-4xl font-black text-forge-gold">
-                                  {privateRolls[0].displayResult ??
-                                    privateRolls[0].total}
-                                </p>
-
-                                <p className="text-xs font-semibold text-white/55">
-                                  {privateRolls[0].breakdown}
-                                </p>
-                              </div>
-
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleRevealPrivateRoll(privateRolls[0])
-                                }
-                                className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-                              >
-                                Revelar
-                              </button>
-                            </div>
-                          </div>
-                        ) : (
-                          <p className="mt-2 text-xs font-semibold text-white/55">
-                            Nenhuma rolagem privada ainda.
-                          </p>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
-                          Última rolagem pública
-                        </p>
-
-                        {lastRoll ? (
-                          <>
-                            <p className="mt-2 text-4xl font-black text-forge-gold">
-                              {lastRoll.displayResult ?? lastRoll.result}
-                            </p>
-
-                            <p className="text-xs font-semibold text-white/60">
-                              {lastRoll.breakdown}
-                            </p>
-                          </>
-                        ) : (
-                          <p className="mt-2 text-xs font-semibold text-white/55">
-                            Nenhuma rolagem pública ainda.
-                          </p>
-                        )}
-                      </>
-                    )}
-                  </div>
-
-                  {rollError && (
-                    <p className="mt-4 rounded-lg border border-red-700/60 bg-red-950/40 px-3 py-2 text-[11px] font-bold text-red-200">
-                      {rollError}
-                    </p>
-                  )}
-
-                  <div className="mt-5 overflow-hidden rounded-xl border border-white/10 bg-black/25">
-                    <button
-                      type="button"
-                      onClick={() => setIsCustomDiceOpen((current) => !current)}
-                      className="flex w-full items-center justify-between px-4 py-4 text-left transition hover:bg-white/5"
-                    >
-                      <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
-                          Dado personalizado
-                        </p>
-
-                        <p className="mt-1 text-xs font-semibold text-white/55">
-                          d3, d5, d30, d1000...
-                        </p>
-                      </div>
-
-                      <span className="text-lg font-black text-forge-gold">
-                        {isCustomDiceOpen ? "−" : "+"}
-                      </span>
-                    </button>
-
-                    {isCustomDiceOpen && (
-                      <div className="border-t border-white/10 p-4">
-                        <p className="text-xs font-semibold text-white/55">
-                          Use para sistemas com dados fora do padrão.
-                        </p>
-
-                        <div className="mt-3 flex gap-2">
-                          <div className="flex h-10 items-center rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-black text-white/40">
-                            d
-                          </div>
-
-                          <input
-                            id="customDiceSides"
-                            type="number"
-                            min={2}
-                            max={1000}
-                            value={customDiceSides}
-                            onChange={(event) =>
-                              setCustomDiceSides(Number(event.target.value))
-                            }
-                            aria-label="Quantidade de lados do dado personalizado"
-                            className="h-10 min-w-0 flex-1 rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-bold text-white outline-none focus:border-forge-gold"
-                          />
-
-                          <button
-                            type="button"
-                            onClick={handleRollCustomDice}
-                            className="rounded-lg border border-forge-gold bg-forge-purple px-4 text-xs font-black text-forge-gold transition hover:bg-[#4d0d63]"
-                          >
-                            Rolar
-                          </button>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={handleAddCustomDiceToBuilder}
-                          className="mt-3 w-full rounded-lg border border-forge-gold/40 px-4 py-2 text-[11px] font-black text-forge-gold transition hover:bg-forge-purple"
-                        >
-                          Adicionar ao montador
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/25">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setIsDiceBuilderOpen((current) => !current)
-                      }
-                      className="flex w-full items-center justify-between px-4 py-4 text-left transition hover:bg-white/5"
-                    >
-                      <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
-                          Montador de dados
-                        </p>
-
-                        <p className="mt-1 text-xs font-semibold text-white/55">
-                          Monte rolagens como 1d20 + 3d4.
-                        </p>
-                      </div>
-
-                      <span className="text-lg font-black text-forge-gold">
-                        {isDiceBuilderOpen ? "−" : "+"}
-                      </span>
-                    </button>
-
-                    {isDiceBuilderOpen && (
-                      <div className="border-t border-white/10 p-4">
-                        <div className="flex justify-end">
-                          <button
-                            type="button"
-                            onClick={handleAddDiceTerm}
-                            className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[11px] font-black text-forge-gold transition hover:bg-forge-purple"
-                          >
-                            + Dado
-                          </button>
-                        </div>
-
-                        <div className="mt-4 space-y-3">
-                          {diceTerms.map((term) => (
-                            <div
-                              key={term.id}
-                              className="grid grid-cols-[1fr_1fr_32px] gap-2"
-                            >
-                              <div>
-                                <label
-                                  htmlFor={`dice-quantity-${term.id}`}
-                                  className="mb-1 block text-[9px] font-black uppercase tracking-[0.14em] text-white/35"
-                                >
-                                  Qtd.
-                                </label>
-
-                                <input
-                                  id={`dice-quantity-${term.id}`}
-                                  type="number"
-                                  min={1}
-                                  max={100}
-                                  value={term.quantity}
-                                  onChange={(event) =>
-                                    handleChangeDiceTerm(
-                                      term.id,
-                                      "quantity",
-                                      Number(event.target.value),
-                                    )
-                                  }
-                                  className="h-10 w-full rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-bold text-white outline-none focus:border-forge-gold"
-                                />
-                              </div>
-
-                              <div>
-                                <label
-                                  htmlFor={`dice-sides-${term.id}`}
-                                  className="mb-1 block text-[9px] font-black uppercase tracking-[0.14em] text-white/35"
-                                >
-                                  Dado
-                                </label>
-
-                                <select
-                                  id={`dice-sides-${term.id}`}
-                                  value={term.sides}
-                                  onChange={(event) =>
-                                    handleChangeDiceTerm(
-                                      term.id,
-                                      "sides",
-                                      Number(event.target.value),
-                                    )
-                                  }
-                                  className="h-10 w-full rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-bold text-white outline-none focus:border-forge-gold"
-                                >
-                                  {DICE_OPTIONS.map((sides) => (
-                                    <option key={sides} value={sides}>
-                                      d{sides}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveDiceTerm(term.id)}
-                                className="mt-5 flex h-10 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-sm font-black text-white/40 transition hover:border-red-500 hover:text-red-300"
-                                aria-label="Remover dado"
-                              >
-                                ×
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="mt-4 rounded-lg border border-forge-gold/25 bg-black/35 px-3 py-2">
-                          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
-                            Expressão final
-                          </p>
-
-                          <p className="mt-1 text-xs font-black text-forge-gold">
-                            {customExpression}
-                          </p>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={handleRollCustomBuilder}
-                          className="mt-3 w-full rounded-lg border border-forge-gold bg-forge-purple px-4 py-3 text-xs font-black text-forge-gold transition hover:bg-[#4d0d63]"
-                        >
-                          Rolar expressão montada
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/25">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setIsAdvancedRollOpen((current) => !current)
-                      }
-                      className="flex w-full items-center justify-between px-4 py-4 text-left transition hover:bg-white/5"
-                    >
-                      <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
-                          Modo avançado
-                        </p>
-
-                        <p className="mt-1 text-xs font-semibold text-white/55">
-                          Digite fórmulas simples manualmente.
-                        </p>
-                      </div>
-
-                      <span className="text-lg font-black text-forge-gold">
-                        {isAdvancedRollOpen ? "−" : "+"}
-                      </span>
-                    </button>
-
-                    {isAdvancedRollOpen && (
-                      <form
-                        onSubmit={handleRollExpression}
-                        className="border-t border-white/10 p-4"
-                      >
-                        <label
-                          htmlFor="diceExpression"
-                          className="mb-2 block text-[10px] font-black uppercase tracking-[0.16em] text-white/45"
-                        >
-                          Expressão
-                        </label>
-
-                        <div className="flex gap-2">
-                          <input
-                            id="diceExpression"
-                            type="text"
-                            value={diceExpression}
-                            onChange={(event) =>
-                              setDiceExpression(event.target.value)
-                            }
-                            placeholder="Ex: 1d20 + 3d4 + d10t"
-                            className="h-10 min-w-0 flex-1 rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-semibold text-white outline-none placeholder:text-white/35 focus:border-forge-gold"
-                          />
-
-                          <button
-                            type="submit"
-                            className="rounded-lg border border-forge-gold bg-forge-purple px-4 text-xs font-black text-forge-gold transition hover:bg-[#4d0d63]"
-                          >
-                            Rolar
-                          </button>
-                        </div>
-
-                        <p className="mt-2 text-[11px] font-semibold text-white/40">
-                          Exemplos: 1d20 + 3d4, d10t, moeda, 2d100.
-                        </p>
-                      </form>
-                    )}
-                  </div>
-                </section>
+                <TableRollsPanel
+                  isGM={isGM}
+                  diceExpression={diceExpression}
+                  rollVisibility={rollVisibility}
+                  rollError={rollError}
+                  customDiceSides={customDiceSides}
+                  isCustomDiceOpen={isCustomDiceOpen}
+                  isDiceBuilderOpen={isDiceBuilderOpen}
+                  isAdvancedRollOpen={isAdvancedRollOpen}
+                  diceTerms={diceTerms}
+                  privateRolls={privateRolls}
+                  customExpression={customExpression}
+                  lastRoll={lastRoll}
+                  onChangeDiceExpression={setDiceExpression}
+                  onChangeRollVisibility={setRollVisibility}
+                  onChangeCustomDiceSides={setCustomDiceSides}
+                  onToggleCustomDiceOpen={() =>
+                    setIsCustomDiceOpen((current) => !current)
+                  }
+                  onToggleDiceBuilderOpen={() =>
+                    setIsDiceBuilderOpen((current) => !current)
+                  }
+                  onToggleAdvancedRollOpen={() =>
+                    setIsAdvancedRollOpen((current) => !current)
+                  }
+                  onRollExpression={handleRollExpression}
+                  onQuickRoll={handleQuickRoll}
+                  onRollCustomDice={handleRollCustomDice}
+                  onAddCustomDiceToBuilder={handleAddCustomDiceToBuilder}
+                  onAddDiceTerm={handleAddDiceTerm}
+                  onRemoveDiceTerm={handleRemoveDiceTerm}
+                  onChangeDiceTerm={handleChangeDiceTerm}
+                  onRollCustomBuilder={handleRollCustomBuilder}
+                  onRevealPrivateRoll={handleRevealPrivateRoll}
+                  diceOptions={DICE_OPTIONS}
+                  quickRolls={QUICK_ROLLS}
+                />
               )}
 
               {activeRightTab === "characters" && (
-                <section>
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h2 className="text-base font-black text-forge-gold">
-                        Personagens
-                      </h2>
-
-                      <p className="mt-1 text-xs font-semibold text-white/55">
-                        Fichas ativas da mesa, jogadores, NPCs e criaturas.
-                      </p>
-                    </div>
-
-                    {isGM && (
-                      <div className="flex shrink-0 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setIsLibraryModalOpen(true)}
-                          className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-                        >
-                          Biblioteca
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setIsCharacterCreationMenuOpen(true)}
-                          className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-                        >
-                          + Criar
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  {(actionMessage || actionError) && (
-                    <div className="mt-4 space-y-2">
-                      {actionMessage && (
-                        <div className="rounded-lg border border-emerald-600/60 bg-emerald-950/40 px-3 py-2 text-xs font-bold text-emerald-200">
-                          {actionMessage}
-                        </div>
-                      )}
-
-                      {actionError && (
-                        <div className="rounded-lg border border-red-600/60 bg-red-950/40 px-3 py-2 text-xs font-bold text-red-200">
-                          {actionError}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {visibleTableActors.length === 0 && (
-                    <div className="mt-5 rounded-xl border border-white/10 bg-black/35 p-4">
-                      <p className="text-sm font-black text-white">
-                        Nenhum personagem visível
-                      </p>
-
-                      <p className="mt-1 text-xs font-semibold text-white/55">
-                        Quando houver personagens ativos na mesa, eles
-                        aparecerão aqui.
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="mt-5 space-y-4">
-                    {myActors.length > 0 && (
-                      <ActorGroupSection
-                        title="Meus personagens"
-                        actors={myActors}
-                        isGM={isGM}
-                        canCreateTokenForActor={canCreateTokenForActor}
-                        canOpenSheet={canOpenActorSheet}
-                        onOpenActions={setActionActor}
-                      />
-                    )}
-
-                    {otherPlayerActors.length > 0 && (
-                      <ActorGroupSection
-                        title="Players"
-                        actors={otherPlayerActors}
-                        isGM={isGM}
-                        canCreateTokenForActor={canCreateTokenForActor}
-                        canOpenSheet={canOpenActorSheet}
-                        onOpenActions={setActionActor}
-                      />
-                    )}
-
-                    {isGM && npcActors.length > 0 && (
-                      <ActorGroupSection
-                        title="NPCs"
-                        actors={npcActors}
-                        isGM={isGM}
-                        canCreateTokenForActor={canCreateTokenForActor}
-                        canOpenSheet={canOpenActorSheet}
-                        onOpenActions={setActionActor}
-                      />
-                    )}
-
-                    {isGM && creatureActors.length > 0 && (
-                      <ActorGroupSection
-                        title="Criaturas"
-                        actors={creatureActors}
-                        isGM={isGM}
-                        canCreateTokenForActor={canCreateTokenForActor}
-                        canOpenSheet={canOpenActorSheet}
-                        onOpenActions={setActionActor}
-                      />
-                    )}
-                  </div>
-                </section>
+                <TableCharactersPanel
+                  isGM={isGM}
+                  myActors={myActors}
+                  otherPlayerActors={otherPlayerActors}
+                  npcActors={npcActors}
+                  creatureActors={creatureActors}
+                  canCreateTokenForActor={canCreateTokenForActor}
+                  canOpenSheet={canOpenActorSheet}
+                  onOpenActions={setActionActor}
+                  onOpenLibrary={() => setIsLibraryModalOpen(true)}
+                  onOpenCharacterCreationMenu={() =>
+                    setIsCharacterCreationMenuOpen(true)
+                  }
+                />
               )}
 
               {activeRightTab === "journal" && (
-                <section>
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h2 className="text-base font-black text-forge-gold">
-                        Diário
-                      </h2>
-
-                      <p className="mt-1 text-xs font-semibold text-white/55">
-                        Anotações, locais, pistas e documentos da aventura.
-                      </p>
-                    </div>
-
-                    {isGM && (
-                      <button
-                        type="button"
-                        className="shrink-0 rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-                      >
-                        + Criar
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="mt-5 space-y-4">
-                    <JournalGroupSection
-                      title="Notas da mesa"
-                      items={[
-                        {
-                          id: "journal-note-1",
-                          title: "Resumo da última sessão",
-                          description:
-                            "O grupo chegou à Primeira Vigília e encontrou sinais de atividade estranha perto da muralha.",
-                          visibility: "Público",
-                        },
-                      ]}
-                    />
-
-                    <JournalGroupSection
-                      title="Locais"
-                      items={[
-                        {
-                          id: "journal-location-1",
-                          title: "Primeira Vigília",
-                          description:
-                            "Fortificação antiga usada como ponto de passagem entre as terras civilizadas e a região selvagem.",
-                          visibility: "Público",
-                        },
-                        {
-                          id: "journal-location-2",
-                          title: "Cripta sob a torre",
-                          description:
-                            "Local conhecido pelo mestre. Ainda não revelado aos jogadores.",
-                          visibility: isGM ? "GM" : "Oculto",
-                          hiddenForPlayer: !isGM,
-                        },
-                      ]}
-                    />
-
-                    <JournalGroupSection
-                      title="Pistas"
-                      items={[
-                        {
-                          id: "journal-clue-1",
-                          title: "Símbolo queimado",
-                          description:
-                            "Um símbolo escuro foi encontrado no portão norte. Ninguém reconheceu sua origem.",
-                          visibility: "Público",
-                        },
-                      ]}
-                    />
-
-                    <JournalGroupSection
-                      title="Documentos / PDFs"
-                      items={[
-                        {
-                          id: "journal-doc-1",
-                          title: "Contrato de escolta",
-                          description:
-                            "Documento entregue ao grupo antes da viagem para a Primeira Vigília.",
-                          visibility: "Público",
-                        },
-                      ]}
-                    />
-
-                    <JournalGroupSection
-                      title="Registro da sessão"
-                      items={[
-                        {
-                          id: "journal-log-1",
-                          title: "Sessão 01",
-                          description:
-                            "Registro inicial da campanha. Depois poderá guardar resumo, data e acontecimentos importantes.",
-                          visibility: "Público",
-                        },
-                      ]}
-                    />
-                  </div>
-                </section>
+                <TableJournalPanel isGM={isGM} />
               )}
 
-              {activeRightTab === "settings" && (
-                <section>
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h2 className="text-base font-black text-forge-gold">
-                        Mesa
-                      </h2>
-                    </div>
-
-                    <span className="shrink-0 rounded-full border border-forge-gold/30 bg-black/30 px-3 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold">
-                      {campaign.isPublic ? "Pública" : "Privada"}
-                    </span>
-                  </div>
-
-                  <div className="mt-5 space-y-4">
-                    {actionMessage && (
-                      <div className="rounded-lg border border-emerald-600/60 bg-emerald-950/40 px-3 py-2 text-xs font-bold text-emerald-200">
-                        {actionMessage}
-                      </div>
-                    )}
-
-                    {actionError && (
-                      <div className="rounded-lg border border-red-600/60 bg-red-950/40 px-3 py-2 text-xs font-bold text-red-200">
-                        {actionError}
-                      </div>
-                    )}
-
-                    <div className="rounded-xl border border-white/10 bg-black/25 p-4">
-                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-                        Campanha atual
-                      </p>
-
-                      <p className="mt-2 text-sm font-black text-white">
-                        {campaign.name}
-                      </p>
-
-                      <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
-                        {campaign.description ||
-                          "Sem descrição cadastrada para esta campanha."}
-                      </p>
-
-                      <div className="mt-4 grid grid-cols-2 gap-2">
-                        <div className="rounded-lg border border-white/10 bg-black/30 px-3 py-2">
-                          <p className="text-[9px] font-black uppercase tracking-[0.12em] text-white/35">
-                            Jogadores
-                          </p>
-
-                          <p className="mt-1 text-sm font-black text-forge-gold">
-                            {approvedPlayers.length}/{campaign.maxPlayers}
-                          </p>
-                        </div>
-
-                        <div className="rounded-lg border border-white/10 bg-black/30 px-3 py-2">
-                          <p className="text-[9px] font-black uppercase tracking-[0.12em] text-white/35">
-                            Mestres
-                          </p>
-
-                          <p className="mt-1 text-sm font-black text-forge-gold">
-                            {approvedGms.length}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="rounded-xl border border-white/10 bg-black/25 p-4">
-                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-                        Seu acesso
-                      </p>
-
-                      <div className="mt-3 flex items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-forge-gold/50 bg-forge-purple text-xs font-black text-forge-gold">
-                          {user.image ? (
-                            <span
-                              className="h-full w-full bg-cover bg-center"
-                              style={{
-                                backgroundImage: `url(${user.image})`,
-                              }}
-                              aria-hidden="true"
-                            />
-                          ) : (
-                            getInitials(user)
-                          )}
-                        </div>
-
-                        <div className="min-w-0">
-                          <p className="truncate text-xs font-black text-white">
-                            {getDisplayName(user)}
-                          </p>
-
-                          <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">
-                            {roleLabel}
-                            {isOwner ? " • Owner" : ""}
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="mt-3 text-xs font-semibold leading-relaxed text-white/55">
-                        {isGM
-                          ? "Você está usando a mesa como Mestre."
-                          : "Você está usando a mesa como jogador."}
-                      </p>
-                    </div>
-
-                    <div className="rounded-xl border border-white/10 bg-black/25 p-4">
-                      <div className="flex items-center justify-between">
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-                          Participantes
-                        </p>
-
-                        <span className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[9px] font-black text-white/45">
-                          {approvedParticipants.length}
-                        </span>
-                      </div>
-
-                      {approvedParticipants.length === 0 ? (
-                        <p className="mt-3 text-xs font-semibold text-white/45">
-                          Nenhum participante aprovado encontrado.
-                        </p>
-                      ) : (
-                        <div className="mt-3 space-y-2">
-                          {approvedParticipants.map((participant) => (
-                            <div
-                              key={participant.id}
-                              className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/30 px-3 py-2"
-                            >
-                              <div className="flex min-w-0 items-center gap-2">
-                                <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-forge-purple text-[10px] font-black text-forge-gold">
-                                  {participant.user.image ? (
-                                    <span
-                                      className="h-full w-full bg-cover bg-center"
-                                      style={{
-                                        backgroundImage: `url(${participant.user.image})`,
-                                      }}
-                                      aria-hidden="true"
-                                    />
-                                  ) : (
-                                    getParticipantInitials(participant)
-                                  )}
-                                </div>
-
-                                <div className="min-w-0">
-                                  <p className="truncate text-xs font-black text-white">
-                                    {getParticipantDisplayName(participant)}
-                                  </p>
-
-                                  <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
-                                    {participant.userId === campaign.ownerId
-                                      ? "Owner"
-                                      : "Participante"}
-                                  </p>
-                                </div>
-                              </div>
-
-                              <span
-                                className={`shrink-0 rounded-full border px-2 py-1 text-[8px] font-black uppercase tracking-[0.08em] ${
-                                  participant.role === "GM"
-                                    ? "border-forge-gold/40 bg-forge-purple/40 text-forge-gold"
-                                    : "border-white/10 bg-black/30 text-white/40"
-                                }`}
-                              >
-                                {participant.role === "GM" ? "GM" : "Player"}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="rounded-xl border border-white/10 bg-black/25 p-4">
-                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-                        Ações da mesa
-                      </p>
-
-                      <div className="mt-3 space-y-2">
-                        <button
-                          type="button"
-                          onClick={() => setIsExitModalOpen(true)}
-                          className="block w-full rounded-lg border border-white/15 px-4 py-3 text-left text-xs font-black text-white/75 transition hover:border-forge-gold hover:text-forge-gold"
-                        >
-                          Sair da mesa
-                        </button>
-
-                        {canAssumeGm && (
-                          <button
-                            type="button"
-                            onClick={handleAssumeGmRole}
-                            disabled={isAssumingGm}
-                            className="block w-full rounded-lg border border-forge-gold/50 px-4 py-3 text-left text-xs font-black text-forge-gold transition hover:bg-forge-purple disabled:cursor-not-allowed disabled:opacity-50"
-                          >
-                            {isAssumingGm
-                              ? "Assumindo papel de GM..."
-                              : "Assumir papel de GM"}
-                          </button>
-                        )}
-
-                        {canManageCampaignInsideTable && (
-                          <Link
-                            href={`/campaigns/${campaign.id}/edit`}
-                            className="block w-full rounded-lg border border-forge-gold/40 px-4 py-3 text-left text-xs font-black text-forge-gold transition hover:bg-forge-purple"
-                          >
-                            Gerenciar campanha
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </section>
+              {activeRightTab === "settings" && campaign && user && (
+                <TableSettingsPanel
+                  campaign={campaign}
+                  user={user}
+                  approvedParticipants={approvedParticipants}
+                  approvedGms={approvedGms}
+                  approvedPlayers={approvedPlayers}
+                  isOwner={isOwner}
+                  isGM={isGM}
+                  canManageCampaignInsideTable={canManageCampaignInsideTable}
+                  canAssumeGm={canAssumeGm}
+                  isAssumingGm={isAssumingGm}
+                  onAssumeGm={handleAssumeGmRole}
+                  onOpenExitModal={() => setIsExitModalOpen(true)}
+                  onOpenCharacterCreationMenu={() =>
+                    setIsCharacterCreationMenuOpen(true)
+                  }
+                />
               )}
             </div>
-
-            <form
-              onSubmit={handleSendMessage}
-              className="shrink-0 border-t border-forge-gold/25 p-4"
-            >
-              <div className="mb-3 grid grid-cols-2 overflow-hidden rounded-lg border border-forge-gold/25 bg-black/25">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setChatMode("public");
-                    setChatError("");
-                  }}
-                  className={`px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] transition ${
-                    chatMode === "public"
-                      ? "bg-forge-purple text-forge-gold"
-                      : "text-white/45 hover:text-forge-gold"
-                  }`}
-                >
-                  Público
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setChatMode("whisper");
-                    setChatError("");
-                  }}
-                  className={`px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] transition ${
-                    chatMode === "whisper"
-                      ? "bg-forge-purple text-forge-gold"
-                      : "text-white/45 hover:text-forge-gold"
-                  }`}
-                >
-                  Sussurro
-                </button>
-              </div>
-
-              {chatMode === "whisper" && (
-                <div className="mb-3">
-                  <select
-                    aria-label="Selecionar destinatário do sussurro"
-                    title="Selecionar destinatário do sussurro"
-                    value={whisperTargetId}
-                    onChange={(event) => setWhisperTargetId(event.target.value)}
-                    className="h-10 w-full rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-bold text-white outline-none focus:border-forge-gold"
-                  >
-                    <option value="">
-                      {isGM
-                        ? "Sussurrar ou criar nota pessoal..."
-                        : "Sussurrar para GM ou nota pessoal..."}
-                    </option>
-
-                    {whisperTargets.map((participant) => (
-                      <option key={participant.id} value={participant.userId}>
-                        {getParticipantDisplayName(participant)} —{" "}
-                        {participant.userId === user.id
-                          ? "Nota pessoal"
-                          : participant.role === "GM"
-                            ? "GM"
-                            : "Player"}
-                      </option>
-                    ))}
-                  </select>
-
-                  {whisperTargets.length === 0 && (
-                    <p className="mt-2 text-[11px] font-semibold text-white/40">
-                      Nenhum destinatário disponível para sussurro agora.
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {chatError && (
-                <p className="mb-3 rounded-lg border border-red-700/60 bg-red-950/40 px-3 py-2 text-[11px] font-bold text-red-200">
-                  {chatError}
-                </p>
-              )}
-
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={chatInput}
-                  onChange={(event) => setChatInput(event.target.value)}
-                  placeholder={
-                    chatMode === "whisper"
-                      ? "Enviar sussurro ou nota..."
-                      : "Enviar mensagem..."
-                  }
-                  className="h-11 min-w-0 flex-1 rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-semibold text-white outline-none placeholder:text-white/35 focus:border-forge-gold"
-                />
-
-                <button
-                  type="submit"
-                  className="rounded-lg border border-forge-gold bg-forge-purple px-4 text-xs font-black text-forge-gold transition hover:bg-[#4d0d63]"
-                >
-                  Enviar
-                </button>
-              </div>
-            </form>
-          </aside>
+          </TableRightPanel>
         </div>
       </div>
 
@@ -4830,6 +3385,7 @@ export default function CampaignPlayPage() {
           sceneTokens={sceneTokens.filter(
             (token) => token.actorId === actionActor.id,
           )}
+          tokenSizeOptions={TOKEN_SIZE_OPTIONS}
           onOpenSheet={() => {
             setSelectedActor(actionActor);
             setActionActor(null);
@@ -4838,6 +3394,9 @@ export default function CampaignPlayPage() {
             await handleAddTokenToScene(actionActor);
           }}
           onRemoveToken={handleRemoveTokenFromScene}
+          onChangeTokenSize={async (gridSize) => {
+            await handleChangeActorTokenSize(actionActor, gridSize);
+          }}
           onReturnToLibrary={async () => {
             await handleReturnActorToLibrary(actionActor);
           }}
@@ -4904,107 +3463,6 @@ export default function CampaignPlayPage() {
     </main>
   );
 }
-
-function ActorGroupSection({
-  title,
-  actors,
-  isGM,
-  canCreateTokenForActor,
-  canOpenSheet,
-  onOpenActions,
-}: {
-  title: string;
-  actors: CampaignActor[];
-  isGM: boolean;
-  canCreateTokenForActor: (actor: CampaignActor) => boolean;
-  canOpenSheet: (actor: CampaignActor) => boolean;
-  onOpenActions: (actor: CampaignActor) => void;
-}) {
-  const [isOpen, setIsOpen] = useState(true);
-
-  return (
-    <div className="overflow-hidden rounded-xl border border-white/10 bg-black/20">
-      <button
-        type="button"
-        onClick={() => setIsOpen((current) => !current)}
-        className="flex w-full items-center justify-between px-3 py-3 text-left transition hover:bg-white/5"
-      >
-        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-purple-200/70">
-          {title}
-        </p>
-
-        <span className="text-sm font-black text-forge-gold">
-          {isOpen ? "−" : "+"}
-        </span>
-      </button>
-
-      {isOpen && (
-        <div className="space-y-2 border-t border-white/10 p-3">
-          {actors.map((actor) => {
-            const canCreateToken = canCreateTokenForActor(actor);
-            const canViewSheet = canOpenSheet(actor);
-
-            return (
-              <button
-                key={actor.id}
-                type="button"
-                onClick={() => onOpenActions(actor)}
-                className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-black/30 p-3 text-left transition hover:border-forge-gold/50 hover:bg-forge-purple/20"
-              >
-                <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border text-sm font-black shadow-[-3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
-                    actor.type,
-                  )}`}
-                >
-                  {actor.portraitUrl ? (
-                    <span
-                      className="h-full w-full bg-cover bg-center"
-                      style={{
-                        backgroundImage: `url(${actor.portraitUrl})`,
-                      }}
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    actor.initials
-                  )}
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-black text-white">
-                    {actor.name}
-                  </p>
-
-                  <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
-                    {isGM
-                      ? getCharacterTypeLabel(actor.type)
-                      : canViewSheet
-                        ? "Seu personagem"
-                        : "Outro player"}
-                  </p>
-                </div>
-
-                <div className="flex shrink-0 items-center gap-1">
-                  {canViewSheet && (
-                    <span className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[8px] font-black uppercase tracking-[0.08em] text-purple-100/60">
-                      Ficha
-                    </span>
-                  )}
-
-                  {canCreateToken && (
-                    <span className="rounded-full border border-forge-gold/30 bg-black/30 px-2 py-1 text-[8px] font-black uppercase tracking-[0.08em] text-forge-gold/80">
-                      Token
-                    </span>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function ActorLibraryModal({
   actors,
   onBringToTable,
@@ -5129,9 +3587,11 @@ function ActorActionModal({
   canOpenSheet,
   canCreateToken,
   sceneTokens,
+  tokenSizeOptions,
   onOpenSheet,
   onAddToken,
   onRemoveToken,
+  onChangeTokenSize,
   onReturnToLibrary,
   onClose,
 }: {
@@ -5140,9 +3600,11 @@ function ActorActionModal({
   canOpenSheet: boolean;
   canCreateToken: boolean;
   sceneTokens: SceneToken[];
+  tokenSizeOptions: typeof TOKEN_SIZE_OPTIONS;
   onOpenSheet: () => void;
   onAddToken: () => void | Promise<void>;
   onRemoveToken: (tokenId: string) => void | Promise<void>;
+  onChangeTokenSize: (gridSize: number) => void | Promise<void>;
   onReturnToLibrary: () => void | Promise<void>;
   onClose: () => void;
 }) {
@@ -5285,6 +3747,51 @@ function ActorActionModal({
             )}
           </div>
         )}
+
+        {isGM && sceneTokens.length > 0 ? (
+          <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+              Tamanho do token
+            </p>
+
+            <p className="mt-1 text-[11px] font-semibold leading-relaxed text-white/45">
+              1 quadrado = 1,5m. Pequeno/Médio ocupa 1 quadrado.
+            </p>
+
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {tokenSizeOptions.map((option) => {
+                const sizeInPixels = getTokenSizeInPixels(option.gridSize);
+                const isSelected = sceneTokens.some(
+                  (token) =>
+                    token.width === sizeInPixels &&
+                    token.height === sizeInPixels,
+                );
+
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => onChangeTokenSize(option.gridSize)}
+                    title={option.description}
+                    className={`rounded-lg border px-3 py-2 text-left transition ${
+                      isSelected
+                        ? "border-forge-gold bg-forge-gold/10 text-forge-gold"
+                        : "border-white/10 bg-black/30 text-white/65 hover:border-forge-gold/60 hover:text-forge-gold"
+                    }`}
+                  >
+                    <span className="block text-[10px] font-black uppercase tracking-[0.12em]">
+                      {option.label}
+                    </span>
+
+                    <span className="mt-1 block text-[10px] font-bold text-white/40">
+                      {option.gridSize}x{option.gridSize} · {sizeInPixels}px
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
 
         {isGM && (
           <p className="mt-4 text-[10px] font-semibold leading-relaxed text-white/35">
@@ -5458,60 +3965,6 @@ function SheetStat({ label, value }: { label: string; value: string }) {
       </p>
 
       <p className="mt-1 text-sm font-black text-white">{value}</p>
-    </div>
-  );
-}
-
-function JournalGroupSection({
-  title,
-  items,
-}: {
-  title: string;
-  items: {
-    id: string;
-    title: string;
-    description: string;
-    visibility: string;
-    hiddenForPlayer?: boolean;
-  }[];
-}) {
-  const visibleItems = items.filter((item) => !item.hiddenForPlayer);
-
-  if (visibleItems.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
-        {title}
-      </p>
-
-      <div className="mt-3 space-y-2">
-        {visibleItems.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            className="group w-full rounded-lg border border-white/10 bg-black/35 px-3 py-3 text-left transition hover:border-forge-gold/40 hover:bg-forge-purple/15"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="truncate text-xs font-black text-white">
-                  {item.title}
-                </p>
-
-                <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-relaxed text-white/45">
-                  {item.description}
-                </p>
-              </div>
-
-              <span className="shrink-0 rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[8px] font-black uppercase tracking-[0.08em] text-white/35">
-                {item.visibility}
-              </span>
-            </div>
-          </button>
-        ))}
-      </div>
     </div>
   );
 }

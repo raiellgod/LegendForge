@@ -593,11 +593,7 @@ export default function EditCampaignPage() {
   const userInitial =
     user.name?.[0]?.toUpperCase() ?? user.email?.[0]?.toUpperCase() ?? "U";
 
-  const playersCount = participants.filter(
-    (participant) => participant.role === "PLAYER",
-  ).length;
-
-  return (
+   return (
     <main className="relative min-h-screen overflow-hidden">
       <ParchmentBackground />
       <SiteHeader variant="private" user={user} />

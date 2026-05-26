@@ -1,5 +1,7 @@
 import type { CharacterBuilderDraft } from "../types/character-builder-types";
 
+import Image from "next/image";
+
 type CharacterReviewVisualIdentityProps = {
   draft: CharacterBuilderDraft;
 };
@@ -70,10 +72,13 @@ export function CharacterReviewVisualIdentity({
             title="Retrato do personagem"
           >
             {portraitUrl ? (
-              <img
-                src={portraitUrl}
+              <Image
+                src={draft.portraitUrl}
                 alt={`Retrato de ${draft.name || "personagem"}`}
+                width={160}
+                height={160}
                 className="h-full w-full object-cover"
+                unoptimized
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center px-3 text-center text-[10px] font-black uppercase tracking-[0.18em] text-zinc-600">
@@ -87,9 +92,11 @@ export function CharacterReviewVisualIdentity({
             title="Token do personagem"
           >
             {tokenImageUrl ? (
-              <img
-                src={tokenImageUrl}
+              <Image
+                src={draft.tokenImageUrl}
                 alt={`Token de ${draft.name || "personagem"}`}
+                width={160}
+                height={160}
                 className={
                   draft.tokenImageFit === "CONTAIN"
                     ? "h-full w-full object-contain"
@@ -97,6 +104,7 @@ export function CharacterReviewVisualIdentity({
                       ? "h-full w-full object-cover"
                       : "h-full w-full object-fill"
                 }
+                unoptimized
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center px-3 text-center text-[10px] font-black uppercase tracking-[0.18em] text-zinc-600">
