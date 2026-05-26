@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-character%20builder%20in%20progress-yellow)
+![Status](https://img.shields.io/badge/status-game%20table%20refactor%20complete-green)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -24,6 +24,7 @@ Inspired by tools like Roll20 and Foundry VTT, but with a different philosophy:
 - 🧠 Designed as a serious full-stack portfolio project
 - ⚙️ Built incrementally with production mindset
 - 📄 Character creation built as a real persisted flow
+- 🗺️ Table tools built toward a playable VTT experience
 
 ---
 
@@ -37,8 +38,9 @@ LegendForge demonstrates:
 - 🔐 Real authentication and persisted sessions
 - 🧠 System design thinking
 - 🎮 Flexible RPG engine foundation
-- 🎨 UI built from a Figma-driven product flow
+- 🎨 UI built from a product-driven flow
 - 🧍 Character builder connected to real domain data
+- 🧩 Incremental VTT features with persistence where it matters
 
 ---
 
@@ -103,6 +105,9 @@ LegendForge/
 │   │   │   ├── layout.tsx
 │   │   │   └── page.tsx
 │   │   ├── components/
+│   │   ├── features/
+│   │   │   ├── character-builder/
+│   │   │   └── game-table/
 │   │   ├── lib/
 │   │   └── service/
 │   ├── public/
@@ -116,7 +121,8 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟡 Character builder in progress
+> 🟢 Character builder and game table refactors completed.  
+> 🟡 Next focus: active characters, library rules and safe removal/deletion flows.
 
 ### ✅ Completed
 
@@ -144,7 +150,8 @@ LegendForge/
   - `/campaigns/[id]/edit`
 - Game page:
   - `/campaigns/[id]/play`
-- Campaign actors and token foundation
+- Campaign actors and real actor locations
+- Scene tokens persisted in the database
 - RPG system foundation:
   - GameSystem
   - Stat
@@ -171,32 +178,54 @@ LegendForge/
   - clickable cards
   - persisted class/ancestry/background choices
   - step validation
-  - visual/local attributes step
+  - standard array attributes
+  - persisted attributes
+  - persisted skills
+  - persisted spells
+  - persisted starting equipment
+  - about/appearance/personality/history step
+  - review step
+  - empty draft when creating a new character
+  - basic dynamic language by pronoun
+- Game table refactor:
+  - `features/game-table`
+  - extracted toolbar
+  - extracted scene canvas
+  - extracted right panel
+  - extracted Chat, Rolls, Characters, Journal and Settings panels
+  - select tool
+  - pan tool
+  - measure line/circle tool
+  - local drawing tool
+  - local fog tool with real mask
+  - editable/persisted token size
+  - table regression test completed
 
 ---
 
 ## 🚧 In Progress
 
-- Character builder Phase 4
-- Attribute persistence
-- Skills, spells, equipment and review steps
-- Finalizing sheet and listing it in the Personagens tab
+```txt
+4.24.0 — Updating project documentation after the game table refactor
+```
 
 ---
 
 ## 🔜 Next Step
 
 ```txt
-4.15 — Persist attributes in the database
+4.24 — Active characters, library and safe removal/deletion flows
 ```
 
 Expected work:
 
-- send attributes with draft save
-- validate attribute values
-- create/update `CharacterSheetStat`
-- include saved stats in character sheet GET routes
-- load saved stats into the builder
+- map current `CampaignActor`, `TABLE`, `LIBRARY` and `SceneToken` rules
+- define active character rules per player
+- separate token removal from actor removal/deletion
+- define safe NPC/creature deletion
+- define player/GM character removal rules
+- adjust UI in Characters and Library flows
+- regression test actors, tokens and library
 
 ---
 
@@ -234,7 +263,8 @@ Current state:
 - Auth tables are operational
 - Campaign tables are operational
 - RPG domain is expanding incrementally
-- CharacterSheet domain exists and is being connected to the builder
+- CharacterSheet domain exists and is connected to the builder
+- Campaign actors and scene tokens are connected to the game table
 
 More details:
 
@@ -255,9 +285,9 @@ Current UI progress:
 - ✅ Create campaign page
 - ✅ Initial edit/finalize campaign page
 - ✅ Search campaign page started
-- ✅ Tabletop/session screen started
-- ✅ Character builder modal started
-- 🟡 Character sheet creation flow in progress
+- ✅ Tabletop/session screen with functional tools
+- ✅ Character builder modal with persisted flow
+- 🟡 Character active/library/removal rules coming next
 
 ---
 
@@ -306,7 +336,16 @@ Current capsules now include:
 - Capsule 23 — Character Builder Options
 - Capsule 24 — Character Builder Choices Persistence
 - Capsule 25 — Character Builder Step Validation
-- Capsule 26 — Character Builder Attributes UI
+- Capsule 26 — Character Builder Attributes
+- Capsule 27 — Character Builder Skills
+- Capsule 28 — Character Builder Spells
+- Capsule 29 — Character Builder Equipment
+- Capsule 30 — Character Builder About
+- Capsule 31 — Character Builder Review & Stabilization
+- Capsule 32 — Game Table Refactor Foundation
+- Capsule 33 — Game Table Panels
+- Capsule 34 — Game Table Canvas & Tools
+- Capsule 35 — Game Table Regression & Cleanup
 
 See:
 

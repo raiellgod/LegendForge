@@ -31,6 +31,7 @@ Princípios:
 - Código deve servir ao domínio.
 - UI deve aproximar o produto de algo jogável.
 - Arquivos grandes exigem fonte única da verdade.
+- Antes de qualquer commit Git: sempre rodar `git diff --stat`.
 
 ---
 
@@ -45,7 +46,7 @@ frontend/src/app/campaigns/[id]/play/page.tsx
 - Para mudança grande: reescrever o arquivo inteiro baseado no último arquivo enviado pelo usuário.
 - Para mudança pequena: usar âncoras reais do arquivo atual no estilo “Procure este trecho / Troque por este trecho”.
 - Não usar código presumido de versões antigas.
-- Antes de qualquer commit Git: sempre rodar `git diff --stat`.
+- Quando refatorar fluxos grandes, manter um único arquivo atual como fonte da verdade.
 
 ---
 
@@ -87,13 +88,19 @@ LegendForge/
 │   │   │   └── page.tsx
 │   │   ├── components/
 │   │   ├── features/
-│   │   │   └── character-builder/
+│   │   │   ├── character-builder/
+│   │   │   │   ├── components/
+│   │   │   │   ├── constants/
+│   │   │   │   ├── review/
+│   │   │   │   ├── services/
+│   │   │   │   ├── steps/
+│   │   │   │   ├── summary/
+│   │   │   │   ├── types/
+│   │   │   │   └── utils/
+│   │   │   └── game-table/
 │   │   │       ├── components/
 │   │   │       ├── constants/
-│   │   │       ├── review/
 │   │   │       ├── services/
-│   │   │       ├── steps/
-│   │   │       ├── summary/
 │   │   │       ├── types/
 │   │   │       └── utils/
 │   │   ├── lib/
@@ -224,8 +231,6 @@ backend/prisma/schema.prisma
 backend/prisma/seed.ts
 ```
 
-O builder foi parcialmente extraído de `page.tsx` para `frontend/src/features/character-builder/`.
-
 Estrutura extraída:
 
 ```txt
@@ -233,40 +238,79 @@ features/character-builder/
 ├── components/
 ├── constants/
 ├── review/
+├── services/
 ├── steps/
 ├── summary/
 ├── types/
 └── utils/
 ```
 
-Etapas extraídas ou em refatoração:
+Status consolidado:
 
-- Conceito
-- Atributos
-- Perícias
-- Magias
-- Equipamentos
-- Sobre
-- Revisão
+- Conceito, atributos, perícias, magias, equipamentos, sobre e revisão foram extraídos/refatorados.
+- Criar personagem pela mesa abre draft vazio.
+- Linguagem dinâmica por pronome foi aplicada em labels principais de classe/ancestralidade/antecedente.
+- Pronome e gênero inicial foram sincronizados quando apropriado.
+- O builder continua sendo aberto dentro da mesa.
 
 ---
 
-## ⚠️ Estado importante da refatoração 4.22
+## 🎲 Game Table — Arquitetura atual
 
-A Fase 4.22 está em andamento. Não marcar a etapa como concluída ainda.
+A mesa foi refatorada para `frontend/src/features/game-table/`.
 
-Último ponto conhecido:
+Estrutura:
 
 ```txt
-4.22.18 — Extração/Revisão e ajustes finais do builder ainda precisam ser validados.
+features/game-table/
+├── components/
+│   ├── TableChatPanel.tsx
+│   ├── TableCharactersPanel.tsx
+│   ├── TableJournalPanel.tsx
+│   ├── TableLeftToolbar.tsx
+│   ├── TableRightPanel.tsx
+│   ├── TableRollsPanel.tsx
+│   ├── TableSceneCanvas.tsx
+│   └── TableSettingsPanel.tsx
+├── constants/
+│   ├── dice-constants.ts
+│   └── table-ui-constants.ts
+├── services/
+│   └── game-table-api.ts
+├── types/
+│   └── game-table-types.ts
+└── utils/
+    ├── actor-utils.ts
+    ├── dice-utils.ts
+    ├── token-utils.ts
+    └── user-utils.ts
 ```
 
-Problemas observados recentemente:
+Funcionalidades atuais da mesa:
 
-- O fluxo “Criar personagem” ainda pode carregar rascunho antigo em vez de abrir ficha vazia.
-- A correção de `page.tsx` enviada ainda não foi confirmada como funcionando.
-- Linguagem dinâmica por pronome e sincronização pronome → gênero foram planejadas, mas não devem ser marcadas como concluídas até teste real.
-- Antes de seguir para commit, validar build, abrir builder do zero e testar todas as etapas.
+- Painel direito em abas: Chat, Rolagens, Personagens, Diário e Mesa.
+- Toolbar esquerda funcional: Selecionar, Mover visão, Medir, Desenhar e Névoa.
+- Tokens reais na cena com posição persistida.
+- Tamanho de token editável e persistido.
+- Escala definida: `1 quadrado = 40px = 1,5m`.
+- Ferramenta Medir:
+  - linha em metros
+  - círculo com centro no clique e raio no arrasto
+  - medição fica visível até trocar de ferramenta ou criar outra
+- Ferramenta Desenhar:
+  - desenho local
+  - desfazer último traço
+  - limpar desenhos
+- Ferramenta Névoa:
+  - névoa local com máscara real
+  - áreas reveladas
+  - tokens fora da área revelada ficam cobertos
+- Biblioteca e `+ Criar` restaurados na aba Personagens.
+- Sem sincronização em tempo real ainda.
+
+Decisão atual:
+
+> Desenho, medição, pan/zoom e névoa são locais/visuais por enquanto. Persistência e sincronização em tempo real entram em fases futuras.
 
 ---
 
@@ -293,7 +337,7 @@ Problemas observados recentemente:
 
 ### Linguagem dinâmica
 
-- Implementar linguagem baseada em pronomes.
+- Implementar e expandir linguagem baseada em pronomes.
 - Primeiro masculino/feminino.
 - Neutro será adaptado caso a caso depois.
 
@@ -302,16 +346,24 @@ Problemas observados recentemente:
 - Upload direto do computador entra na Fase 4.25.
 - Inclui retrato, token, preview/fit/crop simples e persistência da URL no banco.
 
+### Sincronização em tempo real
+
+- Entrará em fase posterior.
+- Deve sincronizar tokens, chat/rolagens, névoa, desenhos e demais eventos de mesa entre contas.
+
 ---
 
 ## 🔄 Current Phase
 
 > **FASE 4 — Criação/Ficha de Personagem**
 
-Micro em aberto:
+Estado atual:
 
 ```txt
-4.22.18 — Finalizar extração/revisão do builder e corrigir criação de personagem vazio
+[x] 4.22 — Refatoração do Character Builder
+[x] 4.23 — Refatoração da Mesa de Jogo
+[em andamento] 4.24.0 — Atualização dos documentos do projeto
+[próximo] 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
 ```
 
 ---
@@ -331,4 +383,6 @@ Micro em aberto:
 - Campanhas reais.
 - Mesa com atores/tokens persistidos.
 - Sistema RPG inicial semeado.
-- Builder de personagem avançado, mas refatoração atual ainda precisa validação.
+- Builder de personagem avançado e refatorado.
+- Mesa de jogo refatorada em `features/game-table`.
+- Próximo foco: regras corretas de personagens ativos, biblioteca e remoção/exclusão.

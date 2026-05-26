@@ -391,41 +391,134 @@ Definir domínio do sistema antes da implementação.
 
 ---
 
-# ⚡ Capsule 31 — Character Builder Review
+# ⚡ Capsule 31 — Character Builder Review & Stabilization
 
-## ⚠️ Status
-
-Em andamento / não marcar como concluída.
-
-## 🎯 Goal
-
-Extrair e estabilizar a etapa Revisão, corrigindo também o fluxo de criação de personagem vazio.
-
-## Parcialmente feito
+## ✅ Result
 
 - componentes de revisão criados
 - revisão visual exibida
-- parte da etapa foi extraída
+- etapa de revisão estabilizada
+- fluxo “Criar personagem” abre draft vazio
+- builder não carrega dados antigos ao criar personagem do zero
+- linguagem dinâmica por pronome aplicada em labels principais
+- sincronização inicial pronome → gênero funcionando
+- teste regressivo do builder concluído
+- commit da refatoração do builder concluído
 
-## Pendente
+---
 
-- corrigir fluxo “Criar personagem” para não carregar rascunho antigo
-- validar `CharacterReviewStep`
-- implementar ou confirmar:
-  - `4.22.18.3 — Limpar valores padrão do rascunho inicial`
-  - `4.22.18.4 — Linguagem dinâmica por pronome`
-  - `4.22.18.5 — Sincronizar pronome com gênero inicial`
+# ⚡ Capsule 32 — Game Table Refactor Foundation
+
+## 🎯 Goal
+
+Reduzir responsabilidades do `frontend/src/app/campaigns/[id]/play/page.tsx` e criar uma base modular para a mesa.
+
+## ✅ Result
+
+- criada a pasta `frontend/src/features/game-table`
+- types extraídos
+- helpers de usuários, atores, tokens e rolagens extraídos
+- serviços/API da mesa extraídos
+- constantes de dados e UI da mesa extraídas
+- toolbar esquerda extraída
+- painel direito base extraído
+
+---
+
+# ⚡ Capsule 33 — Game Table Panels
+
+## 🎯 Goal
+
+Extrair as abas do painel direito da mesa.
+
+## ✅ Result
+
+- Chat extraído para componente próprio
+- Rolagens extraída para componente próprio
+- Personagens extraída para componente próprio
+- Diário extraído para componente próprio
+- Mesa/configurações extraída para componente próprio
+- botões Biblioteca e `+ Criar` restaurados na aba Personagens
+- painel direito ficou mais modular e testável
+
+---
+
+# ⚡ Capsule 34 — Game Table Canvas & Tools
+
+## 🎯 Goal
+
+Transformar a área central da mesa em uma camada mais organizada e funcional.
+
+## ✅ Result
+
+- `TableSceneCanvas` criado
+- renderização de tokens movida para componente próprio
+- drag de token corrigido com offset real do clique
+- drag em tempo real corrigido após extração
+- ferramenta Selecionar move tokens
+- ferramenta Mover visão arrasta o mapa
+- ferramenta Medir funciona com:
+  - linha
+  - círculo
+  - escala em metros
+  - `1 quadrado = 40px = 1,5m`
+- ferramenta Desenhar funciona localmente:
+  - criar traço
+  - desfazer último
+  - limpar desenhos
+- ferramenta Névoa funciona localmente:
+  - máscara real
+  - áreas reveladas
+  - desfazer última área
+  - limpar áreas
+  - tokens fora da área revelada ficam cobertos
+- tamanho de token editável e persistido:
+  - 1x1
+  - 2x2
+  - 3x3
+  - 4x4
+
+---
+
+# ⚡ Capsule 35 — Game Table Regression & Cleanup
+
+## 🎯 Goal
+
+Validar que a mesa continuou funcionando após a refatoração.
+
+## ✅ Result
+
+- lint limpo de warnings relevantes da mesa
+- uso de `<Image />` ajustado onde necessário
+- teste regressivo da mesa concluído
+- commit da refatoração da mesa concluído
+
+Testado:
+
+- carregamento da mesa
+- toolbar esquerda
+- tokens
+- tamanho de token
+- painel direito
+- chat
+- rolagens
+- personagens
+- diário
+- configurações/mesa
+- builder aberto pela mesa
+- biblioteca
+- remover/adicionar/devolver atores/tokens
 
 ---
 
 # 🧠 Estado Atual do Projeto
 
-👉 **Fase 4.22.18 — Refatoração/revisão do Character Builder em andamento.**
+👉 **Fase 4.24.0 — Atualização dos documentos do projeto em andamento.**
 
-Próximo foco:
+Próximo foco funcional:
 
 ```txt
-Corrigir criação de personagem do zero para abrir rascunho vazio.
+4.24 — Personagens ativos, biblioteca e exclusão/remoção correta.
 ```
 
 ---

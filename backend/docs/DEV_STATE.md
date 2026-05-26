@@ -4,7 +4,7 @@
 
 ## 📅 Last Update
 
-24/05/2026
+26/05/2026
 
 ---
 
@@ -32,12 +32,19 @@ LegendForge/
 │   │   ├── app/
 │   │   │   └── campaigns/[id]/play/page.tsx
 │   │   ├── features/
-│   │   │   └── character-builder/
+│   │   │   ├── character-builder/
+│   │   │   │   ├── components/
+│   │   │   │   ├── constants/
+│   │   │   │   ├── review/
+│   │   │   │   ├── services/
+│   │   │   │   ├── steps/
+│   │   │   │   ├── summary/
+│   │   │   │   ├── types/
+│   │   │   │   └── utils/
+│   │   │   └── game-table/
 │   │   │       ├── components/
 │   │   │       ├── constants/
-│   │   │       ├── review/
-│   │   │       ├── steps/
-│   │   │       ├── summary/
+│   │   │       ├── services/
 │   │   │       ├── types/
 │   │   │       └── utils/
 │   │   ├── components/
@@ -120,6 +127,8 @@ LegendForge/
 - aba Personagens consome atores reais
 - biblioteca/mesa de atores está persistida
 - tokens de cena persistem
+- posição de token persiste
+- tamanho de token persiste
 - rascunho de CharacterSheet cria no banco
 - rascunho carrega
 - classe/ancestralidade/antecedente persistem
@@ -128,15 +137,15 @@ LegendForge/
 - magias persistem
 - equipamentos persistem
 - campos de sobre persistem
+- criação de personagem do zero abre draft vazio
 
 ### 🚧 Em andamento
 
-- refatoração do Character Builder
-- correção do fluxo “Criar personagem do zero”
-- limpeza final do `page.tsx`
-- teste regressivo completo
+- atualização dos documentos após 4.23
+- próxima macro: personagens ativos, biblioteca e exclusão/remoção correta
 - preparar upload real de imagens
-- finalizar fluxo estável de ficha
+- finalizar fluxo estável de ficha pronta
+- persistência/sincronização futura de ferramentas locais da mesa
 
 ---
 
@@ -211,8 +220,8 @@ Estado atual:
 
 - header de mesa
 - grid/mapa
-- toolbar lateral
-- abas laterais
+- toolbar lateral esquerda
+- painel direito com abas extraídas
 - Chat
 - Rolagens
 - Personagens
@@ -222,24 +231,21 @@ Estado atual:
 - tokens/cena
 - modal de criação de personagem
 - builder de personagem
+- biblioteca de atores
+- ações de ator/personagem
+- edição de tamanho de token
 
 ---
 
 ## 🧍 Character Builder — Status detalhado
 
-Arquivo principal ainda grande:
-
-```txt
-frontend/src/app/campaigns/[id]/play/page.tsx
-```
-
-Pasta criada para refatoração:
+Pasta principal:
 
 ```txt
 frontend/src/features/character-builder/
 ```
 
-Etapas/componentes já extraídos ou parcialmente extraídos:
+Etapas/componentes extraídos:
 
 - types
 - constants
@@ -259,53 +265,71 @@ Etapas/componentes já extraídos ou parcialmente extraídos:
 - etapa Sobre
 - etapa Revisão
 
----
+Status:
 
-## ⚠️ Problema atual
-
-O fluxo abaixo ainda precisa ser corrigido/validado:
-
-```txt
-+ Criar → Criar personagem
-```
-
-Comportamento esperado:
-
-- abrir ficha vazia
-- não carregar Hikari ou qualquer rascunho antigo
-- nome/pronomes/conceito vazios
-- sem classe/ancestralidade/antecedente selecionados
-- sem savedCharacterSheetId
-- status como rascunho novo
-
-Comportamento observado recentemente:
-
-- abriu com dados antigos de uma ficha/rascunho existente
+- Criar personagem abre draft vazio.
+- Builder não carrega dados antigos da Hikari ao criar personagem.
+- Pronomes influenciam linguagem de labels principais.
+- Pronome e gênero inicial sincronizam quando apropriado.
+- Salvar rascunho funciona.
+- Teste regressivo da refatoração do builder foi concluído antes da 4.23.
 
 ---
 
-## 🧠 Plano imediato
+## 🎲 Game Table — Status detalhado
+
+Pasta principal:
 
 ```txt
-4.22.18.3 — Limpar valores padrão do rascunho inicial
+frontend/src/features/game-table/
 ```
 
-Tarefas:
+Componentes extraídos:
 
-- [ ] encontrar função chamada pelo botão “Criar personagem”
-- [ ] remover chamada de `handleLoadCharacterBuilderDraft()` desse fluxo
-- [ ] criar/usar `createEmptyCharacterBuilderDraft()`
-- [ ] limpar `savedCharacterSheetId`
-- [ ] limpar `savedCharacterSheetStatus`
-- [ ] limpar erro/sucesso
-- [ ] manter `handleLoadCharacterBuilderDraft()` para fluxo futuro “continuar rascunho”
-- [ ] testar abrindo do zero
+- `TableLeftToolbar`
+- `TableSceneCanvas`
+- `TableRightPanel`
+- `TableChatPanel`
+- `TableRollsPanel`
+- `TableCharactersPanel`
+- `TableJournalPanel`
+- `TableSettingsPanel`
 
-Depois:
+Constantes, serviços, types e utils extraídos:
+
+- `constants/dice-constants.ts`
+- `constants/table-ui-constants.ts`
+- `services/game-table-api.ts`
+- `types/game-table-types.ts`
+- `utils/actor-utils.ts`
+- `utils/dice-utils.ts`
+- `utils/token-utils.ts`
+- `utils/user-utils.ts`
+
+Funcionalidades validadas:
+
+- Selecionar move tokens.
+- Mover visão arrasta o mapa.
+- Medir linha em metros.
+- Medir círculo com centro no clique e raio no arrasto.
+- Medição permanece até trocar ferramenta ou criar outra.
+- Desenhar cria traços locais.
+- Desenhar desfaz último traço.
+- Desenhar limpa desenhos.
+- Névoa cria áreas reveladas com máscara real.
+- Névoa desfaz última área.
+- Névoa limpa áreas.
+- Tokens fora da área revelada ficam cobertos.
+- Tamanho de token 1x1, 2x2, 3x3 e 4x4 funciona.
+- Tamanho de token persiste após recarregar.
+- Biblioteca e `+ Criar` aparecem na aba Personagens.
+- Teste regressivo da mesa concluído.
+
+Observação:
 
 ```txt
-4.22.18.4 — Linguagem dinâmica por pronome
-4.22.18.5 — Sincronizar pronome com gênero inicial
+Medição, desenho, névoa, pan/zoom e chat/rolagens atuais ainda são locais/visuais.
+Sincronização real entre contas será tratada em fase futura.
 ```
 
 ---
@@ -313,48 +337,43 @@ Depois:
 ## 🧩 Micros atuais
 
 ```txt
-[x] 4.22.1 — Criar estrutura features/character-builder
-[x] 4.22.2 — Extrair types
-[x] 4.22.3 — Extrair constants
-[x] 4.22.4 — Extrair steps config
-[x] 4.22.5 — Extrair utils de atributos
-[x] 4.22.6 — Extrair utils de perícias
-[x] 4.22.7 — Extrair utils de magias
-[x] 4.22.8 — Extrair utils de equipamentos
-[x] 4.22.9 — Extrair utils de sobre/about
-[x] 4.22.10 — Extrair componentes genéricos do builder
-[x] 4.22.11 — Extrair componentes da revisão
-[x] 4.22.12 — Extrair etapa Conceito
-[x] 4.22.13 — Extrair etapa Atributos
-[x] 4.22.14 — Extrair etapa Perícias
-[x] 4.22.15 — Extrair etapa Magias
-[x] 4.22.16 — Extrair etapa Equipamentos
-[x] 4.22.17 — Extrair etapa Sobre
-[em andamento] 4.22.18 — Revisão + correções finais
-[ ] 4.22.18.3 — Limpar valores padrão do rascunho inicial
-[ ] 4.22.18.4 — Linguagem dinâmica por pronome
-[ ] 4.22.18.5 — Sincronizar pronome com gênero inicial
-[ ] 4.22.19 — Limpeza final de imports/funções mortas
-[ ] 4.22.20 — Teste regressivo completo
-[ ] 4.22.21 — Commit
+[x] 4.22 — Refatoração do Character Builder
+[x] 4.23 — Refatoração da Mesa de Jogo
+[em andamento] 4.24.0 — Atualização dos documentos do projeto
+[próximo] 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+```
+
+---
+
+## 🧭 Próximo plano
+
+### 4.24.0 — Documentos
+
+```txt
+[ ] 4.24.0.1 — Atualizar DEV_STATE.md com fechamento da 4.23
+[ ] 4.24.0.2 — Atualizar FEATURE_CAPSULE.md com ferramentas da mesa
+[ ] 4.24.0.3 — Atualizar ARCHITECTURE.md com features/game-table
+[ ] 4.24.0.4 — Atualizar BOOT.md com estado atual e próximo passo
+[ ] 4.24.0.5 — Atualizar README.md se necessário
+[ ] 4.24.0.6 — Commit dos documentos
+```
+
+### 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+
+```txt
+[ ] 4.24.1 — Mapear regras atuais de CampaignActor, TABLE/LIBRARY e SceneToken
+[ ] 4.24.2 — Definir regra de personagem ativo por player
+[ ] 4.24.3 — Corrigir diferença entre remover token da cena, devolver à biblioteca e excluir ator
+[ ] 4.24.4 — Implementar remoção/exclusão segura de NPC/criatura
+[ ] 4.24.5 — Implementar regra de personagem de player/GM sem tratar como NPC
+[ ] 4.24.6 — Ajustar UI da aba Personagens/Biblioteca para essas regras
+[ ] 4.24.7 — Teste regressivo de atores, tokens e biblioteca
+[ ] 4.24.8 — Commit da 4.24
 ```
 
 ---
 
 ## 🔮 Backlog confirmado
-
-### Fase 4.23 — Refatoração da mesa
-
-- extrair layout/header/toolbar/painéis/abas
-- refatorar camada de tokens
-- adicionar edição de tamanho de token
-
-### Fase 4.24 — Personagens ativos/biblioteca/exclusão
-
-- NPCs/criaturas podem ir para biblioteca
-- personagens de player têm regra própria
-- limitar 1 personagem ativo por player por campanha
-- GM pode ter vários NPCs/criaturas, mas só 1 personagem próprio ativo
 
 ### Fase 4.25 — Ficha pronta/imagens
 
@@ -363,6 +382,13 @@ Depois:
 - upload de token direto do computador
 - preview/fit/crop
 - persistência de URL
+
+### Fase 4.26 — Ajustes finais de UX/UI da ficha pronta
+
+- polish visual
+- legibilidade
+- responsividade
+- revisão de layout
 
 ### Fase 4.27 — Regras avançadas
 
@@ -395,4 +421,4 @@ Depois:
 
 ## 🏁 Estado Atual
 
-👉 **Fase 4.22.18 em andamento. Próximo passo: corrigir criação de personagem do zero para não carregar rascunho antigo.**
+👉 **Fase 4.24.0 em andamento. Próximo passo funcional: 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta.**

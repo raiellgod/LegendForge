@@ -9,7 +9,7 @@ Virtual Tabletop (VTT)
 
 ---
 
-## 📅 Current State — 24/05/2026
+## 📅 Current State — 26/05/2026
 
 Este documento serve para reiniciar a próxima conversa sem perder contexto.
 
@@ -67,33 +67,54 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
 - Equipamentos iniciais funcionando.
 - Sobre/aparência/personalidade/história funcionando.
 - Revisão visual implementada.
-- Refatoração parcial do builder para `features/character-builder`.
+- Refatoração do builder para `features/character-builder`.
+- Criar personagem pela mesa abre draft vazio.
+- Linguagem dinâmica por pronome funcionando em textos principais.
+- Sincronização inicial pronome → gênero funcionando.
+- Refatoração da mesa para `features/game-table`.
+- Abas da mesa extraídas: Chat, Rolagens, Personagens, Diário e Mesa.
+- Toolbar esquerda funcional.
+- Mover visão, medir, desenhar e névoa funcionando localmente.
+- Tamanho de token editável e persistido.
+- Biblioteca e `+ Criar` restaurados na aba Personagens.
+- Teste regressivo da mesa concluído.
+- Commit da refatoração da mesa concluído.
 
 ---
 
 ## ⚠️ Estado não concluído / atenção
 
-Não marcar 4.22.18 como concluída ainda.
+A mesa ainda **não tem sincronização em tempo real** entre contas.
 
-Problema atual:
-
-```txt
-Ao clicar em + Criar → Criar personagem, o builder ainda pode abrir com dados antigos de rascunho/personagem existente.
-```
-
-Objetivo imediato:
+Recursos locais/visuais por enquanto:
 
 ```txt
-Corrigir fluxo de criar personagem do zero para abrir draft vazio.
+- pan/mover visão
+- zoom
+- medição
+- desenhos
+- névoa
+- chat local atual
+- rolagens locais atuais
 ```
 
-Também foram planejados, mas ainda precisam implementação/teste:
+Persistidos no banco, mas sem atualização em tempo real automática:
 
 ```txt
-4.22.18.3 — Limpar valores padrão do rascunho inicial
-4.22.18.4 — Linguagem dinâmica por pronome
-4.22.18.5 — Sincronizar pronome com gênero inicial
+- tokens na cena
+- posição do token
+- tamanho do token
+- atores na mesa/biblioteca
+- fichas/rascunhos do builder
 ```
+
+Regra futura já decidida:
+
+```txt
+Player só deve ver tokens/mapa em áreas liberadas pela névoa.
+```
+
+Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 
 ---
 
@@ -137,12 +158,15 @@ Também foram planejados, mas ainda precisam implementação/teste:
 [x] 4.19 — Sobre/aparência/personalidade/história
 [x] 4.20 — Revisão/finalização visual
 [x] 4.21 — Planejamento/refatoração
-[em andamento] 4.22 — Refatoração do Character Builder
+[x] 4.22 — Refatoração do Character Builder
+[x] 4.23 — Refatoração da Mesa de Jogo
+[em andamento] 4.24.0 — Atualização dos documentos do projeto
+[próximo] 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
 ```
 
 ---
 
-## 🔧 Fase 4.22 — Refatoração atual
+## ✅ Fase 4.22 — Refatoração do Character Builder
 
 ```txt
 [x] 4.22.1 — Criar estrutura features/character-builder
@@ -162,13 +186,41 @@ Também foram planejados, mas ainda precisam implementação/teste:
 [x] 4.22.15 — Extrair etapa Magias
 [x] 4.22.16 — Extrair etapa Equipamentos
 [x] 4.22.17 — Extrair etapa Sobre
-[em andamento] 4.22.18 — Extrair/Revisar etapa Revisão e corrigir criação vazia
-[ ] 4.22.18.3 — Limpar valores padrão do rascunho inicial
-[ ] 4.22.18.4 — Linguagem dinâmica por pronome
-[ ] 4.22.18.5 — Sincronizar pronome com gênero inicial
-[ ] 4.22.19 — Limpeza final de imports/funções mortas do page.tsx
-[ ] 4.22.20 — Teste regressivo completo do builder
-[ ] 4.22.21 — Commit da refatoração do builder
+[x] 4.22.18 — Revisão, criação vazia, linguagem dinâmica e gênero inicial
+[x] 4.22.19 — Limpeza final de imports/funções mortas do page.tsx
+[x] 4.22.20 — Teste regressivo completo do builder
+[x] 4.22.21 — Commit da refatoração do builder
+```
+
+---
+
+## ✅ Fase 4.23 — Refatoração da Mesa de Jogo
+
+```txt
+[x] 4.23.1 — Mapear responsabilidades atuais do page.tsx da mesa
+[x] 4.23.2 — Criar pasta features/game-table
+[x] 4.23.3 — Extrair types da mesa
+[x] 4.23.4 — Extrair helpers de usuários/participantes/atores/tokens
+[x] 4.23.5 — Extrair constantes e helpers de rolagens
+[x] 4.23.6 — Extrair serviços/API da mesa
+[x] 4.23.7 — Extrair constantes/configurações da toolbar e abas
+[x] 4.23.8 — Extrair componente da toolbar lateral esquerda
+[x] 4.23.9 — Extrair painel direito base
+[x] 4.23.10 — Extrair aba Chat
+[x] 4.23.11 — Extrair aba Rolagens
+[x] 4.23.12 — Extrair aba Personagens
+[x] 4.23.13 — Extrair aba Diário
+[x] 4.23.14 — Extrair aba Mesa/configurações
+[x] 4.23.15 — Extrair camada de mapa/tokens/cena
+[x] 4.23.16 — Fazer ferramenta Selecionar funcionar melhor
+[x] 4.23.17 — Fazer ferramenta Mover visão funcionar
+[x] 4.23.18 — Fazer ferramenta Medir funcionar
+[x] 4.23.19 — Fazer ferramenta Desenhar funcionar
+[x] 4.23.20 — Fazer ferramenta Névoa funcionar
+[x] 4.23.21 — Preparar edição de tamanho de token
+[x] 4.23.22 — Limpeza final do page.tsx da mesa
+[x] 4.23.23 — Teste regressivo da mesa
+[x] 4.23.24 — Commit da refatoração da mesa
 ```
 
 ---
@@ -176,20 +228,30 @@ Também foram planejados, mas ainda precisam implementação/teste:
 ## 🎯 Próxima conversa deve começar por
 
 ```txt
-Corrigir 4.22.18.3:
-Criar personagem do zero deve abrir CharacterBuilderDraft vazio, sem carregar rascunho antigo.
+4.24.0 — Atualização dos documentos do projeto
 ```
 
-Passos esperados:
+Arquivos esperados:
 
-1. Usar o último `page.tsx` enviado pelo usuário como fonte única da verdade.
-2. Procurar a função ligada ao botão `Criar personagem`.
-3. Garantir que ela não chame `handleLoadCharacterBuilderDraft()`.
-4. Criar/usar `createEmptyCharacterBuilderDraft()`.
-5. Limpar `savedCharacterSheetId`, `savedCharacterSheetStatus`, erro/sucesso.
-6. Carregar somente opções do sistema.
-7. Testar abrindo do zero.
-8. Só depois implementar linguagem dinâmica por pronome e sincronização gênero.
+```txt
+ARCHITECTURE.md
+BOOT.md
+DEV_STATE.md
+FEATURE_CAPSULE.md
+README.md
+```
+
+Depois do commit dos documentos, seguir para:
+
+```txt
+4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+```
+
+Primeiro micro sugerido:
+
+```txt
+4.24.1 — Mapear regras atuais de CampaignActor, TABLE/LIBRARY e SceneToken
+```
 
 ---
 
@@ -249,7 +311,7 @@ frontend/src/app/campaigns/[id]/play/page.tsx
 ```
 
 - Sempre usar o arquivo enviado mais recente como fonte da verdade.
-- Mudança grande = reescrever arquivo completo.
+- Mudança grande = arquivo completo.
 - Mudança pequena = usar âncoras reais.
 - Não presumir estrutura antiga.
 - Antes de commit: `git diff --stat`.
@@ -258,4 +320,10 @@ frontend/src/app/campaigns/[id]/play/page.tsx
 
 ## 🚀 Estado Atual
 
-👉 **Fase 4.22.18 em andamento, com correção pendente no fluxo de criação de personagem vazio.**
+👉 **Fase 4.24.0 em andamento — atualização dos documentos após conclusão da 4.23.**
+
+Próximo passo funcional após docs:
+
+```txt
+4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+```
