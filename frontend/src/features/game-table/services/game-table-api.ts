@@ -38,6 +38,41 @@ export async function getCampaignParticipants(
   return data.participants;
 }
 
+export async function createCampaignActor(
+  campaignId: string,
+  data: {
+    name: string;
+    type: CampaignActor["type"];
+    location?: CampaignActor["location"];
+    initials?: string;
+    description?: string | null;
+    portraitUrl?: string | null;
+    ownerId?: string | null;
+  },
+): Promise<CampaignActor> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/actors`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao criar ator da campanha");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.actor;
+}
+
 export async function getCampaignActors(
   campaignId: string,
 ): Promise<CampaignActor[]> {

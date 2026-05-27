@@ -1,0 +1,175 @@
+type CharacterCreationMenuModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onStartCharacterBuilder: () => void;
+  onStartNpcCreation: () => void;
+  onStartCreatureCreation: () => void;
+};
+
+export function CharacterCreationMenuModal({
+  isOpen,
+  onClose,
+  onStartCharacterBuilder,
+  onStartNpcCreation,
+  onStartCreatureCreation,
+}: CharacterCreationMenuModalProps) {
+  if (!isOpen) {
+    return null;
+  }
+
+  const creationOptions = [
+    {
+      action: "character",
+      title: "Criar personagem",
+      description:
+        "Construa uma ficha completa de personagem de jogador. Futuramente cada usuário terá apenas um personagem ativo por campanha.",
+      label: "Disponível",
+      isAvailable: true,
+    },
+    {
+      action: "npc",
+      title: "Criar NPC",
+      description:
+        "Crie um NPC próprio da campanha. A ficha mecânica completa virá depois com NpcSheet, atributos, perícias, magias, equipamentos e regras de combate.",
+      label: "Disponível",
+      isAvailable: true,
+    },
+    {
+      action: "creature",
+      title: "Criar criatura/inimigo",
+      description:
+        "Crie uma criatura ou inimigo próprio da campanha. O bloco mecânico completo virá depois com bestiário, ações, ataques, vida, defesa e habilidades.",
+      label: "Disponível",
+      isAvailable: true,
+    },
+    {
+      action: "bestiary",
+      title: "Importar do bestiário",
+      description:
+        "Escolha futuramente uma criatura pronta do bestiário do sistema, copie para a biblioteca da campanha e ajuste sua versão própria para esta aventura.",
+      label: "Planejado",
+      isAvailable: false,
+    },
+    {
+      action: "npc-template",
+      title: "NPC/template pronto",
+      description:
+        "Escolha futuramente um NPC pronto ou template narrativo, copie para a biblioteca da campanha e ajuste sua versão própria para esta aventura.",
+      label: "Planejado",
+      isAvailable: false,
+    },
+    {
+      action: "direct-sheet",
+      title: "Editar ficha diretamente",
+      description:
+        "Abra futuramente uma ficha vazia e preencha os campos manualmente, sem passar pelo assistente guiado.",
+      label: "Planejado",
+      isAvailable: false,
+    },
+  ];
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
+      <div className="w-full max-w-5xl rounded-2xl border border-forge-gold/35 bg-[#18091f] shadow-[-10px_10px_0_rgba(0,0,0,0.45)]">
+        <div className="flex items-start justify-between gap-4 border-b border-forge-gold/20 px-6 py-5">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-forge-gold/70">
+              LegendForge
+            </p>
+
+            <h2 className="mt-2 text-2xl font-black text-zinc-100">
+              O que deseja criar?
+            </h2>
+
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-300">
+              Escolha um caminho inicial. Personagens usam o builder completo.
+              NPCs e criaturas podem nascer na campanha. Templates e bestiário
+              futuramente copiarão atores prontos para a biblioteca desta
+              campanha.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-300 transition hover:border-red-400/70 hover:text-red-200"
+          >
+            Fechar
+          </button>
+        </div>
+
+        <div className="grid gap-4 p-6 md:grid-cols-2">
+          {creationOptions.map((option) => (
+            <button
+              key={option.title}
+              type="button"
+              disabled={!option.isAvailable}
+              onClick={() => {
+                if (option.action === "character") {
+                  onStartCharacterBuilder();
+                  return;
+                }
+
+                if (option.action === "npc") {
+                  onStartNpcCreation();
+                  return;
+                }
+
+                if (option.action === "creature") {
+                  onStartCreatureCreation();
+                }
+              }}
+              className={[
+                "group relative min-h-40 rounded-2xl border p-5 text-left transition",
+                "shadow-[-6px_6px_0_rgba(0,0,0,0.35)]",
+                option.isAvailable
+                  ? "border-forge-gold/45 bg-gradient-to-br from-zinc-950/95 to-[#2a1233] hover:-translate-y-0.5 hover:border-forge-gold hover:shadow-[-8px_8px_0_rgba(0,0,0,0.5)]"
+                  : "cursor-not-allowed border-zinc-800 bg-zinc-950/50 opacity-55",
+              ].join(" ")}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-black text-zinc-100">
+                    {option.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-300">
+                    {option.description}
+                  </p>
+                </div>
+
+                <span
+                  className={[
+                    "shrink-0 rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em]",
+                    option.isAvailable
+                      ? "bg-forge-gold text-zinc-950"
+                      : "bg-zinc-800 text-zinc-400",
+                  ].join(" ")}
+                >
+                  {option.label}
+                </span>
+              </div>
+
+              <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+                <span className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">
+                  {option.isAvailable ? "Disponível agora" : "Fluxo futuro"}
+                </span>
+
+                <span
+                  className={[
+                    "text-sm font-black",
+                    option.isAvailable
+                      ? "text-forge-gold group-hover:text-amber-200"
+                      : "text-zinc-600",
+                  ].join(" ")}
+                >
+                  Entrar →
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

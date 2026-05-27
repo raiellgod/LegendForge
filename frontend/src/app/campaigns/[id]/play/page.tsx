@@ -85,6 +85,7 @@ import {
 } from "@/features/game-table/utils/dice-utils";
 
 import {
+  createCampaignActor,
   createSceneToken,
   deleteSceneToken,
   getCampaign,
@@ -108,6 +109,17 @@ import { TableCharactersPanel } from "@/features/game-table/components/TableChar
 import { TableJournalPanel } from "@/features/game-table/components/TableJournalPanel";
 import { TableSettingsPanel } from "@/features/game-table/components/TableSettingsPanel";
 import { TableSceneCanvas } from "@/features/game-table/components/TableSceneCanvas";
+
+import {
+  createEmptySimpleActorCreationDraft,
+  NpcCreationModal,
+  type SimpleActorCreationDraft,
+} from "@/features/game-table/components/NpcCreationModal";
+
+import { CreatureCreationModal } from "@/features/game-table/components/CreatureCreationModal";
+import { CharacterCreationMenuModal } from "@/features/game-table/components/CharacterCreationMenuModal";
+import { ActorLibraryModal } from "@/features/game-table/components/ActorLibraryModal";
+import { ActorActionModal } from "@/features/game-table/components/ActorActionModal";
 
 const TOKEN_GRID_SIZE_IN_PIXELS = 40;
 
@@ -140,6 +152,10 @@ const TOKEN_SIZE_OPTIONS = [
 
 function getTokenSizeInPixels(gridSize: number) {
   return gridSize * TOKEN_GRID_SIZE_IN_PIXELS;
+}
+
+function isLibraryCompatibleActor(actor: CampaignActor) {
+  return actor.type === "NPC" || actor.type === "CREATURE";
 }
 
 function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
@@ -525,146 +541,6 @@ function getSelectedOptionLabelByPronouns(pronouns: string) {
   }
 
   return "Selecionado";
-}
-type CharacterCreationMenuModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onStartCharacterBuilder: () => void;
-};
-
-function CharacterCreationMenuModal({
-  isOpen,
-  onClose,
-  onStartCharacterBuilder,
-}: CharacterCreationMenuModalProps) {
-  if (!isOpen) {
-    return null;
-  }
-
-  const creationOptions = [
-    {
-      title: "Criar personagem",
-      description:
-        "Construa uma ficha passo a passo escolhendo ancestralidade, antecedente, classe, atributos, perícias, magias e equipamentos.",
-      label: "Recomendado",
-      isAvailable: true,
-    },
-    {
-      title: "Criar NPC",
-      description:
-        "Crie uma ficha mais rápida para aliados, rivais, criaturas importantes ou personagens controlados pelo mestre.",
-      label: "Em breve",
-      isAvailable: false,
-    },
-    {
-      title: "Editar ficha diretamente",
-      description:
-        "Abra uma ficha vazia e preencha os campos manualmente, sem passar pelo assistente guiado.",
-      label: "Em breve",
-      isAvailable: false,
-    },
-    {
-      title: "Personagem pronto",
-      description:
-        "Escolha um personagem pré-montado para entrar rapidamente na aventura.",
-      label: "Em breve",
-      isAvailable: false,
-    },
-  ];
-
-  return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
-      <div className="w-full max-w-5xl rounded-2xl border border-forge-gold/35 bg-[#18091f] shadow-[-10px_10px_0_rgba(0,0,0,0.45)]">
-        <div className="flex items-start justify-between gap-4 border-b border-forge-gold/20 px-6 py-5">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-forge-gold/70">
-              LegendForge
-            </p>
-
-            <h2 className="mt-2 text-2xl font-black text-zinc-100">
-              Como deseja criar sua ficha?
-            </h2>
-
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-300">
-              Escolha um caminho inicial. Nesta fase, estamos preparando a base
-              visual da criação de personagem antes de ligar cada etapa às
-              regras do sistema.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-300 transition hover:border-red-400/70 hover:text-red-200"
-          >
-            Fechar
-          </button>
-        </div>
-
-        <div className="grid gap-4 p-6 md:grid-cols-2">
-          {creationOptions.map((option) => (
-            <button
-              key={option.title}
-              type="button"
-              disabled={!option.isAvailable}
-              onClick={() => {
-                if (option.title === "Criar personagem") {
-                  onStartCharacterBuilder();
-                }
-              }}
-              className={[
-                "group relative min-h-40 rounded-2xl border p-5 text-left transition",
-                "shadow-[-6px_6px_0_rgba(0,0,0,0.35)]",
-                option.isAvailable
-                  ? "border-forge-gold/45 bg-gradient-to-br from-zinc-950/95 to-[#2a1233] hover:-translate-y-0.5 hover:border-forge-gold hover:shadow-[-8px_8px_0_rgba(0,0,0,0.5)]"
-                  : "cursor-not-allowed border-zinc-800 bg-zinc-950/50 opacity-55",
-              ].join(" ")}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-black text-zinc-100">
-                    {option.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-300">
-                    {option.description}
-                  </p>
-                </div>
-
-                <span
-                  className={[
-                    "shrink-0 rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em]",
-                    option.isAvailable
-                      ? "bg-forge-gold text-zinc-950"
-                      : "bg-zinc-800 text-zinc-400",
-                  ].join(" ")}
-                >
-                  {option.label}
-                </span>
-              </div>
-
-              <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
-                <span className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">
-                  {option.isAvailable ? "Disponível agora" : "Planejado"}
-                </span>
-
-                <span
-                  className={[
-                    "text-sm font-black",
-                    option.isAvailable
-                      ? "text-forge-gold group-hover:text-amber-200"
-                      : "text-zinc-600",
-                  ].join(" ")}
-                >
-                  Entrar →
-                </span>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function CharacterBuilderModal({
@@ -1648,6 +1524,24 @@ export default function CampaignPlayPage() {
   const [activeRightTab, setActiveRightTab] = useState<RightPanelTab>("chat");
   const [isCharacterCreationMenuOpen, setIsCharacterCreationMenuOpen] =
     useState(false);
+  const [isNpcCreationModalOpen, setIsNpcCreationModalOpen] = useState(false);
+  const [npcCreationDraft, setNpcCreationDraft] =
+    useState<SimpleActorCreationDraft>(() =>
+      createEmptySimpleActorCreationDraft(),
+    );
+  const [isSavingNpcCreation, setIsSavingNpcCreation] = useState(false);
+  const [npcCreationError, setNpcCreationError] = useState<string | null>(null);
+  const [isCreatureCreationModalOpen, setIsCreatureCreationModalOpen] =
+    useState(false);
+  const [creatureCreationDraft, setCreatureCreationDraft] =
+    useState<SimpleActorCreationDraft>(() =>
+      createEmptySimpleActorCreationDraft(),
+    );
+  const [isSavingCreatureCreation, setIsSavingCreatureCreation] =
+    useState(false);
+  const [creatureCreationError, setCreatureCreationError] = useState<
+    string | null
+  >(null);
   const [isCharacterBuilderOpen, setIsCharacterBuilderOpen] = useState(false);
   const [activeCharacterBuilderStep, setActiveCharacterBuilderStep] =
     useState("concept");
@@ -1942,9 +1836,7 @@ export default function CampaignPlayPage() {
   );
 
   const libraryActors = campaignActors.filter(
-    (actor) =>
-      actor.location === "LIBRARY" &&
-      (actor.type === "NPC" || actor.type === "CREATURE"),
+    (actor) => actor.location === "LIBRARY" && isLibraryCompatibleActor(actor),
   );
 
   function canMoveToken(token: SceneToken) {
@@ -2673,8 +2565,104 @@ export default function CampaignPlayPage() {
     }
   }
 
+  async function handleCreateNpcActor() {
+    if (!campaign || !isGM) {
+      return;
+    }
+
+    const name = npcCreationDraft.name.trim();
+
+    if (!name) {
+      setNpcCreationError("Informe o nome do NPC.");
+      return;
+    }
+
+    setIsSavingNpcCreation(true);
+    setNpcCreationError(null);
+
+    try {
+      const createdActor = await createCampaignActor(campaign.id, {
+        name,
+        type: "NPC",
+        location: npcCreationDraft.location,
+        initials: npcCreationDraft.initials.trim() || undefined,
+        description: npcCreationDraft.description.trim() || null,
+        portraitUrl: npcCreationDraft.portraitUrl.trim() || null,
+        ownerId: null,
+      });
+
+      setCampaignActors((currentActors) => [...currentActors, createdActor]);
+      setNpcCreationDraft(createEmptySimpleActorCreationDraft());
+      setIsNpcCreationModalOpen(false);
+
+      if (createdActor.location === "TABLE") {
+        setActiveRightTab("characters");
+      } else {
+        setIsLibraryModalOpen(true);
+      }
+    } catch (error) {
+      console.error(error);
+
+      setNpcCreationError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível criar o NPC.",
+      );
+    } finally {
+      setIsSavingNpcCreation(false);
+    }
+  }
+
+  async function handleCreateCreatureActor() {
+    if (!campaign || !isGM) {
+      return;
+    }
+
+    const name = creatureCreationDraft.name.trim();
+
+    if (!name) {
+      setCreatureCreationError("Informe o nome da criatura.");
+      return;
+    }
+
+    setIsSavingCreatureCreation(true);
+    setCreatureCreationError(null);
+
+    try {
+      const createdActor = await createCampaignActor(campaign.id, {
+        name,
+        type: "CREATURE",
+        location: creatureCreationDraft.location,
+        initials: creatureCreationDraft.initials.trim() || undefined,
+        description: creatureCreationDraft.description.trim() || null,
+        portraitUrl: creatureCreationDraft.portraitUrl.trim() || null,
+        ownerId: null,
+      });
+
+      setCampaignActors((currentActors) => [...currentActors, createdActor]);
+      setCreatureCreationDraft(createEmptySimpleActorCreationDraft());
+      setIsCreatureCreationModalOpen(false);
+
+      if (createdActor.location === "TABLE") {
+        setActiveRightTab("characters");
+      } else {
+        setIsLibraryModalOpen(true);
+      }
+    } catch (error) {
+      console.error(error);
+
+      setCreatureCreationError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível criar a criatura.",
+      );
+    } finally {
+      setIsSavingCreatureCreation(false);
+    }
+  }
+
   async function handleBringActorToTable(actor: CampaignActor) {
-    if (!campaign || !isGM || actor.type === "PLAYER_CHARACTER") {
+    if (!campaign || !isGM || !isLibraryCompatibleActor(actor)) {
       return;
     }
 
@@ -2710,10 +2698,9 @@ export default function CampaignPlayPage() {
   }
 
   async function handleReturnActorToLibrary(actor: CampaignActor) {
-    if (!campaign || !isGM || actor.type === "PLAYER_CHARACTER") {
+    if (!campaign || !isGM || !isLibraryCompatibleActor(actor)) {
       return;
     }
-
     setActionError("");
     setActionMessage("");
 
@@ -3345,6 +3332,44 @@ export default function CampaignPlayPage() {
 
           void handleLoadCharacterBuilderOptions();
         }}
+        onStartNpcCreation={() => {
+          setNpcCreationDraft(createEmptySimpleActorCreationDraft());
+          setNpcCreationError(null);
+          setIsCharacterCreationMenuOpen(false);
+          setIsNpcCreationModalOpen(true);
+        }}
+        onStartCreatureCreation={() => {
+          setCreatureCreationDraft(createEmptySimpleActorCreationDraft());
+          setCreatureCreationError(null);
+          setIsCharacterCreationMenuOpen(false);
+          setIsCreatureCreationModalOpen(true);
+        }}
+      />
+
+      <CreatureCreationModal
+        isOpen={isCreatureCreationModalOpen}
+        draft={creatureCreationDraft}
+        isSaving={isSavingCreatureCreation}
+        error={creatureCreationError}
+        onChangeDraft={setCreatureCreationDraft}
+        onSubmit={handleCreateCreatureActor}
+        onClose={() => {
+          setIsCreatureCreationModalOpen(false);
+          setCreatureCreationError(null);
+        }}
+      />
+
+      <NpcCreationModal
+        isOpen={isNpcCreationModalOpen}
+        draft={npcCreationDraft}
+        isSaving={isSavingNpcCreation}
+        error={npcCreationError}
+        onChangeDraft={setNpcCreationDraft}
+        onSubmit={handleCreateNpcActor}
+        onClose={() => {
+          setIsNpcCreationModalOpen(false);
+          setNpcCreationError(null);
+        }}
       />
 
       <CharacterBuilderModal
@@ -3368,15 +3393,15 @@ export default function CampaignPlayPage() {
         onClose={() => setIsCharacterBuilderOpen(false)}
       />
 
-      {isLibraryModalOpen && (
+      {isLibraryModalOpen ? (
         <ActorLibraryModal
           actors={libraryActors}
           onBringToTable={handleBringActorToTable}
           onClose={() => setIsLibraryModalOpen(false)}
         />
-      )}
+      ) : null}
 
-      {actionActor && (
+      {actionActor ? (
         <ActorActionModal
           actor={actionActor}
           isGM={isGM}
@@ -3394,7 +3419,7 @@ export default function CampaignPlayPage() {
             await handleAddTokenToScene(actionActor);
           }}
           onRemoveToken={handleRemoveTokenFromScene}
-          onChangeTokenSize={async (gridSize) => {
+          onChangeTokenSize={async (gridSize: number) => {
             await handleChangeActorTokenSize(actionActor, gridSize);
           }}
           onReturnToLibrary={async () => {
@@ -3402,7 +3427,7 @@ export default function CampaignPlayPage() {
           }}
           onClose={() => setActionActor(null)}
         />
-      )}
+      ) : null}
 
       {selectedActor && (
         <ActorSheetModal
@@ -3463,347 +3488,6 @@ export default function CampaignPlayPage() {
     </main>
   );
 }
-function ActorLibraryModal({
-  actors,
-  onBringToTable,
-  onClose,
-}: {
-  actors: CampaignActor[];
-  onBringToTable: (actor: CampaignActor) => void | Promise<void>;
-  onClose: () => void;
-}) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-6 backdrop-blur-sm">
-      <div className="flex max-h-[82vh] w-full max-w-md flex-col rounded-2xl border border-forge-gold/40 bg-[#120816] shadow-[-14px_14px_0_rgba(0,0,0,0.45)]">
-        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 p-5">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-              Biblioteca
-            </p>
-
-            <h2 className="mt-1 text-lg font-black text-forge-gold">
-              Atores guardados
-            </h2>
-
-            <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
-              NPCs e criaturas que não estão ativos na mesa agora.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-xl font-black text-white/45 transition hover:text-forge-gold"
-            aria-label="Fechar biblioteca"
-          >
-            ×
-          </button>
-        </div>
-
-        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-5">
-          {actors.length === 0 ? (
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <p className="text-sm font-black text-white">Biblioteca vazia</p>
-
-              <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
-                Quando o Mestre devolver NPCs ou criaturas para a biblioteca,
-                eles aparecerão aqui.
-              </p>
-            </div>
-          ) : (
-            actors.map((actor) => (
-              <div
-                key={actor.id}
-                className="rounded-xl border border-white/10 bg-black/30 p-3"
-              >
-                <div className="flex items-start gap-3">
-                  <div
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-sm font-black shadow-[-3px_3px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
-                      actor.type,
-                    )}`}
-                  >
-                    {actor.portraitUrl ? (
-                      <span
-                        className="h-full w-full bg-cover bg-center"
-                        style={{
-                          backgroundImage: `url(${actor.portraitUrl})`,
-                        }}
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      actor.initials
-                    )}
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-black text-white">
-                          {actor.name}
-                        </p>
-
-                        <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
-                          {getCharacterTypeLabel(actor.type)}
-                        </p>
-                      </div>
-
-                      <span className="shrink-0 rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[8px] font-black uppercase tracking-[0.08em] text-white/45">
-                        Biblioteca
-                      </span>
-                    </div>
-
-                    <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
-                      {actor.description || "Sem descrição cadastrada."}
-                    </p>
-
-                    <button
-                      type="button"
-                      onClick={() => onBringToTable(actor)}
-                      className="mt-3 w-full rounded-lg border border-forge-gold/50 px-4 py-2 text-[11px] font-black text-forge-gold transition hover:bg-forge-purple"
-                    >
-                      Trazer para mesa
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        <div className="shrink-0 border-t border-white/10 p-4">
-          <p className="text-[10px] font-semibold leading-relaxed text-white/35">
-            A biblioteca agora usa o banco: ao trazer um ator para a mesa, a
-            localização dele volta para TABLE.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ActorActionModal({
-  actor,
-  isGM,
-  canOpenSheet,
-  canCreateToken,
-  sceneTokens,
-  tokenSizeOptions,
-  onOpenSheet,
-  onAddToken,
-  onRemoveToken,
-  onChangeTokenSize,
-  onReturnToLibrary,
-  onClose,
-}: {
-  actor: CampaignActor;
-  isGM: boolean;
-  canOpenSheet: boolean;
-  canCreateToken: boolean;
-  sceneTokens: SceneToken[];
-  tokenSizeOptions: typeof TOKEN_SIZE_OPTIONS;
-  onOpenSheet: () => void;
-  onAddToken: () => void | Promise<void>;
-  onRemoveToken: (tokenId: string) => void | Promise<void>;
-  onChangeTokenSize: (gridSize: number) => void | Promise<void>;
-  onReturnToLibrary: () => void | Promise<void>;
-  onClose: () => void;
-}) {
-  const hasAnyAction = canOpenSheet || canCreateToken;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-6 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl border border-forge-gold/40 bg-[#120816] p-5 shadow-[-14px_14px_0_rgba(0,0,0,0.45)]">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-3">
-            <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border text-base font-black shadow-[-4px_4px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
-                actor.type,
-              )}`}
-            >
-              {actor.portraitUrl ? (
-                <span
-                  className="h-full w-full bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${actor.portraitUrl})`,
-                  }}
-                  aria-hidden="true"
-                />
-              ) : (
-                actor.initials
-              )}
-            </div>
-
-            <div className="min-w-0">
-              <p className="truncate text-base font-black text-forge-gold">
-                {actor.name}
-              </p>
-
-              <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">
-                {getCharacterTypeLabel(actor.type)}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-xl font-black text-white/45 transition hover:text-forge-gold"
-            aria-label="Fechar ações do personagem"
-          >
-            ×
-          </button>
-        </div>
-
-        <p className="mt-4 text-xs font-semibold leading-relaxed text-white/55">
-          {actor.description ?? "Sem descrição cadastrada."}
-        </p>
-
-        <div className="mt-5 space-y-2">
-          {canOpenSheet && (
-            <button
-              type="button"
-              onClick={onOpenSheet}
-              className="w-full rounded-lg border border-white/15 px-4 py-3 text-sm font-black text-purple-100 transition hover:border-forge-gold hover:text-forge-gold"
-            >
-              Abrir ficha
-            </button>
-          )}
-
-          {canCreateToken && (
-            <button
-              type="button"
-              onClick={onAddToken}
-              className="w-full rounded-lg border border-forge-gold bg-forge-purple px-4 py-3 text-sm font-black text-forge-gold transition hover:bg-[#4d0d63]"
-            >
-              Adicionar token à cena
-            </button>
-          )}
-
-          {isGM && actor.type !== "PLAYER_CHARACTER" && (
-            <button
-              type="button"
-              onClick={onReturnToLibrary}
-              className="w-full rounded-lg border border-red-500/40 px-4 py-3 text-sm font-black text-red-300 transition hover:bg-red-950/40"
-            >
-              Devolver à biblioteca
-            </button>
-          )}
-
-          {!hasAnyAction && (
-            <div className="rounded-lg border border-white/10 bg-black/30 px-4 py-3">
-              <p className="text-xs font-semibold text-white/55">
-                Você pode ver que este personagem está na mesa, mas não possui
-                ações disponíveis para ele.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {isGM && (
-          <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-                Tokens na cena
-              </p>
-
-              <span className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[9px] font-black text-white/45">
-                {sceneTokens.length}
-              </span>
-            </div>
-
-            {sceneTokens.length === 0 ? (
-              <p className="mt-3 text-xs font-semibold text-white/45">
-                Nenhum token deste personagem está na cena.
-              </p>
-            ) : (
-              <div className="mt-3 space-y-2">
-                {sceneTokens.map((token, index) => (
-                  <div
-                    key={token.id}
-                    className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/30 px-3 py-2"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-xs font-black text-white">
-                        {token.name} #{index + 1}
-                      </p>
-
-                      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-white/35">
-                        x {token.x} · y {token.y}
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        await onRemoveToken(token.id);
-                      }}
-                      className="shrink-0 rounded-md border border-red-500/40 px-2 py-1 text-[9px] font-black text-red-300 transition hover:bg-red-950/40"
-                    >
-                      Remover
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {isGM && sceneTokens.length > 0 ? (
-          <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-              Tamanho do token
-            </p>
-
-            <p className="mt-1 text-[11px] font-semibold leading-relaxed text-white/45">
-              1 quadrado = 1,5m. Pequeno/Médio ocupa 1 quadrado.
-            </p>
-
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              {tokenSizeOptions.map((option) => {
-                const sizeInPixels = getTokenSizeInPixels(option.gridSize);
-                const isSelected = sceneTokens.some(
-                  (token) =>
-                    token.width === sizeInPixels &&
-                    token.height === sizeInPixels,
-                );
-
-                return (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => onChangeTokenSize(option.gridSize)}
-                    title={option.description}
-                    className={`rounded-lg border px-3 py-2 text-left transition ${
-                      isSelected
-                        ? "border-forge-gold bg-forge-gold/10 text-forge-gold"
-                        : "border-white/10 bg-black/30 text-white/65 hover:border-forge-gold/60 hover:text-forge-gold"
-                    }`}
-                  >
-                    <span className="block text-[10px] font-black uppercase tracking-[0.12em]">
-                      {option.label}
-                    </span>
-
-                    <span className="mt-1 block text-[10px] font-bold text-white/40">
-                      {option.gridSize}x{option.gridSize} · {sizeInPixels}px
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
-
-        {isGM && (
-          <p className="mt-4 text-[10px] font-semibold leading-relaxed text-white/35">
-            Como Mestre, você pode abrir fichas e adicionar tokens dos
-            personagens visíveis nesta mesa.
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-
 function ActorSheetModal({
   actor,
   isGM,
