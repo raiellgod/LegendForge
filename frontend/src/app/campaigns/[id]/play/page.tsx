@@ -11,6 +11,7 @@ import type {
   CharacterBuilderModalProps,
   CharacterBuilderOptions,
   CharacterBuilderSelectableOption,
+  CharacterReadySheet,
   CharacterSheetStatus,
 } from "@/features/character-builder/types/character-builder-types";
 
@@ -90,9 +91,11 @@ import {
   deleteSceneToken,
   getCampaign,
   getCampaignActors,
+  getCampaignCharacterSheets,
   getCampaignParticipants,
   getCampaignTokens,
   updateCampaignActor,
+  updateCampaignCharacterSheetImages,
   updateSceneToken,
 } from "@/features/game-table/services/game-table-api";
 
@@ -120,6 +123,7 @@ import { CreatureCreationModal } from "@/features/game-table/components/Creature
 import { CharacterCreationMenuModal } from "@/features/game-table/components/CharacterCreationMenuModal";
 import { ActorLibraryModal } from "@/features/game-table/components/ActorLibraryModal";
 import { ActorActionModal } from "@/features/game-table/components/ActorActionModal";
+import { CharacterReadySheetModal } from "@/features/character-builder/components/CharacterReadySheetModal";
 
 const TOKEN_GRID_SIZE_IN_PIXELS = 40;
 
@@ -1649,6 +1653,13 @@ export default function CampaignPlayPage() {
 
   const [campaignActors, setCampaignActors] = useState<CampaignActor[]>([]);
 
+  const [characterSheets, setCharacterSheets] = useState<CharacterReadySheet[]>(
+    [],
+  );
+
+  const [isSavingCharacterSheetImages, setIsSavingCharacterSheetImages] =
+    useState(false);
+
   const [chatInput, setChatInput] = useState("");
   const [chatMode, setChatMode] = useState<ChatMode>("public");
   const [whisperTargetId, setWhisperTargetId] = useState("");
@@ -1720,12 +1731,14 @@ export default function CampaignPlayPage() {
 
         setUser(loggedUser);
 
-        const [campaign, participants, actors, tokens] = await Promise.all([
-          getCampaign(params.id),
-          getCampaignParticipants(params.id),
-          getCampaignActors(params.id),
-          getCampaignTokens(params.id),
-        ]);
+        const [campaign, participants, actors, tokens, characterSheets] =
+          await Promise.all([
+            getCampaign(params.id),
+            getCampaignParticipants(params.id),
+            getCampaignActors(params.id),
+            getCampaignTokens(params.id),
+            getCampaignCharacterSheets(params.id),
+          ]);
 
         const currentUserParticipant = participants.find(
           (participant) => participant.userId === loggedUser.id,
@@ -1744,6 +1757,7 @@ export default function CampaignPlayPage() {
         setParticipants(participants);
         setCampaignActors(actors);
         setSceneTokens(tokens);
+        setCharacterSheets(characterSheets);
       } catch (error) {
         console.error(error);
         setAccessDenied(true);
@@ -1838,6 +1852,84 @@ export default function CampaignPlayPage() {
   const libraryActors = campaignActors.filter(
     (actor) => actor.location === "LIBRARY" && isLibraryCompatibleActor(actor),
   );
+
+  function getCharacterSheetByActor(actor: CampaignActor) {
+    return (
+      characterSheets.find(
+        (characterSheet) => characterSheet.campaignActorId === actor.id,
+      ) ?? null
+    );
+  }
+
+  async function handleUpdateCharacterSheetImages(
+    characterSheetId: string,
+    data: {
+      portraitUrl: string | null;
+      tokenImageUrl: string | null;
+      tokenImageFit: CharacterReadySheet["tokenImageFit"];
+    },
+  ) {
+    setIsSavingCharacterSheetImages(true);
+
+    try {
+      const updatedCharacterSheet = await updateCampaignCharacterSheetImages(
+        params.id,
+        characterSheetId,
+        data,
+      );
+
+      setCharacterSheets((currentSheets) =>
+        currentSheets.map((currentSheet) =>
+          currentSheet.id === updatedCharacterSheet.id
+            ? updatedCharacterSheet
+            : currentSheet,
+        ),
+      );
+
+      const actorId = updatedCharacterSheet.campaignActorId;
+
+      if (!actorId) {
+        return;
+      }
+
+      const updatedActor = await updateCampaignActor(params.id, actorId, {
+        portraitUrl: updatedCharacterSheet.portraitUrl,
+      });
+
+      setCampaignActors((currentActors) =>
+        currentActors.map((currentActor) =>
+          currentActor.id === updatedActor.id ? updatedActor : currentActor,
+        ),
+      );
+
+      const tokensFromActor = sceneTokens.filter(
+        (sceneToken) => sceneToken.actorId === actorId,
+      );
+
+      if (tokensFromActor.length > 0) {
+        const updatedTokens = await Promise.all(
+          tokensFromActor.map((token) =>
+            updateSceneToken(params.id, token.id, {
+              imageUrl: updatedCharacterSheet.tokenImageUrl,
+              imageFit: updatedCharacterSheet.tokenImageFit,
+            }),
+          ),
+        );
+
+        setSceneTokens((currentTokens) =>
+          currentTokens.map((currentToken) => {
+            const updatedToken = updatedTokens.find(
+              (token) => token.id === currentToken.id,
+            );
+
+            return updatedToken ?? currentToken;
+          }),
+        );
+      }
+    } finally {
+      setIsSavingCharacterSheetImages(false);
+    }
+  }
 
   function canMoveToken(token: SceneToken) {
     if (isGM) {
@@ -2331,14 +2423,26 @@ export default function CampaignPlayPage() {
     const nextX = 300 + ((tokenCount * 90) % 560);
     const nextY = 340 + Math.floor(tokenCount / 6) * 90;
 
+    const characterSheet = getCharacterSheetByActor(actor);
+
+    const tokenImageUrl =
+      actor.type === "PLAYER_CHARACTER"
+        ? characterSheet?.tokenImageUrl || actor.portraitUrl
+        : actor.portraitUrl;
+
+    const tokenImageFit =
+      actor.type === "PLAYER_CHARACTER"
+        ? (characterSheet?.tokenImageFit ?? "FILL")
+        : "COVER";
+
     try {
       const createdToken = await createSceneToken(campaign.id, actor.id, {
         x: nextX,
         y: nextY,
         width: 80,
         height: 80,
-        imageUrl: actor.portraitUrl,
-        imageFit: "COVER",
+        imageUrl: tokenImageUrl,
+        imageFit: tokenImageFit,
       });
 
       setSceneTokens((currentTokens) => [...currentTokens, createdToken]);
@@ -2968,6 +3072,20 @@ export default function CampaignPlayPage() {
 
       setSavedCharacterSheetId(data.characterSheet.id);
       setSavedCharacterSheetStatus(data.characterSheet.status ?? "DRAFT");
+      setCharacterSheets((currentSheets) => {
+        const nextSheet = data.characterSheet as CharacterReadySheet;
+        const alreadyExists = currentSheets.some(
+          (sheet) => sheet.id === nextSheet.id,
+        );
+
+        if (alreadyExists) {
+          return currentSheets.map((sheet) =>
+            sheet.id === nextSheet.id ? nextSheet : sheet,
+          );
+        }
+
+        return [nextSheet, ...currentSheets];
+      });
       setCharacterDraftSaveSuccess(
         savedCharacterSheetId
           ? "Rascunho atualizado com sucesso."
@@ -3016,7 +3134,22 @@ export default function CampaignPlayPage() {
         throw new Error(data?.message ?? "Não foi possível finalizar a ficha.");
       }
 
+      const finalizedSheet = data.characterSheet as CharacterReadySheet;
+
       setSavedCharacterSheetStatus("READY");
+      setCharacterSheets((currentSheets) => {
+        const alreadyExists = currentSheets.some(
+          (sheet) => sheet.id === finalizedSheet.id,
+        );
+
+        if (alreadyExists) {
+          return currentSheets.map((sheet) =>
+            sheet.id === finalizedSheet.id ? finalizedSheet : sheet,
+          );
+        }
+
+        return [finalizedSheet, ...currentSheets];
+      });
       setCharacterDraftSaveSuccess(
         "Ficha finalizada e enviada para Personagens.",
       );
@@ -3414,6 +3547,13 @@ export default function CampaignPlayPage() {
           onOpenSheet={() => {
             setSelectedActor(actionActor);
             setActionActor(null);
+
+            if (
+              actionActor.type === "PLAYER_CHARACTER" &&
+              characterBuilderOptions.skills.length === 0
+            ) {
+              void handleLoadCharacterBuilderOptions();
+            }
           }}
           onAddToken={async () => {
             await handleAddTokenToScene(actionActor);
@@ -3429,13 +3569,17 @@ export default function CampaignPlayPage() {
         />
       ) : null}
 
-      {selectedActor && (
+      {selectedActor ? (
         <ActorSheetModal
           actor={selectedActor}
+          characterSheet={getCharacterSheetByActor(selectedActor)}
+          allSkills={characterBuilderOptions.skills}
           isGM={isGM}
+          isSavingCharacterSheetImages={isSavingCharacterSheetImages}
+          onUpdateCharacterSheetImages={handleUpdateCharacterSheetImages}
           onClose={() => setSelectedActor(null)}
         />
-      )}
+      ) : null}
 
       {isExitModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6 backdrop-blur-sm">
@@ -3490,16 +3634,45 @@ export default function CampaignPlayPage() {
 }
 function ActorSheetModal({
   actor,
+  characterSheet,
+  allSkills,
   isGM,
+  isSavingCharacterSheetImages,
+  onUpdateCharacterSheetImages,
   onClose,
 }: {
   actor: CampaignActor;
+  characterSheet: CharacterReadySheet | null;
+  allSkills: CharacterBuilderOptions["skills"];
   isGM: boolean;
+  isSavingCharacterSheetImages: boolean;
+  onUpdateCharacterSheetImages: (
+    characterSheetId: string,
+    data: {
+      portraitUrl: string | null;
+      tokenImageUrl: string | null;
+      tokenImageFit: CharacterReadySheet["tokenImageFit"];
+    },
+  ) => Promise<void>;
   onClose: () => void;
 }) {
   const isPlayerCharacter = actor.type === "PLAYER_CHARACTER";
   const isNpc = actor.type === "NPC";
   const isCreature = actor.type === "CREATURE";
+
+  if (isPlayerCharacter) {
+    return (
+      <CharacterReadySheetModal
+        actor={actor}
+        characterSheet={characterSheet}
+        allSkills={allSkills}
+        isGM={isGM}
+        isSavingImages={isSavingCharacterSheetImages}
+        onSaveImages={onUpdateCharacterSheetImages}
+        onClose={onClose}
+      />
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6 backdrop-blur-sm">

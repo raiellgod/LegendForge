@@ -5,6 +5,8 @@ import type {
   SceneToken,
 } from "../types/game-table-types";
 
+import type { CharacterReadySheet } from "@/features/character-builder/types/character-builder-types";
+
 export async function getCampaign(id: string): Promise<Campaign> {
   const response = await fetch(`http://localhost:8081/campaigns/${id}`, {
     credentials: "include",
@@ -71,6 +73,62 @@ export async function createCampaignActor(
   const responseData = await response.json();
 
   return responseData.actor;
+}
+
+export async function getCampaignCharacterSheets(
+  campaignId: string,
+): Promise<CharacterReadySheet[]> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/character-sheets`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ?? "Erro ao carregar fichas da campanha",
+    );
+  }
+
+  const responseData = await response.json();
+
+  return responseData.characterSheets;
+}
+
+export async function updateCampaignCharacterSheetImages(
+  campaignId: string,
+  characterSheetId: string,
+  data: {
+    portraitUrl?: string | null;
+    tokenImageUrl?: string | null;
+    tokenImageFit?: CharacterReadySheet["tokenImageFit"];
+  },
+): Promise<CharacterReadySheet> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/character-sheets/${characterSheetId}`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao atualizar imagens da ficha");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.characterSheet;
 }
 
 export async function getCampaignActors(
@@ -151,10 +209,7 @@ export async function createSceneToken(
   return responseData.token;
 }
 
-export async function deleteSceneToken(
-  campaignId: string,
-  tokenId: string,
-) {
+export async function deleteSceneToken(campaignId: string, tokenId: string) {
   const response = await fetch(
     `http://localhost:8081/campaigns/${campaignId}/tokens/${tokenId}`,
     {

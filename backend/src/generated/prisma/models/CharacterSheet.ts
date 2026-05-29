@@ -32,6 +32,9 @@ export type CharacterSheetAvgAggregateOutputType = {
   hitPoints: number | null
   maxHitPoints: number | null
   temporaryHp: number | null
+  hitDiceUsed: number | null
+  deathSaveSuccesses: number | null
+  deathSaveFailures: number | null
   armorClass: number | null
   speed: number | null
   startingGold: number | null
@@ -43,6 +46,9 @@ export type CharacterSheetSumAggregateOutputType = {
   hitPoints: number | null
   maxHitPoints: number | null
   temporaryHp: number | null
+  hitDiceUsed: number | null
+  deathSaveSuccesses: number | null
+  deathSaveFailures: number | null
   armorClass: number | null
   speed: number | null
   startingGold: number | null
@@ -70,6 +76,9 @@ export type CharacterSheetMinAggregateOutputType = {
   hitPoints: number | null
   maxHitPoints: number | null
   temporaryHp: number | null
+  hitDiceUsed: number | null
+  deathSaveSuccesses: number | null
+  deathSaveFailures: number | null
   armorClass: number | null
   speed: number | null
   inspiration: boolean | null
@@ -119,6 +128,9 @@ export type CharacterSheetMaxAggregateOutputType = {
   hitPoints: number | null
   maxHitPoints: number | null
   temporaryHp: number | null
+  hitDiceUsed: number | null
+  deathSaveSuccesses: number | null
+  deathSaveFailures: number | null
   armorClass: number | null
   speed: number | null
   inspiration: boolean | null
@@ -168,6 +180,9 @@ export type CharacterSheetCountAggregateOutputType = {
   hitPoints: number
   maxHitPoints: number
   temporaryHp: number
+  hitDiceUsed: number
+  deathSaveSuccesses: number
+  deathSaveFailures: number
   armorClass: number
   speed: number
   inspiration: number
@@ -203,6 +218,9 @@ export type CharacterSheetAvgAggregateInputType = {
   hitPoints?: true
   maxHitPoints?: true
   temporaryHp?: true
+  hitDiceUsed?: true
+  deathSaveSuccesses?: true
+  deathSaveFailures?: true
   armorClass?: true
   speed?: true
   startingGold?: true
@@ -214,6 +232,9 @@ export type CharacterSheetSumAggregateInputType = {
   hitPoints?: true
   maxHitPoints?: true
   temporaryHp?: true
+  hitDiceUsed?: true
+  deathSaveSuccesses?: true
+  deathSaveFailures?: true
   armorClass?: true
   speed?: true
   startingGold?: true
@@ -241,6 +262,9 @@ export type CharacterSheetMinAggregateInputType = {
   hitPoints?: true
   maxHitPoints?: true
   temporaryHp?: true
+  hitDiceUsed?: true
+  deathSaveSuccesses?: true
+  deathSaveFailures?: true
   armorClass?: true
   speed?: true
   inspiration?: true
@@ -290,6 +314,9 @@ export type CharacterSheetMaxAggregateInputType = {
   hitPoints?: true
   maxHitPoints?: true
   temporaryHp?: true
+  hitDiceUsed?: true
+  deathSaveSuccesses?: true
+  deathSaveFailures?: true
   armorClass?: true
   speed?: true
   inspiration?: true
@@ -339,6 +366,9 @@ export type CharacterSheetCountAggregateInputType = {
   hitPoints?: true
   maxHitPoints?: true
   temporaryHp?: true
+  hitDiceUsed?: true
+  deathSaveSuccesses?: true
+  deathSaveFailures?: true
   armorClass?: true
   speed?: true
   inspiration?: true
@@ -475,6 +505,9 @@ export type CharacterSheetGroupByOutputType = {
   hitPoints: number
   maxHitPoints: number
   temporaryHp: number
+  hitDiceUsed: number
+  deathSaveSuccesses: number
+  deathSaveFailures: number
   armorClass: number
   speed: number
   inspiration: boolean
@@ -547,6 +580,9 @@ export type CharacterSheetWhereInput = {
   hitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   maxHitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   temporaryHp?: Prisma.IntFilter<"CharacterSheet"> | number
+  hitDiceUsed?: Prisma.IntFilter<"CharacterSheet"> | number
+  deathSaveSuccesses?: Prisma.IntFilter<"CharacterSheet"> | number
+  deathSaveFailures?: Prisma.IntFilter<"CharacterSheet"> | number
   armorClass?: Prisma.IntFilter<"CharacterSheet"> | number
   speed?: Prisma.IntFilter<"CharacterSheet"> | number
   inspiration?: Prisma.BoolFilter<"CharacterSheet"> | boolean
@@ -608,6 +644,9 @@ export type CharacterSheetOrderByWithRelationInput = {
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
+  hitDiceUsed?: Prisma.SortOrder
+  deathSaveSuccesses?: Prisma.SortOrder
+  deathSaveFailures?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
@@ -672,6 +711,9 @@ export type CharacterSheetWhereUniqueInput = Prisma.AtLeast<{
   hitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   maxHitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   temporaryHp?: Prisma.IntFilter<"CharacterSheet"> | number
+  hitDiceUsed?: Prisma.IntFilter<"CharacterSheet"> | number
+  deathSaveSuccesses?: Prisma.IntFilter<"CharacterSheet"> | number
+  deathSaveFailures?: Prisma.IntFilter<"CharacterSheet"> | number
   armorClass?: Prisma.IntFilter<"CharacterSheet"> | number
   speed?: Prisma.IntFilter<"CharacterSheet"> | number
   inspiration?: Prisma.BoolFilter<"CharacterSheet"> | boolean
@@ -733,6 +775,9 @@ export type CharacterSheetOrderByWithAggregationInput = {
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
+  hitDiceUsed?: Prisma.SortOrder
+  deathSaveSuccesses?: Prisma.SortOrder
+  deathSaveFailures?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
@@ -790,6 +835,9 @@ export type CharacterSheetScalarWhereWithAggregatesInput = {
   hitPoints?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   maxHitPoints?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   temporaryHp?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
+  hitDiceUsed?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
+  deathSaveSuccesses?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
+  deathSaveFailures?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   armorClass?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   speed?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   inspiration?: Prisma.BoolWithAggregatesFilter<"CharacterSheet"> | boolean
@@ -832,6 +880,9 @@ export type CharacterSheetCreateInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -893,6 +944,9 @@ export type CharacterSheetUncheckedCreateInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -940,6 +994,9 @@ export type CharacterSheetUpdateInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1001,6 +1058,9 @@ export type CharacterSheetUncheckedUpdateInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1055,6 +1115,9 @@ export type CharacterSheetCreateManyInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -1097,6 +1160,9 @@ export type CharacterSheetUpdateManyMutationInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1146,6 +1212,9 @@ export type CharacterSheetUncheckedUpdateManyInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1205,6 +1274,9 @@ export type CharacterSheetCountOrderByAggregateInput = {
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
+  hitDiceUsed?: Prisma.SortOrder
+  deathSaveSuccesses?: Prisma.SortOrder
+  deathSaveFailures?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
@@ -1238,6 +1310,9 @@ export type CharacterSheetAvgOrderByAggregateInput = {
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
+  hitDiceUsed?: Prisma.SortOrder
+  deathSaveSuccesses?: Prisma.SortOrder
+  deathSaveFailures?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   startingGold?: Prisma.SortOrder
@@ -1265,6 +1340,9 @@ export type CharacterSheetMaxOrderByAggregateInput = {
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
+  hitDiceUsed?: Prisma.SortOrder
+  deathSaveSuccesses?: Prisma.SortOrder
+  deathSaveFailures?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
@@ -1314,6 +1392,9 @@ export type CharacterSheetMinOrderByAggregateInput = {
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
+  hitDiceUsed?: Prisma.SortOrder
+  deathSaveSuccesses?: Prisma.SortOrder
+  deathSaveFailures?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   inspiration?: Prisma.SortOrder
@@ -1347,6 +1428,9 @@ export type CharacterSheetSumOrderByAggregateInput = {
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
+  hitDiceUsed?: Prisma.SortOrder
+  deathSaveSuccesses?: Prisma.SortOrder
+  deathSaveFailures?: Prisma.SortOrder
   armorClass?: Prisma.SortOrder
   speed?: Prisma.SortOrder
   startingGold?: Prisma.SortOrder
@@ -1737,6 +1821,9 @@ export type CharacterSheetCreateWithoutSystemInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -1796,6 +1883,9 @@ export type CharacterSheetUncheckedCreateWithoutSystemInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -1879,6 +1969,9 @@ export type CharacterSheetScalarWhereInput = {
   hitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   maxHitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   temporaryHp?: Prisma.IntFilter<"CharacterSheet"> | number
+  hitDiceUsed?: Prisma.IntFilter<"CharacterSheet"> | number
+  deathSaveSuccesses?: Prisma.IntFilter<"CharacterSheet"> | number
+  deathSaveFailures?: Prisma.IntFilter<"CharacterSheet"> | number
   armorClass?: Prisma.IntFilter<"CharacterSheet"> | number
   speed?: Prisma.IntFilter<"CharacterSheet"> | number
   inspiration?: Prisma.BoolFilter<"CharacterSheet"> | boolean
@@ -1921,6 +2014,9 @@ export type CharacterSheetCreateWithoutAncestryInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -1980,6 +2076,9 @@ export type CharacterSheetUncheckedCreateWithoutAncestryInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2053,6 +2152,9 @@ export type CharacterSheetCreateWithoutBackgroundInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2112,6 +2214,9 @@ export type CharacterSheetUncheckedCreateWithoutBackgroundInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2185,6 +2290,9 @@ export type CharacterSheetCreateWithoutStatsInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2245,6 +2353,9 @@ export type CharacterSheetUncheckedCreateWithoutStatsInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2307,6 +2418,9 @@ export type CharacterSheetUpdateWithoutStatsInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2367,6 +2481,9 @@ export type CharacterSheetUncheckedUpdateWithoutStatsInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2413,6 +2530,9 @@ export type CharacterSheetCreateWithoutSkillsInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2473,6 +2593,9 @@ export type CharacterSheetUncheckedCreateWithoutSkillsInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2535,6 +2658,9 @@ export type CharacterSheetUpdateWithoutSkillsInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2595,6 +2721,9 @@ export type CharacterSheetUncheckedUpdateWithoutSkillsInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2641,6 +2770,9 @@ export type CharacterSheetCreateWithoutSpellsInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2701,6 +2833,9 @@ export type CharacterSheetUncheckedCreateWithoutSpellsInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2763,6 +2898,9 @@ export type CharacterSheetUpdateWithoutSpellsInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2823,6 +2961,9 @@ export type CharacterSheetUncheckedUpdateWithoutSpellsInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2869,6 +3010,9 @@ export type CharacterSheetCreateWithoutEquipmentInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2929,6 +3073,9 @@ export type CharacterSheetUncheckedCreateWithoutEquipmentInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -2991,6 +3138,9 @@ export type CharacterSheetUpdateWithoutEquipmentInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3051,6 +3201,9 @@ export type CharacterSheetUncheckedUpdateWithoutEquipmentInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3097,6 +3250,9 @@ export type CharacterSheetCreateWithoutCharacterClassInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3156,6 +3312,9 @@ export type CharacterSheetUncheckedCreateWithoutCharacterClassInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3229,6 +3388,9 @@ export type CharacterSheetCreateWithoutSubclassInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3288,6 +3450,9 @@ export type CharacterSheetUncheckedCreateWithoutSubclassInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3361,6 +3526,9 @@ export type CharacterSheetCreateWithoutCampaignInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3420,6 +3588,9 @@ export type CharacterSheetUncheckedCreateWithoutCampaignInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3493,6 +3664,9 @@ export type CharacterSheetCreateWithoutGameSessionsInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3553,6 +3727,9 @@ export type CharacterSheetUncheckedCreateWithoutGameSessionsInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3615,6 +3792,9 @@ export type CharacterSheetUpdateWithoutGameSessionsInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3675,6 +3855,9 @@ export type CharacterSheetUncheckedUpdateWithoutGameSessionsInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3721,6 +3904,9 @@ export type CharacterSheetCreateWithoutCampaignActorInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3780,6 +3966,9 @@ export type CharacterSheetUncheckedCreateWithoutCampaignActorInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3843,6 +4032,9 @@ export type CharacterSheetUpdateWithoutCampaignActorInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3902,6 +4094,9 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignActorInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3955,6 +4150,9 @@ export type CharacterSheetCreateManySystemInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -3997,6 +4195,9 @@ export type CharacterSheetUpdateWithoutSystemInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4056,6 +4257,9 @@ export type CharacterSheetUncheckedUpdateWithoutSystemInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4109,6 +4313,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutSystemInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4157,6 +4364,9 @@ export type CharacterSheetCreateManyAncestryInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -4199,6 +4409,9 @@ export type CharacterSheetUpdateWithoutAncestryInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4258,6 +4471,9 @@ export type CharacterSheetUncheckedUpdateWithoutAncestryInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4311,6 +4527,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutAncestryInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4359,6 +4578,9 @@ export type CharacterSheetCreateManyBackgroundInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -4401,6 +4623,9 @@ export type CharacterSheetUpdateWithoutBackgroundInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4460,6 +4685,9 @@ export type CharacterSheetUncheckedUpdateWithoutBackgroundInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4513,6 +4741,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutBackgroundInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4561,6 +4792,9 @@ export type CharacterSheetCreateManyCharacterClassInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -4603,6 +4837,9 @@ export type CharacterSheetUpdateWithoutCharacterClassInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4662,6 +4899,9 @@ export type CharacterSheetUncheckedUpdateWithoutCharacterClassInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4715,6 +4955,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutCharacterClassInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4763,6 +5006,9 @@ export type CharacterSheetCreateManySubclassInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -4805,6 +5051,9 @@ export type CharacterSheetUpdateWithoutSubclassInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4864,6 +5113,9 @@ export type CharacterSheetUncheckedUpdateWithoutSubclassInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4917,6 +5169,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutSubclassInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4965,6 +5220,9 @@ export type CharacterSheetCreateManyCampaignInput = {
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
+  hitDiceUsed?: number
+  deathSaveSuccesses?: number
+  deathSaveFailures?: number
   armorClass?: number
   speed?: number
   inspiration?: boolean
@@ -5007,6 +5265,9 @@ export type CharacterSheetUpdateWithoutCampaignInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5066,6 +5327,9 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5119,6 +5383,9 @@ export type CharacterSheetUncheckedUpdateManyWithoutCampaignInput = {
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  hitDiceUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveSuccesses?: Prisma.IntFieldUpdateOperationsInput | number
+  deathSaveFailures?: Prisma.IntFieldUpdateOperationsInput | number
   armorClass?: Prisma.IntFieldUpdateOperationsInput | number
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   inspiration?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5235,6 +5502,9 @@ export type CharacterSheetSelect<ExtArgs extends runtime.Types.Extensions.Intern
   hitPoints?: boolean
   maxHitPoints?: boolean
   temporaryHp?: boolean
+  hitDiceUsed?: boolean
+  deathSaveSuccesses?: boolean
+  deathSaveFailures?: boolean
   armorClass?: boolean
   speed?: boolean
   inspiration?: boolean
@@ -5297,6 +5567,9 @@ export type CharacterSheetSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   hitPoints?: boolean
   maxHitPoints?: boolean
   temporaryHp?: boolean
+  hitDiceUsed?: boolean
+  deathSaveSuccesses?: boolean
+  deathSaveFailures?: boolean
   armorClass?: boolean
   speed?: boolean
   inspiration?: boolean
@@ -5353,6 +5626,9 @@ export type CharacterSheetSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   hitPoints?: boolean
   maxHitPoints?: boolean
   temporaryHp?: boolean
+  hitDiceUsed?: boolean
+  deathSaveSuccesses?: boolean
+  deathSaveFailures?: boolean
   armorClass?: boolean
   speed?: boolean
   inspiration?: boolean
@@ -5409,6 +5685,9 @@ export type CharacterSheetSelectScalar = {
   hitPoints?: boolean
   maxHitPoints?: boolean
   temporaryHp?: boolean
+  hitDiceUsed?: boolean
+  deathSaveSuccesses?: boolean
+  deathSaveFailures?: boolean
   armorClass?: boolean
   speed?: boolean
   inspiration?: boolean
@@ -5436,7 +5715,7 @@ export type CharacterSheetSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CharacterSheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "systemId" | "campaignActorId" | "ownerId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "status" | "name" | "pronouns" | "concept" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "level" | "experience" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "armorClass" | "speed" | "inspiration" | "classEquipmentMode" | "backgroundEquipmentMode" | "startingGold" | "alignment" | "faith" | "lifestyle" | "hair" | "skin" | "eyes" | "height" | "weight" | "age" | "gender" | "bonds" | "flaws" | "ideals" | "personality" | "backstory" | "notes" | "gmNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheet"]>
+export type CharacterSheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "systemId" | "campaignActorId" | "ownerId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "status" | "name" | "pronouns" | "concept" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "level" | "experience" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "hitDiceUsed" | "deathSaveSuccesses" | "deathSaveFailures" | "armorClass" | "speed" | "inspiration" | "classEquipmentMode" | "backgroundEquipmentMode" | "startingGold" | "alignment" | "faith" | "lifestyle" | "hair" | "skin" | "eyes" | "height" | "weight" | "age" | "gender" | "bonds" | "flaws" | "ideals" | "personality" | "backstory" | "notes" | "gmNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheet"]>
 export type CharacterSheetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -5509,6 +5788,9 @@ export type $CharacterSheetPayload<ExtArgs extends runtime.Types.Extensions.Inte
     hitPoints: number
     maxHitPoints: number
     temporaryHp: number
+    hitDiceUsed: number
+    deathSaveSuccesses: number
+    deathSaveFailures: number
     armorClass: number
     speed: number
     inspiration: boolean
@@ -5990,6 +6272,9 @@ export interface CharacterSheetFieldRefs {
   readonly hitPoints: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly maxHitPoints: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly temporaryHp: Prisma.FieldRef<"CharacterSheet", 'Int'>
+  readonly hitDiceUsed: Prisma.FieldRef<"CharacterSheet", 'Int'>
+  readonly deathSaveSuccesses: Prisma.FieldRef<"CharacterSheet", 'Int'>
+  readonly deathSaveFailures: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly armorClass: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly speed: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly inspiration: Prisma.FieldRef<"CharacterSheet", 'Boolean'>

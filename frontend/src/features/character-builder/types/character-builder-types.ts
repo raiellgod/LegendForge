@@ -132,9 +132,130 @@ export type CharacterBuilderOptions = {
 
 export type CharacterSheetStatResponse = {
   baseValue: number;
+  isSavingThrowProficient?: boolean;
+  bonusValue?: number | null;
+  overrideValue?: number | null;
   stat: {
     key: string;
+    name?: string;
+    shortName?: string;
   };
+};
+
+export type CharacterSheetCombatState = {
+  level: number;
+  experience: number;
+  hitPoints: number;
+  maxHitPoints: number;
+  temporaryHp: number;
+  hitDiceUsed: number;
+  deathSaveSuccesses: number;
+  deathSaveFailures: number;
+  armorClass: number;
+  speed: number;
+  inspiration: boolean;
+};
+
+export type CharacterReadySheet = CharacterSheetCombatState & {
+  id: string;
+  campaignId: string;
+  campaignActorId: string | null;
+  ownerId: string | null;
+  systemId: string;
+
+  name: string;
+  pronouns: string | null;
+  concept: string | null;
+  portraitUrl: string | null;
+  tokenImageUrl: string | null;
+  tokenImageFit: "COVER" | "CONTAIN" | "FILL";
+
+  status: CharacterSheetStatus;
+
+  classEquipmentMode: CharacterBuilderEquipmentMode;
+  backgroundEquipmentMode: CharacterBuilderEquipmentMode;
+  startingGold: number;
+
+  alignment: string | null;
+  faith: string | null;
+  lifestyle: string | null;
+
+  hair: string | null;
+  skin: string | null;
+  eyes: string | null;
+  height: string | null;
+  weight: string | null;
+  age: string | null;
+  gender: string | null;
+
+  bonds: string | null;
+  flaws: string | null;
+  ideals: string | null;
+  personality: string | null;
+  backstory: string | null;
+  notes: string | null;
+  gmNotes: string | null;
+
+  characterClass: {
+    id: string;
+    key: string;
+    name: string;
+    description: string | null;
+    hitDie: number | null;
+  } | null;
+
+  ancestry: {
+    id: string;
+    key: string;
+    name: string;
+    description: string | null;
+    defaultSizeCategory: string;
+  } | null;
+
+  background: {
+    id: string;
+    key: string;
+    name: string;
+    description: string | null;
+    skillKeys: string[];
+    toolNames: string[];
+    languageChoiceCount: number;
+    startingGold: number;
+  } | null;
+
+  stats: CharacterSheetStatResponse[];
+
+  skills: Array<{
+    isProficient: boolean;
+    expertiseLevel: number;
+    bonusValue: number;
+    overrideValue: number | null;
+    skill: {
+      id: string;
+      key: string;
+      name: string;
+      description: string | null;
+      stat: {
+        id: string;
+        key: string;
+        name: string;
+        shortName: string;
+      };
+    };
+  }>;
+
+  spells: Array<{
+    source: string | null;
+    spell: CharacterBuilderSpellOption;
+  }>;
+
+  equipment: Array<{
+    quantity: number;
+    source: string | null;
+    notes: string | null;
+    isEquipped: boolean;
+    equipment: CharacterBuilderEquipmentOption;
+  }>;
 };
 
 export type StartingEquipmentPlan = {
@@ -188,4 +309,3 @@ export type CharacterBuilderModalProps = {
   onChangeStep: (stepId: string) => void;
   onClose: () => void;
 };
-
