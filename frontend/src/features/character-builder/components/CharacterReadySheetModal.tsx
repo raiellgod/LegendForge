@@ -20,6 +20,23 @@ import {
 } from "@/features/character-builder/utils/character-sheet-calculations";
 import { getCharacterTypeStyles } from "@/features/game-table/utils/actor-utils";
 
+export type CharacterReadySheetRollRequest =
+  | {
+      kind: "d20";
+      label: string;
+      modifier: number;
+    }
+  | {
+      kind: "damage";
+      label: string;
+      expression: string;
+    }
+  | {
+      kind: "effect";
+      label: string;
+      description: string;
+    };
+
 type CharacterReadySheetModalProps = {
   actor: CampaignActor;
   characterSheet: CharacterReadySheet | null;
@@ -34,6 +51,7 @@ type CharacterReadySheetModalProps = {
       tokenImageFit: CharacterReadySheet["tokenImageFit"];
     },
   ) => Promise<void>;
+  onRollSheetAction: (request: CharacterReadySheetRollRequest) => void;
   onClose: () => void;
 };
 
@@ -203,6 +221,44 @@ function SheetBox({
   );
 }
 
+function RollableSheetBox({
+  label,
+  value,
+  helper,
+  onRoll,
+}: {
+  label: string;
+  value: string;
+  helper?: string;
+  onRoll: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onRoll}
+      title="Rolar 1d20 com este modificador."
+      className="group rounded-xl border border-white/10 bg-black/25 p-2.5 text-left shadow-[-3px_3px_0_rgba(0,0,0,0.22)] transition hover:border-forge-gold/45 hover:bg-forge-gold/10"
+    >
+      <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+        {label}
+      </p>
+
+      <p
+        className="mt-1 min-w-0 break-words text-xl font-black leading-tight text-forge-gold"
+        title={value}
+      >
+        {value}
+      </p>
+
+      {helper ? (
+        <p className="mt-0.5 text-[9px] font-semibold leading-relaxed text-white/40 group-hover:text-forge-gold/75">
+          {helper}
+        </p>
+      ) : null}
+    </button>
+  );
+}
+
 function AttributeCard({
   label,
   value,
@@ -217,12 +273,17 @@ function AttributeCard({
 
   return (
     <div className="rounded-xl border border-forge-gold/25 bg-[#1a0d20] p-2.5 text-center shadow-[-3px_3px_0_rgba(0,0,0,0.25)]">
-      <p className="truncate text-[11px] font-black text-white/70" title={label}>
+      <p
+        className="truncate text-[11px] font-black text-white/70"
+        title={label}
+      >
         {label}
       </p>
 
       <div className="mt-2 rounded-lg border border-white/10 bg-black/30 px-3 py-1.5">
-        <p className="text-xl font-black leading-tight text-forge-gold">{displayValue}</p>
+        <p className="text-xl font-black leading-tight text-forge-gold">
+          {displayValue}
+        </p>
         <p className="text-[9px] font-bold text-white/35">
           mod {displayModifier}
         </p>
@@ -237,17 +298,20 @@ function RollableLine({
   value,
   isProficient,
   proficiencyLabel,
+  onRoll,
 }: {
   label: string;
   helper: string;
   value: number;
   isProficient: boolean;
   proficiencyLabel?: string;
+  onRoll?: () => void;
 }) {
   return (
     <button
       type="button"
-      title="Rolagem automática será conectada em micro futuro."
+      onClick={onRoll}
+      title="Rolar 1d20 com este modificador."
       className="group flex w-full items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/25 px-2.5 py-1.5 text-left transition hover:border-forge-gold/45 hover:bg-forge-gold/10"
     >
       <div className="flex min-w-0 items-center gap-2">
@@ -330,6 +394,24 @@ function CompactListRow({
   );
 }
 
+function getDamageRollExpression(damage: string) {
+  const normalizedDamage = damage.toLowerCase().replace(/\s+/g, "");
+  const damageExpression = normalizedDamage.match(/\d*d\d+(?:[+-]\d+)?/);
+
+  return damageExpression?.[0] ?? damage;
+}
+
+function getFirstDamageExpressionFromText(text: string | null | undefined) {
+  if (!text) {
+    return null;
+  }
+
+  const normalizedText = text.toLowerCase().replace(/\s+/g, "");
+  const damageExpression = normalizedText.match(/\d*d\d+(?:[+-]\d+)?/);
+
+  return damageExpression?.[0] ?? null;
+}
+
 function SpellCard({
   name,
   level,
@@ -339,6 +421,9 @@ function SpellCard({
   duration,
   components,
   description,
+  onRollAttack,
+  onRollDamage,
+  onUseEffect,
 }: {
   name: string;
   level: number;
@@ -348,6 +433,9 @@ function SpellCard({
   duration: string | null;
   components: string[] | string | null;
   description: string | null;
+  onRollAttack: () => void;
+  onRollDamage?: () => void;
+  onUseEffect: () => void;
 }) {
   const levelLabel = level === 0 ? "Truque" : `Nível ${level}`;
 
@@ -406,6 +494,37 @@ function SpellCard({
       >
         {description ?? "Sem descrição cadastrada."}
       </p>
+
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={onRollAttack}
+          className="rounded-lg border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white/45 transition hover:border-forge-gold/45 hover:bg-forge-gold/10 hover:text-forge-gold"
+          title={`Rolar ataque mágico básico de ${name}: 1d20 + 0. Bônus real e comparação com CA entram na fase de regras avançadas.`}
+        >
+          Ataque
+        </button>
+
+        {onRollDamage ? (
+          <button
+            type="button"
+            onClick={onRollDamage}
+            className="rounded-lg border border-forge-gold/30 bg-forge-gold/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
+            title={`Rolar dano detectado na descrição de ${name}. Este cálculo será refinado nas regras avançadas.`}
+          >
+            Dano
+          </button>
+        ) : null}
+
+        <button
+          type="button"
+          onClick={onUseEffect}
+          className="rounded-lg border border-purple-300/20 bg-purple-500/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-purple-200 transition hover:border-purple-300/45 hover:bg-purple-500/20"
+          title={`Enviar efeito de ${name} para o chat.`}
+        >
+          Efeito
+        </button>
+      </div>
     </article>
   );
 }
@@ -437,6 +556,7 @@ export function CharacterReadySheetModal({
   isGM,
   isSavingImages,
   onSaveImages,
+  onRollSheetAction,
   onClose,
 }: CharacterReadySheetModalProps) {
   const [activeTab, setActiveTab] = useState<ReadySheetTab>("status");
@@ -566,17 +686,23 @@ export function CharacterReadySheetModal({
   const attackRows =
     characterSheet?.equipment
       .filter((sheetEquipment) => Boolean(sheetEquipment.equipment.damage))
-      .map((sheetEquipment) => ({
-        id: sheetEquipment.equipment.key,
-        name: sheetEquipment.equipment.name,
-        damage: sheetEquipment.equipment.damage ?? "—",
-        helper:
-          sheetEquipment.equipment.properties ??
-          sheetEquipment.equipment.description ??
-          "Ataque derivado de equipamento.",
-      })) ?? [];
+      .map((sheetEquipment) => {
+        const damageLabel = sheetEquipment.equipment.damage ?? "—";
+        const damageExpression = getDamageRollExpression(damageLabel);
 
-   const equipmentRows =
+        return {
+          id: sheetEquipment.equipment.key,
+          name: sheetEquipment.equipment.name,
+          damageLabel,
+          damageExpression,
+          helper:
+            sheetEquipment.equipment.properties ??
+            sheetEquipment.equipment.description ??
+            "Ataque derivado de equipamento.",
+        };
+      }) ?? [];
+
+  const equipmentRows =
     characterSheet?.equipment
       .map((sheetEquipment) => ({
         id: sheetEquipment.equipment.key,
@@ -799,10 +925,17 @@ export function CharacterReadySheetModal({
               <section className="grid grid-cols-2 gap-2 lg:grid-cols-3 2xl:grid-cols-6">
                 <SheetBox label="CA" value={armorClass} helper="Armadura" />
 
-                <SheetBox
+                <RollableSheetBox
                   label="Iniciativa"
                   value={initiativeBonus}
-                  helper="Clique em breve"
+                  helper="rolar"
+                  onRoll={() =>
+                    onRollSheetAction({
+                      kind: "d20",
+                      label: `Iniciativa — ${displayName}`,
+                      modifier: getInitiativeBonus(sheetStats),
+                    })
+                  }
                 />
 
                 <SheetBox label="Desloc." value={speed} helper="metros" />
@@ -840,10 +973,6 @@ export function CharacterReadySheetModal({
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                       Testes de resistência
                     </p>
-
-                    <span className="text-[10px] font-bold text-white/35">
-                      ● = proficiente
-                    </span>
                   </div>
 
                   <div className="mt-2 grid gap-1.5">
@@ -854,6 +983,13 @@ export function CharacterReadySheetModal({
                         helper={savingThrow.shortName}
                         value={savingThrow.value}
                         isProficient={savingThrow.isProficient}
+                        onRoll={() =>
+                          onRollSheetAction({
+                            kind: "d20",
+                            label: `Teste de resistência — ${savingThrow.label}`,
+                            modifier: savingThrow.value,
+                          })
+                        }
                       />
                     ))}
                   </div>
@@ -864,10 +1000,6 @@ export function CharacterReadySheetModal({
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                       Perícias
                     </p>
-
-                    <span className="text-[10px] font-bold text-white/35">
-                      ● = proficiente · clique em breve
-                    </span>
                   </div>
 
                   {sheetSkillRows.length > 0 ? (
@@ -883,6 +1015,13 @@ export function CharacterReadySheetModal({
                             skill.expertiseLevel > 1
                               ? `Proficiente com especialização x${skill.expertiseLevel}`
                               : "Proficiente"
+                          }
+                          onRoll={() =>
+                            onRollSheetAction({
+                              kind: "d20",
+                              label: `Perícia — ${skill.name}`,
+                              modifier: skill.value,
+                            })
                           }
                         />
                       ))}
@@ -905,21 +1044,69 @@ export function CharacterReadySheetModal({
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                       Ataques por equipamento
                     </p>
-
-                    <span className="text-[10px] font-bold text-white/35">
-                      rolagem em breve
-                    </span>
                   </div>
 
                   {attackRows.length > 0 ? (
                     <div className="mt-3 grid gap-2 md:grid-cols-2">
                       {attackRows.map((attack) => (
-                        <CompactListRow
+                        <div
                           key={attack.id}
-                          title={attack.name}
-                          value={attack.damage}
-                          helper={attack.helper}
-                        />
+                          className="rounded-xl border border-white/10 bg-black/25 px-3 py-2 transition hover:border-forge-gold/35 hover:bg-forge-gold/5"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <p
+                                className="min-w-0 break-words text-xs font-black leading-snug text-white/70"
+                                title={attack.name}
+                              >
+                                {attack.name}
+                              </p>
+
+                              <p
+                                className="mt-1 line-clamp-2 text-[10px] font-semibold leading-relaxed text-white/35"
+                                title={attack.helper}
+                              >
+                                {attack.helper}
+                              </p>
+                            </div>
+
+                            <span className="shrink-0 text-xs font-black text-forge-gold">
+                              {attack.damageLabel}
+                            </span>
+                          </div>
+
+                          <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                onRollSheetAction({
+                                  kind: "d20",
+                                  label: `Ataque básico — ${attack.name}`,
+                                  modifier: 0,
+                                })
+                              }
+                              className="rounded-lg border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white/45 transition hover:border-forge-gold/45 hover:bg-forge-gold/10 hover:text-forge-gold"
+                              title={`Rolar ataque básico de ${attack.name}: 1d20 + 0. Bônus real, alvo e comparação com CA entram em micro futura.`}
+                            >
+                              Ataque
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                onRollSheetAction({
+                                  kind: "damage",
+                                  label: `Dano — ${attack.name}`,
+                                  expression: attack.damageExpression,
+                                })
+                              }
+                              className="rounded-lg border border-forge-gold/30 bg-forge-gold/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
+                              title={`Rolar dano de ${attack.name}: ${attack.damageLabel}. Use depois que o ataque acertar.`}
+                            >
+                              Dano
+                            </button>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   ) : (
@@ -954,17 +1141,15 @@ export function CharacterReadySheetModal({
               </main>
 
               <aside className="space-y-4">
-                <SheetBox label="Moedas" value={startingGold} helper="iniciais" />
+                <SheetBox
+                  label="Moedas"
+                  value={startingGold}
+                  helper="iniciais"
+                />
 
                 <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
                   <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                     Bolsa
-                  </p>
-
-                  <p className="mt-2 text-xs font-semibold leading-relaxed text-white/50">
-                    Esta aba concentra itens, moedas e ataques derivados de
-                    equipamento. Carga, peso e organização de inventário entram
-                    em uma micro futura.
                   </p>
                 </section>
               </aside>
@@ -982,13 +1167,6 @@ export function CharacterReadySheetModal({
                   <h3 className="mt-2 text-2xl font-black text-forge-gold">
                     Conjuração
                   </h3>
-
-                  <p className="mt-2 max-w-3xl text-sm font-semibold leading-relaxed text-white/55">
-                    Esta página organiza truques e magias escolhidas na ficha. A
-                    habilidade chave, CD e bônus de ataque mágico serão
-                    calculados quando a progressão de conjuração por classe
-                    estiver completa.
-                  </p>
                 </div>
 
                 <div className="grid min-w-72 gap-2 sm:grid-cols-2">
@@ -1030,10 +1208,6 @@ export function CharacterReadySheetModal({
                         <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                           {levelLabel}
                         </p>
-
-                        <span className="rounded-full border border-white/10 bg-black/25 px-2 py-1 text-[10px] font-black text-white/40">
-                          {spells.length}
-                        </span>
                       </div>
 
                       <div className="mt-4 grid gap-3 xl:grid-cols-2">
@@ -1048,6 +1222,37 @@ export function CharacterReadySheetModal({
                             duration={sheetSpell.spell.duration}
                             components={sheetSpell.spell.components}
                             description={sheetSpell.spell.description}
+                            onRollAttack={() =>
+                              onRollSheetAction({
+                                kind: "d20",
+                                label: `Ataque mágico básico — ${sheetSpell.spell.name}`,
+                                modifier: 0,
+                              })
+                            }
+                            onRollDamage={
+                              getFirstDamageExpressionFromText(
+                                sheetSpell.spell.description,
+                              )
+                                ? () =>
+                                    onRollSheetAction({
+                                      kind: "damage",
+                                      label: `Dano mágico — ${sheetSpell.spell.name}`,
+                                      expression:
+                                        getFirstDamageExpressionFromText(
+                                          sheetSpell.spell.description,
+                                        ) ?? "1d4",
+                                    })
+                                : undefined
+                            }
+                            onUseEffect={() =>
+                              onRollSheetAction({
+                                kind: "effect",
+                                label: `Magia — ${sheetSpell.spell.name}`,
+                                description:
+                                  sheetSpell.spell.description ??
+                                  "Efeito da magia ainda sem descrição.",
+                              })
+                            }
                           />
                         ))}
                       </div>
@@ -1076,11 +1281,6 @@ export function CharacterReadySheetModal({
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                         Imagem e token
-                      </p>
-
-                      <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
-                        Edição por URL. Upload real de arquivo virá em micro
-                        futura.
                       </p>
                     </div>
 
@@ -1227,7 +1427,10 @@ export function CharacterReadySheetModal({
                       value={characterSheet?.backstory}
                     />
 
-                    <NarrativeField label="Notas" value={characterSheet?.notes} />
+                    <NarrativeField
+                      label="Notas"
+                      value={characterSheet?.notes}
+                    />
 
                     {isGM ? (
                       <NarrativeField

@@ -48,10 +48,6 @@ export function TableSettingsPanel({
     <section>
       <h2 className="text-base font-black text-forge-gold">Mesa</h2>
 
-      <p className="mt-1 text-xs font-semibold text-white/55">
-        Informações rápidas da campanha, participantes e ações da mesa.
-      </p>
-
       <div className="mt-5 rounded-xl border border-white/10 bg-black/30 p-4">
         <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
           Campanha

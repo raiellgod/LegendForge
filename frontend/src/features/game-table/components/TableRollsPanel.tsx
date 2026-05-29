@@ -45,6 +45,7 @@ type TableRollsPanelProps = {
   ) => void;
   onRollCustomBuilder: () => void;
   onRevealPrivateRoll: (roll: RollResult) => void;
+  onRollMassNpcInitiative: () => void;
   diceOptions: number[];
   quickRolls: {
     id: string;
@@ -82,6 +83,7 @@ export function TableRollsPanel({
   onChangeDiceTerm,
   onRollCustomBuilder,
   onRevealPrivateRoll,
+  onRollMassNpcInitiative,
   diceOptions,
   quickRolls,
 }: TableRollsPanelProps) {
@@ -89,10 +91,26 @@ export function TableRollsPanel({
     <section>
       <h2 className="text-base font-black text-forge-gold">Rolagens</h2>
 
-      <p className="mt-1 text-xs font-semibold text-white/55">
-        Role dados públicos ou privados. Mestres podem manter rolagens ocultas e
-        revelar depois.
-      </p>
+
+      {isGM ? (
+  <div className="mt-5 rounded-xl border border-forge-gold/25 bg-black/25 p-3 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]">
+    <div className="flex items-start justify-between gap-3">
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold">
+          Ordem de iniciativa
+        </p>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      onClick={onRollMassNpcInitiative}
+      className="mt-3 w-full rounded-lg border border-forge-gold/40 bg-forge-gold/10 px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
+    >
+      Rolar iniciativa da mesa
+    </button>
+  </div>
+) : null}
 
       <form onSubmit={onRollExpression} className="mt-5 space-y-3">
         <label
@@ -260,7 +278,10 @@ export function TableRollsPanel({
         {isDiceBuilderOpen ? (
           <div className="space-y-3 border-t border-white/10 p-4">
             {diceTerms.map((term) => (
-              <div key={term.id} className="grid grid-cols-[1fr_1fr_auto] gap-2">
+              <div
+                key={term.id}
+                className="grid grid-cols-[1fr_1fr_auto] gap-2"
+              >
                 <input
                   type="number"
                   min={1}
@@ -280,7 +301,11 @@ export function TableRollsPanel({
                 <select
                   value={term.sides}
                   onChange={(event) =>
-                    onChangeDiceTerm(term.id, "sides", Number(event.target.value))
+                    onChangeDiceTerm(
+                      term.id,
+                      "sides",
+                      Number(event.target.value),
+                    )
                   }
                   aria-label="Tipo de dado"
                   className="h-10 rounded-lg border border-white/15 bg-black/40 px-3 text-xs font-bold text-white outline-none focus:border-forge-gold"
@@ -402,9 +427,7 @@ export function TableRollsPanel({
             {lastRoll.displayResult ?? lastRoll.result}
           </p>
 
-          <p className="text-xs font-semibold text-white/55">
-            {lastRoll.dice}
-          </p>
+          <p className="text-xs font-semibold text-white/55">{lastRoll.dice}</p>
 
           <p className="mt-1 text-xs font-semibold text-white/45">
             {lastRoll.breakdown}

@@ -29,6 +29,7 @@ import {
 } from "@/features/character-builder/utils/attributes";
 
 import { isCantrip } from "@/features/character-builder/utils/spells";
+import { getInitiativeBonus } from "@/features/character-builder/utils/character-sheet-calculations";
 
 import {
   getStartingEquipmentItemsFromDraft,
@@ -123,7 +124,10 @@ import { CreatureCreationModal } from "@/features/game-table/components/Creature
 import { CharacterCreationMenuModal } from "@/features/game-table/components/CharacterCreationMenuModal";
 import { ActorLibraryModal } from "@/features/game-table/components/ActorLibraryModal";
 import { ActorActionModal } from "@/features/game-table/components/ActorActionModal";
-import { CharacterReadySheetModal } from "@/features/character-builder/components/CharacterReadySheetModal";
+import {
+  CharacterReadySheetModal,
+  type CharacterReadySheetRollRequest,
+} from "@/features/character-builder/components/CharacterReadySheetModal";
 
 const TOKEN_GRID_SIZE_IN_PIXELS = 40;
 
@@ -1861,6 +1865,20 @@ export default function CampaignPlayPage() {
     );
   }
 
+  function getInitiativeBonusForActor(actor: CampaignActor) {
+  if (actor.type !== "PLAYER_CHARACTER") {
+    return 0;
+  }
+
+  const characterSheet = getCharacterSheetByActor(actor);
+
+  if (!characterSheet) {
+    return 0;
+  }
+
+  return getInitiativeBonus(characterSheet.stats);
+}
+
   async function handleUpdateCharacterSheetImages(
     characterSheetId: string,
     data: {
@@ -2273,14 +2291,14 @@ export default function CampaignPlayPage() {
     setChatInput("");
   }
 
-  function publishRollToChat(roll: RollResult) {
+  function publishRollToChat(roll: RollResult, rollLabel?: string) {
     setChatMessages((currentMessages) => [
       ...currentMessages,
       {
         id: createId(),
         author: roll.author,
         kind: "roll",
-        content: `${roll.author} rolou ${roll.expression}`,
+        content: rollLabel ?? `${roll.author} rolou ${roll.expression}`,
         dice: roll.expression,
         result: roll.total,
         displayResult: roll.displayResult,
@@ -2289,7 +2307,11 @@ export default function CampaignPlayPage() {
     ]);
   }
 
-  function handleRoll(rollExpression: string, visibility: RollVisibility) {
+  function handleRoll(
+    rollExpression: string,
+    visibility: RollVisibility,
+    rollLabel?: string,
+  ) {
     if (!user) {
       return;
     }
@@ -2305,7 +2327,7 @@ export default function CampaignPlayPage() {
         return;
       }
 
-      publishRollToChat(roll);
+      publishRollToChat(roll, rollLabel);
     } catch (error) {
       setRollError(
         error instanceof Error ? error.message : "Não foi possível rolar.",
@@ -2325,6 +2347,127 @@ export default function CampaignPlayPage() {
   function handleQuickRoll(expression: string) {
     handleRoll(expression, isGM ? rollVisibility : "public");
   }
+
+  function handleRollMassNpcInitiative() {
+  if (!user || !isGM) {
+    return;
+  }
+
+  setRollError("");
+
+  const initiativeActors = visibleTableActors.filter((actor) => {
+    return (
+      actor.type === "PLAYER_CHARACTER" ||
+      actor.type === "NPC" ||
+      actor.type === "CREATURE"
+    );
+  });
+
+  if (initiativeActors.length === 0) {
+    setRollError(
+      "Não há personagens, NPCs ou criaturas na mesa para rolar iniciativa.",
+    );
+    return;
+  }
+
+  const results = initiativeActors
+  .map((actor) => {
+    const initiativeBonus = getInitiativeBonusForActor(actor);
+    const expression = `1d20${initiativeBonus >= 0 ? "+" : ""}${initiativeBonus}`;
+    const roll = rollDiceExpression(expression, actor.name);
+
+    return {
+      actor,
+      roll,
+      initiativeBonus,
+      expression,
+    };
+  })
+    .sort((firstResult, secondResult) => {
+      if (secondResult.roll.total !== firstResult.roll.total) {
+        return secondResult.roll.total - firstResult.roll.total;
+      }
+
+      return firstResult.actor.name.localeCompare(
+        secondResult.actor.name,
+        "pt-BR",
+      );
+    });
+
+  const ranking = results
+  .map((result, index) => {
+    const bonusText =
+      result.initiativeBonus >= 0
+        ? `+${result.initiativeBonus}`
+        : String(result.initiativeBonus);
+
+    return `${index + 1}. ${result.actor.name} — ${result.roll.total} (${bonusText})`;
+  })
+  .join("\n");
+
+  const breakdown = results
+  .map((result) => {
+    return `${result.actor.name}: ${result.expression} → ${result.roll.breakdown}`;
+  })
+  .join("\n");
+
+  setChatMessages((currentMessages) => [
+    ...currentMessages,
+    {
+      id: createId(),
+      author: getDisplayName(user),
+      kind: "roll",
+      content: `Ordem de iniciativa\n${ranking}`,
+      dice: "Iniciativa da mesa",
+      result: results[0]?.roll.total ?? 0,
+      displayResult: `${results.length} participantes`,
+      breakdown,
+    },
+  ]);
+
+  setActiveRightTab("chat");
+}
+
+  function handleReadySheetRoll(request: CharacterReadySheetRollRequest) {
+  if (request.kind === "effect") {
+    if (!user) {
+      return;
+    }
+
+    setChatMessages((currentMessages) => [
+      ...currentMessages,
+      {
+        id: createId(),
+        author: getDisplayName(user),
+        kind: "roll",
+        content: `${request.label}\n${request.description}`,
+        dice: "Efeito",
+        result: 0,
+        displayResult: "Efeito",
+        breakdown: request.description,
+      },
+    ]);
+
+    setActiveRightTab("chat");
+    return;
+  }
+
+  if (request.kind === "damage") {
+    handleRoll(request.expression, "public", request.label);
+    setActiveRightTab("chat");
+    return;
+  }
+
+  const modifierExpression =
+    request.modifier === 0
+      ? ""
+      : request.modifier > 0
+        ? `+${request.modifier}`
+        : `${request.modifier}`;
+
+  handleRoll(`1d20${modifierExpression}`, "public", request.label);
+  setActiveRightTab("chat");
+}
 
   function handleRollCustomDice() {
     if (!Number.isInteger(customDiceSides) || customDiceSides < 2) {
@@ -3396,6 +3539,7 @@ export default function CampaignPlayPage() {
                   onChangeDiceTerm={handleChangeDiceTerm}
                   onRollCustomBuilder={handleRollCustomBuilder}
                   onRevealPrivateRoll={handleRevealPrivateRoll}
+                  onRollMassNpcInitiative={handleRollMassNpcInitiative}
                   diceOptions={DICE_OPTIONS}
                   quickRolls={QUICK_ROLLS}
                 />
@@ -3577,6 +3721,7 @@ export default function CampaignPlayPage() {
           isGM={isGM}
           isSavingCharacterSheetImages={isSavingCharacterSheetImages}
           onUpdateCharacterSheetImages={handleUpdateCharacterSheetImages}
+          onRollSheetAction={handleReadySheetRoll}
           onClose={() => setSelectedActor(null)}
         />
       ) : null}
@@ -3639,6 +3784,7 @@ function ActorSheetModal({
   isGM,
   isSavingCharacterSheetImages,
   onUpdateCharacterSheetImages,
+  onRollSheetAction,
   onClose,
 }: {
   actor: CampaignActor;
@@ -3654,6 +3800,7 @@ function ActorSheetModal({
       tokenImageFit: CharacterReadySheet["tokenImageFit"];
     },
   ) => Promise<void>;
+  onRollSheetAction: (request: CharacterReadySheetRollRequest) => void;
   onClose: () => void;
 }) {
   const isPlayerCharacter = actor.type === "PLAYER_CHARACTER";
@@ -3669,6 +3816,7 @@ function ActorSheetModal({
         isGM={isGM}
         isSavingImages={isSavingCharacterSheetImages}
         onSaveImages={onUpdateCharacterSheetImages}
+        onRollSheetAction={onRollSheetAction}
         onClose={onClose}
       />
     );

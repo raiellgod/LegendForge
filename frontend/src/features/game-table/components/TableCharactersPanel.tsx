@@ -170,10 +170,6 @@ export function TableCharactersPanel({
       <div className="flex items-start justify-between gap-3">
   <div>
     <h2 className="text-base font-black text-forge-gold">Personagens</h2>
-
-    <p className="mt-1 text-xs font-semibold text-white/55">
-      Personagens ativos, NPCs e criaturas disponíveis na mesa.
-    </p>
   </div>
 
   {isGM ? (

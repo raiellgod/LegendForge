@@ -63,10 +63,6 @@ export function TableJournalPanel({ isGM }: TableJournalPanelProps) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-black text-forge-gold">Diário</h2>
-
-          <p className="mt-1 text-xs font-semibold text-white/55">
-            Anotações, locais, pistas e documentos da aventura.
-          </p>
         </div>
 
         {isGM ? (

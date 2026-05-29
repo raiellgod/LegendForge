@@ -15,10 +15,10 @@ export function rollDiceExpression(
   const normalizedExpression = normalizeDiceExpression(expression);
 
   if (!normalizedExpression) {
-    throw new Error("Digite uma rolagem. Exemplo: 1d20 + 3d4");
+    throw new Error("Digite uma rolagem. Exemplo: 1d20 + 3");
   }
 
-  const terms = normalizedExpression.split("+").filter(Boolean);
+  const terms = normalizedExpression.match(/[+-]?[^+-]+/g)?.filter(Boolean) ?? [];
 
   if (terms.length === 0) {
     throw new Error("Digite uma rolagem válida.");
@@ -28,12 +28,29 @@ export function rollDiceExpression(
   const breakdownParts: string[] = [];
   const displayParts: string[] = [];
 
-  for (const term of terms) {
+  for (const rawTerm of terms) {
+    const sign = rawTerm.startsWith("-") ? -1 : 1;
+    const term = rawTerm.replace(/^[+-]/, "");
+
+    if (!term) {
+      continue;
+    }
+
+    if (/^\d+$/.test(term)) {
+      const value = Number(term) * sign;
+
+      total += value;
+      breakdownParts.push(value >= 0 ? `+${value}` : String(value));
+      displayParts.push(value >= 0 ? `+${value}` : String(value));
+
+      continue;
+    }
+
     if (term === "moeda" || term === "coin" || term === "caraoucoroa") {
       const value = Math.floor(Math.random() * 2);
       const face = value === 1 ? "Cara" : "Coroa";
 
-      total += value;
+      total += value * sign;
       breakdownParts.push(`Moeda [${face}]`);
       displayParts.push(face);
 
@@ -53,7 +70,7 @@ export function rollDiceExpression(
         return Math.floor(Math.random() * 10) * 10;
       });
 
-      const subtotal = rolls.reduce((sum, roll) => sum + roll, 0);
+      const subtotal = rolls.reduce((sum, roll) => sum + roll, 0) * sign;
       const formattedRolls = rolls.map((roll) =>
         roll.toString().padStart(2, "0"),
       );
@@ -61,7 +78,9 @@ export function rollDiceExpression(
       total += subtotal;
 
       breakdownParts.push(
-        `${quantity}d10 dezenas [${formattedRolls.join(", ")}]`,
+        `${sign < 0 ? "-" : ""}${quantity}d10 dezenas [${formattedRolls.join(
+          ", ",
+        )}]`,
       );
 
       displayParts.push(formattedRolls.join(", "));
@@ -73,7 +92,7 @@ export function rollDiceExpression(
 
     if (!match) {
       throw new Error(
-        "Use apenas dados no formato XdY. Exemplos: 1d20, 3d4, d100, d10t, moeda.",
+        "Use dados no formato XdY e modificadores numéricos. Exemplos: 1d20, 1d20+3, 3d4-1, d100, d10t, moeda.",
       );
     }
 
@@ -92,11 +111,13 @@ export function rollDiceExpression(
       return Math.floor(Math.random() * sides) + 1;
     });
 
-    const subtotal = rolls.reduce((sum, roll) => sum + roll, 0);
+    const subtotal = rolls.reduce((sum, roll) => sum + roll, 0) * sign;
 
     total += subtotal;
 
-    breakdownParts.push(`${quantity}d${sides} [${rolls.join(", ")}]`);
+    breakdownParts.push(
+      `${sign < 0 ? "-" : ""}${quantity}d${sides} [${rolls.join(", ")}]`,
+    );
     displayParts.push(rolls.join(", "));
   }
 
@@ -106,7 +127,7 @@ export function rollDiceExpression(
     expression: normalizedExpression,
     total,
     displayResult: displayParts.length === 1 ? displayParts[0] : undefined,
-    breakdown: breakdownParts.join(" + "),
+    breakdown: breakdownParts.join(" + ").replace(/\+ -/g, "- "),
     createdAt: new Date(),
   };
 }
