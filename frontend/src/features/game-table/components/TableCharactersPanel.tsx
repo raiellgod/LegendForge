@@ -168,30 +168,30 @@ export function TableCharactersPanel({
   return (
     <section>
       <div className="flex items-start justify-between gap-3">
-  <div>
-    <h2 className="text-base font-black text-forge-gold">Personagens</h2>
-  </div>
+        <div>
+          <h2 className="text-base font-black text-forge-gold">Personagens</h2>
+        </div>
 
-  {isGM ? (
-    <div className="flex shrink-0 gap-2">
-      <button
-        type="button"
-        onClick={onOpenLibrary}
-        className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-      >
-        Biblioteca
-      </button>
+        <div className="flex shrink-0 gap-2">
+          {isGM ? (
+            <button
+              type="button"
+              onClick={onOpenLibrary}
+              className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
+            >
+              Biblioteca
+            </button>
+          ) : null}
 
-      <button
-        type="button"
-        onClick={onOpenCharacterCreationMenu}
-        className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-      >
-        + Criar
-      </button>
-    </div>
-  ) : null}
-</div>
+          <button
+            type="button"
+            onClick={onOpenCharacterCreationMenu}
+            className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
+          >
+            {isGM ? "+ Criar" : "+ Personagem"}
+          </button>
+        </div>
+      </div>
 
       {!hasAnyActor ? (
         <div className="mt-5 rounded-xl border border-white/10 bg-black/30 p-4">
@@ -200,8 +200,9 @@ export function TableCharactersPanel({
           </p>
 
           <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
-            Quando fichas forem finalizadas ou atores forem trazidos para a
-            mesa, eles aparecerão aqui.
+            {isGM
+              ? "Quando fichas forem finalizadas ou atores forem trazidos para a mesa, eles aparecerão aqui."
+              : "Clique em + Personagem para criar sua ficha e entrar na campanha."}
           </p>
         </div>
       ) : (

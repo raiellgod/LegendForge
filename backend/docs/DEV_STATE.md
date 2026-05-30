@@ -4,7 +4,7 @@
 
 ## 📅 Last Update
 
-26/05/2026
+29/05/2026
 
 ---
 
@@ -138,13 +138,19 @@ LegendForge/
 - equipamentos persistem
 - campos de sobre persistem
 - criação de personagem do zero abre draft vazio
+- player comum consegue abrir criação de personagem pela aba Personagens
+- ficha pronta carrega dados da CharacterSheet
+- retrato/token por URL persistem
+- atualização de token a partir da ficha sincroniza tokens existentes do ator
 
 ### 🚧 Em andamento
 
-- atualização dos documentos após 4.23
-- próxima macro: personagens ativos, biblioteca e exclusão/remoção correta
+- commit/documentação da 4.26
+- próxima macro: regras avançadas de sistema/ficha
+- preparar progressão por nível
+- preparar magias por classe
+- preparar CD/ataque mágico real
 - preparar upload real de imagens
-- finalizar fluxo estável de ficha pronta
 - persistência/sincronização futura de ferramentas locais da mesa
 
 ---
@@ -234,6 +240,9 @@ Estado atual:
 - biblioteca de atores
 - ações de ator/personagem
 - edição de tamanho de token
+- ficha pronta de personagem
+- rolagens automáticas vindas da ficha
+- criação de personagem para player comum pela aba Personagens
 
 ---
 
@@ -255,6 +264,7 @@ Etapas/componentes extraídos:
 - utils de magias
 - utils de equipamentos
 - utils de sobre/about
+- utils de cálculos da ficha pronta
 - componentes genéricos
 - componentes da revisão
 - etapa Conceito
@@ -264,15 +274,23 @@ Etapas/componentes extraídos:
 - etapa Equipamentos
 - etapa Sobre
 - etapa Revisão
+- modal de ficha pronta
 
 Status:
 
 - Criar personagem abre draft vazio.
 - Builder não carrega dados antigos da Hikari ao criar personagem.
+- Player comum abre builder direto pelo botão `+ Personagem`.
 - Pronomes influenciam linguagem de labels principais.
 - Pronome e gênero inicial sincronizam quando apropriado.
 - Salvar rascunho funciona.
-- Teste regressivo da refatoração do builder foi concluído antes da 4.23.
+- Finalizar ficha gera personagem/ficha pronta.
+- Ficha pronta tem abas Ficha/Status, Bolsa, Magia e Perfil.
+- Ficha pronta exibe todas as perícias.
+- Bolsa mostra equipamentos, moedas e botões Ataque/Dano.
+- Magia mostra botões Ataque/Dano/Efeito.
+- Perfil mostra imagem/token e campos narrativos.
+- Teste regressivo da 4.26 foi concluído.
 
 ---
 
@@ -322,8 +340,12 @@ Funcionalidades validadas:
 - Tokens fora da área revelada ficam cobertos.
 - Tamanho de token 1x1, 2x2, 3x3 e 4x4 funciona.
 - Tamanho de token persiste após recarregar.
-- Biblioteca e `+ Criar` aparecem na aba Personagens.
-- Teste regressivo da mesa concluído.
+- Biblioteca e `+ Criar` aparecem para GM.
+- `+ Personagem` aparece para player comum.
+- Rolagens manuais aceitam modificadores numéricos positivos e negativos.
+- Iniciativa da mesa gera ranking sem emoji.
+- Personagens usam iniciativa real no ranking.
+- NPCs/criaturas usam +0 até terem ficha própria.
 
 Observação:
 
@@ -339,58 +361,75 @@ Sincronização real entre contas será tratada em fase futura.
 ```txt
 [x] 4.22 — Refatoração do Character Builder
 [x] 4.23 — Refatoração da Mesa de Jogo
-[em andamento] 4.24.0 — Atualização dos documentos do projeto
-[próximo] 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+[x] 4.24 — Personagens ativos, biblioteca e ciclo de vida de atores
+[x] 4.25 — Ficha pronta, abas, perfil, bolsa, magia e imagens por URL
+[x] 4.26 — Rolagens automáticas pela ficha pronta
+[pendente] 4.26.13 — Commit da 4.26
+[próximo] 4.27 — Regras avançadas de sistema/ficha
 ```
 
 ---
 
 ## 🧭 Próximo plano
 
-### 4.24.0 — Documentos
+### 4.26.13 — Commit da 4.26
 
 ```txt
-[ ] 4.24.0.1 — Atualizar DEV_STATE.md com fechamento da 4.23
-[ ] 4.24.0.2 — Atualizar FEATURE_CAPSULE.md com ferramentas da mesa
-[ ] 4.24.0.3 — Atualizar ARCHITECTURE.md com features/game-table
-[ ] 4.24.0.4 — Atualizar BOOT.md com estado atual e próximo passo
-[ ] 4.24.0.5 — Atualizar README.md se necessário
-[ ] 4.24.0.6 — Commit dos documentos
+[ ] git status
+[ ] git diff --stat
+[ ] cd frontend && pnpm lint && cd ..
+[ ] git add .
+[ ] git status
+[ ] git commit -m "feat: add ready sheet roll actions"
 ```
 
-### 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+### 4.27 — Regras avançadas de sistema/ficha
 
 ```txt
-[ ] 4.24.1 — Mapear regras atuais de CampaignActor, TABLE/LIBRARY e SceneToken
-[ ] 4.24.2 — Definir regra de personagem ativo por player
-[ ] 4.24.3 — Corrigir diferença entre remover token da cena, devolver à biblioteca e excluir ator
-[ ] 4.24.4 — Implementar remoção/exclusão segura de NPC/criatura
-[ ] 4.24.5 — Implementar regra de personagem de player/GM sem tratar como NPC
-[ ] 4.24.6 — Ajustar UI da aba Personagens/Biblioteca para essas regras
-[ ] 4.24.7 — Teste regressivo de atores, tokens e biblioteca
-[ ] 4.24.8 — Commit da 4.24
+[ ] 4.27.1 — Mapear regras atuais de classe, magia, progressão e ficha pronta
+[ ] 4.27.2 — Revisar modelagem de progressão por classe/nível
+[ ] 4.27.3 — Popular seed de progressão básica por classe
+[ ] 4.27.4 — Filtrar magias por classe
+[ ] 4.27.5 — Validar quantidade de truques/magias por nível
+[ ] 4.27.6 — Calcular CD de magia e ataque mágico
+[ ] 4.27.7 — Mostrar espaços de magia na aba Magia
+[ ] 4.27.8 — Features de classe por nível
+[ ] 4.27.9 — Subclasse no nível correto
+[ ] 4.27.10 — Preparar fluxo de subir de nível
+[ ] 4.27.11 — Revisão UX/UI das regras avançadas
+[ ] 4.27.12 — Teste regressivo
+[ ] 4.27.13 — Commit
+```
+
+### 4.28 — Multiclasse
+
+```txt
+[ ] Modelar múltiplas classes por ficha
+[ ] Nível total por soma das classes
+[ ] Subir nível perguntando qual classe recebe o novo nível
+[ ] Ajustar magias/proficiências/features por classe
+[ ] Histórico de níveis
 ```
 
 ---
 
 ## 🔮 Backlog confirmado
 
-### Fase 4.25 — Ficha pronta/imagens
+### Upload real de imagens
 
-- página/modal de ficha pronta
 - upload de retrato direto do computador
 - upload de token direto do computador
 - preview/fit/crop
-- persistência de URL
+- persistência segura
 
-### Fase 4.26 — Ajustes finais de UX/UI da ficha pronta
+### Responsividade da ficha pronta
 
-- polish visual
-- legibilidade
-- responsividade
-- revisão de layout
+- revisar notebooks menores
+- revisar telas widescreen
+- revisar tablet
+- revisar comportamento de scroll nas abas Ficha/Status, Bolsa, Magia e Perfil
 
-### Fase 4.27 — Regras avançadas
+### Regras avançadas
 
 - seed mais robusto
 - progressão por nível
@@ -400,10 +439,11 @@ Sincronização real entre contas será tratada em fase futura.
 - proficiências editáveis pelo GM
 - defesa/armadura como camada mecânica
 
-### Fase 4.28 — Multiclasse
+### Multiclasse
 
 - múltiplas classes por ficha
 - nível por classe
+- escolher qual classe sobe ao ganhar nível
 - impacto em perícias, proficiências, magias e equipamentos
 
 ---
@@ -421,4 +461,4 @@ Sincronização real entre contas será tratada em fase futura.
 
 ## 🏁 Estado Atual
 
-👉 **Fase 4.24.0 em andamento. Próximo passo funcional: 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta.**
+👉 **Fase 4.26 concluída funcionalmente. Próximo passo: commit da 4.26 e início da 4.27 — regras avançadas de sistema/ficha.**

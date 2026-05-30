@@ -3073,6 +3073,33 @@ export default function CampaignPlayPage() {
       setIsLoadingCharacterBuilderOptions(false);
     }
   }
+
+  function startCharacterBuilderCreation() {
+    setCharacterBuilderDraft(createEmptyCharacterBuilderDraft());
+    setSavedCharacterSheetId(null);
+    setSavedCharacterSheetStatus(null);
+    setCharacterDraftSaveError(null);
+    setCharacterDraftSaveSuccess(null);
+    setIsSavingCharacterDraft(false);
+    setIsFinalizingCharacterSheet(false);
+    setCharacterBuilderOptionsError(null);
+
+    setIsCharacterCreationMenuOpen(false);
+    setActiveCharacterBuilderStep("concept");
+    setIsCharacterBuilderOpen(true);
+
+    void handleLoadCharacterBuilderOptions();
+  }
+
+  function handleOpenCharacterCreationEntryPoint() {
+    if (isGM) {
+      setIsCharacterCreationMenuOpen(true);
+      return;
+    }
+
+    startCharacterBuilderCreation();
+  }
+
   function handleSelectCharacterBuilderOption(
     type: "class" | "ancestry" | "background",
     option: {
@@ -3556,9 +3583,7 @@ export default function CampaignPlayPage() {
                   canOpenSheet={canOpenActorSheet}
                   onOpenActions={setActionActor}
                   onOpenLibrary={() => setIsLibraryModalOpen(true)}
-                  onOpenCharacterCreationMenu={() =>
-                    setIsCharacterCreationMenuOpen(true)
-                  }
+                  onOpenCharacterCreationMenu={handleOpenCharacterCreationEntryPoint}
                 />
               )}
 
@@ -3580,9 +3605,7 @@ export default function CampaignPlayPage() {
                   isAssumingGm={isAssumingGm}
                   onAssumeGm={handleAssumeGmRole}
                   onOpenExitModal={() => setIsExitModalOpen(true)}
-                  onOpenCharacterCreationMenu={() =>
-                    setIsCharacterCreationMenuOpen(true)
-                  }
+                  onOpenCharacterCreationMenu={handleOpenCharacterCreationEntryPoint}
                 />
               )}
             </div>
@@ -3591,24 +3614,9 @@ export default function CampaignPlayPage() {
       </div>
 
       <CharacterCreationMenuModal
-        isOpen={isCharacterCreationMenuOpen}
+        isOpen={isGM && isCharacterCreationMenuOpen}
         onClose={() => setIsCharacterCreationMenuOpen(false)}
-        onStartCharacterBuilder={() => {
-          setCharacterBuilderDraft(createEmptyCharacterBuilderDraft());
-          setSavedCharacterSheetId(null);
-          setSavedCharacterSheetStatus(null);
-          setCharacterDraftSaveError(null);
-          setCharacterDraftSaveSuccess(null);
-          setIsSavingCharacterDraft(false);
-          setIsFinalizingCharacterSheet(false);
-          setCharacterBuilderOptionsError(null);
-
-          setIsCharacterCreationMenuOpen(false);
-          setActiveCharacterBuilderStep("concept");
-          setIsCharacterBuilderOpen(true);
-
-          void handleLoadCharacterBuilderOptions();
-        }}
+        onStartCharacterBuilder={startCharacterBuilderCreation}
         onStartNpcCreation={() => {
           setNpcCreationDraft(createEmptySimpleActorCreationDraft());
           setNpcCreationError(null);

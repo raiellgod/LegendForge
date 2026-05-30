@@ -262,10 +262,11 @@ Definir domínio do sistema antes da implementação.
 - menu com opções:
   - Criar personagem
   - Criar NPC
-  - Editar ficha diretamente
-  - Personagem pronto
-- apenas Criar personagem ativo por enquanto
-- demais opções marcadas como planejadas
+  - Criar criatura/inimigo
+- personagem usa builder real
+- NPC/criatura têm fluxo simples próprio de ator
+- GM mantém criação completa
+- player comum usa criação direta de personagem
 
 ---
 
@@ -511,14 +512,124 @@ Testado:
 
 ---
 
+# ⚡ Capsule 36 — Active Characters & Actor Lifecycle
+
+## 🎯 Goal
+
+Ajustar ciclo de vida de personagens, NPCs, criaturas, biblioteca e atores ativos.
+
+## ✅ Result
+
+- fluxo de atores em `TABLE`/`LIBRARY` revisado
+- regras de biblioteca preservadas para NPCs/criaturas
+- preparação para personagem ativo por player
+- decisão mantida: personagem de player/GM não deve ser tratado como NPC
+- decisão futura registrada: NPCs terão ficha própria
+- decisão futura registrada: criaturas terão bloco próprio de bestiário
+
+---
+
+# ⚡ Capsule 37 — Ready Character Sheet
+
+## 🎯 Goal
+
+Transformar a ficha pronta em uma visualização jogável e organizada.
+
+## ✅ Result
+
+- `CharacterReadySheetModal` consolidado
+- abas criadas na ordem:
+  - Ficha/Status
+  - Bolsa
+  - Magia
+  - Perfil
+- identidade movida para header fixo
+- Ficha/Status compactada
+- todas as perícias aparecem, não apenas as proficientes
+- testes e perícias preparados como linhas clicáveis
+- Bolsa concentra moedas, equipamentos e ataques derivados de equipamento
+- Magia concentra truques/magias
+- Perfil concentra retrato, token, personalidade, aparência, história e notas
+- span “Visão do mestre” removido
+- notas do mestre aparecem apenas para GM
+- retrato/token por URL com persistência
+- token/ficha sincronizam imagem e fit quando salvos
+
+---
+
+# ⚡ Capsule 38 — Ready Sheet Roll Actions
+
+## 🎯 Goal
+
+Conectar a ficha pronta ao sistema de rolagens da mesa.
+
+## ✅ Result
+
+- contrato `CharacterReadySheetRollRequest` criado
+- parser de dados aceita modificadores numéricos positivos e negativos
+- clicar em perícia rola `1d20 + bônus`
+- clicar em teste de resistência rola `1d20 + bônus`
+- clicar em iniciativa rola `1d20 + iniciativa`
+- GM pode rolar iniciativa da mesa
+- ranking de iniciativa inclui:
+  - personagens
+  - NPCs
+  - criaturas
+- ranking não usa emojis
+- personagens usam iniciativa real da ficha
+- NPCs/criaturas usam +0 enquanto não têm ficha/stat block
+- Bolsa tem botões pequenos:
+  - Ataque
+  - Dano
+- ataque de equipamento é básico/provisório: `1d20 + 0`
+- dano de equipamento rola expressão do item
+- Magia tem botões:
+  - Ataque
+  - Dano
+  - Efeito
+- ataque mágico é básico/provisório: `1d20 + 0`
+- dano mágico é detectado pela descrição
+- efeito mágico envia descrição ao chat
+- textos de UI deixam claro o que é provisório
+- teste regressivo da 4.26 concluído
+
+---
+
+# ⚡ Capsule 39 — Player Character Creation Access
+
+## 🎯 Goal
+
+Permitir que player comum crie personagem pela aba Personagens.
+
+## ✅ Result
+
+- player comum vê botão `+ Personagem`
+- player comum abre builder diretamente
+- player comum não passa pelo menu completo de NPC/criatura
+- GM continua vendo:
+  - Biblioteca
+  - `+ Criar`
+  - criação de personagem
+  - criação de NPC
+  - criação de criatura
+- fluxo ficou mais coerente para permissões de mesa
+
+---
+
 # 🧠 Estado Atual do Projeto
 
-👉 **Fase 4.24.0 — Atualização dos documentos do projeto em andamento.**
+👉 **Fase 4.26 concluída funcionalmente.**
+
+Próximo foco imediato:
+
+```txt
+4.26.13 — Commit da 4.26
+```
 
 Próximo foco funcional:
 
 ```txt
-4.24 — Personagens ativos, biblioteca e exclusão/remoção correta.
+4.27 — Regras avançadas de sistema/ficha.
 ```
 
 ---

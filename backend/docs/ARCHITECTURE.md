@@ -14,6 +14,7 @@ O projeto é inspirado em VTTs como Roll20 e Foundry VTT, mas segue uma identida
 - 📄 Criação de personagens persistida
 - 🧠 Arquitetura real de produto full-stack
 - ⚙️ Desenvolvimento incremental, testável e com mentalidade de produção
+- 🎲 Ficha pronta voltada para uso real na mesa
 
 ---
 
@@ -249,9 +250,56 @@ Status consolidado:
 
 - Conceito, atributos, perícias, magias, equipamentos, sobre e revisão foram extraídos/refatorados.
 - Criar personagem pela mesa abre draft vazio.
+- Player comum agora vê `+ Personagem` e abre o builder direto.
+- GM mantém `Biblioteca` e `+ Criar` completo.
 - Linguagem dinâmica por pronome foi aplicada em labels principais de classe/ancestralidade/antecedente.
 - Pronome e gênero inicial foram sincronizados quando apropriado.
 - O builder continua sendo aberto dentro da mesa.
+
+---
+
+## 🧾 Ready Character Sheet — Arquitetura atual
+
+Arquivo principal:
+
+```txt
+frontend/src/features/character-builder/components/CharacterReadySheetModal.tsx
+```
+
+A ficha pronta foi organizada em abas:
+
+```txt
+1 — Ficha/Status
+2 — Bolsa
+3 — Magia
+4 — Perfil
+```
+
+Decisões atuais:
+
+- Identidade do personagem fica no header fixo, visível em todas as abas.
+- `Ficha/Status` é compacta e focada em uso durante jogo.
+- Perícias exibem todas as perícias do sistema, não apenas as proficientes.
+- Perícias e testes de resistência usam linhas clicáveis.
+- `Bolsa` concentra moedas, equipamentos e ações básicas de item.
+- `Magia` concentra magias/truques e ações básicas de magia.
+- `Perfil` concentra retrato, token, aparência, personalidade, história e notas.
+- Notas do mestre aparecem apenas para GM.
+
+Ações de rolagem atuais:
+
+- Iniciativa do personagem: `1d20 + iniciativa real`.
+- Perícia: `1d20 + bônus da perícia`.
+- Teste de resistência: `1d20 + bônus do teste`.
+- Ataque de equipamento: ataque básico `1d20 + 0`.
+- Dano de equipamento: rola expressão de dano do equipamento.
+- Ataque mágico: ataque mágico básico `1d20 + 0`.
+- Dano mágico: expressão detectada na descrição.
+- Efeito mágico: envia descrição da magia ao chat.
+
+Limitação atual intencional:
+
+> Ataques de equipamento e ataques mágicos ainda não comparam com CA automaticamente. Bônus real, alvo e comparação com CA entram nas regras avançadas.
 
 ---
 
@@ -305,16 +353,26 @@ Funcionalidades atuais da mesa:
   - névoa local com máscara real
   - áreas reveladas
   - tokens fora da área revelada ficam cobertos
-- Biblioteca e `+ Criar` restaurados na aba Personagens.
+- Biblioteca e criação de atores na aba Personagens.
+- Rolagens manuais e ações de ficha publicam no chat local.
+- Iniciativa da mesa permite GM rolar ranking para personagens/NPCs/criaturas.
 - Sem sincronização em tempo real ainda.
 
 Decisão atual:
 
-> Desenho, medição, pan/zoom e névoa são locais/visuais por enquanto. Persistência e sincronização em tempo real entram em fases futuras.
+> Desenho, medição, pan/zoom, névoa, chat e rolagens são locais/visuais por enquanto. Persistência/sincronização em tempo real entram em fases futuras.
 
 ---
 
 ## 🧠 Regras futuras importantes
+
+### Regras avançadas de ataque
+
+- Ataque deve rolar `1d20 + bônus de ataque`.
+- Depois deve comparar com CA do alvo.
+- Dano só deve ser aplicado/rolado depois de acerto.
+- Primeiro passo futuro: CA manual.
+- Passo posterior: alvo/token selecionado e CA lida automaticamente.
 
 ### Perícias e proficiências
 
@@ -335,6 +393,11 @@ Decisão atual:
 - NPCs/criaturas podem ir para biblioteca.
 - Personagens de player/GM precisam de fluxo próprio de remover/inativar/excluir.
 
+### NPCs e criaturas
+
+- NPCs terão ficha própria futura, separada de `CharacterSheet`.
+- Criaturas terão stat block/bestiário próprio, separado de `CharacterSheet` e `NpcSheet`.
+
 ### Linguagem dinâmica
 
 - Implementar e expandir linguagem baseada em pronomes.
@@ -343,8 +406,14 @@ Decisão atual:
 
 ### Upload de imagem
 
-- Upload direto do computador entra na Fase 4.25.
+- Upload direto do computador entra em fase futura.
 - Inclui retrato, token, preview/fit/crop simples e persistência da URL no banco.
+
+### Progressão e multiclasse
+
+- Subir de nível deve ser um fluxo próprio.
+- Com multiclasse, o jogador escolhe qual classe recebe o novo nível.
+- Nível total deve ser calculado pela soma dos níveis por classe.
 
 ### Sincronização em tempo real
 
@@ -362,8 +431,10 @@ Estado atual:
 ```txt
 [x] 4.22 — Refatoração do Character Builder
 [x] 4.23 — Refatoração da Mesa de Jogo
-[em andamento] 4.24.0 — Atualização dos documentos do projeto
-[próximo] 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+[x] 4.24 — Personagens ativos, biblioteca e ciclo de vida de atores
+[x] 4.25 — Ficha pronta, abas, perfil, bolsa, magia e imagens por URL
+[x] 4.26 — Rolagens automáticas pela ficha pronta
+[próximo] 4.27 — Regras avançadas de sistema/ficha
 ```
 
 ---
@@ -385,4 +456,7 @@ Estado atual:
 - Sistema RPG inicial semeado.
 - Builder de personagem avançado e refatorado.
 - Mesa de jogo refatorada em `features/game-table`.
-- Próximo foco: regras corretas de personagens ativos, biblioteca e remoção/exclusão.
+- Ficha pronta funcional e organizada por abas.
+- Rolagens automáticas da ficha conectadas ao chat local.
+- Player comum consegue iniciar criação de personagem.
+- Próximo foco: regras avançadas de sistema/ficha, conjuração, progressão e preparação para multiclasse.

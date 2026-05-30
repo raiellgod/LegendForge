@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-game%20table%20refactor%20complete-green)
+![Status](https://img.shields.io/badge/status-ready%20sheet%20rolls%20complete-green)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -25,6 +25,8 @@ Inspired by tools like Roll20 and Foundry VTT, but with a different philosophy:
 - ⚙️ Built incrementally with production mindset
 - 📄 Character creation built as a real persisted flow
 - 🗺️ Table tools built toward a playable VTT experience
+- 🧍 Ready character sheet designed for actual gameplay at the table
+- 🎲 Sheet-based roll actions connected to the table chat
 
 ---
 
@@ -40,6 +42,8 @@ LegendForge demonstrates:
 - 🎮 Flexible RPG engine foundation
 - 🎨 UI built from a product-driven flow
 - 🧍 Character builder connected to real domain data
+- 🧾 Ready character sheet with tabs, compact status view and inventory/profile/magic sections
+- 🎲 Table roll actions from skills, saving throws, initiative, equipment and spells
 - 🧩 Incremental VTT features with persistence where it matters
 
 ---
@@ -121,8 +125,8 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟢 Character builder and game table refactors completed.  
-> 🟡 Next focus: active characters, library rules and safe removal/deletion flows.
+> 🟢 Ready character sheet and sheet-based roll actions completed.  
+> 🟡 Next focus: advanced system/character rules, including spellcasting progression, level-up preparation and multiclass foundation.
 
 ### ✅ Completed
 
@@ -152,6 +156,7 @@ LegendForge/
   - `/campaigns/[id]/play`
 - Campaign actors and real actor locations
 - Scene tokens persisted in the database
+- Token size editing and persistence
 - RPG system foundation:
   - GameSystem
   - Stat
@@ -187,6 +192,16 @@ LegendForge/
   - review step
   - empty draft when creating a new character
   - basic dynamic language by pronoun
+- Ready character sheet:
+  - header with identity visible on all tabs
+  - tabs in order: Ficha/Status, Bolsa, Magia, Perfil
+  - compact status layout
+  - all skills shown, not only proficient skills
+  - saving throws and skill rows prepared as rollable actions
+  - Bolsa separated with equipment, coins, attack and damage buttons
+  - Magia separated with spell cards and basic actions
+  - Perfil separated with image/token/profile/narrative fields
+  - portrait/token URL editing and persistence
 - Game table refactor:
   - `features/game-table`
   - extracted toolbar
@@ -198,15 +213,30 @@ LegendForge/
   - measure line/circle tool
   - local drawing tool
   - local fog tool with real mask
-  - editable/persisted token size
   - table regression test completed
+- Ready sheet roll actions:
+  - click skill → rolls `1d20 + skill bonus`
+  - click saving throw → rolls `1d20 + saving throw bonus`
+  - click initiative → rolls `1d20 + initiative bonus`
+  - GM table initiative ranking
+  - player characters use real initiative bonus
+  - NPCs/creatures use `+0` until their own sheets exist
+  - equipment attack basic button
+  - equipment damage button
+  - spell attack basic button
+  - spell damage detection from description
+  - spell effect message to chat
+- Player creation access:
+  - player common user sees `+ Personagem`
+  - player opens character builder directly
+  - GM keeps `Biblioteca` and full `+ Criar` flow
 
 ---
 
 ## 🚧 In Progress
 
 ```txt
-4.24.0 — Updating project documentation after the game table refactor
+4.26.13 — Commit/documentation for ready sheet roll actions
 ```
 
 ---
@@ -214,18 +244,19 @@ LegendForge/
 ## 🔜 Next Step
 
 ```txt
-4.24 — Active characters, library and safe removal/deletion flows
+4.27 — Advanced system and character rules
 ```
 
 Expected work:
 
-- map current `CampaignActor`, `TABLE`, `LIBRARY` and `SceneToken` rules
-- define active character rules per player
-- separate token removal from actor removal/deletion
-- define safe NPC/creature deletion
-- define player/GM character removal rules
-- adjust UI in Characters and Library flows
-- regression test actors, tokens and library
+- spellcasting rules by class
+- filter spells by class
+- validate cantrips/spells by class progression
+- calculate spell DC and spell attack bonus
+- display spell slots / spellcasting limits
+- prepare level-up flow
+- model progression by class and level
+- prepare multiclass foundation for 4.28
 
 ---
 
@@ -263,7 +294,7 @@ Current state:
 - Auth tables are operational
 - Campaign tables are operational
 - RPG domain is expanding incrementally
-- CharacterSheet domain exists and is connected to the builder
+- CharacterSheet domain exists and is connected to the builder and ready sheet
 - Campaign actors and scene tokens are connected to the game table
 
 More details:
@@ -287,7 +318,10 @@ Current UI progress:
 - ✅ Search campaign page started
 - ✅ Tabletop/session screen with functional tools
 - ✅ Character builder modal with persisted flow
-- 🟡 Character active/library/removal rules coming next
+- ✅ Ready character sheet with tabs
+- ✅ Compact Ficha/Status layout
+- ✅ Rollable skills, saving throws, initiative, equipment and spells
+- 🟡 Advanced spellcasting/level-up/multiclass rules coming next
 
 ---
 
@@ -346,6 +380,10 @@ Current capsules now include:
 - Capsule 33 — Game Table Panels
 - Capsule 34 — Game Table Canvas & Tools
 - Capsule 35 — Game Table Regression & Cleanup
+- Capsule 36 — Active Characters & Actor Lifecycle
+- Capsule 37 — Ready Character Sheet
+- Capsule 38 — Ready Sheet Roll Actions
+- Capsule 39 — Player Character Creation Access
 
 See:
 
@@ -416,6 +454,13 @@ Before commits:
 ```bash
 git diff --stat
 ```
+
+Before deployment later:
+
+- review `.gitignore`
+- keep `node_modules`, `.next`, `dist`, `.turbo`, logs and local generated caches out of git/deploy packages
+- keep `.env` private
+- maintain `.env.example`
 
 ---
 

@@ -9,7 +9,7 @@ Virtual Tabletop (VTT)
 
 ---
 
-## 📅 Current State — 26/05/2026
+## 📅 Current State — 29/05/2026
 
 Este documento serve para reiniciar a próxima conversa sem perder contexto.
 
@@ -69,6 +69,8 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
 - Revisão visual implementada.
 - Refatoração do builder para `features/character-builder`.
 - Criar personagem pela mesa abre draft vazio.
+- Player comum vê `+ Personagem` e abre o builder direto.
+- GM mantém `Biblioteca` e `+ Criar`.
 - Linguagem dinâmica por pronome funcionando em textos principais.
 - Sincronização inicial pronome → gênero funcionando.
 - Refatoração da mesa para `features/game-table`.
@@ -76,9 +78,26 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
 - Toolbar esquerda funcional.
 - Mover visão, medir, desenhar e névoa funcionando localmente.
 - Tamanho de token editável e persistido.
-- Biblioteca e `+ Criar` restaurados na aba Personagens.
-- Teste regressivo da mesa concluído.
-- Commit da refatoração da mesa concluído.
+- Biblioteca e criação de atores restauradas na aba Personagens.
+- Ficha pronta organizada em abas: Ficha/Status, Bolsa, Magia e Perfil.
+- Identidade da ficha fica no header fixo.
+- Ficha/Status compacta mostra todos os atributos, status, testes e perícias.
+- Todas as perícias aparecem, não apenas as proficientes.
+- Bolsa mostra equipamentos, moedas e ações de ataque/dano.
+- Magia mostra magias agrupadas e ações básicas.
+- Perfil mostra retrato, token, aparência, história, personalidade e notas.
+- Retrato/token por URL com persistência e sincronização com ator/token.
+- Rolagens automáticas pela ficha funcionando:
+  - perícias
+  - testes de resistência
+  - iniciativa individual
+  - iniciativa da mesa para GM
+  - ataque básico de equipamento
+  - dano de equipamento
+  - ataque mágico básico
+  - dano mágico detectado
+  - efeito de magia no chat
+- Teste regressivo da 4.26 concluído.
 
 ---
 
@@ -106,6 +125,18 @@ Persistidos no banco, mas sem atualização em tempo real automática:
 - tamanho do token
 - atores na mesa/biblioteca
 - fichas/rascunhos do builder
+- imagens por URL da ficha/ator/token
+```
+
+Limitações intencionais atuais:
+
+```txt
+- ataque de equipamento ainda é 1d20 + 0
+- ataque mágico ainda é 1d20 + 0
+- ataque ainda não compara automaticamente com CA
+- NPCs e criaturas ainda não têm ficha/stat block próprios
+- iniciativa de NPC/criatura usa +0
+- dano mágico é detectado por texto/descrição de forma provisória
 ```
 
 Regra futura já decidida:
@@ -160,67 +191,50 @@ Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 [x] 4.21 — Planejamento/refatoração
 [x] 4.22 — Refatoração do Character Builder
 [x] 4.23 — Refatoração da Mesa de Jogo
-[em andamento] 4.24.0 — Atualização dos documentos do projeto
-[próximo] 4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+[x] 4.24 — Personagens ativos, biblioteca e ciclo de vida de atores
+[x] 4.25 — Ficha pronta com abas, perfil, bolsa, magia e imagens por URL
+[x] 4.26 — Rolagens automáticas pela ficha pronta
+[próximo] 4.27 — Regras avançadas de sistema/ficha
+[planejado] 4.28 — Multiclasse
 ```
 
 ---
 
-## ✅ Fase 4.22 — Refatoração do Character Builder
+## ✅ Fase 4.25 — Ficha pronta
 
 ```txt
-[x] 4.22.1 — Criar estrutura features/character-builder
-[x] 4.22.2 — Extrair types
-[x] 4.22.3 — Extrair constants
-[x] 4.22.4 — Extrair steps config
-[x] 4.22.5 — Extrair utils de atributos
-[x] 4.22.6 — Extrair utils de perícias
-[x] 4.22.7 — Extrair utils de magias
-[x] 4.22.8 — Extrair utils de equipamentos
-[x] 4.22.9 — Extrair utils de sobre/about
-[x] 4.22.10 — Extrair componentes genéricos do builder
-[x] 4.22.11 — Extrair componentes da revisão
-[x] 4.22.12 — Extrair etapa Conceito
-[x] 4.22.13 — Extrair etapa Atributos
-[x] 4.22.14 — Extrair etapa Perícias
-[x] 4.22.15 — Extrair etapa Magias
-[x] 4.22.16 — Extrair etapa Equipamentos
-[x] 4.22.17 — Extrair etapa Sobre
-[x] 4.22.18 — Revisão, criação vazia, linguagem dinâmica e gênero inicial
-[x] 4.22.19 — Limpeza final de imports/funções mortas do page.tsx
-[x] 4.22.20 — Teste regressivo completo do builder
-[x] 4.22.21 — Commit da refatoração do builder
+[x] 4.25.1 — Preparar visualização de ficha pronta
+[x] 4.25.x — Organizar ficha em abas: Ficha/Status, Bolsa, Magia, Perfil
+[x] 4.25.x — Mover identidade para header fixo
+[x] 4.25.x — Compactar Ficha/Status
+[x] 4.25.x — Mostrar todas as perícias
+[x] 4.25.x — Separar Bolsa com equipamentos/moedas
+[x] 4.25.x — Separar Magia com magias/truques
+[x] 4.25.x — Separar Perfil com imagem/token/narrativa
+[x] 4.25.x — Persistir retrato/token por URL
+[x] 4.25.x — Teste regressivo da ficha pronta
 ```
 
 ---
 
-## ✅ Fase 4.23 — Refatoração da Mesa de Jogo
+## ✅ Fase 4.26 — Rolagens automáticas pela ficha
 
 ```txt
-[x] 4.23.1 — Mapear responsabilidades atuais do page.tsx da mesa
-[x] 4.23.2 — Criar pasta features/game-table
-[x] 4.23.3 — Extrair types da mesa
-[x] 4.23.4 — Extrair helpers de usuários/participantes/atores/tokens
-[x] 4.23.5 — Extrair constantes e helpers de rolagens
-[x] 4.23.6 — Extrair serviços/API da mesa
-[x] 4.23.7 — Extrair constantes/configurações da toolbar e abas
-[x] 4.23.8 — Extrair componente da toolbar lateral esquerda
-[x] 4.23.9 — Extrair painel direito base
-[x] 4.23.10 — Extrair aba Chat
-[x] 4.23.11 — Extrair aba Rolagens
-[x] 4.23.12 — Extrair aba Personagens
-[x] 4.23.13 — Extrair aba Diário
-[x] 4.23.14 — Extrair aba Mesa/configurações
-[x] 4.23.15 — Extrair camada de mapa/tokens/cena
-[x] 4.23.16 — Fazer ferramenta Selecionar funcionar melhor
-[x] 4.23.17 — Fazer ferramenta Mover visão funcionar
-[x] 4.23.18 — Fazer ferramenta Medir funcionar
-[x] 4.23.19 — Fazer ferramenta Desenhar funcionar
-[x] 4.23.20 — Fazer ferramenta Névoa funcionar
-[x] 4.23.21 — Preparar edição de tamanho de token
-[x] 4.23.22 — Limpeza final do page.tsx da mesa
-[x] 4.23.23 — Teste regressivo da mesa
-[x] 4.23.24 — Commit da refatoração da mesa
+[x] 4.26.1 — Preparar contrato de rolagem automática da ficha
+[x] 4.26.2 — Clicar em perícia rola 1d20 + bônus
+[x] 4.26.3 — Clicar em teste de resistência rola 1d20 + bônus
+[x] 4.26.4 — Clicar em iniciativa rola 1d20 + iniciativa
+[x] 4.26.5 — Botão do GM para rolar iniciativa em massa
+[x] 4.26.6 — Melhorar ranking de iniciativa e preparar ordem de combate
+[x] 4.26.6.1 — Incluir personagens no ranking e remover emojis
+[x] 4.26.6.2 — Usar iniciativa real dos personagens no ranking
+[x] 4.26.7 — Dano por equipamento clicável
+[x] 4.26.7.1 — Separar botões Ataque e Dano no card de equipamento
+[x] 4.26.8 — Magias clicáveis visualmente e rolagem básica de magia
+[x] 4.26.9 — Revisão UX/UI das rolagens
+[x] 4.26.10 — Teste regressivo da 4.26
+[x] 4.26.12 — Corrigir criação de personagem para player comum
+[pendente] 4.26.13 — Commit da 4.26
 ```
 
 ---
@@ -228,29 +242,32 @@ Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 ## 🎯 Próxima conversa deve começar por
 
 ```txt
-4.24.0 — Atualização dos documentos do projeto
+4.26.13 — Commit da 4.26
 ```
 
-Arquivos esperados:
+Comandos esperados:
 
-```txt
-ARCHITECTURE.md
-BOOT.md
-DEV_STATE.md
-FEATURE_CAPSULE.md
-README.md
+```bash
+git status
+git diff --stat
+cd frontend
+pnpm lint
+cd ..
+git add .
+git status
+git commit -m "feat: add ready sheet roll actions"
 ```
 
-Depois do commit dos documentos, seguir para:
+Depois seguir para:
 
 ```txt
-4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
+4.27 — Regras avançadas de sistema/ficha
 ```
 
 Primeiro micro sugerido:
 
 ```txt
-4.24.1 — Mapear regras atuais de CampaignActor, TABLE/LIBRARY e SceneToken
+4.27.1 — Mapear regras atuais de classe, magia, progressão e ficha pronta
 ```
 
 ---
@@ -320,10 +337,4 @@ frontend/src/app/campaigns/[id]/play/page.tsx
 
 ## 🚀 Estado Atual
 
-👉 **Fase 4.24.0 em andamento — atualização dos documentos após conclusão da 4.23.**
-
-Próximo passo funcional após docs:
-
-```txt
-4.24 — Personagens ativos, biblioteca e exclusão/remoção correta
-```
+👉 **Fase 4.26 concluída funcionalmente. Próximo passo imediato: commit da 4.26. Depois iniciar 4.27 — regras avançadas de sistema/ficha.**
