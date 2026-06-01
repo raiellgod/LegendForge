@@ -34,6 +34,338 @@ function getProficiencyBonusByLevel(level: number) {
   return 2;
 }
 
+type SpellSlotProgression = {
+  spellSlotsLevel1: number;
+  spellSlotsLevel2: number;
+  spellSlotsLevel3: number;
+  spellSlotsLevel4: number;
+  spellSlotsLevel5: number;
+  spellSlotsLevel6: number;
+  spellSlotsLevel7: number;
+  spellSlotsLevel8: number;
+  spellSlotsLevel9: number;
+};
+
+type ClassMagicProgression = SpellSlotProgression & {
+  cantripsKnown: number;
+  spellsKnown: number;
+  spellsPrepared: number;
+};
+
+const zeroSpellSlots: SpellSlotProgression = {
+  spellSlotsLevel1: 0,
+  spellSlotsLevel2: 0,
+  spellSlotsLevel3: 0,
+  spellSlotsLevel4: 0,
+  spellSlotsLevel5: 0,
+  spellSlotsLevel6: 0,
+  spellSlotsLevel7: 0,
+  spellSlotsLevel8: 0,
+  spellSlotsLevel9: 0,
+};
+
+function getFullCasterSpellSlots(level: number): SpellSlotProgression {
+  const spellSlotsByLevel: Record<number, SpellSlotProgression> = {
+    1: {
+      spellSlotsLevel1: 2,
+      spellSlotsLevel2: 0,
+      spellSlotsLevel3: 0,
+      spellSlotsLevel4: 0,
+      spellSlotsLevel5: 0,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    2: {
+      spellSlotsLevel1: 3,
+      spellSlotsLevel2: 0,
+      spellSlotsLevel3: 0,
+      spellSlotsLevel4: 0,
+      spellSlotsLevel5: 0,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    3: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 2,
+      spellSlotsLevel3: 0,
+      spellSlotsLevel4: 0,
+      spellSlotsLevel5: 0,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    4: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 0,
+      spellSlotsLevel4: 0,
+      spellSlotsLevel5: 0,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    5: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 2,
+      spellSlotsLevel4: 0,
+      spellSlotsLevel5: 0,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    6: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 0,
+      spellSlotsLevel5: 0,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    7: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 1,
+      spellSlotsLevel5: 0,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    8: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 2,
+      spellSlotsLevel5: 0,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    9: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 1,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    10: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 2,
+      spellSlotsLevel6: 0,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    11: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 2,
+      spellSlotsLevel6: 1,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    12: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 2,
+      spellSlotsLevel6: 1,
+      spellSlotsLevel7: 0,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    13: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 2,
+      spellSlotsLevel6: 1,
+      spellSlotsLevel7: 1,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    14: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 2,
+      spellSlotsLevel6: 1,
+      spellSlotsLevel7: 1,
+      spellSlotsLevel8: 0,
+      spellSlotsLevel9: 0,
+    },
+    15: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 2,
+      spellSlotsLevel6: 1,
+      spellSlotsLevel7: 1,
+      spellSlotsLevel8: 1,
+      spellSlotsLevel9: 0,
+    },
+    16: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 2,
+      spellSlotsLevel6: 1,
+      spellSlotsLevel7: 1,
+      spellSlotsLevel8: 1,
+      spellSlotsLevel9: 0,
+    },
+    17: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 2,
+      spellSlotsLevel6: 1,
+      spellSlotsLevel7: 1,
+      spellSlotsLevel8: 1,
+      spellSlotsLevel9: 1,
+    },
+    18: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 3,
+      spellSlotsLevel6: 1,
+      spellSlotsLevel7: 1,
+      spellSlotsLevel8: 1,
+      spellSlotsLevel9: 1,
+    },
+    19: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 3,
+      spellSlotsLevel6: 2,
+      spellSlotsLevel7: 1,
+      spellSlotsLevel8: 1,
+      spellSlotsLevel9: 1,
+    },
+    20: {
+      spellSlotsLevel1: 4,
+      spellSlotsLevel2: 3,
+      spellSlotsLevel3: 3,
+      spellSlotsLevel4: 3,
+      spellSlotsLevel5: 3,
+      spellSlotsLevel6: 2,
+      spellSlotsLevel7: 2,
+      spellSlotsLevel8: 1,
+      spellSlotsLevel9: 1,
+    },
+  };
+
+  return spellSlotsByLevel[level] ?? zeroSpellSlots;
+}
+
+function getHalfCasterSpellSlots(level: number): SpellSlotProgression {
+  if (level < 2) {
+    return zeroSpellSlots;
+  }
+
+  const casterLevel = Math.ceil(level / 2);
+
+  return getFullCasterSpellSlots(casterLevel);
+}
+
+function getKnownCasterProgression(level: number) {
+  return {
+    cantripsKnown: level >= 10 ? 4 : level >= 4 ? 3 : 2,
+    spellsKnown: Math.min(15, level + 3),
+    spellsPrepared: 0,
+  };
+}
+
+function getPreparedCasterProgression(level: number) {
+  return {
+    cantripsKnown: level >= 10 ? 5 : level >= 4 ? 4 : 3,
+    spellsKnown: 0,
+    spellsPrepared: Math.max(1, level + 2),
+  };
+}
+
+function getHalfCasterProgression(level: number) {
+  if (level < 2) {
+    return {
+      cantripsKnown: 0,
+      spellsKnown: 0,
+      spellsPrepared: 0,
+    };
+  }
+
+  return {
+    cantripsKnown: 0,
+    spellsKnown: Math.max(2, Math.ceil(level / 2) + 1),
+    spellsPrepared: 0,
+  };
+}
+
+function getClassMagicProgression(
+  classKey: string,
+  level: number,
+): ClassMagicProgression {
+  if (["bard", "sorcerer", "warlock", "necromancer"].includes(classKey)) {
+    return {
+      ...getKnownCasterProgression(level),
+      ...getFullCasterSpellSlots(level),
+    };
+  }
+
+  if (["devotee", "druid", "wizard"].includes(classKey)) {
+    return {
+      ...getPreparedCasterProgression(level),
+      ...getFullCasterSpellSlots(level),
+    };
+  }
+
+  if (["oathbound", "ranger", "technomancer"].includes(classKey)) {
+    return {
+      ...getHalfCasterProgression(level),
+      ...getHalfCasterSpellSlots(level),
+    };
+  }
+
+  return {
+    cantripsKnown: 0,
+    spellsKnown: 0,
+    spellsPrepared: 0,
+    ...zeroSpellSlots,
+  };
+}
+
 const stats = [
   {
     name: "Força",
@@ -158,6 +490,7 @@ const classes = [
     key: "barbarian",
     primaryRole: "Marcial",
     hitDie: 12,
+    spellcastingAbilityKey: null,
     description:
       "Combatente feroz movido por fúria, instinto e resistência física extrema.",
   },
@@ -166,6 +499,7 @@ const classes = [
     key: "bard",
     primaryRole: "Suporte",
     hitDie: 8,
+    spellcastingAbilityKey: "charisma",
     description:
       "Artista arcano que inspira aliados, manipula emoções e transforma expressão em poder.",
   },
@@ -174,6 +508,7 @@ const classes = [
     key: "warlock",
     primaryRole: "Oculto",
     hitDie: 8,
+    spellcastingAbilityKey: "charisma",
     description:
       "Conjurador ligado a forças misteriosas, maldições, pactos e segredos arcanos perigosos.",
   },
@@ -182,6 +517,7 @@ const classes = [
     key: "devotee",
     primaryRole: "Suporte",
     hitDie: 8,
+    spellcastingAbilityKey: "wisdom",
     description:
       "Canaliza poder de uma fé, ideal, entidade, tradição espiritual ou força superior para curar, proteger e purificar.",
   },
@@ -190,6 +526,7 @@ const classes = [
     key: "druid",
     primaryRole: "Natural",
     hitDie: 8,
+    spellcastingAbilityKey: "wisdom",
     description:
       "Conjurador ligado às forças naturais, mutações, animais, ciclos vitais e terrenos selvagens.",
   },
@@ -198,6 +535,7 @@ const classes = [
     key: "sorcerer",
     primaryRole: "Arcano",
     hitDie: 6,
+    spellcastingAbilityKey: "charisma",
     description:
       "Conjurador de magia inata, guiado por sangue, mutação, herança ou poder interior instintivo.",
   },
@@ -206,6 +544,7 @@ const classes = [
     key: "fighter",
     primaryRole: "Marcial",
     hitDie: 10,
+    spellcastingAbilityKey: null,
     description:
       "Especialista em combate, armas, armaduras, disciplina marcial e adaptação tática.",
   },
@@ -214,6 +553,7 @@ const classes = [
     key: "rogue",
     primaryRole: "Especialista",
     hitDie: 8,
+    spellcastingAbilityKey: null,
     description:
       "Especialista em furtividade, precisão, truques, mobilidade e ataques oportunistas.",
   },
@@ -222,6 +562,7 @@ const classes = [
     key: "wizard",
     primaryRole: "Arcano",
     hitDie: 6,
+    spellcastingAbilityKey: "intelligence",
     description:
       "Estudioso da magia, rituais, grimórios, fórmulas arcanas e conhecimento sobrenatural.",
   },
@@ -230,6 +571,7 @@ const classes = [
     key: "monk",
     primaryRole: "Marcial",
     hitDie: 8,
+    spellcastingAbilityKey: null,
     description:
       "Combatente disciplinado que usa corpo, mente, velocidade e energia interior como armas.",
   },
@@ -238,6 +580,7 @@ const classes = [
     key: "oathbound",
     primaryRole: "Defensor",
     hitDie: 10,
+    spellcastingAbilityKey: "charisma",
     description:
       "Guerreiro místico sustentado por juramentos, convicções e a força de uma promessa inquebrável.",
   },
@@ -246,6 +589,7 @@ const classes = [
     key: "ranger",
     primaryRole: "Explorador",
     hitDie: 10,
+    spellcastingAbilityKey: "wisdom",
     description:
       "Explorador, rastreador e combatente versátil treinado para sobreviver em regiões hostis.",
   },
@@ -254,6 +598,7 @@ const classes = [
     key: "technomancer",
     primaryRole: "Tecnológico",
     hitDie: 8,
+    spellcastingAbilityKey: "intelligence",
     description:
       "Especialista em tecnologia antiga, dispositivos, engenhocas, alquimia e tecno-magia.",
   },
@@ -262,6 +607,7 @@ const classes = [
     key: "necromancer",
     primaryRole: "Sombrio",
     hitDie: 6,
+    spellcastingAbilityKey: "intelligence",
     description:
       "Conjurador da morte, espíritos, ossos, dreno vital, cadáveres e forças necromânticas.",
   },
@@ -551,7 +897,63 @@ const spells = [
     isRitual: false,
     requiresConcentration: false,
     description:
-      "Canaliza energia fúnebre pelo toque, perturbando a força vital de uma criatura.",
+      "Canaliza energia fúnebre pelo toque, causando 1d8 necrótico e perturbando a força vital de uma criatura.",
+  },
+  {
+    name: "Faísca Arcana",
+    key: "arcane-spark",
+    level: 0,
+    school: "EVOCATION",
+    castingTime: "1 ação",
+    range: "18 metros",
+    duration: "Instantânea",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Dispara uma pequena faísca de energia arcana contra uma criatura visível, causando 1d6 energético.",
+  },
+  {
+    name: "Rajada Mental",
+    key: "mind-burst",
+    level: 0,
+    school: "ENCHANTMENT",
+    castingTime: "1 ação",
+    range: "18 metros",
+    duration: "Instantânea",
+    components: "V",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Projeta uma pressão psíquica breve contra uma mente próxima, causando 1d6 psíquico.",
+  },
+  {
+    name: "Chama Instável",
+    key: "unstable-flame",
+    level: 0,
+    school: "EVOCATION",
+    castingTime: "1 ação",
+    range: "18 metros",
+    duration: "Instantânea",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Cria uma chama mutável que salta contra o alvo, causando 1d8 ígneo.",
+  },
+  {
+    name: "Mãos Sombrias",
+    key: "shadow-hands",
+    level: 0,
+    school: "NECROMANCY",
+    castingTime: "1 ação",
+    range: "9 metros",
+    duration: "Instantânea",
+    components: "S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Sombras em forma de mãos agarram brevemente um alvo, causando 1d6 necrótico.",
   },
   {
     name: "Véu Ilusório",
@@ -579,7 +981,7 @@ const spells = [
     isRitual: false,
     requiresConcentration: false,
     description:
-      "Libera um impacto de energia arcana instável contra um alvo ou ponto visível.",
+      "Libera um impacto de energia arcana instável contra um alvo ou ponto visível, causando 1d10 energético.",
   },
   {
     name: "Sussurros dos Mortos",
@@ -594,6 +996,227 @@ const spells = [
     requiresConcentration: false,
     description:
       "Permite ouvir ecos breves deixados por uma alma, cadáver ou lugar marcado pela morte recente.",
+  },
+  {
+    name: "Dardo de Energia",
+    key: "energy-dart",
+    level: 1,
+    school: "EVOCATION",
+    castingTime: "1 ação",
+    range: "36 metros",
+    duration: "Instantânea",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Cria três dardos de energia que atingem criaturas visíveis, causando 1d4+1 energético cada.",
+  },
+  {
+    name: "Curar Ferimentos",
+    key: "mend-wounds",
+    level: 1,
+    school: "EVOCATION",
+    castingTime: "1 ação",
+    range: "Toque",
+    duration: "Instantânea",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Canaliza energia restauradora pelo toque, recuperando 1d8 pontos de vida.",
+  },
+  {
+    name: "Escudo Reativo",
+    key: "reactive-shield",
+    level: 1,
+    school: "ABJURATION",
+    castingTime: "1 reação",
+    range: "Pessoal",
+    duration: "1 rodada",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Ergue uma barreira instantânea contra um ataque, aumentando temporariamente a defesa do conjurador.",
+  },
+  {
+    name: "Raízes Prendentes",
+    key: "binding-roots",
+    level: 1,
+    school: "CONJURATION",
+    castingTime: "1 ação",
+    range: "18 metros",
+    duration: "1 minuto",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: true,
+    description:
+      "Raízes mutadas irrompem do chão e tentam prender criaturas em uma área pequena.",
+  },
+  {
+    name: "Comando Sombrio",
+    key: "dark-command",
+    level: 1,
+    school: "ENCHANTMENT",
+    castingTime: "1 ação",
+    range: "18 metros",
+    duration: "1 rodada",
+    components: "V",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Impõe uma ordem breve carregada de energia sombria a uma criatura que possa ouvir o conjurador.",
+  },
+  {
+    name: "Marca do Agouro",
+    key: "omen-mark",
+    level: 1,
+    school: "DIVINATION",
+    castingTime: "1 ação bônus",
+    range: "18 metros",
+    duration: "1 minuto",
+    components: "V",
+    isRitual: false,
+    requiresConcentration: true,
+    description:
+      "Marca uma criatura com um presságio visível apenas ao conjurador, facilitando ataques e leituras contra ela.",
+  },
+  {
+    name: "Onda Trovejante",
+    key: "thunder-wave",
+    level: 1,
+    school: "EVOCATION",
+    castingTime: "1 ação",
+    range: "Pessoal",
+    duration: "Instantânea",
+    components: "V, S",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Libera uma onda de impacto sonoro ao redor do conjurador, causando 2d8 trovejante e empurrando criaturas próximas.",
+  },
+] as const;
+
+const classSpellAccess = [
+  {
+    classKey: "bard",
+    spellKeys: [
+      "minor-light",
+      "arcane-spark",
+      "mind-burst",
+      "illusory-veil",
+      "arcane-pulse",
+      "energy-dart",
+      "reactive-shield",
+      "omen-mark",
+      "thunder-wave",
+    ],
+    minimumClassLevel: 1,
+  },
+  {
+    classKey: "warlock",
+    spellKeys: [
+      "funeral-touch",
+      "mind-burst",
+      "shadow-hands",
+      "illusory-veil",
+      "dead-whispers",
+      "dark-command",
+      "omen-mark",
+    ],
+    minimumClassLevel: 1,
+  },
+  {
+    classKey: "devotee",
+    spellKeys: [
+      "minor-light",
+      "funeral-touch",
+      "mend-wounds",
+      "dead-whispers",
+      "dark-command",
+      "reactive-shield",
+    ],
+    minimumClassLevel: 1,
+  },
+  {
+    classKey: "druid",
+    spellKeys: [
+      "minor-light",
+      "unstable-flame",
+      "binding-roots",
+      "mend-wounds",
+      "dead-whispers",
+    ],
+    minimumClassLevel: 1,
+  },
+  {
+    classKey: "sorcerer",
+    spellKeys: [
+      "minor-light",
+      "arcane-spark",
+      "unstable-flame",
+      "mind-burst",
+      "arcane-pulse",
+      "energy-dart",
+      "reactive-shield",
+      "thunder-wave",
+    ],
+    minimumClassLevel: 1,
+  },
+  {
+    classKey: "wizard",
+    spellKeys: [
+      "minor-light",
+      "funeral-touch",
+      "arcane-spark",
+      "mind-burst",
+      "unstable-flame",
+      "shadow-hands",
+      "illusory-veil",
+      "arcane-pulse",
+      "dead-whispers",
+      "energy-dart",
+      "reactive-shield",
+      "binding-roots",
+      "dark-command",
+      "omen-mark",
+      "thunder-wave",
+    ],
+    minimumClassLevel: 1,
+  },
+  {
+    classKey: "oathbound",
+    spellKeys: ["minor-light", "mend-wounds", "reactive-shield"],
+    minimumClassLevel: 2,
+  },
+  {
+    classKey: "ranger",
+    spellKeys: ["minor-light", "unstable-flame", "binding-roots", "mend-wounds"],
+    minimumClassLevel: 2,
+  },
+  {
+    classKey: "technomancer",
+    spellKeys: [
+      "minor-light",
+      "arcane-spark",
+      "arcane-pulse",
+      "energy-dart",
+      "reactive-shield",
+    ],
+    minimumClassLevel: 2,
+  },
+  {
+    classKey: "necromancer",
+    spellKeys: [
+      "funeral-touch",
+      "shadow-hands",
+      "mind-burst",
+      "dead-whispers",
+      "dark-command",
+      "omen-mark",
+      "illusory-veil",
+    ],
+    minimumClassLevel: 1,
   },
 ] as const;
 
@@ -643,8 +1266,7 @@ const equipment = [
     cost: "25 moedas",
     weight: 1,
     properties: "Distância, duas mãos",
-    description:
-      "Arma simples para caça, patrulha e combate à distância.",
+    description: "Arma simples para caça, patrulha e combate à distância.",
   },
   {
     name: "Armadura de Couro",
@@ -986,6 +1608,7 @@ async function main() {
   const createdClasses = new Map<string, string>();
   const createdSubclasses = new Map<string, string>();
   const createdLevelProgressions = new Map<string, string>();
+  const createdSpells = new Map<string, string>();
 
   for (const [index, statData] of stats.entries()) {
     const stat = await prisma.stat.upsert({
@@ -1049,7 +1672,9 @@ async function main() {
       },
     });
 
-    console.log(`Perícia criada/validada: ${skill.name} → ${skillData.statName}`);
+    console.log(
+      `Perícia criada/validada: ${skill.name} → ${skillData.statName}`,
+    );
   }
 
   for (const [index, ancestryData] of ancestries.entries()) {
@@ -1094,6 +1719,7 @@ async function main() {
         description: classData.description,
         primaryRole: classData.primaryRole,
         hitDie: classData.hitDie,
+        spellcastingAbilityKey: classData.spellcastingAbilityKey,
         order: index + 1,
       },
       create: {
@@ -1103,6 +1729,7 @@ async function main() {
         description: classData.description,
         primaryRole: classData.primaryRole,
         hitDie: classData.hitDie,
+        spellcastingAbilityKey: classData.spellcastingAbilityKey,
         order: index + 1,
       },
     });
@@ -1122,6 +1749,8 @@ async function main() {
     }
 
     for (let level = 1; level <= 20; level += 1) {
+      const magicProgression = getClassMagicProgression(classData.key, level);
+
       const progression = await prisma.levelProgression.upsert({
         where: {
           classId_level: {
@@ -1132,12 +1761,36 @@ async function main() {
         update: {
           systemId: system.id,
           proficiencyBonus: getProficiencyBonusByLevel(level),
+          cantripsKnown: magicProgression.cantripsKnown,
+          spellsKnown: magicProgression.spellsKnown,
+          spellsPrepared: magicProgression.spellsPrepared,
+          spellSlotsLevel1: magicProgression.spellSlotsLevel1,
+          spellSlotsLevel2: magicProgression.spellSlotsLevel2,
+          spellSlotsLevel3: magicProgression.spellSlotsLevel3,
+          spellSlotsLevel4: magicProgression.spellSlotsLevel4,
+          spellSlotsLevel5: magicProgression.spellSlotsLevel5,
+          spellSlotsLevel6: magicProgression.spellSlotsLevel6,
+          spellSlotsLevel7: magicProgression.spellSlotsLevel7,
+          spellSlotsLevel8: magicProgression.spellSlotsLevel8,
+          spellSlotsLevel9: magicProgression.spellSlotsLevel9,
         },
         create: {
           systemId: system.id,
           classId,
           level,
           proficiencyBonus: getProficiencyBonusByLevel(level),
+          cantripsKnown: magicProgression.cantripsKnown,
+          spellsKnown: magicProgression.spellsKnown,
+          spellsPrepared: magicProgression.spellsPrepared,
+          spellSlotsLevel1: magicProgression.spellSlotsLevel1,
+          spellSlotsLevel2: magicProgression.spellSlotsLevel2,
+          spellSlotsLevel3: magicProgression.spellSlotsLevel3,
+          spellSlotsLevel4: magicProgression.spellSlotsLevel4,
+          spellSlotsLevel5: magicProgression.spellSlotsLevel5,
+          spellSlotsLevel6: magicProgression.spellSlotsLevel6,
+          spellSlotsLevel7: magicProgression.spellSlotsLevel7,
+          spellSlotsLevel8: magicProgression.spellSlotsLevel8,
+          spellSlotsLevel9: magicProgression.spellSlotsLevel9,
         },
       });
 
@@ -1266,7 +1919,7 @@ async function main() {
     console.log(`Feature criada/validada: ${feature.name}`);
   }
 
-    for (const [index, spellData] of spells.entries()) {
+  for (const [index, spellData] of spells.entries()) {
     const spell = await prisma.spell.upsert({
       where: {
         systemId_key: {
@@ -1304,10 +1957,55 @@ async function main() {
       },
     });
 
+        createdSpells.set(spellData.key, spell.id);
+
     console.log(`Magia criada/validada: ${spell.name}`);
   }
 
-    for (const [index, equipmentData] of equipment.entries()) {
+    for (const classSpellData of classSpellAccess) {
+    const classId = createdClasses.get(classSpellData.classKey);
+
+    if (!classId) {
+      throw new Error(
+        `Classe "${classSpellData.classKey}" não encontrada para vincular magias.`,
+      );
+    }
+
+    for (const spellKey of classSpellData.spellKeys) {
+      const spellId = createdSpells.get(spellKey);
+
+      if (!spellId) {
+        throw new Error(
+          `Magia "${spellKey}" não encontrada para a classe "${classSpellData.classKey}".`,
+        );
+      }
+
+      const classSpell = await prisma.classSpell.upsert({
+        where: {
+          classId_spellId: {
+            classId,
+            spellId,
+          },
+        },
+        update: {
+          minimumClassLevel: classSpellData.minimumClassLevel,
+          isAlwaysKnown: false,
+        },
+        create: {
+          classId,
+          spellId,
+          minimumClassLevel: classSpellData.minimumClassLevel,
+          isAlwaysKnown: false,
+        },
+      });
+
+      console.log(
+        `Magia de classe validada: ${classSpellData.classKey} → ${spellKey} nível mínimo ${classSpell.minimumClassLevel}`,
+      );
+    }
+  }
+  
+  for (const [index, equipmentData] of equipment.entries()) {
     const item = await prisma.equipment.upsert({
       where: {
         systemId_key: {
@@ -1344,39 +2042,39 @@ async function main() {
     console.log(`Equipamento criado/validado: ${item.name}`);
   }
 
-    for (const [index, backgroundData] of backgrounds.entries()) {
+  for (const [index, backgroundData] of backgrounds.entries()) {
     const background = await prisma.background.upsert({
-  where: {
-    systemId_key: {
-      systemId: system.id,
-      key: backgroundData.key,
-    },
-  },
-  update: {
-    name: backgroundData.name,
-    description: backgroundData.description,
-    skillKeys: [...backgroundData.skillKeys],
-    toolNames: [...backgroundData.toolNames],
-    languageChoiceCount: backgroundData.languageChoiceCount,
-    startingGold: backgroundData.startingGold,
-    order: index + 1,
-  },
-  create: {
-    systemId: system.id,
-    name: backgroundData.name,
-    key: backgroundData.key,
-    description: backgroundData.description,
-    skillKeys: [...backgroundData.skillKeys],
-    toolNames: [...backgroundData.toolNames],
-    languageChoiceCount: backgroundData.languageChoiceCount,
-    startingGold: backgroundData.startingGold,
-    order: index + 1,
-  },
-});
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: backgroundData.key,
+        },
+      },
+      update: {
+        name: backgroundData.name,
+        description: backgroundData.description,
+        skillKeys: [...backgroundData.skillKeys],
+        toolNames: [...backgroundData.toolNames],
+        languageChoiceCount: backgroundData.languageChoiceCount,
+        startingGold: backgroundData.startingGold,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        name: backgroundData.name,
+        key: backgroundData.key,
+        description: backgroundData.description,
+        skillKeys: [...backgroundData.skillKeys],
+        toolNames: [...backgroundData.toolNames],
+        languageChoiceCount: backgroundData.languageChoiceCount,
+        startingGold: backgroundData.startingGold,
+        order: index + 1,
+      },
+    });
 
     console.log(`Antecedente criado/validado: ${background.name}`);
   }
-  
+
   console.log("Seed concluído com sucesso.");
 }
 

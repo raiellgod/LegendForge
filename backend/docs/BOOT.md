@@ -9,7 +9,7 @@ Virtual Tabletop (VTT)
 
 ---
 
-## 📅 Current State — 29/05/2026
+## 📅 Current State — 01/06/2026
 
 Este documento serve para reiniciar a próxima conversa sem perder contexto.
 
@@ -84,7 +84,7 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
 - Ficha/Status compacta mostra todos os atributos, status, testes e perícias.
 - Todas as perícias aparecem, não apenas as proficientes.
 - Bolsa mostra equipamentos, moedas e ações de ataque/dano.
-- Magia mostra magias agrupadas e ações básicas.
+- Magia mostra magias agrupadas e ações com cálculo real de conjuração.
 - Perfil mostra retrato, token, aparência, história, personalidade e notas.
 - Retrato/token por URL com persistência e sincronização com ator/token.
 - Rolagens automáticas pela ficha funcionando:
@@ -94,10 +94,19 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
   - iniciativa da mesa para GM
   - ataque básico de equipamento
   - dano de equipamento
-  - ataque mágico básico
+  - ataque mágico real para classe conjuradora
   - dano mágico detectado
-  - efeito de magia no chat
-- Teste regressivo da 4.26 concluído.
+- Regras avançadas de magia/progressão inicial funcionando:
+  - `spellcastingAbilityKey` em classe
+  - `LevelProgression` por classe/nível
+  - `ClassSpell` para magias por classe
+  - filtro de magia por classe no builder
+  - validação de limite de truques/magias por progressão
+  - CD de magia real
+  - ataque mágico real
+  - slots de magia exibidos na ficha pronta
+- Resultado grande da rolagem corrigido para mostrar o total numérico.
+- Teste regressivo da 4.27 concluído.
 
 ---
 
@@ -132,11 +141,11 @@ Limitações intencionais atuais:
 
 ```txt
 - ataque de equipamento ainda é 1d20 + 0
-- ataque mágico ainda é 1d20 + 0
 - ataque ainda não compara automaticamente com CA
 - NPCs e criaturas ainda não têm ficha/stat block próprios
 - iniciativa de NPC/criatura usa +0
-- dano mágico é detectado por texto/descrição de forma provisória
+- dano mágico ainda é detectado por texto/descrição de forma provisória
+- a ficha pronta ainda precisa de uma refatoração estrutural de UX
 ```
 
 Regra futura já decidida:
@@ -161,6 +170,14 @@ Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 [ ] Fase 6 — Diário real
 [ ] Fase 7 — Configurações da campanha/mesa
 [ ] Fase 8 — Sincronização em tempo real
+[ ] Fase 9 — Combate e iniciativa
+[ ] Fase 10 — Cenas/mapas múltiplos
+[ ] Fase 11 — Bestiário completo
+[ ] Fase 12 — Inventário, lojas e economia
+[ ] Fase 13 — Sistema de efeitos/status
+[ ] Fase 14 — Permissões avançadas e moderação
+[ ] Fase 15 — Deploy/produção
+[ ] Fase 16 — Polimento de portfolio/produto
 ```
 
 ---
@@ -194,47 +211,34 @@ Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 [x] 4.24 — Personagens ativos, biblioteca e ciclo de vida de atores
 [x] 4.25 — Ficha pronta com abas, perfil, bolsa, magia e imagens por URL
 [x] 4.26 — Rolagens automáticas pela ficha pronta
-[próximo] 4.27 — Regras avançadas de sistema/ficha
-[planejado] 4.28 — Multiclasse
+[x] 4.27 — Regras avançadas de magia e progressão inicial
+[próximo] 4.28 — Refatoração estrutural da ficha pronta
+[planejado] 4.29 — Regras avançadas de equipamento, features e level up
+[planejado] 4.30 — Multiclasse
 ```
 
 ---
 
-## ✅ Fase 4.25 — Ficha pronta
+## ✅ Fase 4.27 — Regras avançadas de magia e progressão inicial
 
 ```txt
-[x] 4.25.1 — Preparar visualização de ficha pronta
-[x] 4.25.x — Organizar ficha em abas: Ficha/Status, Bolsa, Magia, Perfil
-[x] 4.25.x — Mover identidade para header fixo
-[x] 4.25.x — Compactar Ficha/Status
-[x] 4.25.x — Mostrar todas as perícias
-[x] 4.25.x — Separar Bolsa com equipamentos/moedas
-[x] 4.25.x — Separar Magia com magias/truques
-[x] 4.25.x — Separar Perfil com imagem/token/narrativa
-[x] 4.25.x — Persistir retrato/token por URL
-[x] 4.25.x — Teste regressivo da ficha pronta
-```
-
----
-
-## ✅ Fase 4.26 — Rolagens automáticas pela ficha
-
-```txt
-[x] 4.26.1 — Preparar contrato de rolagem automática da ficha
-[x] 4.26.2 — Clicar em perícia rola 1d20 + bônus
-[x] 4.26.3 — Clicar em teste de resistência rola 1d20 + bônus
-[x] 4.26.4 — Clicar em iniciativa rola 1d20 + iniciativa
-[x] 4.26.5 — Botão do GM para rolar iniciativa em massa
-[x] 4.26.6 — Melhorar ranking de iniciativa e preparar ordem de combate
-[x] 4.26.6.1 — Incluir personagens no ranking e remover emojis
-[x] 4.26.6.2 — Usar iniciativa real dos personagens no ranking
-[x] 4.26.7 — Dano por equipamento clicável
-[x] 4.26.7.1 — Separar botões Ataque e Dano no card de equipamento
-[x] 4.26.8 — Magias clicáveis visualmente e rolagem básica de magia
-[x] 4.26.9 — Revisão UX/UI das rolagens
-[x] 4.26.10 — Teste regressivo da 4.26
-[x] 4.26.12 — Corrigir criação de personagem para player comum
-[pendente] 4.26.13 — Commit da 4.26
+[x] 4.27.1 — Revisar modelagem de progressão por classe/nível
+[x] 4.27.2 — Revisar/expandir LevelProgression no schema
+[x] 4.27.3 — Popular seed de progressão básica por classe
+[x] 4.27.3.1 — Popular seed de magias permitidas por classe
+[x] 4.27.4 — Filtrar magias por classe
+[x] 4.27.5 — Validar quantidade de truques/magias por nível
+[x] 4.27.5.1 — Expandir seed mínimo de magias para teste real
+[x] 4.27.6 — Calcular atributo de conjuração por classe
+[x] 4.27.7 — Calcular CD de magia
+[x] 4.27.8 — Calcular ataque mágico real
+[x] 4.27.8.1 — Desabilitar ataque mágico quando a classe não tiver atributo de conjuração
+[x] 4.27.9 — Exibir espaços de magia na aba Magia
+[x] 4.27.9.1 — Reorganizar UX/UI inicial da aba Magia
+[x] Correção — resultado grande da rolagem mostra o total, não a lista dos dados
+[x] 4.27.10 — Teste regressivo da 4.27
+[x] 4.27.11 — Atualizar documentação da 4.27
+[próximo] 4.27.12 — Commit da 4.27
 ```
 
 ---
@@ -242,7 +246,7 @@ Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 ## 🎯 Próxima conversa deve começar por
 
 ```txt
-4.26.13 — Commit da 4.26
+4.27.12 — Commit da 4.27
 ```
 
 Comandos esperados:
@@ -255,19 +259,48 @@ pnpm lint
 cd ..
 git add .
 git status
-git commit -m "feat: add ready sheet roll actions"
+git commit -m "feat: add advanced spell progression rules"
 ```
 
 Depois seguir para:
 
 ```txt
-4.27 — Regras avançadas de sistema/ficha
+4.28 — Refatoração estrutural da ficha pronta
 ```
 
 Primeiro micro sugerido:
 
 ```txt
-4.27.1 — Mapear regras atuais de classe, magia, progressão e ficha pronta
+4.28.1 — Planejar arquitetura da ficha pronta
+```
+
+---
+
+## 🧭 Plano da 4.28 — Refatoração estrutural da ficha pronta
+
+Objetivo:
+
+```txt
+Transformar a ficha pronta em uma ferramenta mais limpa, rápida e estável para uso real em mesa.
+```
+
+Micros sugeridas:
+
+```txt
+[ ] 4.28.1 — Planejar arquitetura da ficha pronta
+[ ] 4.28.2 — Definir layout shell: header fixo, laterais fixas e centro variável
+[ ] 4.28.3 — Definir modo ficha modal atual versus futura janela destacada/pop-out
+[ ] 4.28.4 — Criar padrão de cards compactos com expand/collapse
+[ ] 4.28.5 — Aplicar expand/collapse na aba Magia
+[ ] 4.28.6 — Aplicar expand/collapse na aba Bolsa
+[ ] 4.28.7 — Reorganizar informações fixas da ficha: PV, CA, iniciativa, proficiência, percepção e recursos
+[ ] 4.28.8 — Reorganizar abas centrais: Ficha/Status, Combate, Magia, Bolsa, Features, Perfil/Notas
+[ ] 4.28.9 — Preparar área lateral de defesas, sentidos, condições e proficiências
+[ ] 4.28.10 — Melhorar densidade visual e reduzir textos redundantes
+[ ] 4.28.11 — Revisar responsividade em notebook menor, widescreen e tablet
+[ ] 4.28.12 — Teste regressivo da ficha pronta
+[ ] 4.28.13 — Atualizar documentação da 4.28
+[ ] 4.28.14 — Commit da 4.28
 ```
 
 ---
@@ -281,7 +314,7 @@ cd backend
 docker compose up -d
 pnpm install
 pnpm prisma generate
-pnpm prisma db push
+pnpm prisma migrate dev
 pnpm run dev
 ```
 
@@ -290,6 +323,20 @@ pnpm run dev
 ```bash
 cd backend
 pnpm prisma studio
+```
+
+### Seed
+
+```bash
+cd backend
+pnpm prisma db seed
+```
+
+Fallback:
+
+```bash
+cd backend
+pnpm tsx prisma/seed.ts
 ```
 
 ### Frontend
@@ -325,16 +372,14 @@ Para arquivos grandes, especialmente:
 
 ```txt
 frontend/src/app/campaigns/[id]/play/page.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetModal.tsx
 ```
 
-- Sempre usar o arquivo enviado mais recente como fonte da verdade.
-- Mudança grande = arquivo completo.
-- Mudança pequena = usar âncoras reais.
-- Não presumir estrutura antiga.
-- Antes de commit: `git diff --stat`.
+Regra:
 
----
-
-## 🚀 Estado Atual
-
-👉 **Fase 4.26 concluída funcionalmente. Próximo passo imediato: commit da 4.26. Depois iniciar 4.27 — regras avançadas de sistema/ficha.**
+```txt
+Mudança grande = arquivo inteiro.
+Mudança pequena = âncoras reais “Procure este trecho / Troque por este trecho”.
+Não usar estrutura presumida antiga.
+Antes de qualquer commit = git diff --stat.
+```

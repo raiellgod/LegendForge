@@ -399,6 +399,7 @@ export const ModelName = {
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
+  ClassSpell: 'ClassSpell',
   Feature: 'Feature',
   Spell: 'Spell',
   Equipment: 'Equipment',
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterClass" | "characterSubclass" | "levelProgression" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterClass" | "characterSubclass" | "levelProgression" | "classSpell" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1537,6 +1538,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LevelProgressionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LevelProgressionCountAggregateOutputType> | number
+        }
+      }
+    }
+    ClassSpell: {
+      payload: Prisma.$ClassSpellPayload<ExtArgs>
+      fields: Prisma.ClassSpellFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClassSpellFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClassSpellFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>
+        }
+        findFirst: {
+          args: Prisma.ClassSpellFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClassSpellFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>
+        }
+        findMany: {
+          args: Prisma.ClassSpellFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>[]
+        }
+        create: {
+          args: Prisma.ClassSpellCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>
+        }
+        createMany: {
+          args: Prisma.ClassSpellCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClassSpellCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>[]
+        }
+        delete: {
+          args: Prisma.ClassSpellDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>
+        }
+        update: {
+          args: Prisma.ClassSpellUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClassSpellDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClassSpellUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClassSpellUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>[]
+        }
+        upsert: {
+          args: Prisma.ClassSpellUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClassSpellPayload>
+        }
+        aggregate: {
+          args: Prisma.ClassSpellAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClassSpell>
+        }
+        groupBy: {
+          args: Prisma.ClassSpellGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClassSpellGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClassSpellCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClassSpellCountAggregateOutputType> | number
         }
       }
     }
@@ -2697,6 +2772,7 @@ export const CharacterClassScalarFieldEnum = {
   description: 'description',
   primaryRole: 'primaryRole',
   hitDie: 'hitDie',
+  spellcastingAbilityKey: 'spellcastingAbilityKey',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2726,11 +2802,36 @@ export const LevelProgressionScalarFieldEnum = {
   classId: 'classId',
   level: 'level',
   proficiencyBonus: 'proficiencyBonus',
+  cantripsKnown: 'cantripsKnown',
+  spellsKnown: 'spellsKnown',
+  spellsPrepared: 'spellsPrepared',
+  spellSlotsLevel1: 'spellSlotsLevel1',
+  spellSlotsLevel2: 'spellSlotsLevel2',
+  spellSlotsLevel3: 'spellSlotsLevel3',
+  spellSlotsLevel4: 'spellSlotsLevel4',
+  spellSlotsLevel5: 'spellSlotsLevel5',
+  spellSlotsLevel6: 'spellSlotsLevel6',
+  spellSlotsLevel7: 'spellSlotsLevel7',
+  spellSlotsLevel8: 'spellSlotsLevel8',
+  spellSlotsLevel9: 'spellSlotsLevel9',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type LevelProgressionScalarFieldEnum = (typeof LevelProgressionScalarFieldEnum)[keyof typeof LevelProgressionScalarFieldEnum]
+
+
+export const ClassSpellScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  spellId: 'spellId',
+  minimumClassLevel: 'minimumClassLevel',
+  isAlwaysKnown: 'isAlwaysKnown',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClassSpellScalarFieldEnum = (typeof ClassSpellScalarFieldEnum)[keyof typeof ClassSpellScalarFieldEnum]
 
 
 export const FeatureScalarFieldEnum = {
@@ -3319,6 +3420,7 @@ export type GlobalOmitConfig = {
   characterClass?: Prisma.CharacterClassOmit
   characterSubclass?: Prisma.CharacterSubclassOmit
   levelProgression?: Prisma.LevelProgressionOmit
+  classSpell?: Prisma.ClassSpellOmit
   feature?: Prisma.FeatureOmit
   spell?: Prisma.SpellOmit
   equipment?: Prisma.EquipmentOmit

@@ -23,6 +23,16 @@ type CharacterSpellsStepProps = {
 
 type SpellTypeFilter = "all" | "cantrips" | "spells";
 
+const CHARACTER_BUILDER_STARTING_LEVEL = 1;
+
+function getStartingLevelProgression(
+  selectedClass: CharacterBuilderClassOption | undefined,
+) {
+  return selectedClass?.levelProgressions.find(
+    (progression) => progression.level === CHARACTER_BUILDER_STARTING_LEVEL,
+  );
+}
+
 function getSpellTitle(spell: CharacterBuilderSpellOption) {
   const description = spell.description ?? "Sem descrição cadastrada.";
   const components =
@@ -71,13 +81,40 @@ function filterSpellByType(
   return true;
 }
 
+function getAvailableSpellsForClass({
+  spells,
+  selectedClass,
+}: {
+  spells: CharacterBuilderSpellOption[];
+  selectedClass: CharacterBuilderClassOption | undefined;
+}) {
+  if (!selectedClass) {
+    return [];
+  }
+
+  const availableSpellKeys = new Set(
+    selectedClass.classSpells
+      .filter(
+        (classSpell) =>
+          classSpell.minimumClassLevel <= CHARACTER_BUILDER_STARTING_LEVEL,
+      )
+      .map((classSpell) => classSpell.spellKey),
+  );
+
+  return spells.filter((spell) => availableSpellKeys.has(spell.key));
+}
+
 function CharacterSpellCard({
   spell,
   isSelected,
+  isDisabled,
+  disabledReason,
   onToggleSpell,
 }: {
   spell: CharacterBuilderSpellOption;
   isSelected: boolean;
+  isDisabled: boolean;
+  disabledReason: string;
   onToggleSpell: (spellKey: string) => void;
 }) {
   const spellTitle = getSpellTitle(spell);
@@ -87,14 +124,22 @@ function CharacterSpellCard({
   return (
     <button
       type="button"
-      onClick={() => onToggleSpell(spell.key)}
+      disabled={isDisabled}
+      onClick={() => {
+        if (!isDisabled) {
+          onToggleSpell(spell.key);
+        }
+      }}
       className={[
-        "w-full rounded-2xl border p-4 text-left shadow-[-4px_4px_0_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5",
+        "w-full rounded-2xl border p-4 text-left shadow-[-4px_4px_0_rgba(0,0,0,0.25)] transition",
+        isDisabled
+          ? "cursor-not-allowed border-zinc-900 bg-zinc-950/30 opacity-55"
+          : "hover:-translate-y-0.5",
         isSelected
           ? "border-forge-gold bg-forge-gold/10"
           : "border-zinc-800 bg-zinc-950/50 hover:border-forge-gold/50 hover:bg-forge-purple/15",
       ].join(" ")}
-      title={spellTitle}
+      title={isDisabled ? disabledReason : spellTitle}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -248,16 +293,23 @@ export function CharacterSpellsStep({
   const [typeFilter, setTypeFilter] = useState<SpellTypeFilter>("all");
   const [schoolFilter, setSchoolFilter] = useState("all");
 
+  const availableSpells = useMemo(() => {
+    return getAvailableSpellsForClass({
+      spells,
+      selectedClass,
+    });
+  }, [selectedClass, spells]);
+
   const spellSchools = useMemo(() => {
-    return Array.from(new Set(spells.map((spell) => spell.school))).sort(
-      (a, b) => a.localeCompare(b),
-    );
-  }, [spells]);
+    return Array.from(
+      new Set(availableSpells.map((spell) => spell.school)),
+    ).sort((a, b) => a.localeCompare(b));
+  }, [availableSpells]);
 
   const filteredSpells = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
 
-    return spells.filter((spell) => {
+    return availableSpells.filter((spell) => {
       const matchesType = filterSpellByType(spell, typeFilter);
       const matchesSchool =
         schoolFilter === "all" || spell.school === schoolFilter;
@@ -267,7 +319,7 @@ export function CharacterSpellsStep({
 
       return matchesType && matchesSchool && matchesSearch;
     });
-  }, [schoolFilter, searchTerm, spells, typeFilter]);
+  }, [availableSpells, schoolFilter, searchTerm, typeFilter]);
 
   const filteredCantrips = filteredSpells.filter(isCantrip);
   const filteredLeveledSpells = filteredSpells.filter(isLeveledSpell);
@@ -284,17 +336,76 @@ export function CharacterSpellsStep({
     .map(Number)
     .sort((a, b) => a - b);
 
-  const totalCantrips = spells.filter(isCantrip).length;
-  const totalLeveledSpells = spells.filter(isLeveledSpell).length;
+  const totalCantrips = availableSpells.filter(isCantrip).length;
+  const totalLeveledSpells = availableSpells.filter(isLeveledSpell).length;
   const selectedClassName = selectedClass?.name ?? "classe não selecionada";
+  const hasSelectedClass = Boolean(selectedClass);
+  const hasAvailableSpellOptions = availableSpells.length > 0;
 
-  const selectedSpells = spells.filter((spell) =>
+  const selectedSpells = availableSpells.filter((spell) =>
     selectedSpellKeys.includes(spell.key),
   );
+
+  const unavailableSelectedSpells = spells.filter((spell) => {
+    const isSelected = selectedSpellKeys.includes(spell.key);
+    const isAvailable = availableSpells.some(
+      (availableSpell) => availableSpell.key === spell.key,
+    );
+
+    return isSelected && !isAvailable;
+  });
 
   const selectedCantrips = selectedSpells.filter(isCantrip);
   const selectedLeveledSpells = selectedSpells.filter(isLeveledSpell);
   const hasSelectedSpells = selectedSpells.length > 0;
+  const hasUnavailableSelectedSpells = unavailableSelectedSpells.length > 0;
+
+    const startingLevelProgression = getStartingLevelProgression(selectedClass);
+
+  const cantripLimit = startingLevelProgression?.cantripsKnown ?? 0;
+
+  const leveledSpellLimit =
+    startingLevelProgression?.spellsKnown ??
+    startingLevelProgression?.spellsPrepared ??
+    0;
+
+  const hasReachedCantripLimit = selectedCantrips.length >= cantripLimit;
+  const hasReachedLeveledSpellLimit =
+    selectedLeveledSpells.length >= leveledSpellLimit;
+
+  function getSpellSelectionState(spell: CharacterBuilderSpellOption) {
+    const isSelected = selectedSpellKeys.includes(spell.key);
+
+    if (isSelected) {
+      return {
+        isSelected,
+        isDisabled: false,
+        disabledReason: "",
+      };
+    }
+
+    if (isCantrip(spell) && hasReachedCantripLimit) {
+      return {
+        isSelected,
+        isDisabled: true,
+        disabledReason: `Limite de ${cantripLimit} truque(s) atingido para ${selectedClassName}. Desmarque outro truque para escolher este.`,
+      };
+    }
+
+    if (isLeveledSpell(spell) && hasReachedLeveledSpellLimit) {
+      return {
+        isSelected,
+        isDisabled: true,
+        disabledReason: `Limite de ${leveledSpellLimit} magia(s) atingido para ${selectedClassName}. Desmarque outra magia para escolher esta.`,
+      };
+    }
+
+    return {
+      isSelected,
+      isDisabled: false,
+      disabledReason: "",
+    };
+  }
 
   const hasActiveFilters =
     searchTerm.trim().length > 0 ||
@@ -302,12 +413,16 @@ export function CharacterSpellsStep({
     schoolFilter !== "all";
 
   const temporaryValidationTitle = hasSelectedSpells
-    ? "Seleção preparada"
-    : "Etapa opcional por enquanto";
+    ? "Seleção dentro da progressão"
+    : hasAvailableSpellOptions
+      ? "Escolha as magias permitidas"
+      : "Sem magias para esta classe";
 
   const temporaryValidationDescription = hasSelectedSpells
-    ? `Você marcou ${selectedCantrips.length} truque(s) e ${selectedLeveledSpells.length} magia(s). Ao atualizar o rascunho, essas escolhas são gravadas na ficha.`
-    : "Nenhuma magia foi escolhida. A etapa continua liberada porque ainda não temos a progressão real por classe.";
+    ? `Você marcou ${selectedCantrips.length}/${cantripLimit} truque(s) e ${selectedLeveledSpells.length}/${leveledSpellLimit} magia(s) disponíveis para ${selectedClassName}. Ao atualizar o rascunho, essas escolhas são gravadas na ficha.`
+    : hasAvailableSpellOptions
+      ? `Esta classe pode escolher até ${cantripLimit} truque(s) e ${leveledSpellLimit} magia(s) no nível inicial.`
+      : "A classe selecionada não possui magias disponíveis no nível inicial.";
 
   if (isLoading) {
     return (
@@ -338,7 +453,7 @@ export function CharacterSpellsStep({
       <div className="space-y-4">
         <div
           className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
-          title="Nesta etapa, truques e magias já aparecem separados. A seleção já pode ser persistida no rascunho; limites por classe e nível entram em uma etapa futura."
+          title="Nesta etapa, truques e magias aparecem filtrados pela classe selecionada. Limites por quantidade de truques/magias por nível entram no próximo passo."
         >
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
@@ -357,32 +472,40 @@ export function CharacterSpellsStep({
               </div>
 
               <h3 className="mt-2 text-xl font-black text-zinc-100">
-                Truques e magias do sistema
+                Truques e magias da classe
               </h3>
 
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-300">
-                Por enquanto esta lista mostra as magias do sistema. O filtro
-                real por classe e a progressão de truques/magias por nível
-                entram em uma etapa futura.
+                Esta lista mostra apenas as magias que a classe selecionada pode
+                aprender no nível inicial. A validação de quantidade por nível
+                entra no próximo passo.
               </p>
             </div>
           </div>
 
           <p
-            className="mt-4 rounded-xl border border-amber-400/20 bg-amber-300/10 px-3 py-2 text-xs font-bold text-amber-100"
-            title="Mais tarde, esta etapa deve mostrar apenas magias que a classe selecionada pode aprender/conjurar."
+            className={[
+              "mt-4 rounded-xl border px-3 py-2 text-xs font-bold",
+              hasSelectedClass && hasAvailableSpellOptions
+                ? "border-emerald-400/20 bg-emerald-500/10 text-emerald-100"
+                : "border-amber-400/20 bg-amber-300/10 text-amber-100",
+            ].join(" ")}
+            title="A lista de magias agora usa a relação ClassSpell cadastrada no seed."
           >
-            Classe atual: {selectedClassName}. Filtro por classe: em breve.
+            Classe atual: {selectedClassName}.{" "}
+            {hasAvailableSpellOptions
+              ? `Magias disponíveis para esta classe no nível inicial: ${availableSpells.length}.`
+              : "Nenhuma magia disponível para esta classe no nível inicial."}
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
           <div
             className="rounded-2xl border border-forge-gold/30 bg-black/25 p-4"
-            title={`Total de truques disponíveis no sistema atual: ${totalCantrips}.`}
+            title={`Total de truques disponíveis para ${selectedClassName}: ${totalCantrips}.`}
           >
             <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-              Truques disponíveis
+              Truques da classe
             </p>
 
             <p className="mt-2 text-2xl font-black leading-none text-forge-gold">
@@ -392,10 +515,10 @@ export function CharacterSpellsStep({
 
           <div
             className="rounded-2xl border border-purple-300/30 bg-purple-500/10 p-4"
-            title={`Total de magias disponíveis no sistema atual: ${totalLeveledSpells}.`}
+            title={`Total de magias disponíveis para ${selectedClassName}: ${totalLeveledSpells}.`}
           >
             <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-              Magias disponíveis
+              Magias da classe
             </p>
 
             <p className="mt-2 text-2xl font-black leading-none text-purple-200">
@@ -405,30 +528,43 @@ export function CharacterSpellsStep({
 
           <div
             className="rounded-2xl border border-forge-gold/30 bg-forge-gold/10 p-4"
-            title={`Truques escolhidos: ${selectedCantrips.length}. Limites por classe virão depois.`}
+            title={`Truques escolhidos: ${selectedCantrips.length} de ${cantripLimit} permitidos para ${selectedClassName}.`}
           >
             <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
               Truques escolhidos
             </p>
 
             <p className="mt-2 text-2xl font-black leading-none text-forge-gold">
-              {selectedCantrips.length}
+              {selectedCantrips.length}/{cantripLimit}
             </p>
           </div>
 
           <div
             className="rounded-2xl border border-purple-300/30 bg-purple-500/10 p-4"
-            title={`Magias escolhidas: ${selectedLeveledSpells.length}. Limites por classe virão depois.`}
+            title={`Magias escolhidas: ${selectedLeveledSpells.length} de ${leveledSpellLimit} permitidas para ${selectedClassName}.`}
           >
             <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
               Magias escolhidas
             </p>
 
             <p className="mt-2 text-2xl font-black leading-none text-purple-200">
-              {selectedLeveledSpells.length}
+              {selectedLeveledSpells.length}/{leveledSpellLimit}
             </p>
           </div>
         </div>
+
+        {hasUnavailableSelectedSpells ? (
+          <div
+            className="rounded-2xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-xs font-bold leading-relaxed text-amber-100 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
+            title="Estas magias estavam selecionadas no rascunho/ficha, mas não pertencem à classe atual segundo a tabela ClassSpell."
+          >
+            Existem {unavailableSelectedSpells.length} magia(s) selecionada(s)
+            que não pertencem à classe atual:{" "}
+            {unavailableSelectedSpells.map((spell) => spell.name).join(", ")}.
+            Ao revisar a seleção, mantenha apenas magias disponíveis para{" "}
+            {selectedClassName}.
+          </div>
+        ) : null}
 
         <div
           className={[
@@ -479,7 +615,7 @@ export function CharacterSpellsStep({
                 </p>
 
                 <p className="mt-1 text-xl font-black text-forge-gold">
-                  {selectedCantrips.length}
+                  {selectedCantrips.length}/{cantripLimit}
                 </p>
               </div>
 
@@ -492,7 +628,7 @@ export function CharacterSpellsStep({
                 </p>
 
                 <p className="mt-1 text-xl font-black text-purple-200">
-                  {selectedLeveledSpells.length}
+                  {selectedLeveledSpells.length}/{leveledSpellLimit}
                 </p>
               </div>
             </div>
@@ -558,10 +694,10 @@ export function CharacterSpellsStep({
 
           <p
             className="mt-3 text-xs font-bold text-zinc-500"
-            title={`Os filtros atuais exibem ${filteredSpells.length} de ${spells.length} opções totais. Truques visíveis: ${filteredCantrips.length}. Magias visíveis: ${filteredLeveledSpells.length}.`}
+            title={`Os filtros atuais exibem ${filteredSpells.length} de ${availableSpells.length} opções disponíveis para ${selectedClassName}. Truques visíveis: ${filteredCantrips.length}. Magias visíveis: ${filteredLeveledSpells.length}.`}
           >
-            Exibindo {filteredSpells.length} de {spells.length} opção
-            {spells.length === 1 ? "" : "ões"}.
+            Exibindo {filteredSpells.length} de {availableSpells.length} opção
+            {availableSpells.length === 1 ? "" : "ões"}.
             {hasActiveFilters
               ? " Limpe os filtros para ver todas as magias."
               : " Use os filtros para reduzir a lista quando ela crescer."}
@@ -571,7 +707,9 @@ export function CharacterSpellsStep({
 
       {filteredSpells.length === 0 ? (
         <div className="rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
-          Nenhuma magia encontrada com os filtros atuais.
+          {hasAvailableSpellOptions
+            ? "Nenhuma magia encontrada com os filtros atuais."
+            : "Nenhuma magia disponível para a classe selecionada no nível inicial."}
         </div>
       ) : null}
 
@@ -597,14 +735,20 @@ export function CharacterSpellsStep({
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            {filteredCantrips.map((spell) => (
-              <CharacterSpellCard
-                key={spell.id}
-                spell={spell}
-                isSelected={selectedSpellKeys.includes(spell.key)}
-                onToggleSpell={onToggleSpell}
-              />
-            ))}
+            {filteredCantrips.map((spell) => {
+              const selectionState = getSpellSelectionState(spell);
+
+              return (
+                <CharacterSpellCard
+                  key={spell.id}
+                  spell={spell}
+                  isSelected={selectionState.isSelected}
+                  isDisabled={selectionState.isDisabled}
+                  disabledReason={selectionState.disabledReason}
+                  onToggleSpell={onToggleSpell}
+                />
+              );
+            })}
           </div>
         </section>
       ) : null}
@@ -631,14 +775,20 @@ export function CharacterSpellsStep({
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            {spellsByLevel[level]?.map((spell) => (
-              <CharacterSpellCard
-                key={spell.id}
-                spell={spell}
-                isSelected={selectedSpellKeys.includes(spell.key)}
-                onToggleSpell={onToggleSpell}
-              />
-            ))}
+            {spellsByLevel[level]?.map((spell) => {
+              const selectionState = getSpellSelectionState(spell);
+
+              return (
+                <CharacterSpellCard
+                  key={spell.id}
+                  spell={spell}
+                  isSelected={selectionState.isSelected}
+                  isDisabled={selectionState.isDisabled}
+                  disabledReason={selectionState.disabledReason}
+                  onToggleSpell={onToggleSpell}
+                />
+              );
+            })}
           </div>
         </section>
       ))}

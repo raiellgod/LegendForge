@@ -66,6 +66,7 @@ export const ModelName = {
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
+  ClassSpell: 'ClassSpell',
   Feature: 'Feature',
   Spell: 'Spell',
   Equipment: 'Equipment',
@@ -326,6 +327,7 @@ export const CharacterClassScalarFieldEnum = {
   description: 'description',
   primaryRole: 'primaryRole',
   hitDie: 'hitDie',
+  spellcastingAbilityKey: 'spellcastingAbilityKey',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -355,11 +357,36 @@ export const LevelProgressionScalarFieldEnum = {
   classId: 'classId',
   level: 'level',
   proficiencyBonus: 'proficiencyBonus',
+  cantripsKnown: 'cantripsKnown',
+  spellsKnown: 'spellsKnown',
+  spellsPrepared: 'spellsPrepared',
+  spellSlotsLevel1: 'spellSlotsLevel1',
+  spellSlotsLevel2: 'spellSlotsLevel2',
+  spellSlotsLevel3: 'spellSlotsLevel3',
+  spellSlotsLevel4: 'spellSlotsLevel4',
+  spellSlotsLevel5: 'spellSlotsLevel5',
+  spellSlotsLevel6: 'spellSlotsLevel6',
+  spellSlotsLevel7: 'spellSlotsLevel7',
+  spellSlotsLevel8: 'spellSlotsLevel8',
+  spellSlotsLevel9: 'spellSlotsLevel9',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type LevelProgressionScalarFieldEnum = (typeof LevelProgressionScalarFieldEnum)[keyof typeof LevelProgressionScalarFieldEnum]
+
+
+export const ClassSpellScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  spellId: 'spellId',
+  minimumClassLevel: 'minimumClassLevel',
+  isAlwaysKnown: 'isAlwaysKnown',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClassSpellScalarFieldEnum = (typeof ClassSpellScalarFieldEnum)[keyof typeof ClassSpellScalarFieldEnum]
 
 
 export const FeatureScalarFieldEnum = {

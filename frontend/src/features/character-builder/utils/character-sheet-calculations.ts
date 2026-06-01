@@ -158,3 +158,110 @@ export function getPassivePerception({
 
   return 10 + getAttributeModifierFromStats(stats, "wisdom");
 }
+
+export function getSpellcastingAbilityKey(
+  spellcastingAbilityKey: string | null | undefined,
+) {
+  if (!isCharacterAttributeKey(spellcastingAbilityKey)) {
+    return null;
+  }
+
+  return spellcastingAbilityKey;
+}
+
+export function getSpellcastingAbilityModifier({
+  stats,
+  spellcastingAbilityKey,
+}: {
+  stats: ReadySheetStat[];
+  spellcastingAbilityKey: string | null | undefined;
+}) {
+  const attributeKey = getSpellcastingAbilityKey(spellcastingAbilityKey);
+
+  if (!attributeKey) {
+    return null;
+  }
+
+  return getAttributeModifierFromStats(stats, attributeKey);
+}
+
+export function getSpellSaveDc({
+  stats,
+  level,
+  spellcastingAbilityKey,
+}: {
+  stats: ReadySheetStat[];
+  level: number;
+  spellcastingAbilityKey: string | null | undefined;
+}) {
+  const spellcastingModifier = getSpellcastingAbilityModifier({
+    stats,
+    spellcastingAbilityKey,
+  });
+
+  if (spellcastingModifier === null) {
+    return null;
+  }
+
+  return 8 + getProficiencyBonusByLevel(level) + spellcastingModifier;
+}
+
+export function getSpellAttackBonus({
+  stats,
+  level,
+  spellcastingAbilityKey,
+}: {
+  stats: ReadySheetStat[];
+  level: number;
+  spellcastingAbilityKey: string | null | undefined;
+}) {
+  const spellcastingModifier = getSpellcastingAbilityModifier({
+    stats,
+    spellcastingAbilityKey,
+  });
+
+  if (spellcastingModifier === null) {
+    return null;
+  }
+
+  return getProficiencyBonusByLevel(level) + spellcastingModifier;
+}
+
+const ATTRIBUTE_LABELS: Record<CharacterAttributeKey, string> = {
+  strength: "Força",
+  dexterity: "Destreza",
+  constitution: "Constituição",
+  intelligence: "Inteligência",
+  wisdom: "Sabedoria",
+  charisma: "Carisma",
+};
+
+const ATTRIBUTE_SHORT_LABELS: Record<CharacterAttributeKey, string> = {
+  strength: "FOR",
+  dexterity: "DES",
+  constitution: "CON",
+  intelligence: "INT",
+  wisdom: "SAB",
+  charisma: "CAR",
+};
+
+export function isCharacterAttributeKey(
+  value: string | null | undefined,
+): value is CharacterAttributeKey {
+  return (
+    value === "strength" ||
+    value === "dexterity" ||
+    value === "constitution" ||
+    value === "intelligence" ||
+    value === "wisdom" ||
+    value === "charisma"
+  );
+}
+
+export function getAttributeLabel(attributeKey: CharacterAttributeKey) {
+  return ATTRIBUTE_LABELS[attributeKey];
+}
+
+export function getAttributeShortLabel(attributeKey: CharacterAttributeKey) {
+  return ATTRIBUTE_SHORT_LABELS[attributeKey];
+}

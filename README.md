@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-ready%20sheet%20rolls%20complete-green)
+![Status](https://img.shields.io/badge/status-advanced%20spell%20progression%20complete-green)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -16,9 +16,9 @@
 
 **LegendForge** is a Virtual Tabletop designed to run tabletop RPG sessions online.
 
-Inspired by tools like Roll20 and Foundry VTT, but with a different philosophy:
+Inspired by tools like Roll20 and Foundry VTT, but with its own philosophy:
 
-- 🧩 System-agnostic
+- 🧩 System-agnostic foundation
 - 🎲 Focused on custom campaigns
 - 👥 Built for real gameplay with friends
 - 🧠 Designed as a serious full-stack portfolio project
@@ -26,7 +26,8 @@ Inspired by tools like Roll20 and Foundry VTT, but with a different philosophy:
 - 📄 Character creation built as a real persisted flow
 - 🗺️ Table tools built toward a playable VTT experience
 - 🧍 Ready character sheet designed for actual gameplay at the table
-- 🎲 Sheet-based roll actions connected to the table chat
+- 🎲 Sheet-based roll actions connected to table chat
+- ✨ Advanced spellcasting rules now connected to class progression
 
 ---
 
@@ -42,15 +43,16 @@ LegendForge demonstrates:
 - 🎮 Flexible RPG engine foundation
 - 🎨 UI built from a product-driven flow
 - 🧍 Character builder connected to real domain data
-- 🧾 Ready character sheet with tabs, compact status view and inventory/profile/magic sections
+- 🧾 Ready character sheet with tabs, compact status view, inventory/profile/magic sections
 - 🎲 Table roll actions from skills, saving throws, initiative, equipment and spells
+- 🪄 Spellcasting progression by class, spell filtering, spell limits, spell DC, spell attack and spell slots
 - 🧩 Incremental VTT features with persistence where it matters
 
 ---
 
 ## ⚙️ Tech Stack
 
-### 🖥️ Backend
+### Backend
 
 - Node.js
 - Fastify
@@ -64,7 +66,7 @@ LegendForge demonstrates:
 - Docker
 - pnpm
 
-### 🎨 Frontend
+### Frontend
 
 - Next.js
 - React
@@ -90,6 +92,7 @@ LegendForge/
 │   │   └── index.ts
 │   ├── prisma/
 │   │   ├── schema.prisma
+│   │   ├── migrations/
 │   │   └── seed.ts
 │   ├── docker-compose.yml
 │   └── package.json
@@ -125,8 +128,8 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟢 Ready character sheet and sheet-based roll actions completed.  
-> 🟡 Next focus: advanced system/character rules, including spellcasting progression, level-up preparation and multiclass foundation.
+> 🟢 Advanced spellcasting progression rules completed.  
+> 🟡 Next focus: structural refactor of the ready character sheet.
 
 ### ✅ Completed
 
@@ -168,6 +171,8 @@ LegendForge/
   - Feature
   - Spell
   - Equipment
+  - LevelProgression
+  - ClassSpell
 - Character sheet foundation:
   - CharacterSheet
   - CharacterSheetStat
@@ -199,7 +204,7 @@ LegendForge/
   - all skills shown, not only proficient skills
   - saving throws and skill rows prepared as rollable actions
   - Bolsa separated with equipment, coins, attack and damage buttons
-  - Magia separated with spell cards and basic actions
+  - Magia separated with spell cards, spellcasting summary and spell slots
   - Perfil separated with image/token/profile/narrative fields
   - portrait/token URL editing and persistence
 - Game table refactor:
@@ -223,9 +228,20 @@ LegendForge/
   - NPCs/creatures use `+0` until their own sheets exist
   - equipment attack basic button
   - equipment damage button
-  - spell attack basic button
+  - spell attack with real spell attack bonus for spellcasting classes
   - spell damage detection from description
-  - spell effect message to chat
+  - spell attack disabled when class has no spellcasting ability
+  - roll display fixed to show numeric total instead of raw dice list
+- Advanced spellcasting rules:
+  - class spellcasting ability
+  - class level progression
+  - class-spell access table
+  - spells filtered by selected class
+  - cantrip/spell limits by class progression
+  - spell save DC calculation
+  - spell attack bonus calculation
+  - spell slot display in ready sheet
+  - expanded minimum spell seed for testing
 - Player creation access:
   - player common user sees `+ Personagem`
   - player opens character builder directly
@@ -236,7 +252,7 @@ LegendForge/
 ## 🚧 In Progress
 
 ```txt
-4.26.13 — Commit/documentation for ready sheet roll actions
+4.27.11 — Documentation update after advanced spellcasting rules
 ```
 
 ---
@@ -244,19 +260,22 @@ LegendForge/
 ## 🔜 Next Step
 
 ```txt
-4.27 — Advanced system and character rules
+4.27.12 — Commit advanced spell progression rules
 ```
 
-Expected work:
+Then:
 
-- spellcasting rules by class
-- filter spells by class
-- validate cantrips/spells by class progression
-- calculate spell DC and spell attack bonus
-- display spell slots / spellcasting limits
-- prepare level-up flow
-- model progression by class and level
-- prepare multiclass foundation for 4.28
+```txt
+4.28 — Structural ready sheet refactor
+```
+
+Expected focus:
+
+- ready sheet as a more stable table tool
+- compact + expandable information pattern
+- better magic/inventory readability
+- fixed shell concept with central dynamic tabs
+- future pop-out/window mode planning
 
 ---
 
@@ -290,12 +309,14 @@ Current state:
 
 - Prisma is integrated
 - PostgreSQL is connected
-- Database sync is working
+- Database migrations are being used for schema evolution
 - Auth tables are operational
 - Campaign tables are operational
 - RPG domain is expanding incrementally
 - CharacterSheet domain exists and is connected to the builder and ready sheet
 - Campaign actors and scene tokens are connected to the game table
+- `LevelProgression` stores class progression by level
+- `ClassSpell` stores which spells each class can learn/use and from which class level
 
 More details:
 
@@ -321,7 +342,8 @@ Current UI progress:
 - ✅ Ready character sheet with tabs
 - ✅ Compact Ficha/Status layout
 - ✅ Rollable skills, saving throws, initiative, equipment and spells
-- 🟡 Advanced spellcasting/level-up/multiclass rules coming next
+- ✅ Magic tab with real spellcasting summary and slots
+- 🟡 Structural ready sheet refactor coming next
 
 ---
 
@@ -384,6 +406,7 @@ Current capsules now include:
 - Capsule 37 — Ready Character Sheet
 - Capsule 38 — Ready Sheet Roll Actions
 - Capsule 39 — Player Character Creation Access
+- Capsule 40 — Advanced Spell Progression Rules
 
 See:
 
@@ -402,7 +425,7 @@ cd backend
 docker compose up -d
 pnpm install
 pnpm prisma generate
-pnpm prisma db push
+pnpm prisma migrate dev
 pnpm run dev
 ```
 
@@ -432,7 +455,21 @@ cd backend
 pnpm prisma format
 pnpm prisma validate
 pnpm prisma generate
-pnpm prisma db push
+pnpm prisma migrate dev --name <migration_name>
+```
+
+When only re-running seed data:
+
+```bash
+cd backend
+pnpm prisma db seed
+```
+
+If Prisma seed is not configured in the Prisma config, run:
+
+```bash
+cd backend
+pnpm tsx prisma/seed.ts
 ```
 
 When testing auth or database changes:
@@ -459,40 +496,3 @@ Before deployment later:
 
 - review `.gitignore`
 - keep `node_modules`, `.next`, `dist`, `.turbo`, logs and local generated caches out of git/deploy packages
-- keep `.env` private
-- maintain `.env.example`
-
----
-
-## 🤝 Contributing
-
-This is currently a personal project focused on learning, architecture, and portfolio quality.
-
----
-
-## 📄 License
-
-MIT License
-
----
-
-## 👨‍💻 Author
-
-Raiel Godinho  
-<https://github.com/raiellgod>
-
----
-
-## 🔮 Vision
-
-LegendForge aims to become:
-
-- 🎲 A complete Virtual Tabletop
-- 🧠 A strong full-stack portfolio project
-- ⚙️ A modular RPG engine
-- 🔐 A well-architected product
-- 👥 A real multiplayer tabletop experience
-
-Built step by step.  
-Built to scale.  
-Built like a real product.

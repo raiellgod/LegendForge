@@ -1024,6 +1024,7 @@ function CharacterBuilderModal({
                       onSelect={(option) => {
                         updateDraft("classId", option.id);
                         updateDraft("className", option.name);
+                        updateDraft("spellKeys", []);
                         onSelectOption("class", option);
                       }}
                     />

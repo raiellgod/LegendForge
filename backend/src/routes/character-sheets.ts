@@ -444,7 +444,15 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     system: true,
     ancestry: true,
     background: true,
-    characterClass: true,
+    characterClass: {
+      include: {
+        levelProgressions: {
+          orderBy: {
+            level: "asc",
+          },
+        },
+      },
+    },
     subclass: true,
     stats: {
       include: {
@@ -470,7 +478,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         equipment: true,
       },
     },
-  };
+  } as const;
 
   server.get(
     "/campaigns/:campaignId/character-sheets",
@@ -523,37 +531,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         where: {
           campaignId,
         },
-        include: {
-          campaignActor: true,
-          ancestry: true,
-          background: true,
-          characterClass: true,
-          subclass: true,
-          stats: {
-            include: {
-              stat: true,
-            },
-          },
-          skills: {
-            include: {
-              skill: {
-                include: {
-                  stat: true,
-                },
-              },
-            },
-          },
-          spells: {
-            include: {
-              spell: true,
-            },
-          },
-          equipment: {
-            include: {
-              equipment: true,
-            },
-          },
-        },
+        include: characterSheetInclude,
         orderBy: {
           createdAt: "desc",
         },

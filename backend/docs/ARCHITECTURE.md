@@ -15,6 +15,7 @@ O projeto é inspirado em VTTs como Roll20 e Foundry VTT, mas segue uma identida
 - 🧠 Arquitetura real de produto full-stack
 - ⚙️ Desenvolvimento incremental, testável e com mentalidade de produção
 - 🎲 Ficha pronta voltada para uso real na mesa
+- 🪄 Regras de conjuração já conectadas a progressão de classe
 
 ---
 
@@ -42,6 +43,7 @@ Regra atual para arquivos grandes, principalmente:
 
 ```txt
 frontend/src/app/campaigns/[id]/play/page.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetModal.tsx
 ```
 
 - Para mudança grande: reescrever o arquivo inteiro baseado no último arquivo enviado pelo usuário.
@@ -58,6 +60,7 @@ LegendForge/
 ├── backend/
 │   ├── prisma/
 │   │   ├── schema.prisma
+│   │   ├── migrations/
 │   │   └── seed.ts
 │   ├── src/
 │   │   ├── generated/
@@ -150,7 +153,7 @@ Responsável por persistência, integridade, relacionamentos e regras críticas 
 
 ### Prisma
 
-Responsável pelo acesso tipado ao banco, queries relacionais, migrations/db push durante desenvolvimento e Prisma Studio.
+Responsável pelo acesso tipado ao banco, queries relacionais, migrations, seed e Prisma Studio.
 
 ### Better Auth
 
@@ -208,6 +211,8 @@ Decisão importante:
 - Feature
 - Spell
 - Equipment
+- LevelProgression
+- ClassSpell
 
 ### Ficha/personagem
 
@@ -216,6 +221,78 @@ Decisão importante:
 - CharacterSheetSkill
 - CharacterSheetSpell
 - CharacterSheetEquipment
+
+---
+
+## 🪄 Arquitetura de regras de magia — 4.27
+
+A macro 4.27 consolidou a primeira camada de regras avançadas de sistema/ficha com foco em magia e progressão inicial.
+
+### Campos e modelos principais
+
+- `CharacterClass.spellcastingAbilityKey`
+  - define o atributo usado pela classe para conjuração.
+  - exemplos: Bardo usa `charisma`, Devoto usa `wisdom`, Bárbaro usa `null`.
+
+- `LevelProgression`
+  - guarda progressão por classe e nível.
+  - inclui bônus de proficiência, truques conhecidos, magias conhecidas/preparadas e espaços de magia por círculo/nível.
+
+- `ClassSpell`
+  - relação entre classe e magia.
+  - define quais magias cada classe pode aprender/conjurar e o nível mínimo da classe.
+
+### Backend
+
+A rota:
+
+```txt
+GET /systems/:systemId/character-options
+```
+
+passou a entregar, em cada classe:
+
+```txt
+spellcastingAbilityKey
+levelProgressions
+classSpells
+```
+
+A rota de ficha pronta também carrega a progressão da classe para a aba Magia exibir slots.
+
+### Frontend
+
+O builder passou a:
+
+- filtrar magias pela classe selecionada.
+- respeitar `minimumClassLevel`.
+- validar limite de truques/magias usando a progressão da classe no nível inicial.
+- limpar magias antigas do draft ao trocar de classe.
+
+A ficha pronta passou a calcular:
+
+```txt
+CD de magia = 8 + proficiência + modificador do atributo de conjuração
+Ataque mágico = proficiência + modificador do atributo de conjuração
+```
+
+Também passou a exibir espaços de magia da progressão atual.
+
+### Correção de rolagem
+
+A função de rolagem foi ajustada para o resultado grande do chat mostrar sempre o total numérico da rolagem.
+
+Exemplo:
+
+```txt
+2d8 [5, 5] → 10
+```
+
+em vez de:
+
+```txt
+2d8 [5, 5] → 5, 5
+```
 
 ---
 
@@ -255,6 +332,7 @@ Status consolidado:
 - Linguagem dinâmica por pronome foi aplicada em labels principais de classe/ancestralidade/antecedente.
 - Pronome e gênero inicial foram sincronizados quando apropriado.
 - O builder continua sendo aberto dentro da mesa.
+- A etapa Magias já usa `ClassSpell` e `LevelProgression` para listar escolhas válidas.
 
 ---
 
@@ -282,7 +360,7 @@ Decisões atuais:
 - Perícias exibem todas as perícias do sistema, não apenas as proficientes.
 - Perícias e testes de resistência usam linhas clicáveis.
 - `Bolsa` concentra moedas, equipamentos e ações básicas de item.
-- `Magia` concentra magias/truques e ações básicas de magia.
+- `Magia` concentra magias/truques, conjuração, CD, ataque mágico e espaços de magia.
 - `Perfil` concentra retrato, token, aparência, personalidade, história e notas.
 - Notas do mestre aparecem apenas para GM.
 
@@ -293,13 +371,13 @@ Ações de rolagem atuais:
 - Teste de resistência: `1d20 + bônus do teste`.
 - Ataque de equipamento: ataque básico `1d20 + 0`.
 - Dano de equipamento: rola expressão de dano do equipamento.
-- Ataque mágico: ataque mágico básico `1d20 + 0`.
+- Ataque mágico: `1d20 + ataque mágico real`, quando a classe possui atributo de conjuração.
 - Dano mágico: expressão detectada na descrição.
-- Efeito mágico: envia descrição da magia ao chat.
+- Ataque mágico desabilitado quando a classe não possui atributo de conjuração.
 
 Limitação atual intencional:
 
-> Ataques de equipamento e ataques mágicos ainda não comparam com CA automaticamente. Bônus real, alvo e comparação com CA entram nas regras avançadas.
+> Ataques de equipamento ainda não têm bônus real e nenhum ataque compara com CA automaticamente. Bônus real de equipamento, alvo e comparação com CA foram movidos para a macro 4.29.
 
 ---
 
@@ -366,13 +444,33 @@ Decisão atual:
 
 ## 🧠 Regras futuras importantes
 
-### Regras avançadas de ataque
+### Refatoração estrutural da ficha pronta — 4.28
 
-- Ataque deve rolar `1d20 + bônus de ataque`.
-- Depois deve comparar com CA do alvo.
-- Dano só deve ser aplicado/rolado depois de acerto.
-- Primeiro passo futuro: CA manual.
-- Passo posterior: alvo/token selecionado e CA lida automaticamente.
+Decisão tomada após análise de UX da ficha pronta e referências de VTTs:
+
+- A ficha pronta merece uma macro própria.
+- A ficha deve ser uma ferramenta viva da mesa, não um bloco que trava a navegação.
+- O padrão visual deve priorizar cards compactos e detalhes sob demanda.
+- A ficha deve evoluir para uma casca fixa com centro variável.
+- Futuramente pode haver modo pop-out/janela destacada, linkada à mesa e ao chat.
+
+### Regras avançadas de equipamento/features/level up — 4.29
+
+Movidas para 4.29:
+
+- ataque real por equipamento.
+- ataque contra CA manual.
+- features por nível.
+- subclasse no nível correto.
+- fluxo de level up.
+- level up mostrando apenas pendências/mudanças do novo nível.
+
+### Multiclasse — 4.30
+
+- Subir de nível deve perguntar qual classe recebe o novo nível.
+- Nível total deve ser soma dos níveis por classe.
+- Header deve exibir classes compostas, como `Bardo 3 / Necromante 2`.
+- Magias, proficiências, features e progressão devem considerar múltiplas classes.
 
 ### Perícias e proficiências
 
@@ -409,12 +507,6 @@ Decisão atual:
 - Upload direto do computador entra em fase futura.
 - Inclui retrato, token, preview/fit/crop simples e persistência da URL no banco.
 
-### Progressão e multiclasse
-
-- Subir de nível deve ser um fluxo próprio.
-- Com multiclasse, o jogador escolhe qual classe recebe o novo nível.
-- Nível total deve ser calculado pela soma dos níveis por classe.
-
 ### Sincronização em tempo real
 
 - Entrará em fase posterior.
@@ -434,29 +526,91 @@ Estado atual:
 [x] 4.24 — Personagens ativos, biblioteca e ciclo de vida de atores
 [x] 4.25 — Ficha pronta, abas, perfil, bolsa, magia e imagens por URL
 [x] 4.26 — Rolagens automáticas pela ficha pronta
-[próximo] 4.27 — Regras avançadas de sistema/ficha
+[x] 4.27 — Regras avançadas de magia e progressão inicial
+[próximo] 4.28 — Refatoração estrutural da ficha pronta
+[planejado] 4.29 — Regras avançadas de equipamento, features e level up
+[planejado] 4.30 — Multiclasse
 ```
 
 ---
 
-## 🧠 Regra Fundamental
+## 📌 Estado da 4.27
 
-> Se uma regra é crítica para o jogo, ela deve existir no banco ou no backend.
+```txt
+[x] 4.27.1 — Revisar modelagem de progressão por classe/nível
+[x] 4.27.2 — Revisar/expandir LevelProgression no schema
+[x] 4.27.3 — Popular seed de progressão básica por classe
+[x] 4.27.3.1 — Popular seed de magias permitidas por classe
+[x] 4.27.4 — Filtrar magias por classe
+[x] 4.27.5 — Validar quantidade de truques/magias por nível
+[x] 4.27.5.1 — Expandir seed mínimo de magias para teste real
+[x] 4.27.6 — Calcular atributo de conjuração por classe
+[x] 4.27.7 — Calcular CD de magia
+[x] 4.27.8 — Calcular ataque mágico real
+[x] 4.27.8.1 — Desabilitar ataque mágico quando a classe não tiver atributo de conjuração
+[x] 4.27.9 — Exibir espaços de magia na aba Magia
+[x] 4.27.9.1 — Reorganizar UX/UI inicial da aba Magia
+[x] Correção — resultado grande da rolagem mostra o total, não a lista dos dados
+[x] 4.27.10 — Teste regressivo da 4.27
+[x] 4.27.11 — Atualizar documentação da 4.27
+[próximo] 4.27.12 — Commit da 4.27
+```
 
 ---
 
-## 🏆 Estado da Arquitetura
+## 📌 Próximas macros reorganizadas
 
-- Auth resolvido.
-- Backend funcional.
-- Prisma operacional.
-- Frontend conectado.
-- Campanhas reais.
-- Mesa com atores/tokens persistidos.
-- Sistema RPG inicial semeado.
-- Builder de personagem avançado e refatorado.
-- Mesa de jogo refatorada em `features/game-table`.
-- Ficha pronta funcional e organizada por abas.
-- Rolagens automáticas da ficha conectadas ao chat local.
-- Player comum consegue iniciar criação de personagem.
-- Próximo foco: regras avançadas de sistema/ficha, conjuração, progressão e preparação para multiclasse.
+### 4.28 — Refatoração estrutural da ficha pronta
+
+```txt
+[ ] 4.28.1 — Planejar arquitetura da ficha pronta
+[ ] 4.28.2 — Definir layout shell: header fixo, laterais fixas e centro variável
+[ ] 4.28.3 — Definir modo ficha modal atual versus futura janela destacada/pop-out
+[ ] 4.28.4 — Criar padrão de cards compactos com expand/collapse
+[ ] 4.28.5 — Aplicar expand/collapse na aba Magia
+[ ] 4.28.6 — Aplicar expand/collapse na aba Bolsa
+[ ] 4.28.7 — Reorganizar informações fixas da ficha: PV, CA, iniciativa, proficiência, percepção e recursos
+[ ] 4.28.8 — Reorganizar abas centrais: Ficha/Status, Combate, Magia, Bolsa, Features, Perfil/Notas
+[ ] 4.28.9 — Preparar área lateral de defesas, sentidos, condições e proficiências
+[ ] 4.28.10 — Melhorar densidade visual e reduzir textos redundantes
+[ ] 4.28.11 — Revisar responsividade em notebook menor, widescreen e tablet
+[ ] 4.28.12 — Teste regressivo da ficha pronta
+[ ] 4.28.13 — Atualizar documentação da 4.28
+[ ] 4.28.14 — Commit da 4.28
+```
+
+### 4.29 — Regras avançadas de equipamento, features e level up
+
+```txt
+[ ] 4.29.1 — Calcular ataque real por equipamento
+[ ] 4.29.2 — Definir regra inicial de ataque por equipamento
+[ ] 4.29.3 — Revisar modelagem de pacotes/itens compostos
+[ ] 4.29.4 — Popular seed de pacotes de equipamento
+[ ] 4.29.5 — Popular seed de equipamentos iniciais por classe
+[ ] 4.29.6 — Preparar ataque contra CA manual
+[ ] 4.29.7 — Features de classe por nível
+[ ] 4.29.8 — Subclasse no nível correto
+[ ] 4.29.9 — Preparar fluxo de subir de nível
+[ ] 4.29.10 — Level up mostra apenas pendências/mudanças do novo nível
+[ ] 4.29.11 — Revisão UX/UI das regras avançadas
+[ ] 4.29.12 — Teste regressivo da 4.29
+[ ] 4.29.13 — Atualizar documentação da 4.29
+[ ] 4.29.14 — Commit da 4.29
+```
+
+### 4.30 — Multiclasse
+
+```txt
+[ ] 4.30.1 — Modelar classes múltiplas da ficha
+[ ] 4.30.2 — Criar CharacterSheetClass ou estrutura equivalente
+[ ] 4.30.3 — Calcular nível total pela soma das classes
+[ ] 4.30.4 — Exibir classes no header da ficha, ex.: Bardo 3 / Necromante 2
+[ ] 4.30.5 — Fluxo de subir de nível pergunta qual classe aumenta
+[ ] 4.30.6 — Aplicar progressão da classe escolhida
+[ ] 4.30.7 — Ajustar magias para múltiplas classes
+[ ] 4.30.8 — Ajustar perícias/proficiências para multiclasse
+[ ] 4.30.9 — Histórico de níveis
+[ ] 4.30.10 — Revisão UX/UI do multiclasse
+[ ] 4.30.11 — Teste regressivo
+[ ] 4.30.12 — Commit da 4.30
+```

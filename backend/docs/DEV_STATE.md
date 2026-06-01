@@ -4,7 +4,7 @@
 
 ## 📅 Last Update
 
-29/05/2026
+01/06/2026
 
 ---
 
@@ -22,6 +22,7 @@ LegendForge/
 │   │   │   └── systems.ts
 │   │   └── index.ts
 │   ├── prisma/
+│   │   ├── migrations/
 │   │   ├── schema.prisma
 │   │   └── seed.ts
 │   ├── docker-compose.yml
@@ -109,6 +110,8 @@ LegendForge/
 - Feature
 - Spell
 - Equipment
+- LevelProgression
+- ClassSpell
 - CharacterSheet
 - CharacterSheetStat
 - CharacterSheetSkill
@@ -142,15 +145,19 @@ LegendForge/
 - ficha pronta carrega dados da CharacterSheet
 - retrato/token por URL persistem
 - atualização de token a partir da ficha sincroniza tokens existentes do ator
+- progressões por classe/nível foram criadas e populadas no seed
+- `ClassSpell` foi populada no seed
+- magias são filtradas por classe no builder
+- limites de truques/magias por nível funcionam no frontend
+- CD e ataque mágico real funcionam na ficha pronta
+- slots de magia aparecem na aba Magia
 
 ### 🚧 Em andamento
 
-- commit/documentação da 4.26
-- próxima macro: regras avançadas de sistema/ficha
-- preparar progressão por nível
-- preparar magias por classe
-- preparar CD/ataque mágico real
-- preparar upload real de imagens
+- documentação/commit da 4.27
+- próxima macro: refatoração estrutural da ficha pronta
+- preparar ficha com informações fixas e centro variável
+- preparar cards compactos com expand/collapse
 - persistência/sincronização futura de ferramentas locais da mesa
 
 ---
@@ -202,6 +209,24 @@ POST   /campaigns/:campaignId/character-sheets
 GET    /campaigns/:campaignId/character-sheets/:sheetId
 PATCH  /campaigns/:campaignId/character-sheets/:sheetId
 ```
+
+### Mudanças relevantes da 4.27
+
+A rota:
+
+```txt
+GET /systems/:systemId/character-options
+```
+
+agora retorna, nas classes:
+
+```txt
+spellcastingAbilityKey
+levelProgressions
+classSpells
+```
+
+As rotas de ficha pronta agora incluem `characterClass.levelProgressions` para permitir a exibição de slots na aba Magia.
 
 ---
 
@@ -288,9 +313,36 @@ Status:
 - Ficha pronta tem abas Ficha/Status, Bolsa, Magia e Perfil.
 - Ficha pronta exibe todas as perícias.
 - Bolsa mostra equipamentos, moedas e botões Ataque/Dano.
-- Magia mostra botões Ataque/Dano/Efeito.
+- Magia mostra botões Ataque/Dano, cálculo real de conjuração e slots.
 - Perfil mostra imagem/token e campos narrativos.
-- Teste regressivo da 4.26 foi concluído.
+- Teste regressivo da 4.27 foi concluído.
+
+---
+
+## 🪄 Spellcasting — Status detalhado
+
+Implementado na 4.27:
+
+- `spellcastingAbilityKey` em `CharacterClass`.
+- `LevelProgression` expandido.
+- `ClassSpell` criado/populado.
+- Seed mínimo de magias expandido.
+- Builder filtra magias por classe.
+- Builder respeita nível mínimo da magia para a classe.
+- Builder valida limite de truques/magias pela progressão nível 1.
+- Ao trocar de classe, magias antigas são limpas do draft.
+- Ficha pronta calcula atributo de conjuração.
+- Ficha pronta calcula CD de magia.
+- Ficha pronta calcula ataque mágico real.
+- Ficha pronta desabilita ataque mágico quando classe não conjura.
+- Ficha pronta exibe espaços de magia do nível atual.
+- `dice-utils.ts` mostra o total correto da rolagem no resultado grande.
+
+Limitações intencionais:
+
+- Dano mágico ainda é detectado pela descrição.
+- Campos próprios como `damageFormula`, `damageType`, `requiresSavingThrow`, `savingThrowAbility` e `usesSpellSlot` ficam para refino futuro.
+- Controle de slots usados ainda não existe.
 
 ---
 
@@ -364,15 +416,16 @@ Sincronização real entre contas será tratada em fase futura.
 [x] 4.24 — Personagens ativos, biblioteca e ciclo de vida de atores
 [x] 4.25 — Ficha pronta, abas, perfil, bolsa, magia e imagens por URL
 [x] 4.26 — Rolagens automáticas pela ficha pronta
-[pendente] 4.26.13 — Commit da 4.26
-[próximo] 4.27 — Regras avançadas de sistema/ficha
+[x] 4.27 — Regras avançadas de magia e progressão inicial
+[próximo] 4.27.12 — Commit da 4.27
+[depois] 4.28 — Refatoração estrutural da ficha pronta
 ```
 
 ---
 
 ## 🧭 Próximo plano
 
-### 4.26.13 — Commit da 4.26
+### 4.27.12 — Commit da 4.27
 
 ```txt
 [ ] git status
@@ -380,28 +433,48 @@ Sincronização real entre contas será tratada em fase futura.
 [ ] cd frontend && pnpm lint && cd ..
 [ ] git add .
 [ ] git status
-[ ] git commit -m "feat: add ready sheet roll actions"
+[ ] git commit -m "feat: add advanced spell progression rules"
 ```
 
-### 4.27 — Regras avançadas de sistema/ficha
+### 4.28 — Refatoração estrutural da ficha pronta
 
 ```txt
-[ ] 4.27.1 — Mapear regras atuais de classe, magia, progressão e ficha pronta
-[ ] 4.27.2 — Revisar modelagem de progressão por classe/nível
-[ ] 4.27.3 — Popular seed de progressão básica por classe
-[ ] 4.27.4 — Filtrar magias por classe
-[ ] 4.27.5 — Validar quantidade de truques/magias por nível
-[ ] 4.27.6 — Calcular CD de magia e ataque mágico
-[ ] 4.27.7 — Mostrar espaços de magia na aba Magia
-[ ] 4.27.8 — Features de classe por nível
-[ ] 4.27.9 — Subclasse no nível correto
-[ ] 4.27.10 — Preparar fluxo de subir de nível
-[ ] 4.27.11 — Revisão UX/UI das regras avançadas
-[ ] 4.27.12 — Teste regressivo
-[ ] 4.27.13 — Commit
+[ ] 4.28.1 — Planejar arquitetura da ficha pronta
+[ ] 4.28.2 — Definir layout shell: header fixo, laterais fixas e centro variável
+[ ] 4.28.3 — Definir modo ficha modal atual versus futura janela destacada/pop-out
+[ ] 4.28.4 — Criar padrão de cards compactos com expand/collapse
+[ ] 4.28.5 — Aplicar expand/collapse na aba Magia
+[ ] 4.28.6 — Aplicar expand/collapse na aba Bolsa
+[ ] 4.28.7 — Reorganizar informações fixas da ficha
+[ ] 4.28.8 — Reorganizar abas centrais
+[ ] 4.28.9 — Preparar área lateral de defesas, sentidos, condições e proficiências
+[ ] 4.28.10 — Melhorar densidade visual e reduzir textos redundantes
+[ ] 4.28.11 — Revisar responsividade
+[ ] 4.28.12 — Teste regressivo da ficha pronta
+[ ] 4.28.13 — Atualizar documentação da 4.28
+[ ] 4.28.14 — Commit da 4.28
 ```
 
-### 4.28 — Multiclasse
+### 4.29 — Regras avançadas de equipamento, features e level up
+
+```txt
+[ ] 4.29.1 — Calcular ataque real por equipamento
+[ ] 4.29.2 — Definir regra inicial de ataque por equipamento
+[ ] 4.29.3 — Revisar modelagem de pacotes/itens compostos
+[ ] 4.29.4 — Popular seed de pacotes de equipamento
+[ ] 4.29.5 — Popular seed de equipamentos iniciais por classe
+[ ] 4.29.6 — Preparar ataque contra CA manual
+[ ] 4.29.7 — Features de classe por nível
+[ ] 4.29.8 — Subclasse no nível correto
+[ ] 4.29.9 — Preparar fluxo de subir de nível
+[ ] 4.29.10 — Level up mostra apenas pendências/mudanças do novo nível
+[ ] 4.29.11 — Revisão UX/UI das regras avançadas
+[ ] 4.29.12 — Teste regressivo da 4.29
+[ ] 4.29.13 — Atualizar documentação da 4.29
+[ ] 4.29.14 — Commit da 4.29
+```
+
+### 4.30 — Multiclasse
 
 ```txt
 [ ] Modelar múltiplas classes por ficha
@@ -414,6 +487,28 @@ Sincronização real entre contas será tratada em fase futura.
 ---
 
 ## 🔮 Backlog confirmado
+
+### Modularização de seed
+
+- Separar seed em arquivos menores antes de expandir muito magias/itens.
+- Estrutura futura sugerida:
+
+```txt
+backend/prisma/seeds/
+  system.seed.ts
+  stats.seed.ts
+  skills.seed.ts
+  ancestries.seed.ts
+  backgrounds.seed.ts
+  classes.seed.ts
+  subclasses.seed.ts
+  level-progressions.seed.ts
+  features.seed.ts
+  spells.seed.ts
+  class-spells.seed.ts
+  equipment.seed.ts
+  starting-equipment.seed.ts
+```
 
 ### Upload real de imagens
 
@@ -442,23 +537,30 @@ Sincronização real entre contas será tratada em fase futura.
 ### Multiclasse
 
 - múltiplas classes por ficha
-- nível por classe
-- escolher qual classe sobe ao ganhar nível
-- impacto em perícias, proficiências, magias e equipamentos
+- escolha de qual classe sobe no level up
+- progressão separada por classe
+- header exibindo composição de classes
+
+### NPCs e criaturas
+
+- NPCs terão ficha própria futura
+- Criaturas terão stat block/bestiário próprio
+- Não usar `CharacterSheet` como ficha universal para tudo
+
+### Sincronização em tempo real
+
+- WebSocket ou estratégia equivalente futura
+- sincronizar tokens, chat, rolagens, desenhos, névoa e estados de mesa
 
 ---
 
-## ⚠️ Regra de trabalho
+## ⚠️ Regras fixas de trabalho
 
-- `page.tsx` é grande.
-- Usar sempre o último arquivo enviado como fonte da verdade.
-- Mudança grande = arquivo completo.
-- Mudança pequena = âncora real.
-- Não presumir estrutura antiga.
-- Antes de commit: `git diff --stat`.
-
----
-
-## 🏁 Estado Atual
-
-👉 **Fase 4.26 concluída funcionalmente. Próximo passo: commit da 4.26 e início da 4.27 — regras avançadas de sistema/ficha.**
+```txt
+Branch atual: feat/game-page
+Antes de qualquer commit: git diff --stat
+Arquivo grande: usar fonte da verdade mais recente
+Mudança grande: arquivo inteiro
+Mudança pequena: “Procure este trecho / Troque por este trecho”
+Não usar estrutura presumida antiga
+```

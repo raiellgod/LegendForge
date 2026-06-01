@@ -413,20 +413,22 @@ model CharacterSheetEquipment {
 }
 
 model CharacterClass {
-  id          String   @id @default(uuid())
-  systemId    String
-  name        String
-  key         String
-  description String?
-  primaryRole String?
-  hitDie      Int?
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                     String   @id @default(uuid())
+  systemId               String
+  name                   String
+  key                    String
+  description            String?
+  primaryRole            String?
+  hitDie                 Int?
+  spellcastingAbilityKey String?
+  order                  Int      @default(0)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
   system            GameSystem          @relation(fields: [systemId], references: [id], onDelete: Cascade)
   subclasses        CharacterSubclass[]
   levelProgressions LevelProgression[]
+  classSpells       ClassSpell[]
   features          Feature[]
   characterSheets   CharacterSheet[]
 
@@ -460,13 +462,28 @@ model CharacterSubclass {
 }
 
 model LevelProgression {
-  id               String   @id @default(uuid())
+  id               String @id @default(uuid())
   systemId         String
   classId          String
   level            Int
   proficiencyBonus Int?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+
+  cantripsKnown  Int @default(0)
+  spellsKnown    Int @default(0)
+  spellsPrepared Int @default(0)
+
+  spellSlotsLevel1 Int @default(0)
+  spellSlotsLevel2 Int @default(0)
+  spellSlotsLevel3 Int @default(0)
+  spellSlotsLevel4 Int @default(0)
+  spellSlotsLevel5 Int @default(0)
+  spellSlotsLevel6 Int @default(0)
+  spellSlotsLevel7 Int @default(0)
+  spellSlotsLevel8 Int @default(0)
+  spellSlotsLevel9 Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   system         GameSystem     @relation(fields: [systemId], references: [id], onDelete: Cascade)
   characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
@@ -476,6 +493,24 @@ model LevelProgression {
   @@index([systemId])
   @@index([classId])
   @@index([level])
+}
+
+model ClassSpell {
+  id                String   @id @default(uuid())
+  classId           String
+  spellId           String
+  minimumClassLevel Int      @default(1)
+  isAlwaysKnown     Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  spell          Spell          @relation(fields: [spellId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, spellId])
+  @@index([classId])
+  @@index([spellId])
+  @@index([minimumClassLevel])
 }
 
 model Feature {
@@ -534,6 +569,7 @@ model Spell {
 
   system          GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
   characterSpells CharacterSheetSpell[]
+  classSpells     ClassSpell[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])

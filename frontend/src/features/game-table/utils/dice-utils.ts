@@ -126,7 +126,7 @@ export function rollDiceExpression(
     author,
     expression: normalizedExpression,
     total,
-    displayResult: displayParts.length === 1 ? displayParts[0] : undefined,
+    displayResult: String(total),
     breakdown: breakdownParts.join(" + ").replace(/\+ -/g, "- "),
     createdAt: new Date(),
   };

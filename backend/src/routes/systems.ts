@@ -119,13 +119,39 @@ export async function systemRoutes(app: FastifyInstance) {
             slug: z.string().nullable(),
             version: z.number(),
           }),
-          classes: z.array(
+                   classes: z.array(
             z.object({
               id: z.string(),
               key: z.string(),
               name: z.string(),
               description: z.string().nullable(),
               hitDie: z.number().nullable(),
+              spellcastingAbilityKey: z.string().nullable(),
+              levelProgressions: z.array(
+                z.object({
+                  level: z.number(),
+                  proficiencyBonus: z.number().nullable(),
+                  cantripsKnown: z.number(),
+                  spellsKnown: z.number(),
+                  spellsPrepared: z.number(),
+                  spellSlotsLevel1: z.number(),
+                  spellSlotsLevel2: z.number(),
+                  spellSlotsLevel3: z.number(),
+                  spellSlotsLevel4: z.number(),
+                  spellSlotsLevel5: z.number(),
+                  spellSlotsLevel6: z.number(),
+                  spellSlotsLevel7: z.number(),
+                  spellSlotsLevel8: z.number(),
+                  spellSlotsLevel9: z.number(),
+                }),
+              ),
+              classSpells: z.array(
+                z.object({
+                  spellKey: z.string(),
+                  minimumClassLevel: z.number(),
+                  isAlwaysKnown: z.boolean(),
+                }),
+              ),
             }),
           ),
           ancestries: z.array(
@@ -234,7 +260,7 @@ export async function systemRoutes(app: FastifyInstance) {
 
       const [classes, ancestries, backgrounds, skills, spells, equipment] =
         await Promise.all([
-          prisma.characterClass.findMany({
+                   prisma.characterClass.findMany({
             where: {
               systemId,
             },
@@ -247,6 +273,54 @@ export async function systemRoutes(app: FastifyInstance) {
               name: true,
               description: true,
               hitDie: true,
+              spellcastingAbilityKey: true,
+              levelProgressions: {
+                orderBy: {
+                  level: "asc",
+                },
+                select: {
+                  level: true,
+                  proficiencyBonus: true,
+                  cantripsKnown: true,
+                  spellsKnown: true,
+                  spellsPrepared: true,
+                  spellSlotsLevel1: true,
+                  spellSlotsLevel2: true,
+                  spellSlotsLevel3: true,
+                  spellSlotsLevel4: true,
+                  spellSlotsLevel5: true,
+                  spellSlotsLevel6: true,
+                  spellSlotsLevel7: true,
+                  spellSlotsLevel8: true,
+                  spellSlotsLevel9: true,
+                },
+              },
+              classSpells: {
+                orderBy: [
+                  {
+                    minimumClassLevel: "asc",
+                  },
+                  {
+                    spell: {
+                      level: "asc",
+                    },
+                  },
+                  {
+                    spell: {
+                      name: "asc",
+                    },
+                  },
+                ],
+                select: {
+                  minimumClassLevel: true,
+                  isAlwaysKnown: true,
+                  spell: {
+                    select: {
+                      key: true,
+                    },
+                  },
+                },
+              },
             },
           }),
 
@@ -367,7 +441,42 @@ export async function systemRoutes(app: FastifyInstance) {
           }),
         ]);
 
-      const normalizedSpells = spells.map((spell) => {
+            const normalizedClasses = classes.map((characterClass) => {
+        return {
+          id: characterClass.id,
+          key: characterClass.key,
+          name: characterClass.name,
+          description: characterClass.description,
+          hitDie: characterClass.hitDie,
+          spellcastingAbilityKey: characterClass.spellcastingAbilityKey,
+          levelProgressions: characterClass.levelProgressions.map(
+            (progression) => ({
+              level: progression.level,
+              proficiencyBonus: progression.proficiencyBonus,
+              cantripsKnown: progression.cantripsKnown,
+              spellsKnown: progression.spellsKnown,
+              spellsPrepared: progression.spellsPrepared,
+              spellSlotsLevel1: progression.spellSlotsLevel1,
+              spellSlotsLevel2: progression.spellSlotsLevel2,
+              spellSlotsLevel3: progression.spellSlotsLevel3,
+              spellSlotsLevel4: progression.spellSlotsLevel4,
+              spellSlotsLevel5: progression.spellSlotsLevel5,
+              spellSlotsLevel6: progression.spellSlotsLevel6,
+              spellSlotsLevel7: progression.spellSlotsLevel7,
+              spellSlotsLevel8: progression.spellSlotsLevel8,
+              spellSlotsLevel9: progression.spellSlotsLevel9,
+            }),
+          ),
+          classSpells: characterClass.classSpells.map((classSpell) => ({
+            spellKey: classSpell.spell.key,
+            minimumClassLevel: classSpell.minimumClassLevel,
+            isAlwaysKnown: classSpell.isAlwaysKnown,
+          })),
+        };
+      });
+      
+      
+        const normalizedSpells = spells.map((spell) => {
         const components =
           typeof spell.components === "string"
             ? spell.components
@@ -407,9 +516,9 @@ export async function systemRoutes(app: FastifyInstance) {
         };
       });
 
-      return reply.status(200).send({
+            return reply.status(200).send({
         system,
-        classes,
+        classes: normalizedClasses,
         ancestries,
         backgrounds,
         skills,

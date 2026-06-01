@@ -310,6 +310,7 @@ export type SpellWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Spell"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterSpells?: Prisma.CharacterSheetSpellListRelationFilter
+  classSpells?: Prisma.ClassSpellListRelationFilter
 }
 
 export type SpellOrderByWithRelationInput = {
@@ -331,6 +332,7 @@ export type SpellOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   characterSpells?: Prisma.CharacterSheetSpellOrderByRelationAggregateInput
+  classSpells?: Prisma.ClassSpellOrderByRelationAggregateInput
 }
 
 export type SpellWhereUniqueInput = Prisma.AtLeast<{
@@ -357,6 +359,7 @@ export type SpellWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Spell"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterSpells?: Prisma.CharacterSheetSpellListRelationFilter
+  classSpells?: Prisma.ClassSpellListRelationFilter
 }, "id" | "systemId_name" | "systemId_key">
 
 export type SpellOrderByWithAggregationInput = {
@@ -423,6 +426,7 @@ export type SpellCreateInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutSpellsInput
   characterSpells?: Prisma.CharacterSheetSpellCreateNestedManyWithoutSpellInput
+  classSpells?: Prisma.ClassSpellCreateNestedManyWithoutSpellInput
 }
 
 export type SpellUncheckedCreateInput = {
@@ -443,6 +447,7 @@ export type SpellUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSpells?: Prisma.CharacterSheetSpellUncheckedCreateNestedManyWithoutSpellInput
+  classSpells?: Prisma.ClassSpellUncheckedCreateNestedManyWithoutSpellInput
 }
 
 export type SpellUpdateInput = {
@@ -463,6 +468,7 @@ export type SpellUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutSpellsNestedInput
   characterSpells?: Prisma.CharacterSheetSpellUpdateManyWithoutSpellNestedInput
+  classSpells?: Prisma.ClassSpellUpdateManyWithoutSpellNestedInput
 }
 
 export type SpellUncheckedUpdateInput = {
@@ -483,6 +489,7 @@ export type SpellUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSpells?: Prisma.CharacterSheetSpellUncheckedUpdateManyWithoutSpellNestedInput
+  classSpells?: Prisma.ClassSpellUncheckedUpdateManyWithoutSpellNestedInput
 }
 
 export type SpellCreateManyInput = {
@@ -689,6 +696,20 @@ export type SpellUpdateOneRequiredWithoutCharacterSpellsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SpellUpdateToOneWithWhereWithoutCharacterSpellsInput, Prisma.SpellUpdateWithoutCharacterSpellsInput>, Prisma.SpellUncheckedUpdateWithoutCharacterSpellsInput>
 }
 
+export type SpellCreateNestedOneWithoutClassSpellsInput = {
+  create?: Prisma.XOR<Prisma.SpellCreateWithoutClassSpellsInput, Prisma.SpellUncheckedCreateWithoutClassSpellsInput>
+  connectOrCreate?: Prisma.SpellCreateOrConnectWithoutClassSpellsInput
+  connect?: Prisma.SpellWhereUniqueInput
+}
+
+export type SpellUpdateOneRequiredWithoutClassSpellsNestedInput = {
+  create?: Prisma.XOR<Prisma.SpellCreateWithoutClassSpellsInput, Prisma.SpellUncheckedCreateWithoutClassSpellsInput>
+  connectOrCreate?: Prisma.SpellCreateOrConnectWithoutClassSpellsInput
+  upsert?: Prisma.SpellUpsertWithoutClassSpellsInput
+  connect?: Prisma.SpellWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SpellUpdateToOneWithWhereWithoutClassSpellsInput, Prisma.SpellUpdateWithoutClassSpellsInput>, Prisma.SpellUncheckedUpdateWithoutClassSpellsInput>
+}
+
 export type EnumSpellSchoolFieldUpdateOperationsInput = {
   set?: $Enums.SpellSchool
 }
@@ -710,6 +731,7 @@ export type SpellCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSpells?: Prisma.CharacterSheetSpellCreateNestedManyWithoutSpellInput
+  classSpells?: Prisma.ClassSpellCreateNestedManyWithoutSpellInput
 }
 
 export type SpellUncheckedCreateWithoutSystemInput = {
@@ -729,6 +751,7 @@ export type SpellUncheckedCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSpells?: Prisma.CharacterSheetSpellUncheckedCreateNestedManyWithoutSpellInput
+  classSpells?: Prisma.ClassSpellUncheckedCreateNestedManyWithoutSpellInput
 }
 
 export type SpellCreateOrConnectWithoutSystemInput = {
@@ -796,6 +819,7 @@ export type SpellCreateWithoutCharacterSpellsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutSpellsInput
+  classSpells?: Prisma.ClassSpellCreateNestedManyWithoutSpellInput
 }
 
 export type SpellUncheckedCreateWithoutCharacterSpellsInput = {
@@ -815,6 +839,7 @@ export type SpellUncheckedCreateWithoutCharacterSpellsInput = {
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  classSpells?: Prisma.ClassSpellUncheckedCreateNestedManyWithoutSpellInput
 }
 
 export type SpellCreateOrConnectWithoutCharacterSpellsInput = {
@@ -850,6 +875,7 @@ export type SpellUpdateWithoutCharacterSpellsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutSpellsNestedInput
+  classSpells?: Prisma.ClassSpellUpdateManyWithoutSpellNestedInput
 }
 
 export type SpellUncheckedUpdateWithoutCharacterSpellsInput = {
@@ -869,6 +895,103 @@ export type SpellUncheckedUpdateWithoutCharacterSpellsInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classSpells?: Prisma.ClassSpellUncheckedUpdateManyWithoutSpellNestedInput
+}
+
+export type SpellCreateWithoutClassSpellsInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  level: number
+  school: $Enums.SpellSchool
+  castingTime?: string | null
+  range?: string | null
+  duration?: string | null
+  components?: string | null
+  isRitual?: boolean
+  requiresConcentration?: boolean
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSpellsInput
+  characterSpells?: Prisma.CharacterSheetSpellCreateNestedManyWithoutSpellInput
+}
+
+export type SpellUncheckedCreateWithoutClassSpellsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  level: number
+  school: $Enums.SpellSchool
+  castingTime?: string | null
+  range?: string | null
+  duration?: string | null
+  components?: string | null
+  isRitual?: boolean
+  requiresConcentration?: boolean
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterSpells?: Prisma.CharacterSheetSpellUncheckedCreateNestedManyWithoutSpellInput
+}
+
+export type SpellCreateOrConnectWithoutClassSpellsInput = {
+  where: Prisma.SpellWhereUniqueInput
+  create: Prisma.XOR<Prisma.SpellCreateWithoutClassSpellsInput, Prisma.SpellUncheckedCreateWithoutClassSpellsInput>
+}
+
+export type SpellUpsertWithoutClassSpellsInput = {
+  update: Prisma.XOR<Prisma.SpellUpdateWithoutClassSpellsInput, Prisma.SpellUncheckedUpdateWithoutClassSpellsInput>
+  create: Prisma.XOR<Prisma.SpellCreateWithoutClassSpellsInput, Prisma.SpellUncheckedCreateWithoutClassSpellsInput>
+  where?: Prisma.SpellWhereInput
+}
+
+export type SpellUpdateToOneWithWhereWithoutClassSpellsInput = {
+  where?: Prisma.SpellWhereInput
+  data: Prisma.XOR<Prisma.SpellUpdateWithoutClassSpellsInput, Prisma.SpellUncheckedUpdateWithoutClassSpellsInput>
+}
+
+export type SpellUpdateWithoutClassSpellsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  school?: Prisma.EnumSpellSchoolFieldUpdateOperationsInput | $Enums.SpellSchool
+  castingTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  range?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  components?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRitual?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresConcentration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSpellsNestedInput
+  characterSpells?: Prisma.CharacterSheetSpellUpdateManyWithoutSpellNestedInput
+}
+
+export type SpellUncheckedUpdateWithoutClassSpellsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  school?: Prisma.EnumSpellSchoolFieldUpdateOperationsInput | $Enums.SpellSchool
+  castingTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  range?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  components?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRitual?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresConcentration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSpells?: Prisma.CharacterSheetSpellUncheckedUpdateManyWithoutSpellNestedInput
 }
 
 export type SpellCreateManySystemInput = {
@@ -906,6 +1029,7 @@ export type SpellUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSpells?: Prisma.CharacterSheetSpellUpdateManyWithoutSpellNestedInput
+  classSpells?: Prisma.ClassSpellUpdateManyWithoutSpellNestedInput
 }
 
 export type SpellUncheckedUpdateWithoutSystemInput = {
@@ -925,6 +1049,7 @@ export type SpellUncheckedUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSpells?: Prisma.CharacterSheetSpellUncheckedUpdateManyWithoutSpellNestedInput
+  classSpells?: Prisma.ClassSpellUncheckedUpdateManyWithoutSpellNestedInput
 }
 
 export type SpellUncheckedUpdateManyWithoutSystemInput = {
@@ -952,10 +1077,12 @@ export type SpellUncheckedUpdateManyWithoutSystemInput = {
 
 export type SpellCountOutputType = {
   characterSpells: number
+  classSpells: number
 }
 
 export type SpellCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   characterSpells?: boolean | SpellCountOutputTypeCountCharacterSpellsArgs
+  classSpells?: boolean | SpellCountOutputTypeCountClassSpellsArgs
 }
 
 /**
@@ -973,6 +1100,13 @@ export type SpellCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  */
 export type SpellCountOutputTypeCountCharacterSpellsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CharacterSheetSpellWhereInput
+}
+
+/**
+ * SpellCountOutputType without action
+ */
+export type SpellCountOutputTypeCountClassSpellsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassSpellWhereInput
 }
 
 
@@ -995,6 +1129,7 @@ export type SpellSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterSpells?: boolean | Prisma.Spell$characterSpellsArgs<ExtArgs>
+  classSpells?: boolean | Prisma.Spell$classSpellsArgs<ExtArgs>
   _count?: boolean | Prisma.SpellCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["spell"]>
 
@@ -1061,6 +1196,7 @@ export type SpellOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type SpellInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterSpells?: boolean | Prisma.Spell$characterSpellsArgs<ExtArgs>
+  classSpells?: boolean | Prisma.Spell$classSpellsArgs<ExtArgs>
   _count?: boolean | Prisma.SpellCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SpellIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1075,6 +1211,7 @@ export type $SpellPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
     characterSpells: Prisma.$CharacterSheetSpellPayload<ExtArgs>[]
+    classSpells: Prisma.$ClassSpellPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1489,6 +1626,7 @@ export interface Prisma__SpellClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   characterSpells<T extends Prisma.Spell$characterSpellsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Spell$characterSpellsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetSpellPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classSpells<T extends Prisma.Spell$classSpellsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Spell$classSpellsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassSpellPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1951,6 +2089,30 @@ export type Spell$characterSpellsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.CharacterSheetSpellScalarFieldEnum | Prisma.CharacterSheetSpellScalarFieldEnum[]
+}
+
+/**
+ * Spell.classSpells
+ */
+export type Spell$classSpellsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassSpell
+   */
+  select?: Prisma.ClassSpellSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassSpell
+   */
+  omit?: Prisma.ClassSpellOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassSpellInclude<ExtArgs> | null
+  where?: Prisma.ClassSpellWhereInput
+  orderBy?: Prisma.ClassSpellOrderByWithRelationInput | Prisma.ClassSpellOrderByWithRelationInput[]
+  cursor?: Prisma.ClassSpellWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassSpellScalarFieldEnum | Prisma.ClassSpellScalarFieldEnum[]
 }
 
 /**

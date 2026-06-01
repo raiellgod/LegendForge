@@ -10,13 +10,19 @@ import type { CampaignActor } from "@/features/game-table/types/game-table-types
 
 import {
   formatSignedNumber,
+  getAttributeLabel,
   getAttributeModifier,
+  getAttributeShortLabel,
   getAttributeValueFromStats,
   getInitiativeBonus,
   getPassivePerception,
   getProficiencyBonusByLevel,
   getSavingThrowBonus,
   getSkillBonus,
+  getSpellAttackBonus,
+  getSpellSaveDc,
+  getSpellcastingAbilityKey,
+  getSpellcastingAbilityModifier,
 } from "@/features/character-builder/utils/character-sheet-calculations";
 import { getCharacterTypeStyles } from "@/features/game-table/utils/actor-utils";
 
@@ -412,6 +418,54 @@ function getFirstDamageExpressionFromText(text: string | null | undefined) {
   return damageExpression?.[0] ?? null;
 }
 
+function getSpellDamageLabelFromText(text: string | null | undefined) {
+  if (!text) {
+    return null;
+  }
+
+  const damageInfo = text.match(/(\d*d\d+(?:[+-]\d+)?)(?:\s+([A-Za-zÀ-ÿ]+))?/i);
+
+  if (!damageInfo) {
+    return null;
+  }
+
+  const [, formula, damageType] = damageInfo;
+
+  return damageType ? `${formula} ${damageType}` : formula;
+}
+
+type SpellSlotRow = {
+  level: number;
+  total: number;
+};
+
+type CharacterReadySheetClass = NonNullable<
+  CharacterReadySheet["characterClass"]
+>;
+
+type CharacterReadySheetLevelProgression =
+  CharacterReadySheetClass["levelProgressions"][number];
+
+function getSpellSlotRowsFromProgression(
+  progression: CharacterReadySheetLevelProgression | null | undefined,
+): SpellSlotRow[] {
+  if (!progression) {
+    return [];
+  }
+
+  return [
+    { level: 1, total: progression.spellSlotsLevel1 },
+    { level: 2, total: progression.spellSlotsLevel2 },
+    { level: 3, total: progression.spellSlotsLevel3 },
+    { level: 4, total: progression.spellSlotsLevel4 },
+    { level: 5, total: progression.spellSlotsLevel5 },
+    { level: 6, total: progression.spellSlotsLevel6 },
+    { level: 7, total: progression.spellSlotsLevel7 },
+    { level: 8, total: progression.spellSlotsLevel8 },
+    { level: 9, total: progression.spellSlotsLevel9 },
+  ].filter((slot) => slot.total > 0);
+}
+
 function SpellCard({
   name,
   level,
@@ -421,9 +475,11 @@ function SpellCard({
   duration,
   components,
   description,
+  damageLabel,
+  isAttackDisabled,
+  attackDisabledReason,
   onRollAttack,
   onRollDamage,
-  onUseEffect,
 }: {
   name: string;
   level: number;
@@ -433,11 +489,15 @@ function SpellCard({
   duration: string | null;
   components: string[] | string | null;
   description: string | null;
+  damageLabel: string | null;
+  isAttackDisabled: boolean;
+  attackDisabledReason: string;
   onRollAttack: () => void;
   onRollDamage?: () => void;
-  onUseEffect: () => void;
 }) {
   const levelLabel = level === 0 ? "Truque" : `Nível ${level}`;
+  const readableDescription = description?.trim() || "Sem descrição cadastrada.";
+  const readableDamage = damageLabel ?? "—";
 
   const componentLabel = Array.isArray(components)
     ? components.length > 0
@@ -446,7 +506,10 @@ function SpellCard({
     : components?.trim() || "—";
 
   return (
-    <article className="rounded-2xl border border-white/10 bg-black/25 p-4">
+    <article
+      className="rounded-2xl border border-white/10 bg-black/25 p-4 transition hover:border-forge-gold/35 hover:bg-forge-gold/5"
+      title={readableDescription}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p
@@ -467,6 +530,14 @@ function SpellCard({
       </div>
 
       <div className="mt-3 grid gap-2 text-[10px] font-semibold text-white/45 md:grid-cols-2">
+        <p
+          className="rounded-lg border border-forge-gold/15 bg-forge-gold/5 px-2 py-1.5"
+          title={`Dano detectado: ${readableDamage}`}
+        >
+          <span className="font-black text-white/35">Dano:</span>{" "}
+          <span className="font-black text-forge-gold">{readableDamage}</span>
+        </p>
+
         <p>
           <span className="font-black text-white/35">Conjuração:</span>{" "}
           {castingTime ?? "—"}
@@ -488,19 +559,22 @@ function SpellCard({
         </p>
       </div>
 
-      <p
-        className="mt-3 line-clamp-5 text-xs font-semibold leading-relaxed text-white/55"
-        title={description ?? "Sem descrição cadastrada."}
-      >
-        {description ?? "Sem descrição cadastrada."}
-      </p>
-
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <button
           type="button"
+          disabled={isAttackDisabled}
           onClick={onRollAttack}
-          className="rounded-lg border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white/45 transition hover:border-forge-gold/45 hover:bg-forge-gold/10 hover:text-forge-gold"
-          title={`Rolar ataque mágico básico de ${name}: 1d20 + 0. Bônus real e comparação com CA entram na fase de regras avançadas.`}
+          className={[
+            "rounded-lg border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] transition",
+            isAttackDisabled
+              ? "cursor-not-allowed border-white/5 bg-black/20 text-white/20"
+              : "border-white/10 bg-black/35 text-white/45 hover:border-forge-gold/45 hover:bg-forge-gold/10 hover:text-forge-gold",
+          ].join(" ")}
+          title={
+            isAttackDisabled
+              ? attackDisabledReason
+              : `Rolar ataque mágico de ${name}. O bônus usa atributo de conjuração + proficiência.`
+          }
         >
           Ataque
         </button>
@@ -510,20 +584,11 @@ function SpellCard({
             type="button"
             onClick={onRollDamage}
             className="rounded-lg border border-forge-gold/30 bg-forge-gold/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
-            title={`Rolar dano detectado na descrição de ${name}. Este cálculo será refinado nas regras avançadas.`}
+            title={`Rolar dano de ${name}: ${readableDamage}.`}
           >
             Dano
           </button>
         ) : null}
-
-        <button
-          type="button"
-          onClick={onUseEffect}
-          className="rounded-lg border border-purple-300/20 bg-purple-500/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-purple-200 transition hover:border-purple-300/45 hover:bg-purple-500/20"
-          title={`Enviar efeito de ${name} para o chat.`}
-        >
-          Efeito
-        </button>
       </div>
     </article>
   );
@@ -740,9 +805,90 @@ export function CharacterReadySheetModal({
     .sort((firstLevel, secondLevel) => firstLevel - secondLevel);
 
   const spellcastingClass = characterSheet?.characterClass?.name ?? "—";
-  const spellcastingAbility = "—";
-  const spellSaveDc = "—";
-  const spellAttackBonus = "—";
+
+  const spellcastingAbilityKey = getSpellcastingAbilityKey(
+    characterSheet?.characterClass?.spellcastingAbilityKey,
+  );
+
+  const spellcastingAbilityModifier = characterSheet
+    ? getSpellcastingAbilityModifier({
+        stats: sheetStats,
+        spellcastingAbilityKey,
+      })
+    : null;
+
+  const spellSaveDcValue = characterSheet
+    ? getSpellSaveDc({
+        stats: sheetStats,
+        level: sheetLevel,
+        spellcastingAbilityKey,
+      })
+    : null;
+
+  const spellAttackBonusValue = characterSheet
+    ? getSpellAttackBonus({
+        stats: sheetStats,
+        level: sheetLevel,
+        spellcastingAbilityKey,
+      })
+    : null;
+
+  const currentLevelProgression =
+    characterSheet?.characterClass?.levelProgressions.find(
+      (progression) => progression.level === sheetLevel,
+    ) ?? null;
+
+  const spellSlotRows = getSpellSlotRowsFromProgression(
+    currentLevelProgression,
+  );
+
+  const hasSpellSlots = spellSlotRows.length > 0;
+
+  const spellSlotsSummary = hasSpellSlots
+    ? spellSlotRows.map((slot) => `N${slot.level}: ${slot.total}`).join(" · ")
+    : "Sem espaços";
+
+  const spellcastingAbility = spellcastingAbilityKey
+    ? `${getAttributeLabel(spellcastingAbilityKey)} (${getAttributeShortLabel(
+        spellcastingAbilityKey,
+      )} ${formatSignedNumber(spellcastingAbilityModifier ?? 0)})`
+    : "—";
+
+  const spellSaveDc =
+    spellSaveDcValue === null ? "—" : String(spellSaveDcValue);
+
+  const spellAttackBonus =
+    spellAttackBonusValue === null
+      ? "—"
+      : formatSignedNumber(spellAttackBonusValue);
+
+  const spellSummaryCards = [
+    {
+      label: "Classe",
+      value: spellcastingClass,
+      helper: "conjuradora",
+    },
+    {
+      label: "Habilidade",
+      value: spellcastingAbility,
+      helper: "atributo",
+    },
+    {
+      label: "CD",
+      value: spellSaveDc,
+      helper: "magia",
+    },
+    {
+      label: "Ataque",
+      value: spellAttackBonus,
+      helper: "mágico",
+    },
+    {
+      label: "Espaços",
+      value: spellSlotsSummary,
+      helper: "por nível",
+    },
+  ];
 
   const appearanceRows = [
     {
@@ -1157,43 +1303,43 @@ export function CharacterReadySheetModal({
           </div>
         ) : activeTab === "spells" ? (
           <div className="min-h-0 flex-1 overflow-y-auto p-3">
-            <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-5">
-              <div className="flex flex-wrap items-start justify-between gap-4">
+            <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">
                     Página de magias
                   </p>
 
-                  <h3 className="mt-2 text-2xl font-black text-forge-gold">
+                  <h3 className="mt-1 text-xl font-black text-forge-gold">
                     Conjuração
                   </h3>
                 </div>
 
-                <div className="grid min-w-72 gap-2 sm:grid-cols-2">
-                  <SheetBox
-                    label="Classe conjuradora"
-                    value={spellcastingClass}
-                    helper="classe"
-                  />
+                <div className="grid w-full gap-2 sm:grid-cols-2 lg:w-auto lg:grid-cols-5">
+                  {spellSummaryCards.map((summaryCard) => (
+                    <div
+                      key={summaryCard.label}
+                      className="rounded-xl border border-white/10 bg-black/25 px-3 py-2 shadow-[-3px_3px_0_rgba(0,0,0,0.18)]"
+                      title={`${summaryCard.label}: ${summaryCard.value}`}
+                    >
+                      <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+                        {summaryCard.label}
+                      </p>
 
-                  <SheetBox
-                    label="Habilidade"
-                    value={spellcastingAbility}
-                    helper="chave"
-                  />
+                      <p className="mt-1 min-w-0 break-words text-sm font-black leading-tight text-forge-gold">
+                        {summaryCard.value}
+                      </p>
 
-                  <SheetBox label="CD magia" value={spellSaveDc} helper="TR" />
-
-                  <SheetBox
-                    label="Ataque mágico"
-                    value={spellAttackBonus}
-                    helper="bônus"
-                  />
+                      <p className="mt-0.5 text-[9px] font-semibold text-white/35">
+                        {summaryCard.helper}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </section>
 
-            <div className="mt-5 space-y-5">
+            <div className="mt-4 space-y-4">
               {sortedSpellLevels.length > 0 ? (
                 sortedSpellLevels.map((level) => {
                   const spells = spellsByLevel[level] ?? [];
@@ -1202,7 +1348,7 @@ export function CharacterReadySheetModal({
                   return (
                     <section
                       key={level}
-                      className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                      className="rounded-2xl border border-white/10 bg-black/20 p-4"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
@@ -1210,51 +1356,53 @@ export function CharacterReadySheetModal({
                         </p>
                       </div>
 
-                      <div className="mt-4 grid gap-3 xl:grid-cols-2">
-                        {spells.map((sheetSpell) => (
-                          <SpellCard
-                            key={sheetSpell.spell.key}
-                            name={sheetSpell.spell.name}
-                            level={sheetSpell.spell.level}
-                            school={sheetSpell.spell.school}
-                            castingTime={sheetSpell.spell.castingTime}
-                            range={sheetSpell.spell.range}
-                            duration={sheetSpell.spell.duration}
-                            components={sheetSpell.spell.components}
-                            description={sheetSpell.spell.description}
-                            onRollAttack={() =>
-                              onRollSheetAction({
-                                kind: "d20",
-                                label: `Ataque mágico básico — ${sheetSpell.spell.name}`,
-                                modifier: 0,
-                              })
-                            }
-                            onRollDamage={
-                              getFirstDamageExpressionFromText(
+                      <div className="mt-3 grid gap-3 xl:grid-cols-2">
+                        {spells.map((sheetSpell) => {
+                          const damageExpression =
+                            getFirstDamageExpressionFromText(
+                              sheetSpell.spell.description,
+                            );
+
+                          return (
+                            <SpellCard
+                              key={sheetSpell.spell.key}
+                              name={sheetSpell.spell.name}
+                              level={sheetSpell.spell.level}
+                              school={sheetSpell.spell.school}
+                              castingTime={sheetSpell.spell.castingTime}
+                              range={sheetSpell.spell.range}
+                              duration={sheetSpell.spell.duration}
+                              components={sheetSpell.spell.components}
+                              description={sheetSpell.spell.description}
+                              damageLabel={getSpellDamageLabelFromText(
                                 sheetSpell.spell.description,
-                              )
-                                ? () =>
-                                    onRollSheetAction({
-                                      kind: "damage",
-                                      label: `Dano mágico — ${sheetSpell.spell.name}`,
-                                      expression:
-                                        getFirstDamageExpressionFromText(
-                                          sheetSpell.spell.description,
-                                        ) ?? "1d4",
-                                    })
-                                : undefined
-                            }
-                            onUseEffect={() =>
-                              onRollSheetAction({
-                                kind: "effect",
-                                label: `Magia — ${sheetSpell.spell.name}`,
-                                description:
-                                  sheetSpell.spell.description ??
-                                  "Efeito da magia ainda sem descrição.",
-                              })
-                            }
-                          />
-                        ))}
+                              )}
+                              isAttackDisabled={spellAttackBonusValue === null}
+                              attackDisabledReason="Esta classe não possui atributo de conjuração. Ataque mágico indisponível."
+                              onRollAttack={() => {
+                                if (spellAttackBonusValue === null) {
+                                  return;
+                                }
+
+                                onRollSheetAction({
+                                  kind: "d20",
+                                  label: `Ataque mágico — ${sheetSpell.spell.name}`,
+                                  modifier: spellAttackBonusValue,
+                                });
+                              }}
+                              onRollDamage={
+                                damageExpression
+                                  ? () =>
+                                      onRollSheetAction({
+                                        kind: "damage",
+                                        label: `Dano mágico — ${sheetSpell.spell.name}`,
+                                        expression: damageExpression,
+                                      })
+                                  : undefined
+                              }
+                            />
+                          );
+                        })}
                       </div>
                     </section>
                   );

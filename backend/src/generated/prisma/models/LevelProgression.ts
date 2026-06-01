@@ -29,11 +29,35 @@ export type AggregateLevelProgression = {
 export type LevelProgressionAvgAggregateOutputType = {
   level: number | null
   proficiencyBonus: number | null
+  cantripsKnown: number | null
+  spellsKnown: number | null
+  spellsPrepared: number | null
+  spellSlotsLevel1: number | null
+  spellSlotsLevel2: number | null
+  spellSlotsLevel3: number | null
+  spellSlotsLevel4: number | null
+  spellSlotsLevel5: number | null
+  spellSlotsLevel6: number | null
+  spellSlotsLevel7: number | null
+  spellSlotsLevel8: number | null
+  spellSlotsLevel9: number | null
 }
 
 export type LevelProgressionSumAggregateOutputType = {
   level: number | null
   proficiencyBonus: number | null
+  cantripsKnown: number | null
+  spellsKnown: number | null
+  spellsPrepared: number | null
+  spellSlotsLevel1: number | null
+  spellSlotsLevel2: number | null
+  spellSlotsLevel3: number | null
+  spellSlotsLevel4: number | null
+  spellSlotsLevel5: number | null
+  spellSlotsLevel6: number | null
+  spellSlotsLevel7: number | null
+  spellSlotsLevel8: number | null
+  spellSlotsLevel9: number | null
 }
 
 export type LevelProgressionMinAggregateOutputType = {
@@ -42,6 +66,18 @@ export type LevelProgressionMinAggregateOutputType = {
   classId: string | null
   level: number | null
   proficiencyBonus: number | null
+  cantripsKnown: number | null
+  spellsKnown: number | null
+  spellsPrepared: number | null
+  spellSlotsLevel1: number | null
+  spellSlotsLevel2: number | null
+  spellSlotsLevel3: number | null
+  spellSlotsLevel4: number | null
+  spellSlotsLevel5: number | null
+  spellSlotsLevel6: number | null
+  spellSlotsLevel7: number | null
+  spellSlotsLevel8: number | null
+  spellSlotsLevel9: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +88,18 @@ export type LevelProgressionMaxAggregateOutputType = {
   classId: string | null
   level: number | null
   proficiencyBonus: number | null
+  cantripsKnown: number | null
+  spellsKnown: number | null
+  spellsPrepared: number | null
+  spellSlotsLevel1: number | null
+  spellSlotsLevel2: number | null
+  spellSlotsLevel3: number | null
+  spellSlotsLevel4: number | null
+  spellSlotsLevel5: number | null
+  spellSlotsLevel6: number | null
+  spellSlotsLevel7: number | null
+  spellSlotsLevel8: number | null
+  spellSlotsLevel9: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +110,18 @@ export type LevelProgressionCountAggregateOutputType = {
   classId: number
   level: number
   proficiencyBonus: number
+  cantripsKnown: number
+  spellsKnown: number
+  spellsPrepared: number
+  spellSlotsLevel1: number
+  spellSlotsLevel2: number
+  spellSlotsLevel3: number
+  spellSlotsLevel4: number
+  spellSlotsLevel5: number
+  spellSlotsLevel6: number
+  spellSlotsLevel7: number
+  spellSlotsLevel8: number
+  spellSlotsLevel9: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -71,11 +131,35 @@ export type LevelProgressionCountAggregateOutputType = {
 export type LevelProgressionAvgAggregateInputType = {
   level?: true
   proficiencyBonus?: true
+  cantripsKnown?: true
+  spellsKnown?: true
+  spellsPrepared?: true
+  spellSlotsLevel1?: true
+  spellSlotsLevel2?: true
+  spellSlotsLevel3?: true
+  spellSlotsLevel4?: true
+  spellSlotsLevel5?: true
+  spellSlotsLevel6?: true
+  spellSlotsLevel7?: true
+  spellSlotsLevel8?: true
+  spellSlotsLevel9?: true
 }
 
 export type LevelProgressionSumAggregateInputType = {
   level?: true
   proficiencyBonus?: true
+  cantripsKnown?: true
+  spellsKnown?: true
+  spellsPrepared?: true
+  spellSlotsLevel1?: true
+  spellSlotsLevel2?: true
+  spellSlotsLevel3?: true
+  spellSlotsLevel4?: true
+  spellSlotsLevel5?: true
+  spellSlotsLevel6?: true
+  spellSlotsLevel7?: true
+  spellSlotsLevel8?: true
+  spellSlotsLevel9?: true
 }
 
 export type LevelProgressionMinAggregateInputType = {
@@ -84,6 +168,18 @@ export type LevelProgressionMinAggregateInputType = {
   classId?: true
   level?: true
   proficiencyBonus?: true
+  cantripsKnown?: true
+  spellsKnown?: true
+  spellsPrepared?: true
+  spellSlotsLevel1?: true
+  spellSlotsLevel2?: true
+  spellSlotsLevel3?: true
+  spellSlotsLevel4?: true
+  spellSlotsLevel5?: true
+  spellSlotsLevel6?: true
+  spellSlotsLevel7?: true
+  spellSlotsLevel8?: true
+  spellSlotsLevel9?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +190,18 @@ export type LevelProgressionMaxAggregateInputType = {
   classId?: true
   level?: true
   proficiencyBonus?: true
+  cantripsKnown?: true
+  spellsKnown?: true
+  spellsPrepared?: true
+  spellSlotsLevel1?: true
+  spellSlotsLevel2?: true
+  spellSlotsLevel3?: true
+  spellSlotsLevel4?: true
+  spellSlotsLevel5?: true
+  spellSlotsLevel6?: true
+  spellSlotsLevel7?: true
+  spellSlotsLevel8?: true
+  spellSlotsLevel9?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,6 +212,18 @@ export type LevelProgressionCountAggregateInputType = {
   classId?: true
   level?: true
   proficiencyBonus?: true
+  cantripsKnown?: true
+  spellsKnown?: true
+  spellsPrepared?: true
+  spellSlotsLevel1?: true
+  spellSlotsLevel2?: true
+  spellSlotsLevel3?: true
+  spellSlotsLevel4?: true
+  spellSlotsLevel5?: true
+  spellSlotsLevel6?: true
+  spellSlotsLevel7?: true
+  spellSlotsLevel8?: true
+  spellSlotsLevel9?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -201,6 +321,18 @@ export type LevelProgressionGroupByOutputType = {
   classId: string
   level: number
   proficiencyBonus: number | null
+  cantripsKnown: number
+  spellsKnown: number
+  spellsPrepared: number
+  spellSlotsLevel1: number
+  spellSlotsLevel2: number
+  spellSlotsLevel3: number
+  spellSlotsLevel4: number
+  spellSlotsLevel5: number
+  spellSlotsLevel6: number
+  spellSlotsLevel7: number
+  spellSlotsLevel8: number
+  spellSlotsLevel9: number
   createdAt: Date
   updatedAt: Date
   _count: LevelProgressionCountAggregateOutputType | null
@@ -234,6 +366,18 @@ export type LevelProgressionWhereInput = {
   classId?: Prisma.StringFilter<"LevelProgression"> | string
   level?: Prisma.IntFilter<"LevelProgression"> | number
   proficiencyBonus?: Prisma.IntNullableFilter<"LevelProgression"> | number | null
+  cantripsKnown?: Prisma.IntFilter<"LevelProgression"> | number
+  spellsKnown?: Prisma.IntFilter<"LevelProgression"> | number
+  spellsPrepared?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel1?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel2?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel3?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel4?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel5?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel6?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel7?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel8?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel9?: Prisma.IntFilter<"LevelProgression"> | number
   createdAt?: Prisma.DateTimeFilter<"LevelProgression"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LevelProgression"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
@@ -247,6 +391,18 @@ export type LevelProgressionOrderByWithRelationInput = {
   classId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   proficiencyBonus?: Prisma.SortOrderInput | Prisma.SortOrder
+  cantripsKnown?: Prisma.SortOrder
+  spellsKnown?: Prisma.SortOrder
+  spellsPrepared?: Prisma.SortOrder
+  spellSlotsLevel1?: Prisma.SortOrder
+  spellSlotsLevel2?: Prisma.SortOrder
+  spellSlotsLevel3?: Prisma.SortOrder
+  spellSlotsLevel4?: Prisma.SortOrder
+  spellSlotsLevel5?: Prisma.SortOrder
+  spellSlotsLevel6?: Prisma.SortOrder
+  spellSlotsLevel7?: Prisma.SortOrder
+  spellSlotsLevel8?: Prisma.SortOrder
+  spellSlotsLevel9?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
@@ -264,6 +420,18 @@ export type LevelProgressionWhereUniqueInput = Prisma.AtLeast<{
   classId?: Prisma.StringFilter<"LevelProgression"> | string
   level?: Prisma.IntFilter<"LevelProgression"> | number
   proficiencyBonus?: Prisma.IntNullableFilter<"LevelProgression"> | number | null
+  cantripsKnown?: Prisma.IntFilter<"LevelProgression"> | number
+  spellsKnown?: Prisma.IntFilter<"LevelProgression"> | number
+  spellsPrepared?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel1?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel2?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel3?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel4?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel5?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel6?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel7?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel8?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel9?: Prisma.IntFilter<"LevelProgression"> | number
   createdAt?: Prisma.DateTimeFilter<"LevelProgression"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LevelProgression"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
@@ -277,6 +445,18 @@ export type LevelProgressionOrderByWithAggregationInput = {
   classId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   proficiencyBonus?: Prisma.SortOrderInput | Prisma.SortOrder
+  cantripsKnown?: Prisma.SortOrder
+  spellsKnown?: Prisma.SortOrder
+  spellsPrepared?: Prisma.SortOrder
+  spellSlotsLevel1?: Prisma.SortOrder
+  spellSlotsLevel2?: Prisma.SortOrder
+  spellSlotsLevel3?: Prisma.SortOrder
+  spellSlotsLevel4?: Prisma.SortOrder
+  spellSlotsLevel5?: Prisma.SortOrder
+  spellSlotsLevel6?: Prisma.SortOrder
+  spellSlotsLevel7?: Prisma.SortOrder
+  spellSlotsLevel8?: Prisma.SortOrder
+  spellSlotsLevel9?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.LevelProgressionCountOrderByAggregateInput
@@ -295,6 +475,18 @@ export type LevelProgressionScalarWhereWithAggregatesInput = {
   classId?: Prisma.StringWithAggregatesFilter<"LevelProgression"> | string
   level?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
   proficiencyBonus?: Prisma.IntNullableWithAggregatesFilter<"LevelProgression"> | number | null
+  cantripsKnown?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellsKnown?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellsPrepared?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel1?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel2?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel3?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel4?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel5?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel6?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel7?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel8?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
+  spellSlotsLevel9?: Prisma.IntWithAggregatesFilter<"LevelProgression"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LevelProgression"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"LevelProgression"> | Date | string
 }
@@ -303,6 +495,18 @@ export type LevelProgressionCreateInput = {
   id?: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLevelProgressionsInput
@@ -316,6 +520,18 @@ export type LevelProgressionUncheckedCreateInput = {
   classId: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutLevelProgressionInput
@@ -325,6 +541,18 @@ export type LevelProgressionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput
@@ -338,6 +566,18 @@ export type LevelProgressionUncheckedUpdateInput = {
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutLevelProgressionNestedInput
@@ -349,6 +589,18 @@ export type LevelProgressionCreateManyInput = {
   classId: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -357,6 +609,18 @@ export type LevelProgressionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -367,6 +631,18 @@ export type LevelProgressionUncheckedUpdateManyInput = {
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -392,6 +668,18 @@ export type LevelProgressionCountOrderByAggregateInput = {
   classId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   proficiencyBonus?: Prisma.SortOrder
+  cantripsKnown?: Prisma.SortOrder
+  spellsKnown?: Prisma.SortOrder
+  spellsPrepared?: Prisma.SortOrder
+  spellSlotsLevel1?: Prisma.SortOrder
+  spellSlotsLevel2?: Prisma.SortOrder
+  spellSlotsLevel3?: Prisma.SortOrder
+  spellSlotsLevel4?: Prisma.SortOrder
+  spellSlotsLevel5?: Prisma.SortOrder
+  spellSlotsLevel6?: Prisma.SortOrder
+  spellSlotsLevel7?: Prisma.SortOrder
+  spellSlotsLevel8?: Prisma.SortOrder
+  spellSlotsLevel9?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -399,6 +687,18 @@ export type LevelProgressionCountOrderByAggregateInput = {
 export type LevelProgressionAvgOrderByAggregateInput = {
   level?: Prisma.SortOrder
   proficiencyBonus?: Prisma.SortOrder
+  cantripsKnown?: Prisma.SortOrder
+  spellsKnown?: Prisma.SortOrder
+  spellsPrepared?: Prisma.SortOrder
+  spellSlotsLevel1?: Prisma.SortOrder
+  spellSlotsLevel2?: Prisma.SortOrder
+  spellSlotsLevel3?: Prisma.SortOrder
+  spellSlotsLevel4?: Prisma.SortOrder
+  spellSlotsLevel5?: Prisma.SortOrder
+  spellSlotsLevel6?: Prisma.SortOrder
+  spellSlotsLevel7?: Prisma.SortOrder
+  spellSlotsLevel8?: Prisma.SortOrder
+  spellSlotsLevel9?: Prisma.SortOrder
 }
 
 export type LevelProgressionMaxOrderByAggregateInput = {
@@ -407,6 +707,18 @@ export type LevelProgressionMaxOrderByAggregateInput = {
   classId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   proficiencyBonus?: Prisma.SortOrder
+  cantripsKnown?: Prisma.SortOrder
+  spellsKnown?: Prisma.SortOrder
+  spellsPrepared?: Prisma.SortOrder
+  spellSlotsLevel1?: Prisma.SortOrder
+  spellSlotsLevel2?: Prisma.SortOrder
+  spellSlotsLevel3?: Prisma.SortOrder
+  spellSlotsLevel4?: Prisma.SortOrder
+  spellSlotsLevel5?: Prisma.SortOrder
+  spellSlotsLevel6?: Prisma.SortOrder
+  spellSlotsLevel7?: Prisma.SortOrder
+  spellSlotsLevel8?: Prisma.SortOrder
+  spellSlotsLevel9?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -417,6 +729,18 @@ export type LevelProgressionMinOrderByAggregateInput = {
   classId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   proficiencyBonus?: Prisma.SortOrder
+  cantripsKnown?: Prisma.SortOrder
+  spellsKnown?: Prisma.SortOrder
+  spellsPrepared?: Prisma.SortOrder
+  spellSlotsLevel1?: Prisma.SortOrder
+  spellSlotsLevel2?: Prisma.SortOrder
+  spellSlotsLevel3?: Prisma.SortOrder
+  spellSlotsLevel4?: Prisma.SortOrder
+  spellSlotsLevel5?: Prisma.SortOrder
+  spellSlotsLevel6?: Prisma.SortOrder
+  spellSlotsLevel7?: Prisma.SortOrder
+  spellSlotsLevel8?: Prisma.SortOrder
+  spellSlotsLevel9?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -424,6 +748,18 @@ export type LevelProgressionMinOrderByAggregateInput = {
 export type LevelProgressionSumOrderByAggregateInput = {
   level?: Prisma.SortOrder
   proficiencyBonus?: Prisma.SortOrder
+  cantripsKnown?: Prisma.SortOrder
+  spellsKnown?: Prisma.SortOrder
+  spellsPrepared?: Prisma.SortOrder
+  spellSlotsLevel1?: Prisma.SortOrder
+  spellSlotsLevel2?: Prisma.SortOrder
+  spellSlotsLevel3?: Prisma.SortOrder
+  spellSlotsLevel4?: Prisma.SortOrder
+  spellSlotsLevel5?: Prisma.SortOrder
+  spellSlotsLevel6?: Prisma.SortOrder
+  spellSlotsLevel7?: Prisma.SortOrder
+  spellSlotsLevel8?: Prisma.SortOrder
+  spellSlotsLevel9?: Prisma.SortOrder
 }
 
 export type LevelProgressionNullableScalarRelationFilter = {
@@ -535,6 +871,18 @@ export type LevelProgressionCreateWithoutSystemInput = {
   id?: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutLevelProgressionsInput
@@ -546,6 +894,18 @@ export type LevelProgressionUncheckedCreateWithoutSystemInput = {
   classId: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutLevelProgressionInput
@@ -586,6 +946,18 @@ export type LevelProgressionScalarWhereInput = {
   classId?: Prisma.StringFilter<"LevelProgression"> | string
   level?: Prisma.IntFilter<"LevelProgression"> | number
   proficiencyBonus?: Prisma.IntNullableFilter<"LevelProgression"> | number | null
+  cantripsKnown?: Prisma.IntFilter<"LevelProgression"> | number
+  spellsKnown?: Prisma.IntFilter<"LevelProgression"> | number
+  spellsPrepared?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel1?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel2?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel3?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel4?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel5?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel6?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel7?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel8?: Prisma.IntFilter<"LevelProgression"> | number
+  spellSlotsLevel9?: Prisma.IntFilter<"LevelProgression"> | number
   createdAt?: Prisma.DateTimeFilter<"LevelProgression"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LevelProgression"> | Date | string
 }
@@ -594,6 +966,18 @@ export type LevelProgressionCreateWithoutCharacterClassInput = {
   id?: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLevelProgressionsInput
@@ -605,6 +989,18 @@ export type LevelProgressionUncheckedCreateWithoutCharacterClassInput = {
   systemId: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutLevelProgressionInput
@@ -640,6 +1036,18 @@ export type LevelProgressionCreateWithoutFeaturesInput = {
   id?: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLevelProgressionsInput
@@ -652,6 +1060,18 @@ export type LevelProgressionUncheckedCreateWithoutFeaturesInput = {
   classId: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -676,6 +1096,18 @@ export type LevelProgressionUpdateWithoutFeaturesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput
@@ -688,6 +1120,18 @@ export type LevelProgressionUncheckedUpdateWithoutFeaturesInput = {
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -697,6 +1141,18 @@ export type LevelProgressionCreateManySystemInput = {
   classId: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -705,6 +1161,18 @@ export type LevelProgressionUpdateWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutLevelProgressionsNestedInput
@@ -716,6 +1184,18 @@ export type LevelProgressionUncheckedUpdateWithoutSystemInput = {
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutLevelProgressionNestedInput
@@ -726,6 +1206,18 @@ export type LevelProgressionUncheckedUpdateManyWithoutSystemInput = {
   classId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -735,6 +1227,18 @@ export type LevelProgressionCreateManyCharacterClassInput = {
   systemId: string
   level: number
   proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -743,6 +1247,18 @@ export type LevelProgressionUpdateWithoutCharacterClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput
@@ -754,6 +1270,18 @@ export type LevelProgressionUncheckedUpdateWithoutCharacterClassInput = {
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutLevelProgressionNestedInput
@@ -764,6 +1292,18 @@ export type LevelProgressionUncheckedUpdateManyWithoutCharacterClassInput = {
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -805,6 +1345,18 @@ export type LevelProgressionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   classId?: boolean
   level?: boolean
   proficiencyBonus?: boolean
+  cantripsKnown?: boolean
+  spellsKnown?: boolean
+  spellsPrepared?: boolean
+  spellSlotsLevel1?: boolean
+  spellSlotsLevel2?: boolean
+  spellSlotsLevel3?: boolean
+  spellSlotsLevel4?: boolean
+  spellSlotsLevel5?: boolean
+  spellSlotsLevel6?: boolean
+  spellSlotsLevel7?: boolean
+  spellSlotsLevel8?: boolean
+  spellSlotsLevel9?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -819,6 +1371,18 @@ export type LevelProgressionSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   classId?: boolean
   level?: boolean
   proficiencyBonus?: boolean
+  cantripsKnown?: boolean
+  spellsKnown?: boolean
+  spellsPrepared?: boolean
+  spellSlotsLevel1?: boolean
+  spellSlotsLevel2?: boolean
+  spellSlotsLevel3?: boolean
+  spellSlotsLevel4?: boolean
+  spellSlotsLevel5?: boolean
+  spellSlotsLevel6?: boolean
+  spellSlotsLevel7?: boolean
+  spellSlotsLevel8?: boolean
+  spellSlotsLevel9?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -831,6 +1395,18 @@ export type LevelProgressionSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   classId?: boolean
   level?: boolean
   proficiencyBonus?: boolean
+  cantripsKnown?: boolean
+  spellsKnown?: boolean
+  spellsPrepared?: boolean
+  spellSlotsLevel1?: boolean
+  spellSlotsLevel2?: boolean
+  spellSlotsLevel3?: boolean
+  spellSlotsLevel4?: boolean
+  spellSlotsLevel5?: boolean
+  spellSlotsLevel6?: boolean
+  spellSlotsLevel7?: boolean
+  spellSlotsLevel8?: boolean
+  spellSlotsLevel9?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -843,11 +1419,23 @@ export type LevelProgressionSelectScalar = {
   classId?: boolean
   level?: boolean
   proficiencyBonus?: boolean
+  cantripsKnown?: boolean
+  spellsKnown?: boolean
+  spellsPrepared?: boolean
+  spellSlotsLevel1?: boolean
+  spellSlotsLevel2?: boolean
+  spellSlotsLevel3?: boolean
+  spellSlotsLevel4?: boolean
+  spellSlotsLevel5?: boolean
+  spellSlotsLevel6?: boolean
+  spellSlotsLevel7?: boolean
+  spellSlotsLevel8?: boolean
+  spellSlotsLevel9?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LevelProgressionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "classId" | "level" | "proficiencyBonus" | "createdAt" | "updatedAt", ExtArgs["result"]["levelProgression"]>
+export type LevelProgressionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "classId" | "level" | "proficiencyBonus" | "cantripsKnown" | "spellsKnown" | "spellsPrepared" | "spellSlotsLevel1" | "spellSlotsLevel2" | "spellSlotsLevel3" | "spellSlotsLevel4" | "spellSlotsLevel5" | "spellSlotsLevel6" | "spellSlotsLevel7" | "spellSlotsLevel8" | "spellSlotsLevel9" | "createdAt" | "updatedAt", ExtArgs["result"]["levelProgression"]>
 export type LevelProgressionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterClass?: boolean | Prisma.CharacterClassDefaultArgs<ExtArgs>
@@ -876,6 +1464,18 @@ export type $LevelProgressionPayload<ExtArgs extends runtime.Types.Extensions.In
     classId: string
     level: number
     proficiencyBonus: number | null
+    cantripsKnown: number
+    spellsKnown: number
+    spellsPrepared: number
+    spellSlotsLevel1: number
+    spellSlotsLevel2: number
+    spellSlotsLevel3: number
+    spellSlotsLevel4: number
+    spellSlotsLevel5: number
+    spellSlotsLevel6: number
+    spellSlotsLevel7: number
+    spellSlotsLevel8: number
+    spellSlotsLevel9: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["levelProgression"]>
@@ -1309,6 +1909,18 @@ export interface LevelProgressionFieldRefs {
   readonly classId: Prisma.FieldRef<"LevelProgression", 'String'>
   readonly level: Prisma.FieldRef<"LevelProgression", 'Int'>
   readonly proficiencyBonus: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly cantripsKnown: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellsKnown: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellsPrepared: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel1: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel2: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel3: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel4: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel5: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel6: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel7: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel8: Prisma.FieldRef<"LevelProgression", 'Int'>
+  readonly spellSlotsLevel9: Prisma.FieldRef<"LevelProgression", 'Int'>
   readonly createdAt: Prisma.FieldRef<"LevelProgression", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"LevelProgression", 'DateTime'>
 }

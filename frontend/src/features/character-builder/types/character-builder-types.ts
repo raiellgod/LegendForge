@@ -76,8 +76,34 @@ export type CharacterBuilderOption = {
   description: string | null;
 };
 
+export type CharacterBuilderClassLevelProgression = {
+  level: number;
+  proficiencyBonus: number | null;
+  cantripsKnown: number;
+  spellsKnown: number;
+  spellsPrepared: number;
+  spellSlotsLevel1: number;
+  spellSlotsLevel2: number;
+  spellSlotsLevel3: number;
+  spellSlotsLevel4: number;
+  spellSlotsLevel5: number;
+  spellSlotsLevel6: number;
+  spellSlotsLevel7: number;
+  spellSlotsLevel8: number;
+  spellSlotsLevel9: number;
+};
+
+export type CharacterBuilderClassSpellAccess = {
+  spellKey: string;
+  minimumClassLevel: number;
+  isAlwaysKnown: boolean;
+};
+
 export type CharacterBuilderClassOption = CharacterBuilderOption & {
-  hitDie: number;
+  hitDie: number | null;
+  spellcastingAbilityKey: CharacterAttributeKey | null;
+  levelProgressions: CharacterBuilderClassLevelProgression[];
+  classSpells: CharacterBuilderClassSpellAccess[];
 };
 
 export type CharacterBuilderAncestryOption = CharacterBuilderOption & {
@@ -202,6 +228,23 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     name: string;
     description: string | null;
     hitDie: number | null;
+    spellcastingAbilityKey: CharacterAttributeKey | null;
+    levelProgressions: Array<{
+      level: number;
+      proficiencyBonus: number | null;
+      cantripsKnown: number;
+      spellsKnown: number;
+      spellsPrepared: number;
+      spellSlotsLevel1: number;
+      spellSlotsLevel2: number;
+      spellSlotsLevel3: number;
+      spellSlotsLevel4: number;
+      spellSlotsLevel5: number;
+      spellSlotsLevel6: number;
+      spellSlotsLevel7: number;
+      spellSlotsLevel8: number;
+      spellSlotsLevel9: number;
+    }>;
   } | null;
 
   ancestry: {
@@ -277,7 +320,7 @@ export type CharacterBuilderSelectableOption = {
   key: string;
   name: string;
   description: string | null;
-  hitDie?: number;
+  hitDie?: number | null;
   defaultSizeCategory?: string;
   skillKeys?: string[];
 };

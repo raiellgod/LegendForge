@@ -120,7 +120,7 @@ Definir domínio do sistema antes da implementação.
 - Prisma Client gerado
 - PostgreSQL conectado via Docker
 - Prisma Studio funcionando
-- banco sincronizado com `db push`
+- banco sincronizado
 
 ---
 
@@ -587,9 +587,8 @@ Conectar a ficha pronta ao sistema de rolagens da mesa.
   - Ataque
   - Dano
   - Efeito
-- ataque mágico é básico/provisório: `1d20 + 0`
+- ataque mágico era básico/provisório antes da 4.27
 - dano mágico é detectado pela descrição
-- efeito mágico envia descrição ao chat
 - textos de UI deixam claro o que é provisório
 - teste regressivo da 4.26 concluído
 
@@ -604,36 +603,77 @@ Permitir que player comum crie personagem pela aba Personagens.
 ## ✅ Result
 
 - player comum vê botão `+ Personagem`
-- player comum abre builder diretamente
-- player comum não passa pelo menu completo de NPC/criatura
-- GM continua vendo:
-  - Biblioteca
-  - `+ Criar`
-  - criação de personagem
-  - criação de NPC
-  - criação de criatura
-- fluxo ficou mais coerente para permissões de mesa
+- player comum abre o builder diretamente
+- GM continua vendo `Biblioteca` e fluxo completo de `+ Criar`
+- ajuste preserva permissões diferentes de GM e player
 
 ---
 
-# 🧠 Estado Atual do Projeto
+# ⚡ Capsule 40 — Advanced Spell Progression Rules
 
-👉 **Fase 4.26 concluída funcionalmente.**
+## 🎯 Goal
 
-Próximo foco imediato:
+Transformar a etapa de Magias e a aba Magia da ficha pronta em uma base real de regras de conjuração por classe/progressão.
 
-```txt
-4.26.13 — Commit da 4.26
-```
+## ✅ Result
 
-Próximo foco funcional:
+- `CharacterClass.spellcastingAbilityKey` adicionado à modelagem.
+- `LevelProgression` revisado/expandido para progressão por classe e nível.
+- `ClassSpell` criado para relacionar classe e magias permitidas.
+- Migration aplicada para regras de progressão de classe.
+- Seed de progressão básica por classe populado.
+- Seed mínimo de magias expandido para permitir testes reais.
+- Seed de magias permitidas por classe populado.
+- Rota `GET /systems/:systemId/character-options` passou a retornar:
+  - `spellcastingAbilityKey`
+  - `levelProgressions`
+  - `classSpells`
+- Builder passou a filtrar magias pela classe selecionada.
+- Builder passou a validar limites de truques/magias por nível inicial.
+- Builder limpa magias antigas ao trocar de classe.
+- Ficha pronta calcula atributo de conjuração por classe.
+- Ficha pronta calcula CD de magia real.
+- Ficha pronta calcula ataque mágico real.
+- Ficha pronta desabilita ataque mágico quando a classe não possui atributo de conjuração.
+- Ficha pronta exibe espaços de magia vindos da progressão do nível atual.
+- Aba Magia recebeu primeira reorganização visual.
+- Resultado grande de rolagem foi corrigido para mostrar o total numérico da rolagem.
+- Teste regressivo da 4.27 concluído.
 
-```txt
-4.27 — Regras avançadas de sistema/ficha.
-```
+## 🧪 Testado
+
+- Bárbaro não mostra magias no builder.
+- Bardo mostra apenas magias permitidas.
+- Limite de truques/magias funciona com seed expandido.
+- Trocar de classe limpa magias antigas.
+- Bardo calcula Carisma, CD e ataque mágico corretamente.
+- Ataque mágico rola `1d20 + bônus real`.
+- Classe sem conjuração mostra valores `—` e bloqueia ataque mágico.
+- Slots de magia aparecem na aba Magia.
+- Dano mágico rola expressão detectada da descrição.
+- Resultado grande do chat mostra soma final, não lista de dados.
+
+## ⚠️ Limitações mantidas
+
+- Dano de magia ainda é detectado pela descrição.
+- Controle de slots usados ainda não existe.
+- Ataque contra CA ainda não é automático.
+- Ataque de equipamento ainda é provisório.
+- Estrutura visual da ficha pronta será melhorada na 4.28.
 
 ---
 
-# 🧠 Regra de Ouro
+# 🧭 Próxima cápsula esperada
 
-> Cada cápsula deve gerar valor real e aproximar o sistema de ser jogável.
+```txt
+Capsule 41 — Ready Sheet Structural Refactor
+```
+
+Foco esperado:
+
+- arquitetura visual da ficha pronta
+- shell fixo com centro variável
+- cards compactos com expand/collapse
+- aba Magia mais limpa
+- aba Bolsa mais limpa
+- preparação futura de ficha destacável/pop-out
