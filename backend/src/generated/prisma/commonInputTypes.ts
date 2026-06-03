@@ -305,6 +305,20 @@ export type FloatNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
 }
 
+export type EnumEquipmentAttackTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentAttackType | Prisma.EnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EquipmentAttackType[] | Prisma.ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EquipmentAttackType[] | Prisma.ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEquipmentAttackTypeFilter<$PrismaModel> | $Enums.EquipmentAttackType
+}
+
+export type EnumEquipmentWeaponGroupNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentWeaponGroup | Prisma.EnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EquipmentWeaponGroup[] | Prisma.ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EquipmentWeaponGroup[] | Prisma.ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEquipmentWeaponGroupNullableFilter<$PrismaModel> | $Enums.EquipmentWeaponGroup | null
+}
+
 export type EnumEquipmentCategoryWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EquipmentCategory | Prisma.EnumEquipmentCategoryFieldRefInput<$PrismaModel>
   in?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
@@ -329,6 +343,26 @@ export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+}
+
+export type EnumEquipmentAttackTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentAttackType | Prisma.EnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EquipmentAttackType[] | Prisma.ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EquipmentAttackType[] | Prisma.ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEquipmentAttackTypeWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentAttackType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEquipmentAttackTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEquipmentAttackTypeFilter<$PrismaModel>
+}
+
+export type EnumEquipmentWeaponGroupNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentWeaponGroup | Prisma.EnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EquipmentWeaponGroup[] | Prisma.ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EquipmentWeaponGroup[] | Prisma.ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEquipmentWeaponGroupNullableWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentWeaponGroup | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEquipmentWeaponGroupNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEquipmentWeaponGroupNullableFilter<$PrismaModel>
 }
 
 export type EnumParticipantRoleFilter<$PrismaModel = never> = {
@@ -743,6 +777,20 @@ export type NestedEnumEquipmentCategoryFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumEquipmentCategoryFilter<$PrismaModel> | $Enums.EquipmentCategory
 }
 
+export type NestedEnumEquipmentAttackTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentAttackType | Prisma.EnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EquipmentAttackType[] | Prisma.ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EquipmentAttackType[] | Prisma.ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEquipmentAttackTypeFilter<$PrismaModel> | $Enums.EquipmentAttackType
+}
+
+export type NestedEnumEquipmentWeaponGroupNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentWeaponGroup | Prisma.EnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EquipmentWeaponGroup[] | Prisma.ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EquipmentWeaponGroup[] | Prisma.ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEquipmentWeaponGroupNullableFilter<$PrismaModel> | $Enums.EquipmentWeaponGroup | null
+}
+
 export type NestedEnumEquipmentCategoryWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EquipmentCategory | Prisma.EnumEquipmentCategoryFieldRefInput<$PrismaModel>
   in?: $Enums.EquipmentCategory[] | Prisma.ListEnumEquipmentCategoryFieldRefInput<$PrismaModel>
@@ -767,6 +815,26 @@ export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumEquipmentAttackTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentAttackType | Prisma.EnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EquipmentAttackType[] | Prisma.ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EquipmentAttackType[] | Prisma.ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEquipmentAttackTypeWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentAttackType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEquipmentAttackTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEquipmentAttackTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumEquipmentWeaponGroupNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EquipmentWeaponGroup | Prisma.EnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EquipmentWeaponGroup[] | Prisma.ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EquipmentWeaponGroup[] | Prisma.ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEquipmentWeaponGroupNullableWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentWeaponGroup | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEquipmentWeaponGroupNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEquipmentWeaponGroupNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumParticipantRoleFilter<$PrismaModel = never> = {

@@ -10,6 +10,7 @@ Este documento descreve:
 - Domínio de campanhas, mesa e ficha
 - Regras de progressão/magia adicionadas na 4.27
 - Impacto da refatoração estrutural da ficha pronta na 4.28
+- Regras avançadas de equipamento, features e Level Up preview na 4.29
 - Próximos passos da Fase 4
 
 ---
@@ -49,7 +50,7 @@ Este documento descreve:
 
 - 4.28.14 — revisão UX/UI do chat após ficha pop-out.
 - 4.28.15 — commit da 4.28.
-- Preparação futura da 4.29: ataque real por equipamento, features e level up.
+- 4.29 implementada no nível atual: ataque real por equipamento, features reais, subclasse por nível correto e Level Up preview.
 
 ## ❌ Ainda futuro
 
@@ -391,6 +392,75 @@ Isso não persiste no banco e não sincroniza entre contas.
 
 ---
 
+# ⚔️ REGRAS DE EQUIPAMENTO, FEATURES E LEVEL UP PREVIEW — 4.29
+
+
+A 4.29 consolidou a primeira camada de regras avançadas para uso real da ficha pronta em mesa.
+
+### Equipamentos e ataques reais
+
+- `Equipment` recebeu campos estruturados para ataque:
+  - `damageFormula`
+  - `damageType`
+  - `attackType`
+  - `attackAbilityKey`
+  - `alternativeAbilityKey`
+  - `weaponGroup`
+  - `normalRange`
+  - `longRange`
+  - `isFinesse`
+  - `isThrown`
+  - `isTwoHanded`
+  - `isVersatile`
+  - `versatileDamageFormula`
+  - `attackBonus`
+  - `damageBonus`
+- O seed de equipamentos ofensivos foi atualizado.
+- A ficha pronta calcula ataque real por equipamento usando atributo, proficiência temporária e bônus do item.
+- A aba Combate exibe os ataques equipados.
+- A aba Bolsa continua exibindo ataques/danos como inventário de uso rápido.
+- GM possui campo manual de CA do alvo na aba Combate.
+- Player não vê nem preenche a CA exata do alvo.
+- Comparação automática contra CA ainda não existe; por enquanto a CA aparece apenas como referência no texto da rolagem do GM.
+
+### Features reais
+
+- As rotas de ficha retornam `features` reais disponíveis para a ficha.
+- A aba Features exibe recursos/traços por origem:
+  - classe
+  - subclasse
+  - ancestralidade
+  - outras fontes futuras
+- Features são exibidas como texto mecânico/narrativo.
+- Aplicação automática de efeitos de features ainda é futura.
+
+### Subclasse por nível correto
+
+- `CharacterClass.subclassSelectionLevel` foi adicionado.
+- O seed define o nível de escolha de subclasse.
+- O backend valida que uma subclasse só pode ser escolhida no nível correto.
+- A subclasse precisa pertencer à classe escolhida.
+- A ficha mostra status de subclasse: indisponível, pendente ou escolhida.
+
+### Level Up preview
+
+- A aba Features recebeu botão Level Up.
+- O Level Up abre como modal dentro da ficha pronta/pop-out.
+- O modal ainda não salva alterações.
+- O backend envia `levelUpPreview` com:
+  - nível atual
+  - próximo nível
+  - progressão atual
+  - próxima progressão
+  - features novas do próximo nível
+  - status de subclasse
+- A decisão arquitetural ficou registrada: nível do personagem é diferente de nível de classe.
+- O Level Up real precisará futuramente permitir subir uma classe existente ou adicionar multiclasse.
+- Ancestralidade, antecedente, equipamentos iniciais e origem do personagem não são reprocessados no Level Up.
+
+
+---
+
 # 🧠 REGRAS QUE DEVEM EXISTIR NO BANCO OU BACKEND
 
 ## Campanhas
@@ -574,17 +644,10 @@ Hoje dano é detectado pela descrição. Funciona para teste, mas não é ideal 
 # 🧭 Próximo foco
 
 ```txt
-4.28.14 — Revisar UX/UI do chat após ficha pop-out
-4.28.15 — Commit da 4.28
+4.29.15 — Commit da 4.29
+4.30 — Multiclasse
+4.31 — Modularização e expansão do conteúdo base do sistema
 ```
-
-Depois:
-
-```txt
-4.29 — Regras avançadas de equipamento, features e level up
-```
-
----
 
 # 🌱 Seed — decisão atual
 
@@ -594,6 +657,17 @@ Decisão recomendada:
 
 ```txt
 Antes de cadastrar grande volume de conteúdo, modularizar o seed em arquivos separados.
+```
+
+Fase planejada:
+
+```txt
+4.31 — Modularização e expansão do conteúdo base do sistema
+4.31.1 — Separar seed em arquivos por domínio
+4.31.2 — Expandir equipamentos
+4.31.3 — Expandir magias
+4.31.4 — Expandir features
+4.31.5 — Expandir pacotes iniciais
 ```
 
 Estrutura futura sugerida:

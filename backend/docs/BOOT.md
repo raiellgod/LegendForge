@@ -122,6 +122,14 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
   - slots de magia exibidos na ficha pronta
 - Resultado grande da rolagem corrigido para mostrar o total numérico.
 - Teste regressivo da 4.28 concluído com zero erros.
+- Regras avançadas da 4.29 funcionando:
+  - ataques reais por equipamento
+  - campos estruturados em `Equipment`
+  - aba Combate com ataques equipados
+  - CA manual visível apenas para GM
+  - features reais na aba Features
+  - subclasse liberada no nível correto
+  - Level Up preview visual com mudanças do próximo nível
 
 ---
 
@@ -155,8 +163,8 @@ Persistidos no banco, mas sem atualização em tempo real automática:
 Limitações intencionais atuais:
 
 ```txt
-- ataque de equipamento ainda é 1d20 + 0
-- ataque ainda não compara automaticamente com CA
+- ataque de equipamento já usa bônus real na ficha
+- ataque ainda não compara automaticamente com CA; GM pode informar CA manual como referência
 - NPCs e criaturas ainda não têm ficha/stat block próprios
 - iniciativa de NPC/criatura usa +0
 - dano mágico ainda é detectado por texto/descrição de forma provisória
@@ -243,8 +251,23 @@ Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 [x] 4.28.13 — Atualizar documentação da 4.28
 [próximo] 4.28.14 — Revisar UX/UI do chat após ficha pop-out
 [pendente] 4.28.15 — Commit da 4.28
-[planejado] 4.29 — Regras avançadas de equipamento, features e level up
+[x] 4.29.1 — Revisar modelagem de ataques reais por equipamento
+[x] 4.29.2 — Adicionar/confirmar campos necessários em Equipment para ataque
+[x] 4.29.3 — Ajustar seed de equipamentos ofensivos
+[x] 4.29.4 — Calcular ataque real por equipamento na ficha
+[x] 4.29.5 — Exibir ataque real na aba Bolsa/Combate
+[x] 4.29.6 — Preparar ataque contra CA manual
+[x] 4.29.7 — Revisar modelagem de Feature por nível
+[x] 4.29.8 — Exibir Features reais na aba Features
+[x] 4.29.9 — Preparar subclasse no nível correto
+[x] 4.29.10 — Planejar fluxo de Level Up
+[x] 4.29.11 — Criar primeira versão do botão Level Up
+[x] 4.29.12 — Level Up mostra apenas pendências/mudanças do novo nível
+[x] 4.29.13 — Teste regressivo da 4.29
+[x] 4.29.14 — Atualizar documentação
+[próximo] 4.29.15 — Commit da 4.29
 [planejado] 4.30 — Multiclasse
+[planejado] 4.31 — Modularização e expansão do conteúdo base do sistema
 ```
 
 ---
@@ -301,6 +324,73 @@ CharacterReadySheetModal
 
 ---
 
+## ✅ Fase 4.29 — Regras avançadas de equipamento, features e Level Up
+
+A 4.29 consolidou a primeira camada de regras avançadas para uso real da ficha pronta em mesa.
+
+### Equipamentos e ataques reais
+
+- `Equipment` recebeu campos estruturados para ataque:
+  - `damageFormula`
+  - `damageType`
+  - `attackType`
+  - `attackAbilityKey`
+  - `alternativeAbilityKey`
+  - `weaponGroup`
+  - `normalRange`
+  - `longRange`
+  - `isFinesse`
+  - `isThrown`
+  - `isTwoHanded`
+  - `isVersatile`
+  - `versatileDamageFormula`
+  - `attackBonus`
+  - `damageBonus`
+- O seed de equipamentos ofensivos foi atualizado.
+- A ficha pronta calcula ataque real por equipamento usando atributo, proficiência temporária e bônus do item.
+- A aba Combate exibe os ataques equipados.
+- A aba Bolsa continua exibindo ataques/danos como inventário de uso rápido.
+- GM possui campo manual de CA do alvo na aba Combate.
+- Player não vê nem preenche a CA exata do alvo.
+- Comparação automática contra CA ainda não existe; por enquanto a CA aparece apenas como referência no texto da rolagem do GM.
+
+### Features reais
+
+- As rotas de ficha retornam `features` reais disponíveis para a ficha.
+- A aba Features exibe recursos/traços por origem:
+  - classe
+  - subclasse
+  - ancestralidade
+  - outras fontes futuras
+- Features são exibidas como texto mecânico/narrativo.
+- Aplicação automática de efeitos de features ainda é futura.
+
+### Subclasse por nível correto
+
+- `CharacterClass.subclassSelectionLevel` foi adicionado.
+- O seed define o nível de escolha de subclasse.
+- O backend valida que uma subclasse só pode ser escolhida no nível correto.
+- A subclasse precisa pertencer à classe escolhida.
+- A ficha mostra status de subclasse: indisponível, pendente ou escolhida.
+
+### Level Up preview
+
+- A aba Features recebeu botão Level Up.
+- O Level Up abre como modal dentro da ficha pronta/pop-out.
+- O modal ainda não salva alterações.
+- O backend envia `levelUpPreview` com:
+  - nível atual
+  - próximo nível
+  - progressão atual
+  - próxima progressão
+  - features novas do próximo nível
+  - status de subclasse
+- A decisão arquitetural ficou registrada: nível do personagem é diferente de nível de classe.
+- O Level Up real precisará futuramente permitir subir uma classe existente ou adicionar multiclasse.
+- Ancestralidade, antecedente, equipamentos iniciais e origem do personagem não são reprocessados no Level Up.
+
+---
+
 ## 🎯 Próxima conversa deve começar por
 
 ```txt
@@ -329,7 +419,7 @@ pnpm lint
 cd ..
 git add .
 git status
-git commit -m "feat: refactor ready sheet popout"
+git commit -m "feat: add advanced equipment features and level up preview"
 ```
 
 ---
@@ -426,4 +516,4 @@ Antes de qualquer commit = git diff --stat.
 
 ## 🚀 Estado Atual
 
-👉 **Fase 4.28 concluída funcionalmente até documentação. Próximo passo imediato: 4.28.14 — revisar UX/UI do chat após ficha pop-out. Depois commit da 4.28.**
+👉 **Fase 4.29 concluída funcionalmente até documentação. Próximo passo imediato: 4.29.15 — commit da 4.29.**

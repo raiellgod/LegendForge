@@ -15,6 +15,9 @@ import {
   getAttributeModifier,
   getAttributeShortLabel,
   getAttributeValueFromStats,
+  getEquipmentAttackAbilityKey,
+  getEquipmentAttackBonus,
+  getEquipmentDamageExpression,
   getInitiativeBonus,
   getPassivePerception,
   getProficiencyBonusByLevel,
@@ -533,6 +536,32 @@ function getSpellSlotRowsFromProgression(
   ].filter((slot) => slot.total > 0);
 }
 
+function getSpellSlotSummaryFromProgression(
+  progression: CharacterReadySheetLevelProgression | null | undefined,
+) {
+  const slotRows = getSpellSlotRowsFromProgression(progression);
+
+  if (slotRows.length === 0) {
+    return "Sem espaços";
+  }
+
+  return slotRows.map((slot) => `N${slot.level}: ${slot.total}`).join(" · ");
+}
+
+function getProgressionChangeLabel(
+  currentValue: number | null | undefined,
+  nextValue: number | null | undefined,
+) {
+  const current = currentValue ?? 0;
+  const next = nextValue ?? 0;
+
+  if (current === next) {
+    return String(next);
+  }
+
+  return `${current} → ${next}`;
+}
+
 function SpellCard({
   name,
   level,
@@ -693,6 +722,7 @@ function SpellCard({
 
 function EquipmentAttackCard({
   name,
+  attackLabel,
   damageLabel,
   helper,
   isExpanded,
@@ -701,6 +731,7 @@ function EquipmentAttackCard({
   onRollDamage,
 }: {
   name: string;
+  attackLabel: string;
   damageLabel: string;
   helper: string;
   isExpanded: boolean;
@@ -727,19 +758,28 @@ function EquipmentAttackCard({
           </p>
         </div>
 
-        <p
-          className="rounded-lg border border-forge-gold/15 bg-forge-gold/5 px-2 py-1 text-[10px] font-black text-forge-gold"
-          title={`Dano: ${damageLabel}`}
-        >
-          Dano: {damageLabel}
-        </p>
+        <div className="grid gap-1.5 text-[10px] font-black text-forge-gold sm:grid-cols-2 xl:grid-cols-1">
+          <p
+            className="rounded-lg border border-forge-gold/15 bg-forge-gold/5 px-2 py-1"
+            title={`Ataque: ${attackLabel}`}
+          >
+            Ataque: {attackLabel}
+          </p>
+
+          <p
+            className="rounded-lg border border-forge-gold/15 bg-forge-gold/5 px-2 py-1"
+            title={`Dano: ${damageLabel}`}
+          >
+            Dano: {damageLabel}
+          </p>
+        </div>
 
         <div className="flex flex-wrap items-center gap-2 xl:justify-end">
           <button
             type="button"
             onClick={onRollAttack}
             className="rounded-lg border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white/45 transition hover:border-forge-gold/45 hover:bg-forge-gold/10 hover:text-forge-gold"
-            title={`Rolar ataque básico de ${name}: 1d20 + 0. Bônus real, alvo e comparação com CA entram em micro futura.`}
+            title={`Rolar ataque de ${name}: 1d20 ${attackLabel}. Comparação contra CA entra na próxima micro.`}
           >
             Ataque
           </button>
@@ -830,6 +870,329 @@ function EquipmentListCard({
   );
 }
 
+function FeatureCard({
+  name,
+  sourceLabel,
+  levelLabel,
+  description,
+}: {
+  name: string;
+  sourceLabel: string;
+  levelLabel: string;
+  description: string;
+}) {
+  return (
+    <article
+      className="rounded-xl border border-white/10 bg-black/25 p-3 transition hover:border-forge-gold/35 hover:bg-forge-gold/5"
+      title={description}
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p
+            className="min-w-0 break-words text-sm font-black leading-snug text-forge-gold"
+            title={name}
+          >
+            {name}
+          </p>
+
+          <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+            {sourceLabel} · {levelLabel}
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-2 whitespace-pre-wrap text-xs font-semibold leading-relaxed text-white/55">
+        {description}
+      </p>
+    </article>
+  );
+}
+
+function getFeatureSourceLabel(sourceType: string) {
+  if (sourceType === "ANCESTRY") {
+    return "Ancestralidade";
+  }
+
+  if (sourceType === "CLASS") {
+    return "Classe";
+  }
+
+  if (sourceType === "SUBCLASS") {
+    return "Subclasse";
+  }
+
+  if (sourceType === "BACKGROUND") {
+    return "Antecedente";
+  }
+
+  return "Feature";
+}
+
+function LevelUpPreviewModal({
+  characterName,
+  className,
+  levelUpPreview,
+  onClose,
+}: {
+  characterName: string;
+  className: string;
+  levelUpPreview: CharacterReadySheet["levelUpPreview"] | null | undefined;
+  onClose: () => void;
+}) {
+  const currentLevel = levelUpPreview?.currentLevel ?? 1;
+  const nextLevel = levelUpPreview?.nextLevel ?? currentLevel + 1;
+  const currentProgression = levelUpPreview?.currentProgression ?? null;
+  const nextProgression = levelUpPreview?.nextProgression ?? null;
+
+  const proficiencyChange = getProgressionChangeLabel(
+    currentProgression?.proficiencyBonus,
+    nextProgression?.proficiencyBonus,
+  );
+
+  const cantripsChange = getProgressionChangeLabel(
+    currentProgression?.cantripsKnown,
+    nextProgression?.cantripsKnown,
+  );
+
+  const spellsKnownChange = getProgressionChangeLabel(
+    currentProgression?.spellsKnown,
+    nextProgression?.spellsKnown,
+  );
+
+  const spellsPreparedChange = getProgressionChangeLabel(
+    currentProgression?.spellsPrepared,
+    nextProgression?.spellsPrepared,
+  );
+
+  const currentSlots = getSpellSlotSummaryFromProgression(currentProgression);
+  const nextSlots = getSpellSlotSummaryFromProgression(nextProgression);
+
+  const slotChange =
+    currentSlots === nextSlots ? nextSlots : `${currentSlots} → ${nextSlots}`;
+
+  const newFeatures = levelUpPreview?.newFeatures ?? [];
+  const hasNewFeatures = newFeatures.length > 0;
+
+  const subclassPreviewLabel = levelUpPreview?.subclass?.name
+    ? levelUpPreview.subclass.name
+    : levelUpPreview?.isSubclassChoicePending
+      ? "Escolha de subclasse pendente"
+      : levelUpPreview?.subclassSelectionLevel
+        ? `Disponível no nível ${levelUpPreview.subclassSelectionLevel}`
+        : "Sem regra de subclasse";
+
+  const subclassPreviewHelper = levelUpPreview?.subclass?.name
+    ? "Subclasse já escolhida."
+    : levelUpPreview?.isSubclassChoicePending
+      ? "Esta escolha será obrigatória quando a confirmação real do Level Up existir."
+      : levelUpPreview?.subclassSelectionLevel
+        ? "Ainda não há escolha de subclasse neste avanço."
+        : "A classe não informa nível de subclasse.";
+
+  const canPreviewNextLevel = levelUpPreview?.canPreviewNextLevel ?? false;
+
+  return (
+    <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+      <section className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-forge-gold/45 bg-[#160b1c] p-4 shadow-[-12px_12px_0_rgba(0,0,0,0.45)]">
+        <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+              Level Up
+            </p>
+
+            <h3 className="mt-1 text-2xl font-black text-forge-gold">
+              {characterName}
+            </h3>
+
+            <p className="mt-1 text-xs font-semibold leading-relaxed text-white/45">
+              Prévia do próximo avanço. Nesta micro, nada é salvo ainda.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-xl font-black text-white/45 transition hover:text-forge-gold"
+            aria-label="Fechar Level Up"
+            title="Fechar Level Up"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <div className="rounded-xl border border-white/10 bg-black/25 p-3">
+            <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+              Nível atual
+            </p>
+
+            <p className="mt-1 text-2xl font-black text-forge-gold">
+              {currentLevel}
+            </p>
+
+            <p className="mt-1 text-[10px] font-semibold text-white/35">
+              nível total do personagem
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-forge-gold/25 bg-forge-gold/10 p-3">
+            <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+              Próximo nível
+            </p>
+
+            <p className="mt-1 text-2xl font-black text-forge-gold">
+              {nextLevel}
+            </p>
+
+            <p className="mt-1 text-[10px] font-semibold text-white/35">
+              prévia, sem salvar
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-white/10 bg-black/25 p-3">
+            <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+              Classe atual
+            </p>
+
+            <p className="mt-1 min-w-0 break-words text-base font-black text-forge-gold">
+              {className}
+            </p>
+
+            <p className="mt-1 text-[10px] font-semibold text-white/35">
+              modo classe única por enquanto
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-3">
+          <div className="rounded-xl border border-white/10 bg-black/25 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+              Mudanças do próximo nível
+            </p>
+
+            {canPreviewNextLevel ? (
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                <CompactListRow
+                  title={`Proficiência: ${proficiencyChange}`}
+                  helper="Bônus de proficiência da classe/progressão atual."
+                />
+
+                <CompactListRow
+                  title={`Truques: ${cantripsChange}`}
+                  helper="Quantidade de truques conhecidos pela progressão."
+                />
+
+                <CompactListRow
+                  title={`Magias conhecidas: ${spellsKnownChange}`}
+                  helper="Quantidade de magias conhecidas, quando aplicável."
+                />
+
+                <CompactListRow
+                  title={`Magias preparadas: ${spellsPreparedChange}`}
+                  helper="Quantidade de magias preparadas, quando aplicável."
+                />
+
+                <CompactListRow title="Espaços de magia" helper={slotChange} />
+
+                <CompactListRow
+                  title={`${newFeatures.length} feature(s) nova(s)`}
+                  helper={
+                    hasNewFeatures
+                      ? "Veja a lista abaixo."
+                      : "Nenhuma feature nova neste nível."
+                  }
+                />
+              </div>
+            ) : (
+              <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                Não existe progressão cadastrada para o próximo nível desta
+                classe. O Level Up real ficará bloqueado até existir progressão.
+              </p>
+            )}
+          </div>
+
+          <div className="rounded-xl border border-white/10 bg-black/25 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+              Features liberadas neste avanço
+            </p>
+
+            {hasNewFeatures ? (
+              <div className="mt-3 grid gap-2">
+                {newFeatures.map((feature) => (
+                  <FeatureCard
+                    key={feature.id}
+                    name={feature.name}
+                    sourceLabel={getFeatureSourceLabel(feature.sourceType)}
+                    levelLabel={
+                      feature.level ? `Nível ${feature.level}` : "Sem nível"
+                    }
+                    description={
+                      feature.description?.trim() ||
+                      "Sem descrição cadastrada."
+                    }
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                Nenhuma feature nova detectada para o próximo nível.
+              </p>
+            )}
+          </div>
+
+          <div className="rounded-xl border border-forge-gold/25 bg-black/25 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+              Subclasse
+            </p>
+
+            <p className="mt-2 text-base font-black text-forge-gold">
+              {subclassPreviewLabel}
+            </p>
+
+            <p className="mt-1 text-xs font-semibold leading-relaxed text-white/45">
+              {subclassPreviewHelper}
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-yellow-400/25 bg-yellow-500/10 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-yellow-100/70">
+              Observação técnica
+            </p>
+
+            <p className="mt-2 text-xs font-semibold leading-relaxed text-yellow-100/70">
+              Por enquanto este modal não salva o Level Up. Isso é intencional:
+              antes de confirmar level real, precisamos separar nível total do
+              personagem e nível de classe para não criar dívida técnica com
+              multiclasse.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 flex flex-wrap justify-end gap-2 border-t border-white/10 pt-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-white/10 bg-black/35 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-white/45 transition hover:border-forge-gold/45 hover:text-forge-gold"
+          >
+            Fechar
+          </button>
+
+          <button
+            type="button"
+            disabled
+            className="cursor-not-allowed rounded-xl border border-white/5 bg-black/20 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-white/20"
+            title="Confirmação real entra na próxima micro."
+          >
+            Confirmar depois
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+
+
 function NarrativeField({
   label,
   value,
@@ -866,6 +1229,8 @@ export function CharacterReadySheetView({
   const [expandedEquipmentKeys, setExpandedEquipmentKeys] = useState<string[]>(
     [],
   );
+  const [manualTargetArmorClass, setManualTargetArmorClass] = useState("");
+  const [isLevelUpPreviewOpen, setIsLevelUpPreviewOpen] = useState(false);
 
   function toggleExpandedSpell(spellKey: string) {
     setExpandedSpellKeys((currentKeys) =>
@@ -1024,22 +1389,98 @@ export function CharacterReadySheetView({
     ),
   })).filter((group) => group.skills.length > 0);
 
+  const parsedManualTargetArmorClass = Number.parseInt(
+    manualTargetArmorClass,
+    10,
+  );
+
+  const hasManualTargetArmorClass =
+    isGM &&
+    manualTargetArmorClass.trim().length > 0 &&
+    Number.isFinite(parsedManualTargetArmorClass) &&
+    parsedManualTargetArmorClass > 0;
+
+  const manualTargetArmorClassLabel = hasManualTargetArmorClass
+    ? `CA ${parsedManualTargetArmorClass}`
+    : "Sem CA definida";
+
+  function getAttackLabelWithManualTarget(attackName: string) {
+    if (!hasManualTargetArmorClass) {
+      return `Ataque — ${attackName}`;
+    }
+
+    return `Ataque — ${attackName} contra CA ${parsedManualTargetArmorClass}`;
+  }
+
   const attackRows =
     characterSheet?.equipment
-      .filter((sheetEquipment) => Boolean(sheetEquipment.equipment.damage))
+      .filter((sheetEquipment) => {
+        return (
+          Boolean(sheetEquipment.equipment.damage) ||
+          Boolean(sheetEquipment.equipment.damageFormula)
+        );
+      })
       .map((sheetEquipment) => {
-        const damageLabel = sheetEquipment.equipment.damage ?? "—";
-        const damageExpression = getDamageRollExpression(damageLabel);
+        const equipment = sheetEquipment.equipment;
+
+        const attackBonus = getEquipmentAttackBonus({
+          stats: sheetStats,
+          level: sheetLevel,
+          equipment,
+          isProficient: true,
+        });
+
+        const attackAbilityKey = getEquipmentAttackAbilityKey({
+          equipment,
+          stats: sheetStats,
+        });
+
+        const damageExpression =
+          getEquipmentDamageExpression({
+            damageFormula: equipment.damageFormula,
+            damageFallback: equipment.damage,
+            damageBonus: equipment.damageBonus,
+          }) ?? getDamageRollExpression(equipment.damage ?? "1d4");
+
+        const damageLabel = [
+          equipment.damageFormula ?? equipment.damage ?? "—",
+          equipment.damageType,
+          equipment.damageBonus
+            ? `(${formatSignedNumber(equipment.damageBonus)})`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" ");
+
+        const attackLabel =
+          attackBonus === null ? "—" : formatSignedNumber(attackBonus);
+
+        const abilityLabel = attackAbilityKey
+          ? `${getAttributeShortLabel(attackAbilityKey)}`
+          : "atributo não definido";
+
+        const weaponGroupLabel = equipment.weaponGroup
+          ? `Grupo: ${equipment.weaponGroup}`
+          : "Grupo não definido";
+
+        const helper = [
+          equipment.properties,
+          `Atributo: ${abilityLabel}`,
+          weaponGroupLabel,
+          "Proficiência temporária: sim",
+          equipment.description,
+        ]
+          .filter(Boolean)
+          .join(" · ");
 
         return {
-          id: sheetEquipment.equipment.key,
-          name: sheetEquipment.equipment.name,
+          id: equipment.key,
+          name: equipment.name,
+          attackBonus,
+          attackLabel,
           damageLabel,
           damageExpression,
-          helper:
-            sheetEquipment.equipment.properties ??
-            sheetEquipment.equipment.description ??
-            "Ataque derivado de equipamento.",
+          helper,
         };
       }) ?? [];
 
@@ -1170,6 +1611,99 @@ export function CharacterReadySheetView({
     },
   ];
 
+  const subclassSelectionLevel =
+    characterSheet?.characterClass?.subclassSelectionLevel ?? null;
+
+  const isSubclassChoiceAvailable =
+    typeof subclassSelectionLevel === "number" &&
+    sheetLevel >= subclassSelectionLevel;
+
+  const subclassStatusLabel = !characterSheet?.characterClass
+    ? "Classe não definida"
+    : !subclassSelectionLevel
+      ? "Esta classe ainda não possui nível de subclasse configurado"
+      : characterSheet.subclass
+        ? characterSheet.subclass.name
+        : isSubclassChoiceAvailable
+          ? "Escolha de subclasse pendente"
+          : `Disponível no nível ${subclassSelectionLevel}`;
+
+  const subclassStatusHelper = !characterSheet?.characterClass
+    ? "Escolha uma classe para liberar progressão."
+    : !subclassSelectionLevel
+      ? "A classe não informa quando escolhe subclasse."
+      : characterSheet.subclass
+        ? "Subclasse escolhida para esta ficha."
+        : isSubclassChoiceAvailable
+          ? "Esta pendência será resolvida no fluxo de Level Up."
+          : `A subclasse ainda não está disponível no nível ${sheetLevel}.`;
+
+  const featureRows = [...(characterSheet?.features ?? [])].sort(
+    (firstFeature, secondFeature) => {
+      const sourceComparison = firstFeature.sourceType.localeCompare(
+        secondFeature.sourceType,
+        "pt-BR",
+      );
+
+      if (sourceComparison !== 0) {
+        return sourceComparison;
+      }
+
+      const firstLevel = firstFeature.level ?? 0;
+      const secondLevel = secondFeature.level ?? 0;
+
+      if (firstLevel !== secondLevel) {
+        return firstLevel - secondLevel;
+      }
+
+      return firstFeature.name.localeCompare(secondFeature.name, "pt-BR");
+    },
+  );
+
+  const ancestryFeatureRows = featureRows.filter(
+    (feature) => feature.sourceType === "ANCESTRY",
+  );
+
+  const classFeatureRows = featureRows.filter(
+    (feature) => feature.sourceType === "CLASS",
+  );
+
+  const subclassFeatureRows = featureRows.filter(
+    (feature) => feature.sourceType === "SUBCLASS",
+  );
+
+  const otherFeatureRows = featureRows.filter(
+    (feature) =>
+      !["ANCESTRY", "CLASS", "SUBCLASS"].includes(feature.sourceType),
+  );
+
+  const featureGroups = [
+    {
+      id: "class",
+      title: "Features de classe",
+      helper: characterSheet?.characterClass?.name ?? "Classe não definida",
+      features: classFeatureRows,
+    },
+    {
+      id: "subclass",
+      title: "Features de subclasse",
+      helper: characterSheet?.subclass?.name ?? "Subclasse não definida",
+      features: subclassFeatureRows,
+    },
+    {
+      id: "ancestry",
+      title: "Traços de ancestralidade",
+      helper: characterSheet?.ancestry?.name ?? "Ancestralidade não definida",
+      features: ancestryFeatureRows,
+    },
+    {
+      id: "other",
+      title: "Outras features",
+      helper: "Fontes adicionais",
+      features: otherFeatureRows,
+    },
+  ].filter((group) => group.features.length > 0);
+
   const appearanceRows = [
     {
       label: "Idade",
@@ -1241,6 +1775,9 @@ export function CharacterReadySheetView({
       ? "Sim"
       : "Não"
     : "—";
+
+  const nextCharacterLevel = sheetLevel + 1;
+  const levelUpClassName = characterSheet?.characterClass?.name ?? "—";
 
   return (
     <div className="flex h-[min(900px,96vh)] w-full max-w-[min(96vw,1400px)] flex-col overflow-hidden rounded-2xl border border-forge-gold/50 bg-[#120816] shadow-[-14px_14px_0_rgba(0,0,0,0.45)]">
@@ -1432,6 +1969,15 @@ export function CharacterReadySheetView({
         </div>
       </header>
 
+            {isLevelUpPreviewOpen ? (
+        <LevelUpPreviewModal
+          characterName={displayName}
+          className={levelUpClassName}
+          levelUpPreview={characterSheet?.levelUpPreview}
+          onClose={() => setIsLevelUpPreviewOpen(false)}
+        />
+      ) : null}
+
       {activeTab === "status" ? (
         <div className="min-h-0 flex-1 overflow-y-auto p-2 sm:p-3">
           <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -1580,18 +2126,75 @@ export function CharacterReadySheetView({
               </section>
 
               <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-2">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                      Ataques equipados
+                    </p>
+
+                    <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+                      Ataques calculados a partir do equipamento, atributo,
+                      proficiência temporária e bônus do item.
+                    </p>
+                  </div>
+                </div>
+
+                {attackRows.length > 0 ? (
+                  <div className="mt-3 grid gap-2">
+                    {attackRows.map((attack, index) => {
+                      const attackKey = `combat-attack-${attack.id}-${index}`;
+
+                      return (
+                        <EquipmentAttackCard
+                          key={attackKey}
+                          name={attack.name}
+                          attackLabel={attack.attackLabel}
+                          damageLabel={attack.damageLabel}
+                          helper={attack.helper}
+                          isExpanded={expandedEquipmentKeys.includes(attackKey)}
+                          onToggleExpanded={() =>
+                            toggleExpandedEquipment(attackKey)
+                          }
+                          onRollAttack={() => {
+                            if (attack.attackBonus === null) {
+                              return;
+                            }
+
+                            onRollSheetAction({
+                              kind: "d20",
+                              label: getAttackLabelWithManualTarget(
+                                attack.name,
+                              ),
+                              modifier: attack.attackBonus,
+                            });
+                          }}
+                          onRollDamage={() =>
+                            onRollSheetAction({
+                              kind: "damage",
+                              label: `Dano — ${attack.name}`,
+                              expression: attack.damageExpression,
+                            })
+                          }
+                        />
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                    Nenhum ataque derivado de equipamento por enquanto.
+                  </p>
+                )}
+              </section>
+
+              <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
                 <p className="border-b border-white/10 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-                  Ações de combate
+                  Próximas ações de combate
                 </p>
 
                 <div className="mt-3 grid gap-2 md:grid-cols-2">
                   <CompactListRow
-                    title="Ataques reais por equipamento"
-                    helper="Entram na próxima macro de regras avançadas de equipamento."
-                  />
-                  <CompactListRow
                     title="Ataque contra CA manual"
-                    helper="Preparado para comparar rolagem de ataque contra defesa do alvo."
+                    helper="Preparado para comparar a rolagem de ataque contra a defesa do alvo."
                   />
                   <CompactListRow
                     title="Condições e efeitos"
@@ -1601,11 +2204,90 @@ export function CharacterReadySheetView({
                     title="Ações, bônus e reação"
                     helper="Espaço reservado para economia de ações em combate."
                   />
+                  <CompactListRow
+                    title="Alvos e alcance"
+                    helper="Futuramente ligado a tokens, distância, tamanho e linha de visão."
+                  />
                 </div>
               </section>
             </main>
 
             <aside className="space-y-4">
+              {isGM ? (
+                <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                    Alvo manual do mestre
+                  </p>
+
+                  <p className="mt-2 text-xs font-semibold leading-relaxed text-white/45">
+                    Informe a CA do alvo apenas quando você, como mestre, quiser
+                    enviar a rolagem ao chat com a defesa de referência.
+                    Jogadores não devem ver nem preencher este valor.
+                  </p>
+
+                  <label className="mt-3 block rounded-xl border border-white/10 bg-black/25 p-2.5">
+                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-white/35">
+                      CA do alvo
+                    </span>
+
+                    <input
+                      type="number"
+                      min={1}
+                      max={99}
+                      value={manualTargetArmorClass}
+                      onChange={(event) =>
+                        setManualTargetArmorClass(event.target.value)
+                      }
+                      placeholder="Ex.: 15"
+                      className="mt-2 w-full rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-sm font-black text-forge-gold outline-none transition placeholder:text-white/20 focus:border-forge-gold/60"
+                    />
+                  </label>
+
+                  <div className="mt-3 rounded-xl border border-white/10 bg-black/25 px-3 py-2">
+                    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+                      Referência atual
+                    </p>
+
+                    <p className="mt-1 text-base font-black text-forge-gold">
+                      {manualTargetArmorClassLabel}
+                    </p>
+
+                    <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+                      A comparação ainda é manual. A automação de acerto/erro
+                      entra quando o fluxo de ataque puder ler o resultado da
+                      rolagem e comparar com a defesa do alvo.
+                    </p>
+                  </div>
+                </section>
+              ) : (
+                <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                    Alvo
+                  </p>
+
+                  <p className="mt-2 text-xs font-semibold leading-relaxed text-white/45">
+                    Você pode rolar ataques normalmente. A defesa exata do alvo
+                    é uma informação controlada pelo mestre e será aplicada no
+                    fluxo de combate.
+                  </p>
+
+                  <div className="mt-3 rounded-xl border border-white/10 bg-black/25 px-3 py-2">
+                    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+                      Fluxo atual
+                    </p>
+
+                    <p className="mt-1 text-base font-black text-forge-gold">
+                      Ataque declarado
+                    </p>
+
+                    <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+                      O mestre interpreta o resultado contra a defesa do alvo.
+                      Depois, isso será automatizado por alvo/token.
+                    </p>
+                  </div>
+                </section>
+              )}
+
               <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                   Preparação
@@ -1637,19 +2319,24 @@ export function CharacterReadySheetView({
                         <EquipmentAttackCard
                           key={attackKey}
                           name={attack.name}
+                          attackLabel={attack.attackLabel}
                           damageLabel={attack.damageLabel}
                           helper={attack.helper}
                           isExpanded={expandedEquipmentKeys.includes(attackKey)}
                           onToggleExpanded={() =>
                             toggleExpandedEquipment(attackKey)
                           }
-                          onRollAttack={() =>
+                          onRollAttack={() => {
+                            if (attack.attackBonus === null) {
+                              return;
+                            }
+
                             onRollSheetAction({
                               kind: "d20",
-                              label: `Ataque básico — ${attack.name}`,
-                              modifier: 0,
-                            })
-                          }
+                              label: `Ataque — ${attack.name}`,
+                              modifier: attack.attackBonus,
+                            });
+                          }}
                           onRollDamage={() =>
                             onRollSheetAction({
                               kind: "damage",
@@ -1927,35 +2614,108 @@ export function CharacterReadySheetView({
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
             <main className="space-y-4">
               <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
-                <p className="border-b border-white/10 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-                  Features e traços
-                </p>
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-2">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                      Features e traços
+                    </p>
 
-                <div className="mt-3 grid gap-2 md:grid-cols-2">
-                  <CompactListRow
-                    title="Features de classe"
-                    helper="Entram quando conectarmos progressão de classe por nível."
-                  />
-                  <CompactListRow
-                    title="Traços de ancestralidade"
-                    helper="Espaço para habilidades vindas da ancestralidade."
-                  />
-                  <CompactListRow
-                    title="Benefícios de antecedente"
-                    helper="Espaço para recursos narrativos e mecânicos do antecedente."
-                  />
-                  <CompactListRow
-                    title="Proficiências especiais"
-                    helper="Futuramente editáveis pelo mestre durante a campanha."
-                  />
+                    <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+                      Recursos vindos da classe, subclasse e ancestralidade do
+                      personagem. Nesta primeira versão eles são exibidos como
+                      texto mecânico/narrativo.
+                    </p>
+                  </div>
                 </div>
+
+                {featureGroups.length > 0 ? (
+                  <div className="mt-3 space-y-3">
+                    {featureGroups.map((group) => (
+                      <div
+                        key={group.id}
+                        className="rounded-2xl border border-white/10 bg-black/20 p-2.5"
+                      >
+                        <div className="border-b border-white/10 pb-2">
+                          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold">
+                            {group.title}
+                          </p>
+
+                          <p className="mt-1 text-[10px] font-semibold text-white/35">
+                            {group.helper}
+                          </p>
+                        </div>
+
+                        <div className="mt-2 grid gap-2">
+                          {group.features.map((feature) => (
+                            <FeatureCard
+                              key={feature.id}
+                              name={feature.name}
+                              sourceLabel={getFeatureSourceLabel(
+                                feature.sourceType,
+                              )}
+                              levelLabel={
+                                feature.level
+                                  ? `Nível ${feature.level}`
+                                  : "Sem nível"
+                              }
+                              description={
+                                feature.description?.trim() ||
+                                "Sem descrição cadastrada."
+                              }
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                    Nenhuma feature disponível para esta ficha no nível atual.
+                  </p>
+                )}
               </section>
             </main>
 
             <aside className="space-y-4">
+                            <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                  Progressão
+                </p>
+
+                <div className="mt-3 grid gap-1.5">
+                  <CompactListRow
+                    title={`Nível ${sheetLevel}`}
+                    helper="Nível total atual do personagem."
+                  />
+
+                  <CompactListRow
+                    title={`Próximo: nível ${nextCharacterLevel}`}
+                    helper="Prévia visual do próximo avanço."
+                  />
+
+                  <CompactListRow
+                    title={levelUpClassName}
+                    helper="Modo classe única nesta primeira versão."
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsLevelUpPreviewOpen(true)}
+                  className="mt-3 w-full rounded-xl border border-forge-gold/30 bg-forge-gold/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
+                >
+                  Level Up
+                </button>
+
+                <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
+                  Primeira versão visual. A confirmação real entra depois, já
+                  respeitando nível de personagem diferente de nível de classe.
+                </p>
+              </section>
+              
               <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-                  Base da ficha
+                  Resumo de origem
                 </p>
 
                 <div className="mt-3 grid gap-1.5">
@@ -1963,15 +2723,34 @@ export function CharacterReadySheetView({
                     title={classAndLevel}
                     helper="Classe e nível atuais."
                   />
+
+                  <CompactListRow
+                    title={subclassStatusLabel}
+                    helper={subclassStatusHelper}
+                  />
+
                   <CompactListRow
                     title={ancestryName}
                     helper="Ancestralidade."
                   />
+
                   <CompactListRow
-                    title={backgroundName}
-                    helper="Antecedente."
+                    title={`${featureRows.length} feature(s)`}
+                    helper="Total disponível para esta ficha."
                   />
                 </div>
+              </section>
+
+              <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                  Próxima evolução
+                </p>
+
+                <p className="mt-2 text-xs font-semibold leading-relaxed text-white/45">
+                  Depois, algumas features poderão aplicar efeitos mecânicos,
+                  usos por descanso, proficiências, bônus e alterações na ficha.
+                  Por enquanto, esta aba exibe as features reais do sistema.
+                </p>
               </section>
             </aside>
           </div>

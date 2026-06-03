@@ -2773,6 +2773,7 @@ export const CharacterClassScalarFieldEnum = {
   primaryRole: 'primaryRole',
   hitDie: 'hitDie',
   spellcastingAbilityKey: 'spellcastingAbilityKey',
+  subclassSelectionLevel: 'subclassSelectionLevel',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2887,8 +2888,23 @@ export const EquipmentScalarFieldEnum = {
   cost: 'cost',
   weight: 'weight',
   damage: 'damage',
+  damageFormula: 'damageFormula',
+  damageType: 'damageType',
   defense: 'defense',
   properties: 'properties',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  alternativeAbilityKey: 'alternativeAbilityKey',
+  weaponGroup: 'weaponGroup',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  isFinesse: 'isFinesse',
+  isThrown: 'isThrown',
+  isTwoHanded: 'isTwoHanded',
+  isVersatile: 'isVersatile',
+  versatileDamageFormula: 'versatileDamageFormula',
+  attackBonus: 'attackBonus',
+  damageBonus: 'damageBonus',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -3210,6 +3226,34 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EquipmentAttackType'
+ */
+export type EnumEquipmentAttackTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EquipmentAttackType'>
+    
+
+
+/**
+ * Reference to a field of type 'EquipmentAttackType[]'
+ */
+export type ListEnumEquipmentAttackTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EquipmentAttackType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EquipmentWeaponGroup'
+ */
+export type EnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EquipmentWeaponGroup'>
+    
+
+
+/**
+ * Reference to a field of type 'EquipmentWeaponGroup[]'
+ */
+export type ListEnumEquipmentWeaponGroupFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EquipmentWeaponGroup[]'>
     
 
 

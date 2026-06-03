@@ -102,6 +102,7 @@ export type CharacterBuilderClassSpellAccess = {
 export type CharacterBuilderClassOption = CharacterBuilderOption & {
   hitDie: number | null;
   spellcastingAbilityKey: CharacterAttributeKey | null;
+  subclassSelectionLevel: number | null;
   levelProgressions: CharacterBuilderClassLevelProgression[];
   classSpells: CharacterBuilderClassSpellAccess[];
 };
@@ -138,13 +139,38 @@ export type CharacterBuilderSpellOption = CharacterBuilderOption & {
   requiresConcentration: boolean;
 };
 
+export type EquipmentAttackType = "NONE" | "MELEE" | "RANGED" | "THROWN";
+
+export type EquipmentWeaponGroup =
+  | "SIMPLE"
+  | "MARTIAL"
+  | "IMPROVISED"
+  | "NATURAL"
+  | "TECH"
+  | "RELIC";
+
 export type CharacterBuilderEquipmentOption = CharacterBuilderOption & {
   category: string;
   damage: string | null;
+  damageFormula: string | null;
+  damageType: string | null;
   defense: number | null;
   cost: string | null;
   weight: number | null;
   properties: string | null;
+  attackType: EquipmentAttackType | string;
+  attackAbilityKey: CharacterAttributeKey | string | null;
+  alternativeAbilityKey: CharacterAttributeKey | string | null;
+  weaponGroup: EquipmentWeaponGroup | string | null;
+  normalRange: number | null;
+  longRange: number | null;
+  isFinesse: boolean;
+  isThrown: boolean;
+  isTwoHanded: boolean;
+  isVersatile: boolean;
+  versatileDamageFormula: string | null;
+  attackBonus: number;
+  damageBonus: number;
 };
 
 export type CharacterBuilderOptions = {
@@ -166,6 +192,53 @@ export type CharacterSheetStatResponse = {
     name?: string;
     shortName?: string;
   };
+};
+
+export type CharacterReadySheetFeature = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+  sourceType: string;
+  level: number | null;
+  order: number;
+  ancestryId: string | null;
+  classId: string | null;
+  subclassId: string | null;
+  levelProgressionId: string | null;
+};
+
+export type CharacterReadySheetLevelProgressionPreview = {
+  level: number;
+  proficiencyBonus: number | null;
+  cantripsKnown: number;
+  spellsKnown: number;
+  spellsPrepared: number;
+  spellSlotsLevel1: number;
+  spellSlotsLevel2: number;
+  spellSlotsLevel3: number;
+  spellSlotsLevel4: number;
+  spellSlotsLevel5: number;
+  spellSlotsLevel6: number;
+  spellSlotsLevel7: number;
+  spellSlotsLevel8: number;
+  spellSlotsLevel9: number;
+};
+
+export type CharacterReadySheetLevelUpPreview = {
+  currentLevel: number;
+  nextLevel: number;
+  currentProgression: CharacterReadySheetLevelProgressionPreview | null;
+  nextProgression: CharacterReadySheetLevelProgressionPreview | null;
+  newFeatures: CharacterReadySheetFeature[];
+  subclass: {
+    id: string;
+    name: string;
+  } | null;
+  subclassSelectionLevel: number | null;
+  isSubclassChoiceAvailable: boolean;
+  isSubclassChoicePending: boolean;
+  canPreviewNextLevel: boolean;
 };
 
 export type CharacterSheetCombatState = {
@@ -229,6 +302,7 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     description: string | null;
     hitDie: number | null;
     spellcastingAbilityKey: CharacterAttributeKey | null;
+    subclassSelectionLevel: number | null;
     levelProgressions: Array<{
       level: number;
       proficiencyBonus: number | null;
@@ -245,6 +319,14 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
       spellSlotsLevel8: number;
       spellSlotsLevel9: number;
     }>;
+  } | null;
+
+    subclass: {
+    id: string;
+    key: string;
+    name: string;
+    description: string | null;
+    classId: string;
   } | null;
 
   ancestry: {
@@ -299,6 +381,9 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     isEquipped: boolean;
     equipment: CharacterBuilderEquipmentOption;
   }>;
+
+  features: CharacterReadySheetFeature[];
+  levelUpPreview: CharacterReadySheetLevelUpPreview;
 };
 
 export type StartingEquipmentPlan = {

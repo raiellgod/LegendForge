@@ -119,7 +119,7 @@ export async function systemRoutes(app: FastifyInstance) {
             slug: z.string().nullable(),
             version: z.number(),
           }),
-                   classes: z.array(
+          classes: z.array(
             z.object({
               id: z.string(),
               key: z.string(),
@@ -214,10 +214,25 @@ export async function systemRoutes(app: FastifyInstance) {
               description: z.string().nullable(),
               category: z.string(),
               damage: z.string().nullable(),
+              damageFormula: z.string().nullable(),
+              damageType: z.string().nullable(),
               defense: z.number().nullable(),
               cost: z.string().nullable(),
               weight: z.number().nullable(),
               properties: z.string().nullable(),
+              attackType: z.string(),
+              attackAbilityKey: z.string().nullable(),
+              alternativeAbilityKey: z.string().nullable(),
+              weaponGroup: z.string().nullable(),
+              normalRange: z.number().nullable(),
+              longRange: z.number().nullable(),
+              isFinesse: z.boolean(),
+              isThrown: z.boolean(),
+              isTwoHanded: z.boolean(),
+              isVersatile: z.boolean(),
+              versatileDamageFormula: z.string().nullable(),
+              attackBonus: z.number(),
+              damageBonus: z.number(),
             }),
           ),
         }),
@@ -260,7 +275,7 @@ export async function systemRoutes(app: FastifyInstance) {
 
       const [classes, ancestries, backgrounds, skills, spells, equipment] =
         await Promise.all([
-                   prisma.characterClass.findMany({
+          prisma.characterClass.findMany({
             where: {
               systemId,
             },
@@ -274,6 +289,7 @@ export async function systemRoutes(app: FastifyInstance) {
               description: true,
               hitDie: true,
               spellcastingAbilityKey: true,
+              subclassSelectionLevel: true,
               levelProgressions: {
                 orderBy: {
                   level: "asc",
@@ -433,15 +449,30 @@ export async function systemRoutes(app: FastifyInstance) {
               description: true,
               category: true,
               damage: true,
+              damageFormula: true,
+              damageType: true,
               defense: true,
               cost: true,
               weight: true,
               properties: true,
+              attackType: true,
+              attackAbilityKey: true,
+              alternativeAbilityKey: true,
+              weaponGroup: true,
+              normalRange: true,
+              longRange: true,
+              isFinesse: true,
+              isThrown: true,
+              isTwoHanded: true,
+              isVersatile: true,
+              versatileDamageFormula: true,
+              attackBonus: true,
+              damageBonus: true,
             },
           }),
         ]);
 
-            const normalizedClasses = classes.map((characterClass) => {
+      const normalizedClasses = classes.map((characterClass) => {
         return {
           id: characterClass.id,
           key: characterClass.key,
@@ -449,6 +480,7 @@ export async function systemRoutes(app: FastifyInstance) {
           description: characterClass.description,
           hitDie: characterClass.hitDie,
           spellcastingAbilityKey: characterClass.spellcastingAbilityKey,
+          subclassSelectionLevel: characterClass.subclassSelectionLevel,
           levelProgressions: characterClass.levelProgressions.map(
             (progression) => ({
               level: progression.level,
@@ -474,9 +506,8 @@ export async function systemRoutes(app: FastifyInstance) {
           })),
         };
       });
-      
-      
-        const normalizedSpells = spells.map((spell) => {
+
+      const normalizedSpells = spells.map((spell) => {
         const components =
           typeof spell.components === "string"
             ? spell.components
@@ -509,14 +540,29 @@ export async function systemRoutes(app: FastifyInstance) {
           description: item.description,
           category: String(item.category),
           damage: item.damage,
+          damageFormula: item.damageFormula,
+          damageType: item.damageType,
           defense: item.defense,
           cost: item.cost,
           weight: item.weight,
           properties: item.properties,
+          attackType: String(item.attackType),
+          attackAbilityKey: item.attackAbilityKey,
+          alternativeAbilityKey: item.alternativeAbilityKey,
+          weaponGroup: item.weaponGroup ? String(item.weaponGroup) : null,
+          normalRange: item.normalRange,
+          longRange: item.longRange,
+          isFinesse: item.isFinesse,
+          isThrown: item.isThrown,
+          isTwoHanded: item.isTwoHanded,
+          isVersatile: item.isVersatile,
+          versatileDamageFormula: item.versatileDamageFormula,
+          attackBonus: item.attackBonus,
+          damageBonus: item.damageBonus,
         };
       });
 
-            return reply.status(200).send({
+      return reply.status(200).send({
         system,
         classes: normalizedClasses,
         ancestries,

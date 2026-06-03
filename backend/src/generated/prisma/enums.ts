@@ -143,6 +143,28 @@ export const EquipmentCategory = {
 export type EquipmentCategory = (typeof EquipmentCategory)[keyof typeof EquipmentCategory]
 
 
+export const EquipmentAttackType = {
+  NONE: 'NONE',
+  MELEE: 'MELEE',
+  RANGED: 'RANGED',
+  THROWN: 'THROWN'
+} as const
+
+export type EquipmentAttackType = (typeof EquipmentAttackType)[keyof typeof EquipmentAttackType]
+
+
+export const EquipmentWeaponGroup = {
+  SIMPLE: 'SIMPLE',
+  MARTIAL: 'MARTIAL',
+  IMPROVISED: 'IMPROVISED',
+  NATURAL: 'NATURAL',
+  TECH: 'TECH',
+  RELIC: 'RELIC'
+} as const
+
+export type EquipmentWeaponGroup = (typeof EquipmentWeaponGroup)[keyof typeof EquipmentWeaponGroup]
+
+
 export const CampaignActorLocation = {
   TABLE: 'TABLE',
   LIBRARY: 'LIBRARY',

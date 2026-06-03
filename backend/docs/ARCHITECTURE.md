@@ -17,6 +17,9 @@ O projeto é inspirado em VTTs como Roll20 e Foundry VTT, mas segue uma identida
 - 🎲 Ficha pronta voltada para uso real na mesa
 - 🪟 Ficha pronta destacável em pop-out, conectada ao chat da mesa
 - 🪄 Regras de conjuração conectadas a progressão de classe
+- ⚔️ Ataques reais por equipamento conectados à ficha
+- ✨ Features reais exibidas por origem e nível
+- ⬆️ Level Up preview dentro da ficha pronta
 
 ---
 
@@ -295,6 +298,75 @@ Exemplo:
 
 ---
 
+## ⚔️ Arquitetura de equipamento/features/Level Up — 4.29
+
+
+A 4.29 consolidou a primeira camada de regras avançadas para uso real da ficha pronta em mesa.
+
+### Equipamentos e ataques reais
+
+- `Equipment` recebeu campos estruturados para ataque:
+  - `damageFormula`
+  - `damageType`
+  - `attackType`
+  - `attackAbilityKey`
+  - `alternativeAbilityKey`
+  - `weaponGroup`
+  - `normalRange`
+  - `longRange`
+  - `isFinesse`
+  - `isThrown`
+  - `isTwoHanded`
+  - `isVersatile`
+  - `versatileDamageFormula`
+  - `attackBonus`
+  - `damageBonus`
+- O seed de equipamentos ofensivos foi atualizado.
+- A ficha pronta calcula ataque real por equipamento usando atributo, proficiência temporária e bônus do item.
+- A aba Combate exibe os ataques equipados.
+- A aba Bolsa continua exibindo ataques/danos como inventário de uso rápido.
+- GM possui campo manual de CA do alvo na aba Combate.
+- Player não vê nem preenche a CA exata do alvo.
+- Comparação automática contra CA ainda não existe; por enquanto a CA aparece apenas como referência no texto da rolagem do GM.
+
+### Features reais
+
+- As rotas de ficha retornam `features` reais disponíveis para a ficha.
+- A aba Features exibe recursos/traços por origem:
+  - classe
+  - subclasse
+  - ancestralidade
+  - outras fontes futuras
+- Features são exibidas como texto mecânico/narrativo.
+- Aplicação automática de efeitos de features ainda é futura.
+
+### Subclasse por nível correto
+
+- `CharacterClass.subclassSelectionLevel` foi adicionado.
+- O seed define o nível de escolha de subclasse.
+- O backend valida que uma subclasse só pode ser escolhida no nível correto.
+- A subclasse precisa pertencer à classe escolhida.
+- A ficha mostra status de subclasse: indisponível, pendente ou escolhida.
+
+### Level Up preview
+
+- A aba Features recebeu botão Level Up.
+- O Level Up abre como modal dentro da ficha pronta/pop-out.
+- O modal ainda não salva alterações.
+- O backend envia `levelUpPreview` com:
+  - nível atual
+  - próximo nível
+  - progressão atual
+  - próxima progressão
+  - features novas do próximo nível
+  - status de subclasse
+- A decisão arquitetural ficou registrada: nível do personagem é diferente de nível de classe.
+- O Level Up real precisará futuramente permitir subir uma classe existente ou adicionar multiclasse.
+- Ancestralidade, antecedente, equipamentos iniciais e origem do personagem não são reprocessados no Level Up.
+
+
+---
+
 ## 🧍 Character Builder — Arquitetura atual
 
 Arquivos principais:
@@ -335,7 +407,7 @@ Status consolidado:
 
 ---
 
-## 🧾 Ready Character Sheet — Arquitetura atual após 4.28
+## 🧾 Ready Character Sheet — Arquitetura atual após 4.29
 
 Arquivos principais:
 
@@ -397,7 +469,7 @@ O pop-out é importante porque permite ao jogador/mestre manter a ficha aberta e
 - Cards compactos e expansíveis.
 - Ataque/Dano sempre visíveis quando aplicável.
 - Detalhes só aparecem sob demanda.
-- Ataque de equipamento ainda é provisório.
+- Ataque de equipamento usa bônus real calculado por atributo/proficiência temporária/bônus do item.
 
 ### Magia
 
@@ -442,7 +514,7 @@ Limitação atual:
 - Iniciativa do personagem: `1d20 + iniciativa real`.
 - Perícia: `1d20 + bônus da perícia`.
 - Teste de resistência: `1d20 + bônus do teste`.
-- Ataque de equipamento: ataque básico `1d20 + 0`.
+- Ataque de equipamento: `1d20 + bônus real do equipamento`.
 - Dano de equipamento: rola expressão de dano do equipamento.
 - Ataque mágico: `1d20 + ataque mágico real`, quando a classe possui atributo de conjuração.
 - Dano mágico: expressão detectada na descrição.
@@ -450,7 +522,7 @@ Limitação atual:
 
 Limitação atual intencional:
 
-> Ataques de equipamento ainda não têm bônus real e nenhum ataque compara com CA automaticamente. Bônus real de equipamento, alvo e comparação com CA foram movidos para a macro 4.29.
+> Ataques de equipamento já possuem bônus real. Comparação automática contra CA ainda é futura; na 4.29 o GM pode informar CA manual como referência no texto da rolagem.
 
 ---
 
@@ -527,7 +599,7 @@ Ajuste planejado após a ficha pop-out:
 - manter rolagens vindas da ficha claras e compactas.
 - evitar flood desnecessário.
 
-### Regras avançadas de equipamento/features/level up — 4.29
+### Multiclasse e Level Up real — 4.30
 
 Movidas para 4.29:
 
@@ -582,15 +654,30 @@ Movidas para 4.29:
 [x] 4.28.11 — Revisar responsividade da ficha pop-out
 [x] 4.28.12 — Teste regressivo da ficha pop-out
 [x] 4.28.13 — Atualizar documentação da 4.28
-[próximo] 4.28.14 — Revisar UX/UI do chat após ficha pop-out
-[pendente] 4.28.15 — Commit da 4.28
-[planejado] 4.29 — Regras avançadas de equipamento, features e level up
+[x] 4.28.14 — Revisar UX/UI do chat após ficha pop-out
+[x] 4.28.15 — Commit da 4.28
+[x] 4.29.1 — Revisar modelagem de ataques reais por equipamento
+[x] 4.29.2 — Adicionar/confirmar campos necessários em Equipment para ataque
+[x] 4.29.3 — Ajustar seed de equipamentos ofensivos
+[x] 4.29.4 — Calcular ataque real por equipamento na ficha
+[x] 4.29.5 — Exibir ataque real na aba Bolsa/Combate
+[x] 4.29.6 — Preparar ataque contra CA manual
+[x] 4.29.7 — Revisar modelagem de Feature por nível
+[x] 4.29.8 — Exibir Features reais na aba Features
+[x] 4.29.9 — Preparar subclasse no nível correto
+[x] 4.29.10 — Planejar fluxo de Level Up
+[x] 4.29.11 — Criar primeira versão do botão Level Up
+[x] 4.29.12 — Level Up mostra apenas pendências/mudanças do novo nível
+[x] 4.29.13 — Teste regressivo da 4.29
+[x] 4.29.14 — Atualizar documentação
+[próximo] 4.29.15 — Commit da 4.29
 [planejado] 4.30 — Multiclasse
+[planejado] 4.31 — Modularização e expansão do conteúdo base do sistema
 ```
 
 ---
 
-## ✅ Checklist antes do commit da 4.28
+## ✅ Checklist antes do commit da 4.29
 
 ```txt
 [ ] git status
@@ -598,5 +685,5 @@ Movidas para 4.29:
 [ ] cd frontend && pnpm lint && cd ..
 [ ] git add .
 [ ] git status
-[ ] git commit -m "feat: refactor ready sheet popout"
+[ ] git commit -m "feat: add advanced equipment features and level up preview"
 ```

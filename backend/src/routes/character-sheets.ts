@@ -439,6 +439,247 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ]);
   }
 
+  type CharacterSheetFeatureSource = {
+    systemId: string;
+    ancestryId: string | null;
+    classId: string | null;
+    subclassId: string | null;
+    level: number;
+  };
+
+  async function getAvailableFeaturesForCharacterSheet(
+    characterSheet: CharacterSheetFeatureSource,
+  ) {
+    const featureConditions = [];
+
+    if (characterSheet.ancestryId) {
+      featureConditions.push({
+        ancestryId: characterSheet.ancestryId,
+      });
+    }
+
+    if (characterSheet.classId) {
+      featureConditions.push({
+        classId: characterSheet.classId,
+        subclassId: null,
+        level: {
+          lte: characterSheet.level,
+        },
+      });
+    }
+
+    if (characterSheet.subclassId) {
+      featureConditions.push({
+        subclassId: characterSheet.subclassId,
+        level: {
+          lte: characterSheet.level,
+        },
+      });
+    }
+
+    if (featureConditions.length === 0) {
+      return [];
+    }
+
+    return prisma.feature.findMany({
+      where: {
+        systemId: characterSheet.systemId,
+        OR: featureConditions,
+      },
+      select: {
+        id: true,
+        key: true,
+        name: true,
+        description: true,
+        sourceType: true,
+        level: true,
+        order: true,
+        ancestryId: true,
+        classId: true,
+        subclassId: true,
+        levelProgressionId: true,
+      },
+      orderBy: [
+        {
+          sourceType: "asc",
+        },
+        {
+          level: "asc",
+        },
+        {
+          order: "asc",
+        },
+        {
+          name: "asc",
+        },
+      ],
+    });
+  }
+
+    async function getFeaturesUnlockedAtLevel(
+    characterSheet: CharacterSheetFeatureSource,
+    targetLevel: number,
+  ) {
+    const featureConditions = [];
+
+    if (characterSheet.classId) {
+      featureConditions.push({
+        classId: characterSheet.classId,
+        subclassId: null,
+        level: targetLevel,
+      });
+    }
+
+    if (characterSheet.subclassId) {
+      featureConditions.push({
+        subclassId: characterSheet.subclassId,
+        level: targetLevel,
+      });
+    }
+
+    if (featureConditions.length === 0) {
+      return [];
+    }
+
+    return prisma.feature.findMany({
+      where: {
+        systemId: characterSheet.systemId,
+        OR: featureConditions,
+      },
+      select: {
+        id: true,
+        key: true,
+        name: true,
+        description: true,
+        sourceType: true,
+        level: true,
+        order: true,
+        ancestryId: true,
+        classId: true,
+        subclassId: true,
+        levelProgressionId: true,
+      },
+      orderBy: [
+        {
+          sourceType: "asc",
+        },
+        {
+          order: "asc",
+        },
+        {
+          name: "asc",
+        },
+      ],
+    });
+  }
+
+    async function getLevelUpPreviewForCharacterSheet(
+    characterSheet: CharacterSheetFeatureSource & {
+      characterClass: {
+        levelProgressions: Array<{
+          level: number;
+          proficiencyBonus: number | null;
+          cantripsKnown: number;
+          spellsKnown: number;
+          spellsPrepared: number;
+          spellSlotsLevel1: number;
+          spellSlotsLevel2: number;
+          spellSlotsLevel3: number;
+          spellSlotsLevel4: number;
+          spellSlotsLevel5: number;
+          spellSlotsLevel6: number;
+          spellSlotsLevel7: number;
+          spellSlotsLevel8: number;
+          spellSlotsLevel9: number;
+        }>;
+        subclassSelectionLevel: number | null;
+      } | null;
+      subclass: {
+        id: string;
+        name: string;
+      } | null;
+    },
+  ) {
+    const currentLevel = characterSheet.level;
+    const nextLevel = currentLevel + 1;
+
+    const currentProgression =
+      characterSheet.characterClass?.levelProgressions.find(
+        (progression) => progression.level === currentLevel,
+      ) ?? null;
+
+    const nextProgression =
+      characterSheet.characterClass?.levelProgressions.find(
+        (progression) => progression.level === nextLevel,
+      ) ?? null;
+
+    const newFeatures = await getFeaturesUnlockedAtLevel(
+      characterSheet,
+      nextLevel,
+    );
+
+    const subclassSelectionLevel =
+      characterSheet.characterClass?.subclassSelectionLevel ?? null;
+
+    const isSubclassChoiceAvailable =
+      typeof subclassSelectionLevel === "number" &&
+      nextLevel >= subclassSelectionLevel;
+
+    const isSubclassChoicePending =
+      isSubclassChoiceAvailable && !characterSheet.subclass;
+
+    return {
+      currentLevel,
+      nextLevel,
+      currentProgression,
+      nextProgression,
+      newFeatures,
+      subclass: characterSheet.subclass,
+      subclassSelectionLevel,
+      isSubclassChoiceAvailable,
+      isSubclassChoicePending,
+      canPreviewNextLevel: Boolean(nextProgression),
+    };
+  }
+
+  async function withAvailableFeatures<
+    T extends CharacterSheetFeatureSource & {
+      characterClass: {
+        levelProgressions: Array<{
+          level: number;
+          proficiencyBonus: number | null;
+          cantripsKnown: number;
+          spellsKnown: number;
+          spellsPrepared: number;
+          spellSlotsLevel1: number;
+          spellSlotsLevel2: number;
+          spellSlotsLevel3: number;
+          spellSlotsLevel4: number;
+          spellSlotsLevel5: number;
+          spellSlotsLevel6: number;
+          spellSlotsLevel7: number;
+          spellSlotsLevel8: number;
+          spellSlotsLevel9: number;
+        }>;
+        subclassSelectionLevel: number | null;
+      } | null;
+      subclass: {
+        id: string;
+        name: string;
+      } | null;
+    },
+  >(characterSheet: T) {
+    const features = await getAvailableFeaturesForCharacterSheet(characterSheet);
+    const levelUpPreview =
+      await getLevelUpPreviewForCharacterSheet(characterSheet);
+
+    return {
+      ...characterSheet,
+      features,
+      levelUpPreview,
+    };
+  }
+  
   const characterSheetInclude = {
     campaignActor: true,
     system: true,
@@ -537,7 +778,15 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         },
       });
 
-      return reply.status(200).send({ characterSheets });
+      const characterSheetsWithFeatures = await Promise.all(
+        characterSheets.map((characterSheet) =>
+          withAvailableFeatures(characterSheet),
+        ),
+      );
+
+      return reply.status(200).send({
+        characterSheets: characterSheetsWithFeatures,
+      });
     },
   );
 
@@ -603,7 +852,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      return reply.status(200).send({ characterSheet });
+      const characterSheetWithFeatures =
+        await withAvailableFeatures(characterSheet);
+
+      return reply.status(200).send({
+        characterSheet: characterSheetWithFeatures,
+      });
     },
   );
 
@@ -969,8 +1223,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           include: characterSheetInclude,
         });
 
+      const characterSheetWithFeatures = await withAvailableFeatures(
+        characterSheetWithRelations,
+      );
+
       return reply.status(201).send({
-        characterSheet: characterSheetWithRelations,
+        characterSheet: characterSheetWithFeatures,
       });
     },
   );
@@ -1175,16 +1433,48 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       if (sheetData.subclassId) {
+        const selectedClassId = sheetData.classId ?? characterSheet.classId;
+        const selectedLevel = sheetData.level ?? characterSheet.level;
+
+        if (!selectedClassId) {
+          return reply.status(400).send({
+            message: "Choose a class before choosing a subclass",
+          });
+        }
+
+        const characterClass = await prisma.characterClass.findFirst({
+          where: {
+            id: selectedClassId,
+            systemId: characterSheet.systemId,
+          },
+        });
+
+        if (!characterClass) {
+          return reply.status(404).send({
+            message: "Character class not found for this system",
+          });
+        }
+
+        const subclassSelectionLevel =
+          characterClass.subclassSelectionLevel ?? 1;
+
+        if (selectedLevel < subclassSelectionLevel) {
+          return reply.status(400).send({
+            message: `Subclass can only be chosen at level ${subclassSelectionLevel}`,
+          });
+        }
+
         const subclass = await prisma.characterSubclass.findFirst({
           where: {
             id: sheetData.subclassId,
             systemId: characterSheet.systemId,
+            classId: selectedClassId,
           },
         });
 
         if (!subclass) {
           return reply.status(404).send({
-            message: "Subclass not found for this system",
+            message: "Subclass not found for this class and system",
           });
         }
       }
@@ -1362,8 +1652,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           include: characterSheetInclude,
         });
 
+      const updatedCharacterSheetWithFeatures = await withAvailableFeatures(
+        updatedCharacterSheet,
+      );
+
       return reply.status(200).send({
-        characterSheet: updatedCharacterSheet,
+        characterSheet: updatedCharacterSheetWithFeatures,
       });
     },
   );
@@ -1578,8 +1872,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       });
 
+            const finalizedCharacterSheetWithFeatures = await withAvailableFeatures(
+        finalizedCharacterSheet,
+      );
+
       return reply.status(200).send({
-        characterSheet: finalizedCharacterSheet,
+        characterSheet: finalizedCharacterSheetWithFeatures,
       });
     },
   );

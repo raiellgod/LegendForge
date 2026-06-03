@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-ready%20sheet%20popout%20complete-green)
+![Status](https://img.shields.io/badge/status-equipment%20features%20levelup%20preview-green)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -28,6 +28,9 @@ Inspired by tools like Roll20 and Foundry VTT, but with its own philosophy:
 - 🧍 Ready character sheet available both as a modal and a pop-out window
 - 🎲 Sheet-based roll actions connected to the table chat
 - ✨ Spellcasting progression connected to class rules
+- ⚔️ Real equipment attacks in the ready sheet
+- 🧩 Real feature display by class, subclass and ancestry
+- ⬆️ Level Up preview prepared for future multiclass
 
 ---
 
@@ -47,6 +50,9 @@ LegendForge demonstrates:
 - 🪟 Character sheet pop-out linked to the table
 - 🎲 Table roll actions from skills, saving throws, initiative, equipment and spells
 - 🪄 Spellcasting progression by class, spell filtering, spell limits, spell DC, spell attack and spell slots
+- ⚔️ Equipment attacks calculated from item data and character stats
+- ✨ Ready sheet features connected to backend rules
+- ⬆️ Level Up preview designed to avoid confusing character level with class level
 - 🧩 Incremental VTT features with persistence where it matters
 
 ---
@@ -130,8 +136,8 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟢 Ready sheet structural refactor completed and tested.  
-> 🟡 Next focus: chat UX/UI cleanup after the pop-out sheet work.
+> 🟢 Advanced equipment, features and Level Up preview completed and tested.  
+> 🟡 Next focus: commit 4.29, then start multiclass planning.
 
 ### ✅ Completed
 
@@ -233,7 +239,7 @@ LegendForge/
   - GM table initiative ranking
   - player characters use real initiative bonus
   - NPCs/creatures use `+0` until their own sheets exist
-  - equipment attack basic button
+  - equipment attack with real calculated bonus
   - equipment damage button
   - spell attack with real spell attack bonus for spellcasting classes
   - spell damage detection from description
@@ -249,6 +255,14 @@ LegendForge/
   - spell attack bonus calculation
   - spell slot display in ready sheet
   - expanded minimum spell seed for testing
+- Advanced equipment/features/Level Up rules:
+  - structured equipment attack fields
+  - offensive equipment seed updated
+  - real equipment attack bonus in ready sheet
+  - GM-only manual target AC reference
+  - real features displayed in Features tab
+  - subclass selection level configured by class
+  - Level Up preview modal inside ready sheet/pop-out
 - Player creation access:
   - player common user sees `+ Personagem`
   - player opens character builder directly
@@ -259,7 +273,7 @@ LegendForge/
 ## 🚧 In Progress
 
 ```txt
-4.28.13 — Documentation update after ready sheet structural refactor
+4.29.15 — Commit da 4.29
 ```
 
 ---
@@ -267,7 +281,14 @@ LegendForge/
 ## 🔜 Next Step
 
 ```txt
-4.28.14 — Revisar UX/UI do chat após ficha pop-out
+4.29.15 — Commit da 4.29
+```
+
+Then:
+
+```txt
+4.30 — Multiclasse
+4.31 — Modularização e expansão do conteúdo base do sistema
 ```
 
 Then:

@@ -29,12 +29,20 @@ export type AggregateEquipment = {
 export type EquipmentAvgAggregateOutputType = {
   weight: number | null
   defense: number | null
+  normalRange: number | null
+  longRange: number | null
+  attackBonus: number | null
+  damageBonus: number | null
   order: number | null
 }
 
 export type EquipmentSumAggregateOutputType = {
   weight: number | null
   defense: number | null
+  normalRange: number | null
+  longRange: number | null
+  attackBonus: number | null
+  damageBonus: number | null
   order: number | null
 }
 
@@ -48,8 +56,23 @@ export type EquipmentMinAggregateOutputType = {
   cost: string | null
   weight: number | null
   damage: string | null
+  damageFormula: string | null
+  damageType: string | null
   defense: number | null
   properties: string | null
+  attackType: $Enums.EquipmentAttackType | null
+  attackAbilityKey: string | null
+  alternativeAbilityKey: string | null
+  weaponGroup: $Enums.EquipmentWeaponGroup | null
+  normalRange: number | null
+  longRange: number | null
+  isFinesse: boolean | null
+  isThrown: boolean | null
+  isTwoHanded: boolean | null
+  isVersatile: boolean | null
+  versatileDamageFormula: string | null
+  attackBonus: number | null
+  damageBonus: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,8 +88,23 @@ export type EquipmentMaxAggregateOutputType = {
   cost: string | null
   weight: number | null
   damage: string | null
+  damageFormula: string | null
+  damageType: string | null
   defense: number | null
   properties: string | null
+  attackType: $Enums.EquipmentAttackType | null
+  attackAbilityKey: string | null
+  alternativeAbilityKey: string | null
+  weaponGroup: $Enums.EquipmentWeaponGroup | null
+  normalRange: number | null
+  longRange: number | null
+  isFinesse: boolean | null
+  isThrown: boolean | null
+  isTwoHanded: boolean | null
+  isVersatile: boolean | null
+  versatileDamageFormula: string | null
+  attackBonus: number | null
+  damageBonus: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -82,8 +120,23 @@ export type EquipmentCountAggregateOutputType = {
   cost: number
   weight: number
   damage: number
+  damageFormula: number
+  damageType: number
   defense: number
   properties: number
+  attackType: number
+  attackAbilityKey: number
+  alternativeAbilityKey: number
+  weaponGroup: number
+  normalRange: number
+  longRange: number
+  isFinesse: number
+  isThrown: number
+  isTwoHanded: number
+  isVersatile: number
+  versatileDamageFormula: number
+  attackBonus: number
+  damageBonus: number
   order: number
   createdAt: number
   updatedAt: number
@@ -94,12 +147,20 @@ export type EquipmentCountAggregateOutputType = {
 export type EquipmentAvgAggregateInputType = {
   weight?: true
   defense?: true
+  normalRange?: true
+  longRange?: true
+  attackBonus?: true
+  damageBonus?: true
   order?: true
 }
 
 export type EquipmentSumAggregateInputType = {
   weight?: true
   defense?: true
+  normalRange?: true
+  longRange?: true
+  attackBonus?: true
+  damageBonus?: true
   order?: true
 }
 
@@ -113,8 +174,23 @@ export type EquipmentMinAggregateInputType = {
   cost?: true
   weight?: true
   damage?: true
+  damageFormula?: true
+  damageType?: true
   defense?: true
   properties?: true
+  attackType?: true
+  attackAbilityKey?: true
+  alternativeAbilityKey?: true
+  weaponGroup?: true
+  normalRange?: true
+  longRange?: true
+  isFinesse?: true
+  isThrown?: true
+  isTwoHanded?: true
+  isVersatile?: true
+  versatileDamageFormula?: true
+  attackBonus?: true
+  damageBonus?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -130,8 +206,23 @@ export type EquipmentMaxAggregateInputType = {
   cost?: true
   weight?: true
   damage?: true
+  damageFormula?: true
+  damageType?: true
   defense?: true
   properties?: true
+  attackType?: true
+  attackAbilityKey?: true
+  alternativeAbilityKey?: true
+  weaponGroup?: true
+  normalRange?: true
+  longRange?: true
+  isFinesse?: true
+  isThrown?: true
+  isTwoHanded?: true
+  isVersatile?: true
+  versatileDamageFormula?: true
+  attackBonus?: true
+  damageBonus?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -147,8 +238,23 @@ export type EquipmentCountAggregateInputType = {
   cost?: true
   weight?: true
   damage?: true
+  damageFormula?: true
+  damageType?: true
   defense?: true
   properties?: true
+  attackType?: true
+  attackAbilityKey?: true
+  alternativeAbilityKey?: true
+  weaponGroup?: true
+  normalRange?: true
+  longRange?: true
+  isFinesse?: true
+  isThrown?: true
+  isTwoHanded?: true
+  isVersatile?: true
+  versatileDamageFormula?: true
+  attackBonus?: true
+  damageBonus?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -251,8 +357,23 @@ export type EquipmentGroupByOutputType = {
   cost: string | null
   weight: number | null
   damage: string | null
+  damageFormula: string | null
+  damageType: string | null
   defense: number | null
   properties: string | null
+  attackType: $Enums.EquipmentAttackType
+  attackAbilityKey: string | null
+  alternativeAbilityKey: string | null
+  weaponGroup: $Enums.EquipmentWeaponGroup | null
+  normalRange: number | null
+  longRange: number | null
+  isFinesse: boolean
+  isThrown: boolean
+  isTwoHanded: boolean
+  isVersatile: boolean
+  versatileDamageFormula: string | null
+  attackBonus: number
+  damageBonus: number
   order: number
   createdAt: Date
   updatedAt: Date
@@ -291,8 +412,23 @@ export type EquipmentWhereInput = {
   cost?: Prisma.StringNullableFilter<"Equipment"> | string | null
   weight?: Prisma.FloatNullableFilter<"Equipment"> | number | null
   damage?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  damageFormula?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  damageType?: Prisma.StringNullableFilter<"Equipment"> | string | null
   defense?: Prisma.IntNullableFilter<"Equipment"> | number | null
   properties?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFilter<"Equipment"> | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  alternativeAbilityKey?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  weaponGroup?: Prisma.EnumEquipmentWeaponGroupNullableFilter<"Equipment"> | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.IntNullableFilter<"Equipment"> | number | null
+  longRange?: Prisma.IntNullableFilter<"Equipment"> | number | null
+  isFinesse?: Prisma.BoolFilter<"Equipment"> | boolean
+  isThrown?: Prisma.BoolFilter<"Equipment"> | boolean
+  isTwoHanded?: Prisma.BoolFilter<"Equipment"> | boolean
+  isVersatile?: Prisma.BoolFilter<"Equipment"> | boolean
+  versatileDamageFormula?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  attackBonus?: Prisma.IntFilter<"Equipment"> | number
+  damageBonus?: Prisma.IntFilter<"Equipment"> | number
   order?: Prisma.IntFilter<"Equipment"> | number
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
@@ -310,8 +446,23 @@ export type EquipmentOrderByWithRelationInput = {
   cost?: Prisma.SortOrderInput | Prisma.SortOrder
   weight?: Prisma.SortOrderInput | Prisma.SortOrder
   damage?: Prisma.SortOrderInput | Prisma.SortOrder
+  damageFormula?: Prisma.SortOrderInput | Prisma.SortOrder
+  damageType?: Prisma.SortOrderInput | Prisma.SortOrder
   defense?: Prisma.SortOrderInput | Prisma.SortOrder
   properties?: Prisma.SortOrderInput | Prisma.SortOrder
+  attackType?: Prisma.SortOrder
+  attackAbilityKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  alternativeAbilityKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  weaponGroup?: Prisma.SortOrderInput | Prisma.SortOrder
+  normalRange?: Prisma.SortOrderInput | Prisma.SortOrder
+  longRange?: Prisma.SortOrderInput | Prisma.SortOrder
+  isFinesse?: Prisma.SortOrder
+  isThrown?: Prisma.SortOrder
+  isTwoHanded?: Prisma.SortOrder
+  isVersatile?: Prisma.SortOrder
+  versatileDamageFormula?: Prisma.SortOrderInput | Prisma.SortOrder
+  attackBonus?: Prisma.SortOrder
+  damageBonus?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -334,8 +485,23 @@ export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
   cost?: Prisma.StringNullableFilter<"Equipment"> | string | null
   weight?: Prisma.FloatNullableFilter<"Equipment"> | number | null
   damage?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  damageFormula?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  damageType?: Prisma.StringNullableFilter<"Equipment"> | string | null
   defense?: Prisma.IntNullableFilter<"Equipment"> | number | null
   properties?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFilter<"Equipment"> | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  alternativeAbilityKey?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  weaponGroup?: Prisma.EnumEquipmentWeaponGroupNullableFilter<"Equipment"> | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.IntNullableFilter<"Equipment"> | number | null
+  longRange?: Prisma.IntNullableFilter<"Equipment"> | number | null
+  isFinesse?: Prisma.BoolFilter<"Equipment"> | boolean
+  isThrown?: Prisma.BoolFilter<"Equipment"> | boolean
+  isTwoHanded?: Prisma.BoolFilter<"Equipment"> | boolean
+  isVersatile?: Prisma.BoolFilter<"Equipment"> | boolean
+  versatileDamageFormula?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  attackBonus?: Prisma.IntFilter<"Equipment"> | number
+  damageBonus?: Prisma.IntFilter<"Equipment"> | number
   order?: Prisma.IntFilter<"Equipment"> | number
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
@@ -353,8 +519,23 @@ export type EquipmentOrderByWithAggregationInput = {
   cost?: Prisma.SortOrderInput | Prisma.SortOrder
   weight?: Prisma.SortOrderInput | Prisma.SortOrder
   damage?: Prisma.SortOrderInput | Prisma.SortOrder
+  damageFormula?: Prisma.SortOrderInput | Prisma.SortOrder
+  damageType?: Prisma.SortOrderInput | Prisma.SortOrder
   defense?: Prisma.SortOrderInput | Prisma.SortOrder
   properties?: Prisma.SortOrderInput | Prisma.SortOrder
+  attackType?: Prisma.SortOrder
+  attackAbilityKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  alternativeAbilityKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  weaponGroup?: Prisma.SortOrderInput | Prisma.SortOrder
+  normalRange?: Prisma.SortOrderInput | Prisma.SortOrder
+  longRange?: Prisma.SortOrderInput | Prisma.SortOrder
+  isFinesse?: Prisma.SortOrder
+  isThrown?: Prisma.SortOrder
+  isTwoHanded?: Prisma.SortOrder
+  isVersatile?: Prisma.SortOrder
+  versatileDamageFormula?: Prisma.SortOrderInput | Prisma.SortOrder
+  attackBonus?: Prisma.SortOrder
+  damageBonus?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -378,8 +559,23 @@ export type EquipmentScalarWhereWithAggregatesInput = {
   cost?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
   weight?: Prisma.FloatNullableWithAggregatesFilter<"Equipment"> | number | null
   damage?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  damageFormula?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  damageType?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
   defense?: Prisma.IntNullableWithAggregatesFilter<"Equipment"> | number | null
   properties?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeWithAggregatesFilter<"Equipment"> | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  alternativeAbilityKey?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  weaponGroup?: Prisma.EnumEquipmentWeaponGroupNullableWithAggregatesFilter<"Equipment"> | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.IntNullableWithAggregatesFilter<"Equipment"> | number | null
+  longRange?: Prisma.IntNullableWithAggregatesFilter<"Equipment"> | number | null
+  isFinesse?: Prisma.BoolWithAggregatesFilter<"Equipment"> | boolean
+  isThrown?: Prisma.BoolWithAggregatesFilter<"Equipment"> | boolean
+  isTwoHanded?: Prisma.BoolWithAggregatesFilter<"Equipment"> | boolean
+  isVersatile?: Prisma.BoolWithAggregatesFilter<"Equipment"> | boolean
+  versatileDamageFormula?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  attackBonus?: Prisma.IntWithAggregatesFilter<"Equipment"> | number
+  damageBonus?: Prisma.IntWithAggregatesFilter<"Equipment"> | number
   order?: Prisma.IntWithAggregatesFilter<"Equipment"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Equipment"> | Date | string
@@ -394,8 +590,23 @@ export type EquipmentCreateInput = {
   cost?: string | null
   weight?: number | null
   damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
   defense?: number | null
   properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -413,8 +624,23 @@ export type EquipmentUncheckedCreateInput = {
   cost?: string | null
   weight?: number | null
   damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
   defense?: number | null
   properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -430,8 +656,23 @@ export type EquipmentUpdateInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -449,8 +690,23 @@ export type EquipmentUncheckedUpdateInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -467,8 +723,23 @@ export type EquipmentCreateManyInput = {
   cost?: string | null
   weight?: number | null
   damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
   defense?: number | null
   properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -483,8 +754,23 @@ export type EquipmentUpdateManyMutationInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -500,8 +786,23 @@ export type EquipmentUncheckedUpdateManyInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -542,8 +843,23 @@ export type EquipmentCountOrderByAggregateInput = {
   cost?: Prisma.SortOrder
   weight?: Prisma.SortOrder
   damage?: Prisma.SortOrder
+  damageFormula?: Prisma.SortOrder
+  damageType?: Prisma.SortOrder
   defense?: Prisma.SortOrder
   properties?: Prisma.SortOrder
+  attackType?: Prisma.SortOrder
+  attackAbilityKey?: Prisma.SortOrder
+  alternativeAbilityKey?: Prisma.SortOrder
+  weaponGroup?: Prisma.SortOrder
+  normalRange?: Prisma.SortOrder
+  longRange?: Prisma.SortOrder
+  isFinesse?: Prisma.SortOrder
+  isThrown?: Prisma.SortOrder
+  isTwoHanded?: Prisma.SortOrder
+  isVersatile?: Prisma.SortOrder
+  versatileDamageFormula?: Prisma.SortOrder
+  attackBonus?: Prisma.SortOrder
+  damageBonus?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -552,6 +868,10 @@ export type EquipmentCountOrderByAggregateInput = {
 export type EquipmentAvgOrderByAggregateInput = {
   weight?: Prisma.SortOrder
   defense?: Prisma.SortOrder
+  normalRange?: Prisma.SortOrder
+  longRange?: Prisma.SortOrder
+  attackBonus?: Prisma.SortOrder
+  damageBonus?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -565,8 +885,23 @@ export type EquipmentMaxOrderByAggregateInput = {
   cost?: Prisma.SortOrder
   weight?: Prisma.SortOrder
   damage?: Prisma.SortOrder
+  damageFormula?: Prisma.SortOrder
+  damageType?: Prisma.SortOrder
   defense?: Prisma.SortOrder
   properties?: Prisma.SortOrder
+  attackType?: Prisma.SortOrder
+  attackAbilityKey?: Prisma.SortOrder
+  alternativeAbilityKey?: Prisma.SortOrder
+  weaponGroup?: Prisma.SortOrder
+  normalRange?: Prisma.SortOrder
+  longRange?: Prisma.SortOrder
+  isFinesse?: Prisma.SortOrder
+  isThrown?: Prisma.SortOrder
+  isTwoHanded?: Prisma.SortOrder
+  isVersatile?: Prisma.SortOrder
+  versatileDamageFormula?: Prisma.SortOrder
+  attackBonus?: Prisma.SortOrder
+  damageBonus?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -582,8 +917,23 @@ export type EquipmentMinOrderByAggregateInput = {
   cost?: Prisma.SortOrder
   weight?: Prisma.SortOrder
   damage?: Prisma.SortOrder
+  damageFormula?: Prisma.SortOrder
+  damageType?: Prisma.SortOrder
   defense?: Prisma.SortOrder
   properties?: Prisma.SortOrder
+  attackType?: Prisma.SortOrder
+  attackAbilityKey?: Prisma.SortOrder
+  alternativeAbilityKey?: Prisma.SortOrder
+  weaponGroup?: Prisma.SortOrder
+  normalRange?: Prisma.SortOrder
+  longRange?: Prisma.SortOrder
+  isFinesse?: Prisma.SortOrder
+  isThrown?: Prisma.SortOrder
+  isTwoHanded?: Prisma.SortOrder
+  isVersatile?: Prisma.SortOrder
+  versatileDamageFormula?: Prisma.SortOrder
+  attackBonus?: Prisma.SortOrder
+  damageBonus?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -592,6 +942,10 @@ export type EquipmentMinOrderByAggregateInput = {
 export type EquipmentSumOrderByAggregateInput = {
   weight?: Prisma.SortOrder
   defense?: Prisma.SortOrder
+  normalRange?: Prisma.SortOrder
+  longRange?: Prisma.SortOrder
+  attackBonus?: Prisma.SortOrder
+  damageBonus?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -663,6 +1017,14 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type EnumEquipmentAttackTypeFieldUpdateOperationsInput = {
+  set?: $Enums.EquipmentAttackType
+}
+
+export type NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput = {
+  set?: $Enums.EquipmentWeaponGroup | null
+}
+
 export type EquipmentCreateWithoutSystemInput = {
   id?: string
   name: string
@@ -672,8 +1034,23 @@ export type EquipmentCreateWithoutSystemInput = {
   cost?: string | null
   weight?: number | null
   damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
   defense?: number | null
   properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -689,8 +1066,23 @@ export type EquipmentUncheckedCreateWithoutSystemInput = {
   cost?: string | null
   weight?: number | null
   damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
   defense?: number | null
   properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -736,8 +1128,23 @@ export type EquipmentScalarWhereInput = {
   cost?: Prisma.StringNullableFilter<"Equipment"> | string | null
   weight?: Prisma.FloatNullableFilter<"Equipment"> | number | null
   damage?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  damageFormula?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  damageType?: Prisma.StringNullableFilter<"Equipment"> | string | null
   defense?: Prisma.IntNullableFilter<"Equipment"> | number | null
   properties?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFilter<"Equipment"> | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  alternativeAbilityKey?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  weaponGroup?: Prisma.EnumEquipmentWeaponGroupNullableFilter<"Equipment"> | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.IntNullableFilter<"Equipment"> | number | null
+  longRange?: Prisma.IntNullableFilter<"Equipment"> | number | null
+  isFinesse?: Prisma.BoolFilter<"Equipment"> | boolean
+  isThrown?: Prisma.BoolFilter<"Equipment"> | boolean
+  isTwoHanded?: Prisma.BoolFilter<"Equipment"> | boolean
+  isVersatile?: Prisma.BoolFilter<"Equipment"> | boolean
+  versatileDamageFormula?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  attackBonus?: Prisma.IntFilter<"Equipment"> | number
+  damageBonus?: Prisma.IntFilter<"Equipment"> | number
   order?: Prisma.IntFilter<"Equipment"> | number
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
@@ -752,8 +1159,23 @@ export type EquipmentCreateWithoutCharacterEquipmentInput = {
   cost?: string | null
   weight?: number | null
   damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
   defense?: number | null
   properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -770,8 +1192,23 @@ export type EquipmentUncheckedCreateWithoutCharacterEquipmentInput = {
   cost?: string | null
   weight?: number | null
   damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
   defense?: number | null
   properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -802,8 +1239,23 @@ export type EquipmentUpdateWithoutCharacterEquipmentInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -820,8 +1272,23 @@ export type EquipmentUncheckedUpdateWithoutCharacterEquipmentInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -836,8 +1303,23 @@ export type EquipmentCreateManySystemInput = {
   cost?: string | null
   weight?: number | null
   damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
   defense?: number | null
   properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -852,8 +1334,23 @@ export type EquipmentUpdateWithoutSystemInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -869,8 +1366,23 @@ export type EquipmentUncheckedUpdateWithoutSystemInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -886,8 +1398,23 @@ export type EquipmentUncheckedUpdateManyWithoutSystemInput = {
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -934,8 +1461,23 @@ export type EquipmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   cost?: boolean
   weight?: boolean
   damage?: boolean
+  damageFormula?: boolean
+  damageType?: boolean
   defense?: boolean
   properties?: boolean
+  attackType?: boolean
+  attackAbilityKey?: boolean
+  alternativeAbilityKey?: boolean
+  weaponGroup?: boolean
+  normalRange?: boolean
+  longRange?: boolean
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: boolean
+  attackBonus?: boolean
+  damageBonus?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -954,8 +1496,23 @@ export type EquipmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   cost?: boolean
   weight?: boolean
   damage?: boolean
+  damageFormula?: boolean
+  damageType?: boolean
   defense?: boolean
   properties?: boolean
+  attackType?: boolean
+  attackAbilityKey?: boolean
+  alternativeAbilityKey?: boolean
+  weaponGroup?: boolean
+  normalRange?: boolean
+  longRange?: boolean
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: boolean
+  attackBonus?: boolean
+  damageBonus?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -972,8 +1529,23 @@ export type EquipmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   cost?: boolean
   weight?: boolean
   damage?: boolean
+  damageFormula?: boolean
+  damageType?: boolean
   defense?: boolean
   properties?: boolean
+  attackType?: boolean
+  attackAbilityKey?: boolean
+  alternativeAbilityKey?: boolean
+  weaponGroup?: boolean
+  normalRange?: boolean
+  longRange?: boolean
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: boolean
+  attackBonus?: boolean
+  damageBonus?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -990,14 +1562,29 @@ export type EquipmentSelectScalar = {
   cost?: boolean
   weight?: boolean
   damage?: boolean
+  damageFormula?: boolean
+  damageType?: boolean
   defense?: boolean
   properties?: boolean
+  attackType?: boolean
+  attackAbilityKey?: boolean
+  alternativeAbilityKey?: boolean
+  weaponGroup?: boolean
+  normalRange?: boolean
+  longRange?: boolean
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: boolean
+  attackBonus?: boolean
+  damageBonus?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "category" | "description" | "cost" | "weight" | "damage" | "defense" | "properties" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["equipment"]>
+export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "category" | "description" | "cost" | "weight" | "damage" | "damageFormula" | "damageType" | "defense" | "properties" | "attackType" | "attackAbilityKey" | "alternativeAbilityKey" | "weaponGroup" | "normalRange" | "longRange" | "isFinesse" | "isThrown" | "isTwoHanded" | "isVersatile" | "versatileDamageFormula" | "attackBonus" | "damageBonus" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["equipment"]>
 export type EquipmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterEquipment?: boolean | Prisma.Equipment$characterEquipmentArgs<ExtArgs>
@@ -1026,8 +1613,23 @@ export type $EquipmentPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     cost: string | null
     weight: number | null
     damage: string | null
+    damageFormula: string | null
+    damageType: string | null
     defense: number | null
     properties: string | null
+    attackType: $Enums.EquipmentAttackType
+    attackAbilityKey: string | null
+    alternativeAbilityKey: string | null
+    weaponGroup: $Enums.EquipmentWeaponGroup | null
+    normalRange: number | null
+    longRange: number | null
+    isFinesse: boolean
+    isThrown: boolean
+    isTwoHanded: boolean
+    isVersatile: boolean
+    versatileDamageFormula: string | null
+    attackBonus: number
+    damageBonus: number
     order: number
     createdAt: Date
     updatedAt: Date
@@ -1465,8 +2067,23 @@ export interface EquipmentFieldRefs {
   readonly cost: Prisma.FieldRef<"Equipment", 'String'>
   readonly weight: Prisma.FieldRef<"Equipment", 'Float'>
   readonly damage: Prisma.FieldRef<"Equipment", 'String'>
+  readonly damageFormula: Prisma.FieldRef<"Equipment", 'String'>
+  readonly damageType: Prisma.FieldRef<"Equipment", 'String'>
   readonly defense: Prisma.FieldRef<"Equipment", 'Int'>
   readonly properties: Prisma.FieldRef<"Equipment", 'String'>
+  readonly attackType: Prisma.FieldRef<"Equipment", 'EquipmentAttackType'>
+  readonly attackAbilityKey: Prisma.FieldRef<"Equipment", 'String'>
+  readonly alternativeAbilityKey: Prisma.FieldRef<"Equipment", 'String'>
+  readonly weaponGroup: Prisma.FieldRef<"Equipment", 'EquipmentWeaponGroup'>
+  readonly normalRange: Prisma.FieldRef<"Equipment", 'Int'>
+  readonly longRange: Prisma.FieldRef<"Equipment", 'Int'>
+  readonly isFinesse: Prisma.FieldRef<"Equipment", 'Boolean'>
+  readonly isThrown: Prisma.FieldRef<"Equipment", 'Boolean'>
+  readonly isTwoHanded: Prisma.FieldRef<"Equipment", 'Boolean'>
+  readonly isVersatile: Prisma.FieldRef<"Equipment", 'Boolean'>
+  readonly versatileDamageFormula: Prisma.FieldRef<"Equipment", 'String'>
+  readonly attackBonus: Prisma.FieldRef<"Equipment", 'Int'>
+  readonly damageBonus: Prisma.FieldRef<"Equipment", 'Int'>
   readonly order: Prisma.FieldRef<"Equipment", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Equipment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Equipment", 'DateTime'>

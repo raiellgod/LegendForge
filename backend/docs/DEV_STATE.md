@@ -157,11 +157,15 @@ LegendForge/
 - limites de truques/magias por nível funcionam no frontend
 - CD e ataque mágico real funcionam na ficha pronta
 - slots de magia aparecem na aba Magia
+- ataques reais por equipamento funcionam na ficha pronta
+- `Equipment` possui campos estruturados de ataque/dano
+- features reais aparecem na aba Features
+- subclasse respeita nível de escolha configurado em `CharacterClass.subclassSelectionLevel`
+- Level Up preview abre na ficha e mostra mudanças do próximo nível
 
 ### 🚧 Em andamento
 
-- 4.28.14 — revisão UX/UI do chat após ficha pop-out
-- 4.28.15 — commit da 4.28
+- 4.29.15 — commit da 4.29
 - persistência/sincronização futura de ferramentas locais da mesa
 
 ---
@@ -338,7 +342,7 @@ Status:
 - Finalizar ficha gera personagem/ficha pronta.
 - Ficha pronta tem abas Ficha/Status, Combate, Bolsa, Magia, Features, Perfil e Notas.
 - Ficha pronta exibe todas as perícias.
-- Bolsa mostra equipamentos, moedas e botões Ataque/Dano.
+- Bolsa mostra equipamentos, moedas e botões Ataque/Dano com ataque real por equipamento.
 - Magia mostra botões Ataque/Dano, cálculo real de conjuração e slots.
 - Perfil mostra imagem/token e campos narrativos.
 - Notas ficam separadas de Perfil.
@@ -346,7 +350,7 @@ Status:
 
 ---
 
-## 🧾 Ready Sheet — Status detalhado da 4.28
+## 🧾 Ready Sheet — Status detalhado da 4.29
 
 Arquivos principais:
 
@@ -422,6 +426,74 @@ Limitações intencionais:
 
 ---
 
+## ⚔️ Equipment, Features e Level Up — Status detalhado da 4.29
+
+
+A 4.29 consolidou a primeira camada de regras avançadas para uso real da ficha pronta em mesa.
+
+### Equipamentos e ataques reais
+
+- `Equipment` recebeu campos estruturados para ataque:
+  - `damageFormula`
+  - `damageType`
+  - `attackType`
+  - `attackAbilityKey`
+  - `alternativeAbilityKey`
+  - `weaponGroup`
+  - `normalRange`
+  - `longRange`
+  - `isFinesse`
+  - `isThrown`
+  - `isTwoHanded`
+  - `isVersatile`
+  - `versatileDamageFormula`
+  - `attackBonus`
+  - `damageBonus`
+- O seed de equipamentos ofensivos foi atualizado.
+- A ficha pronta calcula ataque real por equipamento usando atributo, proficiência temporária e bônus do item.
+- A aba Combate exibe os ataques equipados.
+- A aba Bolsa continua exibindo ataques/danos como inventário de uso rápido.
+- GM possui campo manual de CA do alvo na aba Combate.
+- Player não vê nem preenche a CA exata do alvo.
+- Comparação automática contra CA ainda não existe; por enquanto a CA aparece apenas como referência no texto da rolagem do GM.
+
+### Features reais
+
+- As rotas de ficha retornam `features` reais disponíveis para a ficha.
+- A aba Features exibe recursos/traços por origem:
+  - classe
+  - subclasse
+  - ancestralidade
+  - outras fontes futuras
+- Features são exibidas como texto mecânico/narrativo.
+- Aplicação automática de efeitos de features ainda é futura.
+
+### Subclasse por nível correto
+
+- `CharacterClass.subclassSelectionLevel` foi adicionado.
+- O seed define o nível de escolha de subclasse.
+- O backend valida que uma subclasse só pode ser escolhida no nível correto.
+- A subclasse precisa pertencer à classe escolhida.
+- A ficha mostra status de subclasse: indisponível, pendente ou escolhida.
+
+### Level Up preview
+
+- A aba Features recebeu botão Level Up.
+- O Level Up abre como modal dentro da ficha pronta/pop-out.
+- O modal ainda não salva alterações.
+- O backend envia `levelUpPreview` com:
+  - nível atual
+  - próximo nível
+  - progressão atual
+  - próxima progressão
+  - features novas do próximo nível
+  - status de subclasse
+- A decisão arquitetural ficou registrada: nível do personagem é diferente de nível de classe.
+- O Level Up real precisará futuramente permitir subir uma classe existente ou adicionar multiclasse.
+- Ancestralidade, antecedente, equipamentos iniciais e origem do personagem não são reprocessados no Level Up.
+
+---
+
 ## 🎲 Game Table — Status detalhado
 
 Pasta principal:
@@ -487,57 +559,47 @@ Sincronização real entre contas será tratada em fase futura.
 ## 🧩 Micros atuais
 
 ```txt
-[x] 4.22 — Refatoração do Character Builder
-[x] 4.23 — Refatoração da Mesa de Jogo
-[x] 4.24 — Personagens ativos, biblioteca e ciclo de vida de atores
-[x] 4.25 — Ficha pronta, abas, perfil, bolsa, magia e imagens por URL
-[x] 4.26 — Rolagens automáticas pela ficha pronta
-[x] 4.27 — Regras avançadas de magia e progressão inicial
-[x] 4.28.1 — Planejar arquitetura da ficha pop-out
-[x] 4.28.2 — Criar rota própria da ficha pronta carregando dados reais
-[x] 4.28.3 — Reaproveitar ficha completa dentro do pop-out
-[x] 4.28.4 — Conectar rolagens do pop-out ao chat da mesa via postMessage
-[x] 4.28.5 — Extrair miolo da ficha para CharacterReadySheetView
-[x] 4.28.6 — Criar topo fixo compacto da ficha
-[x] 4.28.7 — Reorganizar Ficha/Status para leitura rápida
-[x] 4.28.8 — Reorganizar aba Magia com cards expansíveis
-[x] 4.28.9 — Reorganizar aba Bolsa com cards expansíveis
-[x] 4.28.10 — Preparar abas futuras: Combate, Features e Notas
-[x] 4.28.11 — Revisar responsividade da ficha pop-out
-[x] 4.28.12 — Teste regressivo da ficha pop-out
-[x] 4.28.13 — Atualizar documentação da 4.28
-[próximo] 4.28.14 — Revisar UX/UI do chat após ficha pop-out
-[pendente] 4.28.15 — Commit da 4.28
-[depois] 4.29 — Regras avançadas de equipamento, features e level up
+[x] 4.29.1 — Revisar modelagem de ataques reais por equipamento
+[x] 4.29.2 — Adicionar/confirmar campos necessários em Equipment para ataque
+[x] 4.29.3 — Ajustar seed de equipamentos ofensivos
+[x] 4.29.4 — Calcular ataque real por equipamento na ficha
+[x] 4.29.5 — Exibir ataque real na aba Bolsa/Combate
+[x] 4.29.6 — Preparar ataque contra CA manual
+[x] 4.29.7 — Revisar modelagem de Feature por nível
+[x] 4.29.8 — Exibir Features reais na aba Features
+[x] 4.29.9 — Preparar subclasse no nível correto
+[x] 4.29.10 — Planejar fluxo de Level Up
+[x] 4.29.11 — Criar primeira versão do botão Level Up
+[x] 4.29.12 — Level Up mostra apenas pendências/mudanças do novo nível
+[x] 4.29.13 — Teste regressivo da 4.29
+[x] 4.29.14 — Atualizar documentação
+[próximo] 4.29.15 — Commit da 4.29
 ```
-
----
 
 ## 🧭 Próximo plano
 
-### 4.28.14 — Revisar UX/UI do chat após ficha pop-out
+### 4.29.15 — Commit da 4.29
 
-```txt
-[ ] Revisar layout de cards de rolagem
-[ ] Reduzir altura/poluição de cards repetidos
-[ ] Diferenciar mensagem normal, sistema, rolagem e sussurro
-[ ] Preservar visibilidade pública/sussurro
-[ ] Melhorar leitura de rolagens vindas da ficha
-[ ] Testar rolagens do modal e do pop-out
+Comandos obrigatórios antes do commit:
+
+```bash
+git status
+git diff --stat
+cd frontend
+pnpm lint
+cd ..
+git add .
+git status
+git commit -m "feat: add advanced equipment features and level up preview"
 ```
 
-### 4.28.15 — Commit da 4.28
+Depois do commit, seguir para:
 
 ```txt
-[ ] git status
-[ ] git diff --stat
-[ ] cd frontend && pnpm lint && cd ..
-[ ] git add .
-[ ] git status
-[ ] git commit -m "feat: refactor ready sheet popout"
+4.30 — Multiclasse
+4.31 — Modularização e expansão do conteúdo base do sistema
 ```
 
----
 
 ## 🔮 Backlog confirmado
 

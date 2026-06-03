@@ -28,11 +28,13 @@ export type AggregateCharacterClass = {
 
 export type CharacterClassAvgAggregateOutputType = {
   hitDie: number | null
+  subclassSelectionLevel: number | null
   order: number | null
 }
 
 export type CharacterClassSumAggregateOutputType = {
   hitDie: number | null
+  subclassSelectionLevel: number | null
   order: number | null
 }
 
@@ -45,6 +47,7 @@ export type CharacterClassMinAggregateOutputType = {
   primaryRole: string | null
   hitDie: number | null
   spellcastingAbilityKey: string | null
+  subclassSelectionLevel: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -59,6 +62,7 @@ export type CharacterClassMaxAggregateOutputType = {
   primaryRole: string | null
   hitDie: number | null
   spellcastingAbilityKey: string | null
+  subclassSelectionLevel: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -73,6 +77,7 @@ export type CharacterClassCountAggregateOutputType = {
   primaryRole: number
   hitDie: number
   spellcastingAbilityKey: number
+  subclassSelectionLevel: number
   order: number
   createdAt: number
   updatedAt: number
@@ -82,11 +87,13 @@ export type CharacterClassCountAggregateOutputType = {
 
 export type CharacterClassAvgAggregateInputType = {
   hitDie?: true
+  subclassSelectionLevel?: true
   order?: true
 }
 
 export type CharacterClassSumAggregateInputType = {
   hitDie?: true
+  subclassSelectionLevel?: true
   order?: true
 }
 
@@ -99,6 +106,7 @@ export type CharacterClassMinAggregateInputType = {
   primaryRole?: true
   hitDie?: true
   spellcastingAbilityKey?: true
+  subclassSelectionLevel?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -113,6 +121,7 @@ export type CharacterClassMaxAggregateInputType = {
   primaryRole?: true
   hitDie?: true
   spellcastingAbilityKey?: true
+  subclassSelectionLevel?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -127,6 +136,7 @@ export type CharacterClassCountAggregateInputType = {
   primaryRole?: true
   hitDie?: true
   spellcastingAbilityKey?: true
+  subclassSelectionLevel?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -228,6 +238,7 @@ export type CharacterClassGroupByOutputType = {
   primaryRole: string | null
   hitDie: number | null
   spellcastingAbilityKey: string | null
+  subclassSelectionLevel: number | null
   order: number
   createdAt: Date
   updatedAt: Date
@@ -265,6 +276,7 @@ export type CharacterClassWhereInput = {
   primaryRole?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
   hitDie?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   spellcastingAbilityKey?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
+  subclassSelectionLevel?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   order?: Prisma.IntFilter<"CharacterClass"> | number
   createdAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
@@ -285,6 +297,7 @@ export type CharacterClassOrderByWithRelationInput = {
   primaryRole?: Prisma.SortOrderInput | Prisma.SortOrder
   hitDie?: Prisma.SortOrderInput | Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  subclassSelectionLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -310,6 +323,7 @@ export type CharacterClassWhereUniqueInput = Prisma.AtLeast<{
   primaryRole?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
   hitDie?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   spellcastingAbilityKey?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
+  subclassSelectionLevel?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   order?: Prisma.IntFilter<"CharacterClass"> | number
   createdAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
@@ -330,6 +344,7 @@ export type CharacterClassOrderByWithAggregationInput = {
   primaryRole?: Prisma.SortOrderInput | Prisma.SortOrder
   hitDie?: Prisma.SortOrderInput | Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  subclassSelectionLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -352,6 +367,7 @@ export type CharacterClassScalarWhereWithAggregatesInput = {
   primaryRole?: Prisma.StringNullableWithAggregatesFilter<"CharacterClass"> | string | null
   hitDie?: Prisma.IntNullableWithAggregatesFilter<"CharacterClass"> | number | null
   spellcastingAbilityKey?: Prisma.StringNullableWithAggregatesFilter<"CharacterClass"> | string | null
+  subclassSelectionLevel?: Prisma.IntNullableWithAggregatesFilter<"CharacterClass"> | number | null
   order?: Prisma.IntWithAggregatesFilter<"CharacterClass"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CharacterClass"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CharacterClass"> | Date | string
@@ -365,6 +381,7 @@ export type CharacterClassCreateInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -385,6 +402,7 @@ export type CharacterClassUncheckedCreateInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -403,6 +421,7 @@ export type CharacterClassUpdateInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -423,6 +442,7 @@ export type CharacterClassUncheckedUpdateInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -442,6 +462,7 @@ export type CharacterClassCreateManyInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -455,6 +476,7 @@ export type CharacterClassUpdateManyMutationInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -469,6 +491,7 @@ export type CharacterClassUncheckedUpdateManyInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -508,6 +531,7 @@ export type CharacterClassCountOrderByAggregateInput = {
   primaryRole?: Prisma.SortOrder
   hitDie?: Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrder
+  subclassSelectionLevel?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -515,6 +539,7 @@ export type CharacterClassCountOrderByAggregateInput = {
 
 export type CharacterClassAvgOrderByAggregateInput = {
   hitDie?: Prisma.SortOrder
+  subclassSelectionLevel?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -527,6 +552,7 @@ export type CharacterClassMaxOrderByAggregateInput = {
   primaryRole?: Prisma.SortOrder
   hitDie?: Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrder
+  subclassSelectionLevel?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -541,6 +567,7 @@ export type CharacterClassMinOrderByAggregateInput = {
   primaryRole?: Prisma.SortOrder
   hitDie?: Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrder
+  subclassSelectionLevel?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -548,6 +575,7 @@ export type CharacterClassMinOrderByAggregateInput = {
 
 export type CharacterClassSumOrderByAggregateInput = {
   hitDie?: Prisma.SortOrder
+  subclassSelectionLevel?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -680,6 +708,7 @@ export type CharacterClassCreateWithoutSystemInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -698,6 +727,7 @@ export type CharacterClassUncheckedCreateWithoutSystemInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -746,6 +776,7 @@ export type CharacterClassScalarWhereInput = {
   primaryRole?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
   hitDie?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   spellcastingAbilityKey?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
+  subclassSelectionLevel?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   order?: Prisma.IntFilter<"CharacterClass"> | number
   createdAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
@@ -759,6 +790,7 @@ export type CharacterClassCreateWithoutCharacterSheetsInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -778,6 +810,7 @@ export type CharacterClassUncheckedCreateWithoutCharacterSheetsInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -811,6 +844,7 @@ export type CharacterClassUpdateWithoutCharacterSheetsInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -830,6 +864,7 @@ export type CharacterClassUncheckedUpdateWithoutCharacterSheetsInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -847,6 +882,7 @@ export type CharacterClassCreateWithoutSubclassesInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -866,6 +902,7 @@ export type CharacterClassUncheckedCreateWithoutSubclassesInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -899,6 +936,7 @@ export type CharacterClassUpdateWithoutSubclassesInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -918,6 +956,7 @@ export type CharacterClassUncheckedUpdateWithoutSubclassesInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -935,6 +974,7 @@ export type CharacterClassCreateWithoutLevelProgressionsInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -954,6 +994,7 @@ export type CharacterClassUncheckedCreateWithoutLevelProgressionsInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -987,6 +1028,7 @@ export type CharacterClassUpdateWithoutLevelProgressionsInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1006,6 +1048,7 @@ export type CharacterClassUncheckedUpdateWithoutLevelProgressionsInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1023,6 +1066,7 @@ export type CharacterClassCreateWithoutClassSpellsInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1042,6 +1086,7 @@ export type CharacterClassUncheckedCreateWithoutClassSpellsInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1075,6 +1120,7 @@ export type CharacterClassUpdateWithoutClassSpellsInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1094,6 +1140,7 @@ export type CharacterClassUncheckedUpdateWithoutClassSpellsInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1111,6 +1158,7 @@ export type CharacterClassCreateWithoutFeaturesInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1130,6 +1178,7 @@ export type CharacterClassUncheckedCreateWithoutFeaturesInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1163,6 +1212,7 @@ export type CharacterClassUpdateWithoutFeaturesInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1182,6 +1232,7 @@ export type CharacterClassUncheckedUpdateWithoutFeaturesInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1199,6 +1250,7 @@ export type CharacterClassCreateManySystemInput = {
   primaryRole?: string | null
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
+  subclassSelectionLevel?: number | null
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1212,6 +1264,7 @@ export type CharacterClassUpdateWithoutSystemInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1230,6 +1283,7 @@ export type CharacterClassUncheckedUpdateWithoutSystemInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1248,6 +1302,7 @@ export type CharacterClassUncheckedUpdateManyWithoutSystemInput = {
   primaryRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1329,6 +1384,7 @@ export type CharacterClassSelect<ExtArgs extends runtime.Types.Extensions.Intern
   primaryRole?: boolean
   hitDie?: boolean
   spellcastingAbilityKey?: boolean
+  subclassSelectionLevel?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1350,6 +1406,7 @@ export type CharacterClassSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   primaryRole?: boolean
   hitDie?: boolean
   spellcastingAbilityKey?: boolean
+  subclassSelectionLevel?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1365,6 +1422,7 @@ export type CharacterClassSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   primaryRole?: boolean
   hitDie?: boolean
   spellcastingAbilityKey?: boolean
+  subclassSelectionLevel?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1380,12 +1438,13 @@ export type CharacterClassSelectScalar = {
   primaryRole?: boolean
   hitDie?: boolean
   spellcastingAbilityKey?: boolean
+  subclassSelectionLevel?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CharacterClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "primaryRole" | "hitDie" | "spellcastingAbilityKey" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["characterClass"]>
+export type CharacterClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "primaryRole" | "hitDie" | "spellcastingAbilityKey" | "subclassSelectionLevel" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["characterClass"]>
 export type CharacterClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   subclasses?: boolean | Prisma.CharacterClass$subclassesArgs<ExtArgs>
@@ -1421,6 +1480,7 @@ export type $CharacterClassPayload<ExtArgs extends runtime.Types.Extensions.Inte
     primaryRole: string | null
     hitDie: number | null
     spellcastingAbilityKey: string | null
+    subclassSelectionLevel: number | null
     order: number
     createdAt: Date
     updatedAt: Date
@@ -1861,6 +1921,7 @@ export interface CharacterClassFieldRefs {
   readonly primaryRole: Prisma.FieldRef<"CharacterClass", 'String'>
   readonly hitDie: Prisma.FieldRef<"CharacterClass", 'Int'>
   readonly spellcastingAbilityKey: Prisma.FieldRef<"CharacterClass", 'String'>
+  readonly subclassSelectionLevel: Prisma.FieldRef<"CharacterClass", 'Int'>
   readonly order: Prisma.FieldRef<"CharacterClass", 'Int'>
   readonly createdAt: Prisma.FieldRef<"CharacterClass", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CharacterClass", 'DateTime'>

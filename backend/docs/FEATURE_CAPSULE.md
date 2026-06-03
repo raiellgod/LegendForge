@@ -662,16 +662,84 @@ Reduzir poluição visual da ficha pronta, melhorar leitura durante jogo e prepa
 
 ---
 
+
+---
+
+# ⚡ Capsule 42 — Advanced Equipment Attacks
+
+## 🎯 Goal
+
+Transformar ataques de equipamento de `1d20 + 0` em rolagens reais baseadas no item, atributo, proficiência temporária e bônus do equipamento.
+
+## ✅ Result
+
+- `Equipment` recebeu campos estruturados de ataque e dano.
+- Seed de armas ofensivas atualizado.
+- Ataque real calculado na ficha pronta.
+- Aba Bolsa e aba Combate exibem ataques reais.
+- GM pode informar CA manual na aba Combate.
+- Player não vê CA exata do alvo.
+- Comparação automática contra CA fica para fase futura.
+
+---
+
+# ⚡ Capsule 43 — Ready Sheet Features
+
+## 🎯 Goal
+
+Conectar features reais do sistema à ficha pronta.
+
+## ✅ Result
+
+- Backend anexa `features` reais ao retorno da ficha.
+- Aba Features mostra recursos por classe, subclasse, ancestralidade e outras fontes.
+- Features são exibidas como texto mecânico/narrativo.
+- Aplicação automática de efeitos fica para o sistema futuro de status/efeitos.
+
+---
+
+# ⚡ Capsule 44 — Subclass Level Rule
+
+## 🎯 Goal
+
+Preparar a regra de subclasse no nível correto.
+
+## ✅ Result
+
+- `CharacterClass.subclassSelectionLevel` adicionado.
+- Seed populado com nível de escolha de subclasse.
+- Backend valida que subclasse só pode ser escolhida no nível permitido.
+- Backend valida que a subclasse pertence à classe.
+- Ficha exibe status de subclasse: indisponível, pendente ou escolhida.
+
+---
+
+# ⚡ Capsule 45 — Level Up Preview
+
+## 🎯 Goal
+
+Criar a primeira experiência visual de Level Up sem salvar mudanças ainda.
+
+## ✅ Result
+
+- Botão Level Up adicionado na aba Features.
+- Modal abre dentro da ficha pronta/pop-out.
+- Modal mostra nível atual, próximo nível, progressão, features novas e status de subclasse.
+- Backend envia `levelUpPreview`.
+- Decisão registrada: nível do personagem é diferente de nível de classe.
+- Level Up real fica preparado para futura multiclasse.
+
+---
+
 # 🧭 Próxima cápsula esperada
 
 ```txt
-Capsule 42 — Chat UX/UI Cleanup After Pop-out
+Capsule 46 — Commit and transition to Multiclass planning
 ```
 
 Foco esperado:
 
-- limpar visual do chat
-- reduzir altura dos cards de rolagem
-- melhorar legibilidade de rolagens vindas da ficha
-- diferenciar mensagem pública, sussurro, sistema e rolagem
-- manter o chat útil com modal e pop-out abertos
+- concluir commit da 4.29
+- iniciar 4.30 Multiclasse
+- separar nível total do personagem e níveis por classe
+- planejar estrutura futura para CharacterClassLevel ou equivalente

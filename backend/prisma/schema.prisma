@@ -102,6 +102,22 @@ enum EquipmentCategory {
   RELIC
 }
 
+enum EquipmentAttackType {
+  NONE
+  MELEE
+  RANGED
+  THROWN
+}
+
+enum EquipmentWeaponGroup {
+  SIMPLE
+  MARTIAL
+  IMPROVISED
+  NATURAL
+  TECH
+  RELIC
+}
+
 enum CampaignActorLocation {
   TABLE
   LIBRARY
@@ -421,6 +437,7 @@ model CharacterClass {
   primaryRole            String?
   hitDie                 Int?
   spellcastingAbilityKey String?
+  subclassSelectionLevel Int?
   order                  Int      @default(0)
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
@@ -588,12 +605,29 @@ model Equipment {
   description String?
   cost        String?
   weight      Float?
-  damage      String?
-  defense     Int?
-  properties  String?
-  order       Int               @default(0)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+
+  damage                 String?
+  damageFormula          String?
+  damageType             String?
+  defense                Int?
+  properties             String?
+  attackType             EquipmentAttackType  @default(NONE)
+  attackAbilityKey       String?
+  alternativeAbilityKey  String?
+  weaponGroup            EquipmentWeaponGroup?
+  normalRange            Int?
+  longRange              Int?
+  isFinesse              Boolean              @default(false)
+  isThrown               Boolean              @default(false)
+  isTwoHanded            Boolean              @default(false)
+  isVersatile            Boolean              @default(false)
+  versatileDamageFormula String?
+  attackBonus            Int                  @default(0)
+  damageBonus            Int                  @default(0)
+
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   system             GameSystem                @relation(fields: [systemId], references: [id], onDelete: Cascade)
   characterEquipment CharacterSheetEquipment[]
@@ -602,6 +636,8 @@ model Equipment {
   @@unique([systemId, key])
   @@index([systemId])
   @@index([category])
+  @@index([attackType])
+  @@index([weaponGroup])
   @@index([order])
 }
 
