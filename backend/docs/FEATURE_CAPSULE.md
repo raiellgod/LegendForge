@@ -550,7 +550,6 @@ Transformar a ficha pronta em uma visualização jogável e organizada.
 - Bolsa concentra moedas, equipamentos e ataques derivados de equipamento
 - Magia concentra truques/magias
 - Perfil concentra retrato, token, personalidade, aparência, história e notas
-- span “Visão do mestre” removido
 - notas do mestre aparecem apenas para GM
 - retrato/token por URL com persistência
 - token/ficha sincronizam imagem e fit quando salvos
@@ -565,115 +564,114 @@ Conectar a ficha pronta ao sistema de rolagens da mesa.
 
 ## ✅ Result
 
-- contrato `CharacterReadySheetRollRequest` criado
-- parser de dados aceita modificadores numéricos positivos e negativos
-- clicar em perícia rola `1d20 + bônus`
-- clicar em teste de resistência rola `1d20 + bônus`
-- clicar em iniciativa rola `1d20 + iniciativa`
-- GM pode rolar iniciativa da mesa
-- ranking de iniciativa inclui:
-  - personagens
-  - NPCs
-  - criaturas
-- ranking não usa emojis
-- personagens usam iniciativa real da ficha
-- NPCs/criaturas usam +0 enquanto não têm ficha/stat block
-- Bolsa tem botões pequenos:
-  - Ataque
-  - Dano
-- ataque de equipamento é básico/provisório: `1d20 + 0`
-- dano de equipamento rola expressão do item
-- Magia tem botões:
-  - Ataque
-  - Dano
-  - Efeito
-- ataque mágico era básico/provisório antes da 4.27
-- dano mágico é detectado pela descrição
-- textos de UI deixam claro o que é provisório
-- teste regressivo da 4.26 concluído
+- perícias roláveis
+- testes de resistência roláveis
+- iniciativa rolável
+- iniciativa da mesa para GM
+- ataque básico por equipamento
+- dano por equipamento
+- ataque mágico
+- dano mágico
+- resultado grande do chat ajustado para exibir total numérico
+- player comum consegue criar personagem pela mesa
 
 ---
 
-# ⚡ Capsule 39 — Player Character Creation Access
+# ⚡ Capsule 39 — Advanced Spell Progression Rules
 
 ## 🎯 Goal
 
-Permitir que player comum crie personagem pela aba Personagens.
+Conectar magias à progressão de classe e tornar a aba Magia mais fiel às regras.
 
 ## ✅ Result
 
-- player comum vê botão `+ Personagem`
-- player comum abre o builder diretamente
-- GM continua vendo `Biblioteca` e fluxo completo de `+ Criar`
-- ajuste preserva permissões diferentes de GM e player
+- `CharacterClass.spellcastingAbilityKey`
+- `LevelProgression`
+- `ClassSpell`
+- seed de progressão por classe
+- seed de magias permitidas por classe
+- seed mínimo de magias expandido
+- builder filtra magias por classe
+- builder valida limites de truques/magias por progressão
+- troca de classe limpa magias antigas
+- ficha calcula CD de magia real
+- ficha calcula ataque mágico real
+- ficha desabilita ataque mágico quando classe não conjura
+- ficha exibe slots de magia
+- teste regressivo da 4.27 concluído
 
 ---
 
-# ⚡ Capsule 40 — Advanced Spell Progression Rules
+# ⚡ Capsule 40 — Ready Sheet Pop-out Architecture
 
 ## 🎯 Goal
 
-Transformar a etapa de Magias e a aba Magia da ficha pronta em uma base real de regras de conjuração por classe/progressão.
+Transformar a ficha pronta em uma ferramenta mais útil durante a mesa, permitindo que ela abra em janela destacada e continue conectada ao chat da mesa.
 
 ## ✅ Result
 
-- `CharacterClass.spellcastingAbilityKey` adicionado à modelagem.
-- `LevelProgression` revisado/expandido para progressão por classe e nível.
-- `ClassSpell` criado para relacionar classe e magias permitidas.
-- Migration aplicada para regras de progressão de classe.
-- Seed de progressão básica por classe populado.
-- Seed mínimo de magias expandido para permitir testes reais.
-- Seed de magias permitidas por classe populado.
-- Rota `GET /systems/:systemId/character-options` passou a retornar:
-  - `spellcastingAbilityKey`
-  - `levelProgressions`
-  - `classSpells`
-- Builder passou a filtrar magias pela classe selecionada.
-- Builder passou a validar limites de truques/magias por nível inicial.
-- Builder limpa magias antigas ao trocar de classe.
-- Ficha pronta calcula atributo de conjuração por classe.
-- Ficha pronta calcula CD de magia real.
-- Ficha pronta calcula ataque mágico real.
-- Ficha pronta desabilita ataque mágico quando a classe não possui atributo de conjuração.
-- Ficha pronta exibe espaços de magia vindos da progressão do nível atual.
-- Aba Magia recebeu primeira reorganização visual.
-- Resultado grande de rolagem foi corrigido para mostrar o total numérico da rolagem.
-- Teste regressivo da 4.27 concluído.
+- rota frontend criada:
+  - `/campaigns/[id]/sheets/[sheetId]`
+- ficha pop-out carrega dados reais:
+  - campanha
+  - ficha
+  - ator vinculado
+  - opções do sistema
+- `CharacterReadySheetView` extraído como miolo reutilizável
+- `CharacterReadySheetModal` simplificado como casca do modal
+- modal e pop-out usam a mesma ficha completa
+- botão de pop-out abre janela separada
+- rolagens do pop-out voltam para a mesa via `postMessage`
+- listener na mesa recebe ações do pop-out e publica no chat
+- lint/TypeScript corrigidos após ajuste de `PointerEvent`, `FormEvent` e `next/image`
 
-## 🧪 Testado
+---
 
-- Bárbaro não mostra magias no builder.
-- Bardo mostra apenas magias permitidas.
-- Limite de truques/magias funciona com seed expandido.
-- Trocar de classe limpa magias antigas.
-- Bardo calcula Carisma, CD e ataque mágico corretamente.
-- Ataque mágico rola `1d20 + bônus real`.
-- Classe sem conjuração mostra valores `—` e bloqueia ataque mágico.
-- Slots de magia aparecem na aba Magia.
-- Dano mágico rola expressão detectada da descrição.
-- Resultado grande do chat mostra soma final, não lista de dados.
+# ⚡ Capsule 41 — Ready Sheet Structural Refactor
 
-## ⚠️ Limitações mantidas
+## 🎯 Goal
 
-- Dano de magia ainda é detectado pela descrição.
-- Controle de slots usados ainda não existe.
-- Ataque contra CA ainda não é automático.
-- Ataque de equipamento ainda é provisório.
-- Estrutura visual da ficha pronta será melhorada na 4.28.
+Reduzir poluição visual da ficha pronta, melhorar leitura durante jogo e preparar abas futuras sem misturar todas as responsabilidades em Ficha/Status.
+
+## ✅ Result
+
+- topo fixo compacto criado
+- atributos/status principais ficaram sempre visíveis
+- salvaguardas/testes de resistência ficaram clicáveis no topo
+- Ficha/Status reorganizada para leitura rápida
+- aba Magia reorganizada:
+  - Truques separados
+  - Magias agrupadas por nível
+  - cards compactos
+  - detalhes expansíveis
+  - dano/conjuração/alcance visíveis no card fechado
+  - botão Efeito removido para evitar flood no chat
+- aba Bolsa reorganizada:
+  - cards compactos
+  - detalhes expansíveis
+  - ações Ataque/Dano sempre acessíveis
+- abas futuras preparadas:
+  - Combate
+  - Features
+  - Notas
+- Perfil ficou mais focado em imagem/dados de personagem
+- Notas foram separadas do Perfil
+- responsividade do pop-out revisada
+- teste regressivo da ficha pop-out concluído
+- documentação da 4.28 atualizada
 
 ---
 
 # 🧭 Próxima cápsula esperada
 
 ```txt
-Capsule 41 — Ready Sheet Structural Refactor
+Capsule 42 — Chat UX/UI Cleanup After Pop-out
 ```
 
 Foco esperado:
 
-- arquitetura visual da ficha pronta
-- shell fixo com centro variável
-- cards compactos com expand/collapse
-- aba Magia mais limpa
-- aba Bolsa mais limpa
-- preparação futura de ficha destacável/pop-out
+- limpar visual do chat
+- reduzir altura dos cards de rolagem
+- melhorar legibilidade de rolagens vindas da ficha
+- diferenciar mensagem pública, sussurro, sistema e rolagem
+- manter o chat útil com modal e pop-out abertos

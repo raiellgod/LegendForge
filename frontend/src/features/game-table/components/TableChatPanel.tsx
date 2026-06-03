@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { FormEvent } from "react";
 
 import type {
@@ -23,6 +24,24 @@ type TableChatPanelProps = {
   onSubmitMessage: (event: FormEvent<HTMLFormElement>) => void;
 };
 
+function getRollCardStyles(content: string) {
+  const normalizedContent = content.toLowerCase();
+
+  if (normalizedContent.includes("dano")) {
+    return "border-red-400/35 bg-red-950/20";
+  }
+
+  if (normalizedContent.includes("ataque")) {
+    return "border-forge-gold/45 bg-forge-purple/30";
+  }
+
+  if (normalizedContent.includes("iniciativa")) {
+    return "border-emerald-400/35 bg-emerald-950/20";
+  }
+
+  return "border-forge-gold/35 bg-forge-purple/25";
+}
+
 export function TableChatPanel({
   user,
   chatMessages,
@@ -36,27 +55,75 @@ export function TableChatPanel({
   onChangeChatInput,
   onSubmitMessage,
 }: TableChatPanelProps) {
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      messagesEndRef.current?.scrollIntoView({ block: "end" });
+    });
+  }, [chatMessages.length]);
+
   return (
-    <>
+    <div className="flex h-full min-h-0 flex-col bg-[#140719]">
       <div className="min-h-0 flex-1 overflow-y-auto p-4 text-[13px]">
-        <section>
+        <section className="min-h-full">
           <h2 className="text-base font-black text-forge-gold">Chat</h2>
 
-          <div className="mt-5 space-y-3">
+          <div className="mt-5 space-y-3 pb-2">
             {chatMessages.map((message) => {
               const isSelfWhisper =
                 message.kind === "whisper" && message.recipientId === user.id;
 
+              if (message.kind === "roll") {
+                return (
+                  <article
+                    key={message.id}
+                    className={`rounded-xl border p-3 ${getRollCardStyles(
+                      message.content,
+                    )}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="break-words text-xs font-black leading-relaxed text-purple-100">
+                          {message.content}
+                        </p>
+                        <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/35">
+                          {message.author}
+                        </p>
+                      </div>
+
+                      <p className="shrink-0 text-3xl font-black leading-none text-forge-gold">
+                        {message.displayResult ?? message.result}
+                      </p>
+                    </div>
+
+                    <div className="mt-3 space-y-2">
+                      {message.dice ? (
+                        <p className="rounded-lg border border-forge-gold/20 bg-black/25 px-2 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-forge-gold/80">
+                          {message.dice}
+                        </p>
+                      ) : null}
+
+                      {message.breakdown ? (
+                        <p className="whitespace-pre-line break-words rounded-lg border border-white/10 bg-black/25 px-2 py-2 text-[11px] font-semibold leading-relaxed text-white/50">
+                          {message.breakdown}
+                        </p>
+                      ) : null}
+                    </div>
+                  </article>
+                );
+              }
+
               return (
-                <div
+                <article
                   key={message.id}
                   className={`rounded-xl border p-3 ${
-                    message.kind === "roll"
-                      ? "border-forge-gold/40 bg-forge-purple/30"
-                      : message.kind === "whisper"
-                        ? isSelfWhisper
-                          ? "border-forge-gold/35 bg-forge-gold/10"
-                          : "border-purple-300/35 bg-purple-950/30"
+                    message.kind === "whisper"
+                      ? isSelfWhisper
+                        ? "border-forge-gold/35 bg-forge-gold/10"
+                        : "border-purple-300/35 bg-purple-950/30"
+                      : message.kind === "system"
+                        ? "border-forge-gold/20 bg-black/30"
                         : "border-white/10 bg-black/35"
                   }`}
                 >
@@ -75,8 +142,8 @@ export function TableChatPanel({
                       {message.author}
                     </p>
 
-                    {message.kind === "whisper" && (
-                      <span
+                    {message.kind === "whisper" ? (
+                      <p
                         className={`rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] ${
                           isSelfWhisper
                             ? "border-forge-gold/40 bg-black/30 text-forge-gold"
@@ -84,33 +151,11 @@ export function TableChatPanel({
                         }`}
                       >
                         {isSelfWhisper ? "Nota pessoal" : "Sussurro"}
-                      </span>
-                    )}
+                      </p>
+                    ) : null}
                   </div>
 
-                  {message.kind === "roll" ? (
-                    <div className="mt-2">
-                      <p className="whitespace-pre-line text-xs font-semibold leading-relaxed text-white/75">
-                        {message.content}
-                      </p>
-
-                      <p className="mt-2 text-3xl font-black text-forge-gold">
-                        {message.displayResult ?? message.result}
-                      </p>
-
-                      {message.dice ? (
-                        <p className="mt-1 rounded-lg border border-forge-gold/20 bg-black/25 px-2 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-forge-gold/80">
-                          {message.dice}
-                        </p>
-                      ) : null}
-
-                      {message.breakdown ? (
-                        <p className="mt-2 whitespace-pre-line break-words rounded-lg border border-white/10 bg-black/25 px-2 py-2 text-[11px] font-semibold leading-relaxed text-white/50">
-                          {message.breakdown}
-                        </p>
-                      ) : null}
-                    </div>
-                  ) : message.kind === "whisper" ? (
+                  {message.kind === "whisper" ? (
                     <div className="mt-2">
                       <p className="text-[11px] font-bold text-purple-100/65">
                         Para: {message.recipientName}
@@ -121,20 +166,22 @@ export function TableChatPanel({
                       </p>
                     </div>
                   ) : (
-                    <p className="mt-1 text-xs text-white/75">
+                    <p className="mt-1 text-xs leading-relaxed text-white/75">
                       {message.content}
                     </p>
                   )}
-                </div>
+                </article>
               );
             })}
+
+            <div ref={messagesEndRef} />
           </div>
         </section>
       </div>
 
       <form
         onSubmit={onSubmitMessage}
-        className="shrink-0 border-t border-forge-gold/25 p-4"
+        className="sticky bottom-0 z-10 shrink-0 border-t border-forge-gold/25 bg-[#140719]/95 p-4 shadow-[0_-12px_24px_rgba(0,0,0,0.35)] backdrop-blur"
       >
         <div className="mb-3 grid grid-cols-2 gap-2 rounded-lg border border-forge-gold/20 bg-black/25 p-1">
           <button
@@ -162,7 +209,7 @@ export function TableChatPanel({
           </button>
         </div>
 
-        {chatMode === "whisper" && (
+        {chatMode === "whisper" ? (
           <select
             value={whisperTargetId}
             onChange={(event) => onChangeWhisperTargetId(event.target.value)}
@@ -178,7 +225,7 @@ export function TableChatPanel({
               </option>
             ))}
           </select>
-        )}
+        ) : null}
 
         {chatError ? (
           <p className="mb-3 rounded-lg border border-red-500/50 bg-red-950/40 px-3 py-2 text-xs font-bold text-red-200">
@@ -206,6 +253,6 @@ export function TableChatPanel({
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 }

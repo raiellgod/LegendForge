@@ -99,6 +99,29 @@ export async function getCampaignCharacterSheets(
   return responseData.characterSheets;
 }
 
+export async function getCampaignCharacterSheet(
+  campaignId: string,
+  characterSheetId: string,
+): Promise<CharacterReadySheet> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/character-sheets/${characterSheetId}`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao carregar ficha");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.characterSheet;
+}
+
 export async function updateCampaignCharacterSheetImages(
   campaignId: string,
   characterSheetId: string,

@@ -9,11 +9,12 @@ Este documento descreve:
 - Progresso da implementação com Prisma
 - Domínio de campanhas, mesa e ficha
 - Regras de progressão/magia adicionadas na 4.27
+- Impacto da refatoração estrutural da ficha pronta na 4.28
 - Próximos passos da Fase 4
 
 ---
 
-# 📌 STATUS ATUAL — 01/06/2026
+# 📌 STATUS ATUAL — 03/06/2026
 
 ## ✅ Implementado
 
@@ -40,11 +41,14 @@ Este documento descreve:
 - Equipamentos iniciais persistem em `CharacterSheetEquipment`.
 - Campos de Sobre/aparência/personalidade/história persistem.
 - Ficha pronta carrega progressão da classe para exibir espaços de magia.
+- Ficha pronta em modal e pop-out consome os mesmos dados persistidos.
+- Retrato/token por URL persistem e sincronizam com ator/token.
+- Rota pop-out carrega ficha por `campaignId` e `sheetId`.
 
 ## 🚧 Em andamento
 
-- Commit da 4.27.
-- Preparação da 4.28: refatoração estrutural da ficha pronta.
+- 4.28.14 — revisão UX/UI do chat após ficha pop-out.
+- 4.28.15 — commit da 4.28.
 - Preparação futura da 4.29: ataque real por equipamento, features e level up.
 
 ## ❌ Ainda futuro
@@ -59,6 +63,8 @@ Este documento descreve:
 - Proficiências editáveis pelo GM.
 - Armadura/defesa como camada mecânica separada da roupa visual.
 - Fichas próprias de NPC e criaturas.
+- Sincronização em tempo real de chat/rolagens/tokens.
+- Persistência futura de chat e rolagens.
 
 ---
 
@@ -121,6 +127,7 @@ Uso atual:
 - representa entidade/personagem/NPC/criatura dentro da campanha
 - pode estar na mesa ou biblioteca
 - alimenta a aba Personagens
+- alimenta a ficha pronta como ator vinculado
 - não substitui a ficha completa
 
 Regra:
@@ -140,6 +147,7 @@ Uso atual:
 - ligado a `CampaignActor`
 - possui posição, tamanho e imagem
 - tamanho de token já é editável/persistido no nível atual
+- token pode receber atualização de imagem quando a ficha salva tokenImageUrl/tokenImageFit
 
 ---
 
@@ -192,6 +200,7 @@ Estado atual:
 - campos de sobre persistem
 - status pode avançar para ficha pronta
 - ficha pronta consome dados persistidos e progressão de classe
+- pop-out da ficha consome a mesma fonte de dados da ficha modal
 
 ---
 
@@ -309,6 +318,76 @@ Comando Sombrio
 Marca do Agouro
 Onda Trovejante
 ```
+
+---
+
+# 🧾 FICHA PRONTA E BANCO — 4.28
+
+A 4.28 não criou novos modelos de banco. A mudança principal foi de arquitetura de frontend e consumo dos dados persistidos.
+
+## O que mudou
+
+- `CharacterReadySheetView` virou o miolo reutilizável da ficha.
+- O modal e o pop-out usam a mesma estrutura.
+- A rota pop-out carrega:
+  - campanha
+  - ficha pronta por `sheetId`
+  - atores da campanha
+  - opções do sistema para perícias
+- A ficha continua usando os modelos existentes:
+  - `CharacterSheet`
+  - `CharacterSheetStat`
+  - `CharacterSheetSkill`
+  - `CharacterSheetSpell`
+  - `CharacterSheetEquipment`
+  - `CampaignActor`
+  - `SceneToken`
+
+## Imagens
+
+Campos já usados:
+
+```txt
+CharacterSheet.portraitUrl
+CharacterSheet.tokenImageUrl
+CharacterSheet.tokenImageFit
+CampaignActor.portraitUrl
+SceneToken.imageUrl
+SceneToken.imageFit
+```
+
+Fluxo atual:
+
+```txt
+Salvar imagem na ficha
+→ atualiza CharacterSheet
+→ atualiza CampaignActor.portraitUrl
+→ atualiza tokens existentes do ator com tokenImageUrl/tokenImageFit
+```
+
+Limitação:
+
+```txt
+Ainda é URL manual. Upload real entra depois.
+```
+
+## Pop-out
+
+A rota:
+
+```txt
+/campaigns/[id]/sheets/[sheetId]
+```
+
+não precisa de novo modelo. Ela usa as rotas/API existentes para carregar dados.
+
+A comunicação de rolagens do pop-out para a mesa é local, via navegador:
+
+```txt
+window.opener.postMessage(...)
+```
+
+Isso não persiste no banco e não sincroniza entre contas.
 
 ---
 
@@ -485,99 +564,31 @@ Hoje dano é detectado pela descrição. Funciona para teste, mas não é ideal 
 - [x] equipamentos persistentes
 - [x] sobre/revisão visual
 - [x] criação de personagem vazio no fluxo novo
-- [x] ficha pronta na aba Personagens
-- [x] rolagens automáticas pela ficha
-- [x] regras avançadas de magia e progressão inicial
+- [x] ficha pronta na mesa
+- [x] ficha pronta em pop-out
+- [x] rolagens da ficha via `postMessage`
+- [x] teste regressivo da 4.28
 
 ---
 
-# 📍 PRÓXIMO PASSO
+# 🧭 Próximo foco
 
 ```txt
-4.27.12 — Commit da 4.27
-```
-
-Checklist esperado:
-
-```txt
-[ ] git status
-[ ] git diff --stat
-[ ] cd frontend && pnpm lint && cd ..
-[ ] git add .
-[ ] git status
-[ ] git commit -m "feat: add advanced spell progression rules"
+4.28.14 — Revisar UX/UI do chat após ficha pop-out
+4.28.15 — Commit da 4.28
 ```
 
 Depois:
 
 ```txt
-4.28 — Refatoração estrutural da ficha pronta
+4.29 — Regras avançadas de equipamento, features e level up
 ```
 
 ---
 
-# 🧭 Próximas macros
+# 🌱 Seed — decisão atual
 
-## 4.28 — Refatoração estrutural da ficha pronta
-
-```txt
-[ ] 4.28.1 — Planejar arquitetura da ficha pronta
-[ ] 4.28.2 — Definir layout shell: header fixo, laterais fixas e centro variável
-[ ] 4.28.3 — Definir modo ficha modal atual versus futura janela destacada/pop-out
-[ ] 4.28.4 — Criar padrão de cards compactos com expand/collapse
-[ ] 4.28.5 — Aplicar expand/collapse na aba Magia
-[ ] 4.28.6 — Aplicar expand/collapse na aba Bolsa
-[ ] 4.28.7 — Reorganizar informações fixas da ficha
-[ ] 4.28.8 — Reorganizar abas centrais
-[ ] 4.28.9 — Preparar área lateral de defesas/sentidos/condições/proficiências
-[ ] 4.28.10 — Melhorar densidade visual
-[ ] 4.28.11 — Revisar responsividade
-[ ] 4.28.12 — Teste regressivo
-[ ] 4.28.13 — Atualizar documentação
-[ ] 4.28.14 — Commit
-```
-
-## 4.29 — Regras avançadas de equipamento, features e level up
-
-```txt
-[ ] 4.29.1 — Calcular ataque real por equipamento
-[ ] 4.29.2 — Definir regra inicial de ataque por equipamento
-[ ] 4.29.3 — Revisar modelagem de pacotes/itens compostos
-[ ] 4.29.4 — Popular seed de pacotes de equipamento
-[ ] 4.29.5 — Popular seed de equipamentos iniciais por classe
-[ ] 4.29.6 — Preparar ataque contra CA manual
-[ ] 4.29.7 — Features de classe por nível
-[ ] 4.29.8 — Subclasse no nível correto
-[ ] 4.29.9 — Preparar fluxo de subir de nível
-[ ] 4.29.10 — Level up mostra apenas pendências/mudanças do novo nível
-[ ] 4.29.11 — Revisão UX/UI
-[ ] 4.29.12 — Teste regressivo
-[ ] 4.29.13 — Atualizar documentação
-[ ] 4.29.14 — Commit
-```
-
-## 4.30 — Multiclasse
-
-```txt
-[ ] 4.30.1 — Modelar classes múltiplas da ficha
-[ ] 4.30.2 — Criar CharacterSheetClass ou estrutura equivalente
-[ ] 4.30.3 — Calcular nível total pela soma das classes
-[ ] 4.30.4 — Exibir classes no header da ficha
-[ ] 4.30.5 — Fluxo de subir de nível pergunta qual classe aumenta
-[ ] 4.30.6 — Aplicar progressão da classe escolhida
-[ ] 4.30.7 — Ajustar magias para múltiplas classes
-[ ] 4.30.8 — Ajustar perícias/proficiências para multiclasse
-[ ] 4.30.9 — Histórico de níveis
-[ ] 4.30.10 — Revisão UX/UI do multiclasse
-[ ] 4.30.11 — Teste regressivo
-[ ] 4.30.12 — Commit
-```
-
----
-
-# 🧾 Observação sobre seed
-
-Com a expansão de magias e futuras expansões de itens, a seed principal tende a crescer demais.
+Com muitas magias, itens e features, a seed principal tende a crescer demais.
 
 Decisão recomendada:
 

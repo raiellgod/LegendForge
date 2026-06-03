@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, PointerEvent, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { FormEvent, PointerEvent } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -128,6 +129,87 @@ import {
   CharacterReadySheetModal,
   type CharacterReadySheetRollRequest,
 } from "@/features/character-builder/components/CharacterReadySheetModal";
+
+type CharacterSheetPopoutMessage = {
+  source: "legendforge-sheet-popout";
+  type: "ROLL_SHEET_ACTION";
+  payload: CharacterReadySheetRollRequest;
+};
+
+function isCharacterSheetPopoutMessage(
+  value: unknown,
+): value is CharacterSheetPopoutMessage {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const message = value as Partial<CharacterSheetPopoutMessage>;
+
+  return (
+    message.source === "legendforge-sheet-popout" &&
+    message.type === "ROLL_SHEET_ACTION" &&
+    Boolean(message.payload)
+  );
+}
+
+
+const DEFAULT_TABLE_CHAT_MESSAGE: ChatMessage = {
+  id: "system-welcome",
+  author: "Sistema",
+  kind: "system",
+  content: "A mesa foi aberta. A aventura aguarda os jogadores.",
+};
+
+function getTableChatStorageKey(campaignId: string) {
+  return `legendforge:campaign:${campaignId}:chat`;
+}
+
+function loadStoredTableChatMessages(campaignId: string): ChatMessage[] {
+  if (typeof window === "undefined") {
+    return [DEFAULT_TABLE_CHAT_MESSAGE];
+  }
+
+  const storedMessages = window.sessionStorage.getItem(
+    getTableChatStorageKey(campaignId),
+  );
+
+  if (!storedMessages) {
+    return [DEFAULT_TABLE_CHAT_MESSAGE];
+  }
+
+  try {
+    const parsedMessages = JSON.parse(storedMessages);
+
+    if (!Array.isArray(parsedMessages)) {
+      return [DEFAULT_TABLE_CHAT_MESSAGE];
+    }
+
+    const validMessages = parsedMessages.filter((message): message is ChatMessage => {
+      if (!message || typeof message !== "object") {
+        return false;
+      }
+
+      const partialMessage = message as Partial<ChatMessage>;
+
+      return (
+        typeof partialMessage.id === "string" &&
+        typeof partialMessage.author === "string" &&
+        typeof partialMessage.content === "string" &&
+        (partialMessage.kind === "system" ||
+          partialMessage.kind === "user" ||
+          partialMessage.kind === "roll" ||
+          partialMessage.kind === "whisper")
+      );
+    });
+
+    return validMessages.length > 0
+      ? validMessages
+      : [DEFAULT_TABLE_CHAT_MESSAGE];
+  } catch {
+    return [DEFAULT_TABLE_CHAT_MESSAGE];
+  }
+}
+
 
 const TOKEN_GRID_SIZE_IN_PIXELS = 40;
 
@@ -1708,14 +1790,16 @@ export default function CampaignPlayPage() {
 
   const [isAssumingGm, setIsAssumingGm] = useState(false);
 
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    {
-      id: "system-welcome",
-      author: "Sistema",
-      kind: "system",
-      content: "A mesa foi aberta. A aventura aguarda os jogadores.",
-    },
-  ]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() =>
+    loadStoredTableChatMessages(params.id),
+  );
+
+  useEffect(() => {
+    window.sessionStorage.setItem(
+      getTableChatStorageKey(params.id),
+      JSON.stringify(chatMessages),
+    );
+  }, [chatMessages, params.id]);
 
   useEffect(() => {
     async function loadTable() {
@@ -1773,6 +1857,7 @@ export default function CampaignPlayPage() {
 
     loadTable();
   }, [params.id, router]);
+
 
   function handleChangeTool(nextTool: ToolMode) {
     if (nextTool !== "measure") {
@@ -2292,49 +2377,55 @@ export default function CampaignPlayPage() {
     setChatInput("");
   }
 
-  function publishRollToChat(roll: RollResult, rollLabel?: string) {
-    setChatMessages((currentMessages) => [
-      ...currentMessages,
-      {
-        id: createId(),
-        author: roll.author,
-        kind: "roll",
-        content: rollLabel ?? `${roll.author} rolou ${roll.expression}`,
-        dice: roll.expression,
-        result: roll.total,
-        displayResult: roll.displayResult,
-        breakdown: roll.breakdown,
-      },
-    ]);
-  }
+  const publishRollToChat = useCallback(
+    (roll: RollResult, rollLabel?: string) => {
+      setChatMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: createId(),
+          author: roll.author,
+          kind: "roll",
+          content: rollLabel ?? `${roll.author} rolou ${roll.expression}`,
+          dice: roll.expression,
+          result: roll.total,
+          displayResult: roll.displayResult,
+          breakdown: roll.breakdown,
+        },
+      ]);
+    },
+    [],
+  );
 
-  function handleRoll(
-    rollExpression: string,
-    visibility: RollVisibility,
-    rollLabel?: string,
-  ) {
-    if (!user) {
-      return;
-    }
-
-    setRollError("");
-
-    try {
-      const author = getDisplayName(user);
-      const roll = rollDiceExpression(rollExpression, author);
-
-      if (visibility === "private" && isGM) {
-        setPrivateRolls((currentRolls) => [roll, ...currentRolls]);
+  const handleRoll = useCallback(
+    (
+      rollExpression: string,
+      visibility: RollVisibility,
+      rollLabel?: string,
+    ) => {
+      if (!user) {
         return;
       }
 
-      publishRollToChat(roll, rollLabel);
-    } catch (error) {
-      setRollError(
-        error instanceof Error ? error.message : "Não foi possível rolar.",
-      );
-    }
-  }
+      setRollError("");
+
+      try {
+        const author = getDisplayName(user);
+        const roll = rollDiceExpression(rollExpression, author);
+
+        if (visibility === "private" && isGM) {
+          setPrivateRolls((currentRolls) => [roll, ...currentRolls]);
+          return;
+        }
+
+        publishRollToChat(roll, rollLabel);
+      } catch (error) {
+        setRollError(
+          error instanceof Error ? error.message : "Não foi possível rolar.",
+        );
+      }
+    },
+    [isGM, publishRollToChat, user],
+  );
 
   function handleRollExpression(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -2429,46 +2520,69 @@ export default function CampaignPlayPage() {
   setActiveRightTab("chat");
 }
 
-  function handleReadySheetRoll(request: CharacterReadySheetRollRequest) {
-  if (request.kind === "effect") {
-    if (!user) {
-      return;
+  const handleReadySheetRoll = useCallback(
+    (request: CharacterReadySheetRollRequest) => {
+      if (request.kind === "effect") {
+        if (!user) {
+          return;
+        }
+
+        setChatMessages((currentMessages) => [
+          ...currentMessages,
+          {
+            id: createId(),
+            author: getDisplayName(user),
+            kind: "roll",
+            content: `${request.label}\n${request.description}`,
+            dice: "Efeito",
+            result: 0,
+            displayResult: "Efeito",
+            breakdown: request.description,
+          },
+        ]);
+
+        setActiveRightTab("chat");
+        return;
+      }
+
+      if (request.kind === "damage") {
+        handleRoll(request.expression, "public", request.label);
+        setActiveRightTab("chat");
+        return;
+      }
+
+      const modifierExpression =
+        request.modifier === 0
+          ? ""
+          : request.modifier > 0
+            ? `+${request.modifier}`
+            : `${request.modifier}`;
+
+      handleRoll(`1d20${modifierExpression}`, "public", request.label);
+      setActiveRightTab("chat");
+    },
+    [handleRoll, user],
+  );
+
+  useEffect(() => {
+    function handleCharacterSheetPopoutMessage(event: MessageEvent) {
+      if (event.origin !== window.location.origin) {
+        return;
+      }
+
+      if (!isCharacterSheetPopoutMessage(event.data)) {
+        return;
+      }
+
+      handleReadySheetRoll(event.data.payload);
     }
 
-    setChatMessages((currentMessages) => [
-      ...currentMessages,
-      {
-        id: createId(),
-        author: getDisplayName(user),
-        kind: "roll",
-        content: `${request.label}\n${request.description}`,
-        dice: "Efeito",
-        result: 0,
-        displayResult: "Efeito",
-        breakdown: request.description,
-      },
-    ]);
+    window.addEventListener("message", handleCharacterSheetPopoutMessage);
 
-    setActiveRightTab("chat");
-    return;
-  }
-
-  if (request.kind === "damage") {
-    handleRoll(request.expression, "public", request.label);
-    setActiveRightTab("chat");
-    return;
-  }
-
-  const modifierExpression =
-    request.modifier === 0
-      ? ""
-      : request.modifier > 0
-        ? `+${request.modifier}`
-        : `${request.modifier}`;
-
-  handleRoll(`1d20${modifierExpression}`, "public", request.label);
-  setActiveRightTab("chat");
-}
+    return () => {
+      window.removeEventListener("message", handleCharacterSheetPopoutMessage);
+    };
+  }, [handleReadySheetRoll]);
 
   function handleRollCustomDice() {
     if (!Number.isInteger(customDiceSides) || customDiceSides < 2) {
@@ -3515,7 +3629,13 @@ export default function CampaignPlayPage() {
             onChangeTab={setActiveRightTab}
             onClose={() => setIsRightPanelOpen(false)}
           >
-            <div className="min-h-0 flex-1 overflow-y-auto p-4 text-[13px]">
+            <div
+              className={
+                activeRightTab === "chat"
+                  ? "min-h-0 flex-1 overflow-hidden text-[13px]"
+                  : "min-h-0 flex-1 overflow-y-auto p-4 text-[13px]"
+              }
+            >
               {activeRightTab === "chat" && user && (
                 <TableChatPanel
                   user={user}
@@ -3698,6 +3818,24 @@ export default function CampaignPlayPage() {
           )}
           tokenSizeOptions={TOKEN_SIZE_OPTIONS}
           onOpenSheet={() => {
+            const actorCharacterSheet = getCharacterSheetByActor(actionActor);
+
+            if (actionActor.type === "PLAYER_CHARACTER" && actorCharacterSheet) {
+              window.open(
+                `/campaigns/${actionActor.campaignId}/sheets/${actorCharacterSheet.id}`,
+                `legendforge-sheet-${actorCharacterSheet.id}`,
+                "width=1280,height=860",
+              );
+
+              setActionActor(null);
+
+              if (characterBuilderOptions.skills.length === 0) {
+                void handleLoadCharacterBuilderOptions();
+              }
+
+              return;
+            }
+
             setSelectedActor(actionActor);
             setActionActor(null);
 
@@ -3816,6 +3954,10 @@ function ActorSheetModal({
   const isNpc = actor.type === "NPC";
   const isCreature = actor.type === "CREATURE";
 
+  const popoutUrl = characterSheet
+    ? `/campaigns/${actor.campaignId}/sheets/${characterSheet.id}`
+    : undefined;
+
   if (isPlayerCharacter) {
     return (
       <CharacterReadySheetModal
@@ -3824,6 +3966,7 @@ function ActorSheetModal({
         allSkills={allSkills}
         isGM={isGM}
         isSavingImages={isSavingCharacterSheetImages}
+        popoutUrl={popoutUrl}
         onSaveImages={onUpdateCharacterSheetImages}
         onRollSheetAction={onRollSheetAction}
         onClose={onClose}

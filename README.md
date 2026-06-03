@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-advanced%20spell%20progression%20complete-green)
+![Status](https://img.shields.io/badge/status-ready%20sheet%20popout%20complete-green)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -8,7 +8,7 @@
 ![Auth](https://img.shields.io/badge/auth-better--auth-green)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen)
 
-> A modern Virtual Tabletop (VTT) built with production-grade backend architecture, focusing on scalability, modularity, and real-world system design.
+> A modern Virtual Tabletop (VTT) built with a production-minded full-stack architecture, focused on real campaign play, persisted character creation, and an evolving ready character sheet connected to the table.
 
 ---
 
@@ -19,15 +19,15 @@
 Inspired by tools like Roll20 and Foundry VTT, but with its own philosophy:
 
 - 🧩 System-agnostic foundation
-- 🎲 Focused on custom campaigns
+- 🎲 Custom campaigns and real table flow
 - 👥 Built for real gameplay with friends
 - 🧠 Designed as a serious full-stack portfolio project
-- ⚙️ Built incrementally with production mindset
-- 📄 Character creation built as a real persisted flow
+- ⚙️ Built incrementally with small, testable steps
+- 📄 Persisted character creation and ready sheet
 - 🗺️ Table tools built toward a playable VTT experience
-- 🧍 Ready character sheet designed for actual gameplay at the table
-- 🎲 Sheet-based roll actions connected to table chat
-- ✨ Advanced spellcasting rules now connected to class progression
+- 🧍 Ready character sheet available both as a modal and a pop-out window
+- 🎲 Sheet-based roll actions connected to the table chat
+- ✨ Spellcasting progression connected to class rules
 
 ---
 
@@ -41,9 +41,10 @@ LegendForge demonstrates:
 - 🔐 Real authentication and persisted sessions
 - 🧠 System design thinking
 - 🎮 Flexible RPG engine foundation
-- 🎨 UI built from a product-driven flow
+- 🎨 Product-driven UI flow
 - 🧍 Character builder connected to real domain data
-- 🧾 Ready character sheet with tabs, compact status view, inventory/profile/magic sections
+- 🧾 Ready character sheet with reusable view architecture
+- 🪟 Character sheet pop-out linked to the table
 - 🎲 Table roll actions from skills, saving throws, initiative, equipment and spells
 - 🪄 Spellcasting progression by class, spell filtering, spell limits, spell DC, spell attack and spell slots
 - 🧩 Incremental VTT features with persistence where it matters
@@ -106,7 +107,8 @@ LegendForge/
 │   │   │   │   ├── search/page.tsx
 │   │   │   │   └── [id]/
 │   │   │   │       ├── edit/page.tsx
-│   │   │   │       └── play/page.tsx
+│   │   │   │       ├── play/page.tsx
+│   │   │   │       └── sheets/[sheetId]/page.tsx
 │   │   │   ├── login/page.tsx
 │   │   │   ├── register/page.tsx
 │   │   │   ├── layout.tsx
@@ -128,8 +130,8 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟢 Advanced spellcasting progression rules completed.  
-> 🟡 Next focus: structural refactor of the ready character sheet.
+> 🟢 Ready sheet structural refactor completed and tested.  
+> 🟡 Next focus: chat UX/UI cleanup after the pop-out sheet work.
 
 ### ✅ Completed
 
@@ -157,6 +159,8 @@ LegendForge/
   - `/campaigns/[id]/edit`
 - Game page:
   - `/campaigns/[id]/play`
+- Character sheet pop-out page:
+  - `/campaigns/[id]/sheets/[sheetId]`
 - Campaign actors and real actor locations
 - Scene tokens persisted in the database
 - Token size editing and persistence
@@ -198,15 +202,18 @@ LegendForge/
   - empty draft when creating a new character
   - basic dynamic language by pronoun
 - Ready character sheet:
-  - header with identity visible on all tabs
-  - tabs in order: Ficha/Status, Bolsa, Magia, Perfil
-  - compact status layout
-  - all skills shown, not only proficient skills
-  - saving throws and skill rows prepared as rollable actions
-  - Bolsa separated with equipment, coins, attack and damage buttons
-  - Magia separated with spell cards, spellcasting summary and spell slots
-  - Perfil separated with image/token/profile/narrative fields
+  - reusable `CharacterReadySheetView`
+  - modal shell through `CharacterReadySheetModal`
+  - pop-out route with real sheet data
+  - top compact fixed sheet summary
+  - tabs in order: Ficha/Status, Combate, Bolsa, Magia, Features, Perfil, Notas
+  - Ficha/Status organized for fast reading
+  - Bolsa with compact expandable cards
+  - Magia with compact expandable cards grouped by Truques and Magias by level
+  - Perfil focused on image/token/profile fields
+  - Notas separated from Perfil
   - portrait/token URL editing and persistence
+  - `<Image />` used for sheet image previews with `unoptimized`
 - Game table refactor:
   - `features/game-table`
   - extracted toolbar
@@ -220,9 +227,9 @@ LegendForge/
   - local fog tool with real mask
   - table regression test completed
 - Ready sheet roll actions:
-  - click skill → rolls `1d20 + skill bonus`
-  - click saving throw → rolls `1d20 + saving throw bonus`
-  - click initiative → rolls `1d20 + initiative bonus`
+  - skill → `1d20 + skill bonus`
+  - saving throw → `1d20 + saving throw bonus`
+  - initiative → `1d20 + initiative bonus`
   - GM table initiative ranking
   - player characters use real initiative bonus
   - NPCs/creatures use `+0` until their own sheets exist
@@ -231,7 +238,7 @@ LegendForge/
   - spell attack with real spell attack bonus for spellcasting classes
   - spell damage detection from description
   - spell attack disabled when class has no spellcasting ability
-  - roll display fixed to show numeric total instead of raw dice list
+  - pop-out sheet sends rolls back to the table by `postMessage`
 - Advanced spellcasting rules:
   - class spellcasting ability
   - class level progression
@@ -252,7 +259,7 @@ LegendForge/
 ## 🚧 In Progress
 
 ```txt
-4.27.11 — Documentation update after advanced spellcasting rules
+4.28.13 — Documentation update after ready sheet structural refactor
 ```
 
 ---
@@ -260,22 +267,27 @@ LegendForge/
 ## 🔜 Next Step
 
 ```txt
-4.27.12 — Commit advanced spell progression rules
+4.28.14 — Revisar UX/UI do chat após ficha pop-out
 ```
 
 Then:
 
 ```txt
-4.28 — Structural ready sheet refactor
+4.28.15 — Commit da 4.28
 ```
 
-Expected focus:
+Expected commit command:
 
-- ready sheet as a more stable table tool
-- compact + expandable information pattern
-- better magic/inventory readability
-- fixed shell concept with central dynamic tabs
-- future pop-out/window mode planning
+```bash
+git status
+git diff --stat
+cd frontend
+pnpm lint
+cd ..
+git add .
+git status
+git commit -m "feat: refactor ready sheet popout"
+```
 
 ---
 
@@ -313,16 +325,16 @@ Current state:
 - Auth tables are operational
 - Campaign tables are operational
 - RPG domain is expanding incrementally
-- CharacterSheet domain exists and is connected to the builder and ready sheet
+- CharacterSheet domain exists and is connected to the builder, ready sheet modal and ready sheet pop-out
 - Campaign actors and scene tokens are connected to the game table
 - `LevelProgression` stores class progression by level
 - `ClassSpell` stores which spells each class can learn/use and from which class level
 
 More details:
 
-- `docs/DATABASE_SETUP.md`
-- `docs/ARCHITECTURE.md`
-- `docs/DEV_STATE.md`
+- `backend/docs/DATABASE_SETUP.md`
+- `backend/docs/ARCHITECTURE.md`
+- `backend/docs/DEV_STATE.md`
 
 ---
 
@@ -339,84 +351,19 @@ Current UI progress:
 - ✅ Search campaign page started
 - ✅ Tabletop/session screen with functional tools
 - ✅ Character builder modal with persisted flow
-- ✅ Ready character sheet with tabs
-- ✅ Compact Ficha/Status layout
+- ✅ Ready character sheet modal
+- ✅ Ready character sheet pop-out
+- ✅ Compact fixed sheet top
+- ✅ Ficha/Status, Combate, Bolsa, Magia, Features, Perfil and Notas tabs
+- ✅ Compact expandable cards in Magia and Bolsa
 - ✅ Rollable skills, saving throws, initiative, equipment and spells
 - ✅ Magic tab with real spellcasting summary and slots
-- 🟡 Structural ready sheet refactor coming next
+- ✅ Image/token URL persistence
+- 🟡 Chat panel needs UX/UI cleanup after pop-out integration
 
 ---
 
-## 🧠 Development Philosophy
-
-- Incremental
-- Always functional
-- No unnecessary overengineering
-- Continuous refinement
-- Production mindset from the start
-- Backend and database protect the domain
-- UI is built around real product flow
-
-> Build small. Scale right.
-
----
-
-## 📦 Feature Capsules
-
-The project is documented through **Feature Capsules**, which record small validated steps.
-
-Current capsules now include:
-
-- Capsule 01 — Setup
-- Capsule 02 — Backend Base
-- Capsule 03 — Data & UI Design
-- Capsule 04 — Database Design
-- Capsule 05 — Figma UI
-- Capsule 06 — RPG System
-- Capsule 07 — Database Refinement
-- Capsule 08 — Production Constraints
-- Capsule 09 — Prisma Integration
-- Capsule 10 — Better Auth
-- Capsule 11 — API Integration
-- Capsule 12 — Campaign Domain API
-- Capsule 13 — Campaign Frontend Flow
-- Capsule 14 — Campaign Search & Join Flow
-- Capsule 15 — Game Page Foundation
-- Capsule 16 — Campaign Actors
-- Capsule 17 — Scene Tokens
-- Capsule 18 — RPG System Seed Expansion
-- Capsule 19 — CharacterSheet Backend
-- Capsule 20 — Character Creation Menu
-- Capsule 21 — Character Builder Layout
-- Capsule 22 — Character Builder Draft
-- Capsule 23 — Character Builder Options
-- Capsule 24 — Character Builder Choices Persistence
-- Capsule 25 — Character Builder Step Validation
-- Capsule 26 — Character Builder Attributes
-- Capsule 27 — Character Builder Skills
-- Capsule 28 — Character Builder Spells
-- Capsule 29 — Character Builder Equipment
-- Capsule 30 — Character Builder About
-- Capsule 31 — Character Builder Review & Stabilization
-- Capsule 32 — Game Table Refactor Foundation
-- Capsule 33 — Game Table Panels
-- Capsule 34 — Game Table Canvas & Tools
-- Capsule 35 — Game Table Regression & Cleanup
-- Capsule 36 — Active Characters & Actor Lifecycle
-- Capsule 37 — Ready Character Sheet
-- Capsule 38 — Ready Sheet Roll Actions
-- Capsule 39 — Player Character Creation Access
-- Capsule 40 — Advanced Spell Progression Rules
-
-See:
-
-```txt
-docs/FEATURE_CAPSULE.md
-```
-
----
-
-## 🚀 Getting Started
+## 🧪 Useful Commands
 
 ### Backend
 
@@ -436,6 +383,20 @@ cd backend
 pnpm prisma studio
 ```
 
+### Seed
+
+```bash
+cd backend
+pnpm prisma db seed
+```
+
+Fallback when seed command is not configured:
+
+```bash
+cd backend
+pnpm tsx prisma/seed.ts
+```
+
 ### Frontend
 
 ```bash
@@ -444,41 +405,14 @@ pnpm install
 pnpm run dev
 ```
 
----
-
-## 🧪 Local Development Notes
-
-When changing the Prisma schema:
+### Lint
 
 ```bash
-cd backend
-pnpm prisma format
-pnpm prisma validate
-pnpm prisma generate
-pnpm prisma migrate dev --name <migration_name>
+cd frontend
+pnpm lint
 ```
 
-When only re-running seed data:
-
-```bash
-cd backend
-pnpm prisma db seed
-```
-
-If Prisma seed is not configured in the Prisma config, run:
-
-```bash
-cd backend
-pnpm tsx prisma/seed.ts
-```
-
-When testing auth or database changes:
-
-- restart the backend
-- validate request in Scalar
-- confirm persistence in Prisma Studio
-
-For frontend cache issues:
+### Clear Next cache
 
 ```bash
 cd frontend
@@ -486,9 +420,10 @@ rm -rf .next
 pnpm run dev
 ```
 
-Before commits:
+### Before commits
 
 ```bash
+git status
 git diff --stat
 ```
 

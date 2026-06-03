@@ -4,7 +4,7 @@
 
 ## 📅 Last Update
 
-01/06/2026
+03/06/2026
 
 ---
 
@@ -31,7 +31,9 @@ LegendForge/
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
-│   │   │   └── campaigns/[id]/play/page.tsx
+│   │   │   └── campaigns/[id]/
+│   │   │       ├── play/page.tsx
+│   │   │       └── sheets/[sheetId]/page.tsx
 │   │   ├── features/
 │   │   │   ├── character-builder/
 │   │   │   │   ├── components/
@@ -143,6 +145,10 @@ LegendForge/
 - criação de personagem do zero abre draft vazio
 - player comum consegue abrir criação de personagem pela aba Personagens
 - ficha pronta carrega dados da CharacterSheet
+- ficha pronta abre no modal
+- ficha pronta abre em pop-out
+- pop-out carrega dados reais
+- pop-out envia rolagens para o chat da mesa via `postMessage`
 - retrato/token por URL persistem
 - atualização de token a partir da ficha sincroniza tokens existentes do ator
 - progressões por classe/nível foram criadas e populadas no seed
@@ -154,10 +160,8 @@ LegendForge/
 
 ### 🚧 Em andamento
 
-- documentação/commit da 4.27
-- próxima macro: refatoração estrutural da ficha pronta
-- preparar ficha com informações fixas e centro variável
-- preparar cards compactos com expand/collapse
+- 4.28.14 — revisão UX/UI do chat após ficha pop-out
+- 4.28.15 — commit da 4.28
 - persistência/sincronização futura de ferramentas locais da mesa
 
 ---
@@ -226,7 +230,25 @@ levelProgressions
 classSpells
 ```
 
-As rotas de ficha pronta agora incluem `characterClass.levelProgressions` para permitir a exibição de slots na aba Magia.
+As rotas de ficha pronta incluem `characterClass.levelProgressions` para permitir a exibição de slots na aba Magia.
+
+### Mudanças relevantes da 4.28
+
+A 4.28 foi majoritariamente frontend. Não criou rota backend nova.
+
+Nova rota frontend:
+
+```txt
+/campaigns/[id]/sheets/[sheetId]
+```
+
+Essa rota usa APIs existentes para:
+
+- validar/carregar campanha
+- buscar a ficha
+- buscar atores
+- buscar opções do sistema
+- renderizar a mesma ficha pronta do modal em pop-out
 
 ---
 
@@ -244,6 +266,7 @@ As rotas de ficha pronta agora incluem `characterClass.levelProgressions` para p
 - `/campaigns/search`
 - `/campaigns/[id]/edit`
 - `/campaigns/[id]/play`
+- `/campaigns/[id]/sheets/[sheetId]`
 
 ### Página de jogo `/campaigns/[id]/play`
 
@@ -266,6 +289,8 @@ Estado atual:
 - ações de ator/personagem
 - edição de tamanho de token
 - ficha pronta de personagem
+- pop-out da ficha
+- listener de mensagens do pop-out
 - rolagens automáticas vindas da ficha
 - criação de personagem para player comum pela aba Personagens
 
@@ -300,22 +325,73 @@ Etapas/componentes extraídos:
 - etapa Sobre
 - etapa Revisão
 - modal de ficha pronta
+- view reutilizável da ficha pronta
 
 Status:
 
 - Criar personagem abre draft vazio.
-- Builder não carrega dados antigos da Hikari ao criar personagem.
+- Builder não carrega dados antigos ao criar personagem.
 - Player comum abre builder direto pelo botão `+ Personagem`.
 - Pronomes influenciam linguagem de labels principais.
 - Pronome e gênero inicial sincronizam quando apropriado.
 - Salvar rascunho funciona.
 - Finalizar ficha gera personagem/ficha pronta.
-- Ficha pronta tem abas Ficha/Status, Bolsa, Magia e Perfil.
+- Ficha pronta tem abas Ficha/Status, Combate, Bolsa, Magia, Features, Perfil e Notas.
 - Ficha pronta exibe todas as perícias.
 - Bolsa mostra equipamentos, moedas e botões Ataque/Dano.
 - Magia mostra botões Ataque/Dano, cálculo real de conjuração e slots.
 - Perfil mostra imagem/token e campos narrativos.
-- Teste regressivo da 4.27 foi concluído.
+- Notas ficam separadas de Perfil.
+- Teste regressivo da 4.28 foi concluído com zero erros.
+
+---
+
+## 🧾 Ready Sheet — Status detalhado da 4.28
+
+Arquivos principais:
+
+```txt
+frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetModal.tsx
+frontend/src/app/campaigns/[id]/sheets/[sheetId]/page.tsx
+frontend/src/app/campaigns/[id]/play/page.tsx
+```
+
+Arquitetura:
+
+```txt
+CharacterReadySheetView
+- contém a ficha completa
+- usado no modal
+- usado no pop-out
+
+CharacterReadySheetModal
+- casca visual do modal
+
+sheets/[sheetId]/page.tsx
+- página pop-out
+- carrega dados reais
+
+play/page.tsx
+- mesa
+- chat
+- listener de postMessage
+```
+
+Funcionalidades validadas:
+
+- abrir ficha no modal
+- abrir ficha em pop-out
+- pop-out carrega a ficha certa
+- rolagem do pop-out aparece no chat da mesa
+- topo compacto da ficha
+- Ficha/Status reorganizada
+- Bolsa compacta e expansível
+- Magia compacta e expansível
+- Magia separada em Truques / Magias / Nível
+- abas futuras preparadas: Combate, Features e Notas
+- responsividade revisada
+- `<Image />` usado no lugar de `<img>` para preview, com `unoptimized`
 
 ---
 
@@ -417,15 +493,40 @@ Sincronização real entre contas será tratada em fase futura.
 [x] 4.25 — Ficha pronta, abas, perfil, bolsa, magia e imagens por URL
 [x] 4.26 — Rolagens automáticas pela ficha pronta
 [x] 4.27 — Regras avançadas de magia e progressão inicial
-[próximo] 4.27.12 — Commit da 4.27
-[depois] 4.28 — Refatoração estrutural da ficha pronta
+[x] 4.28.1 — Planejar arquitetura da ficha pop-out
+[x] 4.28.2 — Criar rota própria da ficha pronta carregando dados reais
+[x] 4.28.3 — Reaproveitar ficha completa dentro do pop-out
+[x] 4.28.4 — Conectar rolagens do pop-out ao chat da mesa via postMessage
+[x] 4.28.5 — Extrair miolo da ficha para CharacterReadySheetView
+[x] 4.28.6 — Criar topo fixo compacto da ficha
+[x] 4.28.7 — Reorganizar Ficha/Status para leitura rápida
+[x] 4.28.8 — Reorganizar aba Magia com cards expansíveis
+[x] 4.28.9 — Reorganizar aba Bolsa com cards expansíveis
+[x] 4.28.10 — Preparar abas futuras: Combate, Features e Notas
+[x] 4.28.11 — Revisar responsividade da ficha pop-out
+[x] 4.28.12 — Teste regressivo da ficha pop-out
+[x] 4.28.13 — Atualizar documentação da 4.28
+[próximo] 4.28.14 — Revisar UX/UI do chat após ficha pop-out
+[pendente] 4.28.15 — Commit da 4.28
+[depois] 4.29 — Regras avançadas de equipamento, features e level up
 ```
 
 ---
 
 ## 🧭 Próximo plano
 
-### 4.27.12 — Commit da 4.27
+### 4.28.14 — Revisar UX/UI do chat após ficha pop-out
+
+```txt
+[ ] Revisar layout de cards de rolagem
+[ ] Reduzir altura/poluição de cards repetidos
+[ ] Diferenciar mensagem normal, sistema, rolagem e sussurro
+[ ] Preservar visibilidade pública/sussurro
+[ ] Melhorar leitura de rolagens vindas da ficha
+[ ] Testar rolagens do modal e do pop-out
+```
+
+### 4.28.15 — Commit da 4.28
 
 ```txt
 [ ] git status
@@ -433,55 +534,7 @@ Sincronização real entre contas será tratada em fase futura.
 [ ] cd frontend && pnpm lint && cd ..
 [ ] git add .
 [ ] git status
-[ ] git commit -m "feat: add advanced spell progression rules"
-```
-
-### 4.28 — Refatoração estrutural da ficha pronta
-
-```txt
-[ ] 4.28.1 — Planejar arquitetura da ficha pronta
-[ ] 4.28.2 — Definir layout shell: header fixo, laterais fixas e centro variável
-[ ] 4.28.3 — Definir modo ficha modal atual versus futura janela destacada/pop-out
-[ ] 4.28.4 — Criar padrão de cards compactos com expand/collapse
-[ ] 4.28.5 — Aplicar expand/collapse na aba Magia
-[ ] 4.28.6 — Aplicar expand/collapse na aba Bolsa
-[ ] 4.28.7 — Reorganizar informações fixas da ficha
-[ ] 4.28.8 — Reorganizar abas centrais
-[ ] 4.28.9 — Preparar área lateral de defesas, sentidos, condições e proficiências
-[ ] 4.28.10 — Melhorar densidade visual e reduzir textos redundantes
-[ ] 4.28.11 — Revisar responsividade
-[ ] 4.28.12 — Teste regressivo da ficha pronta
-[ ] 4.28.13 — Atualizar documentação da 4.28
-[ ] 4.28.14 — Commit da 4.28
-```
-
-### 4.29 — Regras avançadas de equipamento, features e level up
-
-```txt
-[ ] 4.29.1 — Calcular ataque real por equipamento
-[ ] 4.29.2 — Definir regra inicial de ataque por equipamento
-[ ] 4.29.3 — Revisar modelagem de pacotes/itens compostos
-[ ] 4.29.4 — Popular seed de pacotes de equipamento
-[ ] 4.29.5 — Popular seed de equipamentos iniciais por classe
-[ ] 4.29.6 — Preparar ataque contra CA manual
-[ ] 4.29.7 — Features de classe por nível
-[ ] 4.29.8 — Subclasse no nível correto
-[ ] 4.29.9 — Preparar fluxo de subir de nível
-[ ] 4.29.10 — Level up mostra apenas pendências/mudanças do novo nível
-[ ] 4.29.11 — Revisão UX/UI das regras avançadas
-[ ] 4.29.12 — Teste regressivo da 4.29
-[ ] 4.29.13 — Atualizar documentação da 4.29
-[ ] 4.29.14 — Commit da 4.29
-```
-
-### 4.30 — Multiclasse
-
-```txt
-[ ] Modelar múltiplas classes por ficha
-[ ] Nível total por soma das classes
-[ ] Subir nível perguntando qual classe recebe o novo nível
-[ ] Ajustar magias/proficiências/features por classe
-[ ] Histórico de níveis
+[ ] git commit -m "feat: refactor ready sheet popout"
 ```
 
 ---
@@ -491,7 +544,6 @@ Sincronização real entre contas será tratada em fase futura.
 ### Modularização de seed
 
 - Separar seed em arquivos menores antes de expandir muito magias/itens.
-- Estrutura futura sugerida:
 
 ```txt
 backend/prisma/seeds/
@@ -517,35 +569,20 @@ backend/prisma/seeds/
 - preview/fit/crop
 - persistência segura
 
-### Responsividade da ficha pronta
-
-- revisar notebooks menores
-- revisar telas widescreen
-- revisar tablet
-- revisar comportamento de scroll nas abas Ficha/Status, Bolsa, Magia e Perfil
-
 ### Regras avançadas
 
-- seed mais robusto
-- progressão por nível
-- magias por classe/nível
-- perícias por classe/antecedente
-- salvaguardas
-- proficiências editáveis pelo GM
-- defesa/armadura como camada mecânica
-
-### Multiclasse
-
-- múltiplas classes por ficha
-- escolha de qual classe sobe no level up
-- progressão separada por classe
-- header exibindo composição de classes
+- ataque real por equipamento
+- ataque contra CA manual
+- features por nível
+- subclasse no nível correto
+- level up
+- multiclasse
 
 ### NPCs e criaturas
 
-- NPCs terão ficha própria futura
-- Criaturas terão stat block/bestiário próprio
-- Não usar `CharacterSheet` como ficha universal para tudo
+- NPCs terão ficha própria futura.
+- Criaturas terão bloco próprio de bestiário.
+- Não usar `CharacterSheet` como ficha universal para tudo.
 
 ### Sincronização em tempo real
 

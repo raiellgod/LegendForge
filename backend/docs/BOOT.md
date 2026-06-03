@@ -9,7 +9,7 @@ Virtual Tabletop (VTT)
 
 ---
 
-## 📅 Current State — 01/06/2026
+## 📅 Current State — 03/06/2026
 
 Este documento serve para reiniciar a próxima conversa sem perder contexto.
 
@@ -54,6 +54,7 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
 - Scalar/Swagger funcionando.
 - Campanhas reais implementadas.
 - Página `/campaigns/[id]/play` em desenvolvimento avançado.
+- Nova rota `/campaigns/[id]/sheets/[sheetId]` criada para pop-out da ficha.
 - Mesa com `CampaignActor`.
 - Tokens/cena com `SceneToken`.
 - Sistema RPG base semeado.
@@ -79,14 +80,28 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
 - Mover visão, medir, desenhar e névoa funcionando localmente.
 - Tamanho de token editável e persistido.
 - Biblioteca e criação de atores restauradas na aba Personagens.
-- Ficha pronta organizada em abas: Ficha/Status, Bolsa, Magia e Perfil.
-- Identidade da ficha fica no header fixo.
-- Ficha/Status compacta mostra todos os atributos, status, testes e perícias.
-- Todas as perícias aparecem, não apenas as proficientes.
-- Bolsa mostra equipamentos, moedas e ações de ataque/dano.
-- Magia mostra magias agrupadas e ações com cálculo real de conjuração.
-- Perfil mostra retrato, token, aparência, história, personalidade e notas.
+- Ficha pronta refatorada com `CharacterReadySheetView`.
+- `CharacterReadySheetModal` virou casca do modal.
+- A ficha pronta abre no modal e também em pop-out.
+- Pop-out carrega dados reais da ficha e do ator.
+- Pop-out envia rolagens para a mesa via `postMessage`.
+- Topo compacto da ficha funcionando.
+- Ficha pronta organizada em abas:
+  - Ficha/Status
+  - Combate
+  - Bolsa
+  - Magia
+  - Features
+  - Perfil
+  - Notas
+- Ficha/Status reorganizada para leitura rápida.
+- Bolsa com cards compactos e expansíveis.
+- Magia com cards compactos e expansíveis.
+- Magias separadas em Truques e Magias por nível.
+- Perfil focado em imagens e dados narrativos.
+- Notas separadas do Perfil.
 - Retrato/token por URL com persistência e sincronização com ator/token.
+- Imagens da ficha ajustadas para `next/image` com `unoptimized`.
 - Rolagens automáticas pela ficha funcionando:
   - perícias
   - testes de resistência
@@ -106,7 +121,7 @@ Este documento serve para reiniciar a próxima conversa sem perder contexto.
   - ataque mágico real
   - slots de magia exibidos na ficha pronta
 - Resultado grande da rolagem corrigido para mostrar o total numérico.
-- Teste regressivo da 4.27 concluído.
+- Teste regressivo da 4.28 concluído com zero erros.
 
 ---
 
@@ -145,7 +160,8 @@ Limitações intencionais atuais:
 - NPCs e criaturas ainda não têm ficha/stat block próprios
 - iniciativa de NPC/criatura usa +0
 - dano mágico ainda é detectado por texto/descrição de forma provisória
-- a ficha pronta ainda precisa de uma refatoração estrutural de UX
+- controle de slots usados ainda não existe
+- chat precisa de revisão UX/UI depois do pop-out
 ```
 
 Regra futura já decidida:
@@ -212,33 +228,75 @@ Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 [x] 4.25 — Ficha pronta com abas, perfil, bolsa, magia e imagens por URL
 [x] 4.26 — Rolagens automáticas pela ficha pronta
 [x] 4.27 — Regras avançadas de magia e progressão inicial
-[próximo] 4.28 — Refatoração estrutural da ficha pronta
+[x] 4.28.1 — Planejar arquitetura da ficha pop-out
+[x] 4.28.2 — Criar rota própria da ficha pronta carregando dados reais
+[x] 4.28.3 — Reaproveitar ficha completa dentro do pop-out
+[x] 4.28.4 — Conectar rolagens do pop-out ao chat da mesa via postMessage
+[x] 4.28.5 — Extrair miolo da ficha para CharacterReadySheetView
+[x] 4.28.6 — Criar topo fixo compacto da ficha
+[x] 4.28.7 — Reorganizar Ficha/Status para leitura rápida
+[x] 4.28.8 — Reorganizar aba Magia com cards expansíveis
+[x] 4.28.9 — Reorganizar aba Bolsa com cards expansíveis
+[x] 4.28.10 — Preparar abas futuras: Combate, Features e Notas
+[x] 4.28.11 — Revisar responsividade da ficha pop-out
+[x] 4.28.12 — Teste regressivo da ficha pop-out
+[x] 4.28.13 — Atualizar documentação da 4.28
+[próximo] 4.28.14 — Revisar UX/UI do chat após ficha pop-out
+[pendente] 4.28.15 — Commit da 4.28
 [planejado] 4.29 — Regras avançadas de equipamento, features e level up
 [planejado] 4.30 — Multiclasse
 ```
 
 ---
 
-## ✅ Fase 4.27 — Regras avançadas de magia e progressão inicial
+## ✅ Fase 4.28 — Refatoração estrutural da ficha pronta
+
+Objetivo:
 
 ```txt
-[x] 4.27.1 — Revisar modelagem de progressão por classe/nível
-[x] 4.27.2 — Revisar/expandir LevelProgression no schema
-[x] 4.27.3 — Popular seed de progressão básica por classe
-[x] 4.27.3.1 — Popular seed de magias permitidas por classe
-[x] 4.27.4 — Filtrar magias por classe
-[x] 4.27.5 — Validar quantidade de truques/magias por nível
-[x] 4.27.5.1 — Expandir seed mínimo de magias para teste real
-[x] 4.27.6 — Calcular atributo de conjuração por classe
-[x] 4.27.7 — Calcular CD de magia
-[x] 4.27.8 — Calcular ataque mágico real
-[x] 4.27.8.1 — Desabilitar ataque mágico quando a classe não tiver atributo de conjuração
-[x] 4.27.9 — Exibir espaços de magia na aba Magia
-[x] 4.27.9.1 — Reorganizar UX/UI inicial da aba Magia
-[x] Correção — resultado grande da rolagem mostra o total, não a lista dos dados
-[x] 4.27.10 — Teste regressivo da 4.27
-[x] 4.27.11 — Atualizar documentação da 4.27
-[próximo] 4.27.12 — Commit da 4.27
+Transformar a ficha pronta em uma ferramenta real de mesa: rápida, compacta, reutilizável, responsiva e acessível em pop-out.
+```
+
+Micros concluídas:
+
+```txt
+[x] 4.28.1 — Planejar arquitetura da ficha pop-out
+[x] 4.28.2 — Criar rota própria da ficha pronta carregando dados reais
+[x] 4.28.3 — Reaproveitar ficha completa dentro do pop-out
+[x] 4.28.4 — Conectar rolagens do pop-out ao chat da mesa via postMessage
+[x] 4.28.5 — Extrair miolo da ficha para CharacterReadySheetView
+[x] 4.28.6 — Criar topo fixo compacto da ficha
+[x] 4.28.7 — Reorganizar Ficha/Status para leitura rápida
+[x] 4.28.8 — Reorganizar aba Magia com cards expansíveis
+[x] 4.28.9 — Reorganizar aba Bolsa com cards expansíveis
+[x] 4.28.10 — Preparar abas futuras: Combate, Features e Notas
+[x] 4.28.11 — Revisar responsividade da ficha pop-out
+[x] 4.28.12 — Teste regressivo da ficha pop-out
+[x] 4.28.13 — Atualizar documentação da 4.28
+[próximo] 4.28.14 — Revisar UX/UI do chat após ficha pop-out
+[pendente] 4.28.15 — Commit da 4.28
+```
+
+Arquitetura atual da ficha:
+
+```txt
+CharacterReadySheetView
+- miolo real da ficha
+- usado no modal
+- usado no pop-out
+
+CharacterReadySheetModal
+- casca de modal dentro da mesa
+
+/campaigns/[id]/sheets/[sheetId]
+- rota pop-out
+- carrega dados reais
+- usa CharacterReadySheetView
+
+/campaigns/[id]/play
+- mesa
+- chat
+- listener de postMessage
 ```
 
 ---
@@ -246,7 +304,19 @@ Hoje a névoa está local/visual. Persistência/sincronização virão depois.
 ## 🎯 Próxima conversa deve começar por
 
 ```txt
-4.27.12 — Commit da 4.27
+4.28.14 — Revisar UX/UI do chat após ficha pop-out
+```
+
+Objetivo:
+
+```txt
+Limpar o chat para suportar melhor rolagens vindas da ficha, mensagens públicas, sussurros e eventos sem poluir a tela.
+```
+
+Depois seguir para:
+
+```txt
+4.28.15 — Commit da 4.28
 ```
 
 Comandos esperados:
@@ -259,48 +329,7 @@ pnpm lint
 cd ..
 git add .
 git status
-git commit -m "feat: add advanced spell progression rules"
-```
-
-Depois seguir para:
-
-```txt
-4.28 — Refatoração estrutural da ficha pronta
-```
-
-Primeiro micro sugerido:
-
-```txt
-4.28.1 — Planejar arquitetura da ficha pronta
-```
-
----
-
-## 🧭 Plano da 4.28 — Refatoração estrutural da ficha pronta
-
-Objetivo:
-
-```txt
-Transformar a ficha pronta em uma ferramenta mais limpa, rápida e estável para uso real em mesa.
-```
-
-Micros sugeridas:
-
-```txt
-[ ] 4.28.1 — Planejar arquitetura da ficha pronta
-[ ] 4.28.2 — Definir layout shell: header fixo, laterais fixas e centro variável
-[ ] 4.28.3 — Definir modo ficha modal atual versus futura janela destacada/pop-out
-[ ] 4.28.4 — Criar padrão de cards compactos com expand/collapse
-[ ] 4.28.5 — Aplicar expand/collapse na aba Magia
-[ ] 4.28.6 — Aplicar expand/collapse na aba Bolsa
-[ ] 4.28.7 — Reorganizar informações fixas da ficha: PV, CA, iniciativa, proficiência, percepção e recursos
-[ ] 4.28.8 — Reorganizar abas centrais: Ficha/Status, Combate, Magia, Bolsa, Features, Perfil/Notas
-[ ] 4.28.9 — Preparar área lateral de defesas, sentidos, condições e proficiências
-[ ] 4.28.10 — Melhorar densidade visual e reduzir textos redundantes
-[ ] 4.28.11 — Revisar responsividade em notebook menor, widescreen e tablet
-[ ] 4.28.12 — Teste regressivo da ficha pronta
-[ ] 4.28.13 — Atualizar documentação da 4.28
-[ ] 4.28.14 — Commit da 4.28
+git commit -m "feat: refactor ready sheet popout"
 ```
 
 ---
@@ -347,6 +376,13 @@ pnpm install
 pnpm run dev
 ```
 
+### Lint
+
+```bash
+cd frontend
+pnpm lint
+```
+
 ### Limpar cache do Next
 
 ```bash
@@ -372,6 +408,8 @@ Para arquivos grandes, especialmente:
 
 ```txt
 frontend/src/app/campaigns/[id]/play/page.tsx
+frontend/src/app/campaigns/[id]/sheets/[sheetId]/page.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
 frontend/src/features/character-builder/components/CharacterReadySheetModal.tsx
 ```
 
@@ -383,3 +421,9 @@ Mudança pequena = âncoras reais “Procure este trecho / Troque por este trech
 Não usar estrutura presumida antiga.
 Antes de qualquer commit = git diff --stat.
 ```
+
+---
+
+## 🚀 Estado Atual
+
+👉 **Fase 4.28 concluída funcionalmente até documentação. Próximo passo imediato: 4.28.14 — revisar UX/UI do chat após ficha pop-out. Depois commit da 4.28.**
