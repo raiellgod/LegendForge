@@ -870,6 +870,43 @@ function EquipmentListCard({
   );
 }
 
+function CharacterClassEntryCard({
+  className,
+  level,
+  subclassName,
+  isPrimary,
+}: {
+  className: string;
+  level: number;
+  subclassName: string | null;
+  isPrimary: boolean;
+}) {
+  return (
+    <article className="rounded-xl border border-white/10 bg-black/25 px-3 py-2">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p
+            className="min-w-0 break-words text-sm font-black leading-snug text-forge-gold"
+            title={`${className} ${level}`}
+          >
+            {className} {level}
+          </p>
+
+          <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+            {subclassName ?? "Sem subclasse"}
+          </p>
+        </div>
+
+        {isPrimary ? (
+          <span className="rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.12em] text-forge-gold">
+            Principal
+          </span>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
 function FeatureCard({
   name,
   sourceLabel,
@@ -928,15 +965,33 @@ function getFeatureSourceLabel(sourceType: string) {
   return "Feature";
 }
 
+type LevelUpClassOption = {
+  id: string;
+  classId: string;
+  className: string;
+  subclassName: string | null;
+  currentClassLevel: number;
+  nextClassLevel: number;
+  subclassSelectionLevel: number | null;
+  isPrimary: boolean;
+  isSpellcaster: boolean;
+};
+
 function LevelUpPreviewModal({
   characterName,
   className,
+  selectedClassOption,
+  classOptions,
   levelUpPreview,
+  onSelectClass,
   onClose,
 }: {
   characterName: string;
   className: string;
+  selectedClassOption: LevelUpClassOption | null;
+  classOptions: LevelUpClassOption[];
   levelUpPreview: CharacterReadySheet["levelUpPreview"] | null | undefined;
+  onSelectClass: (classOptionId: string) => void;
   onClose: () => void;
 }) {
   const currentLevel = levelUpPreview?.currentLevel ?? 1;
@@ -973,23 +1028,40 @@ function LevelUpPreviewModal({
   const newFeatures = levelUpPreview?.newFeatures ?? [];
   const hasNewFeatures = newFeatures.length > 0;
 
-  const subclassPreviewLabel = levelUpPreview?.subclass?.name
-    ? levelUpPreview.subclass.name
-    : levelUpPreview?.isSubclassChoicePending
-      ? "Escolha de subclasse pendente"
-      : levelUpPreview?.subclassSelectionLevel
-        ? `Disponível no nível ${levelUpPreview.subclassSelectionLevel}`
-        : "Sem regra de subclasse";
-
-  const subclassPreviewHelper = levelUpPreview?.subclass?.name
-    ? "Subclasse já escolhida."
-    : levelUpPreview?.isSubclassChoicePending
-      ? "Esta escolha será obrigatória quando a confirmação real do Level Up existir."
-      : levelUpPreview?.subclassSelectionLevel
-        ? "Ainda não há escolha de subclasse neste avanço."
-        : "A classe não informa nível de subclasse.";
-
+  
   const canPreviewNextLevel = levelUpPreview?.canPreviewNextLevel ?? false;
+
+    const selectedSubclassSelectionLevel =
+    selectedClassOption?.subclassSelectionLevel ?? null;
+
+  const isSelectedSubclassAlreadyChosen = Boolean(
+    selectedClassOption?.subclassName,
+  );
+
+  const isSelectedSubclassUnlockedByThisLevel =
+    selectedClassOption &&
+    typeof selectedSubclassSelectionLevel === "number" &&
+    selectedClassOption.nextClassLevel >= selectedSubclassSelectionLevel;
+
+  const selectedSubclassStatusLabel = !selectedClassOption
+    ? "Nenhuma classe escolhida"
+    : isSelectedSubclassAlreadyChosen
+      ? selectedClassOption.subclassName
+      : !selectedSubclassSelectionLevel
+        ? "Sem regra de subclasse"
+        : isSelectedSubclassUnlockedByThisLevel
+          ? "Escolha de subclasse pendente"
+          : `Disponível no nível ${selectedSubclassSelectionLevel}`;
+
+  const selectedSubclassStatusHelper = !selectedClassOption
+    ? "Escolha uma classe para ver a regra de subclasse."
+    : isSelectedSubclassAlreadyChosen
+      ? `Subclasse atual de ${selectedClassOption.className}.`
+      : !selectedSubclassSelectionLevel
+        ? "Esta classe ainda não informa nível de escolha de subclasse."
+        : isSelectedSubclassUnlockedByThisLevel
+          ? "Quando o Level Up real existir, esta etapa deverá permitir escolher uma subclasse para esta classe."
+          : `${selectedClassOption.className} ainda não alcança o nível de subclasse neste avanço.`;
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
@@ -1051,18 +1123,99 @@ function LevelUpPreviewModal({
 
           <div className="rounded-xl border border-white/10 bg-black/25 p-3">
             <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
-              Classe atual
+              Classe escolhida
             </p>
 
             <p className="mt-1 min-w-0 break-words text-base font-black text-forge-gold">
-              {className}
+              {selectedClassOption
+                ? `${selectedClassOption.className} ${selectedClassOption.currentClassLevel} → ${selectedClassOption.nextClassLevel}`
+                : className}
             </p>
 
             <p className="mt-1 text-[10px] font-semibold text-white/35">
-              modo classe única por enquanto
+              nível da classe, não nível total
             </p>
           </div>
         </div>
+
+                  <div className="rounded-xl border border-forge-gold/25 bg-black/25 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+              Escolha qual classe receberia o nível
+            </p>
+
+            <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+              Nesta micro a escolha é apenas visual. A confirmação real virá
+              depois, quando o backend aplicar nível total e nível de classe.
+            </p>
+
+            {classOptions.length > 0 ? (
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                {classOptions.map((classOption) => {
+                  const isSelected =
+                    selectedClassOption?.id === classOption.id;
+
+                  return (
+                    <button
+                      key={classOption.id}
+                      type="button"
+                      onClick={() => onSelectClass(classOption.id)}
+                      className={[
+                        "rounded-xl border p-3 text-left transition",
+                        isSelected
+                          ? "border-forge-gold bg-forge-gold/10"
+                          : "border-white/10 bg-black/25 hover:border-forge-gold/45 hover:bg-forge-gold/5",
+                      ].join(" ")}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="min-w-0 break-words text-sm font-black text-forge-gold">
+                            {classOption.className}{" "}
+                            {classOption.currentClassLevel} →{" "}
+                            {classOption.nextClassLevel}
+                          </p>
+
+                          <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+                            {classOption.subclassName ?? "Sem subclasse"}
+                          </p>
+                        </div>
+
+                        {classOption.isPrimary ? (
+                          <span className="shrink-0 rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.12em] text-forge-gold">
+                            Principal
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
+                        {classOption.isSpellcaster
+                          ? "Classe conjuradora. Pode alterar progressão de magias desta classe."
+                          : "Classe sem atributo de conjuração configurado."}
+                      </p>
+                    </button>
+                  );
+                })}
+
+                <button
+                  type="button"
+                  disabled
+                  className="cursor-not-allowed rounded-xl border border-white/5 bg-black/20 p-3 text-left opacity-70"
+                  title="Adicionar nova classe será liberado em uma micro posterior."
+                >
+                  <p className="text-sm font-black text-white/25">
+                    + Adicionar nova classe
+                  </p>
+
+                  <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/25">
+                    Em breve: escolher uma nova classe para iniciar multiclasse.
+                  </p>
+                </button>
+              </div>
+            ) : (
+              <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                Nenhuma classe vinculada à estrutura nova da ficha.
+              </p>
+            )}
+          </div>
 
         <div className="mt-4 grid gap-3">
           <div className="rounded-xl border border-white/10 bg-black/25 p-3">
@@ -1142,15 +1295,15 @@ function LevelUpPreviewModal({
 
           <div className="rounded-xl border border-forge-gold/25 bg-black/25 p-3">
             <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-              Subclasse
+              Subclasse da classe escolhida
             </p>
 
             <p className="mt-2 text-base font-black text-forge-gold">
-              {subclassPreviewLabel}
+              {selectedSubclassStatusLabel}
             </p>
 
             <p className="mt-1 text-xs font-semibold leading-relaxed text-white/45">
-              {subclassPreviewHelper}
+              {selectedSubclassStatusHelper}
             </p>
           </div>
 
@@ -1231,6 +1384,9 @@ export function CharacterReadySheetView({
   );
   const [manualTargetArmorClass, setManualTargetArmorClass] = useState("");
   const [isLevelUpPreviewOpen, setIsLevelUpPreviewOpen] = useState(false);
+
+    const [selectedLevelUpClassOptionId, setSelectedLevelUpClassOptionId] =
+    useState<string | null>(null);
 
   function toggleExpandedSpell(spellKey: string) {
     setExpandedSpellKeys((currentKeys) =>
@@ -1525,10 +1681,56 @@ export function CharacterReadySheetView({
   const leveledSpellLevels = sortedSpellLevels.filter((level) => level > 0);
   const hasAnyKnownSpell = sortedSpellLevels.length > 0;
 
-  const spellcastingClass = characterSheet?.characterClass?.name ?? "—";
+  const classAndLevel = characterSheet?.characterClass
+    ? `${characterSheet.characterClass.name} ${characterSheet.level}`
+    : "—";
+
+  const sheetClassEntries = characterSheet?.classes ?? [];
+
+  const primarySheetClassEntry =
+    sheetClassEntries.find((classEntry) => classEntry.isPrimary) ??
+    sheetClassEntries[0] ??
+    null;
+
+  const classSummaryLabel =
+    sheetClassEntries.length > 0
+      ? sheetClassEntries
+          .map(
+            (classEntry) =>
+              `${classEntry.characterClass.name} ${classEntry.level}`,
+          )
+          .join(" / ")
+      : classAndLevel;
+
+  const primaryClassLabel = primarySheetClassEntry
+    ? `${primarySheetClassEntry.characterClass.name} ${primarySheetClassEntry.level}`
+    : classAndLevel;
+
+  const multiclassStatusLabel =
+    sheetClassEntries.length > 1
+      ? `${sheetClassEntries.length} classes`
+      : "Classe única";
+
+  const multiclassStatusHelper =
+    sheetClassEntries.length > 1
+      ? "Esta ficha já possui múltiplas classes cadastradas."
+      : "Estrutura pronta para receber multiclasse no Level Up.";
+
+  const spellcastingClassEntry =
+    sheetClassEntries.find(
+      (classEntry) => classEntry.characterClass.spellcastingAbilityKey,
+    ) ?? primarySheetClassEntry;
+
+  const spellcastingClass = spellcastingClassEntry
+    ? `${spellcastingClassEntry.characterClass.name} ${spellcastingClassEntry.level}`
+    : characterSheet?.characterClass?.name ?? "—";
+
+  const spellcastingClassLevel =
+    spellcastingClassEntry?.level ?? sheetLevel;
 
   const spellcastingAbilityKey = getSpellcastingAbilityKey(
-    characterSheet?.characterClass?.spellcastingAbilityKey,
+    spellcastingClassEntry?.characterClass.spellcastingAbilityKey ??
+      characterSheet?.characterClass?.spellcastingAbilityKey,
   );
 
   const spellcastingAbilityModifier = characterSheet
@@ -1555,9 +1757,13 @@ export function CharacterReadySheetView({
     : null;
 
   const currentLevelProgression =
+    spellcastingClassEntry?.characterClass.levelProgressions.find(
+      (progression) => progression.level === spellcastingClassLevel,
+    ) ??
     characterSheet?.characterClass?.levelProgressions.find(
       (progression) => progression.level === sheetLevel,
-    ) ?? null;
+    ) ??
+    null;
 
   const spellSlotRows = getSpellSlotRowsFromProgression(
     currentLevelProgression,
@@ -1587,7 +1793,7 @@ export function CharacterReadySheetView({
     {
       label: "Classe",
       value: spellcastingClass,
-      helper: "conjuradora",
+      helper: "conjuradora ativa",
     },
     {
       label: "Habilidade",
@@ -1737,7 +1943,10 @@ export function CharacterReadySheetView({
     ? formatSignedNumber(getInitiativeBonus(sheetStats))
     : "—";
 
-  const proficiencyBonus = characterSheet
+  
+  // Multiclasse: proficiência usa o nível total do personagem,
+  // não o nível individual de uma classe.
+    const proficiencyBonus = characterSheet
     ? formatSignedNumber(getProficiencyBonusByLevel(sheetLevel))
     : "—";
 
@@ -1752,9 +1961,6 @@ export function CharacterReadySheetView({
     : "—";
 
   const displayName = characterSheet?.name ?? actor.name;
-  const classAndLevel = characterSheet?.characterClass
-    ? `${characterSheet.characterClass.name} ${characterSheet.level}`
-    : "—";
 
   const ancestryName = characterSheet?.ancestry?.name ?? "—";
   const backgroundName = characterSheet?.background?.name ?? "—";
@@ -1777,7 +1983,40 @@ export function CharacterReadySheetView({
     : "—";
 
   const nextCharacterLevel = sheetLevel + 1;
-  const levelUpClassName = characterSheet?.characterClass?.name ?? "—";
+
+  const levelUpClassOptions: LevelUpClassOption[] = sheetClassEntries.map(
+    (classEntry) => ({
+      id: classEntry.id,
+      classId: classEntry.classId,
+      className: classEntry.characterClass.name,
+      subclassName: classEntry.subclass?.name ?? null,
+      currentClassLevel: classEntry.level,
+      nextClassLevel: classEntry.level + 1,
+      subclassSelectionLevel:
+        classEntry.characterClass.subclassSelectionLevel ?? null,
+      isPrimary: classEntry.isPrimary,
+      isSpellcaster: Boolean(classEntry.characterClass.spellcastingAbilityKey),
+    }),
+  );
+
+  const selectedLevelUpClassOption =
+    levelUpClassOptions.find(
+      (classOption) => classOption.id === selectedLevelUpClassOptionId,
+    ) ??
+    levelUpClassOptions.find((classOption) => classOption.isPrimary) ??
+    levelUpClassOptions[0] ??
+    null;
+
+  const levelUpClassName = selectedLevelUpClassOption
+    ? `${selectedLevelUpClassOption.className} ${selectedLevelUpClassOption.currentClassLevel}`
+    : classSummaryLabel;
+
+  function handleOpenLevelUpPreview() {
+    setSelectedLevelUpClassOptionId(
+      selectedLevelUpClassOption?.id ?? levelUpClassOptions[0]?.id ?? null,
+    );
+    setIsLevelUpPreviewOpen(true);
+  }
 
   return (
     <div className="flex h-[min(900px,96vh)] w-full max-w-[min(96vw,1400px)] flex-col overflow-hidden rounded-2xl border border-forge-gold/50 bg-[#120816] shadow-[-14px_14px_0_rgba(0,0,0,0.45)]">
@@ -1973,7 +2212,10 @@ export function CharacterReadySheetView({
         <LevelUpPreviewModal
           characterName={displayName}
           className={levelUpClassName}
+          selectedClassOption={selectedLevelUpClassOption}
+          classOptions={levelUpClassOptions}
           levelUpPreview={characterSheet?.levelUpPreview}
+          onSelectClass={setSelectedLevelUpClassOptionId}
           onClose={() => setIsLevelUpPreviewOpen(false)}
         />
       ) : null}
@@ -2694,14 +2936,14 @@ export function CharacterReadySheetView({
                   />
 
                   <CompactListRow
-                    title={levelUpClassName}
-                    helper="Modo classe única nesta primeira versão."
+                    title={classSummaryLabel}
+                    helper={multiclassStatusHelper}
                   />
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => setIsLevelUpPreviewOpen(true)}
+                  onClick={handleOpenLevelUpPreview}
                   className="mt-3 w-full rounded-xl border border-forge-gold/30 bg-forge-gold/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
                 >
                   Level Up
@@ -2712,6 +2954,35 @@ export function CharacterReadySheetView({
                   respeitando nível de personagem diferente de nível de classe.
                 </p>
               </section>
+
+                            <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                  Classes da ficha
+                </p>
+
+                {sheetClassEntries.length > 0 ? (
+                  <div className="mt-3 grid gap-2">
+                    {sheetClassEntries.map((classEntry) => (
+                      <CharacterClassEntryCard
+                        key={classEntry.id}
+                        className={classEntry.characterClass.name}
+                        level={classEntry.level}
+                        subclassName={classEntry.subclass?.name ?? null}
+                        isPrimary={classEntry.isPrimary}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                    Nenhuma classe vinculada à estrutura nova da ficha.
+                  </p>
+                )}
+
+                <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
+                  O nível total do personagem continua separado dos níveis de
+                  classe. A multiclasse será aplicada por esta lista.
+                </p>
+              </section>
               
               <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
@@ -2720,8 +2991,13 @@ export function CharacterReadySheetView({
 
                 <div className="mt-3 grid gap-1.5">
                   <CompactListRow
-                    title={classAndLevel}
-                    helper="Classe e nível atuais."
+                    title={primaryClassLabel}
+                    helper="Classe principal na estrutura atual da ficha."
+                  />
+
+                  <CompactListRow
+                    title={multiclassStatusLabel}
+                    helper={classSummaryLabel}
                   />
 
                   <CompactListRow

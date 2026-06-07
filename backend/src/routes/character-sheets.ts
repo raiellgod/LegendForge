@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 
+import type { Prisma } from "../generated/prisma/client.js";
 import { getAuthenticatedSession } from "../lib/get-authenticated-session.js";
 import { prisma } from "../lib/prisma.js";
 
@@ -439,13 +440,98 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ]);
   }
 
+  async function syncPrimaryCharacterSheetClass({
+    characterSheetId,
+    classId,
+    subclassId,
+    level,
+  }: {
+    characterSheetId: string;
+    classId: string | null;
+    subclassId: string | null;
+    level: number;
+  }) {
+    if (!classId) {
+      return;
+    }
+
+    await prisma.$transaction([
+      prisma.characterSheetClass.updateMany({
+        where: {
+          characterSheetId,
+          isPrimary: true,
+          classId: {
+            not: classId,
+          },
+        },
+        data: {
+          isPrimary: false,
+        },
+      }),
+
+      prisma.characterSheetClass.upsert({
+        where: {
+          characterSheetId_classId: {
+            characterSheetId,
+            classId,
+          },
+        },
+        create: {
+          characterSheetId,
+          classId,
+          subclassId,
+          level,
+          isPrimary: true,
+          order: 1,
+        },
+        update: {
+          subclassId,
+          level,
+          isPrimary: true,
+          order: 1,
+        },
+      }),
+    ]);
+  }
+
+  type CharacterSheetClassFeatureSource = {
+    classId: string;
+    subclassId: string | null;
+    level: number;
+  };
+
   type CharacterSheetFeatureSource = {
     systemId: string;
     ancestryId: string | null;
     classId: string | null;
     subclassId: string | null;
     level: number;
+    classes?: CharacterSheetClassFeatureSource[];
   };
+
+  function getCharacterSheetClassFeatureSources(
+    characterSheet: CharacterSheetFeatureSource,
+  ) {
+    if (characterSheet.classes && characterSheet.classes.length > 0) {
+      return characterSheet.classes.map((classEntry) => ({
+        classId: classEntry.classId,
+        subclassId: classEntry.subclassId,
+        level: classEntry.level,
+      }));
+    }
+
+    if (!characterSheet.classId) {
+      return [];
+    }
+
+    return [
+      {
+        classId: characterSheet.classId,
+        subclassId: characterSheet.subclassId,
+        level: characterSheet.level,
+      },
+    ];
+  }
 
   async function getAvailableFeaturesForCharacterSheet(
     characterSheet: CharacterSheetFeatureSource,
@@ -458,23 +544,26 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       });
     }
 
-    if (characterSheet.classId) {
+    const classFeatureSources =
+      getCharacterSheetClassFeatureSources(characterSheet);
+
+    for (const classFeatureSource of classFeatureSources) {
       featureConditions.push({
-        classId: characterSheet.classId,
+        classId: classFeatureSource.classId,
         subclassId: null,
         level: {
-          lte: characterSheet.level,
+          lte: classFeatureSource.level,
         },
       });
-    }
 
-    if (characterSheet.subclassId) {
-      featureConditions.push({
-        subclassId: characterSheet.subclassId,
-        level: {
-          lte: characterSheet.level,
-        },
-      });
+      if (classFeatureSource.subclassId) {
+        featureConditions.push({
+          subclassId: classFeatureSource.subclassId,
+          level: {
+            lte: classFeatureSource.level,
+          },
+        });
+      }
     }
 
     if (featureConditions.length === 0) {
@@ -516,7 +605,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     });
   }
 
-    async function getFeaturesUnlockedAtLevel(
+  async function getFeaturesUnlockedAtLevel(
     characterSheet: CharacterSheetFeatureSource,
     targetLevel: number,
   ) {
@@ -573,7 +662,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     });
   }
 
-    async function getLevelUpPreviewForCharacterSheet(
+  async function getLevelUpPreviewForCharacterSheet(
     characterSheet: CharacterSheetFeatureSource & {
       characterClass: {
         levelProgressions: Array<{
@@ -644,6 +733,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
   async function withAvailableFeatures<
     T extends CharacterSheetFeatureSource & {
+      classes?: CharacterSheetClassFeatureSource[];
       characterClass: {
         levelProgressions: Array<{
           level: number;
@@ -669,7 +759,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       } | null;
     },
   >(characterSheet: T) {
-    const features = await getAvailableFeaturesForCharacterSheet(characterSheet);
+    const features =
+      await getAvailableFeaturesForCharacterSheet(characterSheet);
     const levelUpPreview =
       await getLevelUpPreviewForCharacterSheet(characterSheet);
 
@@ -679,7 +770,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       levelUpPreview,
     };
   }
-  
+
   const characterSheetInclude = {
     campaignActor: true,
     system: true,
@@ -695,6 +786,31 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       },
     },
     subclass: true,
+    classes: {
+      include: {
+        characterClass: {
+          include: {
+            levelProgressions: {
+              orderBy: {
+                level: "asc",
+              },
+            },
+          },
+        },
+        subclass: true,
+      },
+      orderBy: [
+        {
+          isPrimary: "desc",
+        },
+        {
+          order: "asc",
+        },
+        {
+          createdAt: "asc",
+        },
+      ],
+    },
     stats: {
       include: {
         stat: true,
@@ -719,7 +835,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         equipment: true,
       },
     },
-  } as const;
+    } satisfies Prisma.CharacterSheetInclude;
 
   server.get(
     "/campaigns/:campaignId/character-sheets",
@@ -1215,6 +1331,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         );
       }
 
+      await syncPrimaryCharacterSheetClass({
+        characterSheetId: characterSheet.id,
+        classId: characterSheet.classId,
+        subclassId: characterSheet.subclassId,
+        level: characterSheet.level,
+      });
+
       const characterSheetWithRelations =
         await prisma.characterSheet.findUniqueOrThrow({
           where: {
@@ -1554,11 +1677,17 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             ? undefined
             : sheetData.lifestyle?.trim() || null,
         hair:
-          sheetData.hair === undefined ? undefined : sheetData.hair?.trim() || null,
+          sheetData.hair === undefined
+            ? undefined
+            : sheetData.hair?.trim() || null,
         skin:
-          sheetData.skin === undefined ? undefined : sheetData.skin?.trim() || null,
+          sheetData.skin === undefined
+            ? undefined
+            : sheetData.skin?.trim() || null,
         eyes:
-          sheetData.eyes === undefined ? undefined : sheetData.eyes?.trim() || null,
+          sheetData.eyes === undefined
+            ? undefined
+            : sheetData.eyes?.trim() || null,
         height:
           sheetData.height === undefined
             ? undefined
@@ -1568,7 +1697,9 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             ? undefined
             : sheetData.weight?.trim() || null,
         age:
-          sheetData.age === undefined ? undefined : sheetData.age?.trim() || null,
+          sheetData.age === undefined
+            ? undefined
+            : sheetData.age?.trim() || null,
         gender:
           sheetData.gender === undefined
             ? undefined
@@ -1624,17 +1755,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       if (skillKeys !== undefined) {
-        await replaceCharacterSheetSkills(
-          sheetId,
-          skillEntriesResult.entries,
-        );
+        await replaceCharacterSheetSkills(sheetId, skillEntriesResult.entries);
       }
 
       if (spellKeys !== undefined) {
-        await replaceCharacterSheetSpells(
-          sheetId,
-          spellEntriesResult.entries,
-        );
+        await replaceCharacterSheetSpells(sheetId, spellEntriesResult.entries);
       }
 
       if (equipmentItems !== undefined) {
@@ -1652,8 +1777,23 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           include: characterSheetInclude,
         });
 
+      await syncPrimaryCharacterSheetClass({
+        characterSheetId: updatedCharacterSheet.id,
+        classId: updatedCharacterSheet.classId,
+        subclassId: updatedCharacterSheet.subclassId,
+        level: updatedCharacterSheet.level,
+      });
+
+      const updatedCharacterSheetWithRelations =
+        await prisma.characterSheet.findUniqueOrThrow({
+          where: {
+            id: updatedCharacterSheet.id,
+          },
+          include: characterSheetInclude,
+        });
+
       const updatedCharacterSheetWithFeatures = await withAvailableFeatures(
-        updatedCharacterSheet,
+        updatedCharacterSheetWithRelations,
       );
 
       return reply.status(200).send({
@@ -1736,7 +1876,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     {
       schema: {
         tags: ["Character Sheets"],
-        description: "Finalize a draft character sheet and ensure it has a campaign actor",
+        description:
+          "Finalize a draft character sheet and ensure it has a campaign actor",
         params: z.object({
           campaignId: z.string().uuid("Invalid campaign id"),
           sheetId: z.string().uuid("Invalid character sheet id"),
@@ -1817,7 +1958,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
       if (validationErrors.length > 0) {
         return reply.status(400).send({
-          message: "A ficha ainda não possui os dados mínimos para ser finalizada.",
+          message:
+            "A ficha ainda não possui os dados mínimos para ser finalizada.",
           errors: validationErrors,
         });
       }
@@ -1872,7 +2014,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       });
 
-            const finalizedCharacterSheetWithFeatures = await withAvailableFeatures(
+      const finalizedCharacterSheetWithFeatures = await withAvailableFeatures(
         finalizedCharacterSheet,
       );
 
@@ -1881,5 +2023,4 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       });
     },
   );
-
 }

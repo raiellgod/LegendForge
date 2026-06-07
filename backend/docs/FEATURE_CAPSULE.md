@@ -731,15 +731,39 @@ Criar a primeira experiência visual de Level Up sem salvar mudanças ainda.
 
 ---
 
+# ⚡ Capsule 46 — Multiclass Foundation
+
+## 🎯 Goal
+
+Criar a fundação de multiclasse sem salvar Level Up real ainda.
+
+## ✅ Result
+
+- `CharacterSheetClass` criado.
+- Classe principal sincronizada para fichas novas.
+- Backfill manual das fichas antigas executado.
+- Backend passa a carregar `characterSheet.classes[]`.
+- Frontend tipado para múltiplas classes.
+- Ficha pronta mostra níveis por classe.
+- Proficiência continua usando nível total do personagem.
+- Features respeitam o nível individual de cada classe.
+- Magia usa uma classe conjuradora ativa como referência.
+- Level Up permite escolher visualmente qual classe receberia o próximo nível.
+- Opção “Adicionar nova classe” foi preparada visualmente e permanece desabilitada.
+- Subclasse é avaliada por classe escolhida no Level Up.
+- Teste regressivo da multiclasse concluído no nível atual.
+
+---
+
 # 🧭 Próxima cápsula esperada
 
 ```txt
-Capsule 46 — Commit and transition to Multiclass planning
+Capsule 47 — Multiclass documentation and commit
 ```
 
 Foco esperado:
 
-- concluir commit da 4.29
-- iniciar 4.30 Multiclasse
-- separar nível total do personagem e níveis por classe
-- planejar estrutura futura para CharacterClassLevel ou equivalente
+- atualizar documentação da 4.30
+- rodar `git diff --stat`
+- commitar a fundação de multiclasse
+- iniciar 4.31 Modularização e expansão do conteúdo base do sistema

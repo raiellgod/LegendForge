@@ -396,6 +396,7 @@ export const ModelName = {
   CharacterSheetSkill: 'CharacterSheetSkill',
   CharacterSheetSpell: 'CharacterSheetSpell',
   CharacterSheetEquipment: 'CharacterSheetEquipment',
+  CharacterSheetClass: 'CharacterSheetClass',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterClass" | "characterSubclass" | "levelProgression" | "classSpell" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterClass" | "characterSubclass" | "levelProgression" | "classSpell" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1316,6 +1317,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CharacterSheetEquipmentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CharacterSheetEquipmentCountAggregateOutputType> | number
+        }
+      }
+    }
+    CharacterSheetClass: {
+      payload: Prisma.$CharacterSheetClassPayload<ExtArgs>
+      fields: Prisma.CharacterSheetClassFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterSheetClassFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterSheetClassFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterSheetClassFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterSheetClassFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>
+        }
+        findMany: {
+          args: Prisma.CharacterSheetClassFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>[]
+        }
+        create: {
+          args: Prisma.CharacterSheetClassCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>
+        }
+        createMany: {
+          args: Prisma.CharacterSheetClassCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterSheetClassCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterSheetClassDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>
+        }
+        update: {
+          args: Prisma.CharacterSheetClassUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterSheetClassDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterSheetClassUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterSheetClassUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterSheetClassUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetClassPayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterSheetClassAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterSheetClass>
+        }
+        groupBy: {
+          args: Prisma.CharacterSheetClassGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetClassGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterSheetClassCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetClassCountAggregateOutputType> | number
         }
       }
     }
@@ -2764,6 +2839,21 @@ export const CharacterSheetEquipmentScalarFieldEnum = {
 export type CharacterSheetEquipmentScalarFieldEnum = (typeof CharacterSheetEquipmentScalarFieldEnum)[keyof typeof CharacterSheetEquipmentScalarFieldEnum]
 
 
+export const CharacterSheetClassScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  level: 'level',
+  isPrimary: 'isPrimary',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetClassScalarFieldEnum = (typeof CharacterSheetClassScalarFieldEnum)[keyof typeof CharacterSheetClassScalarFieldEnum]
+
+
 export const CharacterClassScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -3461,6 +3551,7 @@ export type GlobalOmitConfig = {
   characterSheetSkill?: Prisma.CharacterSheetSkillOmit
   characterSheetSpell?: Prisma.CharacterSheetSpellOmit
   characterSheetEquipment?: Prisma.CharacterSheetEquipmentOmit
+  characterSheetClass?: Prisma.CharacterSheetClassOmit
   characterClass?: Prisma.CharacterClassOmit
   characterSubclass?: Prisma.CharacterSubclassOmit
   levelProgression?: Prisma.LevelProgressionOmit

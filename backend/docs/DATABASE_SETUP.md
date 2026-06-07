@@ -15,7 +15,7 @@ Este documento descreve:
 
 ---
 
-# 📌 STATUS ATUAL — 03/06/2026
+# 📌 STATUS ATUAL — 07/06/2026
 
 ## ✅ Implementado
 
@@ -34,6 +34,7 @@ Este documento descreve:
 - `ClassSpell` implementado para magias permitidas por classe.
 - `CharacterClass.spellcastingAbilityKey` implementado para atributo de conjuração.
 - CharacterSheet e tabelas relacionadas criadas.
+- `CharacterSheetClass` criado para níveis por classe/multiclasse.
 - Rascunho de ficha salva/carrega.
 - Classe, ancestralidade e antecedente persistem na ficha.
 - Atributos persistem em `CharacterSheetStat`.
@@ -42,15 +43,16 @@ Este documento descreve:
 - Equipamentos iniciais persistem em `CharacterSheetEquipment`.
 - Campos de Sobre/aparência/personalidade/história persistem.
 - Ficha pronta carrega progressão da classe para exibir espaços de magia.
+- Ficha pronta carrega `classes[]` para exibir níveis por classe.
 - Ficha pronta em modal e pop-out consome os mesmos dados persistidos.
 - Retrato/token por URL persistem e sincronizam com ator/token.
 - Rota pop-out carrega ficha por `campaignId` e `sheetId`.
 
 ## 🚧 Em andamento
 
-- 4.28.14 — revisão UX/UI do chat após ficha pop-out.
-- 4.28.15 — commit da 4.28.
-- 4.29 implementada no nível atual: ataque real por equipamento, features reais, subclasse por nível correto e Level Up preview.
+- 4.30.13 — atualização da documentação.
+- 4.30.14 — commit da fundação de multiclasse.
+- 4.31 planejada: modularização e expansão do seed/conteúdo base.
 
 ## ❌ Ainda futuro
 
@@ -60,7 +62,7 @@ Este documento descreve:
 - Upload real de imagens.
 - Controle de slots usados.
 - Campos estruturados de dano de magia.
-- Multiclasse.
+- Multiclasse real com salvamento de Level Up e adição de nova classe.
 - Proficiências editáveis pelo GM.
 - Armadura/defesa como camada mecânica separada da roupa visual.
 - Fichas próprias de NPC e criaturas.
@@ -644,8 +646,8 @@ Hoje dano é detectado pela descrição. Funciona para teste, mas não é ideal 
 # 🧭 Próximo foco
 
 ```txt
-4.29.15 — Commit da 4.29
-4.30 — Multiclasse
+4.30.13 — Atualizar documentação
+4.30.14 — Commit da 4.30
 4.31 — Modularização e expansão do conteúdo base do sistema
 ```
 
@@ -688,3 +690,66 @@ backend/prisma/seeds/
   equipment.seed.ts
   starting-equipment.seed.ts
 ```
+
+---
+
+# 🧩 MULTICLASSE — 4.30
+
+## Novo modelo
+
+```txt
+CharacterSheetClass
+```
+
+Responsabilidade:
+
+```txt
+Representar cada classe vinculada à ficha e o nível individual daquela classe.
+```
+
+Campos principais:
+
+```txt
+characterSheetId
+classId
+subclassId
+level
+isPrimary
+order
+```
+
+## Regra central
+
+```txt
+CharacterSheet.level = nível total do personagem.
+CharacterSheetClass.level = nível naquela classe específica.
+```
+
+Exemplo futuro:
+
+```txt
+CharacterSheet.level = 5
+CharacterSheetClass: Bardo nível 3
+CharacterSheetClass: Necromante nível 2
+```
+
+## Estado atual
+
+- Modelo criado e migrado.
+- Fichas novas sincronizam classe principal.
+- Fichas antigas receberam backfill.
+- API carrega `classes[]`.
+- Ficha pronta exibe classes e níveis individuais.
+- Proficiência continua baseada no nível total.
+- Features são calculadas por nível individual da classe.
+- Magia usa classe conjuradora ativa.
+- Level Up permite escolher visualmente a classe que receberia o nível.
+- Subclasse é avaliada a partir da classe escolhida.
+
+## Ainda futuro
+
+- Salvar Level Up real.
+- Adicionar nova classe.
+- Escolher subclasse real durante Level Up.
+- Slots combinados para magia multiclasse.
+- Remover/aposentar campos antigos de classe única depois da transição.

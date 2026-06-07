@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-equipment%20features%20levelup%20preview-green)
+![Status](https://img.shields.io/badge/status-multiclass%20foundation-green)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -30,7 +30,7 @@ Inspired by tools like Roll20 and Foundry VTT, but with its own philosophy:
 - ✨ Spellcasting progression connected to class rules
 - ⚔️ Real equipment attacks in the ready sheet
 - 🧩 Real feature display by class, subclass and ancestry
-- ⬆️ Level Up preview prepared for future multiclass
+- ⬆️ Level Up preview prepared for class-level selection and future multiclass
 
 ---
 
@@ -52,7 +52,7 @@ LegendForge demonstrates:
 - 🪄 Spellcasting progression by class, spell filtering, spell limits, spell DC, spell attack and spell slots
 - ⚔️ Equipment attacks calculated from item data and character stats
 - ✨ Ready sheet features connected to backend rules
-- ⬆️ Level Up preview designed to avoid confusing character level with class level
+- ⬆️ Level Up preview designed to separate total character level from class levels
 - 🧩 Incremental VTT features with persistence where it matters
 
 ---
@@ -136,8 +136,8 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟢 Advanced equipment, features and Level Up preview completed and tested.  
-> 🟡 Next focus: commit 4.29, then start multiclass planning.
+> 🟢 Multiclass foundation completed and tested at visual/data-structure level.  
+> 🟡 Next focus: update documentation and commit 4.30.
 
 ### ✅ Completed
 
@@ -273,7 +273,8 @@ LegendForge/
 ## 🚧 In Progress
 
 ```txt
-4.29.15 — Commit da 4.29
+4.30.13 — Atualizar documentação
+4.30.14 — Commit da 4.30
 ```
 
 ---
@@ -281,20 +282,14 @@ LegendForge/
 ## 🔜 Next Step
 
 ```txt
-4.29.15 — Commit da 4.29
+4.30.13 — Atualizar documentação
+4.30.14 — Commit da 4.30
 ```
 
 Then:
 
 ```txt
-4.30 — Multiclasse
 4.31 — Modularização e expansão do conteúdo base do sistema
-```
-
-Then:
-
-```txt
-4.28.15 — Commit da 4.28
 ```
 
 Expected commit command:
@@ -309,6 +304,46 @@ git add .
 git status
 git commit -m "feat: refactor ready sheet popout"
 ```
+
+---
+
+# 🧩 Atualização — Fase 4.30 Multiclasse
+
+## ✅ Implementado na 4.30
+
+- `CharacterSheetClass` criado para separar nível total do personagem dos níveis por classe.
+- Fichas novas sincronizam classe principal em `CharacterSheetClass`.
+- Backfill manual executado para fichas antigas que já tinham `classId`.
+- Backend carrega `characterSheet.classes[]` junto da ficha pronta.
+- Frontend recebeu tipos para múltiplas classes na ficha pronta.
+- Aba Features mostra classes da ficha com nível individual e classe principal.
+- Proficiência continua usando o nível total do personagem (`CharacterSheet.level`).
+- Features de classe/subclasse passam a considerar o nível individual de cada classe em `CharacterSheetClass`.
+- Magia/progressão usa uma classe conjuradora ativa baseada em `characterSheet.classes`.
+- CD de magia e ataque mágico continuam usando proficiência pelo nível total.
+- Modal Level Up permite escolher visualmente qual classe existente receberia o próximo nível.
+- Opção futura “Adicionar nova classe” aparece preparada, mas ainda desabilitada.
+- Modal Level Up mostra status de subclasse por classe escolhida.
+- 4.30.12 — Teste regressivo da multiclasse concluído no nível atual.
+
+## ⚠️ Limitações intencionais da 4.30
+
+- Level Up ainda não salva alterações.
+- Ainda não existe PATCH real para subir nível total + nível de classe.
+- Adicionar uma nova classe de multiclasse ainda não está liberado.
+- Escolha real de subclasse no Level Up ainda não salva.
+- Slots combinados de magia multiclasse ainda não foram implementados.
+- Controle de slots usados ainda não existe.
+- A estrutura antiga `CharacterSheet.classId/subclassId/level` foi mantida por compatibilidade durante a transição.
+
+## 🎯 Próximo foco
+
+```txt
+4.30.13 — Atualizar documentação
+4.30.14 — Commit da 4.30
+4.31 — Modularização e expansão do conteúdo base do sistema
+```
+
 
 ---
 

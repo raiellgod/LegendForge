@@ -100,6 +100,11 @@ export type CharacterSheetSpell = Prisma.CharacterSheetSpellModel
  */
 export type CharacterSheetEquipment = Prisma.CharacterSheetEquipmentModel
 /**
+ * Model CharacterSheetClass
+ * 
+ */
+export type CharacterSheetClass = Prisma.CharacterSheetClassModel
+/**
  * Model CharacterClass
  * 
  */

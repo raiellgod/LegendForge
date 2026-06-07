@@ -19,7 +19,7 @@ O projeto é inspirado em VTTs como Roll20 e Foundry VTT, mas segue uma identida
 - 🪄 Regras de conjuração conectadas a progressão de classe
 - ⚔️ Ataques reais por equipamento conectados à ficha
 - ✨ Features reais exibidas por origem e nível
-- ⬆️ Level Up preview dentro da ficha pronta
+- ⬆️ Level Up preview dentro da ficha pronta com base para multiclasse
 
 ---
 
@@ -229,6 +229,7 @@ Decisão importante:
 - CharacterSheetSkill
 - CharacterSheetSpell
 - CharacterSheetEquipment
+- CharacterSheetClass
 
 ---
 
@@ -612,10 +613,27 @@ Movidas para 4.29:
 
 ### Multiclasse — 4.30
 
-- Subir de nível deve perguntar qual classe recebe o novo nível.
-- Nível total deve ser soma dos níveis por classe.
-- Header deve exibir classes compostas, como `Bardo 3 / Necromante 2`.
-- Magias, proficiências, features e progressão devem considerar múltiplas classes.
+Implementado no nível estrutural/visual:
+
+- `CharacterSheetClass` separa níveis por classe.
+- `CharacterSheet.level` continua representando o nível total do personagem.
+- Fichas novas sincronizam classe principal na nova tabela.
+- Fichas antigas receberam backfill manual.
+- API de ficha retorna `classes[]`.
+- Ficha pronta exibe classes e níveis individuais.
+- Proficiência usa nível total.
+- Features usam nível individual de cada classe.
+- Magia usa classe conjuradora ativa da estrutura nova.
+- Level Up permite escolher visualmente a classe que receberia o próximo nível.
+- Subclasse é avaliada por classe escolhida no modal.
+
+Ainda futuro:
+
+- salvar Level Up real;
+- adicionar nova classe de multiclasse;
+- escolher subclasse real durante Level Up;
+- slots combinados de magia multiclasse;
+- remoção gradual dos campos antigos de compatibilidade.
 
 ### NPCs e criaturas
 
@@ -670,14 +688,28 @@ Movidas para 4.29:
 [x] 4.29.12 — Level Up mostra apenas pendências/mudanças do novo nível
 [x] 4.29.13 — Teste regressivo da 4.29
 [x] 4.29.14 — Atualizar documentação
-[próximo] 4.29.15 — Commit da 4.29
-[planejado] 4.30 — Multiclasse
+[x] 4.29.15 — Commit da 4.29
+[x] 4.30.1 — Revisar modelagem de nível total vs níveis de classe
+[x] 4.30.2 — Criar modelo CharacterSheetClass / níveis de classe
+[x] 4.30.3 — Sincronizar classe principal em CharacterSheetClass
+[x] 4.30.3.1 — Backfill das fichas antigas para CharacterSheetClass
+[x] 4.30.4 — Ajustar backend para carregar classes da ficha
+[x] 4.30.5 — Ajustar types/frontend para múltiplas classes na ficha pronta
+[x] 4.30.6 — Atualizar ficha pronta para exibir níveis por classe
+[x] 4.30.7 — Ajustar cálculo de proficiência pelo nível total
+[x] 4.30.8 — Ajustar features por classe/nível de classe
+[x] 4.30.9 — Ajustar magia/progressão considerando classe específica
+[x] 4.30.10 — Atualizar Level Up para escolher classe existente ou nova classe
+[x] 4.30.11 — Preparar escolha de subclasse por classe
+[x] 4.30.12 — Teste regressivo da multiclasse
+[em andamento] 4.30.13 — Atualizar documentação
+[próximo] 4.30.14 — Commit da 4.30
 [planejado] 4.31 — Modularização e expansão do conteúdo base do sistema
 ```
 
 ---
 
-## ✅ Checklist antes do commit da 4.29
+## ✅ Checklist antes do commit da 4.30
 
 ```txt
 [ ] git status
@@ -685,5 +717,45 @@ Movidas para 4.29:
 [ ] cd frontend && pnpm lint && cd ..
 [ ] git add .
 [ ] git status
-[ ] git commit -m "feat: add advanced equipment features and level up preview"
+[ ] git commit -m "feat: add multiclass foundation"
+```
+
+
+---
+
+# 🧩 Atualização — Fase 4.30 Multiclasse
+
+## ✅ Implementado na 4.30
+
+- `CharacterSheetClass` criado para separar nível total do personagem dos níveis por classe.
+- Fichas novas sincronizam classe principal em `CharacterSheetClass`.
+- Backfill manual executado para fichas antigas que já tinham `classId`.
+- Backend carrega `characterSheet.classes[]` junto da ficha pronta.
+- Frontend recebeu tipos para múltiplas classes na ficha pronta.
+- Aba Features mostra classes da ficha com nível individual e classe principal.
+- Proficiência continua usando o nível total do personagem (`CharacterSheet.level`).
+- Features de classe/subclasse passam a considerar o nível individual de cada classe em `CharacterSheetClass`.
+- Magia/progressão usa uma classe conjuradora ativa baseada em `characterSheet.classes`.
+- CD de magia e ataque mágico continuam usando proficiência pelo nível total.
+- Modal Level Up permite escolher visualmente qual classe existente receberia o próximo nível.
+- Opção futura “Adicionar nova classe” aparece preparada, mas ainda desabilitada.
+- Modal Level Up mostra status de subclasse por classe escolhida.
+- 4.30.12 — Teste regressivo da multiclasse concluído no nível atual.
+
+## ⚠️ Limitações intencionais da 4.30
+
+- Level Up ainda não salva alterações.
+- Ainda não existe PATCH real para subir nível total + nível de classe.
+- Adicionar uma nova classe de multiclasse ainda não está liberado.
+- Escolha real de subclasse no Level Up ainda não salva.
+- Slots combinados de magia multiclasse ainda não foram implementados.
+- Controle de slots usados ainda não existe.
+- A estrutura antiga `CharacterSheet.classId/subclassId/level` foi mantida por compatibilidade durante a transição.
+
+## 🎯 Próximo foco
+
+```txt
+4.30.13 — Atualizar documentação
+4.30.14 — Commit da 4.30
+4.31 — Modularização e expansão do conteúdo base do sistema
 ```

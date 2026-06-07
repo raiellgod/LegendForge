@@ -252,6 +252,7 @@ export type CharacterSubclassWhereInput = {
   characterClass?: Prisma.XOR<Prisma.CharacterClassScalarRelationFilter, Prisma.CharacterClassWhereInput>
   features?: Prisma.FeatureListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
+  characterSheetClasses?: Prisma.CharacterSheetClassListRelationFilter
 }
 
 export type CharacterSubclassOrderByWithRelationInput = {
@@ -268,6 +269,7 @@ export type CharacterSubclassOrderByWithRelationInput = {
   characterClass?: Prisma.CharacterClassOrderByWithRelationInput
   features?: Prisma.FeatureOrderByRelationAggregateInput
   characterSheets?: Prisma.CharacterSheetOrderByRelationAggregateInput
+  characterSheetClasses?: Prisma.CharacterSheetClassOrderByRelationAggregateInput
 }
 
 export type CharacterSubclassWhereUniqueInput = Prisma.AtLeast<{
@@ -289,6 +291,7 @@ export type CharacterSubclassWhereUniqueInput = Prisma.AtLeast<{
   characterClass?: Prisma.XOR<Prisma.CharacterClassScalarRelationFilter, Prisma.CharacterClassWhereInput>
   features?: Prisma.FeatureListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
+  characterSheetClasses?: Prisma.CharacterSheetClassListRelationFilter
 }, "id" | "classId_name" | "classId_key">
 
 export type CharacterSubclassOrderByWithAggregationInput = {
@@ -335,6 +338,7 @@ export type CharacterSubclassCreateInput = {
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutSubclassesInput
   features?: Prisma.FeatureCreateNestedManyWithoutSubclassInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassUncheckedCreateInput = {
@@ -349,6 +353,7 @@ export type CharacterSubclassUncheckedCreateInput = {
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubclassInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassUpdateInput = {
@@ -363,6 +368,7 @@ export type CharacterSubclassUpdateInput = {
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutSubclassesNestedInput
   features?: Prisma.FeatureUpdateManyWithoutSubclassNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassUncheckedUpdateInput = {
@@ -377,6 +383,7 @@ export type CharacterSubclassUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSubclassNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassCreateManyInput = {
@@ -540,6 +547,22 @@ export type CharacterSubclassUpdateOneWithoutCharacterSheetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CharacterSubclassUpdateToOneWithWhereWithoutCharacterSheetsInput, Prisma.CharacterSubclassUpdateWithoutCharacterSheetsInput>, Prisma.CharacterSubclassUncheckedUpdateWithoutCharacterSheetsInput>
 }
 
+export type CharacterSubclassCreateNestedOneWithoutCharacterSheetClassesInput = {
+  create?: Prisma.XOR<Prisma.CharacterSubclassCreateWithoutCharacterSheetClassesInput, Prisma.CharacterSubclassUncheckedCreateWithoutCharacterSheetClassesInput>
+  connectOrCreate?: Prisma.CharacterSubclassCreateOrConnectWithoutCharacterSheetClassesInput
+  connect?: Prisma.CharacterSubclassWhereUniqueInput
+}
+
+export type CharacterSubclassUpdateOneWithoutCharacterSheetClassesNestedInput = {
+  create?: Prisma.XOR<Prisma.CharacterSubclassCreateWithoutCharacterSheetClassesInput, Prisma.CharacterSubclassUncheckedCreateWithoutCharacterSheetClassesInput>
+  connectOrCreate?: Prisma.CharacterSubclassCreateOrConnectWithoutCharacterSheetClassesInput
+  upsert?: Prisma.CharacterSubclassUpsertWithoutCharacterSheetClassesInput
+  disconnect?: Prisma.CharacterSubclassWhereInput | boolean
+  delete?: Prisma.CharacterSubclassWhereInput | boolean
+  connect?: Prisma.CharacterSubclassWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CharacterSubclassUpdateToOneWithWhereWithoutCharacterSheetClassesInput, Prisma.CharacterSubclassUpdateWithoutCharacterSheetClassesInput>, Prisma.CharacterSubclassUncheckedUpdateWithoutCharacterSheetClassesInput>
+}
+
 export type CharacterSubclassCreateNestedManyWithoutCharacterClassInput = {
   create?: Prisma.XOR<Prisma.CharacterSubclassCreateWithoutCharacterClassInput, Prisma.CharacterSubclassUncheckedCreateWithoutCharacterClassInput> | Prisma.CharacterSubclassCreateWithoutCharacterClassInput[] | Prisma.CharacterSubclassUncheckedCreateWithoutCharacterClassInput[]
   connectOrCreate?: Prisma.CharacterSubclassCreateOrConnectWithoutCharacterClassInput | Prisma.CharacterSubclassCreateOrConnectWithoutCharacterClassInput[]
@@ -609,6 +632,7 @@ export type CharacterSubclassCreateWithoutSystemInput = {
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutSubclassesInput
   features?: Prisma.FeatureCreateNestedManyWithoutSubclassInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassUncheckedCreateWithoutSystemInput = {
@@ -622,6 +646,7 @@ export type CharacterSubclassUncheckedCreateWithoutSystemInput = {
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubclassInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassCreateOrConnectWithoutSystemInput = {
@@ -676,6 +701,7 @@ export type CharacterSubclassCreateWithoutCharacterSheetsInput = {
   system: Prisma.GameSystemCreateNestedOneWithoutSubclassesInput
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutSubclassesInput
   features?: Prisma.FeatureCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassUncheckedCreateWithoutCharacterSheetsInput = {
@@ -689,6 +715,7 @@ export type CharacterSubclassUncheckedCreateWithoutCharacterSheetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassCreateOrConnectWithoutCharacterSheetsInput = {
@@ -718,6 +745,7 @@ export type CharacterSubclassUpdateWithoutCharacterSheetsInput = {
   system?: Prisma.GameSystemUpdateOneRequiredWithoutSubclassesNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutSubclassesNestedInput
   features?: Prisma.FeatureUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassUncheckedUpdateWithoutCharacterSheetsInput = {
@@ -731,6 +759,79 @@ export type CharacterSubclassUncheckedUpdateWithoutCharacterSheetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedUpdateManyWithoutSubclassNestedInput
+}
+
+export type CharacterSubclassCreateWithoutCharacterSheetClassesInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSubclassesInput
+  characterClass: Prisma.CharacterClassCreateNestedOneWithoutSubclassesInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSubclassInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubclassInput
+}
+
+export type CharacterSubclassUncheckedCreateWithoutCharacterSheetClassesInput = {
+  id?: string
+  systemId: string
+  classId: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubclassInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubclassInput
+}
+
+export type CharacterSubclassCreateOrConnectWithoutCharacterSheetClassesInput = {
+  where: Prisma.CharacterSubclassWhereUniqueInput
+  create: Prisma.XOR<Prisma.CharacterSubclassCreateWithoutCharacterSheetClassesInput, Prisma.CharacterSubclassUncheckedCreateWithoutCharacterSheetClassesInput>
+}
+
+export type CharacterSubclassUpsertWithoutCharacterSheetClassesInput = {
+  update: Prisma.XOR<Prisma.CharacterSubclassUpdateWithoutCharacterSheetClassesInput, Prisma.CharacterSubclassUncheckedUpdateWithoutCharacterSheetClassesInput>
+  create: Prisma.XOR<Prisma.CharacterSubclassCreateWithoutCharacterSheetClassesInput, Prisma.CharacterSubclassUncheckedCreateWithoutCharacterSheetClassesInput>
+  where?: Prisma.CharacterSubclassWhereInput
+}
+
+export type CharacterSubclassUpdateToOneWithWhereWithoutCharacterSheetClassesInput = {
+  where?: Prisma.CharacterSubclassWhereInput
+  data: Prisma.XOR<Prisma.CharacterSubclassUpdateWithoutCharacterSheetClassesInput, Prisma.CharacterSubclassUncheckedUpdateWithoutCharacterSheetClassesInput>
+}
+
+export type CharacterSubclassUpdateWithoutCharacterSheetClassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSubclassesNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutSubclassesNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSubclassNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubclassNestedInput
+}
+
+export type CharacterSubclassUncheckedUpdateWithoutCharacterSheetClassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSubclassNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassCreateWithoutCharacterClassInput = {
@@ -744,6 +845,7 @@ export type CharacterSubclassCreateWithoutCharacterClassInput = {
   system: Prisma.GameSystemCreateNestedOneWithoutSubclassesInput
   features?: Prisma.FeatureCreateNestedManyWithoutSubclassInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassUncheckedCreateWithoutCharacterClassInput = {
@@ -757,6 +859,7 @@ export type CharacterSubclassUncheckedCreateWithoutCharacterClassInput = {
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubclassInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassCreateOrConnectWithoutCharacterClassInput = {
@@ -796,6 +899,7 @@ export type CharacterSubclassCreateWithoutFeaturesInput = {
   system: Prisma.GameSystemCreateNestedOneWithoutSubclassesInput
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutSubclassesInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassUncheckedCreateWithoutFeaturesInput = {
@@ -809,6 +913,7 @@ export type CharacterSubclassUncheckedCreateWithoutFeaturesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubclassInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedCreateNestedManyWithoutSubclassInput
 }
 
 export type CharacterSubclassCreateOrConnectWithoutFeaturesInput = {
@@ -838,6 +943,7 @@ export type CharacterSubclassUpdateWithoutFeaturesInput = {
   system?: Prisma.GameSystemUpdateOneRequiredWithoutSubclassesNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutSubclassesNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassUncheckedUpdateWithoutFeaturesInput = {
@@ -851,6 +957,7 @@ export type CharacterSubclassUncheckedUpdateWithoutFeaturesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassCreateManySystemInput = {
@@ -875,6 +982,7 @@ export type CharacterSubclassUpdateWithoutSystemInput = {
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutSubclassesNestedInput
   features?: Prisma.FeatureUpdateManyWithoutSubclassNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassUncheckedUpdateWithoutSystemInput = {
@@ -888,6 +996,7 @@ export type CharacterSubclassUncheckedUpdateWithoutSystemInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSubclassNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassUncheckedUpdateManyWithoutSystemInput = {
@@ -923,6 +1032,7 @@ export type CharacterSubclassUpdateWithoutCharacterClassInput = {
   system?: Prisma.GameSystemUpdateOneRequiredWithoutSubclassesNestedInput
   features?: Prisma.FeatureUpdateManyWithoutSubclassNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassUncheckedUpdateWithoutCharacterClassInput = {
@@ -936,6 +1046,7 @@ export type CharacterSubclassUncheckedUpdateWithoutCharacterClassInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSubclassNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubclassNestedInput
+  characterSheetClasses?: Prisma.CharacterSheetClassUncheckedUpdateManyWithoutSubclassNestedInput
 }
 
 export type CharacterSubclassUncheckedUpdateManyWithoutCharacterClassInput = {
@@ -957,11 +1068,13 @@ export type CharacterSubclassUncheckedUpdateManyWithoutCharacterClassInput = {
 export type CharacterSubclassCountOutputType = {
   features: number
   characterSheets: number
+  characterSheetClasses: number
 }
 
 export type CharacterSubclassCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   features?: boolean | CharacterSubclassCountOutputTypeCountFeaturesArgs
   characterSheets?: boolean | CharacterSubclassCountOutputTypeCountCharacterSheetsArgs
+  characterSheetClasses?: boolean | CharacterSubclassCountOutputTypeCountCharacterSheetClassesArgs
 }
 
 /**
@@ -988,6 +1101,13 @@ export type CharacterSubclassCountOutputTypeCountCharacterSheetsArgs<ExtArgs ext
   where?: Prisma.CharacterSheetWhereInput
 }
 
+/**
+ * CharacterSubclassCountOutputType without action
+ */
+export type CharacterSubclassCountOutputTypeCountCharacterSheetClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterSheetClassWhereInput
+}
+
 
 export type CharacterSubclassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1003,6 +1123,7 @@ export type CharacterSubclassSelect<ExtArgs extends runtime.Types.Extensions.Int
   characterClass?: boolean | Prisma.CharacterClassDefaultArgs<ExtArgs>
   features?: boolean | Prisma.CharacterSubclass$featuresArgs<ExtArgs>
   characterSheets?: boolean | Prisma.CharacterSubclass$characterSheetsArgs<ExtArgs>
+  characterSheetClasses?: boolean | Prisma.CharacterSubclass$characterSheetClassesArgs<ExtArgs>
   _count?: boolean | Prisma.CharacterSubclassCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["characterSubclass"]>
 
@@ -1052,6 +1173,7 @@ export type CharacterSubclassInclude<ExtArgs extends runtime.Types.Extensions.In
   characterClass?: boolean | Prisma.CharacterClassDefaultArgs<ExtArgs>
   features?: boolean | Prisma.CharacterSubclass$featuresArgs<ExtArgs>
   characterSheets?: boolean | Prisma.CharacterSubclass$characterSheetsArgs<ExtArgs>
+  characterSheetClasses?: boolean | Prisma.CharacterSubclass$characterSheetClassesArgs<ExtArgs>
   _count?: boolean | Prisma.CharacterSubclassCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CharacterSubclassIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1070,6 +1192,7 @@ export type $CharacterSubclassPayload<ExtArgs extends runtime.Types.Extensions.I
     characterClass: Prisma.$CharacterClassPayload<ExtArgs>
     features: Prisma.$FeaturePayload<ExtArgs>[]
     characterSheets: Prisma.$CharacterSheetPayload<ExtArgs>[]
+    characterSheetClasses: Prisma.$CharacterSheetClassPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1479,6 +1602,7 @@ export interface Prisma__CharacterSubclassClient<T, Null = never, ExtArgs extend
   characterClass<T extends Prisma.CharacterClassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterClassDefaultArgs<ExtArgs>>): Prisma.Prisma__CharacterClassClient<runtime.Types.Result.GetResult<Prisma.$CharacterClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   features<T extends Prisma.CharacterSubclass$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSubclass$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterSheets<T extends Prisma.CharacterSubclass$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSubclass$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterSheetClasses<T extends Prisma.CharacterSubclass$characterSheetClassesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSubclass$characterSheetClassesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1958,6 +2082,30 @@ export type CharacterSubclass$characterSheetsArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.CharacterSheetScalarFieldEnum | Prisma.CharacterSheetScalarFieldEnum[]
+}
+
+/**
+ * CharacterSubclass.characterSheetClasses
+ */
+export type CharacterSubclass$characterSheetClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSheetClass
+   */
+  select?: Prisma.CharacterSheetClassSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSheetClass
+   */
+  omit?: Prisma.CharacterSheetClassOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSheetClassInclude<ExtArgs> | null
+  where?: Prisma.CharacterSheetClassWhereInput
+  orderBy?: Prisma.CharacterSheetClassOrderByWithRelationInput | Prisma.CharacterSheetClassOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterSheetClassWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterSheetClassScalarFieldEnum | Prisma.CharacterSheetClassScalarFieldEnum[]
 }
 
 /**

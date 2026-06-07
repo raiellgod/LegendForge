@@ -63,6 +63,7 @@ export const ModelName = {
   CharacterSheetSkill: 'CharacterSheetSkill',
   CharacterSheetSpell: 'CharacterSheetSpell',
   CharacterSheetEquipment: 'CharacterSheetEquipment',
+  CharacterSheetClass: 'CharacterSheetClass',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
@@ -317,6 +318,21 @@ export const CharacterSheetEquipmentScalarFieldEnum = {
 } as const
 
 export type CharacterSheetEquipmentScalarFieldEnum = (typeof CharacterSheetEquipmentScalarFieldEnum)[keyof typeof CharacterSheetEquipmentScalarFieldEnum]
+
+
+export const CharacterSheetClassScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  level: 'level',
+  isPrimary: 'isPrimary',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetClassScalarFieldEnum = (typeof CharacterSheetClassScalarFieldEnum)[keyof typeof CharacterSheetClassScalarFieldEnum]
 
 
 export const CharacterClassScalarFieldEnum = {

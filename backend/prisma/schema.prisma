@@ -333,6 +333,7 @@ model CharacterSheet {
   skills    CharacterSheetSkill[]
   spells    CharacterSheetSpell[]
   equipment CharacterSheetEquipment[]
+  classes   CharacterSheetClass[]
 
   @@index([campaignId])
   @@index([systemId])
@@ -428,6 +429,29 @@ model CharacterSheetEquipment {
   @@index([isEquipped])
 }
 
+model CharacterSheetClass {
+  id               String   @id @default(uuid())
+  characterSheetId String
+  classId          String
+  subclassId       String?
+  level            Int      @default(1)
+  isPrimary        Boolean  @default(false)
+  order            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  characterSheet CharacterSheet     @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
+
+  @@unique([characterSheetId, classId])
+  @@index([characterSheetId])
+  @@index([classId])
+  @@index([subclassId])
+  @@index([isPrimary])
+  @@index([order])
+}
+
 model CharacterClass {
   id                     String   @id @default(uuid())
   systemId               String
@@ -442,12 +466,13 @@ model CharacterClass {
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 
-  system            GameSystem          @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  subclasses        CharacterSubclass[]
-  levelProgressions LevelProgression[]
-  classSpells       ClassSpell[]
-  features          Feature[]
-  characterSheets   CharacterSheet[]
+  system                GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  subclasses            CharacterSubclass[]
+  levelProgressions     LevelProgression[]
+  classSpells           ClassSpell[]
+  features              Feature[]
+  characterSheets       CharacterSheet[]
+  characterSheetClasses CharacterSheetClass[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -466,10 +491,11 @@ model CharacterSubclass {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  system          GameSystem       @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterClass  CharacterClass   @relation(fields: [classId], references: [id], onDelete: Cascade)
-  features        Feature[]
-  characterSheets CharacterSheet[]
+  system                GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterClass        CharacterClass        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  features              Feature[]
+  characterSheets       CharacterSheet[]
+  characterSheetClasses CharacterSheetClass[]
 
   @@unique([classId, name])
   @@unique([classId, key])
@@ -611,23 +637,23 @@ model Equipment {
   damageType             String?
   defense                Int?
   properties             String?
-  attackType             EquipmentAttackType  @default(NONE)
+  attackType             EquipmentAttackType   @default(NONE)
   attackAbilityKey       String?
   alternativeAbilityKey  String?
   weaponGroup            EquipmentWeaponGroup?
   normalRange            Int?
   longRange              Int?
-  isFinesse              Boolean              @default(false)
-  isThrown               Boolean              @default(false)
-  isTwoHanded            Boolean              @default(false)
-  isVersatile            Boolean              @default(false)
+  isFinesse              Boolean               @default(false)
+  isThrown               Boolean               @default(false)
+  isTwoHanded            Boolean               @default(false)
+  isVersatile            Boolean               @default(false)
   versatileDamageFormula String?
-  attackBonus            Int                  @default(0)
-  damageBonus            Int                  @default(0)
+  attackBonus            Int                   @default(0)
+  damageBonus            Int                   @default(0)
 
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   system             GameSystem                @relation(fields: [systemId], references: [id], onDelete: Cascade)
   characterEquipment CharacterSheetEquipment[]

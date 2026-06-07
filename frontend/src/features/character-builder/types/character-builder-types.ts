@@ -225,6 +225,33 @@ export type CharacterReadySheetLevelProgressionPreview = {
   spellSlotsLevel9: number;
 };
 
+export type CharacterReadySheetClassEntry = {
+  id: string;
+  characterSheetId: string;
+  classId: string;
+  subclassId: string | null;
+  level: number;
+  isPrimary: boolean;
+  order: number;
+  characterClass: {
+    id: string;
+    key: string;
+    name: string;
+    description: string | null;
+    hitDie: number | null;
+    spellcastingAbilityKey: CharacterAttributeKey | null;
+    subclassSelectionLevel: number | null;
+    levelProgressions: CharacterBuilderClassLevelProgression[];
+  };
+  subclass: {
+    id: string;
+    key: string;
+    name: string;
+    description: string | null;
+    classId: string;
+  } | null;
+};
+
 export type CharacterReadySheetLevelUpPreview = {
   currentLevel: number;
   nextLevel: number;
@@ -321,13 +348,15 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     }>;
   } | null;
 
-    subclass: {
+  subclass: {
     id: string;
     key: string;
     name: string;
     description: string | null;
     classId: string;
   } | null;
+
+  classes: CharacterReadySheetClassEntry[];
 
   ancestry: {
     id: string;
