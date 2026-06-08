@@ -629,6 +629,7 @@ model Equipment {
   key         String
   category    EquipmentCategory
   description String?
+  imageUrl    String?
   cost        String?
   weight      Float?
 

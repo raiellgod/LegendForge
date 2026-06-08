@@ -456,6 +456,7 @@ export const EquipmentScalarFieldEnum = {
   key: 'key',
   category: 'category',
   description: 'description',
+  imageUrl: 'imageUrl',
   cost: 'cost',
   weight: 'weight',
   damage: 'damage',

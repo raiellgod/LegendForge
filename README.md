@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-multiclass%20foundation-green)
+![Status](https://img.shields.io/badge/status-phase%204%20closed-green)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -100,6 +100,7 @@ LegendForge/
 │   ├── prisma/
 │   │   ├── schema.prisma
 │   │   ├── migrations/
+│   │   ├── seed-data/
 │   │   └── seed.ts
 │   ├── docker-compose.yml
 │   └── package.json
@@ -136,8 +137,8 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟢 Multiclass foundation completed and tested at visual/data-structure level.  
-> 🟡 Next focus: update documentation and commit 4.30.
+> 🟢 Fase 4 concluída no nível atual com ficha/personagem, multiclasse base e seed modularizado.  
+> 🟡 Próximo foco: documentação final e commit de fechamento da Fase 4.
 
 ### ✅ Completed
 
@@ -273,8 +274,8 @@ LegendForge/
 ## 🚧 In Progress
 
 ```txt
-4.30.13 — Atualizar documentação
-4.30.14 — Commit da 4.30
+4.31.7 — Atualizar documentação final da Fase 4
+4.31.8 — Commit de fechamento da Fase 4
 ```
 
 ---
@@ -282,8 +283,8 @@ LegendForge/
 ## 🔜 Next Step
 
 ```txt
-4.30.13 — Atualizar documentação
-4.30.14 — Commit da 4.30
+Depois do commit de fechamento da Fase 4:
+Fase 4.5 — Revisão estrutural de regras de personagem/equipamento
 ```
 
 Then:
@@ -339,9 +340,9 @@ git commit -m "feat: refactor ready sheet popout"
 ## 🎯 Próximo foco
 
 ```txt
-4.30.13 — Atualizar documentação
-4.30.14 — Commit da 4.30
-4.31 — Modularização e expansão do conteúdo base do sistema
+4.31.7 — Atualizar documentação final da Fase 4
+4.31.8 — Commit de fechamento da Fase 4
+Depois do commit: abrir Fase 4.5
 ```
 
 
@@ -487,3 +488,123 @@ Before deployment later:
 
 - review `.gitignore`
 - keep `node_modules`, `.next`, `dist`, `.turbo`, logs and local generated caches out of git/deploy packages
+
+---
+
+# 🧩 4.31 — Modularização e expansão do conteúdo base do sistema
+
+## Resultado
+
+A 4.31 modularizou e expandiu o conteúdo base do sistema sem iniciar ainda as refatorações estruturais maiores que ficaram para a Fase 4.5.
+
+## Backend / Prisma
+
+- `backend/prisma/seed.ts` passou a atuar como orquestrador.
+- Dados do seed foram separados em `backend/prisma/seed-data/`.
+- Arquivos de dados criados/organizados por domínio:
+  - `ancestries.ts`
+  - `backgrounds.ts`
+  - `classes.ts`
+  - `subclasses.ts`
+  - `stats.ts`
+  - `skills.ts`
+  - `spells.ts`
+  - `class-spells.ts`
+  - `equipment.ts`
+  - `features.ts`
+- `Equipment.imageUrl` foi adicionado ao schema.
+- Foi criada migration para `imageUrl`.
+- O seed de equipamentos passou a preencher placeholders como `/images/equipment/<key>.png`.
+
+## Conteúdo expandido
+
+- Skills novas, incluindo opções ligadas a Força além de Atletismo.
+- Antecedentes revisados para usar skills novas.
+- Ancestralidades adicionais.
+- Subclasses adicionais.
+- Equipamentos adicionais.
+- Magias adicionais.
+- Vínculos classe-magia revisados.
+- Features de ancestralidade, classe e subclasse adicionadas.
+
+## Frontend
+
+- `CharacterBuilderEquipmentOption` recebeu `imageUrl`.
+- A ficha pronta passou a exibir imagem ou fallback por inicial nos cards de equipamento.
+- Aba Combate mostra imagem/inicial nos ataques por equipamento.
+- Aba Bolsa mostra imagem/inicial nos itens.
+- Fallback evita quebra enquanto as imagens reais ainda não existem.
+
+## Limite proposital
+
+A 4.31 não implementou ainda:
+
+- proficiência real por grupo de arma/proteção/ferramenta;
+- escolha real de equipamento inicial;
+- revisão profunda de ARMOR/proteção/revestimento no domínio;
+- sistema de roupa visual separado da proteção mecânica;
+- lojas/inventário avançado.
+
+Esses pontos foram movidos para a Fase 4.5.
+
+
+---
+
+# ✅ Fase 4 — Fechamento
+
+A Fase 4 foi concluída no nível atual com a criação/ficha de personagem funcionando como base jogável de mesa.
+
+## Entregas finais consolidadas
+
+- Character Builder persistido e organizado por etapas.
+- Ficha pronta reutilizável em `CharacterReadySheetView`.
+- Ficha em modal e pop-out.
+- Rolagens automáticas pela ficha.
+- Regras avançadas de magia/progressão inicial.
+- Ataques reais por equipamento no nível atual.
+- Features reais por classe, subclasse e ancestralidade.
+- Level Up preview visual.
+- Fundação de multiclasse com `CharacterSheetClass`.
+- Seed modularizado em `backend/prisma/seed-data`.
+- Conteúdo base expandido:
+  - ancestralidades;
+  - antecedentes;
+  - perícias;
+  - subclasses;
+  - equipamentos;
+  - magias;
+  - vínculos classe-magia;
+  - features.
+- `Equipment.imageUrl` adicionado ao banco.
+- Seed de equipamentos com placeholders de imagem.
+- Ficha pronta exibindo imagem/inicial de equipamento em Bolsa e Combate.
+- Teste regressivo final da Fase 4 concluído no nível atual.
+
+## Decisão importante
+
+Algumas decisões estruturais cresceram além da Fase 4 e foram movidas para uma fase intermediária antes da Fase 5.
+
+```txt
+[planejado] Fase 4.5 — Revisão estrutural de regras de personagem/equipamento
+```
+
+A Fase 4.5 será construída junto com o usuário e deve discutir/refatorar, entre outras coisas:
+
+- proficiências reais de equipamento por classe;
+- grupos de armas/proteções/ferramentas;
+- escolhas de equipamento inicial no builder;
+- armaduras como proteção/revestimento aplicado, não roupa visual;
+- diferença entre roupa/aparência e equipamento mecânico;
+- categorias de equipamento próprias do LegendForge;
+- impacto em ficha pronta, inventário, lojas, combate e Level Up;
+- outras decisões estruturais que ficaram grandes demais para fechar dentro da Fase 4.
+
+---
+
+# 🎯 Próximo foco
+
+```txt
+4.31.7 — Atualizar documentação final da Fase 4
+4.31.8 — Commit de fechamento da Fase 4
+Depois do commit: abrir Fase 4.5
+```

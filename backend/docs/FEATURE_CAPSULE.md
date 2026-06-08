@@ -753,17 +753,67 @@ Criar a fundação de multiclasse sem salvar Level Up real ainda.
 - Subclasse é avaliada por classe escolhida no Level Up.
 - Teste regressivo da multiclasse concluído no nível atual.
 
+
+---
+
+# ⚡ Capsule 47 — Seed Modularization and Content Expansion
+
+## 🎯 Goal
+
+Modularizar o seed, expandir o conteúdo base do sistema e preparar equipamentos para imagens futuras.
+
+## ✅ Result
+
+- `backend/prisma/seed.ts` passou a atuar como orquestrador.
+- Dados do seed foram separados em `backend/prisma/seed-data`.
+- Conteúdo base expandido:
+  - ancestralidades;
+  - antecedentes;
+  - perícias;
+  - subclasses;
+  - equipamentos;
+  - magias;
+  - vínculos classe-magia;
+  - features.
+- `Equipment.imageUrl` foi adicionado ao banco.
+- Seed passou a preencher placeholders de imagem de equipamento.
+- Frontend passou a ler `imageUrl` em `CharacterBuilderEquipmentOption`.
+- Ficha pronta passou a exibir imagem ou inicial nos equipamentos.
+- Aba Combate mostra imagem/inicial nos ataques por equipamento.
+- Aba Bolsa mostra imagem/inicial nos itens.
+- Teste regressivo final da Fase 4 concluído no nível atual.
+
+---
+
+# ⚡ Capsule 48 — Phase 4 Closure Planning
+
+## 🎯 Goal
+
+Fechar a Fase 4 sem misturar decisões estruturais maiores com o commit atual.
+
+## ✅ Result
+
+- Fase 4 considerada concluída no nível atual.
+- Fase 4.5 planejada antes da Fase 5.
+- Pontos grandes movidos para 4.5:
+  - proficiências reais de equipamento;
+  - escolhas de equipamento inicial;
+  - armaduras como proteção/revestimento aplicado;
+  - roupa visual separada de proteção mecânica;
+  - categorias de equipamento;
+  - impacto em inventário, lojas, combate, builder e ficha pronta.
+
 ---
 
 # 🧭 Próxima cápsula esperada
 
 ```txt
-Capsule 47 — Multiclass documentation and commit
+Capsule 49 — Phase 4 final documentation and commit
 ```
 
 Foco esperado:
 
-- atualizar documentação da 4.30
+- atualizar documentação final da Fase 4
 - rodar `git diff --stat`
-- commitar a fundação de multiclasse
-- iniciar 4.31 Modularização e expansão do conteúdo base do sistema
+- commitar fechamento da Fase 4
+- abrir Fase 4.5

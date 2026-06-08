@@ -53,6 +53,7 @@ export type EquipmentMinAggregateOutputType = {
   key: string | null
   category: $Enums.EquipmentCategory | null
   description: string | null
+  imageUrl: string | null
   cost: string | null
   weight: number | null
   damage: string | null
@@ -85,6 +86,7 @@ export type EquipmentMaxAggregateOutputType = {
   key: string | null
   category: $Enums.EquipmentCategory | null
   description: string | null
+  imageUrl: string | null
   cost: string | null
   weight: number | null
   damage: string | null
@@ -117,6 +119,7 @@ export type EquipmentCountAggregateOutputType = {
   key: number
   category: number
   description: number
+  imageUrl: number
   cost: number
   weight: number
   damage: number
@@ -171,6 +174,7 @@ export type EquipmentMinAggregateInputType = {
   key?: true
   category?: true
   description?: true
+  imageUrl?: true
   cost?: true
   weight?: true
   damage?: true
@@ -203,6 +207,7 @@ export type EquipmentMaxAggregateInputType = {
   key?: true
   category?: true
   description?: true
+  imageUrl?: true
   cost?: true
   weight?: true
   damage?: true
@@ -235,6 +240,7 @@ export type EquipmentCountAggregateInputType = {
   key?: true
   category?: true
   description?: true
+  imageUrl?: true
   cost?: true
   weight?: true
   damage?: true
@@ -354,6 +360,7 @@ export type EquipmentGroupByOutputType = {
   key: string
   category: $Enums.EquipmentCategory
   description: string | null
+  imageUrl: string | null
   cost: string | null
   weight: number | null
   damage: string | null
@@ -409,6 +416,7 @@ export type EquipmentWhereInput = {
   key?: Prisma.StringFilter<"Equipment"> | string
   category?: Prisma.EnumEquipmentCategoryFilter<"Equipment"> | $Enums.EquipmentCategory
   description?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Equipment"> | string | null
   cost?: Prisma.StringNullableFilter<"Equipment"> | string | null
   weight?: Prisma.FloatNullableFilter<"Equipment"> | number | null
   damage?: Prisma.StringNullableFilter<"Equipment"> | string | null
@@ -443,6 +451,7 @@ export type EquipmentOrderByWithRelationInput = {
   key?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cost?: Prisma.SortOrderInput | Prisma.SortOrder
   weight?: Prisma.SortOrderInput | Prisma.SortOrder
   damage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -482,6 +491,7 @@ export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
   key?: Prisma.StringFilter<"Equipment"> | string
   category?: Prisma.EnumEquipmentCategoryFilter<"Equipment"> | $Enums.EquipmentCategory
   description?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Equipment"> | string | null
   cost?: Prisma.StringNullableFilter<"Equipment"> | string | null
   weight?: Prisma.FloatNullableFilter<"Equipment"> | number | null
   damage?: Prisma.StringNullableFilter<"Equipment"> | string | null
@@ -516,6 +526,7 @@ export type EquipmentOrderByWithAggregationInput = {
   key?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cost?: Prisma.SortOrderInput | Prisma.SortOrder
   weight?: Prisma.SortOrderInput | Prisma.SortOrder
   damage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -556,6 +567,7 @@ export type EquipmentScalarWhereWithAggregatesInput = {
   key?: Prisma.StringWithAggregatesFilter<"Equipment"> | string
   category?: Prisma.EnumEquipmentCategoryWithAggregatesFilter<"Equipment"> | $Enums.EquipmentCategory
   description?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
   cost?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
   weight?: Prisma.FloatNullableWithAggregatesFilter<"Equipment"> | number | null
   damage?: Prisma.StringNullableWithAggregatesFilter<"Equipment"> | string | null
@@ -587,6 +599,7 @@ export type EquipmentCreateInput = {
   key: string
   category: $Enums.EquipmentCategory
   description?: string | null
+  imageUrl?: string | null
   cost?: string | null
   weight?: number | null
   damage?: string | null
@@ -621,6 +634,7 @@ export type EquipmentUncheckedCreateInput = {
   key: string
   category: $Enums.EquipmentCategory
   description?: string | null
+  imageUrl?: string | null
   cost?: string | null
   weight?: number | null
   damage?: string | null
@@ -653,6 +667,7 @@ export type EquipmentUpdateInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -687,6 +702,7 @@ export type EquipmentUncheckedUpdateInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -720,6 +736,7 @@ export type EquipmentCreateManyInput = {
   key: string
   category: $Enums.EquipmentCategory
   description?: string | null
+  imageUrl?: string | null
   cost?: string | null
   weight?: number | null
   damage?: string | null
@@ -751,6 +768,7 @@ export type EquipmentUpdateManyMutationInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -783,6 +801,7 @@ export type EquipmentUncheckedUpdateManyInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -840,6 +859,7 @@ export type EquipmentCountOrderByAggregateInput = {
   key?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   cost?: Prisma.SortOrder
   weight?: Prisma.SortOrder
   damage?: Prisma.SortOrder
@@ -882,6 +902,7 @@ export type EquipmentMaxOrderByAggregateInput = {
   key?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   cost?: Prisma.SortOrder
   weight?: Prisma.SortOrder
   damage?: Prisma.SortOrder
@@ -914,6 +935,7 @@ export type EquipmentMinOrderByAggregateInput = {
   key?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   cost?: Prisma.SortOrder
   weight?: Prisma.SortOrder
   damage?: Prisma.SortOrder
@@ -1031,6 +1053,7 @@ export type EquipmentCreateWithoutSystemInput = {
   key: string
   category: $Enums.EquipmentCategory
   description?: string | null
+  imageUrl?: string | null
   cost?: string | null
   weight?: number | null
   damage?: string | null
@@ -1063,6 +1086,7 @@ export type EquipmentUncheckedCreateWithoutSystemInput = {
   key: string
   category: $Enums.EquipmentCategory
   description?: string | null
+  imageUrl?: string | null
   cost?: string | null
   weight?: number | null
   damage?: string | null
@@ -1125,6 +1149,7 @@ export type EquipmentScalarWhereInput = {
   key?: Prisma.StringFilter<"Equipment"> | string
   category?: Prisma.EnumEquipmentCategoryFilter<"Equipment"> | $Enums.EquipmentCategory
   description?: Prisma.StringNullableFilter<"Equipment"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Equipment"> | string | null
   cost?: Prisma.StringNullableFilter<"Equipment"> | string | null
   weight?: Prisma.FloatNullableFilter<"Equipment"> | number | null
   damage?: Prisma.StringNullableFilter<"Equipment"> | string | null
@@ -1156,6 +1181,7 @@ export type EquipmentCreateWithoutCharacterEquipmentInput = {
   key: string
   category: $Enums.EquipmentCategory
   description?: string | null
+  imageUrl?: string | null
   cost?: string | null
   weight?: number | null
   damage?: string | null
@@ -1189,6 +1215,7 @@ export type EquipmentUncheckedCreateWithoutCharacterEquipmentInput = {
   key: string
   category: $Enums.EquipmentCategory
   description?: string | null
+  imageUrl?: string | null
   cost?: string | null
   weight?: number | null
   damage?: string | null
@@ -1236,6 +1263,7 @@ export type EquipmentUpdateWithoutCharacterEquipmentInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1269,6 +1297,7 @@ export type EquipmentUncheckedUpdateWithoutCharacterEquipmentInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1300,6 +1329,7 @@ export type EquipmentCreateManySystemInput = {
   key: string
   category: $Enums.EquipmentCategory
   description?: string | null
+  imageUrl?: string | null
   cost?: string | null
   weight?: number | null
   damage?: string | null
@@ -1331,6 +1361,7 @@ export type EquipmentUpdateWithoutSystemInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1363,6 +1394,7 @@ export type EquipmentUncheckedUpdateWithoutSystemInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1395,6 +1427,7 @@ export type EquipmentUncheckedUpdateManyWithoutSystemInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1458,6 +1491,7 @@ export type EquipmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   key?: boolean
   category?: boolean
   description?: boolean
+  imageUrl?: boolean
   cost?: boolean
   weight?: boolean
   damage?: boolean
@@ -1493,6 +1527,7 @@ export type EquipmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   key?: boolean
   category?: boolean
   description?: boolean
+  imageUrl?: boolean
   cost?: boolean
   weight?: boolean
   damage?: boolean
@@ -1526,6 +1561,7 @@ export type EquipmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   key?: boolean
   category?: boolean
   description?: boolean
+  imageUrl?: boolean
   cost?: boolean
   weight?: boolean
   damage?: boolean
@@ -1559,6 +1595,7 @@ export type EquipmentSelectScalar = {
   key?: boolean
   category?: boolean
   description?: boolean
+  imageUrl?: boolean
   cost?: boolean
   weight?: boolean
   damage?: boolean
@@ -1584,7 +1621,7 @@ export type EquipmentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "category" | "description" | "cost" | "weight" | "damage" | "damageFormula" | "damageType" | "defense" | "properties" | "attackType" | "attackAbilityKey" | "alternativeAbilityKey" | "weaponGroup" | "normalRange" | "longRange" | "isFinesse" | "isThrown" | "isTwoHanded" | "isVersatile" | "versatileDamageFormula" | "attackBonus" | "damageBonus" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["equipment"]>
+export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "category" | "description" | "imageUrl" | "cost" | "weight" | "damage" | "damageFormula" | "damageType" | "defense" | "properties" | "attackType" | "attackAbilityKey" | "alternativeAbilityKey" | "weaponGroup" | "normalRange" | "longRange" | "isFinesse" | "isThrown" | "isTwoHanded" | "isVersatile" | "versatileDamageFormula" | "attackBonus" | "damageBonus" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["equipment"]>
 export type EquipmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterEquipment?: boolean | Prisma.Equipment$characterEquipmentArgs<ExtArgs>
@@ -1610,6 +1647,7 @@ export type $EquipmentPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     key: string
     category: $Enums.EquipmentCategory
     description: string | null
+    imageUrl: string | null
     cost: string | null
     weight: number | null
     damage: string | null
@@ -2064,6 +2102,7 @@ export interface EquipmentFieldRefs {
   readonly key: Prisma.FieldRef<"Equipment", 'String'>
   readonly category: Prisma.FieldRef<"Equipment", 'EquipmentCategory'>
   readonly description: Prisma.FieldRef<"Equipment", 'String'>
+  readonly imageUrl: Prisma.FieldRef<"Equipment", 'String'>
   readonly cost: Prisma.FieldRef<"Equipment", 'String'>
   readonly weight: Prisma.FieldRef<"Equipment", 'Float'>
   readonly damage: Prisma.FieldRef<"Equipment", 'String'>
