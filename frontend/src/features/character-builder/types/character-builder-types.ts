@@ -150,6 +150,7 @@ export type EquipmentWeaponGroup =
   | "RELIC";
 
 export type CharacterBuilderEquipmentOption = CharacterBuilderOption & {
+  imageUrl: string | null;
   category: string;
   damage: string | null;
   damageFormula: string | null;

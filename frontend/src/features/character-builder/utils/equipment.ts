@@ -22,7 +22,7 @@ export const EQUIPMENT_CATEGORY_ORDER = [
 export function getEquipmentCategoryLabel(category: string) {
   const labels: Record<string, string> = {
     WEAPON: "Arma",
-    ARMOR: "Armadura",
+    ARMOR: "Proteção",
     SHIELD: "Escudo",
     GEAR: "Item",
     TOOL: "Ferramenta",
@@ -72,7 +72,8 @@ export function formatEquipmentWeight(weight: number | null) {
 export function getEquipmentCategoryDescription(category: string) {
   const descriptions: Record<string, string> = {
     WEAPON: "Armas usadas para ataques corpo a corpo ou à distância.",
-    ARMOR: "Proteções vestidas para reduzir risco e aumentar defesa.",
+    ARMOR:
+      "Revestimentos e camadas defensivas aplicadas ao personagem sem definir a roupa visual.",
     SHIELD: "Proteções empunhadas para bloquear golpes e proteger posição.",
     TOOL: "Ferramentas usadas em testes, ofícios, reparos ou especialidades.",
     GEAR: "Itens gerais de exploração, sobrevivência e aventura.",
@@ -170,14 +171,14 @@ export function getClassStartingEquipmentPlan(
           key: "heavy-axe",
           quantity: 1,
           source: "class",
-          notes: "Arma inicial da classe",
+          notes: "Arma pesada inicial da classe",
           isEquipped: true,
         },
         {
-          key: "shortbow",
+          key: "short-spear",
           quantity: 1,
           source: "class",
-          notes: "Opção simples de ataque à distância",
+          notes: "Arma simples de apoio e arremesso",
         },
         {
           key: "survival-kit",

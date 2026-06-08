@@ -720,8 +720,42 @@ function SpellCard({
   );
 }
 
+function EquipmentImageBadge({
+  name,
+  imageUrl,
+}: {
+  name: string;
+  imageUrl: string | null;
+}) {
+  const [hasImageError, setHasImageError] = useState(false);
+  const normalizedImageUrl = imageUrl?.trim() ?? "";
+  const shouldShowImage = normalizedImageUrl.length > 0 && !hasImageError;
+  const fallbackInitial = name.trim().charAt(0).toUpperCase() || "?";
+
+  return (
+    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-forge-gold/25 bg-black/35 shadow-[-2px_2px_0_rgba(0,0,0,0.25)]">
+      {shouldShowImage ? (
+        <Image
+          src={normalizedImageUrl}
+          alt={name}
+          width={96}
+          height={96}
+          unoptimized
+          onError={() => setHasImageError(true)}
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <span className="text-sm font-black text-forge-gold/75">
+          {fallbackInitial}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function EquipmentAttackCard({
   name,
+  imageUrl,
   attackLabel,
   damageLabel,
   helper,
@@ -731,6 +765,7 @@ function EquipmentAttackCard({
   onRollDamage,
 }: {
   name: string;
+  imageUrl: string | null;
   attackLabel: string;
   damageLabel: string;
   helper: string;
@@ -745,17 +780,21 @@ function EquipmentAttackCard({
       title={helper}
     >
       <div className="grid gap-2 xl:grid-cols-[minmax(180px,1fr)_160px_auto] xl:items-center">
-        <div className="min-w-0">
-          <p
-            className="min-w-0 break-words text-sm font-black leading-snug text-forge-gold"
-            title={name}
-          >
-            {name}
-          </p>
+        <div className="flex min-w-0 items-center gap-3">
+          <EquipmentImageBadge name={name} imageUrl={imageUrl} />
 
-          <p className="mt-0.5 line-clamp-1 text-[10px] font-semibold text-white/35">
-            {helper}
-          </p>
+          <div className="min-w-0">
+            <p
+              className="min-w-0 break-words text-sm font-black leading-snug text-forge-gold"
+              title={name}
+            >
+              {name}
+            </p>
+
+            <p className="mt-0.5 line-clamp-1 text-[10px] font-semibold text-white/35">
+              {helper}
+            </p>
+          </div>
         </div>
 
         <div className="grid gap-1.5 text-[10px] font-black text-forge-gold sm:grid-cols-2 xl:grid-cols-1">
@@ -814,12 +853,14 @@ function EquipmentAttackCard({
 
 function EquipmentListCard({
   title,
+  imageUrl,
   helper,
   value,
   isExpanded,
   onToggleExpanded,
 }: {
   title: string;
+  imageUrl: string | null;
   helper: string | null;
   value?: string;
   isExpanded: boolean;
@@ -831,19 +872,23 @@ function EquipmentListCard({
       title={helper ?? title}
     >
       <div className="grid gap-2 xl:grid-cols-[minmax(180px,1fr)_120px_auto] xl:items-center">
-        <div className="min-w-0">
-          <p
-            className="min-w-0 break-words text-sm font-black leading-snug text-white/70"
-            title={title}
-          >
-            {title}
-          </p>
+        <div className="flex min-w-0 items-center gap-3">
+          <EquipmentImageBadge name={title} imageUrl={imageUrl} />
 
-          {helper ? (
-            <p className="mt-0.5 line-clamp-1 text-[10px] font-semibold text-white/35">
-              {helper}
+          <div className="min-w-0">
+            <p
+              className="min-w-0 break-words text-sm font-black leading-snug text-white/70"
+              title={title}
+            >
+              {title}
             </p>
-          ) : null}
+
+            {helper ? (
+              <p className="mt-0.5 line-clamp-1 text-[10px] font-semibold text-white/35">
+                {helper}
+              </p>
+            ) : null}
+          </div>
         </div>
 
         <p className="text-[10px] font-black uppercase tracking-[0.12em] text-forge-gold xl:text-right">
@@ -1028,10 +1073,9 @@ function LevelUpPreviewModal({
   const newFeatures = levelUpPreview?.newFeatures ?? [];
   const hasNewFeatures = newFeatures.length > 0;
 
-  
   const canPreviewNextLevel = levelUpPreview?.canPreviewNextLevel ?? false;
 
-    const selectedSubclassSelectionLevel =
+  const selectedSubclassSelectionLevel =
     selectedClassOption?.subclassSelectionLevel ?? null;
 
   const isSelectedSubclassAlreadyChosen = Boolean(
@@ -1138,84 +1182,83 @@ function LevelUpPreviewModal({
           </div>
         </div>
 
-                  <div className="rounded-xl border border-forge-gold/25 bg-black/25 p-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-              Escolha qual classe receberia o nível
-            </p>
+        <div className="rounded-xl border border-forge-gold/25 bg-black/25 p-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+            Escolha qual classe receberia o nível
+          </p>
 
-            <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
-              Nesta micro a escolha é apenas visual. A confirmação real virá
-              depois, quando o backend aplicar nível total e nível de classe.
-            </p>
+          <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+            Nesta micro a escolha é apenas visual. A confirmação real virá
+            depois, quando o backend aplicar nível total e nível de classe.
+          </p>
 
-            {classOptions.length > 0 ? (
-              <div className="mt-3 grid gap-2 md:grid-cols-2">
-                {classOptions.map((classOption) => {
-                  const isSelected =
-                    selectedClassOption?.id === classOption.id;
+          {classOptions.length > 0 ? (
+            <div className="mt-3 grid gap-2 md:grid-cols-2">
+              {classOptions.map((classOption) => {
+                const isSelected = selectedClassOption?.id === classOption.id;
 
-                  return (
-                    <button
-                      key={classOption.id}
-                      type="button"
-                      onClick={() => onSelectClass(classOption.id)}
-                      className={[
-                        "rounded-xl border p-3 text-left transition",
-                        isSelected
-                          ? "border-forge-gold bg-forge-gold/10"
-                          : "border-white/10 bg-black/25 hover:border-forge-gold/45 hover:bg-forge-gold/5",
-                      ].join(" ")}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <p className="min-w-0 break-words text-sm font-black text-forge-gold">
-                            {classOption.className}{" "}
-                            {classOption.currentClassLevel} →{" "}
-                            {classOption.nextClassLevel}
-                          </p>
+                return (
+                  <button
+                    key={classOption.id}
+                    type="button"
+                    onClick={() => onSelectClass(classOption.id)}
+                    className={[
+                      "rounded-xl border p-3 text-left transition",
+                      isSelected
+                        ? "border-forge-gold bg-forge-gold/10"
+                        : "border-white/10 bg-black/25 hover:border-forge-gold/45 hover:bg-forge-gold/5",
+                    ].join(" ")}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="min-w-0 break-words text-sm font-black text-forge-gold">
+                          {classOption.className}{" "}
+                          {classOption.currentClassLevel} →{" "}
+                          {classOption.nextClassLevel}
+                        </p>
 
-                          <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
-                            {classOption.subclassName ?? "Sem subclasse"}
-                          </p>
-                        </div>
-
-                        {classOption.isPrimary ? (
-                          <span className="shrink-0 rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.12em] text-forge-gold">
-                            Principal
-                          </span>
-                        ) : null}
+                        <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+                          {classOption.subclassName ?? "Sem subclasse"}
+                        </p>
                       </div>
 
-                      <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
-                        {classOption.isSpellcaster
-                          ? "Classe conjuradora. Pode alterar progressão de magias desta classe."
-                          : "Classe sem atributo de conjuração configurado."}
-                      </p>
-                    </button>
-                  );
-                })}
+                      {classOption.isPrimary ? (
+                        <span className="shrink-0 rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.12em] text-forge-gold">
+                          Principal
+                        </span>
+                      ) : null}
+                    </div>
 
-                <button
-                  type="button"
-                  disabled
-                  className="cursor-not-allowed rounded-xl border border-white/5 bg-black/20 p-3 text-left opacity-70"
-                  title="Adicionar nova classe será liberado em uma micro posterior."
-                >
-                  <p className="text-sm font-black text-white/25">
-                    + Adicionar nova classe
-                  </p>
+                    <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
+                      {classOption.isSpellcaster
+                        ? "Classe conjuradora. Pode alterar progressão de magias desta classe."
+                        : "Classe sem atributo de conjuração configurado."}
+                    </p>
+                  </button>
+                );
+              })}
 
-                  <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/25">
-                    Em breve: escolher uma nova classe para iniciar multiclasse.
-                  </p>
-                </button>
-              </div>
-            ) : (
-              <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
-                Nenhuma classe vinculada à estrutura nova da ficha.
-              </p>
-            )}
-          </div>
+              <button
+                type="button"
+                disabled
+                className="cursor-not-allowed rounded-xl border border-white/5 bg-black/20 p-3 text-left opacity-70"
+                title="Adicionar nova classe será liberado em uma micro posterior."
+              >
+                <p className="text-sm font-black text-white/25">
+                  + Adicionar nova classe
+                </p>
+
+                <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/25">
+                  Em breve: escolher uma nova classe para iniciar multiclasse.
+                </p>
+              </button>
+            </div>
+          ) : (
+            <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+              Nenhuma classe vinculada à estrutura nova da ficha.
+            </p>
+          )}
+        </div>
 
         <div className="mt-4 grid gap-3">
           <div className="rounded-xl border border-white/10 bg-black/25 p-3">
@@ -1280,8 +1323,7 @@ function LevelUpPreviewModal({
                       feature.level ? `Nível ${feature.level}` : "Sem nível"
                     }
                     description={
-                      feature.description?.trim() ||
-                      "Sem descrição cadastrada."
+                      feature.description?.trim() || "Sem descrição cadastrada."
                     }
                   />
                 ))}
@@ -1344,8 +1386,6 @@ function LevelUpPreviewModal({
   );
 }
 
-
-
 function NarrativeField({
   label,
   value,
@@ -1385,7 +1425,7 @@ export function CharacterReadySheetView({
   const [manualTargetArmorClass, setManualTargetArmorClass] = useState("");
   const [isLevelUpPreviewOpen, setIsLevelUpPreviewOpen] = useState(false);
 
-    const [selectedLevelUpClassOptionId, setSelectedLevelUpClassOptionId] =
+  const [selectedLevelUpClassOptionId, setSelectedLevelUpClassOptionId] =
     useState<string | null>(null);
 
   function toggleExpandedSpell(spellKey: string) {
@@ -1632,6 +1672,7 @@ export function CharacterReadySheetView({
         return {
           id: equipment.key,
           name: equipment.name,
+          imageUrl: equipment.imageUrl,
           attackBonus,
           attackLabel,
           damageLabel,
@@ -1645,6 +1686,7 @@ export function CharacterReadySheetView({
       .map((sheetEquipment) => ({
         id: sheetEquipment.equipment.key,
         name: sheetEquipment.equipment.name,
+        imageUrl: sheetEquipment.equipment.imageUrl,
         quantity: sheetEquipment.quantity,
         helper:
           sheetEquipment.notes ??
@@ -1723,10 +1765,9 @@ export function CharacterReadySheetView({
 
   const spellcastingClass = spellcastingClassEntry
     ? `${spellcastingClassEntry.characterClass.name} ${spellcastingClassEntry.level}`
-    : characterSheet?.characterClass?.name ?? "—";
+    : (characterSheet?.characterClass?.name ?? "—");
 
-  const spellcastingClassLevel =
-    spellcastingClassEntry?.level ?? sheetLevel;
+  const spellcastingClassLevel = spellcastingClassEntry?.level ?? sheetLevel;
 
   const spellcastingAbilityKey = getSpellcastingAbilityKey(
     spellcastingClassEntry?.characterClass.spellcastingAbilityKey ??
@@ -1943,10 +1984,9 @@ export function CharacterReadySheetView({
     ? formatSignedNumber(getInitiativeBonus(sheetStats))
     : "—";
 
-  
   // Multiclasse: proficiência usa o nível total do personagem,
   // não o nível individual de uma classe.
-    const proficiencyBonus = characterSheet
+  const proficiencyBonus = characterSheet
     ? formatSignedNumber(getProficiencyBonusByLevel(sheetLevel))
     : "—";
 
@@ -2208,7 +2248,7 @@ export function CharacterReadySheetView({
         </div>
       </header>
 
-            {isLevelUpPreviewOpen ? (
+      {isLevelUpPreviewOpen ? (
         <LevelUpPreviewModal
           characterName={displayName}
           className={levelUpClassName}
@@ -2390,6 +2430,7 @@ export function CharacterReadySheetView({
                         <EquipmentAttackCard
                           key={attackKey}
                           name={attack.name}
+                          imageUrl={attack.imageUrl}
                           attackLabel={attack.attackLabel}
                           damageLabel={attack.damageLabel}
                           helper={attack.helper}
@@ -2561,6 +2602,7 @@ export function CharacterReadySheetView({
                         <EquipmentAttackCard
                           key={attackKey}
                           name={attack.name}
+                          imageUrl={attack.imageUrl}
                           attackLabel={attack.attackLabel}
                           damageLabel={attack.damageLabel}
                           helper={attack.helper}
@@ -2611,6 +2653,7 @@ export function CharacterReadySheetView({
                         <EquipmentListCard
                           key={itemKey}
                           title={`${item.quantity}x ${item.name}`}
+                          imageUrl={item.imageUrl}
                           value={item.isEquipped ? "Equipado" : undefined}
                           helper={item.helper}
                           isExpanded={expandedEquipmentKeys.includes(itemKey)}
@@ -2919,7 +2962,7 @@ export function CharacterReadySheetView({
             </main>
 
             <aside className="space-y-4">
-                            <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+              <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                   Progressão
                 </p>
@@ -2955,7 +2998,7 @@ export function CharacterReadySheetView({
                 </p>
               </section>
 
-                            <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+              <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                   Classes da ficha
                 </p>
@@ -2983,7 +3026,7 @@ export function CharacterReadySheetView({
                   classe. A multiclasse será aplicada por esta lista.
                 </p>
               </section>
-              
+
               <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                   Resumo de origem
