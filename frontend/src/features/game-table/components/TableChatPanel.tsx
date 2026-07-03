@@ -22,6 +22,7 @@ type TableChatPanelProps = {
   onChangeWhisperTargetId: (targetId: string) => void;
   onChangeChatInput: (value: string) => void;
   onSubmitMessage: (event: FormEvent<HTMLFormElement>) => void;
+  onClearChat: () => void;
 };
 
 function getRollCardStyles(content: string) {
@@ -54,6 +55,7 @@ export function TableChatPanel({
   onChangeWhisperTargetId,
   onChangeChatInput,
   onSubmitMessage,
+  onClearChat,
 }: TableChatPanelProps) {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -67,7 +69,19 @@ export function TableChatPanel({
     <div className="flex h-full min-h-0 flex-col bg-[#140719]">
       <div className="min-h-0 flex-1 overflow-y-auto p-4 text-[13px]">
         <section className="min-h-full">
-          <h2 className="text-base font-black text-forge-gold">Chat</h2>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-base font-black text-forge-gold">Chat</h2>
+
+            <button
+              type="button"
+              onClick={onClearChat}
+              disabled={chatMessages.length <= 1}
+              className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-white/45 transition hover:border-red-400/50 hover:bg-red-500/10 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-35"
+              title="Limpar mensagens desta sessão"
+            >
+              Limpar
+            </button>
+          </div>
 
           <div className="mt-5 space-y-3 pb-2">
             {chatMessages.map((message) => {

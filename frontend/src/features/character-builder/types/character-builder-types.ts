@@ -11,6 +11,10 @@ export type CharacterBuilderAttributes = Record<
   number | null
 >;
 
+export type CharacterAttributeBonusMap = Partial<
+  Record<CharacterAttributeKey, number>
+>;
+
 export type CharacterBuilderEquipmentMode = "PACKAGE" | "GOLD";
 
 export type CharacterSheetStatus = "DRAFT" | "READY" | "ARCHIVED";
@@ -30,6 +34,7 @@ export type CharacterBuilderDraft = {
   portraitUrl: string;
   tokenImageUrl: string;
   tokenImageFit: "FILL" | "CONTAIN" | "COVER";
+  level: number;
 
   classId: string;
   className: string;
@@ -103,12 +108,17 @@ export type CharacterBuilderClassOption = CharacterBuilderOption & {
   hitDie: number | null;
   spellcastingAbilityKey: CharacterAttributeKey | null;
   subclassSelectionLevel: number | null;
+  classSkillChoiceCount: number;
+  weaponProficiencyKeys: string[];
+  protectionProficiencyKeys: string[];
+  toolProficiencyKeys: string[];
   levelProgressions: CharacterBuilderClassLevelProgression[];
   classSpells: CharacterBuilderClassSpellAccess[];
 };
 
 export type CharacterBuilderAncestryOption = CharacterBuilderOption & {
   defaultSizeCategory: string;
+  attributeBonuses: CharacterAttributeBonusMap;
 };
 
 export type CharacterBuilderBackgroundOption = CharacterBuilderOption & {
@@ -116,6 +126,7 @@ export type CharacterBuilderBackgroundOption = CharacterBuilderOption & {
   toolNames: string[];
   languageChoiceCount: number;
   startingGold: number;
+  attributeBonuses: CharacterAttributeBonusMap;
 };
 
 export type CharacterBuilderSkillOption = CharacterBuilderOption & {
@@ -272,6 +283,7 @@ export type CharacterReadySheetLevelUpPreview = {
 export type CharacterSheetCombatState = {
   level: number;
   experience: number;
+  levelUpAvailable: boolean;
   hitPoints: number;
   maxHitPoints: number;
   temporaryHp: number;
@@ -438,6 +450,10 @@ export type CharacterBuilderSelectableOption = {
   hitDie?: number | null;
   defaultSizeCategory?: string;
   skillKeys?: string[];
+  classSkillChoiceCount?: number;
+  weaponProficiencyKeys?: string[];
+  protectionProficiencyKeys?: string[];
+  toolProficiencyKeys?: string[];
 };
 
 export type CharacterBuilderModalProps = {

@@ -73,6 +73,7 @@ export type CharacterSheetMinAggregateOutputType = {
   tokenImageFit: string | null
   level: number | null
   experience: number | null
+  levelUpAvailable: boolean | null
   hitPoints: number | null
   maxHitPoints: number | null
   temporaryHp: number | null
@@ -125,6 +126,7 @@ export type CharacterSheetMaxAggregateOutputType = {
   tokenImageFit: string | null
   level: number | null
   experience: number | null
+  levelUpAvailable: boolean | null
   hitPoints: number | null
   maxHitPoints: number | null
   temporaryHp: number | null
@@ -177,6 +179,7 @@ export type CharacterSheetCountAggregateOutputType = {
   tokenImageFit: number
   level: number
   experience: number
+  levelUpAvailable: number
   hitPoints: number
   maxHitPoints: number
   temporaryHp: number
@@ -259,6 +262,7 @@ export type CharacterSheetMinAggregateInputType = {
   tokenImageFit?: true
   level?: true
   experience?: true
+  levelUpAvailable?: true
   hitPoints?: true
   maxHitPoints?: true
   temporaryHp?: true
@@ -311,6 +315,7 @@ export type CharacterSheetMaxAggregateInputType = {
   tokenImageFit?: true
   level?: true
   experience?: true
+  levelUpAvailable?: true
   hitPoints?: true
   maxHitPoints?: true
   temporaryHp?: true
@@ -363,6 +368,7 @@ export type CharacterSheetCountAggregateInputType = {
   tokenImageFit?: true
   level?: true
   experience?: true
+  levelUpAvailable?: true
   hitPoints?: true
   maxHitPoints?: true
   temporaryHp?: true
@@ -502,6 +508,7 @@ export type CharacterSheetGroupByOutputType = {
   tokenImageFit: string
   level: number
   experience: number
+  levelUpAvailable: boolean
   hitPoints: number
   maxHitPoints: number
   temporaryHp: number
@@ -577,6 +584,7 @@ export type CharacterSheetWhereInput = {
   tokenImageFit?: Prisma.StringFilter<"CharacterSheet"> | string
   level?: Prisma.IntFilter<"CharacterSheet"> | number
   experience?: Prisma.IntFilter<"CharacterSheet"> | number
+  levelUpAvailable?: Prisma.BoolFilter<"CharacterSheet"> | boolean
   hitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   maxHitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   temporaryHp?: Prisma.IntFilter<"CharacterSheet"> | number
@@ -642,6 +650,7 @@ export type CharacterSheetOrderByWithRelationInput = {
   tokenImageFit?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
+  levelUpAvailable?: Prisma.SortOrder
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
@@ -710,6 +719,7 @@ export type CharacterSheetWhereUniqueInput = Prisma.AtLeast<{
   tokenImageFit?: Prisma.StringFilter<"CharacterSheet"> | string
   level?: Prisma.IntFilter<"CharacterSheet"> | number
   experience?: Prisma.IntFilter<"CharacterSheet"> | number
+  levelUpAvailable?: Prisma.BoolFilter<"CharacterSheet"> | boolean
   hitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   maxHitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   temporaryHp?: Prisma.IntFilter<"CharacterSheet"> | number
@@ -775,6 +785,7 @@ export type CharacterSheetOrderByWithAggregationInput = {
   tokenImageFit?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
+  levelUpAvailable?: Prisma.SortOrder
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
@@ -835,6 +846,7 @@ export type CharacterSheetScalarWhereWithAggregatesInput = {
   tokenImageFit?: Prisma.StringWithAggregatesFilter<"CharacterSheet"> | string
   level?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   experience?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
+  levelUpAvailable?: Prisma.BoolWithAggregatesFilter<"CharacterSheet"> | boolean
   hitPoints?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   maxHitPoints?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
   temporaryHp?: Prisma.IntWithAggregatesFilter<"CharacterSheet"> | number
@@ -880,6 +892,7 @@ export type CharacterSheetCreateInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -945,6 +958,7 @@ export type CharacterSheetUncheckedCreateInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -996,6 +1010,7 @@ export type CharacterSheetUpdateInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1061,6 +1076,7 @@ export type CharacterSheetUncheckedUpdateInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1119,6 +1135,7 @@ export type CharacterSheetCreateManyInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -1164,6 +1181,7 @@ export type CharacterSheetUpdateManyMutationInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1216,6 +1234,7 @@ export type CharacterSheetUncheckedUpdateManyInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1278,6 +1297,7 @@ export type CharacterSheetCountOrderByAggregateInput = {
   tokenImageFit?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
+  levelUpAvailable?: Prisma.SortOrder
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
@@ -1344,6 +1364,7 @@ export type CharacterSheetMaxOrderByAggregateInput = {
   tokenImageFit?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
+  levelUpAvailable?: Prisma.SortOrder
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
@@ -1396,6 +1417,7 @@ export type CharacterSheetMinOrderByAggregateInput = {
   tokenImageFit?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
+  levelUpAvailable?: Prisma.SortOrder
   hitPoints?: Prisma.SortOrder
   maxHitPoints?: Prisma.SortOrder
   temporaryHp?: Prisma.SortOrder
@@ -1839,6 +1861,7 @@ export type CharacterSheetCreateWithoutSystemInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -1902,6 +1925,7 @@ export type CharacterSheetUncheckedCreateWithoutSystemInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -1989,6 +2013,7 @@ export type CharacterSheetScalarWhereInput = {
   tokenImageFit?: Prisma.StringFilter<"CharacterSheet"> | string
   level?: Prisma.IntFilter<"CharacterSheet"> | number
   experience?: Prisma.IntFilter<"CharacterSheet"> | number
+  levelUpAvailable?: Prisma.BoolFilter<"CharacterSheet"> | boolean
   hitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   maxHitPoints?: Prisma.IntFilter<"CharacterSheet"> | number
   temporaryHp?: Prisma.IntFilter<"CharacterSheet"> | number
@@ -2034,6 +2059,7 @@ export type CharacterSheetCreateWithoutAncestryInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2097,6 +2123,7 @@ export type CharacterSheetUncheckedCreateWithoutAncestryInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2174,6 +2201,7 @@ export type CharacterSheetCreateWithoutBackgroundInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2237,6 +2265,7 @@ export type CharacterSheetUncheckedCreateWithoutBackgroundInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2314,6 +2343,7 @@ export type CharacterSheetCreateWithoutStatsInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2378,6 +2408,7 @@ export type CharacterSheetUncheckedCreateWithoutStatsInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2444,6 +2475,7 @@ export type CharacterSheetUpdateWithoutStatsInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2508,6 +2540,7 @@ export type CharacterSheetUncheckedUpdateWithoutStatsInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2558,6 +2591,7 @@ export type CharacterSheetCreateWithoutSkillsInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2622,6 +2656,7 @@ export type CharacterSheetUncheckedCreateWithoutSkillsInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2688,6 +2723,7 @@ export type CharacterSheetUpdateWithoutSkillsInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2752,6 +2788,7 @@ export type CharacterSheetUncheckedUpdateWithoutSkillsInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2802,6 +2839,7 @@ export type CharacterSheetCreateWithoutSpellsInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2866,6 +2904,7 @@ export type CharacterSheetUncheckedCreateWithoutSpellsInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -2932,6 +2971,7 @@ export type CharacterSheetUpdateWithoutSpellsInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2996,6 +3036,7 @@ export type CharacterSheetUncheckedUpdateWithoutSpellsInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3046,6 +3087,7 @@ export type CharacterSheetCreateWithoutEquipmentInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3110,6 +3152,7 @@ export type CharacterSheetUncheckedCreateWithoutEquipmentInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3176,6 +3219,7 @@ export type CharacterSheetUpdateWithoutEquipmentInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3240,6 +3284,7 @@ export type CharacterSheetUncheckedUpdateWithoutEquipmentInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3290,6 +3335,7 @@ export type CharacterSheetCreateWithoutClassesInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3354,6 +3400,7 @@ export type CharacterSheetUncheckedCreateWithoutClassesInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3420,6 +3467,7 @@ export type CharacterSheetUpdateWithoutClassesInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3484,6 +3532,7 @@ export type CharacterSheetUncheckedUpdateWithoutClassesInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3534,6 +3583,7 @@ export type CharacterSheetCreateWithoutCharacterClassInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3597,6 +3647,7 @@ export type CharacterSheetUncheckedCreateWithoutCharacterClassInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3674,6 +3725,7 @@ export type CharacterSheetCreateWithoutSubclassInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3737,6 +3789,7 @@ export type CharacterSheetUncheckedCreateWithoutSubclassInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3814,6 +3867,7 @@ export type CharacterSheetCreateWithoutCampaignInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3877,6 +3931,7 @@ export type CharacterSheetUncheckedCreateWithoutCampaignInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -3954,6 +4009,7 @@ export type CharacterSheetCreateWithoutGameSessionsInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -4018,6 +4074,7 @@ export type CharacterSheetUncheckedCreateWithoutGameSessionsInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -4084,6 +4141,7 @@ export type CharacterSheetUpdateWithoutGameSessionsInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4148,6 +4206,7 @@ export type CharacterSheetUncheckedUpdateWithoutGameSessionsInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4198,6 +4257,7 @@ export type CharacterSheetCreateWithoutCampaignActorInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -4261,6 +4321,7 @@ export type CharacterSheetUncheckedCreateWithoutCampaignActorInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -4328,6 +4389,7 @@ export type CharacterSheetUpdateWithoutCampaignActorInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4391,6 +4453,7 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignActorInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4448,6 +4511,7 @@ export type CharacterSheetCreateManySystemInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -4493,6 +4557,7 @@ export type CharacterSheetUpdateWithoutSystemInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4556,6 +4621,7 @@ export type CharacterSheetUncheckedUpdateWithoutSystemInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4613,6 +4679,7 @@ export type CharacterSheetUncheckedUpdateManyWithoutSystemInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4664,6 +4731,7 @@ export type CharacterSheetCreateManyAncestryInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -4709,6 +4777,7 @@ export type CharacterSheetUpdateWithoutAncestryInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4772,6 +4841,7 @@ export type CharacterSheetUncheckedUpdateWithoutAncestryInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4829,6 +4899,7 @@ export type CharacterSheetUncheckedUpdateManyWithoutAncestryInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4880,6 +4951,7 @@ export type CharacterSheetCreateManyBackgroundInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -4925,6 +4997,7 @@ export type CharacterSheetUpdateWithoutBackgroundInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4988,6 +5061,7 @@ export type CharacterSheetUncheckedUpdateWithoutBackgroundInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5045,6 +5119,7 @@ export type CharacterSheetUncheckedUpdateManyWithoutBackgroundInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5096,6 +5171,7 @@ export type CharacterSheetCreateManyCharacterClassInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -5141,6 +5217,7 @@ export type CharacterSheetUpdateWithoutCharacterClassInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5204,6 +5281,7 @@ export type CharacterSheetUncheckedUpdateWithoutCharacterClassInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5261,6 +5339,7 @@ export type CharacterSheetUncheckedUpdateManyWithoutCharacterClassInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5312,6 +5391,7 @@ export type CharacterSheetCreateManySubclassInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -5357,6 +5437,7 @@ export type CharacterSheetUpdateWithoutSubclassInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5420,6 +5501,7 @@ export type CharacterSheetUncheckedUpdateWithoutSubclassInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5477,6 +5559,7 @@ export type CharacterSheetUncheckedUpdateManyWithoutSubclassInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5528,6 +5611,7 @@ export type CharacterSheetCreateManyCampaignInput = {
   tokenImageFit?: string
   level?: number
   experience?: number
+  levelUpAvailable?: boolean
   hitPoints?: number
   maxHitPoints?: number
   temporaryHp?: number
@@ -5573,6 +5657,7 @@ export type CharacterSheetUpdateWithoutCampaignInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5636,6 +5721,7 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5693,6 +5779,7 @@ export type CharacterSheetUncheckedUpdateManyWithoutCampaignInput = {
   tokenImageFit?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
+  levelUpAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
   temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5821,6 +5908,7 @@ export type CharacterSheetSelect<ExtArgs extends runtime.Types.Extensions.Intern
   tokenImageFit?: boolean
   level?: boolean
   experience?: boolean
+  levelUpAvailable?: boolean
   hitPoints?: boolean
   maxHitPoints?: boolean
   temporaryHp?: boolean
@@ -5887,6 +5975,7 @@ export type CharacterSheetSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   tokenImageFit?: boolean
   level?: boolean
   experience?: boolean
+  levelUpAvailable?: boolean
   hitPoints?: boolean
   maxHitPoints?: boolean
   temporaryHp?: boolean
@@ -5946,6 +6035,7 @@ export type CharacterSheetSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   tokenImageFit?: boolean
   level?: boolean
   experience?: boolean
+  levelUpAvailable?: boolean
   hitPoints?: boolean
   maxHitPoints?: boolean
   temporaryHp?: boolean
@@ -6005,6 +6095,7 @@ export type CharacterSheetSelectScalar = {
   tokenImageFit?: boolean
   level?: boolean
   experience?: boolean
+  levelUpAvailable?: boolean
   hitPoints?: boolean
   maxHitPoints?: boolean
   temporaryHp?: boolean
@@ -6038,7 +6129,7 @@ export type CharacterSheetSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CharacterSheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "systemId" | "campaignActorId" | "ownerId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "status" | "name" | "pronouns" | "concept" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "level" | "experience" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "hitDiceUsed" | "deathSaveSuccesses" | "deathSaveFailures" | "armorClass" | "speed" | "inspiration" | "classEquipmentMode" | "backgroundEquipmentMode" | "startingGold" | "alignment" | "faith" | "lifestyle" | "hair" | "skin" | "eyes" | "height" | "weight" | "age" | "gender" | "bonds" | "flaws" | "ideals" | "personality" | "backstory" | "notes" | "gmNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheet"]>
+export type CharacterSheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "systemId" | "campaignActorId" | "ownerId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "status" | "name" | "pronouns" | "concept" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "level" | "experience" | "levelUpAvailable" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "hitDiceUsed" | "deathSaveSuccesses" | "deathSaveFailures" | "armorClass" | "speed" | "inspiration" | "classEquipmentMode" | "backgroundEquipmentMode" | "startingGold" | "alignment" | "faith" | "lifestyle" | "hair" | "skin" | "eyes" | "height" | "weight" | "age" | "gender" | "bonds" | "flaws" | "ideals" | "personality" | "backstory" | "notes" | "gmNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheet"]>
 export type CharacterSheetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -6110,6 +6201,7 @@ export type $CharacterSheetPayload<ExtArgs extends runtime.Types.Extensions.Inte
     tokenImageFit: string
     level: number
     experience: number
+    levelUpAvailable: boolean
     hitPoints: number
     maxHitPoints: number
     temporaryHp: number
@@ -6595,6 +6687,7 @@ export interface CharacterSheetFieldRefs {
   readonly tokenImageFit: Prisma.FieldRef<"CharacterSheet", 'String'>
   readonly level: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly experience: Prisma.FieldRef<"CharacterSheet", 'Int'>
+  readonly levelUpAvailable: Prisma.FieldRef<"CharacterSheet", 'Boolean'>
   readonly hitPoints: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly maxHitPoints: Prisma.FieldRef<"CharacterSheet", 'Int'>
   readonly temporaryHp: Prisma.FieldRef<"CharacterSheet", 'Int'>

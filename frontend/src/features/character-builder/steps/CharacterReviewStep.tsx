@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 import type {
+  CharacterAttributeKey,
   CharacterBuilderAncestryOption,
   CharacterBuilderBackgroundOption,
   CharacterBuilderClassOption,
@@ -10,10 +11,7 @@ import type {
   CharacterBuilderSpellOption,
 } from "../types/character-builder-types";
 
-import {
-  CHARACTER_ATTRIBUTE_DEFINITIONS,
-  CHARACTER_BUILDER_LEVEL,
-} from "../constants/character-builder-constants";
+import { CHARACTER_ATTRIBUTE_DEFINITIONS } from "../constants/character-builder-constants";
 
 import { formatAttributeModifier } from "../utils/attributes";
 
@@ -23,11 +21,7 @@ import {
   getPhysicalSummary,
 } from "../utils/about";
 
-import {
-  getSpellLevelLabel,
-  isCantrip,
-  isLeveledSpell,
-} from "../utils/spells";
+import { getSpellLevelLabel, isCantrip, isLeveledSpell } from "../utils/spells";
 
 import {
   formatEquipmentWeight,
@@ -36,14 +30,81 @@ import {
   getStartingGoldFromDraft,
 } from "../utils/equipment";
 
-import {
-  getSkillCalculation,
-} from "../utils/skills";
+import { getSkillCalculation } from "../utils/skills";
 
 import { CharacterReviewSection } from "../review/CharacterReviewSection";
 import { CharacterReviewFact } from "../review/CharacterReviewFact";
 import { CharacterReviewTextBlock } from "../review/CharacterReviewTextBlock";
 import { CharacterReviewVisualIdentity } from "../review/CharacterReviewVisualIdentity";
+
+const characterAttributeKeys = new Set<string>([
+  "strength",
+  "dexterity",
+  "constitution",
+  "intelligence",
+  "wisdom",
+  "charisma",
+]);
+
+function isCharacterAttributeKey(key: string): key is CharacterAttributeKey {
+  return characterAttributeKeys.has(key);
+}
+
+function getAttributeSourceBonus({
+  attributeKey,
+  selectedAncestry,
+  selectedBackground,
+}: {
+  attributeKey: keyof CharacterBuilderDraft["attributes"];
+  selectedAncestry: CharacterBuilderAncestryOption | undefined;
+  selectedBackground: CharacterBuilderBackgroundOption | undefined;
+}) {
+  return (
+    (selectedAncestry?.attributeBonuses[attributeKey] ?? 0) +
+    (selectedBackground?.attributeBonuses[attributeKey] ?? 0)
+  );
+}
+
+
+const proficiencyLabelsByKey: Record<string, string> = {
+  "simple-weapons": "Armas simples",
+  "martial-weapons": "Armas marciais",
+  "hand-crossbow": "Besta de mão",
+  "light-crossbow": "Besta leve",
+  longsword: "Espada longa",
+  rapier: "Rapieira",
+  shortsword: "Espada curta",
+  dagger: "Adaga",
+  dart: "Dardo",
+  sling: "Funda",
+  quarterstaff: "Bastão",
+  club: "Clava",
+  javelin: "Azagaia",
+  mace: "Maça",
+  scimitar: "Cimitarra",
+  sickle: "Foice curta",
+  spear: "Lança",
+  "light-armor": "Proteções leves",
+  "medium-armor": "Proteções médias",
+  "heavy-armor": "Proteções pesadas",
+  shield: "Escudos",
+  "musical-instrument": "Instrumentos musicais",
+  "thieves-tools": "Ferramentas de ladrão",
+  "herbalism-kit": "Kit de herbalismo",
+};
+
+function formatProficiencyKey(key: string) {
+  return (
+    proficiencyLabelsByKey[key] ??
+    key
+      .split("-")
+      .filter(Boolean)
+      .map((part) => {
+        return part.charAt(0).toUpperCase() + part.slice(1);
+      })
+      .join(" ")
+  );
+}
 
 type CharacterReviewStepProps = {
   draft: CharacterBuilderDraft;
@@ -53,7 +114,6 @@ type CharacterReviewStepProps = {
   selectedBackground: CharacterBuilderBackgroundOption | undefined;
 };
 
-
 export function CharacterReviewStep({
   draft,
   options,
@@ -61,6 +121,10 @@ export function CharacterReviewStep({
   selectedAncestry,
   selectedBackground,
 }: CharacterReviewStepProps) {
+  const safeCharacterLevel = Number.isFinite(draft.level)
+    ? Math.max(1, Math.min(20, Math.trunc(draft.level)))
+    : 1;
+
   const selectedSkills = draft.skillKeys
     .map((skillKey) => {
       return options.skills.find((skill) => skill.key === skillKey);
@@ -88,6 +152,23 @@ export function CharacterReviewStep({
   const assignedAttributesCount = CHARACTER_ATTRIBUTE_DEFINITIONS.filter(
     (attribute) => draft.attributes[attribute.key] !== null,
   ).length;
+
+  const suggestedBackgroundSkills =
+    selectedBackground?.skillKeys
+      .map((skillKey) => {
+        return options.skills.find((skill) => skill.key === skillKey);
+      })
+      .filter((skill): skill is CharacterBuilderSkillOption => Boolean(skill)) ??
+    [];
+
+  const weaponProficiencyNames =
+    selectedClass?.weaponProficiencyKeys.map(formatProficiencyKey) ?? [];
+
+  const protectionProficiencyNames =
+    selectedClass?.protectionProficiencyKeys.map(formatProficiencyKey) ?? [];
+
+  const toolProficiencyNames =
+    selectedClass?.toolProficiencyKeys.map(formatProficiencyKey) ?? [];
 
   return (
     <div className="mt-5 space-y-5">
@@ -140,7 +221,10 @@ export function CharacterReviewStep({
             }
           />
 
-          <CharacterReviewFact label="Nível" value="1" />
+          <CharacterReviewFact
+            label="Nível"
+            value={String(safeCharacterLevel)}
+          />
         </div>
       </CharacterReviewSection>
 
@@ -151,6 +235,14 @@ export function CharacterReviewStep({
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {CHARACTER_ATTRIBUTE_DEFINITIONS.map((attribute) => {
             const value = draft.attributes[attribute.key];
+            const sourceBonus = getAttributeSourceBonus({
+              attributeKey: attribute.key,
+              selectedAncestry,
+              selectedBackground,
+            });
+
+            const finalValue =
+              typeof value === "number" ? value + sourceBonus : null;
 
             return (
               <div
@@ -171,12 +263,20 @@ export function CharacterReviewStep({
 
                   <div className="text-right">
                     <p className="text-lg font-black leading-none text-forge-gold">
-                      {value ?? "—"}
+                      {finalValue ?? "—"}
                     </p>
 
                     <p className="mt-1 text-xs font-bold text-zinc-400">
-                      {formatAttributeModifier(value)}
+                      {typeof value === "number" && sourceBonus !== 0
+                        ? `base ${value} ${sourceBonus > 0 ? "+" : ""}${sourceBonus}`
+                        : formatAttributeModifier(value)}
                     </p>
+
+                    {typeof finalValue === "number" && sourceBonus !== 0 ? (
+                      <p className="mt-1 text-xs font-bold text-zinc-500">
+                        Mod. {formatAttributeModifier(finalValue)}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -196,11 +296,47 @@ export function CharacterReviewStep({
         {selectedSkills.length > 0 ? (
           <div className="grid gap-3 md:grid-cols-2">
             {selectedSkills.map((skill) => {
+              const statKey = skill.stat.key;
+
+              if (!isCharacterAttributeKey(statKey)) {
+                const calculation = getSkillCalculation({
+                  attributes: draft.attributes,
+                  statKey,
+                  isProficient: true,
+                  level: safeCharacterLevel,
+                });
+
+                return (
+                  <CharacterReviewFact
+                    key={skill.key}
+                    label={skill.stat.shortName}
+                    value={`${skill.name} ${calculation.formattedTotal}`}
+                    title={`Atributo: ${skill.stat.name}. Bônus de proficiência: ${calculation.formattedProficiencyBonus}.`}
+                  />
+                );
+              }
+
+              const sourceBonus = getAttributeSourceBonus({
+                attributeKey: statKey,
+                selectedAncestry,
+                selectedBackground,
+              });
+
+              const currentAttributeValue = draft.attributes[statKey];
+
+              const skillAttributes = {
+                ...draft.attributes,
+                [statKey]:
+                  typeof currentAttributeValue === "number"
+                    ? currentAttributeValue + sourceBonus
+                    : currentAttributeValue,
+              };
+
               const calculation = getSkillCalculation({
-                attributes: draft.attributes,
-                statKey: skill.stat.key,
+                attributes: skillAttributes,
+                statKey,
                 isProficient: true,
-                level: CHARACTER_BUILDER_LEVEL,
+                level: safeCharacterLevel,
               });
 
               return (
@@ -218,6 +354,53 @@ export function CharacterReviewStep({
             Nenhuma perícia escolhida.
           </CharacterReviewEmptyText>
         )}
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Sugestões do antecedente"
+        description="O antecedente apenas destaca caminhos narrativos. Essas perícias não são aplicadas automaticamente."
+      >
+        {suggestedBackgroundSkills.length > 0 ? (
+          <div className="grid gap-3 md:grid-cols-2">
+            {suggestedBackgroundSkills.map((skill) => (
+              <CharacterReviewFact
+                key={skill.key}
+                label={skill.stat.shortName}
+                value={skill.name}
+                title={`Sugerida por ${selectedBackground?.name ?? "antecedente"}. Não conta como escolha automática.`}
+              />
+            ))}
+          </div>
+        ) : (
+          <CharacterReviewEmptyText>
+            Nenhuma sugestão de perícia cadastrada para este antecedente.
+          </CharacterReviewEmptyText>
+        )}
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Proficiências da classe"
+        description="Armas, proteções e ferramentas concedidas pela classe escolhida."
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          <CharacterReviewPillList
+            title="Armas"
+            values={weaponProficiencyNames}
+            emptyMessage="Nenhuma proficiência de arma cadastrada."
+          />
+
+          <CharacterReviewPillList
+            title="Proteções"
+            values={protectionProficiencyNames}
+            emptyMessage="Nenhuma proficiência de proteção cadastrada."
+          />
+
+          <CharacterReviewPillList
+            title="Ferramentas"
+            values={toolProficiencyNames}
+            emptyMessage="Nenhuma proficiência de ferramenta cadastrada."
+          />
+        </div>
       </CharacterReviewSection>
 
       <CharacterReviewSection
@@ -347,6 +530,40 @@ export function CharacterReviewStep({
           value={draft.backstory || "História ainda não preenchida."}
         />
       </CharacterReviewSection>
+    </div>
+  );
+}
+
+function CharacterReviewPillList({
+  title,
+  values,
+  emptyMessage,
+}: {
+  title: string;
+  values: string[];
+  emptyMessage: string;
+}) {
+  return (
+    <div>
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+        {title}
+      </p>
+
+      {values.length > 0 ? (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {values.map((value) => (
+            <span
+              key={value}
+              className="rounded-full border border-forge-gold/25 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold"
+              title={value}
+            >
+              {value}
+            </span>
+          ))}
+        </div>
+      ) : (
+        <CharacterReviewEmptyText>{emptyMessage}</CharacterReviewEmptyText>
+      )}
     </div>
   );
 }

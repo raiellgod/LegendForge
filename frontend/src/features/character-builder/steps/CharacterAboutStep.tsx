@@ -180,16 +180,16 @@ export function CharacterAboutStep({
           <CharacterBuilderTextInput
             label="Altura"
             value={draft.height}
-            placeholder="Ex.: 1,72m"
-            title="Altura aproximada do personagem."
+            placeholder="Ex.: 172 cm"
+            title="Informe em centímetros ou metros. Ex.: 172, 172 cm ou 1,72 m. A ficha exibirá em metros."
             onChange={(value) => onChangeDraftField("height", value)}
           />
 
           <CharacterBuilderTextInput
             label="Peso"
             value={draft.weight}
-            placeholder="Ex.: 74kg"
-            title="Peso aproximado do personagem."
+            placeholder="Ex.: 74 kg"
+            title="Informe em quilogramas. Ex.: 74, 74 kg ou 74,5 kg."
             onChange={(value) => onChangeDraftField("weight", value)}
           />
 

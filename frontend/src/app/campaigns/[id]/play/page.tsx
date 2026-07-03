@@ -57,6 +57,7 @@ import type {
   ChatMode,
   DiceTerm,
   RightPanelTab,
+  RollAdvantageState,
   RollResult,
   RollVisibility,
   SceneToken,
@@ -96,6 +97,7 @@ import {
   getCampaignCharacterSheets,
   getCampaignParticipants,
   getCampaignTokens,
+  confirmCampaignCharacterSheetLevelUp,
   updateCampaignActor,
   updateCampaignCharacterSheetImages,
   updateSceneToken,
@@ -152,7 +154,6 @@ function isCharacterSheetPopoutMessage(
   );
 }
 
-
 const DEFAULT_TABLE_CHAT_MESSAGE: ChatMessage = {
   id: "system-welcome",
   author: "Sistema",
@@ -184,23 +185,25 @@ function loadStoredTableChatMessages(campaignId: string): ChatMessage[] {
       return [DEFAULT_TABLE_CHAT_MESSAGE];
     }
 
-    const validMessages = parsedMessages.filter((message): message is ChatMessage => {
-      if (!message || typeof message !== "object") {
-        return false;
-      }
+    const validMessages = parsedMessages.filter(
+      (message): message is ChatMessage => {
+        if (!message || typeof message !== "object") {
+          return false;
+        }
 
-      const partialMessage = message as Partial<ChatMessage>;
+        const partialMessage = message as Partial<ChatMessage>;
 
-      return (
-        typeof partialMessage.id === "string" &&
-        typeof partialMessage.author === "string" &&
-        typeof partialMessage.content === "string" &&
-        (partialMessage.kind === "system" ||
-          partialMessage.kind === "user" ||
-          partialMessage.kind === "roll" ||
-          partialMessage.kind === "whisper")
-      );
-    });
+        return (
+          typeof partialMessage.id === "string" &&
+          typeof partialMessage.author === "string" &&
+          typeof partialMessage.content === "string" &&
+          (partialMessage.kind === "system" ||
+            partialMessage.kind === "user" ||
+            partialMessage.kind === "roll" ||
+            partialMessage.kind === "whisper")
+        );
+      },
+    );
 
     return validMessages.length > 0
       ? validMessages
@@ -210,32 +213,31 @@ function loadStoredTableChatMessages(campaignId: string): ChatMessage[] {
   }
 }
 
-
 const TOKEN_GRID_SIZE_IN_PIXELS = 40;
 
 const TOKEN_SIZE_OPTIONS = [
   {
     id: "small-medium",
     label: "Pequeno / Médio",
-    description: "Ocupa 1 quadrado. Ideal para personagens comuns.",
+    description: "1x1",
     gridSize: 1,
   },
   {
     id: "large",
     label: "Grande",
-    description: "Ocupa 2x2 quadrados.",
+    description: "2x2",
     gridSize: 2,
   },
   {
     id: "huge",
     label: "Enorme",
-    description: "Ocupa 3x3 quadrados.",
+    description: "3x3",
     gridSize: 3,
   },
   {
     id: "gargantuan",
     label: "Colossal",
-    description: "Ocupa 4x4 quadrados.",
+    description: "4x4",
     gridSize: 4,
   },
 ] as const;
@@ -256,6 +258,7 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
     portraitUrl: "",
     tokenImageUrl: "",
     tokenImageFit: "FILL",
+    level: 1,
 
     classId: "",
     className: "",
@@ -762,11 +765,7 @@ function CharacterBuilderModal({
 
   const selectedOptionLabel = getSelectedOptionLabelByPronouns(draft.pronouns);
 
-  const temporaryClassSkillChoiceCount = selectedClass ? 2 : 0;
-  const backgroundSkillChoiceCount = selectedBackground?.skillKeys.length ?? 0;
-
-  const requiredSkillChoiceCount =
-    temporaryClassSkillChoiceCount + backgroundSkillChoiceCount;
+  const requiredSkillChoiceCount = selectedClass?.classSkillChoiceCount ?? 0;
 
   const selectedSkillCount = draft.skillKeys.length;
   const selectedSpellCount = draft.spellKeys.length;
@@ -848,7 +847,10 @@ function CharacterBuilderModal({
     }
 
     if (stepId === "skills") {
-      return draft.skillKeys.length >= requiredSkillChoiceCount;
+      return (
+        Boolean(draft.classId) &&
+        draft.skillKeys.length >= requiredSkillChoiceCount
+      );
     }
 
     return true;
@@ -876,7 +878,7 @@ function CharacterBuilderModal({
     }
 
     if (stepId === "skills" && !isStepComplete("skills")) {
-      return `Escolha ${requiredSkillChoiceCount} perícias no total, somando classe e antecedente. Atualmente você escolheu ${selectedSkillCount}.`;
+      return `Escolha ${requiredSkillChoiceCount} perícias da classe. O antecedente apenas sugere opções. Atualmente você escolheu ${selectedSkillCount}.`;
     }
 
     return null;
@@ -1068,10 +1070,58 @@ function CharacterBuilderModal({
                   </p>
 
                   {activeStep.id === "concept" ? (
-                    <CharacterConceptStep
-                      draft={draft}
-                      onChangeDraftField={updateDraft}
-                    />
+                    <div className="space-y-4">
+                      <CharacterConceptStep
+                        draft={draft}
+                        onChangeDraftField={updateDraft}
+                      />
+
+                      <section
+                        className="rounded-2xl border border-zinc-800 bg-black/20 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
+                        title="Use para personagens de one-shot ou campanhas que começam acima do nível 1."
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="text-sm font-black uppercase tracking-[0.22em] text-forge-gold">
+                              Nível inicial
+                            </p>
+
+                            <p className="mt-2 text-xs font-semibold leading-relaxed text-zinc-400">
+                              Para campanhas comuns, mantenha nível 1. Para
+                              one-shots, escolha o nível inicial combinado com o
+                              Mestre.
+                            </p>
+                          </div>
+
+                          <div className="w-28 shrink-0">
+                            <label className="block">
+                              <span className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                                Nível
+                              </span>
+
+                              <input
+                                type="number"
+                                min={1}
+                                max={20}
+                                value={draft.level}
+                                onChange={(event) => {
+                                  const nextLevel = Math.max(
+                                    1,
+                                    Math.min(
+                                      20,
+                                      Number(event.target.value) || 1,
+                                    ),
+                                  );
+
+                                  updateDraft("level", nextLevel);
+                                }}
+                                className="mt-1.5 h-11 w-full rounded-lg border border-zinc-700 bg-zinc-950/70 px-3 text-sm font-black text-zinc-100 outline-none transition focus:border-forge-gold"
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
                   ) : activeStep.id === "class" ? (
                     <CharacterBuilderOptionCards
                       title="Classes disponíveis"
@@ -1211,6 +1261,7 @@ function CharacterBuilderModal({
                       attributes={draft.attributes}
                       selectedSkillKeys={draft.skillKeys}
                       requiredSkillChoiceCount={requiredSkillChoiceCount}
+                      characterLevel={draft.level}
                       isLoading={isLoadingOptions}
                       error={optionsError}
                       onToggleSkill={(skillKey) => {
@@ -1238,6 +1289,7 @@ function CharacterBuilderModal({
                       spells={options.spells}
                       selectedClass={genderedSelectedClass}
                       selectedSpellKeys={draft.spellKeys}
+                      characterLevel={draft.level}
                       isLoading={isLoadingOptions}
                       error={optionsError}
                       onToggleSpell={(spellKey) => {
@@ -1380,7 +1432,10 @@ function CharacterBuilderModal({
                       <CharacterAboutSummaryPanel draft={draft} />
                     ) : null}
 
-                    <BuilderSummaryRow label="Nível" value="1" />
+                    <BuilderSummaryRow
+                      label="Nível"
+                      value={String(draft.level)}
+                    />
 
                     <BuilderSummaryRow
                       label="Status"
@@ -1667,7 +1722,7 @@ export default function CampaignPlayPage() {
   ] = useState(false);
   const [characterBuilderOptionsError, setCharacterBuilderOptionsError] =
     useState<string | null>(null);
-  const [zoom, setZoom] = useState(100);
+  const [zoom, setZoom] = useState(90);
   const [scenePan, setScenePan] = useState({ x: 0, y: 0 });
   const [scenePanStart, setScenePanStart] = useState<{
     pointerX: number;
@@ -1747,6 +1802,9 @@ export default function CampaignPlayPage() {
   const [isSavingCharacterSheetImages, setIsSavingCharacterSheetImages] =
     useState(false);
 
+  const [isConfirmingLevelUp, setIsConfirmingLevelUp] = useState(false);
+  const [levelUpError, setLevelUpError] = useState<string | null>(null);
+
   const [chatInput, setChatInput] = useState("");
   const [chatMode, setChatMode] = useState<ChatMode>("public");
   const [whisperTargetId, setWhisperTargetId] = useState("");
@@ -1757,6 +1815,8 @@ export default function CampaignPlayPage() {
     useState<RollVisibility>("private");
   const [rollError, setRollError] = useState("");
   const [customDiceSides, setCustomDiceSides] = useState(30);
+  const [rollAdvantages, setRollAdvantages] = useState(0);
+  const [rollDisadvantages, setRollDisadvantages] = useState(0);
 
   const [isCustomDiceOpen, setIsCustomDiceOpen] = useState(false);
   const [isDiceBuilderOpen, setIsDiceBuilderOpen] = useState(false);
@@ -1858,7 +1918,6 @@ export default function CampaignPlayPage() {
     loadTable();
   }, [params.id, router]);
 
-
   function handleChangeTool(nextTool: ToolMode) {
     if (nextTool !== "measure") {
       setMeasureStart(null);
@@ -1952,18 +2011,18 @@ export default function CampaignPlayPage() {
   }
 
   function getInitiativeBonusForActor(actor: CampaignActor) {
-  if (actor.type !== "PLAYER_CHARACTER") {
-    return 0;
+    if (actor.type !== "PLAYER_CHARACTER") {
+      return 0;
+    }
+
+    const characterSheet = getCharacterSheetByActor(actor);
+
+    if (!characterSheet) {
+      return 0;
+    }
+
+    return getInitiativeBonus(characterSheet.stats);
   }
-
-  const characterSheet = getCharacterSheetByActor(actor);
-
-  if (!characterSheet) {
-    return 0;
-  }
-
-  return getInitiativeBonus(characterSheet.stats);
-}
 
   async function handleUpdateCharacterSheetImages(
     characterSheetId: string,
@@ -2032,6 +2091,46 @@ export default function CampaignPlayPage() {
       }
     } finally {
       setIsSavingCharacterSheetImages(false);
+    }
+  }
+
+  async function handleConfirmCharacterSheetLevelUp(data: {
+    classEntryId?: string;
+  }) {
+    const selectedSheet = selectedActor
+      ? getCharacterSheetByActor(selectedActor)
+      : null;
+
+    if (!selectedSheet) {
+      setLevelUpError("Ficha não encontrada para confirmar Level Up.");
+      return;
+    }
+
+    setIsConfirmingLevelUp(true);
+    setLevelUpError(null);
+
+    try {
+      const updatedCharacterSheet = await confirmCampaignCharacterSheetLevelUp(
+        params.id,
+        selectedSheet.id,
+        data,
+      );
+
+      setCharacterSheets((currentSheets) =>
+        currentSheets.map((currentSheet) =>
+          currentSheet.id === updatedCharacterSheet.id
+            ? updatedCharacterSheet
+            : currentSheet,
+        ),
+      );
+    } catch (error) {
+      setLevelUpError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível confirmar Level Up.",
+      );
+    } finally {
+      setIsConfirmingLevelUp(false);
     }
   }
 
@@ -2327,6 +2426,19 @@ export default function CampaignPlayPage() {
     setZoom((currentZoom) => Math.max(currentZoom - 10, 50));
   }
 
+  function handleClearChat() {
+    setChatError("");
+    setChatInput("");
+    setChatMessages([DEFAULT_TABLE_CHAT_MESSAGE]);
+
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem(
+        getTableChatStorageKey(params.id),
+        JSON.stringify([DEFAULT_TABLE_CHAT_MESSAGE]),
+      );
+    }
+  }
+
   function handleSendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -2401,6 +2513,7 @@ export default function CampaignPlayPage() {
       rollExpression: string,
       visibility: RollVisibility,
       rollLabel?: string,
+      advantageState?: RollAdvantageState,
     ) => {
       if (!user) {
         return;
@@ -2410,7 +2523,7 @@ export default function CampaignPlayPage() {
 
       try {
         const author = getDisplayName(user);
-        const roll = rollDiceExpression(rollExpression, author);
+        const roll = rollDiceExpression(rollExpression, author, advantageState);
 
         if (visibility === "private" && isGM) {
           setPrivateRolls((currentRolls) => [roll, ...currentRolls]);
@@ -2427,98 +2540,229 @@ export default function CampaignPlayPage() {
     [isGM, publishRollToChat, user],
   );
 
+  function getManualRollAdvantageState(): RollAdvantageState {
+    return {
+      advantages: rollAdvantages,
+      disadvantages: rollDisadvantages,
+    };
+  }
+
+  function resetRollAdvantageState() {
+    setRollAdvantages(0);
+    setRollDisadvantages(0);
+  }
+
+  function getFirstD20RollFromBreakdown(breakdown: string) {
+    const d20Match = breakdown.match(/1d20 \[(\d+)\]/);
+
+    if (!d20Match) {
+      return null;
+    }
+
+    const d20Value = Number(d20Match[1]);
+
+    return Number.isFinite(d20Value) ? d20Value : null;
+  }
+
+  function getDeathSaveOutcome(naturalD20: number, total: number) {
+    if (naturalD20 === 1) {
+      return "Morte.";
+    }
+
+    if (naturalD20 === 20) {
+      return "Meia vida e Retorno desesperado.";
+    }
+
+    if (total <= 5) {
+      return "Morte ou consequência grave.";
+    }
+
+    if (total <= 9) {
+      return "Sobrevive por um fio.";
+    }
+
+    if (total <= 14) {
+      return "Instável.";
+    }
+
+    return "Estável.";
+  }
+
+  function getDeathSaveBreakdown(roll: RollResult, naturalD20: number) {
+    const advantageModifier = roll.total - naturalD20;
+
+    if (advantageModifier === 0) {
+      return `Rolagem: ${naturalD20}`;
+    }
+
+    return `Rolagem: ${naturalD20}\nVantagem/desvantagem: ${
+      advantageModifier > 0 ? "+" : ""
+    }${advantageModifier}`;
+  }
+
   function handleRollExpression(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    handleRoll(diceExpression, isGM ? rollVisibility : "public");
+
+    handleRoll(
+      diceExpression,
+      isGM ? rollVisibility : "public",
+      undefined,
+      getManualRollAdvantageState(),
+    );
+
+    resetRollAdvantageState();
   }
 
   function handleRollCustomBuilder() {
-    handleRoll(customExpression, isGM ? rollVisibility : "public");
+    handleRoll(
+      customExpression,
+      isGM ? rollVisibility : "public",
+      undefined,
+      getManualRollAdvantageState(),
+    );
+
+    resetRollAdvantageState();
   }
 
   function handleQuickRoll(expression: string) {
-    handleRoll(expression, isGM ? rollVisibility : "public");
+    handleRoll(
+      expression,
+      isGM ? rollVisibility : "public",
+      undefined,
+      getManualRollAdvantageState(),
+    );
+
+    resetRollAdvantageState();
+  }
+
+  function handleRollDeathSave() {
+    if (!user) {
+      return;
+    }
+
+    setRollError("");
+
+    try {
+      const author = getDisplayName(user);
+      const roll = rollDiceExpression("1d20", author, {
+        advantages: rollAdvantages,
+        disadvantages: rollDisadvantages,
+      });
+
+      const naturalD20 = getFirstD20RollFromBreakdown(roll.breakdown);
+
+      if (naturalD20 === null) {
+        throw new Error(
+          "Não foi possível interpretar o d20 do teste de morte.",
+        );
+      }
+
+      const outcome = getDeathSaveOutcome(naturalD20, roll.total);
+
+      setChatMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: createId(),
+          author,
+          kind: "roll",
+          content: `Teste de Morte — ${outcome}`,
+          dice: "1d20 — Teste de Morte",
+          result: roll.total,
+          displayResult: String(roll.total),
+          breakdown: getDeathSaveBreakdown(roll, naturalD20),
+        },
+      ]);
+
+      resetRollAdvantageState();
+      setActiveRightTab("chat");
+    } catch (error) {
+      setRollError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível rolar o teste de morte.",
+      );
+    }
   }
 
   function handleRollMassNpcInitiative() {
-  if (!user || !isGM) {
-    return;
-  }
+    if (!user || !isGM) {
+      return;
+    }
 
-  setRollError("");
+    setRollError("");
 
-  const initiativeActors = visibleTableActors.filter((actor) => {
-    return (
-      actor.type === "PLAYER_CHARACTER" ||
-      actor.type === "NPC" ||
-      actor.type === "CREATURE"
-    );
-  });
-
-  if (initiativeActors.length === 0) {
-    setRollError(
-      "Não há personagens, NPCs ou criaturas na mesa para rolar iniciativa.",
-    );
-    return;
-  }
-
-  const results = initiativeActors
-  .map((actor) => {
-    const initiativeBonus = getInitiativeBonusForActor(actor);
-    const expression = `1d20${initiativeBonus >= 0 ? "+" : ""}${initiativeBonus}`;
-    const roll = rollDiceExpression(expression, actor.name);
-
-    return {
-      actor,
-      roll,
-      initiativeBonus,
-      expression,
-    };
-  })
-    .sort((firstResult, secondResult) => {
-      if (secondResult.roll.total !== firstResult.roll.total) {
-        return secondResult.roll.total - firstResult.roll.total;
-      }
-
-      return firstResult.actor.name.localeCompare(
-        secondResult.actor.name,
-        "pt-BR",
+    const initiativeActors = visibleTableActors.filter((actor) => {
+      return (
+        actor.type === "PLAYER_CHARACTER" ||
+        actor.type === "NPC" ||
+        actor.type === "CREATURE"
       );
     });
 
-  const ranking = results
-  .map((result, index) => {
-    const bonusText =
-      result.initiativeBonus >= 0
-        ? `+${result.initiativeBonus}`
-        : String(result.initiativeBonus);
+    if (initiativeActors.length === 0) {
+      setRollError(
+        "Não há personagens, NPCs ou criaturas na mesa para rolar iniciativa.",
+      );
+      return;
+    }
 
-    return `${index + 1}. ${result.actor.name} — ${result.roll.total} (${bonusText})`;
-  })
-  .join("\n");
+    const results = initiativeActors
+      .map((actor) => {
+        const initiativeBonus = getInitiativeBonusForActor(actor);
+        const expression = `1d20${initiativeBonus >= 0 ? "+" : ""}${initiativeBonus}`;
+        const roll = rollDiceExpression(expression, actor.name);
 
-  const breakdown = results
-  .map((result) => {
-    return `${result.actor.name}: ${result.expression} → ${result.roll.breakdown}`;
-  })
-  .join("\n");
+        return {
+          actor,
+          roll,
+          initiativeBonus,
+          expression,
+        };
+      })
+      .sort((firstResult, secondResult) => {
+        if (secondResult.roll.total !== firstResult.roll.total) {
+          return secondResult.roll.total - firstResult.roll.total;
+        }
 
-  setChatMessages((currentMessages) => [
-    ...currentMessages,
-    {
-      id: createId(),
-      author: getDisplayName(user),
-      kind: "roll",
-      content: `Ordem de iniciativa\n${ranking}`,
-      dice: "Iniciativa da mesa",
-      result: results[0]?.roll.total ?? 0,
-      displayResult: `${results.length} participantes`,
-      breakdown,
-    },
-  ]);
+        return firstResult.actor.name.localeCompare(
+          secondResult.actor.name,
+          "pt-BR",
+        );
+      });
 
-  setActiveRightTab("chat");
-}
+    const ranking = results
+      .map((result, index) => {
+        const bonusText =
+          result.initiativeBonus >= 0
+            ? `+${result.initiativeBonus}`
+            : String(result.initiativeBonus);
+
+        return `${index + 1}. ${result.actor.name} — ${result.roll.total} (${bonusText})`;
+      })
+      .join("\n");
+
+    const breakdown = results
+      .map((result) => {
+        return `${result.actor.name}: ${result.expression} → ${result.roll.breakdown}`;
+      })
+      .join("\n");
+
+    setChatMessages((currentMessages) => [
+      ...currentMessages,
+      {
+        id: createId(),
+        author: getDisplayName(user),
+        kind: "roll",
+        content: `Ordem de iniciativa\n${ranking}`,
+        dice: "Iniciativa da mesa",
+        result: results[0]?.roll.total ?? 0,
+        displayResult: `${results.length} participantes`,
+        breakdown,
+      },
+    ]);
+
+    setActiveRightTab("chat");
+  }
 
   const handleReadySheetRoll = useCallback(
     (request: CharacterReadySheetRollRequest) => {
@@ -2558,10 +2802,15 @@ export default function CampaignPlayPage() {
             ? `+${request.modifier}`
             : `${request.modifier}`;
 
-      handleRoll(`1d20${modifierExpression}`, "public", request.label);
+      handleRoll(`1d20${modifierExpression}`, "public", request.label, {
+        advantages: rollAdvantages,
+        disadvantages: rollDisadvantages,
+      });
+
+      resetRollAdvantageState();
       setActiveRightTab("chat");
     },
-    [handleRoll, user],
+    [handleRoll, rollAdvantages, rollDisadvantages, user],
   );
 
   useEffect(() => {
@@ -2693,12 +2942,14 @@ export default function CampaignPlayPage() {
         ? (characterSheet?.tokenImageFit ?? "FILL")
         : "COVER";
 
+    const defaultTokenSize = getTokenSizeInPixels(1);
+
     try {
       const createdToken = await createSceneToken(campaign.id, actor.id, {
         x: nextX,
         y: nextY,
-        width: 80,
-        height: 80,
+        width: defaultTokenSize,
+        height: defaultTokenSize,
         imageUrl: tokenImageUrl,
         imageFit: tokenImageFit,
       });
@@ -3063,13 +3314,26 @@ export default function CampaignPlayPage() {
     if (!campaign || !isGM || !isLibraryCompatibleActor(actor)) {
       return;
     }
+
     setActionError("");
     setActionMessage("");
+
+    const tokensFromActor = sceneTokens.filter(
+      (sceneToken) => sceneToken.actorId === actor.id,
+    );
 
     try {
       const updatedActor = await updateCampaignActor(campaign.id, actor.id, {
         location: "LIBRARY",
       });
+
+      if (tokensFromActor.length > 0) {
+        await Promise.all(
+          tokensFromActor.map((token) =>
+            deleteSceneToken(campaign.id, token.id),
+          ),
+        );
+      }
 
       setCampaignActors((currentActors) =>
         currentActors.map((currentActor) => {
@@ -3086,7 +3350,12 @@ export default function CampaignPlayPage() {
       );
 
       setActionActor(null);
-      setActionMessage(`${updatedActor.name} voltou para a biblioteca.`);
+
+      setActionMessage(
+        tokensFromActor.length > 0
+          ? `${updatedActor.name} voltou para a biblioteca e seus tokens foram removidos da cena.`
+          : `${updatedActor.name} voltou para a biblioteca.`,
+      );
     } catch (error) {
       console.error(error);
 
@@ -3307,6 +3576,7 @@ export default function CampaignPlayPage() {
             ? characterBuilderDraft.tokenImageUrl.trim() || null
             : characterBuilderDraft.tokenImageUrl.trim(),
           tokenImageFit: characterBuilderDraft.tokenImageFit,
+          level: characterBuilderDraft.level,
           classId: characterBuilderDraft.classId || null,
           ancestryId: characterBuilderDraft.ancestryId || null,
           backgroundId: characterBuilderDraft.backgroundId || null,
@@ -3649,6 +3919,7 @@ export default function CampaignPlayPage() {
                   onChangeWhisperTargetId={setWhisperTargetId}
                   onChangeChatInput={setChatInput}
                   onSubmitMessage={handleSendMessage}
+                  onClearChat={handleClearChat}
                 />
               )}
 
@@ -3659,6 +3930,8 @@ export default function CampaignPlayPage() {
                   rollVisibility={rollVisibility}
                   rollError={rollError}
                   customDiceSides={customDiceSides}
+                  rollAdvantages={rollAdvantages}
+                  rollDisadvantages={rollDisadvantages}
                   isCustomDiceOpen={isCustomDiceOpen}
                   isDiceBuilderOpen={isDiceBuilderOpen}
                   isAdvancedRollOpen={isAdvancedRollOpen}
@@ -3669,6 +3942,8 @@ export default function CampaignPlayPage() {
                   onChangeDiceExpression={setDiceExpression}
                   onChangeRollVisibility={setRollVisibility}
                   onChangeCustomDiceSides={setCustomDiceSides}
+                  onChangeRollAdvantages={setRollAdvantages}
+                  onChangeRollDisadvantages={setRollDisadvantages}
                   onToggleCustomDiceOpen={() =>
                     setIsCustomDiceOpen((current) => !current)
                   }
@@ -3688,6 +3963,7 @@ export default function CampaignPlayPage() {
                   onRollCustomBuilder={handleRollCustomBuilder}
                   onRevealPrivateRoll={handleRevealPrivateRoll}
                   onRollMassNpcInitiative={handleRollMassNpcInitiative}
+                  onRollDeathSave={handleRollDeathSave}
                   diceOptions={DICE_OPTIONS}
                   quickRolls={QUICK_ROLLS}
                 />
@@ -3704,7 +3980,9 @@ export default function CampaignPlayPage() {
                   canOpenSheet={canOpenActorSheet}
                   onOpenActions={setActionActor}
                   onOpenLibrary={() => setIsLibraryModalOpen(true)}
-                  onOpenCharacterCreationMenu={handleOpenCharacterCreationEntryPoint}
+                  onOpenCharacterCreationMenu={
+                    handleOpenCharacterCreationEntryPoint
+                  }
                 />
               )}
 
@@ -3726,7 +4004,9 @@ export default function CampaignPlayPage() {
                   isAssumingGm={isAssumingGm}
                   onAssumeGm={handleAssumeGmRole}
                   onOpenExitModal={() => setIsExitModalOpen(true)}
-                  onOpenCharacterCreationMenu={handleOpenCharacterCreationEntryPoint}
+                  onOpenCharacterCreationMenu={
+                    handleOpenCharacterCreationEntryPoint
+                  }
                 />
               )}
             </div>
@@ -3820,7 +4100,10 @@ export default function CampaignPlayPage() {
           onOpenSheet={() => {
             const actorCharacterSheet = getCharacterSheetByActor(actionActor);
 
-            if (actionActor.type === "PLAYER_CHARACTER" && actorCharacterSheet) {
+            if (
+              actionActor.type === "PLAYER_CHARACTER" &&
+              actorCharacterSheet
+            ) {
               window.open(
                 `/campaigns/${actionActor.campaignId}/sheets/${actorCharacterSheet.id}`,
                 `legendforge-sheet-${actorCharacterSheet.id}`,
@@ -3867,7 +4150,10 @@ export default function CampaignPlayPage() {
           allSkills={characterBuilderOptions.skills}
           isGM={isGM}
           isSavingCharacterSheetImages={isSavingCharacterSheetImages}
+          isConfirmingLevelUp={isConfirmingLevelUp}
+          levelUpError={levelUpError}
           onUpdateCharacterSheetImages={handleUpdateCharacterSheetImages}
+          onConfirmLevelUp={handleConfirmCharacterSheetLevelUp}
           onRollSheetAction={handleReadySheetRoll}
           onClose={() => setSelectedActor(null)}
         />
@@ -3930,7 +4216,10 @@ function ActorSheetModal({
   allSkills,
   isGM,
   isSavingCharacterSheetImages,
+  isConfirmingLevelUp,
+  levelUpError,
   onUpdateCharacterSheetImages,
+  onConfirmLevelUp,
   onRollSheetAction,
   onClose,
 }: {
@@ -3939,6 +4228,8 @@ function ActorSheetModal({
   allSkills: CharacterBuilderOptions["skills"];
   isGM: boolean;
   isSavingCharacterSheetImages: boolean;
+  isConfirmingLevelUp: boolean;
+  levelUpError: string | null;
   onUpdateCharacterSheetImages: (
     characterSheetId: string,
     data: {
@@ -3947,6 +4238,7 @@ function ActorSheetModal({
       tokenImageFit: CharacterReadySheet["tokenImageFit"];
     },
   ) => Promise<void>;
+  onConfirmLevelUp: (data: { classEntryId?: string }) => Promise<void>;
   onRollSheetAction: (request: CharacterReadySheetRollRequest) => void;
   onClose: () => void;
 }) {
@@ -3966,8 +4258,11 @@ function ActorSheetModal({
         allSkills={allSkills}
         isGM={isGM}
         isSavingImages={isSavingCharacterSheetImages}
+        isConfirmingLevelUp={isConfirmingLevelUp}
+        levelUpError={levelUpError}
         popoutUrl={popoutUrl}
         onSaveImages={onUpdateCharacterSheetImages}
+        onConfirmLevelUp={onConfirmLevelUp}
         onRollSheetAction={onRollSheetAction}
         onClose={onClose}
       />

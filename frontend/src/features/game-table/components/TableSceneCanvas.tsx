@@ -461,9 +461,7 @@ export function TableSceneCanvas({
                 } ${
                   canMoveToken(token)
                     ? "cursor-grab active:cursor-grabbing"
-                    : isMeasureToolActive || isDrawToolActive || isFogToolActive
-                      ? "cursor-crosshair"
-                      : "cursor-not-allowed opacity-75"
+                    : "cursor-default"
                 } ${getCharacterTypeStyles(token.type)}`}
                 style={{
                   width: token.width,

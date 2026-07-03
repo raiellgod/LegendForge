@@ -15,13 +15,20 @@ import {
   type CharacterReadySheetRollRequest,
 } from "@/features/character-builder/components/CharacterReadySheetView";
 
-import type { CampaignActor } from "@/features/game-table/types/game-table-types";
+import type {
+  Campaign,
+  CampaignActor,
+  CampaignParticipant,
+  User,
+} from "@/features/game-table/types/game-table-types";
 
 import {
   getCampaign,
   getCampaignActors,
   getCampaignCharacterSheet,
+  confirmCampaignCharacterSheetLevelUp,
   updateCampaignCharacterSheetImages,
+  getCampaignParticipants,
 } from "@/features/game-table/services/game-table-api";
 
 function createEmptyCharacterBuilderOptions(): CharacterBuilderOptions {
@@ -39,15 +46,21 @@ export default function CharacterSheetPopoutPage() {
   const params = useParams<{ id: string; sheetId: string }>();
   const router = useRouter();
 
+  const [user, setUser] = useState<User | null>(null);
+  const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [characterSheet, setCharacterSheet] =
     useState<CharacterReadySheet | null>(null);
   const [actors, setActors] = useState<CampaignActor[]>([]);
+  const [participants, setParticipants] = useState<CampaignParticipant[]>([]);
   const [characterBuilderOptions, setCharacterBuilderOptions] =
     useState<CharacterBuilderOptions>(createEmptyCharacterBuilderOptions);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [isSavingCharacterSheetImages, setIsSavingCharacterSheetImages] =
     useState(false);
+
+  const [isConfirmingLevelUp, setIsConfirmingLevelUp] = useState(false);
+  const [levelUpError, setLevelUpError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadPopoutSheet() {
@@ -62,14 +75,20 @@ export default function CharacterSheetPopoutPage() {
           return;
         }
 
-        const [campaignData, sheetData, actorsData] = await Promise.all([
-          getCampaign(params.id),
-          getCampaignCharacterSheet(params.id, params.sheetId),
-          getCampaignActors(params.id),
-        ]);
+        setUser(data.user);
 
+        const [campaignData, sheetData, actorsData, participantsData] =
+          await Promise.all([
+            getCampaign(params.id),
+            getCampaignCharacterSheet(params.id, params.sheetId),
+            getCampaignActors(params.id),
+            getCampaignParticipants(params.id),
+          ]);
+
+        setCampaign(campaignData);
         setCharacterSheet(sheetData);
         setActors(actorsData);
+        setParticipants(participantsData);
 
         if (campaignData.systemId) {
           const optionsResponse = await fetch(
@@ -119,6 +138,17 @@ export default function CharacterSheetPopoutPage() {
       ) ?? null)
     : null;
 
+  const currentParticipant = user
+    ? (participants.find(
+        (participant) =>
+          participant.userId === user.id || participant.user?.id === user.id,
+      ) ?? null)
+    : null;
+
+  const isGM =
+    Boolean(user && campaign?.ownerId === user.id) ||
+    currentParticipant?.role === "GM";
+
   async function handleUpdateCharacterSheetImages(
     characterSheetId: string,
     data: {
@@ -139,6 +169,34 @@ export default function CharacterSheetPopoutPage() {
       setCharacterSheet(updatedCharacterSheet);
     } finally {
       setIsSavingCharacterSheetImages(false);
+    }
+  }
+
+    async function handleConfirmLevelUp(data: { classEntryId?: string }) {
+    if (!characterSheet) {
+      setLevelUpError("Ficha não encontrada para confirmar Level Up.");
+      return;
+    }
+
+    setIsConfirmingLevelUp(true);
+    setLevelUpError(null);
+
+    try {
+      const updatedCharacterSheet = await confirmCampaignCharacterSheetLevelUp(
+        params.id,
+        characterSheet.id,
+        data,
+      );
+
+      setCharacterSheet(updatedCharacterSheet);
+    } catch (error) {
+      setLevelUpError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível confirmar Level Up.",
+      );
+    } finally {
+      setIsConfirmingLevelUp(false);
     }
   }
 
@@ -186,9 +244,12 @@ export default function CharacterSheetPopoutPage() {
             actor={actor}
             characterSheet={characterSheet}
             allSkills={characterBuilderOptions.skills}
-            isGM={true}
+            isGM={isGM}
             isSavingImages={isSavingCharacterSheetImages}
+            isConfirmingLevelUp={isConfirmingLevelUp}
+            levelUpError={levelUpError}
             onSaveImages={handleUpdateCharacterSheetImages}
+            onConfirmLevelUp={handleConfirmLevelUp}
             onRollSheetAction={handlePopoutRollSheetAction}
             onClose={() => window.close()}
           />

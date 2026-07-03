@@ -225,6 +225,7 @@ model Ancestry {
   key                 String
   description         String?
   defaultSizeCategory CreatureSize @default(MEDIUM)
+  attributeBonuses    Json         @default("{}")
   order               Int          @default(0)
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
@@ -249,6 +250,7 @@ model Background {
   toolNames           String[] @default([])
   languageChoiceCount Int      @default(0)
   startingGold        Int      @default(0)
+  attributeBonuses    Json     @default("{}")
   order               Int      @default(0)
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
@@ -284,6 +286,7 @@ model CharacterSheet {
 
   level                   Int     @default(1)
   experience              Int     @default(0)
+  levelUpAvailable        Boolean @default(false)
   hitPoints               Int     @default(0)
   maxHitPoints            Int     @default(0)
   temporaryHp             Int     @default(0)
@@ -453,18 +456,22 @@ model CharacterSheetClass {
 }
 
 model CharacterClass {
-  id                     String   @id @default(uuid())
-  systemId               String
-  name                   String
-  key                    String
-  description            String?
-  primaryRole            String?
-  hitDie                 Int?
-  spellcastingAbilityKey String?
-  subclassSelectionLevel Int?
-  order                  Int      @default(0)
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  id                        String   @id @default(uuid())
+  systemId                  String
+  name                      String
+  key                       String
+  description               String?
+  primaryRole               String?
+  hitDie                    Int?
+  spellcastingAbilityKey    String?
+  subclassSelectionLevel    Int?
+  classSkillChoiceCount     Int      @default(0)
+  weaponProficiencyKeys     String[] @default([])
+  protectionProficiencyKeys String[] @default([])
+  toolProficiencyKeys       String[] @default([])
+  order                     Int      @default(0)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @default(now()) @updatedAt
 
   system                GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
   subclasses            CharacterSubclass[]

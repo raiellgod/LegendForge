@@ -29,12 +29,14 @@ export type AggregateCharacterClass = {
 export type CharacterClassAvgAggregateOutputType = {
   hitDie: number | null
   subclassSelectionLevel: number | null
+  classSkillChoiceCount: number | null
   order: number | null
 }
 
 export type CharacterClassSumAggregateOutputType = {
   hitDie: number | null
   subclassSelectionLevel: number | null
+  classSkillChoiceCount: number | null
   order: number | null
 }
 
@@ -48,6 +50,7 @@ export type CharacterClassMinAggregateOutputType = {
   hitDie: number | null
   spellcastingAbilityKey: string | null
   subclassSelectionLevel: number | null
+  classSkillChoiceCount: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -63,6 +66,7 @@ export type CharacterClassMaxAggregateOutputType = {
   hitDie: number | null
   spellcastingAbilityKey: string | null
   subclassSelectionLevel: number | null
+  classSkillChoiceCount: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -78,6 +82,10 @@ export type CharacterClassCountAggregateOutputType = {
   hitDie: number
   spellcastingAbilityKey: number
   subclassSelectionLevel: number
+  classSkillChoiceCount: number
+  weaponProficiencyKeys: number
+  protectionProficiencyKeys: number
+  toolProficiencyKeys: number
   order: number
   createdAt: number
   updatedAt: number
@@ -88,12 +96,14 @@ export type CharacterClassCountAggregateOutputType = {
 export type CharacterClassAvgAggregateInputType = {
   hitDie?: true
   subclassSelectionLevel?: true
+  classSkillChoiceCount?: true
   order?: true
 }
 
 export type CharacterClassSumAggregateInputType = {
   hitDie?: true
   subclassSelectionLevel?: true
+  classSkillChoiceCount?: true
   order?: true
 }
 
@@ -107,6 +117,7 @@ export type CharacterClassMinAggregateInputType = {
   hitDie?: true
   spellcastingAbilityKey?: true
   subclassSelectionLevel?: true
+  classSkillChoiceCount?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -122,6 +133,7 @@ export type CharacterClassMaxAggregateInputType = {
   hitDie?: true
   spellcastingAbilityKey?: true
   subclassSelectionLevel?: true
+  classSkillChoiceCount?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -137,6 +149,10 @@ export type CharacterClassCountAggregateInputType = {
   hitDie?: true
   spellcastingAbilityKey?: true
   subclassSelectionLevel?: true
+  classSkillChoiceCount?: true
+  weaponProficiencyKeys?: true
+  protectionProficiencyKeys?: true
+  toolProficiencyKeys?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -239,6 +255,10 @@ export type CharacterClassGroupByOutputType = {
   hitDie: number | null
   spellcastingAbilityKey: string | null
   subclassSelectionLevel: number | null
+  classSkillChoiceCount: number
+  weaponProficiencyKeys: string[]
+  protectionProficiencyKeys: string[]
+  toolProficiencyKeys: string[]
   order: number
   createdAt: Date
   updatedAt: Date
@@ -277,6 +297,10 @@ export type CharacterClassWhereInput = {
   hitDie?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   spellcastingAbilityKey?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
   subclassSelectionLevel?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
+  classSkillChoiceCount?: Prisma.IntFilter<"CharacterClass"> | number
+  weaponProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
+  protectionProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
+  toolProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
   order?: Prisma.IntFilter<"CharacterClass"> | number
   createdAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
@@ -299,6 +323,10 @@ export type CharacterClassOrderByWithRelationInput = {
   hitDie?: Prisma.SortOrderInput | Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrderInput | Prisma.SortOrder
   subclassSelectionLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  classSkillChoiceCount?: Prisma.SortOrder
+  weaponProficiencyKeys?: Prisma.SortOrder
+  protectionProficiencyKeys?: Prisma.SortOrder
+  toolProficiencyKeys?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -326,6 +354,10 @@ export type CharacterClassWhereUniqueInput = Prisma.AtLeast<{
   hitDie?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   spellcastingAbilityKey?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
   subclassSelectionLevel?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
+  classSkillChoiceCount?: Prisma.IntFilter<"CharacterClass"> | number
+  weaponProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
+  protectionProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
+  toolProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
   order?: Prisma.IntFilter<"CharacterClass"> | number
   createdAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
@@ -348,6 +380,10 @@ export type CharacterClassOrderByWithAggregationInput = {
   hitDie?: Prisma.SortOrderInput | Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrderInput | Prisma.SortOrder
   subclassSelectionLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  classSkillChoiceCount?: Prisma.SortOrder
+  weaponProficiencyKeys?: Prisma.SortOrder
+  protectionProficiencyKeys?: Prisma.SortOrder
+  toolProficiencyKeys?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -371,6 +407,10 @@ export type CharacterClassScalarWhereWithAggregatesInput = {
   hitDie?: Prisma.IntNullableWithAggregatesFilter<"CharacterClass"> | number | null
   spellcastingAbilityKey?: Prisma.StringNullableWithAggregatesFilter<"CharacterClass"> | string | null
   subclassSelectionLevel?: Prisma.IntNullableWithAggregatesFilter<"CharacterClass"> | number | null
+  classSkillChoiceCount?: Prisma.IntWithAggregatesFilter<"CharacterClass"> | number
+  weaponProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
+  protectionProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
+  toolProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
   order?: Prisma.IntWithAggregatesFilter<"CharacterClass"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CharacterClass"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CharacterClass"> | Date | string
@@ -385,6 +425,10 @@ export type CharacterClassCreateInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -407,6 +451,10 @@ export type CharacterClassUncheckedCreateInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -427,6 +475,10 @@ export type CharacterClassUpdateInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -449,6 +501,10 @@ export type CharacterClassUncheckedUpdateInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -470,6 +526,10 @@ export type CharacterClassCreateManyInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -484,6 +544,10 @@ export type CharacterClassUpdateManyMutationInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -499,6 +563,10 @@ export type CharacterClassUncheckedUpdateManyInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -544,6 +612,10 @@ export type CharacterClassCountOrderByAggregateInput = {
   hitDie?: Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrder
   subclassSelectionLevel?: Prisma.SortOrder
+  classSkillChoiceCount?: Prisma.SortOrder
+  weaponProficiencyKeys?: Prisma.SortOrder
+  protectionProficiencyKeys?: Prisma.SortOrder
+  toolProficiencyKeys?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -552,6 +624,7 @@ export type CharacterClassCountOrderByAggregateInput = {
 export type CharacterClassAvgOrderByAggregateInput = {
   hitDie?: Prisma.SortOrder
   subclassSelectionLevel?: Prisma.SortOrder
+  classSkillChoiceCount?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -565,6 +638,7 @@ export type CharacterClassMaxOrderByAggregateInput = {
   hitDie?: Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrder
   subclassSelectionLevel?: Prisma.SortOrder
+  classSkillChoiceCount?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -580,6 +654,7 @@ export type CharacterClassMinOrderByAggregateInput = {
   hitDie?: Prisma.SortOrder
   spellcastingAbilityKey?: Prisma.SortOrder
   subclassSelectionLevel?: Prisma.SortOrder
+  classSkillChoiceCount?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -588,6 +663,7 @@ export type CharacterClassMinOrderByAggregateInput = {
 export type CharacterClassSumOrderByAggregateInput = {
   hitDie?: Prisma.SortOrder
   subclassSelectionLevel?: Prisma.SortOrder
+  classSkillChoiceCount?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -663,6 +739,33 @@ export type CharacterClassUpdateOneRequiredWithoutCharacterSheetClassesNestedInp
   update?: Prisma.XOR<Prisma.XOR<Prisma.CharacterClassUpdateToOneWithWhereWithoutCharacterSheetClassesInput, Prisma.CharacterClassUpdateWithoutCharacterSheetClassesInput>, Prisma.CharacterClassUncheckedUpdateWithoutCharacterSheetClassesInput>
 }
 
+export type CharacterClassCreateweaponProficiencyKeysInput = {
+  set: string[]
+}
+
+export type CharacterClassCreateprotectionProficiencyKeysInput = {
+  set: string[]
+}
+
+export type CharacterClassCreatetoolProficiencyKeysInput = {
+  set: string[]
+}
+
+export type CharacterClassUpdateweaponProficiencyKeysInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type CharacterClassUpdateprotectionProficiencyKeysInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type CharacterClassUpdatetoolProficiencyKeysInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type CharacterClassCreateNestedOneWithoutSubclassesInput = {
   create?: Prisma.XOR<Prisma.CharacterClassCreateWithoutSubclassesInput, Prisma.CharacterClassUncheckedCreateWithoutSubclassesInput>
   connectOrCreate?: Prisma.CharacterClassCreateOrConnectWithoutSubclassesInput
@@ -730,6 +833,10 @@ export type CharacterClassCreateWithoutSystemInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -750,6 +857,10 @@ export type CharacterClassUncheckedCreateWithoutSystemInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -800,6 +911,10 @@ export type CharacterClassScalarWhereInput = {
   hitDie?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
   spellcastingAbilityKey?: Prisma.StringNullableFilter<"CharacterClass"> | string | null
   subclassSelectionLevel?: Prisma.IntNullableFilter<"CharacterClass"> | number | null
+  classSkillChoiceCount?: Prisma.IntFilter<"CharacterClass"> | number
+  weaponProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
+  protectionProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
+  toolProficiencyKeys?: Prisma.StringNullableListFilter<"CharacterClass">
   order?: Prisma.IntFilter<"CharacterClass"> | number
   createdAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterClass"> | Date | string
@@ -814,6 +929,10 @@ export type CharacterClassCreateWithoutCharacterSheetsInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -835,6 +954,10 @@ export type CharacterClassUncheckedCreateWithoutCharacterSheetsInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -870,6 +993,10 @@ export type CharacterClassUpdateWithoutCharacterSheetsInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -891,6 +1018,10 @@ export type CharacterClassUncheckedUpdateWithoutCharacterSheetsInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -910,6 +1041,10 @@ export type CharacterClassCreateWithoutCharacterSheetClassesInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -931,6 +1066,10 @@ export type CharacterClassUncheckedCreateWithoutCharacterSheetClassesInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -966,6 +1105,10 @@ export type CharacterClassUpdateWithoutCharacterSheetClassesInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -987,6 +1130,10 @@ export type CharacterClassUncheckedUpdateWithoutCharacterSheetClassesInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1006,6 +1153,10 @@ export type CharacterClassCreateWithoutSubclassesInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1027,6 +1178,10 @@ export type CharacterClassUncheckedCreateWithoutSubclassesInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1062,6 +1217,10 @@ export type CharacterClassUpdateWithoutSubclassesInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1083,6 +1242,10 @@ export type CharacterClassUncheckedUpdateWithoutSubclassesInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1102,6 +1265,10 @@ export type CharacterClassCreateWithoutLevelProgressionsInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1123,6 +1290,10 @@ export type CharacterClassUncheckedCreateWithoutLevelProgressionsInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1158,6 +1329,10 @@ export type CharacterClassUpdateWithoutLevelProgressionsInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1179,6 +1354,10 @@ export type CharacterClassUncheckedUpdateWithoutLevelProgressionsInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1198,6 +1377,10 @@ export type CharacterClassCreateWithoutClassSpellsInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1219,6 +1402,10 @@ export type CharacterClassUncheckedCreateWithoutClassSpellsInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1254,6 +1441,10 @@ export type CharacterClassUpdateWithoutClassSpellsInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1275,6 +1466,10 @@ export type CharacterClassUncheckedUpdateWithoutClassSpellsInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1294,6 +1489,10 @@ export type CharacterClassCreateWithoutFeaturesInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1315,6 +1514,10 @@ export type CharacterClassUncheckedCreateWithoutFeaturesInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1350,6 +1553,10 @@ export type CharacterClassUpdateWithoutFeaturesInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1371,6 +1578,10 @@ export type CharacterClassUncheckedUpdateWithoutFeaturesInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1390,6 +1601,10 @@ export type CharacterClassCreateManySystemInput = {
   hitDie?: number | null
   spellcastingAbilityKey?: string | null
   subclassSelectionLevel?: number | null
+  classSkillChoiceCount?: number
+  weaponProficiencyKeys?: Prisma.CharacterClassCreateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassCreateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassCreatetoolProficiencyKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1404,6 +1619,10 @@ export type CharacterClassUpdateWithoutSystemInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1424,6 +1643,10 @@ export type CharacterClassUncheckedUpdateWithoutSystemInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1444,6 +1667,10 @@ export type CharacterClassUncheckedUpdateManyWithoutSystemInput = {
   hitDie?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   spellcastingAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subclassSelectionLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  classSkillChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  weaponProficiencyKeys?: Prisma.CharacterClassUpdateweaponProficiencyKeysInput | string[]
+  protectionProficiencyKeys?: Prisma.CharacterClassUpdateprotectionProficiencyKeysInput | string[]
+  toolProficiencyKeys?: Prisma.CharacterClassUpdatetoolProficiencyKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1535,6 +1762,10 @@ export type CharacterClassSelect<ExtArgs extends runtime.Types.Extensions.Intern
   hitDie?: boolean
   spellcastingAbilityKey?: boolean
   subclassSelectionLevel?: boolean
+  classSkillChoiceCount?: boolean
+  weaponProficiencyKeys?: boolean
+  protectionProficiencyKeys?: boolean
+  toolProficiencyKeys?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1558,6 +1789,10 @@ export type CharacterClassSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   hitDie?: boolean
   spellcastingAbilityKey?: boolean
   subclassSelectionLevel?: boolean
+  classSkillChoiceCount?: boolean
+  weaponProficiencyKeys?: boolean
+  protectionProficiencyKeys?: boolean
+  toolProficiencyKeys?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1574,6 +1809,10 @@ export type CharacterClassSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   hitDie?: boolean
   spellcastingAbilityKey?: boolean
   subclassSelectionLevel?: boolean
+  classSkillChoiceCount?: boolean
+  weaponProficiencyKeys?: boolean
+  protectionProficiencyKeys?: boolean
+  toolProficiencyKeys?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1590,12 +1829,16 @@ export type CharacterClassSelectScalar = {
   hitDie?: boolean
   spellcastingAbilityKey?: boolean
   subclassSelectionLevel?: boolean
+  classSkillChoiceCount?: boolean
+  weaponProficiencyKeys?: boolean
+  protectionProficiencyKeys?: boolean
+  toolProficiencyKeys?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CharacterClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "primaryRole" | "hitDie" | "spellcastingAbilityKey" | "subclassSelectionLevel" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["characterClass"]>
+export type CharacterClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "primaryRole" | "hitDie" | "spellcastingAbilityKey" | "subclassSelectionLevel" | "classSkillChoiceCount" | "weaponProficiencyKeys" | "protectionProficiencyKeys" | "toolProficiencyKeys" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["characterClass"]>
 export type CharacterClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   subclasses?: boolean | Prisma.CharacterClass$subclassesArgs<ExtArgs>
@@ -1634,6 +1877,10 @@ export type $CharacterClassPayload<ExtArgs extends runtime.Types.Extensions.Inte
     hitDie: number | null
     spellcastingAbilityKey: string | null
     subclassSelectionLevel: number | null
+    classSkillChoiceCount: number
+    weaponProficiencyKeys: string[]
+    protectionProficiencyKeys: string[]
+    toolProficiencyKeys: string[]
     order: number
     createdAt: Date
     updatedAt: Date
@@ -2076,6 +2323,10 @@ export interface CharacterClassFieldRefs {
   readonly hitDie: Prisma.FieldRef<"CharacterClass", 'Int'>
   readonly spellcastingAbilityKey: Prisma.FieldRef<"CharacterClass", 'String'>
   readonly subclassSelectionLevel: Prisma.FieldRef<"CharacterClass", 'Int'>
+  readonly classSkillChoiceCount: Prisma.FieldRef<"CharacterClass", 'Int'>
+  readonly weaponProficiencyKeys: Prisma.FieldRef<"CharacterClass", 'String[]'>
+  readonly protectionProficiencyKeys: Prisma.FieldRef<"CharacterClass", 'String[]'>
+  readonly toolProficiencyKeys: Prisma.FieldRef<"CharacterClass", 'String[]'>
   readonly order: Prisma.FieldRef<"CharacterClass", 'Int'>
   readonly createdAt: Prisma.FieldRef<"CharacterClass", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CharacterClass", 'DateTime'>

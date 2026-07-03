@@ -175,6 +175,7 @@ export const AncestryScalarFieldEnum = {
   key: 'key',
   description: 'description',
   defaultSizeCategory: 'defaultSizeCategory',
+  attributeBonuses: 'attributeBonuses',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -193,6 +194,7 @@ export const BackgroundScalarFieldEnum = {
   toolNames: 'toolNames',
   languageChoiceCount: 'languageChoiceCount',
   startingGold: 'startingGold',
+  attributeBonuses: 'attributeBonuses',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -220,6 +222,7 @@ export const CharacterSheetScalarFieldEnum = {
   tokenImageFit: 'tokenImageFit',
   level: 'level',
   experience: 'experience',
+  levelUpAvailable: 'levelUpAvailable',
   hitPoints: 'hitPoints',
   maxHitPoints: 'maxHitPoints',
   temporaryHp: 'temporaryHp',
@@ -345,6 +348,10 @@ export const CharacterClassScalarFieldEnum = {
   hitDie: 'hitDie',
   spellcastingAbilityKey: 'spellcastingAbilityKey',
   subclassSelectionLevel: 'subclassSelectionLevel',
+  classSkillChoiceCount: 'classSkillChoiceCount',
+  weaponProficiencyKeys: 'weaponProficiencyKeys',
+  protectionProficiencyKeys: 'protectionProficiencyKeys',
+  toolProficiencyKeys: 'toolProficiencyKeys',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -632,6 +639,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -646,4 +660,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

@@ -9,6 +9,11 @@ export type RightPanelTab =
 
 export type RollVisibility = "public" | "private";
 
+export type RollAdvantageState = {
+  advantages: number;
+  disadvantages: number;
+};
+
 export type ChatMode = "public" | "whisper";
 
 export type CharacterType = "PLAYER_CHARACTER" | "NPC" | "CREATURE";

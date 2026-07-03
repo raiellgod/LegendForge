@@ -53,6 +53,8 @@ export type CharacterReadySheetViewProps = {
   allSkills: CharacterBuilderSkillOption[];
   isGM: boolean;
   isSavingImages: boolean;
+  isConfirmingLevelUp: boolean;
+  levelUpError: string | null;
   popoutUrl?: string;
   onSaveImages: (
     characterSheetId: string,
@@ -63,6 +65,7 @@ export type CharacterReadySheetViewProps = {
     },
   ) => Promise<void>;
   onRollSheetAction: (request: CharacterReadySheetRollRequest) => void;
+  onConfirmLevelUp: (data: { classEntryId?: string }) => Promise<void>;
   onClose: () => void;
 };
 
@@ -502,6 +505,49 @@ function getSpellDamageLabelFromText(text: string | null | undefined) {
   const [, formula, damageType] = damageInfo;
 
   return damageType ? `${formula} ${damageType}` : formula;
+}
+
+function getNumericValueFromText(value: string | null | undefined) {
+  if (!value) {
+    return null;
+  }
+
+  const normalizedValue = value
+    .trim()
+    .replace(",", ".")
+    .match(/\d+(?:\.\d+)?/);
+
+  if (!normalizedValue) {
+    return null;
+  }
+
+  const parsedValue = Number(normalizedValue[0]);
+
+  return Number.isFinite(parsedValue) ? parsedValue : null;
+}
+
+function formatCharacterHeight(value: string | null | undefined) {
+  const parsedValue = getNumericValueFromText(value);
+
+  if (parsedValue === null) {
+    return value?.trim() || "—";
+  }
+
+  const heightInMeters = parsedValue > 3 ? parsedValue / 100 : parsedValue;
+
+  return `${heightInMeters.toFixed(2).replace(".", ",")} m`;
+}
+
+function formatCharacterWeight(value: string | null | undefined) {
+  const parsedValue = getNumericValueFromText(value);
+
+  if (parsedValue === null) {
+    return value?.trim() || "—";
+  }
+
+  return `${parsedValue.toLocaleString("pt-BR", {
+    maximumFractionDigits: 1,
+  })} kg`;
 }
 
 type SpellSlotRow = {
@@ -1028,7 +1074,10 @@ function LevelUpPreviewModal({
   selectedClassOption,
   classOptions,
   levelUpPreview,
+  isConfirmingLevelUp,
+  levelUpError,
   onSelectClass,
+  onConfirmLevelUp,
   onClose,
 }: {
   characterName: string;
@@ -1036,7 +1085,10 @@ function LevelUpPreviewModal({
   selectedClassOption: LevelUpClassOption | null;
   classOptions: LevelUpClassOption[];
   levelUpPreview: CharacterReadySheet["levelUpPreview"] | null | undefined;
+  isConfirmingLevelUp: boolean;
+  levelUpError: string | null;
   onSelectClass: (classOptionId: string) => void;
+  onConfirmLevelUp: (data: { classEntryId?: string }) => Promise<void>;
   onClose: () => void;
 }) {
   const currentLevel = levelUpPreview?.currentLevel ?? 1;
@@ -1074,6 +1126,19 @@ function LevelUpPreviewModal({
   const hasNewFeatures = newFeatures.length > 0;
 
   const canPreviewNextLevel = levelUpPreview?.canPreviewNextLevel ?? false;
+
+  const canConfirmLevelUp =
+    canPreviewNextLevel && Boolean(selectedClassOption) && !isConfirmingLevelUp;
+
+  async function handleConfirmLevelUp() {
+    if (!selectedClassOption || isConfirmingLevelUp) {
+      return;
+    }
+
+    await onConfirmLevelUp({
+      classEntryId: selectedClassOption.id,
+    });
+  }
 
   const selectedSubclassSelectionLevel =
     selectedClassOption?.subclassSelectionLevel ?? null;
@@ -1121,7 +1186,8 @@ function LevelUpPreviewModal({
             </h3>
 
             <p className="mt-1 text-xs font-semibold leading-relaxed text-white/45">
-              Prévia do próximo avanço. Nesta micro, nada é salvo ainda.
+              Prévia do próximo avanço. Apenas o Mestre pode liberar Level Up.
+              Nesta micro, nada é salvo ainda.
             </p>
           </div>
 
@@ -1372,13 +1438,29 @@ function LevelUpPreviewModal({
             Fechar
           </button>
 
+          {levelUpError ? (
+            <p className="mr-auto rounded-xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-[10px] font-bold text-red-100">
+              {levelUpError}
+            </p>
+          ) : null}
+
           <button
             type="button"
-            disabled
-            className="cursor-not-allowed rounded-xl border border-white/5 bg-black/20 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-white/20"
-            title="Confirmação real entra na próxima micro."
+            disabled={!canConfirmLevelUp}
+            onClick={handleConfirmLevelUp}
+            className={[
+              "rounded-xl border px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] transition",
+              canConfirmLevelUp
+                ? "border-forge-gold bg-forge-gold/10 text-forge-gold hover:bg-forge-gold/20"
+                : "cursor-not-allowed border-white/5 bg-black/20 text-white/20",
+            ].join(" ")}
+            title={
+              canConfirmLevelUp
+                ? "Confirmar Level Up desta classe."
+                : "Não é possível confirmar Level Up agora."
+            }
           >
-            Confirmar depois
+            {isConfirmingLevelUp ? "Confirmando..." : "Confirmar Level Up"}
           </button>
         </div>
       </section>
@@ -1412,9 +1494,12 @@ export function CharacterReadySheetView({
   allSkills,
   isGM,
   isSavingImages,
+  isConfirmingLevelUp,
+  levelUpError,
   popoutUrl,
   onSaveImages,
   onRollSheetAction,
+  onConfirmLevelUp,
   onClose,
 }: CharacterReadySheetViewProps) {
   const [activeTab, setActiveTab] = useState<ReadySheetTab>("status");
@@ -1958,11 +2043,11 @@ export function CharacterReadySheetView({
     },
     {
       label: "Altura",
-      value: characterSheet?.height,
+      value: formatCharacterHeight(characterSheet?.height),
     },
     {
       label: "Peso",
-      value: characterSheet?.weight,
+      value: formatCharacterWeight(characterSheet?.weight),
     },
     {
       label: "Olhos",
@@ -2004,9 +2089,8 @@ export function CharacterReadySheetView({
 
   const ancestryName = characterSheet?.ancestry?.name ?? "—";
   const backgroundName = characterSheet?.background?.name ?? "—";
-  const experience = characterSheet ? String(characterSheet.experience) : "—";
   const armorClass = characterSheet ? String(characterSheet.armorClass) : "—";
-  const speed = characterSheet ? `${characterSheet.speed}m` : "—";
+  const speed = characterSheet ? String(characterSheet.speed) : "—";
   const hitPoints = characterSheet ? String(characterSheet.hitPoints) : "—";
   const maxHitPoints = characterSheet
     ? String(characterSheet.maxHitPoints)
@@ -2098,10 +2182,6 @@ export function CharacterReadySheetView({
                 <span className="rounded-full border border-white/10 bg-black/25 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-white/50">
                   {backgroundName}
                 </span>
-
-                <span className="rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-forge-gold">
-                  XP {experience}
-                </span>
               </div>
             </div>
           </div>
@@ -2158,7 +2238,7 @@ export function CharacterReadySheetView({
             title="Rolar iniciativa."
           />
 
-          <CompactInfoPill label="Desloc." value={speed} helper="metros" />
+          <CompactInfoPill label="Desloc." value={speed} helper="m" />
           <CompactInfoPill
             label="Prof."
             value={proficiencyBonus}
@@ -2248,14 +2328,17 @@ export function CharacterReadySheetView({
         </div>
       </header>
 
-      {isLevelUpPreviewOpen ? (
+      {isGM && isLevelUpPreviewOpen ? (
         <LevelUpPreviewModal
           characterName={displayName}
           className={levelUpClassName}
           selectedClassOption={selectedLevelUpClassOption}
           classOptions={levelUpClassOptions}
           levelUpPreview={characterSheet?.levelUpPreview}
+          isConfirmingLevelUp={isConfirmingLevelUp}
+          levelUpError={levelUpError}
           onSelectClass={setSelectedLevelUpClassOptionId}
+          onConfirmLevelUp={onConfirmLevelUp}
           onClose={() => setIsLevelUpPreviewOpen(false)}
         />
       ) : null}
@@ -2398,7 +2481,7 @@ export function CharacterReadySheetView({
                     value={initiativeBonus}
                     helper="bônus"
                   />
-                  <SheetBox label="Desloc." value={speed} helper="movimento" />
+                  <SheetBox label="Desloc." value={speed} helper="metros" />
                   <SheetBox
                     label="PV"
                     value={`${hitPoints}/${maxHitPoints}`}
@@ -2984,18 +3067,27 @@ export function CharacterReadySheetView({
                   />
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleOpenLevelUpPreview}
-                  className="mt-3 w-full rounded-xl border border-forge-gold/30 bg-forge-gold/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
-                >
-                  Level Up
-                </button>
+                {isGM ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleOpenLevelUpPreview}
+                      className="mt-3 w-full rounded-xl border border-forge-gold/30 bg-forge-gold/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
+                    >
+                      Level Up
+                    </button>
 
-                <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
-                  Primeira versão visual. A confirmação real entra depois, já
-                  respeitando nível de personagem diferente de nível de classe.
-                </p>
+                    <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
+                      Primeira versão visual. A confirmação real entra depois,
+                      já respeitando nível de personagem diferente de nível de
+                      classe.
+                    </p>
+                  </>
+                ) : (
+                  <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-[10px] font-semibold leading-relaxed text-white/35">
+                    Level Up é liberado pelo Mestre.
+                  </p>
+                )}
               </section>
 
               <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">

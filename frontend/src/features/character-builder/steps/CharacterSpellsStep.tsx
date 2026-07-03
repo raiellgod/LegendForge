@@ -16,6 +16,7 @@ type CharacterSpellsStepProps = {
   spells: CharacterBuilderSpellOption[];
   selectedClass: CharacterBuilderClassOption | undefined;
   selectedSpellKeys: string[];
+  characterLevel: number;
   isLoading: boolean;
   error: string | null;
   onToggleSpell: (spellKey: string) => void;
@@ -23,14 +24,77 @@ type CharacterSpellsStepProps = {
 
 type SpellTypeFilter = "all" | "cantrips" | "spells";
 
-const CHARACTER_BUILDER_STARTING_LEVEL = 1;
+function normalizeCharacterLevel(level: number) {
+  if (!Number.isFinite(level)) {
+    return 1;
+  }
 
-function getStartingLevelProgression(
+  return Math.max(1, Math.min(20, Math.trunc(level)));
+}
+
+function getLevelProgression(
   selectedClass: CharacterBuilderClassOption | undefined,
+  characterLevel: number,
 ) {
+  const safeLevel = normalizeCharacterLevel(characterLevel);
+
   return selectedClass?.levelProgressions.find(
-    (progression) => progression.level === CHARACTER_BUILDER_STARTING_LEVEL,
+    (progression) => progression.level === safeLevel,
   );
+}
+
+function getHighestAvailableSpellLevel(
+  progression:
+    | CharacterBuilderClassOption["levelProgressions"][number]
+    | null
+    | undefined,
+) {
+  if (!progression) {
+    return 0;
+  }
+
+  const spellSlotsByLevel = [
+    progression.spellSlotsLevel1,
+    progression.spellSlotsLevel2,
+    progression.spellSlotsLevel3,
+    progression.spellSlotsLevel4,
+    progression.spellSlotsLevel5,
+    progression.spellSlotsLevel6,
+    progression.spellSlotsLevel7,
+    progression.spellSlotsLevel8,
+    progression.spellSlotsLevel9,
+  ];
+
+  for (let index = spellSlotsByLevel.length - 1; index >= 0; index -= 1) {
+    if ((spellSlotsByLevel[index] ?? 0) > 0) {
+      return index + 1;
+    }
+  }
+
+  return 0;
+}
+
+function canUseSpellAtProgression({
+  spell,
+  progression,
+}: {
+  spell: CharacterBuilderSpellOption;
+  progression:
+    | CharacterBuilderClassOption["levelProgressions"][number]
+    | null
+    | undefined;
+}) {
+  if (!progression) {
+    return false;
+  }
+
+  if (isCantrip(spell)) {
+    return progression.cantripsKnown > 0;
+  }
+
+  const highestAvailableSpellLevel = getHighestAvailableSpellLevel(progression);
+
+  return spell.level > 0 && spell.level <= highestAvailableSpellLevel;
 }
 
 function getSpellTitle(spell: CharacterBuilderSpellOption) {
@@ -84,24 +148,35 @@ function filterSpellByType(
 function getAvailableSpellsForClass({
   spells,
   selectedClass,
+  characterLevel,
 }: {
   spells: CharacterBuilderSpellOption[];
   selectedClass: CharacterBuilderClassOption | undefined;
+  characterLevel: number;
 }) {
   if (!selectedClass) {
     return [];
   }
 
+  const safeLevel = normalizeCharacterLevel(characterLevel);
+  const progression = getLevelProgression(selectedClass, safeLevel);
+
   const availableSpellKeys = new Set(
     selectedClass.classSpells
-      .filter(
-        (classSpell) =>
-          classSpell.minimumClassLevel <= CHARACTER_BUILDER_STARTING_LEVEL,
-      )
+      .filter((classSpell) => classSpell.minimumClassLevel <= safeLevel)
       .map((classSpell) => classSpell.spellKey),
   );
 
-  return spells.filter((spell) => availableSpellKeys.has(spell.key));
+  return spells.filter((spell) => {
+    if (!availableSpellKeys.has(spell.key)) {
+      return false;
+    }
+
+    return canUseSpellAtProgression({
+      spell,
+      progression,
+    });
+  });
 }
 
 function CharacterSpellCard({
@@ -285,6 +360,7 @@ export function CharacterSpellsStep({
   spells,
   selectedClass,
   selectedSpellKeys,
+  characterLevel,
   isLoading,
   error,
   onToggleSpell,
@@ -293,12 +369,15 @@ export function CharacterSpellsStep({
   const [typeFilter, setTypeFilter] = useState<SpellTypeFilter>("all");
   const [schoolFilter, setSchoolFilter] = useState("all");
 
+  const safeCharacterLevel = normalizeCharacterLevel(characterLevel);
+
   const availableSpells = useMemo(() => {
     return getAvailableSpellsForClass({
       spells,
       selectedClass,
+      characterLevel: safeCharacterLevel,
     });
-  }, [selectedClass, spells]);
+  }, [safeCharacterLevel, selectedClass, spells]);
 
   const spellSchools = useMemo(() => {
     return Array.from(
@@ -360,14 +439,20 @@ export function CharacterSpellsStep({
   const hasSelectedSpells = selectedSpells.length > 0;
   const hasUnavailableSelectedSpells = unavailableSelectedSpells.length > 0;
 
-    const startingLevelProgression = getStartingLevelProgression(selectedClass);
+  const currentLevelProgression = getLevelProgression(
+    selectedClass,
+    safeCharacterLevel,
+  );
 
-  const cantripLimit = startingLevelProgression?.cantripsKnown ?? 0;
+  const cantripLimit = currentLevelProgression?.cantripsKnown ?? 0;
 
-  const leveledSpellLimit =
-    startingLevelProgression?.spellsKnown ??
-    startingLevelProgression?.spellsPrepared ??
-    0;
+  const leveledSpellLimit = Math.max(
+    currentLevelProgression?.spellsKnown ?? 0,
+    currentLevelProgression?.spellsPrepared ?? 0,
+  );
+
+  const highestAvailableSpellLevel =
+    getHighestAvailableSpellLevel(currentLevelProgression);
 
   const hasReachedCantripLimit = selectedCantrips.length >= cantripLimit;
   const hasReachedLeveledSpellLimit =
@@ -421,7 +506,7 @@ export function CharacterSpellsStep({
   const temporaryValidationDescription = hasSelectedSpells
     ? `Você marcou ${selectedCantrips.length}/${cantripLimit} truque(s) e ${selectedLeveledSpells.length}/${leveledSpellLimit} magia(s) disponíveis para ${selectedClassName}. Ao atualizar o rascunho, essas escolhas são gravadas na ficha.`
     : hasAvailableSpellOptions
-      ? `Esta classe pode escolher até ${cantripLimit} truque(s) e ${leveledSpellLimit} magia(s) no nível inicial.`
+      ? `Esta classe pode escolher até ${cantripLimit} truque(s) e ${leveledSpellLimit} magia(s) no nível ${safeCharacterLevel}. Maior nível de magia permitido: ${highestAvailableSpellLevel || "nenhum"}.`
       : "A classe selecionada não possui magias disponíveis no nível inicial.";
 
   if (isLoading) {
@@ -453,7 +538,6 @@ export function CharacterSpellsStep({
       <div className="space-y-4">
         <div
           className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
-          title="Nesta etapa, truques e magias aparecem filtrados pela classe selecionada. Limites por quantidade de truques/magias por nível entram no próximo passo."
         >
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
@@ -464,7 +548,6 @@ export function CharacterSpellsStep({
 
                 <span
                   className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                  title="Truques são magias de nível 0. Magias são poderes de nível 1 ou maior. Seleção por classe vem em breve."
                   aria-label="Informação sobre magias"
                 >
                   i
@@ -494,8 +577,8 @@ export function CharacterSpellsStep({
           >
             Classe atual: {selectedClassName}.{" "}
             {hasAvailableSpellOptions
-              ? `Magias disponíveis para esta classe no nível inicial: ${availableSpells.length}.`
-              : "Nenhuma magia disponível para esta classe no nível inicial."}
+              ? `Magias disponíveis para esta classe no nível ${safeCharacterLevel}: ${availableSpells.length}.`
+              : `Nenhuma magia disponível para esta classe no nível ${safeCharacterLevel}.`}
           </p>
         </div>
 
@@ -573,7 +656,6 @@ export function CharacterSpellsStep({
               ? "border-emerald-400/30 bg-emerald-500/10"
               : "border-zinc-700 bg-black/25",
           ].join(" ")}
-          title="Validação temporária: esta etapa ainda não bloqueia avanço por quantidade de magias. Os limites reais virão da classe e do nível em uma etapa futura."
         >
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div>
@@ -584,7 +666,6 @@ export function CharacterSpellsStep({
 
                 <span
                   className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                  title="A etapa de Magias continua opcional por enquanto. Depois, a classe vai informar quantos truques e magias podem ser escolhidos por nível."
                   aria-label="Informação sobre validação temporária de magias"
                 >
                   i
@@ -709,7 +790,7 @@ export function CharacterSpellsStep({
         <div className="rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
           {hasAvailableSpellOptions
             ? "Nenhuma magia encontrada com os filtros atuais."
-            : "Nenhuma magia disponível para a classe selecionada no nível inicial."}
+            : `Nenhuma magia disponível para a classe selecionada no nível ${safeCharacterLevel}.`}
         </div>
       ) : null}
 

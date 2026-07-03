@@ -165,7 +165,7 @@ export function getClassStartingEquipmentPlan(
       description:
         "Um conjunto bruto para combate direto e exploração em regiões perigosas.",
       gold: 20,
-      proficiencies: ["Armas marciais", "Armaduras leves", "Escudos"],
+      proficiencies: ["Armas marciais", "Proteções leves", "Escudos"],
       items: [
         {
           key: "heavy-axe",
@@ -249,7 +249,7 @@ export function getClassStartingEquipmentPlan(
       label: "Pacote do Guerreiro",
       description: "Equipamento marcial equilibrado para linha de frente.",
       gold: 25,
-      proficiencies: ["Armas simples", "Armas marciais", "Armaduras"],
+      proficiencies: ["Armas simples", "Armas marciais", "Proteções"],
       items: [
         {
           key: "longsword",
@@ -262,7 +262,7 @@ export function getClassStartingEquipmentPlan(
           key: "reinforced-mail",
           quantity: 1,
           source: "class",
-          notes: "Armadura inicial",
+          notes: "Proteção inicial",
           isEquipped: true,
         },
         {

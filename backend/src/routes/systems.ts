@@ -125,8 +125,14 @@ export async function systemRoutes(app: FastifyInstance) {
               key: z.string(),
               name: z.string(),
               description: z.string().nullable(),
+              primaryRole: z.string().nullable(),
               hitDie: z.number().nullable(),
               spellcastingAbilityKey: z.string().nullable(),
+              subclassSelectionLevel: z.number().nullable(),
+              classSkillChoiceCount: z.number(),
+              weaponProficiencyKeys: z.array(z.string()),
+              protectionProficiencyKeys: z.array(z.string()),
+              toolProficiencyKeys: z.array(z.string()),
               levelProgressions: z.array(
                 z.object({
                   level: z.number(),
@@ -161,6 +167,7 @@ export async function systemRoutes(app: FastifyInstance) {
               name: z.string(),
               description: z.string().nullable(),
               defaultSizeCategory: z.string(),
+              attributeBonuses: z.record(z.string(), z.number()),
             }),
           ),
           backgrounds: z.array(
@@ -173,6 +180,7 @@ export async function systemRoutes(app: FastifyInstance) {
               toolNames: z.array(z.string()),
               languageChoiceCount: z.number(),
               startingGold: z.number(),
+              attributeBonuses: z.record(z.string(), z.number()),
             }),
           ),
           skills: z.array(
@@ -287,9 +295,14 @@ export async function systemRoutes(app: FastifyInstance) {
               key: true,
               name: true,
               description: true,
+              primaryRole: true,
               hitDie: true,
               spellcastingAbilityKey: true,
               subclassSelectionLevel: true,
+              classSkillChoiceCount: true,
+              weaponProficiencyKeys: true,
+              protectionProficiencyKeys: true,
+              toolProficiencyKeys: true,
               levelProgressions: {
                 orderBy: {
                   level: "asc",
@@ -353,6 +366,7 @@ export async function systemRoutes(app: FastifyInstance) {
               name: true,
               description: true,
               defaultSizeCategory: true,
+              attributeBonuses: true,
             },
           }),
 
@@ -372,6 +386,7 @@ export async function systemRoutes(app: FastifyInstance) {
               toolNames: true,
               languageChoiceCount: true,
               startingGold: true,
+              attributeBonuses: true,
             },
           }),
 
@@ -478,9 +493,14 @@ export async function systemRoutes(app: FastifyInstance) {
           key: characterClass.key,
           name: characterClass.name,
           description: characterClass.description,
+          primaryRole: characterClass.primaryRole,
           hitDie: characterClass.hitDie,
           spellcastingAbilityKey: characterClass.spellcastingAbilityKey,
           subclassSelectionLevel: characterClass.subclassSelectionLevel,
+          classSkillChoiceCount: characterClass.classSkillChoiceCount,
+          weaponProficiencyKeys: characterClass.weaponProficiencyKeys,
+          protectionProficiencyKeys: characterClass.protectionProficiencyKeys,
+          toolProficiencyKeys: characterClass.toolProficiencyKeys,
           levelProgressions: characterClass.levelProgressions.map(
             (progression) => ({
               level: progression.level,
@@ -562,11 +582,37 @@ export async function systemRoutes(app: FastifyInstance) {
         };
       });
 
+      function normalizeAttributeBonuses(
+        attributeBonuses: unknown,
+      ): Record<string, number> {
+        if (!attributeBonuses || typeof attributeBonuses !== "object") {
+          return {};
+        }
+
+        return Object.fromEntries(
+          Object.entries(attributeBonuses).filter(([, value]) => {
+            return typeof value === "number" && Number.isFinite(value);
+          }),
+        );
+      }
+
+      const normalizedAncestries = ancestries.map((ancestry) => ({
+        ...ancestry,
+        attributeBonuses: normalizeAttributeBonuses(ancestry.attributeBonuses),
+      }));
+
+      const normalizedBackgrounds = backgrounds.map((background) => ({
+        ...background,
+        attributeBonuses: normalizeAttributeBonuses(
+          background.attributeBonuses,
+        ),
+      }));
+
       return reply.status(200).send({
         system,
         classes: normalizedClasses,
-        ancestries,
-        backgrounds,
+        ancestries: normalizedAncestries,
+        backgrounds: normalizedBackgrounds,
         skills,
         spells: normalizedSpells,
         equipment: normalizedEquipment,

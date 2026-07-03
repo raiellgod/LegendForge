@@ -448,4 +448,32 @@ export const spells = [
     description:
       "Uma nuvem explosiva de cinzas quentes e energia instável causa 3d8 ígneo em uma pequena área.",
   },
+  {
+    name: "Bola de Fogo",
+    key: "fireball",
+    level: 3,
+    school: "EVOCATION",
+    castingTime: "1 ação",
+    range: "45 metros",
+    duration: "Instantânea",
+    components: "V, S, M",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Um ponto escolhido pelo conjurador explode em chamas violentas, causando 8d6 ígneo em uma área. Criaturas na área podem tentar reduzir o dano conforme a regra da mesa.",
+  },
+  {
+    name: "Esfera de Putrefação",
+    key: "putrefaction-orb",
+    level: 3,
+    school: "NECROMANCY",
+    castingTime: "1 ação",
+    range: "45 metros",
+    duration: "Instantânea",
+    components: "V, S, M",
+    isRitual: false,
+    requiresConcentration: false,
+    description:
+      "Uma esfera necromântica se rompe em gases, larvas espectrais e energia de decomposição, causando 8d6 necrótico em uma área. Criaturas atingidas sentem a própria vitalidade apodrecer por um instante.",
+  },
 ] as const;

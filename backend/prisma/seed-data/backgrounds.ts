@@ -8,6 +8,7 @@ export const backgrounds = [
     toolNames: [],
     languageChoiceCount: 2,
     startingGold: 15,
+    attributeBonuses: {},
   },
   {
     name: "Marcado pelo Agouro",
@@ -18,6 +19,7 @@ export const backgrounds = [
     toolNames: [],
     languageChoiceCount: 1,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Artesão de Guilda",
@@ -28,6 +30,7 @@ export const backgrounds = [
     toolNames: ["Uma ferramenta de artesão"],
     languageChoiceCount: 1,
     startingGold: 15,
+    attributeBonuses: {},
   },
   {
     name: "Menestrel Errante",
@@ -38,6 +41,7 @@ export const backgrounds = [
     toolNames: ["Um instrumento musical", "Kit de disfarce"],
     languageChoiceCount: 0,
     startingGold: 15,
+    attributeBonuses: {},
   },
   {
     name: "Farsante de Corte",
@@ -48,6 +52,7 @@ export const backgrounds = [
     toolNames: ["Kit de disfarce", "Kit de falsificação"],
     languageChoiceCount: 0,
     startingGold: 15,
+    attributeBonuses: {},
   },
   {
     name: "Lâmina de Beco",
@@ -58,6 +63,7 @@ export const backgrounds = [
     toolNames: ["Ferramentas de ladrão", "Um tipo de kit de jogo"],
     languageChoiceCount: 0,
     startingGold: 15,
+    attributeBonuses: {},
   },
   {
     name: "Recluso dos Ermos",
@@ -68,6 +74,7 @@ export const backgrounds = [
     toolNames: ["Kit de herbalismo"],
     languageChoiceCount: 1,
     startingGold: 5,
+    attributeBonuses: {},
   },
   {
     name: "Andarilho das Fronteiras",
@@ -78,6 +85,7 @@ export const backgrounds = [
     toolNames: ["Um instrumento musical ou ferramenta simples"],
     languageChoiceCount: 1,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Campeão da Aldeia",
@@ -88,6 +96,7 @@ export const backgrounds = [
     toolNames: ["Ferramentas de artesão ou veículos terrestres"],
     languageChoiceCount: 0,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Navegante de Marés Negras",
@@ -98,6 +107,7 @@ export const backgrounds = [
     toolNames: ["Ferramentas de navegador", "Veículos aquáticos"],
     languageChoiceCount: 0,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Sangue de Brasão",
@@ -108,6 +118,7 @@ export const backgrounds = [
     toolNames: ["Um tipo de kit de jogo"],
     languageChoiceCount: 1,
     startingGold: 25,
+    attributeBonuses: {},
   },
   {
     name: "Filho da Sarjeta",
@@ -118,6 +129,7 @@ export const backgrounds = [
     toolNames: ["Kit de disfarce", "Ferramentas de ladrão"],
     languageChoiceCount: 0,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Arquivista Arcano",
@@ -128,6 +140,7 @@ export const backgrounds = [
     toolNames: [],
     languageChoiceCount: 2,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Veterano da Cinza",
@@ -138,6 +151,7 @@ export const backgrounds = [
     toolNames: ["Um tipo de jogo", "Veículos terrestres"],
     languageChoiceCount: 0,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Peregrino de Terras Distantes",
@@ -148,6 +162,7 @@ export const backgrounds = [
     toolNames: ["Um instrumento musical ou jogo"],
     languageChoiceCount: 1,
     startingGold: 5,
+    attributeBonuses: {},
   },
   {
     name: "Caçador de Relíquias",
@@ -158,6 +173,7 @@ export const backgrounds = [
     toolNames: ["Ferramentas de ladrão ou cartógrafo"],
     languageChoiceCount: 1,
     startingGold: 15,
+    attributeBonuses: {},
   },
   {
     name: "Sobrevivente do Colapso",
@@ -168,6 +184,7 @@ export const backgrounds = [
     toolNames: ["Kit de herbalismo ou ferramentas de artesão"],
     languageChoiceCount: 0,
     startingGold: 5,
+    attributeBonuses: {},
   },
   {
     name: "Escudeiro Sem Senhor",
@@ -178,6 +195,7 @@ export const backgrounds = [
     toolNames: ["Um tipo de jogo ou veículos terrestres"],
     languageChoiceCount: 1,
     startingGold: 10,
+    attributeBonuses: {},
   },
     {
     name: "Catador de Ruínas",
@@ -188,6 +206,7 @@ export const backgrounds = [
     toolNames: ["Ferramentas de ladrão ou ferramentas de artesão"],
     languageChoiceCount: 0,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Aprendiz de Tecnomante",
@@ -198,6 +217,7 @@ export const backgrounds = [
     toolNames: ["Ferramentas de tecnomante"],
     languageChoiceCount: 1,
     startingGold: 15,
+    attributeBonuses: {},
   },
   {
     name: "Mensageiro das Estradas",
@@ -208,6 +228,7 @@ export const backgrounds = [
     toolNames: ["Veículos terrestres"],
     languageChoiceCount: 1,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Médico de Campo",
@@ -218,6 +239,7 @@ export const backgrounds = [
     toolNames: ["Kit de herbalismo ou suprimentos médicos"],
     languageChoiceCount: 0,
     startingGold: 10,
+    attributeBonuses: {},
   },
   {
     name: "Estrategista de Milícia",
@@ -228,6 +250,7 @@ export const backgrounds = [
     toolNames: ["Um tipo de jogo ou veículos terrestres"],
     languageChoiceCount: 0,
     startingGold: 15,
+    attributeBonuses: {},
   },
   {
     name: "Artesão de Forja Fria",
@@ -238,5 +261,6 @@ export const backgrounds = [
     toolNames: ["Ferramentas de ferreiro ou ferramentas de artesão"],
     languageChoiceCount: 0,
     startingGold: 15,
+    attributeBonuses: {},
   },
 ] as const;

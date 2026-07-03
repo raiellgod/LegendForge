@@ -122,6 +122,66 @@ export async function getCampaignCharacterSheet(
   return responseData.characterSheet;
 }
 
+export async function updateCampaignCharacterSheetLevelUpAvailability(
+  campaignId: string,
+  characterSheetId: string,
+  data: {
+    levelUpAvailable: boolean;
+  },
+): Promise<CharacterReadySheet> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/character-sheets/${characterSheetId}/level-up-availability`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao atualizar liberação de Level Up");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.characterSheet;
+}
+
+export async function confirmCampaignCharacterSheetLevelUp(
+  campaignId: string,
+  characterSheetId: string,
+  data: {
+    classEntryId?: string;
+  } = {},
+): Promise<CharacterReadySheet> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/character-sheets/${characterSheetId}/level-up`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(errorData?.message ?? "Erro ao confirmar Level Up");
+  }
+
+  const responseData = await response.json();
+
+  return responseData.characterSheet;
+}
+
 export async function updateCampaignCharacterSheetImages(
   campaignId: string,
   characterSheetId: string,

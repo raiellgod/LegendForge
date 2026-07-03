@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 
@@ -22,6 +22,26 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
   const characterSkillKeysSchema = z.array(z.string()).optional();
   const characterSpellKeysSchema = z.array(z.string()).optional();
+  type CharacterProficiencySource =
+    | "builder"
+    | "class"
+    | "background"
+    | "ancestry"
+    | "feature"
+    | "manual";
+
+  const characterProficiencySourcePriority: Record<
+    CharacterProficiencySource,
+    number
+  > = {
+    background: 60,
+    class: 50,
+    ancestry: 40,
+    feature: 30,
+    builder: 20,
+    manual: 10,
+  };
+
   const characterEquipmentItemsSchema = z
     .array(
       z.object({
@@ -34,6 +54,65 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     )
     .optional();
 
+  type CharacterSheetRouteParams = {
+    campaignId: string;
+    sheetId: string;
+  };
+
+  type CharacterSheetUpdateBody = {
+    classId?: string | null;
+    ancestryId?: string | null;
+    backgroundId?: string | null;
+    subclassId?: string | null;
+
+    name?: string;
+    pronouns?: string | null;
+    concept?: string | null;
+    portraitUrl?: string | null;
+    tokenImageUrl?: string | null;
+    tokenImageFit?: "COVER" | "CONTAIN" | "FILL";
+
+    attributes?: z.infer<typeof characterAttributesSchema>;
+    skillKeys?: z.infer<typeof characterSkillKeysSchema>;
+    spellKeys?: z.infer<typeof characterSpellKeysSchema>;
+    equipmentItems?: z.infer<typeof characterEquipmentItemsSchema>;
+
+    classEquipmentMode?: "PACKAGE" | "GOLD";
+    backgroundEquipmentMode?: "PACKAGE" | "GOLD";
+    startingGold?: number;
+
+    level?: number;
+    experience?: number;
+    hitPoints?: number;
+    maxHitPoints?: number;
+    temporaryHp?: number;
+    armorClass?: number;
+    speed?: number;
+    inspiration?: boolean;
+
+    alignment?: string | null;
+    faith?: string | null;
+    lifestyle?: string | null;
+
+    hair?: string | null;
+    skin?: string | null;
+    eyes?: string | null;
+    height?: string | null;
+    weight?: string | null;
+    age?: string | null;
+    gender?: string | null;
+
+    bonds?: string | null;
+    flaws?: string | null;
+    ideals?: string | null;
+    personality?: string | null;
+    backstory?: string | null;
+    notes?: string | null;
+    gmNotes?: string | null;
+
+    status?: "DRAFT" | "READY" | "ARCHIVED";
+  };
+
   type CharacterAttributeKey =
     | "strength"
     | "dexterity"
@@ -42,14 +121,70 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     | "wisdom"
     | "charisma";
 
+  const characterAttributeKeys = new Set<CharacterAttributeKey>([
+    "strength",
+    "dexterity",
+    "constitution",
+    "intelligence",
+    "wisdom",
+    "charisma",
+  ]);
+
+  type CharacterAttributeBonusMap = Partial<
+    Record<CharacterAttributeKey, number>
+  >;
+
+  function isCharacterAttributeKey(key: string): key is CharacterAttributeKey {
+    return characterAttributeKeys.has(key as CharacterAttributeKey);
+  }
+
+  function normalizeAttributeBonusMap(
+    attributeBonuses: unknown,
+  ): CharacterAttributeBonusMap {
+    if (!attributeBonuses || typeof attributeBonuses !== "object") {
+      return {};
+    }
+
+    return Object.fromEntries(
+      Object.entries(attributeBonuses).filter(([key, value]) => {
+        return (
+          isCharacterAttributeKey(key) &&
+          typeof value === "number" &&
+          Number.isFinite(value)
+        );
+      }),
+    ) as CharacterAttributeBonusMap;
+  }
+
+  function mergeAttributeBonusMaps(
+    ...bonusMaps: CharacterAttributeBonusMap[]
+  ): CharacterAttributeBonusMap {
+    return bonusMaps.reduce<CharacterAttributeBonusMap>(
+      (mergedMap, bonusMap) => {
+        for (const [key, value] of Object.entries(bonusMap)) {
+          if (!isCharacterAttributeKey(key)) {
+            continue;
+          }
+
+          mergedMap[key] = (mergedMap[key] ?? 0) + value;
+        }
+
+        return mergedMap;
+      },
+      {},
+    );
+  }
+
   async function getCharacterAttributeEntries(
     systemId: string,
     attributes: z.infer<typeof characterAttributesSchema>,
+    attributeBonuses: CharacterAttributeBonusMap,
   ) {
     if (!attributes) {
       return {
         entries: [] as Array<{
-          value: number;
+          baseValue: number;
+          bonusValue: number;
           statId: string;
         }>,
         error: null as string | null,
@@ -63,7 +198,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     if (attributeEntries.length === 0) {
       return {
         entries: [] as Array<{
-          value: number;
+          baseValue: number;
+          bonusValue: number;
           statId: string;
         }>,
         error: null as string | null,
@@ -98,7 +234,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
     return {
       entries: attributeEntries.map(([key, value]) => ({
-        value,
+        baseValue: value,
+        bonusValue: attributeBonuses[key] ?? 0,
         statId: statsByKey.get(key)!.id,
       })),
       error: null,
@@ -108,7 +245,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
   async function upsertCharacterSheetStats(
     characterSheetId: string,
     entries: Array<{
-      value: number;
+      baseValue: number;
+      bonusValue: number;
       statId: string;
     }>,
   ) {
@@ -128,24 +266,32 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           create: {
             characterSheetId,
             statId: entry.statId,
-            baseValue: entry.value,
+            baseValue: entry.baseValue,
+            bonusValue: entry.bonusValue,
           },
           update: {
-            baseValue: entry.value,
+            baseValue: entry.baseValue,
+            bonusValue: entry.bonusValue,
           },
         }),
       ),
     );
   }
 
-  async function getCharacterSkillEntries(
-    systemId: string,
-    skillKeys: z.infer<typeof characterSkillKeysSchema>,
-  ) {
+  async function getCharacterSkillEntries({
+    systemId,
+    skillKeys,
+    source = "builder",
+  }: {
+    systemId: string;
+    skillKeys: z.infer<typeof characterSkillKeysSchema>;
+    source?: CharacterProficiencySource;
+  }) {
     if (!skillKeys) {
       return {
         entries: [] as Array<{
           skillId: string;
+          source: CharacterProficiencySource;
         }>,
         error: null as string | null,
       };
@@ -157,6 +303,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       return {
         entries: [] as Array<{
           skillId: string;
+          source: CharacterProficiencySource;
         }>,
         error: null as string | null,
       };
@@ -191,15 +338,103 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     return {
       entries: uniqueSkillKeys.map((key) => ({
         skillId: skillsByKey.get(key)!.id,
+        source,
       })),
       error: null,
     };
+  }
+
+  function mergeCharacterSkillEntries(
+    ...entryGroups: Array<
+      Array<{
+        skillId: string;
+        source: CharacterProficiencySource;
+      }>
+    >
+  ) {
+    const entriesBySkillId = new Map<
+      string,
+      {
+        skillId: string;
+        source: CharacterProficiencySource;
+      }
+    >();
+
+    for (const entries of entryGroups) {
+      for (const entry of entries) {
+        const currentEntry = entriesBySkillId.get(entry.skillId);
+
+        if (!currentEntry) {
+          entriesBySkillId.set(entry.skillId, entry);
+          continue;
+        }
+
+        const currentPriority =
+          characterProficiencySourcePriority[currentEntry.source];
+
+        const nextPriority = characterProficiencySourcePriority[entry.source];
+
+        if (nextPriority > currentPriority) {
+          entriesBySkillId.set(entry.skillId, entry);
+        }
+      }
+    }
+
+    return Array.from(entriesBySkillId.values());
+  }
+
+  function getClassSkillChoiceCount(
+    characterClass:
+      | {
+          classSkillChoiceCount: number;
+        }
+      | null
+      | undefined,
+  ) {
+    return Math.max(0, characterClass?.classSkillChoiceCount ?? 0);
+  }
+
+  function getUniqueSkillKeyCount(
+    skillKeys: z.infer<typeof characterSkillKeysSchema>,
+  ) {
+    if (!skillKeys) {
+      return 0;
+    }
+
+    return new Set(skillKeys).size;
+  }
+
+  function validateDraftSkillChoiceLimit({
+    skillKeys,
+    characterClass,
+  }: {
+    skillKeys: z.infer<typeof characterSkillKeysSchema>;
+    characterClass:
+      | {
+          classSkillChoiceCount: number;
+        }
+      | null
+      | undefined;
+  }) {
+    if (skillKeys === undefined) {
+      return null;
+    }
+
+    const requiredSkillChoiceCount = getClassSkillChoiceCount(characterClass);
+    const selectedSkillCount = getUniqueSkillKeyCount(skillKeys);
+
+    if (selectedSkillCount > requiredSkillChoiceCount) {
+      return `This class allows ${requiredSkillChoiceCount} skill choices, but ${selectedSkillCount} were provided.`;
+    }
+
+    return null;
   }
 
   async function replaceCharacterSheetSkills(
     characterSheetId: string,
     entries: Array<{
       skillId: string;
+      source: CharacterProficiencySource;
     }>,
   ) {
     await prisma.$transaction([
@@ -215,16 +450,99 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             characterSheetId,
             skillId: entry.skillId,
             isProficient: true,
+            source: entry.source,
           },
         }),
       ),
     ]);
   }
 
-  async function getCharacterSpellEntries(
-    systemId: string,
-    spellKeys: z.infer<typeof characterSpellKeysSchema>,
+  function normalizeCharacterLevel(level: number | null | undefined) {
+    if (typeof level !== "number" || !Number.isFinite(level)) {
+      return 1;
+    }
+
+    return Math.max(1, Math.min(20, Math.trunc(level)));
+  }
+
+  function getAttributeModifier(value: number | null | undefined) {
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+      return 0;
+    }
+
+    return Math.floor((value - 10) / 2);
+  }
+
+  function calculateInitialMaxHitPoints({
+    hitDie,
+    level,
+    constitutionValue,
+  }: {
+    hitDie: number | null | undefined;
+    level: number | null | undefined;
+    constitutionValue: number | null | undefined;
+  }) {
+    if (typeof hitDie !== "number" || hitDie <= 0) {
+      return 0;
+    }
+
+    const safeLevel = normalizeCharacterLevel(level);
+    const constitutionModifier = getAttributeModifier(constitutionValue);
+
+    const hitPointsPerLevel = Math.max(1, hitDie + constitutionModifier);
+
+    return hitPointsPerLevel * safeLevel;
+  }
+
+  function getHighestAvailableSpellLevel(
+    progression: {
+      spellSlotsLevel1: number;
+      spellSlotsLevel2: number;
+      spellSlotsLevel3: number;
+      spellSlotsLevel4: number;
+      spellSlotsLevel5: number;
+      spellSlotsLevel6: number;
+      spellSlotsLevel7: number;
+      spellSlotsLevel8: number;
+      spellSlotsLevel9: number;
+    } | null,
   ) {
+    if (!progression) {
+      return 0;
+    }
+
+    const spellSlotsByLevel = [
+      progression.spellSlotsLevel1,
+      progression.spellSlotsLevel2,
+      progression.spellSlotsLevel3,
+      progression.spellSlotsLevel4,
+      progression.spellSlotsLevel5,
+      progression.spellSlotsLevel6,
+      progression.spellSlotsLevel7,
+      progression.spellSlotsLevel8,
+      progression.spellSlotsLevel9,
+    ];
+
+    for (let index = spellSlotsByLevel.length - 1; index >= 0; index -= 1) {
+      if ((spellSlotsByLevel[index] ?? 0) > 0) {
+        return index + 1;
+      }
+    }
+
+    return 0;
+  }
+
+  async function getCharacterSpellEntries({
+    systemId,
+    spellKeys,
+    classId,
+    characterLevel,
+  }: {
+    systemId: string;
+    spellKeys: z.infer<typeof characterSpellKeysSchema>;
+    classId: string | null | undefined;
+    characterLevel: number | null | undefined;
+  }) {
     if (!spellKeys) {
       return {
         entries: [] as Array<{
@@ -245,6 +563,48 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       };
     }
 
+    if (!classId) {
+      return {
+        entries: [],
+        error: "Choose a class before choosing spells",
+      };
+    }
+
+    const safeLevel = normalizeCharacterLevel(characterLevel);
+
+    const characterClass = await prisma.characterClass.findFirst({
+      where: {
+        id: classId,
+        systemId,
+      },
+      include: {
+        levelProgressions: true,
+        classSpells: true,
+      },
+    });
+
+    if (!characterClass) {
+      return {
+        entries: [],
+        error: "Character class not found for this system",
+      };
+    }
+
+    const progression =
+      characterClass.levelProgressions.find(
+        (currentProgression) => currentProgression.level === safeLevel,
+      ) ?? null;
+
+    if (!progression) {
+      return {
+        entries: [],
+        error: `Class progression not found for level ${safeLevel}`,
+      };
+    }
+
+    const highestAvailableSpellLevel =
+      getHighestAvailableSpellLevel(progression);
+
     const spells = await prisma.spell.findMany({
       where: {
         systemId,
@@ -255,6 +615,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       select: {
         id: true,
         key: true,
+        name: true,
+        level: true,
       },
     });
 
@@ -269,6 +631,50 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         entries: [],
         error: `Spell ${missingSpellKey} not found for this system`,
       };
+    }
+
+    const classSpellsBySpellId = new Map(
+      characterClass.classSpells.map((classSpell) => [
+        classSpell.spellId,
+        classSpell,
+      ]),
+    );
+
+    for (const spellKey of uniqueSpellKeys) {
+      const spell = spellsByKey.get(spellKey)!;
+      const classSpell = classSpellsBySpellId.get(spell.id);
+
+      if (!classSpell) {
+        return {
+          entries: [],
+          error: `Spell ${spell.name} is not available for ${characterClass.name}`,
+        };
+      }
+
+      if ((classSpell.minimumClassLevel ?? 1) > safeLevel) {
+        return {
+          entries: [],
+          error: `Spell ${spell.name} requires ${characterClass.name} level ${
+            classSpell.minimumClassLevel ?? 1
+          }`,
+        };
+      }
+
+      if (spell.level === 0 && progression.cantripsKnown <= 0) {
+        return {
+          entries: [],
+          error: `${characterClass.name} cannot choose cantrips at level ${safeLevel}`,
+        };
+      }
+
+      if (spell.level > 0 && spell.level > highestAvailableSpellLevel) {
+        return {
+          entries: [],
+          error: `Spell ${spell.name} is level ${spell.level}, but ${characterClass.name} level ${safeLevel} can only choose spells up to level ${
+            highestAvailableSpellLevel || 0
+          }`,
+        };
+      }
     }
 
     return {
@@ -835,7 +1241,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         equipment: true,
       },
     },
-    } satisfies Prisma.CharacterSheetInclude;
+  } satisfies Prisma.CharacterSheetInclude;
 
   server.get(
     "/campaigns/:campaignId/character-sheets",
@@ -1020,6 +1426,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
           backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
           startingGold: z.number().int().min(0).optional(),
+          level: z.number().int().min(1).max(20).optional(),
 
           alignment: z.string().nullable().optional(),
           faith: z.string().nullable().optional(),
@@ -1073,6 +1480,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         classEquipmentMode,
         backgroundEquipmentMode,
         startingGold,
+        level,
         alignment,
         faith,
         lifestyle,
@@ -1173,54 +1581,85 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      if (classId) {
-        const characterClass = await prisma.characterClass.findFirst({
-          where: {
-            id: classId,
-            systemId,
-          },
-        });
+      const selectedCharacterClass = classId
+        ? await prisma.characterClass.findFirst({
+            where: {
+              id: classId,
+              systemId,
+            },
+            select: {
+              id: true,
+              hitDie: true,
+              classSkillChoiceCount: true,
+            },
+          })
+        : null;
 
-        if (!characterClass) {
-          return reply.status(404).send({
-            message: "Character class not found for this system",
-          });
-        }
+      if (classId && !selectedCharacterClass) {
+        return reply.status(404).send({
+          message: "Character class not found for this system",
+        });
       }
 
-      if (ancestryId) {
-        const ancestry = await prisma.ancestry.findFirst({
-          where: {
-            id: ancestryId,
-            systemId,
-          },
-        });
+      const skillChoiceLimitError = validateDraftSkillChoiceLimit({
+        skillKeys,
+        characterClass: selectedCharacterClass,
+      });
 
-        if (!ancestry) {
-          return reply.status(404).send({
-            message: "Ancestry not found for this system",
-          });
-        }
+      if (skillChoiceLimitError) {
+        return reply.status(400).send({
+          message: skillChoiceLimitError,
+        });
       }
 
-      if (backgroundId) {
-        const background = await prisma.background.findFirst({
-          where: {
-            id: backgroundId,
-            systemId,
-          },
-        });
+      const selectedAncestry = ancestryId
+        ? await prisma.ancestry.findFirst({
+            where: {
+              id: ancestryId,
+              systemId,
+            },
+            select: {
+              id: true,
+              attributeBonuses: true,
+            },
+          })
+        : null;
 
-        if (!background) {
-          return reply.status(404).send({
-            message: "Background not found for this system",
-          });
-        }
+      if (ancestryId && !selectedAncestry) {
+        return reply.status(404).send({
+          message: "Ancestry not found for this system",
+        });
       }
+
+      const selectedBackground = backgroundId
+        ? await prisma.background.findFirst({
+            where: {
+              id: backgroundId,
+              systemId,
+            },
+            select: {
+              id: true,
+              attributeBonuses: true,
+              skillKeys: true,
+            },
+          })
+        : null;
+
+      if (backgroundId && !selectedBackground) {
+        return reply.status(404).send({
+          message: "Background not found for this system",
+        });
+      }
+
+      const sourceAttributeBonuses = mergeAttributeBonusMaps(
+        normalizeAttributeBonusMap(selectedAncestry?.attributeBonuses),
+        normalizeAttributeBonusMap(selectedBackground?.attributeBonuses),
+      );
 
       const attributeEntriesResult = await getCharacterAttributeEntries(
         systemId,
         attributes,
+        sourceAttributeBonuses,
       );
 
       if (attributeEntriesResult.error) {
@@ -1229,10 +1668,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const skillEntriesResult = await getCharacterSkillEntries(
+      const skillEntriesResult = await getCharacterSkillEntries({
         systemId,
         skillKeys,
-      );
+        source: "builder",
+      });
 
       if (skillEntriesResult.error) {
         return reply.status(400).send({
@@ -1240,10 +1680,16 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const spellEntriesResult = await getCharacterSpellEntries(
+      const mergedSkillEntries = mergeCharacterSkillEntries(
+        skillEntriesResult.entries,
+      );
+
+      const spellEntriesResult = await getCharacterSpellEntries({
         systemId,
         spellKeys,
-      );
+        classId: classId ?? null,
+        characterLevel: level ?? 1,
+      });
 
       if (spellEntriesResult.error) {
         return reply.status(400).send({
@@ -1262,6 +1708,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const initialMaxHitPoints = calculateInitialMaxHitPoints({
+        hitDie: selectedCharacterClass?.hitDie ?? null,
+        level: level ?? 1,
+        constitutionValue: attributes?.constitution ?? null,
+      });
+
       const characterSheet = await prisma.characterSheet.create({
         data: {
           campaignId,
@@ -1279,6 +1731,9 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           portraitUrl: portraitUrl?.trim() || null,
           tokenImageUrl: tokenImageUrl?.trim() || null,
           tokenImageFit: tokenImageFit ?? "FILL",
+          level: level ?? 1,
+          hitPoints: initialMaxHitPoints,
+          maxHitPoints: initialMaxHitPoints,
           classEquipmentMode: classEquipmentMode ?? "PACKAGE",
           backgroundEquipmentMode: backgroundEquipmentMode ?? "PACKAGE",
           startingGold: startingGold ?? 0,
@@ -1313,7 +1768,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       if (skillKeys !== undefined) {
         await replaceCharacterSheetSkills(
           characterSheet.id,
-          skillEntriesResult.entries,
+          mergedSkillEntries,
         );
       }
 
@@ -1436,7 +1891,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           }),
       },
     },
-    async (request, reply) => {
+    async (
+      request: FastifyRequest<{
+        Params: CharacterSheetRouteParams;
+        Body: CharacterSheetUpdateBody;
+      }>,
+      reply: FastifyReply,
+    ) => {
       const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
@@ -1490,6 +1951,25 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         },
         include: {
           campaignActor: true,
+          characterClass: {
+            select: {
+              id: true,
+              classSkillChoiceCount: true,
+            },
+          },
+          ancestry: {
+            select: {
+              id: true,
+              attributeBonuses: true,
+            },
+          },
+          background: {
+            select: {
+              id: true,
+              attributeBonuses: true,
+              skillKeys: true,
+            },
+          },
         },
       });
 
@@ -1510,49 +1990,82 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      if (sheetData.classId) {
-        const characterClass = await prisma.characterClass.findFirst({
-          where: {
-            id: sheetData.classId,
-            systemId: characterSheet.systemId,
-          },
-        });
+      const selectedCharacterClass =
+        sheetData.classId === undefined
+          ? characterSheet.characterClass
+          : sheetData.classId
+            ? await prisma.characterClass.findFirst({
+                where: {
+                  id: sheetData.classId,
+                  systemId: characterSheet.systemId,
+                },
+                select: {
+                  id: true,
+                  classSkillChoiceCount: true,
+                },
+              })
+            : null;
 
-        if (!characterClass) {
-          return reply.status(404).send({
-            message: "Character class not found for this system",
-          });
-        }
+      if (sheetData.classId && !selectedCharacterClass) {
+        return reply.status(404).send({
+          message: "Character class not found for this system",
+        });
       }
 
-      if (sheetData.ancestryId) {
-        const ancestry = await prisma.ancestry.findFirst({
-          where: {
-            id: sheetData.ancestryId,
-            systemId: characterSheet.systemId,
-          },
-        });
+      const skillChoiceLimitError = validateDraftSkillChoiceLimit({
+        skillKeys,
+        characterClass: selectedCharacterClass,
+      });
 
-        if (!ancestry) {
-          return reply.status(404).send({
-            message: "Ancestry not found for this system",
-          });
-        }
+      if (skillChoiceLimitError) {
+        return reply.status(400).send({
+          message: skillChoiceLimitError,
+        });
       }
 
-      if (sheetData.backgroundId) {
-        const background = await prisma.background.findFirst({
-          where: {
-            id: sheetData.backgroundId,
-            systemId: characterSheet.systemId,
-          },
-        });
+      const selectedAncestry =
+        sheetData.ancestryId === undefined
+          ? characterSheet.ancestry
+          : sheetData.ancestryId
+            ? await prisma.ancestry.findFirst({
+                where: {
+                  id: sheetData.ancestryId,
+                  systemId: characterSheet.systemId,
+                },
+                select: {
+                  id: true,
+                  attributeBonuses: true,
+                },
+              })
+            : null;
 
-        if (!background) {
-          return reply.status(404).send({
-            message: "Background not found for this system",
-          });
-        }
+      if (sheetData.ancestryId && !selectedAncestry) {
+        return reply.status(404).send({
+          message: "Ancestry not found for this system",
+        });
+      }
+
+      const selectedBackground =
+        sheetData.backgroundId === undefined
+          ? characterSheet.background
+          : sheetData.backgroundId
+            ? await prisma.background.findFirst({
+                where: {
+                  id: sheetData.backgroundId,
+                  systemId: characterSheet.systemId,
+                },
+                select: {
+                  id: true,
+                  attributeBonuses: true,
+                  skillKeys: true,
+                },
+              })
+            : null;
+
+      if (sheetData.backgroundId && !selectedBackground) {
+        return reply.status(404).send({
+          message: "Background not found for this system",
+        });
       }
 
       if (sheetData.subclassId) {
@@ -1602,9 +2115,15 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         }
       }
 
+      const sourceAttributeBonuses = mergeAttributeBonusMaps(
+        normalizeAttributeBonusMap(selectedAncestry?.attributeBonuses),
+        normalizeAttributeBonusMap(selectedBackground?.attributeBonuses),
+      );
+
       const attributeEntriesResult = await getCharacterAttributeEntries(
         characterSheet.systemId,
         attributes,
+        sourceAttributeBonuses,
       );
 
       if (attributeEntriesResult.error) {
@@ -1613,10 +2132,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const skillEntriesResult = await getCharacterSkillEntries(
-        characterSheet.systemId,
+      const skillEntriesResult = await getCharacterSkillEntries({
+        systemId: characterSheet.systemId,
         skillKeys,
-      );
+        source: "builder",
+      });
 
       if (skillEntriesResult.error) {
         return reply.status(400).send({
@@ -1624,10 +2144,21 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const spellEntriesResult = await getCharacterSpellEntries(
-        characterSheet.systemId,
-        spellKeys,
+      const mergedSkillEntries = mergeCharacterSkillEntries(
+        skillEntriesResult.entries,
       );
+
+      const spellValidationClassId =
+        sheetData.classId ?? characterSheet.classId;
+
+      const spellValidationLevel = sheetData.level ?? characterSheet.level;
+
+      const spellEntriesResult = await getCharacterSpellEntries({
+        systemId: characterSheet.systemId,
+        spellKeys,
+        classId: spellValidationClassId,
+        characterLevel: spellValidationLevel,
+      });
 
       if (spellEntriesResult.error) {
         return reply.status(400).send({
@@ -1747,15 +2278,50 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      if (attributes !== undefined) {
-        await upsertCharacterSheetStats(
-          sheetId,
-          attributeEntriesResult.entries,
-        );
+      const shouldRefreshAttributeBonuses =
+        attributes !== undefined ||
+        sheetData.ancestryId !== undefined ||
+        sheetData.backgroundId !== undefined;
+
+      if (shouldRefreshAttributeBonuses) {
+        if (attributes !== undefined) {
+          await upsertCharacterSheetStats(
+            sheetId,
+            attributeEntriesResult.entries,
+          );
+        } else {
+          const currentStats = await prisma.characterSheetStat.findMany({
+            where: {
+              characterSheetId: sheetId,
+            },
+            include: {
+              stat: {
+                select: {
+                  key: true,
+                },
+              },
+            },
+          });
+
+          await upsertCharacterSheetStats(
+            sheetId,
+            currentStats.map((currentStat) => {
+              const statKey = currentStat.stat.key;
+
+              return {
+                statId: currentStat.statId,
+                baseValue: currentStat.baseValue,
+                bonusValue: isCharacterAttributeKey(statKey)
+                  ? (sourceAttributeBonuses[statKey] ?? 0)
+                  : 0,
+              };
+            }),
+          );
+        }
       }
 
       if (skillKeys !== undefined) {
-        await replaceCharacterSheetSkills(sheetId, skillEntriesResult.entries);
+        await replaceCharacterSheetSkills(sheetId, mergedSkillEntries);
       }
 
       if (spellKeys !== undefined) {
@@ -1801,6 +2367,311 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       });
     },
   );
+
+  server.patch(
+    "/campaigns/:campaignId/character-sheets/:sheetId/level-up-availability",
+    {
+      schema: {
+        tags: ["Character Sheets"],
+        description: "Set character sheet Level Up availability",
+        params: z.object({
+          campaignId: z.string().uuid("Invalid campaign id"),
+          sheetId: z.string().uuid("Invalid character sheet id"),
+        }),
+        body: z.object({
+          levelUpAvailable: z.boolean(),
+        }),
+      },
+    },
+    async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const { campaignId, sheetId } = request.params;
+      const { levelUpAvailable } = request.body;
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: campaignId,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = currentParticipant?.role === "GM";
+
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message:
+            "Only the campaign owner or GM can change Level Up availability",
+        });
+      }
+
+      const characterSheet = await prisma.characterSheet.findFirst({
+        where: {
+          id: sheetId,
+          campaignId,
+        },
+      });
+
+      if (!characterSheet) {
+        return reply.status(404).send({
+          message: "Character sheet not found",
+        });
+      }
+
+      const updatedCharacterSheet = await prisma.characterSheet.update({
+        where: {
+          id: characterSheet.id,
+        },
+        data: {
+          levelUpAvailable,
+        },
+        include: characterSheetInclude,
+      });
+
+      const updatedCharacterSheetWithFeatures = await withAvailableFeatures(
+        updatedCharacterSheet,
+      );
+
+      return reply.status(200).send({
+        characterSheet: updatedCharacterSheetWithFeatures,
+      });
+    },
+  );
+
+  server.post(
+    "/campaigns/:campaignId/character-sheets/:sheetId/level-up",
+    {
+      schema: {
+        tags: ["Character Sheets"],
+        description: "Confirm character sheet level up",
+        params: z.object({
+          campaignId: z.string().uuid("Invalid campaign id"),
+          sheetId: z.string().uuid("Invalid character sheet id"),
+        }),
+        body: z
+          .object({
+            classEntryId: z
+              .string()
+              .uuid("Invalid character sheet class id")
+              .optional(),
+          })
+          .optional(),
+      },
+    },
+    async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const { campaignId, sheetId } = request.params;
+      const { classEntryId } = request.body ?? {};
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: campaignId,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = currentParticipant?.role === "GM";
+
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message: "Only the campaign owner or GM can confirm Level Up",
+        });
+      }
+
+      const characterSheet = await prisma.characterSheet.findFirst({
+        where: {
+          id: sheetId,
+          campaignId,
+        },
+        include: {
+          classes: {
+            include: {
+              characterClass: {
+                include: {
+                  levelProgressions: true,
+                },
+              },
+            },
+            orderBy: [
+              {
+                isPrimary: "desc",
+              },
+              {
+                order: "asc",
+              },
+              {
+                createdAt: "asc",
+              },
+            ],
+          },
+        },
+      });
+
+      if (!characterSheet) {
+        return reply.status(404).send({
+          message: "Character sheet not found",
+        });
+      }
+
+      if (characterSheet.status !== "READY") {
+        return reply.status(400).send({
+          message: "Only ready character sheets can level up",
+        });
+      }
+
+      if (characterSheet.level >= 20) {
+        return reply.status(400).send({
+          message: "Character is already at maximum level",
+        });
+      }
+
+      const selectedClassEntry =
+        (classEntryId
+          ? characterSheet.classes.find(
+              (classEntry) => classEntry.id === classEntryId,
+            )
+          : null) ??
+        characterSheet.classes.find((classEntry) => classEntry.isPrimary) ??
+        characterSheet.classes[0] ??
+        null;
+
+      if (!selectedClassEntry) {
+        return reply.status(400).send({
+          message: "Character sheet has no class to level up",
+        });
+      }
+
+      const nextClassLevel = selectedClassEntry.level + 1;
+      const nextCharacterLevel = characterSheet.level + 1;
+
+      if (nextClassLevel > 20) {
+        return reply.status(400).send({
+          message: "Selected class is already at maximum level",
+        });
+      }
+
+      const hasNextClassProgression =
+        selectedClassEntry.characterClass.levelProgressions.some(
+          (progression) => progression.level === nextClassLevel,
+        );
+
+      if (!hasNextClassProgression) {
+        return reply.status(400).send({
+          message:
+            "Selected class has no progression registered for the next level",
+        });
+      }
+
+      await prisma.$transaction([
+        prisma.characterSheet.update({
+          where: {
+            id: characterSheet.id,
+          },
+          data: {
+            level: nextCharacterLevel,
+            levelUpAvailable: false,
+          },
+        }),
+
+        prisma.characterSheetClass.update({
+          where: {
+            id: selectedClassEntry.id,
+          },
+          data: {
+            level: nextClassLevel,
+          },
+        }),
+      ]);
+
+      const updatedCharacterSheet =
+        await prisma.characterSheet.findUniqueOrThrow({
+          where: {
+            id: characterSheet.id,
+          },
+          include: characterSheetInclude,
+        });
+
+      const updatedCharacterSheetWithFeatures = await withAvailableFeatures(
+        updatedCharacterSheet,
+      );
+
+      return reply.status(200).send({
+        characterSheet: updatedCharacterSheetWithFeatures,
+      });
+    },
+  );
+
   function getActorInitialsFromName(name: string) {
     const initials = name
       .trim()
@@ -1818,12 +2689,17 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     classId: string | null;
     ancestryId: string | null;
     backgroundId: string | null;
+    characterClass: {
+      classSkillChoiceCount: number;
+    } | null;
     stats: Array<{
       stat: {
         key: string;
       };
     }>;
-    skills: Array<unknown>;
+    skills: Array<{
+      source: string | null;
+    }>;
   }) {
     const errors: string[] = [];
 
@@ -1864,8 +2740,18 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       errors.push("Distribua todos os seis atributos.");
     }
 
-    if (characterSheet.skills.length === 0) {
-      errors.push("Escolha pelo menos uma perícia.");
+    const requiredSkillChoiceCount = getClassSkillChoiceCount(
+      characterSheet.characterClass,
+    );
+
+    const builderSkillChoiceCount = characterSheet.skills.filter(
+      (skill) => skill.source === "builder",
+    ).length;
+
+    if (builderSkillChoiceCount !== requiredSkillChoiceCount) {
+      errors.push(
+        `Escolha exatamente ${requiredSkillChoiceCount} perícias da classe antes de finalizar a ficha.`,
+      );
     }
 
     return errors;

@@ -5,6 +5,14 @@ export const ancestries = [
     description:
       "Povo versátil e adaptável, marcado pela sobrevivência após o colapso do velho mundo.",
     defaultSizeCategory: "MEDIUM",
+    attributeBonuses: {
+      strength: 1,
+      dexterity: 1,
+      constitution: 1,
+      intelligence: 1,
+      wisdom: 1,
+      charisma: 1,
+    },
   },
   {
     name: "Sylvaris",
@@ -12,6 +20,10 @@ export const ancestries = [
     description:
       "Linhagem de traços élficos, sensibilidade arcana e forte conexão com ambientes transformados pela magia.",
     defaultSizeCategory: "MEDIUM",
+    attributeBonuses: {
+      dexterity: 2,
+      intelligence: 1,
+    },
   },
   {
     name: "Durandir",
@@ -19,6 +31,10 @@ export const ancestries = [
     description:
       "Povo resistente, robusto e associado a comunidades subterrâneas, metalurgia e sobrevivência em regiões severas.",
     defaultSizeCategory: "MEDIUM",
+    attributeBonuses: {
+      constitution: 2,
+      strength: 1,
+    },
   },
   {
     name: "Brutakar",
@@ -26,6 +42,10 @@ export const ancestries = [
     description:
       "Linhagem forte e imponente, frequentemente ligada à resistência física e presença intimidadora.",
     defaultSizeCategory: "MEDIUM",
+    attributeBonuses: {
+      strength: 2,
+      constitution: 1,
+    },
   },
   {
     name: "Faunari",
@@ -33,6 +53,10 @@ export const ancestries = [
     description:
       "Povo de traços feéricos e animalescos, associado a mobilidade, expressão cultural e instinto natural.",
     defaultSizeCategory: "MEDIUM",
+    attributeBonuses: {
+      dexterity: 2,
+      charisma: 1,
+    },
   },
   {
     name: "Sintéticos",
@@ -40,6 +64,10 @@ export const ancestries = [
     description:
       "Seres parcialmente artificiais ou reconstruídos, ligados a tecnologia antiga, implantes e sobrevivência mecânica.",
     defaultSizeCategory: "MEDIUM",
+    attributeBonuses: {
+      constitution: 2,
+      intelligence: 1,
+    },
   },
   {
     name: "Minuri",
@@ -47,6 +75,10 @@ export const ancestries = [
     description:
       "Povo de baixa estatura, ágil e discreto, conhecido por adaptação social e coragem inesperada.",
     defaultSizeCategory: "SMALL",
+    attributeBonuses: {
+      dexterity: 2,
+      charisma: 1,
+    },
   },
   {
     name: "Ignivar",
@@ -54,6 +86,10 @@ export const ancestries = [
     description:
       "Linhagem marcada por calor interno, resiliência elemental e traços associados a fogo, cinzas, forjas ou energia instável.",
     defaultSizeCategory: "MEDIUM",
+    attributeBonuses: {
+      constitution: 2,
+      charisma: 1,
+    },
   },
   {
     name: "Yokari",
@@ -61,6 +97,10 @@ export const ancestries = [
     description:
       "Povo de herança espiritual e traços sobrenaturais, associado a presságios, tradições antigas, máscaras, espíritos e vínculos com o invisível.",
     defaultSizeCategory: "MEDIUM",
+    attributeBonuses: {
+      wisdom: 2,
+      charisma: 1,
+    },
   },
   {
     name: "Gnomyx",
@@ -68,5 +108,9 @@ export const ancestries = [
     description:
       "Povo pequeno, engenhoso e curioso, ligado a invenções, artifícios, improviso técnico, alquimia e estudo de ruínas antigas.",
     defaultSizeCategory: "SMALL",
+    attributeBonuses: {
+      intelligence: 2,
+      dexterity: 1,
+    },
   },
 ] as const;

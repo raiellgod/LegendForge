@@ -12,7 +12,7 @@ import { spells } from "./seed-data/spells.js";
 import { stats } from "./seed-data/stats.js";
 import { subclasses } from "./seed-data/subclasses.js";
 
-const SYSTEM_NAME = "Meu sistema";
+const SYSTEM_NAME = "5e Homebrew — Ecos da Ruína";
 const SYSTEM_SLUG = "meu-sistema";
 
 function createKeyFromName(name: string) {
@@ -379,10 +379,10 @@ function getClassMagicProgression(
 async function main() {
   const system = await prisma.gameSystem.upsert({
     where: {
-      name: SYSTEM_NAME,
+      slug: SYSTEM_SLUG,
     },
     update: {
-      slug: SYSTEM_SLUG,
+      name: SYSTEM_NAME,
       version: 1,
     },
     create: {
@@ -480,6 +480,7 @@ async function main() {
         name: ancestryData.name,
         description: ancestryData.description,
         defaultSizeCategory: ancestryData.defaultSizeCategory,
+        attributeBonuses: ancestryData.attributeBonuses,
         order: index + 1,
       },
       create: {
@@ -488,6 +489,7 @@ async function main() {
         key: ancestryData.key,
         description: ancestryData.description,
         defaultSizeCategory: ancestryData.defaultSizeCategory,
+        attributeBonuses: ancestryData.attributeBonuses,
         order: index + 1,
       },
     });
@@ -512,6 +514,10 @@ async function main() {
         hitDie: classData.hitDie,
         spellcastingAbilityKey: classData.spellcastingAbilityKey,
         subclassSelectionLevel: classData.subclassSelectionLevel,
+        classSkillChoiceCount: classData.classSkillChoiceCount,
+        weaponProficiencyKeys: [...classData.weaponProficiencyKeys],
+        protectionProficiencyKeys: [...classData.protectionProficiencyKeys],
+        toolProficiencyKeys: [...classData.toolProficiencyKeys],
         order: index + 1,
       },
       create: {
@@ -523,6 +529,10 @@ async function main() {
         hitDie: classData.hitDie,
         spellcastingAbilityKey: classData.spellcastingAbilityKey,
         subclassSelectionLevel: classData.subclassSelectionLevel,
+        classSkillChoiceCount: classData.classSkillChoiceCount,
+        weaponProficiencyKeys: [...classData.weaponProficiencyKeys],
+        protectionProficiencyKeys: [...classData.protectionProficiencyKeys],
+        toolProficiencyKeys: [...classData.toolProficiencyKeys],
         order: index + 1,
       },
     });
@@ -882,6 +892,7 @@ async function main() {
         toolNames: [...backgroundData.toolNames],
         languageChoiceCount: backgroundData.languageChoiceCount,
         startingGold: backgroundData.startingGold,
+        attributeBonuses: backgroundData.attributeBonuses,
         order: index + 1,
       },
       create: {
@@ -893,6 +904,7 @@ async function main() {
         toolNames: [...backgroundData.toolNames],
         languageChoiceCount: backgroundData.languageChoiceCount,
         startingGold: backgroundData.startingGold,
+        attributeBonuses: backgroundData.attributeBonuses,
         order: index + 1,
       },
     });

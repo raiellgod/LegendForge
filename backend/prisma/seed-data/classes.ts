@@ -1,4 +1,3 @@
-
 export const classes = [
   {
     name: "Bárbaro",
@@ -7,6 +6,10 @@ export const classes = [
     hitDie: 12,
     spellcastingAbilityKey: null,
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 3,
+    weaponProficiencyKeys: ["simple-weapons", "martial-weapons"],
+    protectionProficiencyKeys: ["light-armor", "medium-armor", "shield"],
+    toolProficiencyKeys: [],
     description:
       "Combatente feroz movido por fúria, instinto e resistência física extrema.",
   },
@@ -17,6 +20,16 @@ export const classes = [
     hitDie: 8,
     spellcastingAbilityKey: "charisma",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 3,
+    weaponProficiencyKeys: [
+      "simple-weapons",
+      "hand-crossbow",
+      "longsword",
+      "rapier",
+      "shortsword",
+    ],
+    protectionProficiencyKeys: ["light-armor"],
+    toolProficiencyKeys: ["musical-instrument"],
     description:
       "Artista arcano que inspira aliados, manipula emoções e transforma expressão em poder.",
   },
@@ -27,6 +40,10 @@ export const classes = [
     hitDie: 8,
     spellcastingAbilityKey: "charisma",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 2,
+    weaponProficiencyKeys: ["simple-weapons"],
+    protectionProficiencyKeys: ["light-armor"],
+    toolProficiencyKeys: [],
     description:
       "Conjurador ligado a forças misteriosas, maldições, pactos e segredos arcanos perigosos.",
   },
@@ -37,6 +54,10 @@ export const classes = [
     hitDie: 8,
     spellcastingAbilityKey: "wisdom",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 2,
+    weaponProficiencyKeys: ["simple-weapons"],
+    protectionProficiencyKeys: ["light-armor", "medium-armor", "shield"],
+    toolProficiencyKeys: [],
     description:
       "Canaliza poder de uma fé, ideal, entidade, tradição espiritual ou força superior para curar, proteger e purificar.",
   },
@@ -47,6 +68,21 @@ export const classes = [
     hitDie: 8,
     spellcastingAbilityKey: "wisdom",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 2,
+    weaponProficiencyKeys: [
+      "club",
+      "dagger",
+      "dart",
+      "javelin",
+      "mace",
+      "quarterstaff",
+      "scimitar",
+      "sickle",
+      "sling",
+      "spear",
+    ],
+    protectionProficiencyKeys: ["light-armor", "medium-armor", "shield"],
+    toolProficiencyKeys: ["herbalism-kit"],
     description:
       "Conjurador ligado às forças naturais, mutações, animais, ciclos vitais e terrenos selvagens.",
   },
@@ -57,6 +93,16 @@ export const classes = [
     hitDie: 6,
     spellcastingAbilityKey: "charisma",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 2,
+    weaponProficiencyKeys: [
+      "dagger",
+      "dart",
+      "sling",
+      "quarterstaff",
+      "light-crossbow",
+    ],
+    protectionProficiencyKeys: [],
+    toolProficiencyKeys: [],
     description:
       "Conjurador de magia inata, guiado por sangue, mutação, herança ou poder interior instintivo.",
   },
@@ -67,6 +113,15 @@ export const classes = [
     hitDie: 10,
     spellcastingAbilityKey: null,
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 3,
+    weaponProficiencyKeys: ["simple-weapons", "martial-weapons"],
+    protectionProficiencyKeys: [
+      "light-armor",
+      "medium-armor",
+      "heavy-armor",
+      "shield",
+    ],
+    toolProficiencyKeys: [],
     description:
       "Especialista em combate, armas, armaduras, disciplina marcial e adaptação tática.",
   },
@@ -77,6 +132,16 @@ export const classes = [
     hitDie: 8,
     spellcastingAbilityKey: null,
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 4,
+    weaponProficiencyKeys: [
+      "simple-weapons",
+      "hand-crossbow",
+      "longsword",
+      "rapier",
+      "shortsword",
+    ],
+    protectionProficiencyKeys: ["light-armor"],
+    toolProficiencyKeys: ["thieves-tools"],
     description:
       "Especialista em furtividade, precisão, truques, mobilidade e ataques oportunistas.",
   },
@@ -87,6 +152,16 @@ export const classes = [
     hitDie: 6,
     spellcastingAbilityKey: "intelligence",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 2,
+    weaponProficiencyKeys: [
+      "dagger",
+      "dart",
+      "sling",
+      "quarterstaff",
+      "light-crossbow",
+    ],
+    protectionProficiencyKeys: [],
+    toolProficiencyKeys: [],
     description:
       "Estudioso da magia, rituais, grimórios, fórmulas arcanas e conhecimento sobrenatural.",
   },
@@ -97,6 +172,10 @@ export const classes = [
     hitDie: 8,
     spellcastingAbilityKey: null,
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 3,
+    weaponProficiencyKeys: ["simple-weapons", "shortsword"],
+    protectionProficiencyKeys: [],
+    toolProficiencyKeys: ["artisan-tools", "musical-instrument"],
     description:
       "Combatente disciplinado que usa corpo, mente, velocidade e energia interior como armas.",
   },
@@ -107,6 +186,15 @@ export const classes = [
     hitDie: 10,
     spellcastingAbilityKey: "charisma",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 2,
+    weaponProficiencyKeys: ["simple-weapons", "martial-weapons"],
+    protectionProficiencyKeys: [
+      "light-armor",
+      "medium-armor",
+      "heavy-armor",
+      "shield",
+    ],
+    toolProficiencyKeys: [],
     description:
       "Guerreiro místico sustentado por juramentos, convicções e a força de uma promessa inquebrável.",
   },
@@ -117,6 +205,10 @@ export const classes = [
     hitDie: 10,
     spellcastingAbilityKey: "wisdom",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 3,
+    weaponProficiencyKeys: ["simple-weapons", "martial-weapons"],
+    protectionProficiencyKeys: ["light-armor", "medium-armor", "shield"],
+    toolProficiencyKeys: [],
     description:
       "Explorador, rastreador e combatente versátil treinado para sobreviver em regiões hostis.",
   },
@@ -127,6 +219,10 @@ export const classes = [
     hitDie: 8,
     spellcastingAbilityKey: "intelligence",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 2,
+    weaponProficiencyKeys: ["simple-weapons", "firearms", "crossbows"],
+    protectionProficiencyKeys: ["light-armor", "medium-armor", "shield"],
+    toolProficiencyKeys: ["tinker-tools", "alchemist-supplies"],
     description:
       "Especialista em tecnologia antiga, dispositivos, engenhocas, alquimia e tecno-magia.",
   },
@@ -137,8 +233,11 @@ export const classes = [
     hitDie: 6,
     spellcastingAbilityKey: "intelligence",
     subclassSelectionLevel: 3,
+    classSkillChoiceCount: 2,
+    weaponProficiencyKeys: ["dagger", "dart", "sling", "quarterstaff"],
+    protectionProficiencyKeys: [],
+    toolProficiencyKeys: [],
     description:
       "Conjurador da morte, espíritos, ossos, dreno vital, cadáveres e forças necromânticas.",
   },
 ] as const;
-

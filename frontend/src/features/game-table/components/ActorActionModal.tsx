@@ -60,10 +60,10 @@ export function ActorActionModal({
   const canUseLibrary = isGM && isLibraryCompatibleActor(actor);
   const actorLifecycleDescription =
     actor.type === "PLAYER_CHARACTER"
-      ? "Personagens de jogador têm ciclo próprio. Eles não voltam para a biblioteca como NPCs ou criaturas."
+      ? "Personagem de jogador"
       : actor.type === "NPC"
-        ? "NPCs podem ficar ativos na mesa ou guardados na biblioteca da campanha."
-        : "Criaturas e inimigos podem ficar ativos na mesa ou guardados na biblioteca da campanha.";
+        ? "NPC da campanha"
+        : "Criatura ou inimigo";
 
   const hasAnyAction = canOpenSheet || canCreateToken || canUseLibrary;
 
@@ -138,15 +138,15 @@ export function ActorActionModal({
 
           {canUseLibrary ? (
             <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-                Biblioteca da campanha
-              </p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+                  Biblioteca
+                </p>
 
-              <p className="mt-1 text-[11px] font-semibold leading-relaxed text-white/45">
-                Enviar para a biblioteca muda este ator para LIBRARY e remove
-                seus tokens da cena atual. O ator poderá ser trazido de volta
-                depois.
-              </p>
+                <span className="text-[9px] font-black uppercase tracking-[0.12em] text-white/35">
+                  NPC/Criatura
+                </span>
+              </div>
 
               <button
                 type="button"
@@ -165,10 +165,7 @@ export function ActorActionModal({
               </p>
 
               <p className="mt-1 text-[11px] font-semibold leading-relaxed text-white/45">
-                Este personagem não será enviado para a biblioteca. Personagens
-                de jogador terão um ciclo próprio: ativo, inativo e remoção
-                segura da campanha. A regra futura será 1 personagem ativo por
-                usuário em cada campanha.
+                Personagens de jogador não voltam para a biblioteca.
               </p>
             </div>
           ) : null}
@@ -238,10 +235,6 @@ export function ActorActionModal({
               Tamanho do token
             </p>
 
-            <p className="mt-1 text-[11px] font-semibold leading-relaxed text-white/45">
-              1 quadrado = 1,5m. Pequeno/Médio ocupa 1 quadrado.
-            </p>
-
             <div className="mt-3 grid grid-cols-2 gap-2">
               {tokenSizeOptions.map((option) => {
                 const sizeInPixels = getTokenSizeInPixels(option.gridSize);
@@ -268,20 +261,13 @@ export function ActorActionModal({
                     </span>
 
                     <span className="mt-1 block text-[10px] font-bold text-white/40">
-                      {option.gridSize}x{option.gridSize} · {sizeInPixels}px
+                      {option.description}
                     </span>
                   </button>
                 );
               })}
             </div>
           </div>
-        ) : null}
-
-        {isGM ? (
-          <p className="mt-4 text-[10px] font-semibold leading-relaxed text-white/35">
-            Como Mestre, você pode abrir fichas e adicionar tokens dos
-            personagens visíveis nesta mesa.
-          </p>
         ) : null}
       </div>
     </div>

@@ -66,21 +66,9 @@ export function TableSettingsPanel({
           </div>
 
           <div className="rounded-lg border border-white/10 bg-black/25 p-3">
-            <p className="text-white/35">Vagas</p>
-            <p className="mt-1 text-forge-gold">{campaign.maxPlayers}</p>
-          </div>
-
-          <div className="rounded-lg border border-white/10 bg-black/25 p-3">
             <p className="text-white/35">Visibilidade</p>
             <p className="mt-1 text-forge-gold">
               {campaign.isPublic ? "Pública" : "Privada"}
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-white/10 bg-black/25 p-3">
-            <p className="text-white/35">Sistema</p>
-            <p className="mt-1 text-forge-gold">
-              {campaign.systemId ? "Definido" : "Pendente"}
             </p>
           </div>
         </div>
@@ -117,15 +105,9 @@ export function TableSettingsPanel({
       </div>
 
       <div className="mt-5 rounded-xl border border-white/10 bg-black/30 p-4">
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
-            Participantes
-          </p>
-
-          <span className="rounded-full border border-white/10 bg-black/30 px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] text-white/45">
-            {approvedParticipants.length}
-          </span>
-        </div>
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
+          Participantes
+        </p>
 
         <div className="mt-4 space-y-3">
           {approvedGms.map((participant) => (

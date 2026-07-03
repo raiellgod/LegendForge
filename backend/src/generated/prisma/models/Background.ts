@@ -74,6 +74,7 @@ export type BackgroundCountAggregateOutputType = {
   toolNames: number
   languageChoiceCount: number
   startingGold: number
+  attributeBonuses: number
   order: number
   createdAt: number
   updatedAt: number
@@ -129,6 +130,7 @@ export type BackgroundCountAggregateInputType = {
   toolNames?: true
   languageChoiceCount?: true
   startingGold?: true
+  attributeBonuses?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -231,6 +233,7 @@ export type BackgroundGroupByOutputType = {
   toolNames: string[]
   languageChoiceCount: number
   startingGold: number
+  attributeBonuses: runtime.JsonValue
   order: number
   createdAt: Date
   updatedAt: Date
@@ -269,6 +272,7 @@ export type BackgroundWhereInput = {
   toolNames?: Prisma.StringNullableListFilter<"Background">
   languageChoiceCount?: Prisma.IntFilter<"Background"> | number
   startingGold?: Prisma.IntFilter<"Background"> | number
+  attributeBonuses?: Prisma.JsonFilter<"Background">
   order?: Prisma.IntFilter<"Background"> | number
   createdAt?: Prisma.DateTimeFilter<"Background"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Background"> | Date | string
@@ -287,6 +291,7 @@ export type BackgroundOrderByWithRelationInput = {
   toolNames?: Prisma.SortOrder
   languageChoiceCount?: Prisma.SortOrder
   startingGold?: Prisma.SortOrder
+  attributeBonuses?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -310,6 +315,7 @@ export type BackgroundWhereUniqueInput = Prisma.AtLeast<{
   toolNames?: Prisma.StringNullableListFilter<"Background">
   languageChoiceCount?: Prisma.IntFilter<"Background"> | number
   startingGold?: Prisma.IntFilter<"Background"> | number
+  attributeBonuses?: Prisma.JsonFilter<"Background">
   order?: Prisma.IntFilter<"Background"> | number
   createdAt?: Prisma.DateTimeFilter<"Background"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Background"> | Date | string
@@ -328,6 +334,7 @@ export type BackgroundOrderByWithAggregationInput = {
   toolNames?: Prisma.SortOrder
   languageChoiceCount?: Prisma.SortOrder
   startingGold?: Prisma.SortOrder
+  attributeBonuses?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -351,6 +358,7 @@ export type BackgroundScalarWhereWithAggregatesInput = {
   toolNames?: Prisma.StringNullableListFilter<"Background">
   languageChoiceCount?: Prisma.IntWithAggregatesFilter<"Background"> | number
   startingGold?: Prisma.IntWithAggregatesFilter<"Background"> | number
+  attributeBonuses?: Prisma.JsonWithAggregatesFilter<"Background">
   order?: Prisma.IntWithAggregatesFilter<"Background"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Background"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Background"> | Date | string
@@ -365,6 +373,7 @@ export type BackgroundCreateInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -383,6 +392,7 @@ export type BackgroundUncheckedCreateInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -399,6 +409,7 @@ export type BackgroundUpdateInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -417,6 +428,7 @@ export type BackgroundUncheckedUpdateInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -434,6 +446,7 @@ export type BackgroundCreateManyInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -448,6 +461,7 @@ export type BackgroundUpdateManyMutationInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -463,6 +477,7 @@ export type BackgroundUncheckedUpdateManyInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -506,6 +521,7 @@ export type BackgroundCountOrderByAggregateInput = {
   toolNames?: Prisma.SortOrder
   languageChoiceCount?: Prisma.SortOrder
   startingGold?: Prisma.SortOrder
+  attributeBonuses?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -655,6 +671,7 @@ export type BackgroundCreateWithoutSystemInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -671,6 +688,7 @@ export type BackgroundUncheckedCreateWithoutSystemInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -717,6 +735,7 @@ export type BackgroundScalarWhereInput = {
   toolNames?: Prisma.StringNullableListFilter<"Background">
   languageChoiceCount?: Prisma.IntFilter<"Background"> | number
   startingGold?: Prisma.IntFilter<"Background"> | number
+  attributeBonuses?: Prisma.JsonFilter<"Background">
   order?: Prisma.IntFilter<"Background"> | number
   createdAt?: Prisma.DateTimeFilter<"Background"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Background"> | Date | string
@@ -731,6 +750,7 @@ export type BackgroundCreateWithoutCharacterSheetsInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -748,6 +768,7 @@ export type BackgroundUncheckedCreateWithoutCharacterSheetsInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -779,6 +800,7 @@ export type BackgroundUpdateWithoutCharacterSheetsInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -796,6 +818,7 @@ export type BackgroundUncheckedUpdateWithoutCharacterSheetsInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -811,6 +834,7 @@ export type BackgroundCreateWithoutFeaturesInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -828,6 +852,7 @@ export type BackgroundUncheckedCreateWithoutFeaturesInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -859,6 +884,7 @@ export type BackgroundUpdateWithoutFeaturesInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -876,6 +902,7 @@ export type BackgroundUncheckedUpdateWithoutFeaturesInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -891,6 +918,7 @@ export type BackgroundCreateManySystemInput = {
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
   startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -905,6 +933,7 @@ export type BackgroundUpdateWithoutSystemInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -921,6 +950,7 @@ export type BackgroundUncheckedUpdateWithoutSystemInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -937,6 +967,7 @@ export type BackgroundUncheckedUpdateManyWithoutSystemInput = {
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -992,6 +1023,7 @@ export type BackgroundSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   toolNames?: boolean
   languageChoiceCount?: boolean
   startingGold?: boolean
+  attributeBonuses?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1011,6 +1043,7 @@ export type BackgroundSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   toolNames?: boolean
   languageChoiceCount?: boolean
   startingGold?: boolean
+  attributeBonuses?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1027,6 +1060,7 @@ export type BackgroundSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   toolNames?: boolean
   languageChoiceCount?: boolean
   startingGold?: boolean
+  attributeBonuses?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1043,12 +1077,13 @@ export type BackgroundSelectScalar = {
   toolNames?: boolean
   languageChoiceCount?: boolean
   startingGold?: boolean
+  attributeBonuses?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BackgroundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "skillKeys" | "toolNames" | "languageChoiceCount" | "startingGold" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["background"]>
+export type BackgroundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "skillKeys" | "toolNames" | "languageChoiceCount" | "startingGold" | "attributeBonuses" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["background"]>
 export type BackgroundInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   features?: boolean | Prisma.Background$featuresArgs<ExtArgs>
@@ -1079,6 +1114,7 @@ export type $BackgroundPayload<ExtArgs extends runtime.Types.Extensions.Internal
     toolNames: string[]
     languageChoiceCount: number
     startingGold: number
+    attributeBonuses: runtime.JsonValue
     order: number
     createdAt: Date
     updatedAt: Date
@@ -1517,6 +1553,7 @@ export interface BackgroundFieldRefs {
   readonly toolNames: Prisma.FieldRef<"Background", 'String[]'>
   readonly languageChoiceCount: Prisma.FieldRef<"Background", 'Int'>
   readonly startingGold: Prisma.FieldRef<"Background", 'Int'>
+  readonly attributeBonuses: Prisma.FieldRef<"Background", 'Json'>
   readonly order: Prisma.FieldRef<"Background", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Background", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Background", 'DateTime'>

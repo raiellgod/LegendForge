@@ -1,4 +1,8 @@
-import type { DiceTerm, RollResult } from "../types/game-table-types";
+import type {
+  DiceTerm,
+  RollAdvantageState,
+  RollResult,
+} from "../types/game-table-types";
 
 export function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -8,9 +12,39 @@ export function normalizeDiceExpression(expression: string) {
   return expression.toLowerCase().replace(/\s+/g, "").replace(/d%/g, "d100");
 }
 
+function normalizeAdvantageCount(value: number) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(20, Math.floor(value)));
+}
+
+function hasD20Term(expression: string) {
+  const terms = expression.match(/[+-]?[^+-]+/g)?.filter(Boolean) ?? [];
+
+  return terms.some((rawTerm) => {
+    const term = rawTerm.replace(/^[+-]/, "");
+
+    return /^(\d*)d20$/.test(term);
+  });
+}
+
+function rollAdvantagePool(quantity: number) {
+  const rolls = Array.from({ length: quantity }, () => {
+    return Math.floor(Math.random() * 6) + 1;
+  });
+
+  return {
+    rolls,
+    highest: Math.max(...rolls),
+  };
+}
+
 export function rollDiceExpression(
   expression: string,
   author: string,
+  advantageState?: RollAdvantageState,
 ): RollResult {
   const normalizedExpression = normalizeDiceExpression(expression);
 
@@ -119,6 +153,36 @@ export function rollDiceExpression(
       `${sign < 0 ? "-" : ""}${quantity}d${sides} [${rolls.join(", ")}]`,
     );
     displayParts.push(rolls.join(", "));
+  }
+
+  const advantages = normalizeAdvantageCount(advantageState?.advantages ?? 0);
+  const disadvantages = normalizeAdvantageCount(
+    advantageState?.disadvantages ?? 0,
+  );
+
+  const advantageBalance = advantages - disadvantages;
+
+  if ((advantages > 0 || disadvantages > 0) && hasD20Term(normalizedExpression)) {
+    breakdownParts.push(
+      `Vantagens ${advantages} · Desvantagens ${disadvantages} · Saldo ${advantageBalance >= 0 ? "+" : ""}${advantageBalance}`,
+    );
+
+    if (advantageBalance !== 0) {
+      const poolSize = Math.abs(advantageBalance);
+      const advantagePool = rollAdvantagePool(poolSize);
+      const advantageModifier =
+        advantageBalance > 0 ? advantagePool.highest : -advantagePool.highest;
+
+      total += advantageModifier;
+
+      breakdownParts.push(
+        advantageBalance > 0
+          ? `Bônus de vantagem: maior de ${poolSize}d6 [${advantagePool.rolls.join(", ")}] = +${advantagePool.highest}`
+          : `Penalidade de desvantagem: maior de ${poolSize}d6 [${advantagePool.rolls.join(", ")}] = -${advantagePool.highest}`,
+      );
+    } else {
+      breakdownParts.push("Vantagens e desvantagens se anularam.");
+    }
   }
 
   return {
