@@ -1,877 +1,313 @@
 # 🧠 DATABASE SETUP — LegendForge
 
----
+> Atualizado para novo chat em 07/07/2026. Contexto consolidado após a sequência 4.6.6 — Idiomas por fonte.
 
-Este documento descreve:
 
-- Estrutura do banco
-- Regras de negócio
-- Progresso da implementação com Prisma
-- Domínio de campanhas, mesa e ficha
-- Regras de progressão/magia adicionadas na 4.27
-- Impacto da refatoração estrutural da ficha pronta na 4.28
-- Regras avançadas de equipamento, features e Level Up preview na 4.29
-- Próximos passos da Fase 4
+## 📌 Status atual
+
+Banco funcional com Prisma/PostgreSQL, Better Auth, campanhas, mesa, sistema RPG, fichas e relações avançadas.
+
+Última expansão concluída: **4.6.6 — Idiomas por fonte**.
 
 ---
 
-# 📌 STATUS ATUAL — 08/06/2026
+## ✅ Modelos principais implementados
 
-## ✅ Implementado
-
-- Banco modelado e funcional.
-- Prisma integrado e funcionando.
-- Better Auth integrado ao banco.
-- Auth persistindo dados corretamente.
-- Campanhas implementadas.
-- Participantes implementados.
-- Sessões de jogo implementadas.
-- Atores de campanha implementados.
-- Tokens de cena implementados no nível atual.
-- Sistema RPG base implementado.
-- Classes, ancestralidades, antecedentes, magias e equipamentos semeados.
-- `LevelProgression` implementado para progressão por classe/nível.
-- `ClassSpell` implementado para magias permitidas por classe.
-- `CharacterClass.spellcastingAbilityKey` implementado para atributo de conjuração.
-- CharacterSheet e tabelas relacionadas criadas.
-- `CharacterSheetClass` criado para níveis por classe/multiclasse.
-- Rascunho de ficha salva/carrega.
-- Classe, ancestralidade e antecedente persistem na ficha.
-- Atributos persistem em `CharacterSheetStat`.
-- Perícias persistem em `CharacterSheetSkill`.
-- Magias persistem em `CharacterSheetSpell`.
-- Equipamentos iniciais persistem em `CharacterSheetEquipment`.
-- `Equipment.imageUrl` implementado para imagem/ícone futuro de item.
-- Seed modularizado em `backend/prisma/seed-data`.
-- Campos de Sobre/aparência/personalidade/história persistem.
-- Ficha pronta carrega progressão da classe para exibir espaços de magia.
-- Ficha pronta carrega `classes[]` para exibir níveis por classe.
-- Ficha pronta em modal e pop-out consome os mesmos dados persistidos.
-- Retrato/token por URL persistem e sincronizam com ator/token.
-- Rota pop-out carrega ficha por `campaignId` e `sheetId`.
-
-## 🚧 Em andamento
-
-- 4.31.7 — atualização da documentação final da Fase 4.
-- 4.31.8 — commit de fechamento da Fase 4.
-- Fase 4.5 planejada para revisão estrutural antes da Fase 5.
-
-## ❌ Ainda futuro
-
-- Regras SQL avançadas.
-- Triggers.
-- Constraints finas para regras de jogo avançadas.
-- Upload real de imagens.
-- Controle de slots usados.
-- Campos estruturados de dano de magia.
-- Multiclasse real com salvamento de Level Up e adição de nova classe.
-- Proficiências editáveis pelo GM.
-- Armadura/defesa como camada mecânica separada da roupa visual.
-- Fichas próprias de NPC e criaturas.
-- Sincronização em tempo real de chat/rolagens/tokens.
-- Persistência futura de chat e rolagens.
-
----
-
-# 🗺️ BANCO DE DADOS — NÚCLEO ATUAL
-
-## Auth — Better Auth Core
-
-Tabelas oficiais:
-
-- `user`
-- `session`
-- `account`
-- `verification`
-
-Responsabilidade:
-
-- identidade
-- sessão
-- autenticação
-- vínculo de todo domínio com `user.id`
-
----
-
-## Campanhas
-
-Modelos relacionados:
-
-- `Campaign`
-- `Participant`
-- `GameSession`
-- `CampaignActor`
-- `SceneToken`
-- `CharacterSheet`
-
-Responsabilidades:
-
-- representar mundo/campanha
-- guardar owner
-- permitir visibilidade pública/futura busca
-- receber participantes
-- conter atores de campanha, tokens e fichas
-
----
-
-## Participantes
-
-Regras importantes:
-
-- usuário não deve entrar duas vezes na mesma campanha
-- owner não deve ser removido da própria campanha
-- permissões críticas devem ficar no backend/banco
-- futuro: status e solicitações de entrada mais robustos
-
----
-
-## CampaignActor
-
-Uso atual:
-
-- representa entidade/personagem/NPC/criatura dentro da campanha
-- pode estar na mesa ou biblioteca
-- alimenta a aba Personagens
-- alimenta a ficha pronta como ator vinculado
-- não substitui a ficha completa
-
-Regra:
+### Auth
 
 ```txt
-CampaignActor = ator/entidade da campanha.
-CharacterSheet = ficha completa do personagem.
+User
+Session
+Account
+Verification
+```
+
+### Campanha e mesa
+
+```txt
+Campaign
+Participant
+GameSession
+CampaignActor
+SceneToken
+```
+
+### Sistema RPG
+
+```txt
+GameSystem
+Stat
+Skill
+Language
+Ancestry
+Background
+CharacterClass
+CharacterSubclass
+Feature
+Spell
+Equipment
+LevelProgression
+ClassSpell
+```
+
+### Ficha
+
+```txt
+CharacterSheet
+CharacterSheetStat
+CharacterSheetSkill
+CharacterSheetSpell
+CharacterSheetLanguage
+CharacterSheetEquipment
+CharacterSheetClass
 ```
 
 ---
 
-## SceneToken
+## 🗣️ Idiomas — 4.6.6
 
-Uso atual:
+### Novos/atualizados
 
-- representa presença visual no mapa/cena
-- ligado a `CampaignActor`
-- possui posição, tamanho e imagem
-- tamanho de token já é editável/persistido no nível atual
-- token pode receber atualização de imagem quando a ficha salva tokenImageUrl/tokenImageFit
+```txt
+Language
+CharacterSheetLanguage
+Ancestry.languageKeys
+Background.languageKeys
+Background.languageChoiceCount
+GameSystem.languages
+CharacterSheet.languages
+```
 
----
-
-## Sistema RPG
-
-Modelos atuais:
-
-- `GameSystem`
-- `Stat`
-- `Skill`
-- `Ancestry`
-- `Background`
-- `CharacterClass`
-- `CharacterSubclass`
-- `Feature`
-- `Spell`
-- `Equipment`
-- `LevelProgression`
-- `ClassSpell`
-
-Status:
-
-- sistema base D&D-like/LegendForge iniciado
-- dados principais no seed
-- conteúdos grandes podem começar no seed e migrar para admin/importadores depois
-- seed deve ser modularizado antes de crescer muito em magias/itens
-
----
-
-## CharacterSheet — Fase 4
-
-Modelos relacionados:
-
-- `CharacterSheet`
-- `CharacterSheetStat`
-- `CharacterSheetSkill`
-- `CharacterSheetSpell`
-- `CharacterSheetEquipment`
-
-Estado atual:
-
-- ficha pode ser criada como rascunho
-- ficha pertence à campanha, sistema e owner
-- campos conceituais persistem
-- classe/ancestralidade/antecedente persistem
-- atributos persistem
-- perícias persistem
-- magias persistem
-- equipamentos persistem
-- campos de sobre persistem
-- status pode avançar para ficha pronta
-- ficha pronta consome dados persistidos e progressão de classe
-- pop-out da ficha consome a mesma fonte de dados da ficha modal
-
----
-
-# 🪄 REGRAS DE MAGIA E PROGRESSÃO — 4.27
-
-## CharacterClass.spellcastingAbilityKey
+### Language
 
 Responsabilidade:
 
 ```txt
-Define qual atributo a classe usa para conjuração.
+Cadastro de idiomas disponíveis por sistema.
 ```
 
-Exemplos:
+Campos esperados:
 
 ```txt
-Bardo      → charisma
-Devoto     → wisdom
-Mago       → intelligence
-Bárbaro    → null
+id
+systemId
+key
+name
+description
+order
+createdAt
+updatedAt
 ```
 
-Se for `null`, a classe não possui ataque mágico/CD de magia no nível atual da regra.
+Regras:
 
----
+```txt
+@@unique([systemId, key])
+@@unique([systemId, name])
+```
 
-## LevelProgression
+### CharacterSheetLanguage
 
 Responsabilidade:
 
 ```txt
-Guardar progressão por classe e nível.
+Idiomas conhecidos por uma ficha, com fonte.
 ```
 
-Campos relevantes:
+Campos esperados:
 
 ```txt
-level
-proficiencyBonus
-cantripsKnown
-spellsKnown
-spellsPrepared
-spellSlotsLevel1
-spellSlotsLevel2
-spellSlotsLevel3
-spellSlotsLevel4
-spellSlotsLevel5
-spellSlotsLevel6
-spellSlotsLevel7
-spellSlotsLevel8
-spellSlotsLevel9
+id
+characterSheetId
+languageId
+source
+createdAt
+updatedAt
 ```
 
-Uso atual:
-
-- Builder usa nível 1 como base inicial para limites.
-- Ficha pronta usa o nível atual da ficha para exibir slots.
-- Futuramente será usado no fluxo de subir de nível.
-
----
-
-## ClassSpell
-
-Responsabilidade:
+Regras:
 
 ```txt
-Definir quais magias uma classe pode aprender/conjurar e a partir de qual nível.
+@@unique([characterSheetId, languageId])
 ```
 
-Campos principais:
+Fonte atual:
 
 ```txt
-classId
-spellId
-minimumClassLevel
-isAlwaysKnown
+builder
 ```
 
-Uso atual:
-
-- Rota de opções retorna `classSpells` por classe.
-- Builder filtra magias pela classe selecionada.
-- Builder considera `minimumClassLevel <= 1` no fluxo inicial.
-
----
-
-## Spell seed
-
-A 4.27 expandiu o seed mínimo de magias para permitir testar:
-
-- filtro por classe
-- limite de truques
-- limite de magias
-- dano detectado em descrição
-- classes conjuradoras diferentes
-- classes sem conjuração
-
-Exemplos de magias semeadas:
+Fontes previstas:
 
 ```txt
-Luz Menor
-Toque Fúnebre
-Faísca Arcana
-Rajada Mental
-Chama Instável
-Mãos Sombrias
-Véu Ilusório
-Pulso Arcano
-Sussurros dos Mortos
-Dardo de Energia
-Curar Ferimentos
-Escudo Reativo
-Raízes Prendentes
-Comando Sombrio
-Marca do Agouro
-Onda Trovejante
+class
+background
+ancestry
+feature
+manual
 ```
 
 ---
 
-# 🧾 FICHA PRONTA E BANCO — 4.28
+## 🧩 Regras atuais de idioma
 
-A 4.28 não criou novos modelos de banco. A mudança principal foi de arquitetura de frontend e consumo dos dados persistidos.
-
-## O que mudou
-
-- `CharacterReadySheetView` virou o miolo reutilizável da ficha.
-- O modal e o pop-out usam a mesma estrutura.
-- A rota pop-out carrega:
-  - campanha
-  - ficha pronta por `sheetId`
-  - atores da campanha
-  - opções do sistema para perícias
-- A ficha continua usando os modelos existentes:
-  - `CharacterSheet`
-  - `CharacterSheetStat`
-  - `CharacterSheetSkill`
-  - `CharacterSheetSpell`
-  - `CharacterSheetEquipment`
-  - `CampaignActor`
-  - `SceneToken`
-
-## Imagens
-
-Campos já usados:
+Automáticos:
 
 ```txt
-CharacterSheet.portraitUrl
-CharacterSheet.tokenImageUrl
-CharacterSheet.tokenImageFit
-CampaignActor.portraitUrl
-SceneToken.imageUrl
-SceneToken.imageFit
+Ancestry.languageKeys
+Background.languageKeys
 ```
 
-Fluxo atual:
+Escolhas extras:
 
 ```txt
-Salvar imagem na ficha
-→ atualiza CharacterSheet
-→ atualiza CampaignActor.portraitUrl
-→ atualiza tokens existentes do ator com tokenImageUrl/tokenImageFit
+CharacterSheetLanguage.source === "builder"
 ```
 
-Limitação:
+Quantidade:
 
 ```txt
-Ainda é URL manual. Upload real entra depois.
+Background.languageChoiceCount
 ```
 
-## Pop-out
-
-A rota:
+Validação de finalização:
 
 ```txt
-/campaigns/[id]/sheets/[sheetId]
+- deve ter exatamente a quantidade exigida de escolhas extras
+- não pode repetir idioma extra
+- não pode escolher como extra um idioma automático
 ```
-
-não precisa de novo modelo. Ela usa as rotas/API existentes para carregar dados.
-
-A comunicação de rolagens do pop-out para a mesa é local, via navegador:
-
-```txt
-window.opener.postMessage(...)
-```
-
-Isso não persiste no banco e não sincroniza entre contas.
 
 ---
 
-# ⚔️ REGRAS DE EQUIPAMENTO, FEATURES E LEVEL UP PREVIEW — 4.29
+## ⚔️ Equipamentos — estado antes da próxima micro
 
-
-A 4.29 consolidou a primeira camada de regras avançadas para uso real da ficha pronta em mesa.
-
-### Equipamentos e ataques reais
-
-- `Equipment` recebeu campos estruturados para ataque:
-  - `damageFormula`
-  - `damageType`
-  - `attackType`
-  - `attackAbilityKey`
-  - `alternativeAbilityKey`
-  - `weaponGroup`
-  - `normalRange`
-  - `longRange`
-  - `isFinesse`
-  - `isThrown`
-  - `isTwoHanded`
-  - `isVersatile`
-  - `versatileDamageFormula`
-  - `attackBonus`
-  - `damageBonus`
-- O seed de equipamentos ofensivos foi atualizado.
-- A ficha pronta calcula ataque real por equipamento usando atributo, proficiência temporária e bônus do item.
-- A aba Combate exibe os ataques equipados.
-- A aba Bolsa continua exibindo ataques/danos como inventário de uso rápido.
-- GM possui campo manual de CA do alvo na aba Combate.
-- Player não vê nem preenche a CA exata do alvo.
-- Comparação automática contra CA ainda não existe; por enquanto a CA aparece apenas como referência no texto da rolagem do GM.
-
-### Features reais
-
-- As rotas de ficha retornam `features` reais disponíveis para a ficha.
-- A aba Features exibe recursos/traços por origem:
-  - classe
-  - subclasse
-  - ancestralidade
-  - outras fontes futuras
-- Features são exibidas como texto mecânico/narrativo.
-- Aplicação automática de efeitos de features ainda é futura.
-
-### Subclasse por nível correto
-
-- `CharacterClass.subclassSelectionLevel` foi adicionado.
-- O seed define o nível de escolha de subclasse.
-- O backend valida que uma subclasse só pode ser escolhida no nível correto.
-- A subclasse precisa pertencer à classe escolhida.
-- A ficha mostra status de subclasse: indisponível, pendente ou escolhida.
-
-### Level Up preview
-
-- A aba Features recebeu botão Level Up.
-- O Level Up abre como modal dentro da ficha pronta/pop-out.
-- O modal ainda não salva alterações.
-- O backend envia `levelUpPreview` com:
-  - nível atual
-  - próximo nível
-  - progressão atual
-  - próxima progressão
-  - features novas do próximo nível
-  - status de subclasse
-- A decisão arquitetural ficou registrada: nível do personagem é diferente de nível de classe.
-- O Level Up real precisará futuramente permitir subir uma classe existente ou adicionar multiclasse.
-- Ancestralidade, antecedente, equipamentos iniciais e origem do personagem não são reprocessados no Level Up.
-
-
----
-
-# 🧠 REGRAS QUE DEVEM EXISTIR NO BANCO OU BACKEND
-
-## Campanhas
-
-- apenas owner pode deletar campanha
-- apenas owner/GM pode alterar configurações críticas
-- usuário deve ver campanhas onde é owner ou participant
-- campanhas inativas não devem aparecer na home
-- inviteCode deve ser único
-
-## Participantes
-
-- owner não pode ser removido da própria campanha
-- usuário não deve entrar duas vezes na mesma campanha
-- alteração de GM deve preservar consistência
-- futuro: status `PENDING`, `APPROVED`, `REMOVED`
-
-## Sistemas RPG
-
-- stats devem pertencer ao sistema correto
-- skills devem pertencer ao sistema correto
-- personagem deve respeitar sistema da campanha
-- classe/ancestralidade/antecedente escolhidos devem pertencer ao mesmo sistema
-- nível deve respeitar limites
-- atributos devem respeitar limites
-- progressão deve pertencer à classe correta
-- magia permitida deve respeitar `ClassSpell`
-
-## Character Builder
-
-- Conceito exige nome.
-- Classe exige classe escolhida.
-- Ancestralidade exige ancestralidade escolhida.
-- Antecedente exige antecedente escolhido.
-- Atributos devem respeitar o método atual de Standard Array.
-- Perícias não devem duplicar no futuro.
-- Magias devem respeitar classe/nível.
-- Limites de truques/magias usam progressão da classe.
-- Ao trocar classe, magias antigas são limpas do draft.
-- Salvamento deve aceitar rascunho incompleto sem quebrar.
-
----
-
-# 🔮 REGRAS FUTURAS IMPORTANTES
-
-## Magias
-
-Campos futuros desejáveis em `Spell` ou estrutura relacionada:
+`Equipment` já possui campos estruturados para ataque:
 
 ```txt
 damageFormula
 damageType
-requiresAttackRoll
-requiresSavingThrow
-savingThrowAbility
-areaShape
-areaSize
-usesSpellSlot
-scalingFormula
+attackType
+attackAbilityKey
+alternativeAbilityKey
+weaponGroup
+normalRange
+longRange
+isFinesse
+isThrown
+isTwoHanded
+isVersatile
+versatileDamageFormula
+attackBonus
+damageBonus
+imageUrl
 ```
 
-Motivo:
+A ficha pronta calcula ataque real por equipamento, mas ainda há pendência:
 
 ```txt
-Hoje dano é detectado pela descrição. Funciona para teste, mas não é ideal para longo prazo.
+Proficiência de equipamento ainda precisa ser aplicada por fonte real.
 ```
 
-## Perícias
-
-- Classe fornece lista pré-definida de perícias permitidas.
-- Classe fornece quantidade de escolhas.
-- Antecedente fornece quantidade de perícias e sugestões.
-- Usuário escolhe manualmente.
-- Sistema trava duplicidade.
-
-## Proficiências
-
-- Armas, escudos, ferramentas e similares devem ser editáveis pelo GM.
-- Personagens podem aprender proficiências durante a campanha.
-
-## Armadura/defesa
-
-- Roupa/aparência é cosmética.
-- Defesa vem de camada mecânica aplicada à roupa/equipamento.
-- Player pode trocar aparência sem perder defesa.
-
-## Personagens ativos
-
-- Cada player deve ter apenas 1 personagem ativo por campanha.
-- GM pode ter vários NPCs/criaturas.
-- GM deve ter apenas 1 personagem próprio ativo.
-- NPCs/criaturas podem ir para biblioteca.
-- Personagens de player precisam de fluxo próprio de inativar/remover/excluir.
-
-## Multiclasse
-
-- Cada ficha poderá ter múltiplas classes.
-- O nível total será a soma dos níveis por classe.
-- Ao subir de nível, o jogador deverá escolher qual classe recebe o novo nível.
-- Progressão, magias, features e proficiências precisam considerar a classe escolhida.
-
----
-
-# 🧱 ARQUITETURA DE RESPONSABILIDADE
-
-| Camada | Responsabilidade |
-|---|---|
-| DB | integridade estrutural |
-| SQL RULES | regras críticas complexas futuras |
-| Prisma | acesso tipado |
-| Backend | lógica, permissões e validação |
-| Frontend | experiência e feedback visual |
-
----
-
-# 🧪 PASSOS DE IMPLEMENTAÇÃO
-
-## Fase 1 — Setup Prisma
-
-- [x] Criar `schema.prisma`
-- [x] Validar schema
-- [x] Gerar Prisma Client
-- [x] Conectar com banco
-
-## Fase 2 — Auth
-
-- [x] Better Auth integrado
-- [x] User
-- [x] Session
-- [x] Account
-- [x] Verification
-- [x] Sessão via cookie validada
-
-## Fase 3 — Campanhas/Mesa
-
-- [x] Campaign
-- [x] Participant
-- [x] GameSession
-- [x] rotas principais de campanha
-- [x] join por invite code
-- [x] participantes
-- [x] atores reais de campanha
-- [x] tokens reais na cena
-
-## Fase 4 — Sistema RPG e ficha
-
-- [x] GameSystem
-- [x] Stat
-- [x] Skill
-- [x] Ancestry
-- [x] Background
-- [x] CharacterClass
-- [x] CharacterSubclass
-- [x] Feature
-- [x] Spell
-- [x] Equipment
-- [x] LevelProgression
-- [x] ClassSpell
-- [x] CharacterSheet
-- [x] CharacterSheetStat
-- [x] CharacterSheetSkill
-- [x] CharacterSheetSpell
-- [x] CharacterSheetEquipment
-- [x] rotas de CharacterSheet
-- [x] builder visual
-- [x] rascunho persistente
-- [x] classe/ancestralidade/antecedente persistentes
-- [x] atributos persistentes
-- [x] perícias persistentes
-- [x] magias persistentes
-- [x] equipamentos persistentes
-- [x] sobre/revisão visual
-- [x] criação de personagem vazio no fluxo novo
-- [x] ficha pronta na mesa
-- [x] ficha pronta em pop-out
-- [x] rolagens da ficha via `postMessage`
-- [x] teste regressivo da 4.28
-
----
-
-# 🧭 Próximo foco
+Próxima micro recomendada:
 
 ```txt
-4.31.7 — Atualizar documentação final da Fase 4
-4.31.8 — Commit de fechamento da Fase 4
-Depois do commit: abrir Fase 4.5
-```
-
-# 🌱 Seed — decisão atual
-
-Com muitas magias, itens e features, a seed principal tende a crescer demais.
-
-Decisão recomendada:
-
-```txt
-Antes de cadastrar grande volume de conteúdo, modularizar o seed em arquivos separados.
-```
-
-Fase planejada:
-
-```txt
-4.31 — Modularização e expansão do conteúdo base do sistema
-4.31.1 — Separar seed em arquivos por domínio
-4.31.2 — Expandir equipamentos
-4.31.3 — Expandir magias
-4.31.4 — Expandir features
-4.31.5 — Expandir pacotes iniciais
-```
-
-Estrutura futura sugerida:
-
-```txt
-backend/prisma/seeds/
-  system.seed.ts
-  stats.seed.ts
-  skills.seed.ts
-  ancestries.seed.ts
-  backgrounds.seed.ts
-  classes.seed.ts
-  subclasses.seed.ts
-  level-progressions.seed.ts
-  features.seed.ts
-  spells.seed.ts
-  class-spells.seed.ts
-  equipment.seed.ts
-  starting-equipment.seed.ts
+4.6.7 — Proficiências de equipamento por fonte
 ```
 
 ---
 
-# 🧩 MULTICLASSE — 4.30
+## 🧍 CharacterSheet — estado
 
-## Novo modelo
-
-```txt
-CharacterSheetClass
-```
-
-Responsabilidade:
+`CharacterSheet` guarda:
 
 ```txt
-Representar cada classe vinculada à ficha e o nível individual daquela classe.
+campanha
+sistema
+owner
+ator vinculado
+classe principal legacy
+ancestralidade
+antecedente
+nível total
+status
+dados narrativos
+PV/CA/status
+imagens
 ```
 
-Campos principais:
+Relacionamentos usados pela ficha pronta:
 
 ```txt
-characterSheetId
-classId
-subclassId
-level
-isPrimary
-order
+stats
+skills
+spells
+languages
+equipment
+classes
+features calculadas no backend
+levelUpPreview calculado no backend
 ```
-
-## Regra central
-
-```txt
-CharacterSheet.level = nível total do personagem.
-CharacterSheetClass.level = nível naquela classe específica.
-```
-
-Exemplo futuro:
-
-```txt
-CharacterSheet.level = 5
-CharacterSheetClass: Bardo nível 3
-CharacterSheetClass: Necromante nível 2
-```
-
-## Estado atual
-
-- Modelo criado e migrado.
-- Fichas novas sincronizam classe principal.
-- Fichas antigas receberam backfill.
-- API carrega `classes[]`.
-- Ficha pronta exibe classes e níveis individuais.
-- Proficiência continua baseada no nível total.
-- Features são calculadas por nível individual da classe.
-- Magia usa classe conjuradora ativa.
-- Level Up permite escolher visualmente a classe que receberia o nível.
-- Subclasse é avaliada a partir da classe escolhida.
-
-## Ainda futuro
-
-- Salvar Level Up real.
-- Adicionar nova classe.
-- Escolher subclasse real durante Level Up.
-- Slots combinados para magia multiclasse.
-- Remover/aposentar campos antigos de classe única depois da transição.
 
 ---
 
-# 🧩 4.31 — Modularização e expansão do conteúdo base do sistema
+## 🪄 Magia/progressão
 
-## Resultado
+Já implementado:
 
-A 4.31 modularizou e expandiu o conteúdo base do sistema sem iniciar ainda as refatorações estruturais maiores que ficaram para a Fase 4.5.
+```txt
+CharacterClass.spellcastingAbilityKey
+LevelProgression
+ClassSpell
+CharacterSheetSpell
+```
 
-## Backend / Prisma
+A ficha pronta usa:
 
-- `backend/prisma/seed.ts` passou a atuar como orquestrador.
-- Dados do seed foram separados em `backend/prisma/seed-data/`.
-- Arquivos de dados criados/organizados por domínio:
-  - `ancestries.ts`
-  - `backgrounds.ts`
-  - `classes.ts`
-  - `subclasses.ts`
-  - `stats.ts`
-  - `skills.ts`
-  - `spells.ts`
-  - `class-spells.ts`
-  - `equipment.ts`
-  - `features.ts`
-- `Equipment.imageUrl` foi adicionado ao schema.
-- Foi criada migration para `imageUrl`.
-- O seed de equipamentos passou a preencher placeholders como `/images/equipment/<key>.png`.
-
-## Conteúdo expandido
-
-- Skills novas, incluindo opções ligadas a Força além de Atletismo.
-- Antecedentes revisados para usar skills novas.
-- Ancestralidades adicionais.
-- Subclasses adicionais.
-- Equipamentos adicionais.
-- Magias adicionais.
-- Vínculos classe-magia revisados.
-- Features de ancestralidade, classe e subclasse adicionadas.
-
-## Frontend
-
-- `CharacterBuilderEquipmentOption` recebeu `imageUrl`.
-- A ficha pronta passou a exibir imagem ou fallback por inicial nos cards de equipamento.
-- Aba Combate mostra imagem/inicial nos ataques por equipamento.
-- Aba Bolsa mostra imagem/inicial nos itens.
-- Fallback evita quebra enquanto as imagens reais ainda não existem.
-
-## Limite proposital
-
-A 4.31 não implementou ainda:
-
-- proficiência real por grupo de arma/proteção/ferramenta;
-- escolha real de equipamento inicial;
-- revisão profunda de ARMOR/proteção/revestimento no domínio;
-- sistema de roupa visual separado da proteção mecânica;
-- lojas/inventário avançado.
-
-Esses pontos foram movidos para a Fase 4.5.
-
+```txt
+CD = 8 + proficiência + modificador de conjuração
+Ataque mágico = proficiência + modificador de conjuração
+Slots = LevelProgression da classe conjuradora ativa
+```
 
 ---
 
-# ✅ Fase 4 — Fechamento
+## ⬆️ Multiclasse / Level Up
 
-A Fase 4 foi concluída no nível atual com a criação/ficha de personagem funcionando como base jogável de mesa.
-
-## Entregas finais consolidadas
-
-- Character Builder persistido e organizado por etapas.
-- Ficha pronta reutilizável em `CharacterReadySheetView`.
-- Ficha em modal e pop-out.
-- Rolagens automáticas pela ficha.
-- Regras avançadas de magia/progressão inicial.
-- Ataques reais por equipamento no nível atual.
-- Features reais por classe, subclasse e ancestralidade.
-- Level Up preview visual.
-- Fundação de multiclasse com `CharacterSheetClass`.
-- Seed modularizado em `backend/prisma/seed-data`.
-- Conteúdo base expandido:
-  - ancestralidades;
-  - antecedentes;
-  - perícias;
-  - subclasses;
-  - equipamentos;
-  - magias;
-  - vínculos classe-magia;
-  - features.
-- `Equipment.imageUrl` adicionado ao banco.
-- Seed de equipamentos com placeholders de imagem.
-- Ficha pronta exibindo imagem/inicial de equipamento em Bolsa e Combate.
-- Teste regressivo final da Fase 4 concluído no nível atual.
-
-## Decisão importante
-
-Algumas decisões estruturais cresceram além da Fase 4 e foram movidas para uma fase intermediária antes da Fase 5.
+Já implementado como fundação:
 
 ```txt
-[planejado] Fase 4.5 — Revisão estrutural de regras de personagem/equipamento
+CharacterSheet.level = nível total
+CharacterSheetClass.level = nível por classe
 ```
 
-A Fase 4.5 será construída junto com o usuário e deve discutir/refatorar, entre outras coisas:
+Ainda futuro:
 
-- proficiências reais de equipamento por classe;
-- grupos de armas/proteções/ferramentas;
-- escolhas de equipamento inicial no builder;
-- armaduras como proteção/revestimento aplicado, não roupa visual;
-- diferença entre roupa/aparência e equipamento mecânico;
-- categorias de equipamento próprias do LegendForge;
-- impacto em ficha pronta, inventário, lojas, combate e Level Up;
-- outras decisões estruturais que ficaram grandes demais para fechar dentro da Fase 4.
+```txt
+- level up real completo
+- adicionar nova classe
+- escolhas de subclasse no level up
+- ASI/talentos
+- PV por classe no level up
+```
 
 ---
 
-# 🎯 Próximo foco
+## ❌ Futuro do banco
+
+Ainda não implementado:
 
 ```txt
-4.31.7 — Atualizar documentação final da Fase 4
-4.31.8 — Commit de fechamento da Fase 4
-Depois do commit: abrir Fase 4.5
+ChatMessage persistido
+RollLog persistido
+Scene real/múltiplas cenas
+Fog persistida por cena
+Drawing persistido
+NPC sheet
+Creature sheet / bestiary
+Spell slot usage
+Conditions/effects
+Inventory transactions/shops
+File uploads
 ```
+

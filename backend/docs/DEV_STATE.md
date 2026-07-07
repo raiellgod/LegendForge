@@ -1,843 +1,194 @@
 # 📊 DEV STATE — LegendForge
 
----
+> Atualizado para novo chat em 07/07/2026. Contexto consolidado após a sequência 4.6.6 — Idiomas por fonte.
+
 
 ## 📅 Last Update
 
-08/06/2026
+07/07/2026
 
 ---
 
-## 🧱 Project Structure
+## ✅ Estado consolidado
+
+### Geral
 
 ```txt
-LegendForge/
-├── backend/
-│   ├── src/
-│   │   ├── generated/prisma/
-│   │   ├── lib/
-│   │   ├── routes/
-│   │   │   ├── campaigns.ts
-│   │   │   ├── character-sheets.ts
-│   │   │   └── systems.ts
-│   │   └── index.ts
-│   ├── prisma/
-│   │   ├── migrations/
-│   │   ├── schema.prisma
-│   │   ├── seed-data/
-│   │   └── seed.ts
-│   ├── docker-compose.yml
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   └── campaigns/[id]/
-│   │   │       ├── play/page.tsx
-│   │   │       └── sheets/[sheetId]/page.tsx
-│   │   ├── features/
-│   │   │   ├── character-builder/
-│   │   │   │   ├── components/
-│   │   │   │   ├── constants/
-│   │   │   │   ├── review/
-│   │   │   │   ├── services/
-│   │   │   │   ├── steps/
-│   │   │   │   ├── summary/
-│   │   │   │   ├── types/
-│   │   │   │   └── utils/
-│   │   │   └── game-table/
-│   │   │       ├── components/
-│   │   │       ├── constants/
-│   │   │       ├── services/
-│   │   │       ├── types/
-│   │   │       └── utils/
-│   │   ├── components/
-│   │   ├── lib/
-│   │   └── service/
-│   └── package.json
-│
-├── docs/
-└── README.md
+Branch usual: feat/game-page
+Stack: Next.js + React + Tailwind + TypeScript / Fastify + Prisma + PostgreSQL
+Auth: Better Auth por sessão/cookie
+Gerenciador: pnpm
+```
+
+### Última informação de qualidade
+
+```txt
+Backend eslint: limpo
+Frontend lint: limpo
+```
+
+Confirmado pelo usuário após a 4.6.6.5.
+
+---
+
+## ✅ Última sequência concluída
+
+```txt
+[x] 4.6.6.1 — Modelar idiomas no schema/seed/API/types
+[x] 4.6.6.2 — Backend salva languageKeys no rascunho da ficha
+[x] 4.6.6.3 — Criar etapa de idiomas no builder
+[x] 4.6.6.4 — Validar idiomas ao finalizar ficha
+[x] 4.6.6.5 — Exibir idiomas na ficha pronta
+```
+
+Commit sugerido:
+
+```bash
+git diff --stat
+git status
+git add .
+git commit -m "feat: add character language choices"
 ```
 
 ---
 
-## ⚙️ Dependencies
+## 📁 Arquivos relevantes recentes
 
 ### Backend
 
-- Node.js
-- Fastify
-- TypeScript
-- Prisma
-- PostgreSQL
-- Better Auth
-- Zod
-- Swagger
-- Scalar API Reference
-- ESLint
-- Prettier
-- pnpm
-- Docker
+```txt
+backend/prisma/schema.prisma
+backend/prisma/seed.ts
+backend/prisma/seed-data/languages.ts
+backend/prisma/seed-data/ancestries.ts
+backend/prisma/seed-data/backgrounds.ts
+backend/src/routes/systems.ts
+backend/src/routes/character-sheets.ts
+```
 
 ### Frontend
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Better Auth Client
-- lucide-react
-- ESLint
-- pnpm
-
----
-
-## 🗄️ Database — Status Real
-
-### ✅ Implementado
-
-- Better Auth tables
-- GameSystem
-- Stat
-- Skill
-- Campaign
-- Participant
-- GameSession
-- CampaignActor
-- SceneToken
-- Ancestry
-- Background
-- CharacterClass
-- CharacterSubclass
-- Feature
-- Spell
-- Equipment
-- LevelProgression
-- ClassSpell
-- CharacterSheet
-- CharacterSheetStat
-- CharacterSheetSkill
-- CharacterSheetSpell
-- CharacterSheetEquipment
-- CharacterSheetClass
-
-### ✅ Validado
-
-- registro cria usuário
-- login cria sessão
-- sessão aparece no Prisma Studio
-- campanhas são criadas com owner
-- criador entra como participante GM
-- home lista campanhas do usuário autenticado
-- página de mesa abre campanha real
-- aba Personagens consome atores reais
-- biblioteca/mesa de atores está persistida
-- tokens de cena persistem
-- posição de token persiste
-- tamanho de token persiste
-- rascunho de CharacterSheet cria no banco
-- rascunho carrega
-- classe/ancestralidade/antecedente persistem
-- atributos persistem
-- perícias persistem
-- magias persistem
-- equipamentos persistem
-- campos de sobre persistem
-- criação de personagem do zero abre draft vazio
-- player comum consegue abrir criação de personagem pela aba Personagens
-- ficha pronta carrega dados da CharacterSheet
-- ficha pronta abre no modal
-- ficha pronta abre em pop-out
-- pop-out carrega dados reais
-- pop-out envia rolagens para o chat da mesa via `postMessage`
-- retrato/token por URL persistem
-- atualização de token a partir da ficha sincroniza tokens existentes do ator
-- progressões por classe/nível foram criadas e populadas no seed
-- `ClassSpell` foi populada no seed
-- magias são filtradas por classe no builder
-- limites de truques/magias por nível funcionam no frontend
-- CD e ataque mágico real funcionam na ficha pronta
-- slots de magia aparecem na aba Magia
-- ataques reais por equipamento funcionam na ficha pronta
-- `Equipment` possui campos estruturados de ataque/dano
-- features reais aparecem na aba Features
-- subclasse respeita nível de escolha configurado em `CharacterClass.subclassSelectionLevel`
-- Level Up preview abre na ficha e mostra mudanças do próximo nível
-- `CharacterSheetClass` separa nível total e níveis por classe
-- Ficha pronta exibe classes por nível
-- Features usam nível individual da classe
-- Magia usa classe conjuradora ativa
-- Modal Level Up permite escolher visualmente qual classe receberia o próximo nível
-- Modal Level Up mostra status de subclasse por classe escolhida
-- Seed modularizado em `backend/prisma/seed-data`
-- `Equipment.imageUrl` criado e preenchido pelo seed
-- Ficha pronta exibe imagem/inicial de equipamento em Bolsa e Combate
-- Conteúdo base expandido na 4.31
-- Teste regressivo final da Fase 4 concluído
-
-### 🚧 Em andamento
-
-- 4.31.7 — documentação final da Fase 4
-- 4.31.8 — commit de fechamento da Fase 4
-- persistência/sincronização futura de ferramentas locais da mesa
-
----
-
-## 🌐 API — Status
-
-### ✅ Implementado
-
-- Fastify configurado
-- CORS funcionando para frontend local
-- Better Auth em `/api/auth/*`
-- Swagger em `/swagger.json`
-- Scalar em `/docs`
-- Helper de sessão real
-- Rotas de campanha
-- Rotas de participantes
-- Rotas de sistemas
-- Rotas de character sheets
-- Rotas de atores de campanha
-- Rotas de tokens de cena
-
-### Rotas importantes atuais
-
 ```txt
-GET    /campaigns
-POST   /campaigns
-GET    /campaigns/:id
-PATCH  /campaigns/:id
-DELETE /campaigns/:id
-
-GET    /campaigns/:id/participants
-PATCH  /campaigns/:campaignId/participants/:participantId/role
-DELETE /campaigns/:campaignId/participants/:participantId
-
-GET    /campaigns/:campaignId/actors
-POST   /campaigns/:campaignId/actors
-PATCH  /campaigns/:campaignId/actors/:actorId
-
-GET    /campaigns/:campaignId/tokens
-POST   /campaigns/:campaignId/tokens
-PATCH  /campaigns/:campaignId/tokens/:tokenId
-DELETE /campaigns/:campaignId/tokens/:tokenId
-
-GET    /systems
-GET    /systems/:systemId/character-options
-
-GET    /campaigns/:campaignId/character-sheets
-POST   /campaigns/:campaignId/character-sheets
-GET    /campaigns/:campaignId/character-sheets/:sheetId
-PATCH  /campaigns/:campaignId/character-sheets/:sheetId
-```
-
-### Mudanças relevantes da 4.27
-
-A rota:
-
-```txt
-GET /systems/:systemId/character-options
-```
-
-agora retorna, nas classes:
-
-```txt
-spellcastingAbilityKey
-levelProgressions
-classSpells
-```
-
-As rotas de ficha pronta incluem `characterClass.levelProgressions` para permitir a exibição de slots na aba Magia.
-
-### Mudanças relevantes da 4.28
-
-A 4.28 foi majoritariamente frontend. Não criou rota backend nova.
-
-Nova rota frontend:
-
-```txt
-/campaigns/[id]/sheets/[sheetId]
-```
-
-Essa rota usa APIs existentes para:
-
-- validar/carregar campanha
-- buscar a ficha
-- buscar atores
-- buscar opções do sistema
-- renderizar a mesma ficha pronta do modal em pop-out
-
----
-
-## 🎨 Frontend — Status
-
-### ✅ Implementado
-
-- Home pública
-- Login
-- Registro
-- Header privado
-- Background parchment
-- `/campaigns`
-- `/campaigns/create`
-- `/campaigns/search`
-- `/campaigns/[id]/edit`
-- `/campaigns/[id]/play`
-- `/campaigns/[id]/sheets/[sheetId]`
-
-### Página de jogo `/campaigns/[id]/play`
-
-Estado atual:
-
-- header de mesa
-- grid/mapa
-- toolbar lateral esquerda
-- painel direito com abas extraídas
-- Chat
-- Rolagens
-- Personagens
-- Diário inicial
-- Mesa/configuração inicial
-- atores reais
-- tokens/cena
-- modal de criação de personagem
-- builder de personagem
-- biblioteca de atores
-- ações de ator/personagem
-- edição de tamanho de token
-- ficha pronta de personagem
-- pop-out da ficha
-- listener de mensagens do pop-out
-- rolagens automáticas vindas da ficha
-- criação de personagem para player comum pela aba Personagens
-
----
-
-## 🧍 Character Builder — Status detalhado
-
-Pasta principal:
-
-```txt
-frontend/src/features/character-builder/
-```
-
-Etapas/componentes extraídos:
-
-- types
-- constants
-- steps config
-- utils de atributos
-- utils de perícias
-- utils de magias
-- utils de equipamentos
-- utils de sobre/about
-- utils de cálculos da ficha pronta
-- componentes genéricos
-- componentes da revisão
-- etapa Conceito
-- etapa Atributos
-- etapa Perícias
-- etapa Magias
-- etapa Equipamentos
-- etapa Sobre
-- etapa Revisão
-- modal de ficha pronta
-- view reutilizável da ficha pronta
-
-Status:
-
-- Criar personagem abre draft vazio.
-- Builder não carrega dados antigos ao criar personagem.
-- Player comum abre builder direto pelo botão `+ Personagem`.
-- Pronomes influenciam linguagem de labels principais.
-- Pronome e gênero inicial sincronizam quando apropriado.
-- Salvar rascunho funciona.
-- Finalizar ficha gera personagem/ficha pronta.
-- Ficha pronta tem abas Ficha/Status, Combate, Bolsa, Magia, Features, Perfil e Notas.
-- Ficha pronta exibe todas as perícias.
-- Bolsa mostra equipamentos, moedas e botões Ataque/Dano com ataque real por equipamento.
-- Magia mostra botões Ataque/Dano, cálculo real de conjuração e slots.
-- Perfil mostra imagem/token e campos narrativos.
-- Notas ficam separadas de Perfil.
-- Teste regressivo da 4.28 foi concluído com zero erros.
-
----
-
-## 🧾 Ready Sheet — Status detalhado da 4.29
-
-Arquivos principais:
-
-```txt
-frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
-frontend/src/features/character-builder/components/CharacterReadySheetModal.tsx
-frontend/src/app/campaigns/[id]/sheets/[sheetId]/page.tsx
 frontend/src/app/campaigns/[id]/play/page.tsx
+frontend/src/features/character-builder/constants/character-builder-steps.ts
+frontend/src/features/character-builder/types/character-builder-types.ts
+frontend/src/features/character-builder/steps/CharacterLanguagesStep.tsx
+frontend/src/features/character-builder/steps/CharacterReviewStep.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
 ```
 
-Arquitetura:
+---
+
+## 🧩 Estado funcional atual
+
+### Character Builder
+
+- abre draft vazio ao criar personagem;
+- salva rascunho;
+- carrega rascunho;
+- etapa Conceito;
+- etapa Classe;
+- etapa Ancestralidade;
+- etapa Antecedente;
+- etapa Atributos;
+- etapa Perícias;
+- etapa Idiomas;
+- etapa Magias;
+- etapa Equipamentos;
+- etapa Sobre;
+- etapa Revisão;
+- finaliza ficha.
+
+### Idiomas
+
+- idiomas carregam da API de opções do sistema;
+- ancestralidade/antecedente podem conceder idiomas automáticos;
+- antecedente pode exigir escolhas extras;
+- builder salva `draft.languageKeys`;
+- POST/PATCH salvam `languageKeys`;
+- finalização valida idiomas;
+- review mostra idiomas;
+- ficha pronta mostra idiomas no Perfil.
+
+### Ficha pronta
+
+- Modal dentro da mesa;
+- pop-out;
+- rolagens pela ficha;
+- rolagens do pop-out retornam à mesa;
+- status, combate, bolsa, magia, features, perfil e notas;
+- idiomas no Perfil;
+- imagens de equipamento em Bolsa/Combate.
+
+---
+
+## ⚠️ Atenções técnicas
+
+### Arquivos grandes
+
+Pedir versão atual do usuário antes de reescrever:
 
 ```txt
-CharacterReadySheetView
-- contém a ficha completa
-- usado no modal
-- usado no pop-out
-
-CharacterReadySheetModal
-- casca visual do modal
-
-sheets/[sheetId]/page.tsx
-- página pop-out
-- carrega dados reais
-
 play/page.tsx
-- mesa
-- chat
-- listener de postMessage
+CharacterReadySheetView.tsx
+character-sheets.ts
+systems.ts
+schema.prisma
+seed.ts
 ```
 
-Funcionalidades validadas:
+### Regra de trabalho
 
-- abrir ficha no modal
-- abrir ficha em pop-out
-- pop-out carrega a ficha certa
-- rolagem do pop-out aparece no chat da mesa
-- topo compacto da ficha
-- Ficha/Status reorganizada
-- Bolsa compacta e expansível
-- Magia compacta e expansível
-- Magia separada em Truques / Magias / Nível
-- abas futuras preparadas: Combate, Features e Notas
-- responsividade revisada
-- `<Image />` usado no lugar de `<img>` para preview, com `unoptimized`
+Antes de commit:
 
----
-
-## 🪄 Spellcasting — Status detalhado
-
-Implementado na 4.27:
-
-- `spellcastingAbilityKey` em `CharacterClass`.
-- `LevelProgression` expandido.
-- `ClassSpell` criado/populado.
-- Seed mínimo de magias expandido.
-- Builder filtra magias por classe.
-- Builder respeita nível mínimo da magia para a classe.
-- Builder valida limite de truques/magias pela progressão nível 1.
-- Ao trocar de classe, magias antigas são limpas do draft.
-- Ficha pronta calcula atributo de conjuração.
-- Ficha pronta calcula CD de magia.
-- Ficha pronta calcula ataque mágico real.
-- Ficha pronta desabilita ataque mágico quando classe não conjura.
-- Ficha pronta exibe espaços de magia do nível atual.
-- `dice-utils.ts` mostra o total correto da rolagem no resultado grande.
-
-Limitações intencionais:
-
-- Dano mágico ainda é detectado pela descrição.
-- Campos próprios como `damageFormula`, `damageType`, `requiresSavingThrow`, `savingThrowAbility` e `usesSpellSlot` ficam para refino futuro.
-- Controle de slots usados ainda não existe.
-
----
-
-## ⚔️ Equipment, Features e Level Up — Status detalhado da 4.29
-
-
-A 4.29 consolidou a primeira camada de regras avançadas para uso real da ficha pronta em mesa.
-
-### Equipamentos e ataques reais
-
-- `Equipment` recebeu campos estruturados para ataque:
-  - `damageFormula`
-  - `damageType`
-  - `attackType`
-  - `attackAbilityKey`
-  - `alternativeAbilityKey`
-  - `weaponGroup`
-  - `normalRange`
-  - `longRange`
-  - `isFinesse`
-  - `isThrown`
-  - `isTwoHanded`
-  - `isVersatile`
-  - `versatileDamageFormula`
-  - `attackBonus`
-  - `damageBonus`
-- O seed de equipamentos ofensivos foi atualizado.
-- A ficha pronta calcula ataque real por equipamento usando atributo, proficiência temporária e bônus do item.
-- A aba Combate exibe os ataques equipados.
-- A aba Bolsa continua exibindo ataques/danos como inventário de uso rápido.
-- GM possui campo manual de CA do alvo na aba Combate.
-- Player não vê nem preenche a CA exata do alvo.
-- Comparação automática contra CA ainda não existe; por enquanto a CA aparece apenas como referência no texto da rolagem do GM.
-
-### Features reais
-
-- As rotas de ficha retornam `features` reais disponíveis para a ficha.
-- A aba Features exibe recursos/traços por origem:
-  - classe
-  - subclasse
-  - ancestralidade
-  - outras fontes futuras
-- Features são exibidas como texto mecânico/narrativo.
-- Aplicação automática de efeitos de features ainda é futura.
-
-### Subclasse por nível correto
-
-- `CharacterClass.subclassSelectionLevel` foi adicionado.
-- O seed define o nível de escolha de subclasse.
-- O backend valida que uma subclasse só pode ser escolhida no nível correto.
-- A subclasse precisa pertencer à classe escolhida.
-- A ficha mostra status de subclasse: indisponível, pendente ou escolhida.
-
-### Level Up preview
-
-- A aba Features recebeu botão Level Up.
-- O Level Up abre como modal dentro da ficha pronta/pop-out.
-- O modal ainda não salva alterações.
-- O backend envia `levelUpPreview` com:
-  - nível atual
-  - próximo nível
-  - progressão atual
-  - próxima progressão
-  - features novas do próximo nível
-  - status de subclasse
-- A decisão arquitetural ficou registrada: nível do personagem é diferente de nível de classe.
-- O Level Up real precisará futuramente permitir subir uma classe existente ou adicionar multiclasse.
-- Ancestralidade, antecedente, equipamentos iniciais e origem do personagem não são reprocessados no Level Up.
-
----
-
-## 🎲 Game Table — Status detalhado
-
-Pasta principal:
-
-```txt
-frontend/src/features/game-table/
+```bash
+git diff --stat
 ```
 
-Componentes extraídos:
-
-- `TableLeftToolbar`
-- `TableSceneCanvas`
-- `TableRightPanel`
-- `TableChatPanel`
-- `TableRollsPanel`
-- `TableCharactersPanel`
-- `TableJournalPanel`
-- `TableSettingsPanel`
-
-Constantes, serviços, types e utils extraídos:
-
-- `constants/dice-constants.ts`
-- `constants/table-ui-constants.ts`
-- `services/game-table-api.ts`
-- `types/game-table-types.ts`
-- `utils/actor-utils.ts`
-- `utils/dice-utils.ts`
-- `utils/token-utils.ts`
-- `utils/user-utils.ts`
-
-Funcionalidades validadas:
-
-- Selecionar move tokens.
-- Mover visão arrasta o mapa.
-- Medir linha em metros.
-- Medir círculo com centro no clique e raio no arrasto.
-- Medição permanece até trocar ferramenta ou criar outra.
-- Desenhar cria traços locais.
-- Desenhar desfaz último traço.
-- Desenhar limpa desenhos.
-- Névoa cria áreas reveladas com máscara real.
-- Névoa desfaz última área.
-- Névoa limpa áreas.
-- Tokens fora da área revelada ficam cobertos.
-- Tamanho de token 1x1, 2x2, 3x3 e 4x4 funciona.
-- Tamanho de token persiste após recarregar.
-- Biblioteca e `+ Criar` aparecem para GM.
-- `+ Personagem` aparece para player comum.
-- Rolagens manuais aceitam modificadores numéricos positivos e negativos.
-- Iniciativa da mesa gera ranking sem emoji.
-- Personagens usam iniciativa real no ranking.
-- NPCs/criaturas usam +0 até terem ficha própria.
-
-Observação:
-
-```txt
-Medição, desenho, névoa, pan/zoom e chat/rolagens atuais ainda são locais/visuais.
-Sincronização real entre contas será tratada em fase futura.
-```
-
----
-
-## 🧩 Micros atuais
-
-```txt
-[x] 4.29.1 — Revisar modelagem de ataques reais por equipamento
-[x] 4.29.2 — Adicionar/confirmar campos necessários em Equipment para ataque
-[x] 4.29.3 — Ajustar seed de equipamentos ofensivos
-[x] 4.29.4 — Calcular ataque real por equipamento na ficha
-[x] 4.29.5 — Exibir ataque real na aba Bolsa/Combate
-[x] 4.29.6 — Preparar ataque contra CA manual
-[x] 4.29.7 — Revisar modelagem de Feature por nível
-[x] 4.29.8 — Exibir Features reais na aba Features
-[x] 4.29.9 — Preparar subclasse no nível correto
-[x] 4.29.10 — Planejar fluxo de Level Up
-[x] 4.29.11 — Criar primeira versão do botão Level Up
-[x] 4.29.12 — Level Up mostra apenas pendências/mudanças do novo nível
-[x] 4.29.13 — Teste regressivo da 4.29
-[x] 4.29.14 — Atualizar documentação
-[próximo] 4.29.15 — Commit da 4.29
-```
-
-## 🧭 Próximo plano
-
-### 4.30.14 — Commit da 4.30
-
-Comandos obrigatórios antes do commit:
+Depois:
 
 ```bash
 git status
-git diff --stat
-cd frontend
-pnpm lint
-cd ..
-git add .
-git status
-git commit -m "feat: add multiclass foundation"
 ```
 
-Depois do commit, seguir para:
+### Quando usar arquivo inteiro
+
+Usar arquivo inteiro em mudanças grandes, principalmente:
 
 ```txt
-4.31 — Modularização e expansão do conteúdo base do sistema
+page.tsx
+CharacterReadySheetView.tsx
+character-sheets.ts
 ```
 
+### Quando usar Procure/Troque
 
-## 🔮 Backlog confirmado
-
-### Modularização de seed
-
-- Separar seed em arquivos menores antes de expandir muito magias/itens.
-
-```txt
-backend/prisma/seeds/
-  system.seed.ts
-  stats.seed.ts
-  skills.seed.ts
-  ancestries.seed.ts
-  backgrounds.seed.ts
-  classes.seed.ts
-  subclasses.seed.ts
-  level-progressions.seed.ts
-  features.seed.ts
-  spells.seed.ts
-  class-spells.seed.ts
-  equipment.seed.ts
-  starting-equipment.seed.ts
-```
-
-### Upload real de imagens
-
-- upload de retrato direto do computador
-- upload de token direto do computador
-- preview/fit/crop
-- persistência segura
-
-### Regras avançadas
-
-- ataque real por equipamento
-- ataque contra CA manual
-- features por nível
-- subclasse no nível correto
-- level up
-- multiclasse
-
-### NPCs e criaturas
-
-- NPCs terão ficha própria futura.
-- Criaturas terão bloco próprio de bestiário.
-- Não usar `CharacterSheet` como ficha universal para tudo.
-
-### Sincronização em tempo real
-
-- WebSocket ou estratégia equivalente futura
-- sincronizar tokens, chat, rolagens, desenhos, névoa e estados de mesa
+Usar em mudanças pequenas e com âncora clara.
 
 ---
 
-## ⚠️ Regras fixas de trabalho
+## 🔜 Próxima micro recomendada
 
 ```txt
-Branch atual: feat/game-page
-Antes de qualquer commit: git diff --stat
-Arquivo grande: usar fonte da verdade mais recente
-Mudança grande: arquivo inteiro
-Mudança pequena: “Procure este trecho / Troque por este trecho”
-Não usar estrutura presumida antiga
+4.6.7 — Proficiências de equipamento por fonte
 ```
 
-
----
-
-# 🧩 Atualização — Fase 4.30 Multiclasse
-
-## ✅ Implementado na 4.30
-
-- `CharacterSheetClass` criado para separar nível total do personagem dos níveis por classe.
-- Fichas novas sincronizam classe principal em `CharacterSheetClass`.
-- Backfill manual executado para fichas antigas que já tinham `classId`.
-- Backend carrega `characterSheet.classes[]` junto da ficha pronta.
-- Frontend recebeu tipos para múltiplas classes na ficha pronta.
-- Aba Features mostra classes da ficha com nível individual e classe principal.
-- Proficiência continua usando o nível total do personagem (`CharacterSheet.level`).
-- Features de classe/subclasse passam a considerar o nível individual de cada classe em `CharacterSheetClass`.
-- Magia/progressão usa uma classe conjuradora ativa baseada em `characterSheet.classes`.
-- CD de magia e ataque mágico continuam usando proficiência pelo nível total.
-- Modal Level Up permite escolher visualmente qual classe existente receberia o próximo nível.
-- Opção futura “Adicionar nova classe” aparece preparada, mas ainda desabilitada.
-- Modal Level Up mostra status de subclasse por classe escolhida
-- Seed modularizado em `backend/prisma/seed-data`
-- `Equipment.imageUrl` criado e preenchido pelo seed
-- Ficha pronta exibe imagem/inicial de equipamento em Bolsa e Combate
-- Conteúdo base expandido na 4.31
-- Teste regressivo final da Fase 4 concluído.
-- 4.30.12 — Teste regressivo da multiclasse concluído no nível atual.
-
-## ⚠️ Limitações intencionais da 4.30
-
-- Level Up ainda não salva alterações.
-- Ainda não existe PATCH real para subir nível total + nível de classe.
-- Adicionar uma nova classe de multiclasse ainda não está liberado.
-- Escolha real de subclasse no Level Up ainda não salva.
-- Slots combinados de magia multiclasse ainda não foram implementados.
-- Controle de slots usados ainda não existe.
-- A estrutura antiga `CharacterSheet.classId/subclassId/level` foi mantida por compatibilidade durante a transição.
-
-## 🎯 Próximo foco
+Plano provável:
 
 ```txt
-4.31.7 — Atualizar documentação final da Fase 4
-4.31.8 — Commit de fechamento da Fase 4
-Depois do commit: abrir Fase 4.5
+4.6.7.1 — Revisar modelagem atual de proficiências de equipamento
+4.6.7.2 — Backend retorna proficiências resolvidas da ficha
+4.6.7.3 — Ficha pronta calcula ataque usando proficiência real
+4.6.7.4 — Review/ficha mostram fonte da proficiência
+4.6.7.5 — Preparar proteções/armaduras para CA real
 ```
 
----
-
-# 🧩 4.31 — Modularização e expansão do conteúdo base do sistema
-
-## Resultado
-
-A 4.31 modularizou e expandiu o conteúdo base do sistema sem iniciar ainda as refatorações estruturais maiores que ficaram para a Fase 4.5.
-
-## Backend / Prisma
-
-- `backend/prisma/seed.ts` passou a atuar como orquestrador.
-- Dados do seed foram separados em `backend/prisma/seed-data/`.
-- Arquivos de dados criados/organizados por domínio:
-  - `ancestries.ts`
-  - `backgrounds.ts`
-  - `classes.ts`
-  - `subclasses.ts`
-  - `stats.ts`
-  - `skills.ts`
-  - `spells.ts`
-  - `class-spells.ts`
-  - `equipment.ts`
-  - `features.ts`
-- `Equipment.imageUrl` foi adicionado ao schema.
-- Foi criada migration para `imageUrl`.
-- O seed de equipamentos passou a preencher placeholders como `/images/equipment/<key>.png`.
-
-## Conteúdo expandido
-
-- Skills novas, incluindo opções ligadas a Força além de Atletismo.
-- Antecedentes revisados para usar skills novas.
-- Ancestralidades adicionais.
-- Subclasses adicionais.
-- Equipamentos adicionais.
-- Magias adicionais.
-- Vínculos classe-magia revisados.
-- Features de ancestralidade, classe e subclasse adicionadas.
-
-## Frontend
-
-- `CharacterBuilderEquipmentOption` recebeu `imageUrl`.
-- A ficha pronta passou a exibir imagem ou fallback por inicial nos cards de equipamento.
-- Aba Combate mostra imagem/inicial nos ataques por equipamento.
-- Aba Bolsa mostra imagem/inicial nos itens.
-- Fallback evita quebra enquanto as imagens reais ainda não existem.
-
-## Limite proposital
-
-A 4.31 não implementou ainda:
-
-- proficiência real por grupo de arma/proteção/ferramenta;
-- escolha real de equipamento inicial;
-- revisão profunda de ARMOR/proteção/revestimento no domínio;
-- sistema de roupa visual separado da proteção mecânica;
-- lojas/inventário avançado.
-
-Esses pontos foram movidos para a Fase 4.5.
-
-
----
-
-# ✅ Fase 4 — Fechamento
-
-A Fase 4 foi concluída no nível atual com a criação/ficha de personagem funcionando como base jogável de mesa.
-
-## Entregas finais consolidadas
-
-- Character Builder persistido e organizado por etapas.
-- Ficha pronta reutilizável em `CharacterReadySheetView`.
-- Ficha em modal e pop-out.
-- Rolagens automáticas pela ficha.
-- Regras avançadas de magia/progressão inicial.
-- Ataques reais por equipamento no nível atual.
-- Features reais por classe, subclasse e ancestralidade.
-- Level Up preview visual.
-- Fundação de multiclasse com `CharacterSheetClass`.
-- Seed modularizado em `backend/prisma/seed-data`.
-- Conteúdo base expandido:
-  - ancestralidades;
-  - antecedentes;
-  - perícias;
-  - subclasses;
-  - equipamentos;
-  - magias;
-  - vínculos classe-magia;
-  - features.
-- `Equipment.imageUrl` adicionado ao banco.
-- Seed de equipamentos com placeholders de imagem.
-- Ficha pronta exibindo imagem/inicial de equipamento em Bolsa e Combate.
-- Teste regressivo final da Fase 4 concluído no nível atual.
-
-## Decisão importante
-
-Algumas decisões estruturais cresceram além da Fase 4 e foram movidas para uma fase intermediária antes da Fase 5.
+Ponto de partida provável:
 
 ```txt
-[planejado] Fase 4.5 — Revisão estrutural de regras de personagem/equipamento
+backend/src/routes/character-sheets.ts
+frontend/src/features/character-builder/utils/character-sheet-calculations.ts
+frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
+frontend/src/features/character-builder/types/character-builder-types.ts
 ```
 
-A Fase 4.5 será construída junto com o usuário e deve discutir/refatorar, entre outras coisas:
-
-- proficiências reais de equipamento por classe;
-- grupos de armas/proteções/ferramentas;
-- escolhas de equipamento inicial no builder;
-- armaduras como proteção/revestimento aplicado, não roupa visual;
-- diferença entre roupa/aparência e equipamento mecânico;
-- categorias de equipamento próprias do LegendForge;
-- impacto em ficha pronta, inventário, lojas, combate e Level Up;
-- outras decisões estruturais que ficaram grandes demais para fechar dentro da Fase 4.
-
----
-
-# 🎯 Próximo foco
-
-```txt
-4.31.7 — Atualizar documentação final da Fase 4
-4.31.8 — Commit de fechamento da Fase 4
-Depois do commit: abrir Fase 4.5
-```
