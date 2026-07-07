@@ -73,6 +73,7 @@ export type BackgroundCountAggregateOutputType = {
   skillKeys: number
   toolNames: number
   languageChoiceCount: number
+  languageKeys: number
   startingGold: number
   attributeBonuses: number
   order: number
@@ -129,6 +130,7 @@ export type BackgroundCountAggregateInputType = {
   skillKeys?: true
   toolNames?: true
   languageChoiceCount?: true
+  languageKeys?: true
   startingGold?: true
   attributeBonuses?: true
   order?: true
@@ -232,6 +234,7 @@ export type BackgroundGroupByOutputType = {
   skillKeys: string[]
   toolNames: string[]
   languageChoiceCount: number
+  languageKeys: string[]
   startingGold: number
   attributeBonuses: runtime.JsonValue
   order: number
@@ -271,6 +274,7 @@ export type BackgroundWhereInput = {
   skillKeys?: Prisma.StringNullableListFilter<"Background">
   toolNames?: Prisma.StringNullableListFilter<"Background">
   languageChoiceCount?: Prisma.IntFilter<"Background"> | number
+  languageKeys?: Prisma.StringNullableListFilter<"Background">
   startingGold?: Prisma.IntFilter<"Background"> | number
   attributeBonuses?: Prisma.JsonFilter<"Background">
   order?: Prisma.IntFilter<"Background"> | number
@@ -290,6 +294,7 @@ export type BackgroundOrderByWithRelationInput = {
   skillKeys?: Prisma.SortOrder
   toolNames?: Prisma.SortOrder
   languageChoiceCount?: Prisma.SortOrder
+  languageKeys?: Prisma.SortOrder
   startingGold?: Prisma.SortOrder
   attributeBonuses?: Prisma.SortOrder
   order?: Prisma.SortOrder
@@ -314,6 +319,7 @@ export type BackgroundWhereUniqueInput = Prisma.AtLeast<{
   skillKeys?: Prisma.StringNullableListFilter<"Background">
   toolNames?: Prisma.StringNullableListFilter<"Background">
   languageChoiceCount?: Prisma.IntFilter<"Background"> | number
+  languageKeys?: Prisma.StringNullableListFilter<"Background">
   startingGold?: Prisma.IntFilter<"Background"> | number
   attributeBonuses?: Prisma.JsonFilter<"Background">
   order?: Prisma.IntFilter<"Background"> | number
@@ -333,6 +339,7 @@ export type BackgroundOrderByWithAggregationInput = {
   skillKeys?: Prisma.SortOrder
   toolNames?: Prisma.SortOrder
   languageChoiceCount?: Prisma.SortOrder
+  languageKeys?: Prisma.SortOrder
   startingGold?: Prisma.SortOrder
   attributeBonuses?: Prisma.SortOrder
   order?: Prisma.SortOrder
@@ -357,6 +364,7 @@ export type BackgroundScalarWhereWithAggregatesInput = {
   skillKeys?: Prisma.StringNullableListFilter<"Background">
   toolNames?: Prisma.StringNullableListFilter<"Background">
   languageChoiceCount?: Prisma.IntWithAggregatesFilter<"Background"> | number
+  languageKeys?: Prisma.StringNullableListFilter<"Background">
   startingGold?: Prisma.IntWithAggregatesFilter<"Background"> | number
   attributeBonuses?: Prisma.JsonWithAggregatesFilter<"Background">
   order?: Prisma.IntWithAggregatesFilter<"Background"> | number
@@ -372,6 +380,7 @@ export type BackgroundCreateInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -391,6 +400,7 @@ export type BackgroundUncheckedCreateInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -408,6 +418,7 @@ export type BackgroundUpdateInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -427,6 +438,7 @@ export type BackgroundUncheckedUpdateInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -445,6 +457,7 @@ export type BackgroundCreateManyInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -460,6 +473,7 @@ export type BackgroundUpdateManyMutationInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -476,6 +490,7 @@ export type BackgroundUncheckedUpdateManyInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -491,14 +506,6 @@ export type BackgroundListRelationFilter = {
 
 export type BackgroundOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
 }
 
 export type BackgroundSystemIdNameCompoundUniqueInput = {
@@ -520,6 +527,7 @@ export type BackgroundCountOrderByAggregateInput = {
   skillKeys?: Prisma.SortOrder
   toolNames?: Prisma.SortOrder
   languageChoiceCount?: Prisma.SortOrder
+  languageKeys?: Prisma.SortOrder
   startingGold?: Prisma.SortOrder
   attributeBonuses?: Prisma.SortOrder
   order?: Prisma.SortOrder
@@ -620,12 +628,21 @@ export type BackgroundCreatetoolNamesInput = {
   set: string[]
 }
 
+export type BackgroundCreatelanguageKeysInput = {
+  set: string[]
+}
+
 export type BackgroundUpdateskillKeysInput = {
   set?: string[]
   push?: string | string[]
 }
 
 export type BackgroundUpdatetoolNamesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type BackgroundUpdatelanguageKeysInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -670,6 +687,7 @@ export type BackgroundCreateWithoutSystemInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -687,6 +705,7 @@ export type BackgroundUncheckedCreateWithoutSystemInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -734,6 +753,7 @@ export type BackgroundScalarWhereInput = {
   skillKeys?: Prisma.StringNullableListFilter<"Background">
   toolNames?: Prisma.StringNullableListFilter<"Background">
   languageChoiceCount?: Prisma.IntFilter<"Background"> | number
+  languageKeys?: Prisma.StringNullableListFilter<"Background">
   startingGold?: Prisma.IntFilter<"Background"> | number
   attributeBonuses?: Prisma.JsonFilter<"Background">
   order?: Prisma.IntFilter<"Background"> | number
@@ -749,6 +769,7 @@ export type BackgroundCreateWithoutCharacterSheetsInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -767,6 +788,7 @@ export type BackgroundUncheckedCreateWithoutCharacterSheetsInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -799,6 +821,7 @@ export type BackgroundUpdateWithoutCharacterSheetsInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -817,6 +840,7 @@ export type BackgroundUncheckedUpdateWithoutCharacterSheetsInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -833,6 +857,7 @@ export type BackgroundCreateWithoutFeaturesInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -851,6 +876,7 @@ export type BackgroundUncheckedCreateWithoutFeaturesInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -883,6 +909,7 @@ export type BackgroundUpdateWithoutFeaturesInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -901,6 +928,7 @@ export type BackgroundUncheckedUpdateWithoutFeaturesInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -917,6 +945,7 @@ export type BackgroundCreateManySystemInput = {
   skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
   languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
   startingGold?: number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: number
@@ -932,6 +961,7 @@ export type BackgroundUpdateWithoutSystemInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -949,6 +979,7 @@ export type BackgroundUncheckedUpdateWithoutSystemInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -966,6 +997,7 @@ export type BackgroundUncheckedUpdateManyWithoutSystemInput = {
   skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
   toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
   languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
   startingGold?: Prisma.IntFieldUpdateOperationsInput | number
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1022,6 +1054,7 @@ export type BackgroundSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   skillKeys?: boolean
   toolNames?: boolean
   languageChoiceCount?: boolean
+  languageKeys?: boolean
   startingGold?: boolean
   attributeBonuses?: boolean
   order?: boolean
@@ -1042,6 +1075,7 @@ export type BackgroundSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   skillKeys?: boolean
   toolNames?: boolean
   languageChoiceCount?: boolean
+  languageKeys?: boolean
   startingGold?: boolean
   attributeBonuses?: boolean
   order?: boolean
@@ -1059,6 +1093,7 @@ export type BackgroundSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   skillKeys?: boolean
   toolNames?: boolean
   languageChoiceCount?: boolean
+  languageKeys?: boolean
   startingGold?: boolean
   attributeBonuses?: boolean
   order?: boolean
@@ -1076,6 +1111,7 @@ export type BackgroundSelectScalar = {
   skillKeys?: boolean
   toolNames?: boolean
   languageChoiceCount?: boolean
+  languageKeys?: boolean
   startingGold?: boolean
   attributeBonuses?: boolean
   order?: boolean
@@ -1083,7 +1119,7 @@ export type BackgroundSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BackgroundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "skillKeys" | "toolNames" | "languageChoiceCount" | "startingGold" | "attributeBonuses" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["background"]>
+export type BackgroundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "skillKeys" | "toolNames" | "languageChoiceCount" | "languageKeys" | "startingGold" | "attributeBonuses" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["background"]>
 export type BackgroundInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   features?: boolean | Prisma.Background$featuresArgs<ExtArgs>
@@ -1113,6 +1149,7 @@ export type $BackgroundPayload<ExtArgs extends runtime.Types.Extensions.Internal
     skillKeys: string[]
     toolNames: string[]
     languageChoiceCount: number
+    languageKeys: string[]
     startingGold: number
     attributeBonuses: runtime.JsonValue
     order: number
@@ -1552,6 +1589,7 @@ export interface BackgroundFieldRefs {
   readonly skillKeys: Prisma.FieldRef<"Background", 'String[]'>
   readonly toolNames: Prisma.FieldRef<"Background", 'String[]'>
   readonly languageChoiceCount: Prisma.FieldRef<"Background", 'Int'>
+  readonly languageKeys: Prisma.FieldRef<"Background", 'String[]'>
   readonly startingGold: Prisma.FieldRef<"Background", 'Int'>
   readonly attributeBonuses: Prisma.FieldRef<"Background", 'Json'>
   readonly order: Prisma.FieldRef<"Background", 'Int'>

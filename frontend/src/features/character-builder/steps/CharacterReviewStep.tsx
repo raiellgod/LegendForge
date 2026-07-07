@@ -7,6 +7,7 @@ import type {
   CharacterBuilderClassOption,
   CharacterBuilderDraft,
   CharacterBuilderOptions,
+  CharacterBuilderLanguageOption,
   CharacterBuilderSkillOption,
   CharacterBuilderSpellOption,
 } from "../types/character-builder-types";
@@ -160,6 +161,34 @@ export function CharacterReviewStep({
       })
       .filter((skill): skill is CharacterBuilderSkillOption => Boolean(skill)) ??
     [];
+
+  const automaticLanguageKeys = Array.from(
+    new Set([
+      ...(selectedAncestry?.languageKeys ?? []),
+      ...(selectedBackground?.languageKeys ?? []),
+    ]),
+  );
+
+  const automaticLanguages = automaticLanguageKeys
+    .map((languageKey) => {
+      return options.languages.find((language) => language.key === languageKey);
+    })
+    .filter(
+      (language): language is CharacterBuilderLanguageOption =>
+        Boolean(language),
+    );
+
+  const selectedLanguages = draft.languageKeys
+    .map((languageKey) => {
+      return options.languages.find((language) => language.key === languageKey);
+    })
+    .filter(
+      (language): language is CharacterBuilderLanguageOption =>
+        Boolean(language),
+    );
+
+  const requiredLanguageChoiceCount =
+    selectedBackground?.languageChoiceCount ?? 0;
 
   const weaponProficiencyNames =
     selectedClass?.weaponProficiencyKeys.map(formatProficiencyKey) ?? [];
@@ -399,6 +428,29 @@ export function CharacterReviewStep({
             title="Ferramentas"
             values={toolProficiencyNames}
             emptyMessage="Nenhuma proficiência de ferramenta cadastrada."
+          />
+        </div>
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Idiomas"
+        description="Idiomas automáticos da origem e idiomas extras escolhidos."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <CharacterReviewPillList
+            title="Automáticos"
+            values={automaticLanguages.map((language) => language.name)}
+            emptyMessage="Nenhum idioma automático cadastrado."
+          />
+
+          <CharacterReviewPillList
+            title={`Escolhas extras (${selectedLanguages.length}/${requiredLanguageChoiceCount})`}
+            values={selectedLanguages.map((language) => language.name)}
+            emptyMessage={
+              requiredLanguageChoiceCount > 0
+                ? "Nenhum idioma extra escolhido."
+                : "Este antecedente não concede escolhas extras."
+            }
           />
         </div>
       </CharacterReviewSection>

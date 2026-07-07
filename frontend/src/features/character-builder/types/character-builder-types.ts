@@ -44,6 +44,7 @@ export type CharacterBuilderDraft = {
 
   backgroundId: string;
   backgroundName: string;
+  languageKeys: string[];
 
   attributes: CharacterBuilderAttributes;
   skillKeys: string[];
@@ -118,6 +119,7 @@ export type CharacterBuilderClassOption = CharacterBuilderOption & {
 
 export type CharacterBuilderAncestryOption = CharacterBuilderOption & {
   defaultSizeCategory: string;
+  languageKeys: string[];
   attributeBonuses: CharacterAttributeBonusMap;
 };
 
@@ -125,6 +127,7 @@ export type CharacterBuilderBackgroundOption = CharacterBuilderOption & {
   skillKeys: string[];
   toolNames: string[];
   languageChoiceCount: number;
+  languageKeys: string[];
   startingGold: number;
   attributeBonuses: CharacterAttributeBonusMap;
 };
@@ -138,6 +141,8 @@ export type CharacterBuilderSkillOption = CharacterBuilderOption & {
     shortName: string;
   };
 };
+
+export type CharacterBuilderLanguageOption = CharacterBuilderOption;
 
 export type CharacterBuilderSpellOption = CharacterBuilderOption & {
   level: number;
@@ -192,6 +197,7 @@ export type CharacterBuilderOptions = {
   skills: CharacterBuilderSkillOption[];
   spells: CharacterBuilderSpellOption[];
   equipment: CharacterBuilderEquipmentOption[];
+  languages: CharacterBuilderLanguageOption[];
 };
 
 export type CharacterSheetStatResponse = {
@@ -377,6 +383,7 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     name: string;
     description: string | null;
     defaultSizeCategory: string;
+    languageKeys: string[];
   } | null;
 
   background: {
@@ -387,6 +394,7 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     skillKeys: string[];
     toolNames: string[];
     languageChoiceCount: number;
+    languageKeys: string[];
     startingGold: number;
   } | null;
 
@@ -424,6 +432,11 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     equipment: CharacterBuilderEquipmentOption;
   }>;
 
+  languages: Array<{
+    source: string | null;
+    language: CharacterBuilderLanguageOption;
+  }>;
+
   features: CharacterReadySheetFeature[];
   levelUpPreview: CharacterReadySheetLevelUpPreview;
 };
@@ -450,6 +463,7 @@ export type CharacterBuilderSelectableOption = {
   hitDie?: number | null;
   defaultSizeCategory?: string;
   skillKeys?: string[];
+  languageKeys?: string[];
   classSkillChoiceCount?: number;
   weaponProficiencyKeys?: string[];
   protectionProficiencyKeys?: string[];

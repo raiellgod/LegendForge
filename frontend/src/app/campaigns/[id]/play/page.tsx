@@ -44,6 +44,7 @@ import { CharacterAboutSummaryPanel } from "@/features/character-builder/summary
 import { CharacterConceptStep } from "@/features/character-builder/steps/CharacterConceptStep";
 import { CharacterAttributesStep } from "@/features/character-builder/steps/CharacterAttributesStep";
 import { CharacterSkillsStep } from "@/features/character-builder/steps/CharacterSkillsStep";
+import { CharacterLanguagesStep } from "@/features/character-builder/steps/CharacterLanguagesStep";
 import { CharacterSpellsStep } from "@/features/character-builder/steps/CharacterSpellsStep";
 import { CharacterEquipmentStep } from "@/features/character-builder/steps/CharacterEquipmentStep";
 import { CharacterAboutStep } from "@/features/character-builder/steps/CharacterAboutStep";
@@ -268,6 +269,7 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
 
     backgroundId: "",
     backgroundName: "",
+    languageKeys: [],
 
     attributes: { ...DEFAULT_CHARACTER_ATTRIBUTES },
     skillKeys: [],
@@ -766,8 +768,18 @@ function CharacterBuilderModal({
   const selectedOptionLabel = getSelectedOptionLabelByPronouns(draft.pronouns);
 
   const requiredSkillChoiceCount = selectedClass?.classSkillChoiceCount ?? 0;
+  const requiredLanguageChoiceCount =
+    selectedBackground?.languageChoiceCount ?? 0;
+
+  const automaticLanguageKeys = Array.from(
+    new Set([
+      ...(selectedAncestry?.languageKeys ?? []),
+      ...(selectedBackground?.languageKeys ?? []),
+    ]),
+  );
 
   const selectedSkillCount = draft.skillKeys.length;
+  const selectedLanguageChoiceCount = draft.languageKeys.length;
   const selectedSpellCount = draft.spellKeys.length;
   const selectedCantripCount = draft.spellKeys.filter((spellKey) => {
     const spell = options.spells.find(
@@ -853,6 +865,10 @@ function CharacterBuilderModal({
       );
     }
 
+    if (stepId === "languages") {
+      return draft.languageKeys.length >= requiredLanguageChoiceCount;
+    }
+
     return true;
   }
 
@@ -879,6 +895,10 @@ function CharacterBuilderModal({
 
     if (stepId === "skills" && !isStepComplete("skills")) {
       return `Escolha ${requiredSkillChoiceCount} perícias da classe. O antecedente apenas sugere opções. Atualmente você escolheu ${selectedSkillCount}.`;
+    }
+
+    if (stepId === "languages" && !isStepComplete("languages")) {
+      return `Escolha ${requiredLanguageChoiceCount} idioma(s) extra(s) do antecedente. Idiomas fixos da ancestralidade e do antecedente já aparecem como automáticos. Atualmente você escolheu ${selectedLanguageChoiceCount}.`;
     }
 
     return null;
@@ -1284,6 +1304,40 @@ function CharacterBuilderModal({
                         );
                       }}
                     />
+                  ) : activeStep.id === "languages" ? (
+                    <CharacterLanguagesStep
+                      languages={options.languages}
+                      selectedLanguageKeys={draft.languageKeys}
+                      automaticLanguageKeys={automaticLanguageKeys}
+                      requiredLanguageChoiceCount={requiredLanguageChoiceCount}
+                      selectedAncestry={genderedSelectedAncestry}
+                      selectedBackground={genderedSelectedBackground}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      onToggleLanguage={(languageKey) => {
+                        const isSelected =
+                          draft.languageKeys.includes(languageKey);
+
+                        if (
+                          !isSelected &&
+                          draft.languageKeys.length >=
+                            requiredLanguageChoiceCount
+                        ) {
+                          return;
+                        }
+
+                        updateDraft(
+                          "languageKeys",
+                          isSelected
+                            ? draft.languageKeys.filter(
+                                (currentLanguageKey) => {
+                                  return currentLanguageKey !== languageKey;
+                                },
+                              )
+                            : [...draft.languageKeys, languageKey],
+                        );
+                      }}
+                    />
                   ) : activeStep.id === "spells" ? (
                     <CharacterSpellsStep
                       spells={options.spells}
@@ -1396,6 +1450,11 @@ function CharacterBuilderModal({
                     <BuilderSummaryRow
                       label="Perícias"
                       value={`${selectedSkillCount}/${requiredSkillChoiceCount} escolhidas`}
+                    />
+
+                    <BuilderSummaryRow
+                      label="Idiomas"
+                      value={`${automaticLanguageKeys.length + selectedLanguageChoiceCount} total (${selectedLanguageChoiceCount}/${requiredLanguageChoiceCount} escolhas)`}
                     />
 
                     <BuilderSummaryRow
@@ -1715,6 +1774,7 @@ export default function CampaignPlayPage() {
       skills: [],
       spells: [],
       equipment: [],
+      languages: [],
     });
   const [
     isLoadingCharacterBuilderOptions,
@@ -3446,6 +3506,7 @@ export default function CampaignPlayPage() {
         skills: data.skills ?? [],
         spells: data.spells ?? [],
         equipment: data.equipment ?? [],
+        languages: data.languages ?? [],
       });
     } catch (error) {
       setCharacterBuilderOptionsError(
@@ -3518,6 +3579,7 @@ export default function CampaignPlayPage() {
           backgroundId: option.id,
           backgroundName: option.name,
           skillKeys: isChangingBackground ? [] : currentDraft.skillKeys,
+          languageKeys: isChangingBackground ? [] : currentDraft.languageKeys,
         };
       }
 
@@ -3585,6 +3647,18 @@ export default function CampaignPlayPage() {
           ),
           skillKeys: characterBuilderDraft.skillKeys,
           spellKeys: characterBuilderDraft.spellKeys,
+          languageKeys: Array.from(
+            new Set([
+              ...(characterBuilderOptions.ancestries.find(
+                (ancestry) => ancestry.id === characterBuilderDraft.ancestryId,
+              )?.languageKeys ?? []),
+              ...(characterBuilderOptions.backgrounds.find(
+                (background) =>
+                  background.id === characterBuilderDraft.backgroundId,
+              )?.languageKeys ?? []),
+              ...characterBuilderDraft.languageKeys,
+            ]),
+          ),
           equipmentItems: getStartingEquipmentItemsFromDraft(
             characterBuilderDraft,
             characterBuilderOptions,

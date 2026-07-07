@@ -13,6 +13,7 @@ export const ancestries = [
       wisdom: 1,
       charisma: 1,
     },
+    languageKeys: ["common"],
   },
   {
     name: "Sylvaris",
@@ -24,6 +25,7 @@ export const ancestries = [
       dexterity: 2,
       intelligence: 1,
     },
+    languageKeys: ["common", "sylvan"],
   },
   {
     name: "Durandir",
@@ -35,6 +37,7 @@ export const ancestries = [
       constitution: 2,
       strength: 1,
     },
+    languageKeys: ["common", "deep-speech"],
   },
   {
     name: "Brutakar",
@@ -46,6 +49,7 @@ export const ancestries = [
       strength: 2,
       constitution: 1,
     },
+    languageKeys: ["common", "brutakar"],
   },
   {
     name: "Faunari",
@@ -57,6 +61,7 @@ export const ancestries = [
       dexterity: 2,
       charisma: 1,
     },
+    languageKeys: ["common", "faunari"],
   },
   {
     name: "Sintéticos",
@@ -68,6 +73,7 @@ export const ancestries = [
       constitution: 2,
       intelligence: 1,
     },
+    languageKeys: ["common", "synthetic"],
   },
   {
     name: "Minuri",
@@ -79,6 +85,7 @@ export const ancestries = [
       dexterity: 2,
       charisma: 1,
     },
+    languageKeys: ["common", "minuri"],
   },
   {
     name: "Ignivar",
@@ -90,6 +97,7 @@ export const ancestries = [
       constitution: 2,
       charisma: 1,
     },
+    languageKeys: ["common", "ignean"],
   },
   {
     name: "Yokari",
@@ -101,6 +109,7 @@ export const ancestries = [
       wisdom: 2,
       charisma: 1,
     },
+    languageKeys: ["common", "yokari"],
   },
   {
     name: "Gnomyx",
@@ -112,5 +121,6 @@ export const ancestries = [
       intelligence: 2,
       dexterity: 1,
     },
+    languageKeys: ["common", "gnomyx"],
   },
 ] as const;

@@ -32,6 +32,12 @@ export const characterBuilderSteps: CharacterBuilderStep[] = [
     description: "Escolha treinamentos, especialidades e proficiências.",
   },
   {
+    id: "languages",
+    title: "Idiomas",
+    description:
+      "Confira idiomas automáticos e escolha idiomas extras do antecedente.",
+  },
+  {
     id: "spells",
     title: "Magias",
     description: "Selecione truques, magias e poderes conhecidos.",

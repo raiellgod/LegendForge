@@ -80,6 +80,16 @@ export type Background = Prisma.BackgroundModel
  */
 export type CharacterSheet = Prisma.CharacterSheetModel
 /**
+ * Model Language
+ * 
+ */
+export type Language = Prisma.LanguageModel
+/**
+ * Model CharacterSheetLanguage
+ * 
+ */
+export type CharacterSheetLanguage = Prisma.CharacterSheetLanguageModel
+/**
  * Model CharacterSheetStat
  * 
  */

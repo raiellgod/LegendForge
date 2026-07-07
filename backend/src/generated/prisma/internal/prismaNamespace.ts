@@ -392,6 +392,8 @@ export const ModelName = {
   Ancestry: 'Ancestry',
   Background: 'Background',
   CharacterSheet: 'CharacterSheet',
+  Language: 'Language',
+  CharacterSheetLanguage: 'CharacterSheetLanguage',
   CharacterSheetStat: 'CharacterSheetStat',
   CharacterSheetSkill: 'CharacterSheetSkill',
   CharacterSheetSpell: 'CharacterSheetSpell',
@@ -428,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterClass" | "characterSubclass" | "levelProgression" | "classSpell" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterClass" | "characterSubclass" | "levelProgression" | "classSpell" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1021,6 +1023,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CharacterSheetCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CharacterSheetCountAggregateOutputType> | number
+        }
+      }
+    }
+    Language: {
+      payload: Prisma.$LanguagePayload<ExtArgs>
+      fields: Prisma.LanguageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LanguageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LanguageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>
+        }
+        findFirst: {
+          args: Prisma.LanguageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LanguageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>
+        }
+        findMany: {
+          args: Prisma.LanguageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>[]
+        }
+        create: {
+          args: Prisma.LanguageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>
+        }
+        createMany: {
+          args: Prisma.LanguageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LanguageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>[]
+        }
+        delete: {
+          args: Prisma.LanguageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>
+        }
+        update: {
+          args: Prisma.LanguageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>
+        }
+        deleteMany: {
+          args: Prisma.LanguageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LanguageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LanguageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>[]
+        }
+        upsert: {
+          args: Prisma.LanguageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LanguagePayload>
+        }
+        aggregate: {
+          args: Prisma.LanguageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLanguage>
+        }
+        groupBy: {
+          args: Prisma.LanguageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LanguageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LanguageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LanguageCountAggregateOutputType> | number
+        }
+      }
+    }
+    CharacterSheetLanguage: {
+      payload: Prisma.$CharacterSheetLanguagePayload<ExtArgs>
+      fields: Prisma.CharacterSheetLanguageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterSheetLanguageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterSheetLanguageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterSheetLanguageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterSheetLanguageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>
+        }
+        findMany: {
+          args: Prisma.CharacterSheetLanguageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>[]
+        }
+        create: {
+          args: Prisma.CharacterSheetLanguageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>
+        }
+        createMany: {
+          args: Prisma.CharacterSheetLanguageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterSheetLanguageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterSheetLanguageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>
+        }
+        update: {
+          args: Prisma.CharacterSheetLanguageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterSheetLanguageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterSheetLanguageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterSheetLanguageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterSheetLanguageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetLanguagePayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterSheetLanguageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterSheetLanguage>
+        }
+        groupBy: {
+          args: Prisma.CharacterSheetLanguageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetLanguageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterSheetLanguageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetLanguageCountAggregateOutputType> | number
         }
       }
     }
@@ -2681,7 +2831,8 @@ export const GameSystemScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   version: 'version',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type GameSystemScalarFieldEnum = (typeof GameSystemScalarFieldEnum)[keyof typeof GameSystemScalarFieldEnum]
@@ -2695,6 +2846,7 @@ export const AncestryScalarFieldEnum = {
   description: 'description',
   defaultSizeCategory: 'defaultSizeCategory',
   attributeBonuses: 'attributeBonuses',
+  languageKeys: 'languageKeys',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2712,6 +2864,7 @@ export const BackgroundScalarFieldEnum = {
   skillKeys: 'skillKeys',
   toolNames: 'toolNames',
   languageChoiceCount: 'languageChoiceCount',
+  languageKeys: 'languageKeys',
   startingGold: 'startingGold',
   attributeBonuses: 'attributeBonuses',
   order: 'order',
@@ -2776,6 +2929,32 @@ export const CharacterSheetScalarFieldEnum = {
 } as const
 
 export type CharacterSheetScalarFieldEnum = (typeof CharacterSheetScalarFieldEnum)[keyof typeof CharacterSheetScalarFieldEnum]
+
+
+export const LanguageScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LanguageScalarFieldEnum = (typeof LanguageScalarFieldEnum)[keyof typeof LanguageScalarFieldEnum]
+
+
+export const CharacterSheetLanguageScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  languageId: 'languageId',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetLanguageScalarFieldEnum = (typeof CharacterSheetLanguageScalarFieldEnum)[keyof typeof CharacterSheetLanguageScalarFieldEnum]
 
 
 export const CharacterSheetStatScalarFieldEnum = {
@@ -3585,6 +3764,8 @@ export type GlobalOmitConfig = {
   ancestry?: Prisma.AncestryOmit
   background?: Prisma.BackgroundOmit
   characterSheet?: Prisma.CharacterSheetOmit
+  language?: Prisma.LanguageOmit
+  characterSheetLanguage?: Prisma.CharacterSheetLanguageOmit
   characterSheetStat?: Prisma.CharacterSheetStatOmit
   characterSheetSkill?: Prisma.CharacterSheetSkillOmit
   characterSheetSpell?: Prisma.CharacterSheetSpellOmit

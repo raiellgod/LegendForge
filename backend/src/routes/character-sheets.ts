@@ -22,6 +22,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
   const characterSkillKeysSchema = z.array(z.string()).optional();
   const characterSpellKeysSchema = z.array(z.string()).optional();
+  const characterLanguageKeysSchema = z.array(z.string()).optional();
   type CharacterProficiencySource =
     | "builder"
     | "class"
@@ -75,6 +76,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     attributes?: z.infer<typeof characterAttributesSchema>;
     skillKeys?: z.infer<typeof characterSkillKeysSchema>;
     spellKeys?: z.infer<typeof characterSpellKeysSchema>;
+    languageKeys?: z.infer<typeof characterLanguageKeysSchema>;
     equipmentItems?: z.infer<typeof characterEquipmentItemsSchema>;
 
     classEquipmentMode?: "PACKAGE" | "GOLD";
@@ -710,6 +712,100 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ]);
   }
 
+  async function getCharacterLanguageEntries({
+    systemId,
+    languageKeys,
+    source = "builder",
+  }: {
+    systemId: string;
+    languageKeys: z.infer<typeof characterLanguageKeysSchema>;
+    source?: CharacterProficiencySource;
+  }) {
+    if (!languageKeys) {
+      return {
+        entries: [] as Array<{
+          languageId: string;
+          source: CharacterProficiencySource;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const uniqueLanguageKeys = Array.from(new Set(languageKeys));
+
+    if (uniqueLanguageKeys.length === 0) {
+      return {
+        entries: [] as Array<{
+          languageId: string;
+          source: CharacterProficiencySource;
+        }>,
+        error: null as string | null,
+      };
+    }
+
+    const languages = await prisma.language.findMany({
+      where: {
+        systemId,
+        key: {
+          in: uniqueLanguageKeys,
+        },
+      },
+      select: {
+        id: true,
+        key: true,
+      },
+    });
+
+    const languagesByKey = new Map(
+      languages.map((language) => [language.key, language]),
+    );
+
+    const missingLanguageKey = uniqueLanguageKeys.find(
+      (languageKey) => !languagesByKey.has(languageKey),
+    );
+
+    if (missingLanguageKey) {
+      return {
+        entries: [],
+        error: `Language ${missingLanguageKey} not found for this system`,
+      };
+    }
+
+    return {
+      entries: uniqueLanguageKeys.map((key) => ({
+        languageId: languagesByKey.get(key)!.id,
+        source,
+      })),
+      error: null,
+    };
+  }
+
+  async function replaceCharacterSheetLanguages(
+    characterSheetId: string,
+    entries: Array<{
+      languageId: string;
+      source: CharacterProficiencySource;
+    }>,
+  ) {
+    await prisma.$transaction([
+      prisma.characterSheetLanguage.deleteMany({
+        where: {
+          characterSheetId,
+        },
+      }),
+
+      ...entries.map((entry) =>
+        prisma.characterSheetLanguage.create({
+          data: {
+            characterSheetId,
+            languageId: entry.languageId,
+            source: entry.source,
+          },
+        }),
+      ),
+    ]);
+  }
+
   async function getCharacterEquipmentEntries(
     systemId: string,
     equipmentItems: z.infer<typeof characterEquipmentItemsSchema>,
@@ -1236,6 +1332,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         spell: true,
       },
     },
+    languages: {
+      include: {
+        language: true,
+      },
+    },
     equipment: {
       include: {
         equipment: true,
@@ -1422,6 +1523,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           attributes: characterAttributesSchema,
           skillKeys: characterSkillKeysSchema,
           spellKeys: characterSpellKeysSchema,
+          languageKeys: characterLanguageKeysSchema,
           equipmentItems: characterEquipmentItemsSchema,
           classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
           backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
@@ -1476,6 +1578,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         attributes,
         skillKeys,
         spellKeys,
+        languageKeys,
         equipmentItems,
         classEquipmentMode,
         backgroundEquipmentMode,
@@ -1697,6 +1800,18 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const languageEntriesResult = await getCharacterLanguageEntries({
+        systemId,
+        languageKeys,
+        source: "builder",
+      });
+
+      if (languageEntriesResult.error) {
+        return reply.status(400).send({
+          message: languageEntriesResult.error,
+        });
+      }
+
       const equipmentEntriesResult = await getCharacterEquipmentEntries(
         systemId,
         equipmentItems,
@@ -1779,6 +1894,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         );
       }
 
+      if (languageKeys !== undefined) {
+        await replaceCharacterSheetLanguages(
+          characterSheet.id,
+          languageEntriesResult.entries,
+        );
+      }
+
       if (equipmentItems !== undefined) {
         await replaceCharacterSheetEquipment(
           characterSheet.id,
@@ -1850,6 +1972,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             attributes: characterAttributesSchema,
             skillKeys: characterSkillKeysSchema,
             spellKeys: characterSpellKeysSchema,
+            languageKeys: characterLanguageKeysSchema,
             equipmentItems: characterEquipmentItemsSchema,
             classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
             backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
@@ -1907,8 +2030,14 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       const { campaignId, sheetId } = request.params;
-      const { attributes, skillKeys, spellKeys, equipmentItems, ...sheetData } =
-        request.body;
+      const {
+        attributes,
+        skillKeys,
+        spellKeys,
+        languageKeys,
+        equipmentItems,
+        ...sheetData
+      } = request.body;
 
       const campaign = await prisma.campaign.findFirst({
         where: {
@@ -2166,6 +2295,18 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const languageEntriesResult = await getCharacterLanguageEntries({
+        systemId: characterSheet.systemId,
+        languageKeys,
+        source: "builder",
+      });
+
+      if (languageEntriesResult.error) {
+        return reply.status(400).send({
+          message: languageEntriesResult.error,
+        });
+      }
+
       const equipmentEntriesResult = await getCharacterEquipmentEntries(
         characterSheet.systemId,
         equipmentItems,
@@ -2326,6 +2467,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
       if (spellKeys !== undefined) {
         await replaceCharacterSheetSpells(sheetId, spellEntriesResult.entries);
+      }
+
+      if (languageKeys !== undefined) {
+        await replaceCharacterSheetLanguages(
+          sheetId,
+          languageEntriesResult.entries,
+        );
       }
 
       if (equipmentItems !== undefined) {

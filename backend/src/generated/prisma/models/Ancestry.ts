@@ -66,6 +66,7 @@ export type AncestryCountAggregateOutputType = {
   description: number
   defaultSizeCategory: number
   attributeBonuses: number
+  languageKeys: number
   order: number
   createdAt: number
   updatedAt: number
@@ -113,6 +114,7 @@ export type AncestryCountAggregateInputType = {
   description?: true
   defaultSizeCategory?: true
   attributeBonuses?: true
+  languageKeys?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -213,6 +215,7 @@ export type AncestryGroupByOutputType = {
   description: string | null
   defaultSizeCategory: $Enums.CreatureSize
   attributeBonuses: runtime.JsonValue
+  languageKeys: string[]
   order: number
   createdAt: Date
   updatedAt: Date
@@ -249,6 +252,7 @@ export type AncestryWhereInput = {
   description?: Prisma.StringNullableFilter<"Ancestry"> | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFilter<"Ancestry"> | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonFilter<"Ancestry">
+  languageKeys?: Prisma.StringNullableListFilter<"Ancestry">
   order?: Prisma.IntFilter<"Ancestry"> | number
   createdAt?: Prisma.DateTimeFilter<"Ancestry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ancestry"> | Date | string
@@ -265,6 +269,7 @@ export type AncestryOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultSizeCategory?: Prisma.SortOrder
   attributeBonuses?: Prisma.SortOrder
+  languageKeys?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -286,6 +291,7 @@ export type AncestryWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Ancestry"> | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFilter<"Ancestry"> | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonFilter<"Ancestry">
+  languageKeys?: Prisma.StringNullableListFilter<"Ancestry">
   order?: Prisma.IntFilter<"Ancestry"> | number
   createdAt?: Prisma.DateTimeFilter<"Ancestry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ancestry"> | Date | string
@@ -302,6 +308,7 @@ export type AncestryOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultSizeCategory?: Prisma.SortOrder
   attributeBonuses?: Prisma.SortOrder
+  languageKeys?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -323,6 +330,7 @@ export type AncestryScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Ancestry"> | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeWithAggregatesFilter<"Ancestry"> | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonWithAggregatesFilter<"Ancestry">
+  languageKeys?: Prisma.StringNullableListFilter<"Ancestry">
   order?: Prisma.IntWithAggregatesFilter<"Ancestry"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ancestry"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Ancestry"> | Date | string
@@ -335,6 +343,7 @@ export type AncestryCreateInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -351,6 +360,7 @@ export type AncestryUncheckedCreateInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -365,6 +375,7 @@ export type AncestryUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -381,6 +392,7 @@ export type AncestryUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -396,6 +408,7 @@ export type AncestryCreateManyInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -408,6 +421,7 @@ export type AncestryUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -421,6 +435,7 @@ export type AncestryUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -434,6 +449,14 @@ export type AncestryListRelationFilter = {
 
 export type AncestryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type AncestrySystemIdNameCompoundUniqueInput = {
@@ -454,6 +477,7 @@ export type AncestryCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   defaultSizeCategory?: Prisma.SortOrder
   attributeBonuses?: Prisma.SortOrder
+  languageKeys?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -538,8 +562,17 @@ export type AncestryUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.AncestryScalarWhereInput | Prisma.AncestryScalarWhereInput[]
 }
 
+export type AncestryCreatelanguageKeysInput = {
+  set: string[]
+}
+
 export type EnumCreatureSizeFieldUpdateOperationsInput = {
   set?: $Enums.CreatureSize
+}
+
+export type AncestryUpdatelanguageKeysInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type AncestryCreateNestedOneWithoutCharacterSheetsInput = {
@@ -581,6 +614,7 @@ export type AncestryCreateWithoutSystemInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -595,6 +629,7 @@ export type AncestryUncheckedCreateWithoutSystemInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -639,6 +674,7 @@ export type AncestryScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Ancestry"> | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFilter<"Ancestry"> | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonFilter<"Ancestry">
+  languageKeys?: Prisma.StringNullableListFilter<"Ancestry">
   order?: Prisma.IntFilter<"Ancestry"> | number
   createdAt?: Prisma.DateTimeFilter<"Ancestry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ancestry"> | Date | string
@@ -651,6 +687,7 @@ export type AncestryCreateWithoutCharacterSheetsInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -666,6 +703,7 @@ export type AncestryUncheckedCreateWithoutCharacterSheetsInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -695,6 +733,7 @@ export type AncestryUpdateWithoutCharacterSheetsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -710,6 +749,7 @@ export type AncestryUncheckedUpdateWithoutCharacterSheetsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -723,6 +763,7 @@ export type AncestryCreateWithoutFeaturesInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -738,6 +779,7 @@ export type AncestryUncheckedCreateWithoutFeaturesInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -767,6 +809,7 @@ export type AncestryUpdateWithoutFeaturesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -782,6 +825,7 @@ export type AncestryUncheckedUpdateWithoutFeaturesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -795,6 +839,7 @@ export type AncestryCreateManySystemInput = {
   description?: string | null
   defaultSizeCategory?: $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryCreatelanguageKeysInput | string[]
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -807,6 +852,7 @@ export type AncestryUpdateWithoutSystemInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -821,6 +867,7 @@ export type AncestryUncheckedUpdateWithoutSystemInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -835,6 +882,7 @@ export type AncestryUncheckedUpdateManyWithoutSystemInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultSizeCategory?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
   attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.AncestryUpdatelanguageKeysInput | string[]
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -888,6 +936,7 @@ export type AncestrySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   description?: boolean
   defaultSizeCategory?: boolean
   attributeBonuses?: boolean
+  languageKeys?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -905,6 +954,7 @@ export type AncestrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   description?: boolean
   defaultSizeCategory?: boolean
   attributeBonuses?: boolean
+  languageKeys?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -919,6 +969,7 @@ export type AncestrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   description?: boolean
   defaultSizeCategory?: boolean
   attributeBonuses?: boolean
+  languageKeys?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -933,12 +984,13 @@ export type AncestrySelectScalar = {
   description?: boolean
   defaultSizeCategory?: boolean
   attributeBonuses?: boolean
+  languageKeys?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AncestryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "defaultSizeCategory" | "attributeBonuses" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["ancestry"]>
+export type AncestryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "description" | "defaultSizeCategory" | "attributeBonuses" | "languageKeys" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["ancestry"]>
 export type AncestryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   features?: boolean | Prisma.Ancestry$featuresArgs<ExtArgs>
@@ -967,6 +1019,7 @@ export type $AncestryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     description: string | null
     defaultSizeCategory: $Enums.CreatureSize
     attributeBonuses: runtime.JsonValue
+    languageKeys: string[]
     order: number
     createdAt: Date
     updatedAt: Date
@@ -1403,6 +1456,7 @@ export interface AncestryFieldRefs {
   readonly description: Prisma.FieldRef<"Ancestry", 'String'>
   readonly defaultSizeCategory: Prisma.FieldRef<"Ancestry", 'CreatureSize'>
   readonly attributeBonuses: Prisma.FieldRef<"Ancestry", 'Json'>
+  readonly languageKeys: Prisma.FieldRef<"Ancestry", 'String[]'>
   readonly order: Prisma.FieldRef<"Ancestry", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Ancestry", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ancestry", 'DateTime'>

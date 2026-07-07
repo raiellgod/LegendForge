@@ -168,6 +168,7 @@ export async function systemRoutes(app: FastifyInstance) {
               description: z.string().nullable(),
               defaultSizeCategory: z.string(),
               attributeBonuses: z.record(z.string(), z.number()),
+              languageKeys: z.array(z.string()),
             }),
           ),
           backgrounds: z.array(
@@ -179,8 +180,17 @@ export async function systemRoutes(app: FastifyInstance) {
               skillKeys: z.array(z.string()),
               toolNames: z.array(z.string()),
               languageChoiceCount: z.number(),
+              languageKeys: z.array(z.string()),
               startingGold: z.number(),
               attributeBonuses: z.record(z.string(), z.number()),
+            }),
+          ),
+          languages: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
             }),
           ),
           skills: z.array(
@@ -281,7 +291,7 @@ export async function systemRoutes(app: FastifyInstance) {
         });
       }
 
-      const [classes, ancestries, backgrounds, skills, spells, equipment] =
+      const [classes, ancestries, backgrounds, languages, skills, spells, equipment] =
         await Promise.all([
           prisma.characterClass.findMany({
             where: {
@@ -367,6 +377,7 @@ export async function systemRoutes(app: FastifyInstance) {
               description: true,
               defaultSizeCategory: true,
               attributeBonuses: true,
+              languageKeys: true,
             },
           }),
 
@@ -385,8 +396,29 @@ export async function systemRoutes(app: FastifyInstance) {
               skillKeys: true,
               toolNames: true,
               languageChoiceCount: true,
+              languageKeys: true,
               startingGold: true,
               attributeBonuses: true,
+            },
+          }),
+
+          prisma.language.findMany({
+            where: {
+              systemId,
+            },
+            orderBy: [
+              {
+                order: "asc",
+              },
+              {
+                name: "asc",
+              },
+            ],
+            select: {
+              id: true,
+              key: true,
+              name: true,
+              description: true,
             },
           }),
 
@@ -613,6 +645,7 @@ export async function systemRoutes(app: FastifyInstance) {
         classes: normalizedClasses,
         ancestries: normalizedAncestries,
         backgrounds: normalizedBackgrounds,
+        languages,
         skills,
         spells: normalizedSpells,
         equipment: normalizedEquipment,

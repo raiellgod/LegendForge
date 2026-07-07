@@ -59,6 +59,8 @@ export const ModelName = {
   Ancestry: 'Ancestry',
   Background: 'Background',
   CharacterSheet: 'CharacterSheet',
+  Language: 'Language',
+  CharacterSheetLanguage: 'CharacterSheetLanguage',
   CharacterSheetStat: 'CharacterSheetStat',
   CharacterSheetSkill: 'CharacterSheetSkill',
   CharacterSheetSpell: 'CharacterSheetSpell',
@@ -162,7 +164,8 @@ export const GameSystemScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   version: 'version',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type GameSystemScalarFieldEnum = (typeof GameSystemScalarFieldEnum)[keyof typeof GameSystemScalarFieldEnum]
@@ -176,6 +179,7 @@ export const AncestryScalarFieldEnum = {
   description: 'description',
   defaultSizeCategory: 'defaultSizeCategory',
   attributeBonuses: 'attributeBonuses',
+  languageKeys: 'languageKeys',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -193,6 +197,7 @@ export const BackgroundScalarFieldEnum = {
   skillKeys: 'skillKeys',
   toolNames: 'toolNames',
   languageChoiceCount: 'languageChoiceCount',
+  languageKeys: 'languageKeys',
   startingGold: 'startingGold',
   attributeBonuses: 'attributeBonuses',
   order: 'order',
@@ -257,6 +262,32 @@ export const CharacterSheetScalarFieldEnum = {
 } as const
 
 export type CharacterSheetScalarFieldEnum = (typeof CharacterSheetScalarFieldEnum)[keyof typeof CharacterSheetScalarFieldEnum]
+
+
+export const LanguageScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LanguageScalarFieldEnum = (typeof LanguageScalarFieldEnum)[keyof typeof LanguageScalarFieldEnum]
+
+
+export const CharacterSheetLanguageScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  languageId: 'languageId',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetLanguageScalarFieldEnum = (typeof CharacterSheetLanguageScalarFieldEnum)[keyof typeof CharacterSheetLanguageScalarFieldEnum]
 
 
 export const CharacterSheetStatScalarFieldEnum = {

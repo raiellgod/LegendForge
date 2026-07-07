@@ -7,6 +7,7 @@ import { classSpellAccess } from "./seed-data/class-spells.js";
 import { classes } from "./seed-data/classes.js";
 import { equipment } from "./seed-data/equipment.js";
 import { features } from "./seed-data/features.js";
+import { languages } from "./seed-data/languages.js";
 import { skills } from "./seed-data/skills.js";
 import { spells } from "./seed-data/spells.js";
 import { stats } from "./seed-data/stats.js";
@@ -468,6 +469,31 @@ async function main() {
     );
   }
 
+  for (const [index, languageData] of languages.entries()) {
+    const language = await prisma.language.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: languageData.key,
+        },
+      },
+      update: {
+        name: languageData.name,
+        description: languageData.description,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        name: languageData.name,
+        key: languageData.key,
+        description: languageData.description,
+        order: index + 1,
+      },
+    });
+
+    console.log(`Idioma criado/validado: ${language.name}`);
+  }
+
   for (const [index, ancestryData] of ancestries.entries()) {
     const ancestry = await prisma.ancestry.upsert({
       where: {
@@ -481,6 +507,7 @@ async function main() {
         description: ancestryData.description,
         defaultSizeCategory: ancestryData.defaultSizeCategory,
         attributeBonuses: ancestryData.attributeBonuses,
+        languageKeys: [...ancestryData.languageKeys],
         order: index + 1,
       },
       create: {
@@ -490,6 +517,7 @@ async function main() {
         description: ancestryData.description,
         defaultSizeCategory: ancestryData.defaultSizeCategory,
         attributeBonuses: ancestryData.attributeBonuses,
+        languageKeys: [...ancestryData.languageKeys],
         order: index + 1,
       },
     });
@@ -891,6 +919,7 @@ async function main() {
         skillKeys: [...backgroundData.skillKeys],
         toolNames: [...backgroundData.toolNames],
         languageChoiceCount: backgroundData.languageChoiceCount,
+        languageKeys: [...backgroundData.languageKeys],
         startingGold: backgroundData.startingGold,
         attributeBonuses: backgroundData.attributeBonuses,
         order: index + 1,
@@ -903,6 +932,7 @@ async function main() {
         skillKeys: [...backgroundData.skillKeys],
         toolNames: [...backgroundData.toolNames],
         languageChoiceCount: backgroundData.languageChoiceCount,
+        languageKeys: [...backgroundData.languageKeys],
         startingGold: backgroundData.startingGold,
         attributeBonuses: backgroundData.attributeBonuses,
         order: index + 1,

@@ -199,10 +199,11 @@ model Verification {
 
 model GameSystem {
   id        String   @id @default(uuid())
-  name      String   @unique
+  name      String
   slug      String?  @unique
-  version   Int
+  version   Int      @default(1)
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   stats             Stat[]
   skills            Skill[]
@@ -210,11 +211,12 @@ model GameSystem {
   backgrounds       Background[]
   classes           CharacterClass[]
   subclasses        CharacterSubclass[]
-  levelProgressions LevelProgression[]
   features          Feature[]
   spells            Spell[]
   equipment         Equipment[]
+  languages         Language[]
   characterSheets   CharacterSheet[]
+  levelProgressions LevelProgression[]
   campaigns         Campaign[]
 }
 
@@ -226,6 +228,7 @@ model Ancestry {
   description         String?
   defaultSizeCategory CreatureSize @default(MEDIUM)
   attributeBonuses    Json         @default("{}")
+  languageKeys        String[]     @default([])
   order               Int          @default(0)
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
@@ -249,6 +252,7 @@ model Background {
   skillKeys           String[] @default([])
   toolNames           String[] @default([])
   languageChoiceCount Int      @default(0)
+  languageKeys        String[] @default([])
   startingGold        Int      @default(0)
   attributeBonuses    Json     @default("{}")
   order               Int      @default(0)
@@ -337,6 +341,7 @@ model CharacterSheet {
   spells    CharacterSheetSpell[]
   equipment CharacterSheetEquipment[]
   classes   CharacterSheetClass[]
+  languages CharacterSheetLanguage[]
 
   @@index([campaignId])
   @@index([systemId])
@@ -347,6 +352,42 @@ model CharacterSheet {
   @@index([classId])
   @@index([subclassId])
   @@index([status])
+}
+
+model Language {
+  id          String   @id @default(uuid())
+  systemId    String
+  name        String
+  key         String
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  system          GameSystem               @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterSheets CharacterSheetLanguage[]
+
+  @@unique([systemId, name])
+  @@unique([systemId, key])
+  @@index([systemId])
+  @@index([order])
+}
+
+model CharacterSheetLanguage {
+  id               String   @id @default(uuid())
+  characterSheetId String
+  languageId       String
+  source           String?  @default("builder")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  characterSheet CharacterSheet @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  language       Language       @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([characterSheetId, languageId])
+  @@index([characterSheetId])
+  @@index([languageId])
+  @@index([source])
 }
 
 model CharacterSheetStat {
