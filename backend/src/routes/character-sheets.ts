@@ -2837,6 +2837,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     classId: string | null;
     ancestryId: string | null;
     backgroundId: string | null;
+    ancestry: {
+      languageKeys: string[];
+    } | null;
+    background: {
+      languageChoiceCount: number;
+      languageKeys: string[];
+    } | null;
     characterClass: {
       classSkillChoiceCount: number;
     } | null;
@@ -2847,6 +2854,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     }>;
     skills: Array<{
       source: string | null;
+    }>;
+    languages: Array<{
+      source: string | null;
+      language: {
+        key: string;
+      };
     }>;
   }) {
     const errors: string[] = [];
@@ -2899,6 +2912,42 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     if (builderSkillChoiceCount !== requiredSkillChoiceCount) {
       errors.push(
         `Escolha exatamente ${requiredSkillChoiceCount} perícias da classe antes de finalizar a ficha.`,
+      );
+    }
+
+    const automaticLanguageKeys = new Set([
+      ...(characterSheet.ancestry?.languageKeys ?? []),
+      ...(characterSheet.background?.languageKeys ?? []),
+    ]);
+
+    const builderLanguageKeys = characterSheet.languages
+      .filter((languageEntry) => languageEntry.source === "builder")
+      .map((languageEntry) => languageEntry.language.key);
+
+    const uniqueBuilderLanguageKeys = new Set(builderLanguageKeys);
+
+    if (uniqueBuilderLanguageKeys.size !== builderLanguageKeys.length) {
+      errors.push("Remova idiomas duplicados antes de finalizar a ficha.");
+    }
+
+    const duplicatedAutomaticLanguageKey = builderLanguageKeys.find(
+      (languageKey) => automaticLanguageKeys.has(languageKey),
+    );
+
+    if (duplicatedAutomaticLanguageKey) {
+      errors.push(
+        "Idiomas automáticos da ancestralidade ou do antecedente não devem ser escolhidos novamente como idioma extra.",
+      );
+    }
+
+    const requiredLanguageChoiceCount = Math.max(
+      0,
+      characterSheet.background?.languageChoiceCount ?? 0,
+    );
+
+    if (uniqueBuilderLanguageKeys.size !== requiredLanguageChoiceCount) {
+      errors.push(
+        `Escolha exatamente ${requiredLanguageChoiceCount} idioma(s) extra(s) do antecedente antes de finalizar a ficha.`,
       );
     }
 
