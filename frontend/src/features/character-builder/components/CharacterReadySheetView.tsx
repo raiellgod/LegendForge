@@ -107,13 +107,7 @@ const READY_SHEET_ATTRIBUTES: Array<{
 ];
 
 type ReadySheetTab =
-  | "status"
-  | "combat"
-  | "bag"
-  | "spells"
-  | "features"
-  | "profile"
-  | "notes";
+  "status" | "combat" | "bag" | "spells" | "features" | "profile" | "notes";
 
 type TokenImageFitOption = "FILL" | "COVER" | "CONTAIN";
 
@@ -1054,6 +1048,42 @@ function getFeatureSourceLabel(sourceType: string) {
   }
 
   return "Feature";
+}
+
+function getCharacterLanguageSourceLabel(source: string | null | undefined) {
+  if (source === "ancestry") {
+    return "Ancestralidade";
+  }
+
+  if (source === "background") {
+    return "Antecedente";
+  }
+
+  if (source === "builder") {
+    return "Escolha extra";
+  }
+
+  if (source === "class") {
+    return "Classe";
+  }
+
+  if (source === "feature") {
+    return "Feature";
+  }
+
+  if (source === "manual") {
+    return "Manual";
+  }
+
+  return "Fonte não informada";
+}
+
+function formatLanguageKey(languageKey: string) {
+  return languageKey
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 type LevelUpClassOption = {
@@ -2064,6 +2094,71 @@ export function CharacterReadySheetView({
   ];
 
   const hasAnyAppearanceInfo = appearanceRows.some((row) => row.value?.trim());
+
+  const ancestryLanguageKeys = characterSheet?.ancestry?.languageKeys ?? [];
+  const backgroundLanguageKeys = characterSheet?.background?.languageKeys ?? [];
+
+  const automaticLanguageKeys = Array.from(
+    new Set([...ancestryLanguageKeys, ...backgroundLanguageKeys]),
+  );
+
+  const savedLanguageRows = characterSheet?.languages ?? [];
+
+  const savedLanguagesByKey = new Map(
+    savedLanguageRows.map((sheetLanguage) => [
+      sheetLanguage.language.key,
+      sheetLanguage,
+    ]),
+  );
+
+  const automaticLanguageRows = automaticLanguageKeys.map((languageKey) => ({
+    key: languageKey,
+    name:
+      savedLanguagesByKey.get(languageKey)?.language.name ??
+      formatLanguageKey(languageKey),
+    sourceLabel: ancestryLanguageKeys.includes(languageKey)
+      ? "Ancestralidade"
+      : "Antecedente",
+    description:
+      savedLanguagesByKey.get(languageKey)?.language.description ?? null,
+  }));
+
+  const chosenLanguageRows = savedLanguageRows
+    .filter((sheetLanguage) => sheetLanguage.source === "builder")
+    .filter(
+      (sheetLanguage) =>
+        !automaticLanguageKeys.includes(sheetLanguage.language.key),
+    )
+    .map((sheetLanguage) => ({
+      key: sheetLanguage.language.key,
+      name: sheetLanguage.language.name,
+      sourceLabel: getCharacterLanguageSourceLabel(sheetLanguage.source),
+      description: sheetLanguage.language.description,
+    }))
+    .sort((firstLanguage, secondLanguage) =>
+      firstLanguage.name.localeCompare(secondLanguage.name, "pt-BR"),
+    );
+
+  const otherLanguageRows = savedLanguageRows
+    .filter((sheetLanguage) => sheetLanguage.source !== "builder")
+    .filter(
+      (sheetLanguage) =>
+        !automaticLanguageKeys.includes(sheetLanguage.language.key),
+    )
+    .map((sheetLanguage) => ({
+      key: sheetLanguage.language.key,
+      name: sheetLanguage.language.name,
+      sourceLabel: getCharacterLanguageSourceLabel(sheetLanguage.source),
+      description: sheetLanguage.language.description,
+    }))
+    .sort((firstLanguage, secondLanguage) =>
+      firstLanguage.name.localeCompare(secondLanguage.name, "pt-BR"),
+    );
+
+  const hasAnyLanguage =
+    automaticLanguageRows.length > 0 ||
+    chosenLanguageRows.length > 0 ||
+    otherLanguageRows.length > 0;
 
   const initiativeBonus = characterSheet
     ? formatSignedNumber(getInitiativeBonus(sheetStats))
@@ -3308,6 +3403,93 @@ export function CharacterReadySheetView({
                     Nenhuma informação física cadastrada.
                   </p>
                 ) : null}
+              </section>
+
+              <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                  Idiomas
+                </p>
+
+                {hasAnyLanguage ? (
+                  <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                    <div className="rounded-xl border border-forge-gold/20 bg-forge-gold/5 p-3">
+                      <p className="text-[9px] font-black uppercase tracking-[0.16em] text-forge-gold/80">
+                        Automáticos
+                      </p>
+
+                      {automaticLanguageRows.length > 0 ? (
+                        <div className="mt-2 grid gap-2">
+                          {automaticLanguageRows.map((language) => (
+                            <CompactListRow
+                              key={`${language.sourceLabel}-${language.key}`}
+                              title={language.name}
+                              value={language.sourceLabel}
+                              helper={
+                                language.description ??
+                                "Idioma recebido automaticamente pela origem do personagem."
+                              }
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="mt-2 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                          Nenhum idioma automático cadastrado.
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="rounded-xl border border-white/10 bg-black/25 p-3">
+                      <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/35">
+                        Escolhas extras
+                      </p>
+
+                      {chosenLanguageRows.length > 0 ? (
+                        <div className="mt-2 grid gap-2">
+                          {chosenLanguageRows.map((language) => (
+                            <CompactListRow
+                              key={language.key}
+                              title={language.name}
+                              value={language.sourceLabel}
+                              helper={
+                                language.description ??
+                                "Idioma escolhido durante a criação da ficha."
+                              }
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="mt-2 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                          Nenhum idioma extra escolhido.
+                        </p>
+                      )}
+                    </div>
+
+                    {otherLanguageRows.length > 0 ? (
+                      <div className="rounded-xl border border-white/10 bg-black/25 p-3 lg:col-span-2">
+                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/35">
+                          Outras fontes
+                        </p>
+
+                        <div className="mt-2 grid gap-2 md:grid-cols-2">
+                          {otherLanguageRows.map((language) => (
+                            <CompactListRow
+                              key={language.key}
+                              title={language.name}
+                              value={language.sourceLabel}
+                              helper={
+                                language.description ?? "Idioma conhecido."
+                              }
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                    Nenhum idioma cadastrado para esta ficha.
+                  </p>
+                )}
               </section>
             </main>
           </div>
