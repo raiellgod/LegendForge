@@ -233,10 +233,10 @@ Objetivo: deixar a criação de personagem mais correta mecanicamente antes de a
     [x] classes possuem weaponProficiencyKeys
     [x] classes possuem protectionProficiencyKeys
     [x] classes possuem toolProficiencyKeys
-    [ ] ataque de equipamento usa proficiência real
-    [ ] ficha mostra fonte da proficiência de equipamento
-    [ ] proteções/armaduras são preparadas para CA real
-    [ ] ferramentas/instrumentos/kits são preparados para uso mecânico futuro
+    [x] ataque de equipamento usa proficiência real
+    [x] ficha mostra fonte da proficiência de equipamento
+    [x] proteções/armaduras são preparadas para CA real
+    [x] ferramentas/instrumentos/kits são preparados para uso mecânico futuro
 
 [x] 4.6.6 — Línguas por fonte
     - línguas conhecidas fixas
@@ -244,7 +244,7 @@ Objetivo: deixar a criação de personagem mais correta mecanicamente antes de a
     - escolhas de línguas por antecedente
     - escolhas futuras por feature/talento
 
-[ ] 4.6.7 — Magias/truques por fonte
+[em andamento] 4.6.7 — Magias/truques por fonte
     - classe
     - ancestralidade
     - antecedente
@@ -263,28 +263,6 @@ Objetivo: deixar a criação de personagem mais correta mecanicamente antes de a
     - traços de personalidade
     - notas do mestre
 ```
-
-## Fluxo imediato aprovado
-
-A próxima sequência **não** deve ser chamada de `4.6.7 — Proficiências de equipamento por fonte`, porque `4.6.7` fica reservado para **Magias/truques por fonte**.
-
-A consolidação de proficiências de equipamento deve ser tratada como retomada da `4.6.5`:
-
-```txt
-[próximo] 4.6.5.R1 — Revisar estado atual de proficiências de equipamento
-[ ] 4.6.5.R2 — Resolver proficiências efetivas de equipamento
-[ ] 4.6.5.R3 — Ataque de equipamento usa proficiência real
-[ ] 4.6.5.R4 — Exibir fonte da proficiência na ficha/review
-[ ] 4.6.5.R5 — Preparar proteções/armaduras para CA real
-```
-
-Depois disso, avançar para:
-
-```txt
-[ ] 4.6.7 — Magias/truques por fonte
-```
-
----
 
 # 5. Fase 4.7 — Multiclasse e Level Up real
 

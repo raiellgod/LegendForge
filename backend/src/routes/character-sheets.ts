@@ -23,6 +23,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
   const characterSkillKeysSchema = z.array(z.string()).optional();
   const characterSpellKeysSchema = z.array(z.string()).optional();
   const characterLanguageKeysSchema = z.array(z.string()).optional();
+
   type CharacterProficiencySource =
     | "builder"
     | "class"
@@ -30,6 +31,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     | "ancestry"
     | "feature"
     | "manual";
+
+  type CharacterSpellEntry = {
+    spellId: string;
+    source: CharacterProficiencySource;
+  };
 
   const characterProficiencySourcePriority: Record<
     CharacterProficiencySource,
@@ -546,21 +552,17 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     characterLevel: number | null | undefined;
   }) {
     if (!spellKeys) {
-      return {
-        entries: [] as Array<{
-          spellId: string;
-        }>,
-        error: null as string | null,
-      };
-    }
+  return {
+    entries: [] as CharacterSpellEntry[],
+    error: null as string | null,
+  };
+}
 
     const uniqueSpellKeys = Array.from(new Set(spellKeys));
 
     if (uniqueSpellKeys.length === 0) {
       return {
-        entries: [] as Array<{
-          spellId: string;
-        }>,
+        entries: [] as CharacterSpellEntry[],
         error: null as string | null,
       };
     }
@@ -682,6 +684,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     return {
       entries: uniqueSpellKeys.map((key) => ({
         spellId: spellsByKey.get(key)!.id,
+        source: "class" as CharacterProficiencySource,
       })),
       error: null,
     };
@@ -689,9 +692,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
   async function replaceCharacterSheetSpells(
     characterSheetId: string,
-    entries: Array<{
-      spellId: string;
-    }>,
+    entries: CharacterSpellEntry[],
   ) {
     await prisma.$transaction([
       prisma.characterSheetSpell.deleteMany({
@@ -705,7 +706,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           data: {
             characterSheetId,
             spellId: entry.spellId,
-            source: "builder",
+            source: entry.source,
           },
         }),
       ),
