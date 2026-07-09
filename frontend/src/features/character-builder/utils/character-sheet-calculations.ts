@@ -26,6 +26,8 @@ export type ReadySheetSkill = {
 };
 
 export type ReadySheetEquipmentAttack = {
+  key?: string | null;
+  name?: string | null;
   attackType?: string | null;
   attackAbilityKey?: string | null;
   alternativeAbilityKey?: string | null;
@@ -273,11 +275,111 @@ export function getEquipmentAttackAbilityKey({
     : mainAbilityKey;
 }
 
+const WEAPON_PROFICIENCY_LABELS: Record<string, string> = {
+  "simple-weapons": "armas simples",
+  "martial-weapons": "armas marciais",
+  "improvised-weapons": "armas improvisadas",
+  "natural-weapons": "armas naturais",
+  "tech-weapons": "armas tecnológicas",
+  "relic-weapons": "armas relíquia",
+};
+
+function getWeaponGroupProficiencyKey(weaponGroup: string | null | undefined) {
+  const normalizedWeaponGroup = weaponGroup?.trim().toUpperCase();
+
+  if (normalizedWeaponGroup === "SIMPLE") {
+    return "simple-weapons";
+  }
+
+  if (normalizedWeaponGroup === "MARTIAL") {
+    return "martial-weapons";
+  }
+
+  if (normalizedWeaponGroup === "IMPROVISED") {
+    return "improvised-weapons";
+  }
+
+  if (normalizedWeaponGroup === "NATURAL") {
+    return "natural-weapons";
+  }
+
+  if (normalizedWeaponGroup === "TECH") {
+    return "tech-weapons";
+  }
+
+  if (normalizedWeaponGroup === "RELIC") {
+    return "relic-weapons";
+  }
+
+  return null;
+}
+
+function formatWeaponProficiencyLabel(proficiencyKey: string) {
+  return WEAPON_PROFICIENCY_LABELS[proficiencyKey] ?? proficiencyKey;
+}
+
+export function getEquipmentWeaponProficiency({
+  equipment,
+  weaponProficiencyKeys,
+}: {
+  equipment: ReadySheetEquipmentAttack;
+  weaponProficiencyKeys: string[];
+}) {
+  const normalizedAttackType = equipment.attackType?.trim().toUpperCase();
+
+  if (!normalizedAttackType || normalizedAttackType === "NONE") {
+    return {
+      isProficient: false,
+      label: "Proficiência: não aplicável",
+      matchedKey: null as string | null,
+    };
+  }
+
+  const proficiencyKeySet = new Set(
+    weaponProficiencyKeys
+      .map((proficiencyKey) => proficiencyKey.trim())
+      .filter(Boolean),
+  );
+
+  const equipmentKey = equipment.key?.trim() ?? "";
+
+  if (equipmentKey && proficiencyKeySet.has(equipmentKey)) {
+    return {
+      isProficient: true,
+      label: `Proficiência: sim (${equipment.name ?? equipmentKey})`,
+      matchedKey: equipmentKey,
+    };
+  }
+
+  const weaponGroupProficiencyKey = getWeaponGroupProficiencyKey(
+    equipment.weaponGroup,
+  );
+
+  if (
+    weaponGroupProficiencyKey &&
+    proficiencyKeySet.has(weaponGroupProficiencyKey)
+  ) {
+    return {
+      isProficient: true,
+      label: `Proficiência: sim (${formatWeaponProficiencyLabel(
+        weaponGroupProficiencyKey,
+      )})`,
+      matchedKey: weaponGroupProficiencyKey,
+    };
+  }
+
+  return {
+    isProficient: false,
+    label: "Proficiência: não",
+    matchedKey: null as string | null,
+  };
+}
+
 export function getEquipmentAttackBonus({
   stats,
   level,
   equipment,
-  isProficient = true,
+  isProficient = false,
 }: {
   stats: ReadySheetStat[];
   level: number;
@@ -302,9 +404,7 @@ export function getEquipmentAttackBonus({
     attackAbilityKey,
   );
 
-  const proficiencyBonus = isProficient
-    ? getProficiencyBonusByLevel(level)
-    : 0;
+  const proficiencyBonus = isProficient ? getProficiencyBonusByLevel(level) : 0;
 
   return attributeModifier + proficiencyBonus + (equipment.attackBonus ?? 0);
 }

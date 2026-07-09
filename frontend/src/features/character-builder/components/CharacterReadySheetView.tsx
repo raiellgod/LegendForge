@@ -18,6 +18,7 @@ import {
   getEquipmentAttackAbilityKey,
   getEquipmentAttackBonus,
   getEquipmentDamageExpression,
+  getEquipmentWeaponProficiency,
   getInitiativeBonus,
   getPassivePerception,
   getProficiencyBonusByLevel,
@@ -542,6 +543,183 @@ function formatCharacterWeight(value: string | null | undefined) {
   return `${parsedValue.toLocaleString("pt-BR", {
     maximumFractionDigits: 1,
   })} kg`;
+}
+
+const READY_SHEET_PROFICIENCY_LABELS: Record<string, string> = {
+  "simple-weapons": "Armas simples",
+  "martial-weapons": "Armas marciais",
+  "improvised-weapons": "Armas improvisadas",
+  "natural-weapons": "Armas naturais",
+  "tech-weapons": "Armas tecnológicas",
+  "relic-weapons": "Armas relíquia",
+  firearms: "Armas de fogo",
+  crossbows: "Bestas",
+  "hand-crossbow": "Besta de mão",
+  "light-crossbow": "Besta leve",
+  longsword: "Espada longa",
+  rapier: "Rapieira",
+  shortsword: "Espada curta",
+  dagger: "Adaga",
+  dart: "Dardo",
+  sling: "Funda",
+  quarterstaff: "Bastão",
+  club: "Clava",
+  javelin: "Azagaia",
+  mace: "Maça",
+  scimitar: "Cimitarra",
+  sickle: "Foice curta",
+  spear: "Lança",
+  "light-armor": "Proteções leves",
+  "medium-armor": "Proteções médias",
+  "heavy-armor": "Proteções pesadas",
+  shield: "Escudos",
+  "musical-instrument": "Instrumentos musicais",
+  "thieves-tools": "Ferramentas de ladrão",
+  "herbalism-kit": "Kit de herbalismo",
+  "artisan-tools": "Ferramentas de artesão",
+  "tinker-tools": "Ferramentas de funileiro",
+  "alchemist-supplies": "Suprimentos de alquimista",
+};
+
+function formatReadySheetProficiencyKey(key: string) {
+  return (
+    READY_SHEET_PROFICIENCY_LABELS[key] ??
+    key
+      .split("-")
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ")
+  );
+}
+
+function getUniqueReadySheetProficiencyNames(proficiencyKeys: string[]) {
+  return Array.from(
+    new Set(
+      proficiencyKeys
+        .map((proficiencyKey) => proficiencyKey.trim())
+        .filter(Boolean)
+        .map(formatReadySheetProficiencyKey),
+    ),
+  );
+}
+
+type ReadySheetDefensiveEquipment = {
+  key: string;
+  name: string;
+  category: string;
+  properties: string | null;
+  defense: number | null;
+};
+
+function normalizeReadySheetEquipmentText(value: string | null | undefined) {
+  return value
+    ?.trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function getProtectionProficiencyKeyForEquipment(
+  equipment: ReadySheetDefensiveEquipment,
+) {
+  const normalizedCategory = equipment.category.trim().toUpperCase();
+
+  if (normalizedCategory === "SHIELD") {
+    return "shield";
+  }
+
+  if (normalizedCategory !== "ARMOR") {
+    return null;
+  }
+
+  const searchableText = [
+    equipment.key,
+    equipment.name,
+    equipment.properties,
+  ]
+    .map(normalizeReadySheetEquipmentText)
+    .filter(Boolean)
+    .join(" ");
+
+  if (
+    searchableText.includes("heavy") ||
+    searchableText.includes("pesad")
+  ) {
+    return "heavy-armor";
+  }
+
+  if (
+    searchableText.includes("medium") ||
+    searchableText.includes("media") ||
+    searchableText.includes("medio")
+  ) {
+    return "medium-armor";
+  }
+
+  if (
+    searchableText.includes("light") ||
+    searchableText.includes("leve")
+  ) {
+    return "light-armor";
+  }
+
+  return null;
+}
+
+export function getEquipmentProtectionProficiency({
+  equipment,
+  protectionProficiencyKeys,
+}: {
+  equipment: ReadySheetDefensiveEquipment;
+  protectionProficiencyKeys: string[];
+}) {
+  const requiredProficiencyKey = getProtectionProficiencyKeyForEquipment(
+    equipment,
+  );
+
+  if (!requiredProficiencyKey) {
+    return {
+      isProficient: false,
+      label: "Proficiência: não aplicável",
+      requiredKey: null as string | null,
+    };
+  }
+
+  const proficiencyKeySet = new Set(
+    protectionProficiencyKeys
+      .map((proficiencyKey) => proficiencyKey.trim())
+      .filter(Boolean),
+  );
+
+  if (proficiencyKeySet.has(requiredProficiencyKey)) {
+    return {
+      isProficient: true,
+      label: `Proficiência: sim (${formatReadySheetProficiencyKey(
+        requiredProficiencyKey,
+      )})`,
+      requiredKey: requiredProficiencyKey,
+    };
+  }
+
+  return {
+    isProficient: false,
+    label: `Proficiência: não (${formatReadySheetProficiencyKey(
+      requiredProficiencyKey,
+    )})`,
+    requiredKey: requiredProficiencyKey,
+  };
+}
+
+function isReadySheetDefensiveEquipment(
+  equipment: ReadySheetDefensiveEquipment,
+) {
+  const normalizedCategory = equipment.category.trim().toUpperCase();
+
+  return (
+    normalizedCategory === "ARMOR" ||
+    normalizedCategory === "SHIELD" ||
+    typeof equipment.defense === "number"
+  );
 }
 
 type SpellSlotRow = {
@@ -1723,6 +1901,45 @@ export function CharacterReadySheetView({
     return `Ataque — ${attackName} contra CA ${parsedManualTargetArmorClass}`;
   }
 
+  const effectiveWeaponProficiencyKeys = Array.from(
+  new Set([
+    ...(characterSheet?.characterClass?.weaponProficiencyKeys ?? []),
+    ...(characterSheet?.classes.flatMap(
+      (classEntry) => classEntry.characterClass.weaponProficiencyKeys,
+    ) ?? []),
+  ]),
+);
+
+const effectiveProtectionProficiencyKeys = Array.from(
+  new Set([
+    ...(characterSheet?.characterClass?.protectionProficiencyKeys ?? []),
+    ...(characterSheet?.classes.flatMap(
+      (classEntry) => classEntry.characterClass.protectionProficiencyKeys,
+    ) ?? []),
+  ]),
+);
+
+const effectiveToolProficiencyKeys = Array.from(
+  new Set([
+    ...(characterSheet?.characterClass?.toolProficiencyKeys ?? []),
+    ...(characterSheet?.classes.flatMap(
+      (classEntry) => classEntry.characterClass.toolProficiencyKeys,
+    ) ?? []),
+  ]),
+);
+
+const weaponProficiencyNames = getUniqueReadySheetProficiencyNames(
+  effectiveWeaponProficiencyKeys,
+);
+
+const protectionProficiencyNames = getUniqueReadySheetProficiencyNames(
+  effectiveProtectionProficiencyKeys,
+);
+
+const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
+  effectiveToolProficiencyKeys,
+);
+
   const attackRows =
     characterSheet?.equipment
       .filter((sheetEquipment) => {
@@ -1734,11 +1951,16 @@ export function CharacterReadySheetView({
       .map((sheetEquipment) => {
         const equipment = sheetEquipment.equipment;
 
+        const weaponProficiency = getEquipmentWeaponProficiency({
+          equipment,
+          weaponProficiencyKeys: effectiveWeaponProficiencyKeys,
+        });
+
         const attackBonus = getEquipmentAttackBonus({
           stats: sheetStats,
           level: sheetLevel,
           equipment,
-          isProficient: true,
+          isProficient: weaponProficiency.isProficient,
         });
 
         const attackAbilityKey = getEquipmentAttackAbilityKey({
@@ -1778,7 +2000,7 @@ export function CharacterReadySheetView({
           equipment.properties,
           `Atributo: ${abilityLabel}`,
           weaponGroupLabel,
-          "Proficiência temporária: sim",
+          weaponProficiency.label,
           equipment.description,
         ]
           .filter(Boolean)
@@ -1796,21 +2018,98 @@ export function CharacterReadySheetView({
         };
       }) ?? [];
 
+  const equippedProtectionRows =
+    characterSheet?.equipment
+      .filter((sheetEquipment) => {
+        return (
+          sheetEquipment.isEquipped &&
+          isReadySheetDefensiveEquipment(sheetEquipment.equipment)
+        );
+      })
+      .map((sheetEquipment) => {
+        const equipment = sheetEquipment.equipment;
+        const defenseBonus = equipment.defense ?? 0;
+
+        const protectionProficiency = getEquipmentProtectionProficiency({
+          equipment,
+          protectionProficiencyKeys: effectiveProtectionProficiencyKeys,
+        });
+
+        const helper = [
+          equipment.properties,
+          defenseBonus > 0 ? `Defesa: +${defenseBonus}` : null,
+          protectionProficiency.label,
+          equipment.description,
+        ]
+          .filter(Boolean)
+          .join(" · ");
+
+        return {
+          id: equipment.key,
+          name: equipment.name,
+          imageUrl: equipment.imageUrl,
+          quantity: sheetEquipment.quantity,
+          defenseBonus,
+          helper,
+          isEquipped: sheetEquipment.isEquipped,
+          isProficient: protectionProficiency.isProficient,
+        };
+      })
+      .sort((firstItem, secondItem) =>
+        firstItem.name.localeCompare(secondItem.name, "pt-BR"),
+      ) ?? [];
+
+  const equippedProtectionDefenseBonus = equippedProtectionRows.reduce(
+    (totalDefenseBonus, protectionItem) => {
+      return totalDefenseBonus + protectionItem.defenseBonus;
+    },
+    0,
+  );
+
+  const previewArmorClassFromProtections =
+    10 + equippedProtectionDefenseBonus;
+
+  const armorClassHelper =
+    equippedProtectionRows.length > 0
+      ? `manual · proteções +${equippedProtectionDefenseBonus} · prévia ${previewArmorClassFromProtections}`
+      : "manual";
+
   const equipmentRows =
     characterSheet?.equipment
-      .map((sheetEquipment) => ({
-        id: sheetEquipment.equipment.key,
-        name: sheetEquipment.equipment.name,
-        imageUrl: sheetEquipment.equipment.imageUrl,
-        quantity: sheetEquipment.quantity,
-        helper:
-          sheetEquipment.notes ??
-          sheetEquipment.equipment.properties ??
-          sheetEquipment.equipment.description ??
-          sheetEquipment.source ??
-          null,
-        isEquipped: sheetEquipment.isEquipped,
-      }))
+      .map((sheetEquipment) => {
+        const equipment = sheetEquipment.equipment;
+        const isDefensiveEquipment = isReadySheetDefensiveEquipment(equipment);
+
+        const protectionProficiency = isDefensiveEquipment
+          ? getEquipmentProtectionProficiency({
+              equipment,
+              protectionProficiencyKeys: effectiveProtectionProficiencyKeys,
+            })
+          : null;
+
+        const defenseLabel =
+          typeof equipment.defense === "number" && equipment.defense > 0
+            ? `Defesa: +${equipment.defense}`
+            : null;
+
+        return {
+          id: equipment.key,
+          name: equipment.name,
+          imageUrl: equipment.imageUrl,
+          quantity: sheetEquipment.quantity,
+          helper: [
+            sheetEquipment.notes,
+            equipment.properties,
+            defenseLabel,
+            protectionProficiency?.label,
+            equipment.description,
+            sheetEquipment.source,
+          ]
+            .filter(Boolean)
+            .join(" · "),
+          isEquipped: sheetEquipment.isEquipped,
+        };
+      })
       .sort((firstItem, secondItem) =>
         firstItem.name.localeCompare(secondItem.name, "pt-BR"),
       ) ?? [];
@@ -2570,7 +2869,7 @@ export function CharacterReadySheetView({
                 </p>
 
                 <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
-                  <SheetBox label="CA" value={armorClass} helper="defesa" />
+                  <SheetBox label="CA" value={armorClass} helper={armorClassHelper} />
                   <SheetBox
                     label="Iniciativa"
                     value={initiativeBonus}
@@ -2583,6 +2882,56 @@ export function CharacterReadySheetView({
                     helper="atual/máx."
                   />
                 </div>
+              </section>
+
+                            <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-2">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                      Proteções equipadas
+                    </p>
+
+                    <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+                      Prévia mecânica para a futura CA real. A CA salva continua manual nesta micro.
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-forge-gold/25 bg-forge-gold/10 px-3 py-2 text-right">
+                    <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+                      Prévia
+                    </p>
+
+                    <p className="text-lg font-black leading-none text-forge-gold">
+                      {previewArmorClassFromProtections}
+                    </p>
+                  </div>
+                </div>
+
+                {equippedProtectionRows.length > 0 ? (
+                  <div className="mt-3 grid gap-2">
+                    {equippedProtectionRows.map((item, index) => {
+                      const itemKey = `protection-${item.id}-${index}`;
+
+                      return (
+                        <EquipmentListCard
+                          key={itemKey}
+                          title={`${item.quantity}x ${item.name}`}
+                          imageUrl={item.imageUrl}
+                          value={`+${item.defenseBonus} defesa`}
+                          helper={item.helper}
+                          isExpanded={expandedEquipmentKeys.includes(itemKey)}
+                          onToggleExpanded={() =>
+                            toggleExpandedEquipment(itemKey)
+                          }
+                        />
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                    Nenhuma proteção equipada. Equipe uma armadura ou escudo para preparar a CA real.
+                  </p>
+                )}
               </section>
 
               <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
@@ -3348,6 +3697,87 @@ export function CharacterReadySheetView({
             </aside>
 
             <main className="space-y-4">
+              <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+                <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/10 pb-2">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                      Proficiências
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-3 grid gap-3 md:grid-cols-3">
+                  <div className="rounded-xl border border-white/10 bg-black/25 p-3">
+                    <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/35">
+                      Armas
+                    </p>
+
+                    {weaponProficiencyNames.length > 0 ? (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {weaponProficiencyNames.map((proficiencyName) => (
+                          <span
+                            key={proficiencyName}
+                            className="rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-1 text-[9px] font-black text-forge-gold"
+                          >
+                            {proficiencyName}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="mt-2 text-xs font-semibold text-white/35">
+                        Nenhuma proficiência de arma registrada.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="rounded-xl border border-white/10 bg-black/25 p-3">
+                    <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/35">
+                      Proteções
+                    </p>
+
+                    {protectionProficiencyNames.length > 0 ? (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {protectionProficiencyNames.map((proficiencyName) => (
+                          <span
+                            key={proficiencyName}
+                            className="rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-1 text-[9px] font-black text-forge-gold"
+                          >
+                            {proficiencyName}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="mt-2 text-xs font-semibold text-white/35">
+                        Nenhuma proficiência de proteção registrada.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="rounded-xl border border-white/10 bg-black/25 p-3">
+                    <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/35">
+                      Ferramentas
+                    </p>
+
+                    {toolProficiencyNames.length > 0 ? (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {toolProficiencyNames.map((proficiencyName) => (
+                          <span
+                            key={proficiencyName}
+                            className="rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-1 text-[9px] font-black text-forge-gold"
+                          >
+                            {proficiencyName}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="mt-2 text-xs font-semibold text-white/35">
+                        Nenhuma proficiência de ferramenta registrada.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </section>
+
               <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
                   Personalidade

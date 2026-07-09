@@ -259,6 +259,9 @@ export type CharacterReadySheetClassEntry = {
     hitDie: number | null;
     spellcastingAbilityKey: CharacterAttributeKey | null;
     subclassSelectionLevel: number | null;
+    weaponProficiencyKeys: string[];
+    protectionProficiencyKeys: string[];
+    toolProficiencyKeys: string[];
     levelProgressions: CharacterBuilderClassLevelProgression[];
   };
   subclass: {
@@ -349,6 +352,9 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     hitDie: number | null;
     spellcastingAbilityKey: CharacterAttributeKey | null;
     subclassSelectionLevel: number | null;
+    weaponProficiencyKeys: string[];
+    protectionProficiencyKeys: string[];
+    toolProficiencyKeys: string[];
     levelProgressions: Array<{
       level: number;
       proficiencyBonus: number | null;
