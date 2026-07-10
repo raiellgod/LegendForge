@@ -244,14 +244,14 @@ Objetivo: deixar a criação de personagem mais correta mecanicamente antes de a
     - escolhas de línguas por antecedente
     - escolhas futuras por feature/talento
 
-[em andamento] 4.6.7 — Magias/truques por fonte
+[adiado] 4.6.7 — Magias/truques por fonte
     - classe
     - ancestralidade
     - antecedente
     - talento/feature
     - separar magia conhecida, preparada, sempre conhecida e magia extra
 
-[ ] 4.6.8 — Melhorar notas da criação de ficha
+[ em andamento] 4.6.8 — Melhorar notas da criação de ficha
     - organizações
     - aliados
     - inimigos
@@ -262,6 +262,46 @@ Objetivo: deixar a criação de personagem mais correta mecanicamente antes de a
     - ideais
     - traços de personalidade
     - notas do mestre
+
+    [x] 4.6.8.1 — Revisar estado atual das notas narrativas
+
+[x] 4.6.8.2 — Modelar campos narrativos avançados
+    - organizations
+    - allies
+    - enemies
+    - otherNotes
+
+[ ] 4.6.8.3 — Backend aceita e salva campos narrativos avançados
+    - POST/PATCH
+    - retorno da ficha pronta
+    - sem validação complexa
+
+[ ] 4.6.8.4 — Types e draft aceitam campos narrativos avançados
+    - CharacterBuilderDraft
+    - CharacterReadySheet
+    - valores iniciais do draft, se necessário
+
+[ ] 4.6.8.5 — Melhorar etapa Sobre
+    - criar bloco “Relações e mundo”
+    - organizações
+    - aliados
+    - inimigos
+    - outros
+
+[ ] 4.6.8.6 — Melhorar Review narrativo
+    - mostrar personalidade
+    - história
+    - relações
+    - notas
+
+[ ] 4.6.8.7 — Melhorar aba Notas da ficha pronta
+    - separar História
+    - Personalidade
+    - Relações
+    - Notas gerais
+    - Notas do mestre
+
+[ ] 4.6.8.8 — Lint, páginas e checkpoint final da Fase 4.6
 ```
 
 # 5. Fase 4.7 — Multiclasse e Level Up real
@@ -589,4 +629,3 @@ frontend/src/features/character-builder/steps/CharacterReviewStep.tsx
 Este arquivo substitui listas antigas e resumidas de fases do LegendForge.
 
 Quando houver conflito entre este documento e resumos anteriores, este documento vence.
-

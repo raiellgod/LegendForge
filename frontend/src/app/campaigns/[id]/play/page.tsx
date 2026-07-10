@@ -296,7 +296,11 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
     ideals: "",
     personality: "",
     backstory: "",
+    organizations: "",
+    allies: "",
+    enemies: "",
     notes: "",
+    otherNotes: "",
     gmNotes: "",
   };
 }
@@ -3688,7 +3692,11 @@ export default function CampaignPlayPage() {
           ideals: characterBuilderDraft.ideals.trim(),
           personality: characterBuilderDraft.personality.trim(),
           backstory: characterBuilderDraft.backstory.trim(),
+          organizations: characterBuilderDraft.organizations.trim(),
+          allies: characterBuilderDraft.allies.trim(),
+          enemies: characterBuilderDraft.enemies.trim(),
           notes: characterBuilderDraft.notes.trim(),
+          otherNotes: characterBuilderDraft.otherNotes.trim(),
           gmNotes: characterBuilderDraft.gmNotes.trim(),
         }),
       });

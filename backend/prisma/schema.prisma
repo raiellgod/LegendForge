@@ -316,13 +316,17 @@ model CharacterSheet {
   age    String?
   gender String?
 
-  bonds       String?
-  flaws       String?
-  ideals      String?
-  personality String?
-  backstory   String?
-  notes       String?
-  gmNotes     String?
+  bonds         String?
+  flaws         String?
+  ideals        String?
+  personality   String?
+  backstory     String?
+  organizations String?
+  allies        String?
+  enemies       String?
+  notes         String?
+  otherNotes    String?
+  gmNotes       String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

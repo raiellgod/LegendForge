@@ -3900,51 +3900,95 @@ export function CharacterReadySheetView({
         </div>
       ) : (
         <div className="min-h-0 flex-1 overflow-y-auto p-2 sm:p-3">
-          <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
-            <main className="space-y-4">
-              <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
-                <p className="border-b border-white/10 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-                  História e notas
-                </p>
+          <div className="space-y-4">
+            <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
+              <p className="border-b border-white/10 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                História
+              </p>
 
-                <div className="mt-3 grid gap-2">
+              <div className="mt-3">
+                <NarrativeField
+                  label="História do personagem"
+                  value={characterSheet?.backstory}
+                />
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
+              <p className="border-b border-white/10 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                Personalidade
+              </p>
+
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                <NarrativeField
+                  label="Traços de personalidade"
+                  value={characterSheet?.personality}
+                />
+
+                <NarrativeField
+                  label="Vínculos"
+                  value={characterSheet?.bonds}
+                />
+
+                <NarrativeField
+                  label="Ideais"
+                  value={characterSheet?.ideals}
+                />
+
+                <NarrativeField
+                  label="Defeitos"
+                  value={characterSheet?.flaws}
+                />
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+              <p className="border-b border-forge-gold/20 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold/80">
+                Relações e mundo
+              </p>
+
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                <NarrativeField
+                  label="Organizações"
+                  value={characterSheet?.organizations}
+                />
+
+                <NarrativeField
+                  label="Aliados"
+                  value={characterSheet?.allies}
+                />
+
+                <NarrativeField
+                  label="Inimigos"
+                  value={characterSheet?.enemies}
+                />
+
+                <NarrativeField
+                  label="Outros vínculos"
+                  value={characterSheet?.otherNotes}
+                />
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
+              <p className="border-b border-white/10 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                Notas
+              </p>
+
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                <NarrativeField
+                  label="Notas gerais"
+                  value={characterSheet?.notes}
+                />
+
+                {isGM ? (
                   <NarrativeField
-                    label="História"
-                    value={characterSheet?.backstory}
+                    label="Notas do mestre"
+                    value={characterSheet?.gmNotes}
                   />
-                  <NarrativeField label="Notas" value={characterSheet?.notes} />
-                  {isGM ? (
-                    <NarrativeField
-                      label="Notas do mestre"
-                      value={characterSheet?.gmNotes}
-                    />
-                  ) : null}
-                </div>
-              </section>
-            </main>
-
-            <aside className="space-y-4">
-              <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-                  Notas futuras
-                </p>
-
-                <div className="mt-3 grid gap-1.5">
-                  <CompactListRow
-                    title="Aliados e contatos"
-                    helper="Espaço para vínculos importantes da campanha."
-                  />
-                  <CompactListRow
-                    title="Inimigos e ameaças"
-                    helper="Espaço para acompanhar conflitos pessoais."
-                  />
-                  <CompactListRow
-                    title="Organizações e objetivos"
-                    helper="Espaço para registros de longo prazo."
-                  />
-                </div>
-              </section>
-            </aside>
+                ) : null}
+              </div>
+            </section>
           </div>
         </div>
       )}

@@ -101,7 +101,11 @@ export type CharacterSheetMinAggregateOutputType = {
   ideals: string | null
   personality: string | null
   backstory: string | null
+  organizations: string | null
+  allies: string | null
+  enemies: string | null
   notes: string | null
+  otherNotes: string | null
   gmNotes: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -154,7 +158,11 @@ export type CharacterSheetMaxAggregateOutputType = {
   ideals: string | null
   personality: string | null
   backstory: string | null
+  organizations: string | null
+  allies: string | null
+  enemies: string | null
   notes: string | null
+  otherNotes: string | null
   gmNotes: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -207,7 +215,11 @@ export type CharacterSheetCountAggregateOutputType = {
   ideals: number
   personality: number
   backstory: number
+  organizations: number
+  allies: number
+  enemies: number
   notes: number
+  otherNotes: number
   gmNotes: number
   createdAt: number
   updatedAt: number
@@ -290,7 +302,11 @@ export type CharacterSheetMinAggregateInputType = {
   ideals?: true
   personality?: true
   backstory?: true
+  organizations?: true
+  allies?: true
+  enemies?: true
   notes?: true
+  otherNotes?: true
   gmNotes?: true
   createdAt?: true
   updatedAt?: true
@@ -343,7 +359,11 @@ export type CharacterSheetMaxAggregateInputType = {
   ideals?: true
   personality?: true
   backstory?: true
+  organizations?: true
+  allies?: true
+  enemies?: true
   notes?: true
+  otherNotes?: true
   gmNotes?: true
   createdAt?: true
   updatedAt?: true
@@ -396,7 +416,11 @@ export type CharacterSheetCountAggregateInputType = {
   ideals?: true
   personality?: true
   backstory?: true
+  organizations?: true
+  allies?: true
+  enemies?: true
   notes?: true
+  otherNotes?: true
   gmNotes?: true
   createdAt?: true
   updatedAt?: true
@@ -536,7 +560,11 @@ export type CharacterSheetGroupByOutputType = {
   ideals: string | null
   personality: string | null
   backstory: string | null
+  organizations: string | null
+  allies: string | null
+  enemies: string | null
   notes: string | null
+  otherNotes: string | null
   gmNotes: string | null
   createdAt: Date
   updatedAt: Date
@@ -612,7 +640,11 @@ export type CharacterSheetWhereInput = {
   ideals?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   personality?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   backstory?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  organizations?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  allies?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  enemies?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   notes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  otherNotes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   gmNotes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CharacterSheet"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterSheet"> | Date | string
@@ -679,7 +711,11 @@ export type CharacterSheetOrderByWithRelationInput = {
   ideals?: Prisma.SortOrderInput | Prisma.SortOrder
   personality?: Prisma.SortOrderInput | Prisma.SortOrder
   backstory?: Prisma.SortOrderInput | Prisma.SortOrder
+  organizations?: Prisma.SortOrderInput | Prisma.SortOrder
+  allies?: Prisma.SortOrderInput | Prisma.SortOrder
+  enemies?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  otherNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   gmNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -749,7 +785,11 @@ export type CharacterSheetWhereUniqueInput = Prisma.AtLeast<{
   ideals?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   personality?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   backstory?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  organizations?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  allies?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  enemies?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   notes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  otherNotes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   gmNotes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CharacterSheet"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterSheet"> | Date | string
@@ -816,7 +856,11 @@ export type CharacterSheetOrderByWithAggregationInput = {
   ideals?: Prisma.SortOrderInput | Prisma.SortOrder
   personality?: Prisma.SortOrderInput | Prisma.SortOrder
   backstory?: Prisma.SortOrderInput | Prisma.SortOrder
+  organizations?: Prisma.SortOrderInput | Prisma.SortOrder
+  allies?: Prisma.SortOrderInput | Prisma.SortOrder
+  enemies?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  otherNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   gmNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -877,7 +921,11 @@ export type CharacterSheetScalarWhereWithAggregatesInput = {
   ideals?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
   personality?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
   backstory?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
+  organizations?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
+  allies?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
+  enemies?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
+  otherNotes?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
   gmNotes?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheet"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CharacterSheet"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CharacterSheet"> | Date | string
@@ -923,7 +971,11 @@ export type CharacterSheetCreateInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -990,7 +1042,11 @@ export type CharacterSheetUncheckedCreateInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1043,7 +1099,11 @@ export type CharacterSheetUpdateInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1110,7 +1170,11 @@ export type CharacterSheetUncheckedUpdateInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1170,7 +1234,11 @@ export type CharacterSheetCreateManyInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1216,7 +1284,11 @@ export type CharacterSheetUpdateManyMutationInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1269,7 +1341,11 @@ export type CharacterSheetUncheckedUpdateManyInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1332,7 +1408,11 @@ export type CharacterSheetCountOrderByAggregateInput = {
   ideals?: Prisma.SortOrder
   personality?: Prisma.SortOrder
   backstory?: Prisma.SortOrder
+  organizations?: Prisma.SortOrder
+  allies?: Prisma.SortOrder
+  enemies?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  otherNotes?: Prisma.SortOrder
   gmNotes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -1399,7 +1479,11 @@ export type CharacterSheetMaxOrderByAggregateInput = {
   ideals?: Prisma.SortOrder
   personality?: Prisma.SortOrder
   backstory?: Prisma.SortOrder
+  organizations?: Prisma.SortOrder
+  allies?: Prisma.SortOrder
+  enemies?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  otherNotes?: Prisma.SortOrder
   gmNotes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -1452,7 +1536,11 @@ export type CharacterSheetMinOrderByAggregateInput = {
   ideals?: Prisma.SortOrder
   personality?: Prisma.SortOrder
   backstory?: Prisma.SortOrder
+  organizations?: Prisma.SortOrder
+  allies?: Prisma.SortOrder
+  enemies?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  otherNotes?: Prisma.SortOrder
   gmNotes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -1910,7 +1998,11 @@ export type CharacterSheetCreateWithoutSystemInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1975,7 +2067,11 @@ export type CharacterSheetUncheckedCreateWithoutSystemInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2064,7 +2160,11 @@ export type CharacterSheetScalarWhereInput = {
   ideals?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   personality?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   backstory?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  organizations?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  allies?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  enemies?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   notes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
+  otherNotes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   gmNotes?: Prisma.StringNullableFilter<"CharacterSheet"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CharacterSheet"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterSheet"> | Date | string
@@ -2110,7 +2210,11 @@ export type CharacterSheetCreateWithoutAncestryInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2175,7 +2279,11 @@ export type CharacterSheetUncheckedCreateWithoutAncestryInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2254,7 +2362,11 @@ export type CharacterSheetCreateWithoutBackgroundInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2319,7 +2431,11 @@ export type CharacterSheetUncheckedCreateWithoutBackgroundInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2398,7 +2514,11 @@ export type CharacterSheetCreateWithoutLanguagesInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2464,7 +2584,11 @@ export type CharacterSheetUncheckedCreateWithoutLanguagesInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2532,7 +2656,11 @@ export type CharacterSheetUpdateWithoutLanguagesInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2598,7 +2726,11 @@ export type CharacterSheetUncheckedUpdateWithoutLanguagesInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2650,7 +2782,11 @@ export type CharacterSheetCreateWithoutStatsInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2716,7 +2852,11 @@ export type CharacterSheetUncheckedCreateWithoutStatsInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2784,7 +2924,11 @@ export type CharacterSheetUpdateWithoutStatsInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2850,7 +2994,11 @@ export type CharacterSheetUncheckedUpdateWithoutStatsInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2902,7 +3050,11 @@ export type CharacterSheetCreateWithoutSkillsInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2968,7 +3120,11 @@ export type CharacterSheetUncheckedCreateWithoutSkillsInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3036,7 +3192,11 @@ export type CharacterSheetUpdateWithoutSkillsInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3102,7 +3262,11 @@ export type CharacterSheetUncheckedUpdateWithoutSkillsInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3154,7 +3318,11 @@ export type CharacterSheetCreateWithoutSpellsInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3220,7 +3388,11 @@ export type CharacterSheetUncheckedCreateWithoutSpellsInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3288,7 +3460,11 @@ export type CharacterSheetUpdateWithoutSpellsInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3354,7 +3530,11 @@ export type CharacterSheetUncheckedUpdateWithoutSpellsInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3406,7 +3586,11 @@ export type CharacterSheetCreateWithoutEquipmentInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3472,7 +3656,11 @@ export type CharacterSheetUncheckedCreateWithoutEquipmentInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3540,7 +3728,11 @@ export type CharacterSheetUpdateWithoutEquipmentInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3606,7 +3798,11 @@ export type CharacterSheetUncheckedUpdateWithoutEquipmentInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3658,7 +3854,11 @@ export type CharacterSheetCreateWithoutClassesInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3724,7 +3924,11 @@ export type CharacterSheetUncheckedCreateWithoutClassesInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3792,7 +3996,11 @@ export type CharacterSheetUpdateWithoutClassesInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3858,7 +4066,11 @@ export type CharacterSheetUncheckedUpdateWithoutClassesInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3910,7 +4122,11 @@ export type CharacterSheetCreateWithoutCharacterClassInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3975,7 +4191,11 @@ export type CharacterSheetUncheckedCreateWithoutCharacterClassInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4054,7 +4274,11 @@ export type CharacterSheetCreateWithoutSubclassInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4119,7 +4343,11 @@ export type CharacterSheetUncheckedCreateWithoutSubclassInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4198,7 +4426,11 @@ export type CharacterSheetCreateWithoutCampaignInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4263,7 +4495,11 @@ export type CharacterSheetUncheckedCreateWithoutCampaignInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4342,7 +4578,11 @@ export type CharacterSheetCreateWithoutGameSessionsInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4408,7 +4648,11 @@ export type CharacterSheetUncheckedCreateWithoutGameSessionsInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4476,7 +4720,11 @@ export type CharacterSheetUpdateWithoutGameSessionsInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4542,7 +4790,11 @@ export type CharacterSheetUncheckedUpdateWithoutGameSessionsInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4594,7 +4846,11 @@ export type CharacterSheetCreateWithoutCampaignActorInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4659,7 +4915,11 @@ export type CharacterSheetUncheckedCreateWithoutCampaignActorInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4728,7 +4988,11 @@ export type CharacterSheetUpdateWithoutCampaignActorInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4793,7 +5057,11 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignActorInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4852,7 +5120,11 @@ export type CharacterSheetCreateManySystemInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -4898,7 +5170,11 @@ export type CharacterSheetUpdateWithoutSystemInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4963,7 +5239,11 @@ export type CharacterSheetUncheckedUpdateWithoutSystemInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5022,7 +5302,11 @@ export type CharacterSheetUncheckedUpdateManyWithoutSystemInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5074,7 +5358,11 @@ export type CharacterSheetCreateManyAncestryInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -5120,7 +5408,11 @@ export type CharacterSheetUpdateWithoutAncestryInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5185,7 +5477,11 @@ export type CharacterSheetUncheckedUpdateWithoutAncestryInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5244,7 +5540,11 @@ export type CharacterSheetUncheckedUpdateManyWithoutAncestryInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5296,7 +5596,11 @@ export type CharacterSheetCreateManyBackgroundInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -5342,7 +5646,11 @@ export type CharacterSheetUpdateWithoutBackgroundInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5407,7 +5715,11 @@ export type CharacterSheetUncheckedUpdateWithoutBackgroundInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5466,7 +5778,11 @@ export type CharacterSheetUncheckedUpdateManyWithoutBackgroundInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5518,7 +5834,11 @@ export type CharacterSheetCreateManyCharacterClassInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -5564,7 +5884,11 @@ export type CharacterSheetUpdateWithoutCharacterClassInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5629,7 +5953,11 @@ export type CharacterSheetUncheckedUpdateWithoutCharacterClassInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5688,7 +6016,11 @@ export type CharacterSheetUncheckedUpdateManyWithoutCharacterClassInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5740,7 +6072,11 @@ export type CharacterSheetCreateManySubclassInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -5786,7 +6122,11 @@ export type CharacterSheetUpdateWithoutSubclassInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5851,7 +6191,11 @@ export type CharacterSheetUncheckedUpdateWithoutSubclassInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5910,7 +6254,11 @@ export type CharacterSheetUncheckedUpdateManyWithoutSubclassInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5962,7 +6310,11 @@ export type CharacterSheetCreateManyCampaignInput = {
   ideals?: string | null
   personality?: string | null
   backstory?: string | null
+  organizations?: string | null
+  allies?: string | null
+  enemies?: string | null
   notes?: string | null
+  otherNotes?: string | null
   gmNotes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -6008,7 +6360,11 @@ export type CharacterSheetUpdateWithoutCampaignInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6073,7 +6429,11 @@ export type CharacterSheetUncheckedUpdateWithoutCampaignInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6132,7 +6492,11 @@ export type CharacterSheetUncheckedUpdateManyWithoutCampaignInput = {
   ideals?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backstory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  allies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  enemies?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  otherNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gmNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6270,7 +6634,11 @@ export type CharacterSheetSelect<ExtArgs extends runtime.Types.Extensions.Intern
   ideals?: boolean
   personality?: boolean
   backstory?: boolean
+  organizations?: boolean
+  allies?: boolean
+  enemies?: boolean
   notes?: boolean
+  otherNotes?: boolean
   gmNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -6338,7 +6706,11 @@ export type CharacterSheetSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   ideals?: boolean
   personality?: boolean
   backstory?: boolean
+  organizations?: boolean
+  allies?: boolean
+  enemies?: boolean
   notes?: boolean
+  otherNotes?: boolean
   gmNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -6398,7 +6770,11 @@ export type CharacterSheetSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   ideals?: boolean
   personality?: boolean
   backstory?: boolean
+  organizations?: boolean
+  allies?: boolean
+  enemies?: boolean
   notes?: boolean
+  otherNotes?: boolean
   gmNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -6458,13 +6834,17 @@ export type CharacterSheetSelectScalar = {
   ideals?: boolean
   personality?: boolean
   backstory?: boolean
+  organizations?: boolean
+  allies?: boolean
+  enemies?: boolean
   notes?: boolean
+  otherNotes?: boolean
   gmNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CharacterSheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "systemId" | "campaignActorId" | "ownerId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "status" | "name" | "pronouns" | "concept" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "level" | "experience" | "levelUpAvailable" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "hitDiceUsed" | "deathSaveSuccesses" | "deathSaveFailures" | "armorClass" | "speed" | "inspiration" | "classEquipmentMode" | "backgroundEquipmentMode" | "startingGold" | "alignment" | "faith" | "lifestyle" | "hair" | "skin" | "eyes" | "height" | "weight" | "age" | "gender" | "bonds" | "flaws" | "ideals" | "personality" | "backstory" | "notes" | "gmNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheet"]>
+export type CharacterSheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "systemId" | "campaignActorId" | "ownerId" | "ancestryId" | "backgroundId" | "classId" | "subclassId" | "status" | "name" | "pronouns" | "concept" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "level" | "experience" | "levelUpAvailable" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "hitDiceUsed" | "deathSaveSuccesses" | "deathSaveFailures" | "armorClass" | "speed" | "inspiration" | "classEquipmentMode" | "backgroundEquipmentMode" | "startingGold" | "alignment" | "faith" | "lifestyle" | "hair" | "skin" | "eyes" | "height" | "weight" | "age" | "gender" | "bonds" | "flaws" | "ideals" | "personality" | "backstory" | "organizations" | "allies" | "enemies" | "notes" | "otherNotes" | "gmNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheet"]>
 export type CharacterSheetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -6566,7 +6946,11 @@ export type $CharacterSheetPayload<ExtArgs extends runtime.Types.Extensions.Inte
     ideals: string | null
     personality: string | null
     backstory: string | null
+    organizations: string | null
+    allies: string | null
+    enemies: string | null
     notes: string | null
+    otherNotes: string | null
     gmNotes: string | null
     createdAt: Date
     updatedAt: Date
@@ -7053,7 +7437,11 @@ export interface CharacterSheetFieldRefs {
   readonly ideals: Prisma.FieldRef<"CharacterSheet", 'String'>
   readonly personality: Prisma.FieldRef<"CharacterSheet", 'String'>
   readonly backstory: Prisma.FieldRef<"CharacterSheet", 'String'>
+  readonly organizations: Prisma.FieldRef<"CharacterSheet", 'String'>
+  readonly allies: Prisma.FieldRef<"CharacterSheet", 'String'>
+  readonly enemies: Prisma.FieldRef<"CharacterSheet", 'String'>
   readonly notes: Prisma.FieldRef<"CharacterSheet", 'String'>
+  readonly otherNotes: Prisma.FieldRef<"CharacterSheet", 'String'>
   readonly gmNotes: Prisma.FieldRef<"CharacterSheet", 'String'>
   readonly createdAt: Prisma.FieldRef<"CharacterSheet", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CharacterSheet", 'DateTime'>

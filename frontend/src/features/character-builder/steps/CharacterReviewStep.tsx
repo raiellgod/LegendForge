@@ -543,7 +543,7 @@ export function CharacterReviewStep({
 
       <CharacterReviewSection
         title="Sobre"
-        description="Identidade, aparência, personalidade, história e notas."
+        description="Identidade, aparência, personalidade, relações, história e notas."
       >
         <div className="grid gap-3 md:grid-cols-2">
           <CharacterReviewFact
@@ -572,15 +572,66 @@ export function CharacterReviewStep({
           value={getPhysicalSummary(draft)}
         />
 
-        <CharacterReviewTextBlock
-          label="Personalidade"
-          value={getPersonalitySummary(draft)}
-        />
+        <div className="grid gap-3 md:grid-cols-2">
+          <CharacterReviewTextBlock
+            label="Personalidade"
+            value={getPersonalitySummary(draft)}
+          />
+
+          <CharacterReviewTextBlock
+            label="Vínculos"
+            value={draft.bonds || "Vínculos ainda não preenchidos."}
+          />
+
+          <CharacterReviewTextBlock
+            label="Ideais"
+            value={draft.ideals || "Ideais ainda não preenchidos."}
+          />
+
+          <CharacterReviewTextBlock
+            label="Defeitos"
+            value={draft.flaws || "Defeitos ainda não preenchidos."}
+          />
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <CharacterReviewTextBlock
+            label="Organizações"
+            value={draft.organizations || "Organizações ainda não preenchidas."}
+          />
+
+          <CharacterReviewTextBlock
+            label="Aliados"
+            value={draft.allies || "Aliados ainda não preenchidos."}
+          />
+
+          <CharacterReviewTextBlock
+            label="Inimigos"
+            value={draft.enemies || "Inimigos ainda não preenchidos."}
+          />
+
+          <CharacterReviewTextBlock
+            label="Outros vínculos"
+            value={draft.otherNotes || "Outros vínculos ainda não preenchidos."}
+          />
+        </div>
 
         <CharacterReviewTextBlock
           label="História"
           value={draft.backstory || "História ainda não preenchida."}
         />
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <CharacterReviewTextBlock
+            label="Notas gerais"
+            value={draft.notes || "Notas gerais ainda não preenchidas."}
+          />
+
+          <CharacterReviewTextBlock
+            label="Notas do mestre"
+            value={draft.gmNotes || "Notas do mestre ainda não preenchidas."}
+          />
+        </div>
       </CharacterReviewSection>
     </div>
   );

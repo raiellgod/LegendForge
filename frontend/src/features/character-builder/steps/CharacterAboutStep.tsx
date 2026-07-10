@@ -259,8 +259,51 @@ export function CharacterAboutStep({
       </CharacterAboutSection>
 
       <CharacterAboutSection
+        title="Relações e mundo"
+        description="Organizações, aliados, inimigos e relações importantes que conectam o personagem à campanha."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <CharacterBuilderTextarea
+            label="Organizações"
+            value={draft.organizations}
+            placeholder="Facções, guildas, igrejas, gangues, clãs, companhias..."
+            title="Organizações, facções, grupos, guildas ou instituições ligadas ao personagem."
+            rows={4}
+            onChange={(value) => onChangeDraftField("organizations", value)}
+          />
+
+          <CharacterBuilderTextarea
+            label="Aliados"
+            value={draft.allies}
+            placeholder="Pessoas, contatos, mentores, amigos, protegidos..."
+            title="Aliados, contatos, mentores, amigos, familiares ou pessoas que podem ajudar o personagem."
+            rows={4}
+            onChange={(value) => onChangeDraftField("allies", value)}
+          />
+
+          <CharacterBuilderTextarea
+            label="Inimigos"
+            value={draft.enemies}
+            placeholder="Rivais, caçadores, monstros, facções hostis, traidores..."
+            title="Inimigos, rivais, ameaças, perseguidores ou grupos hostis ao personagem."
+            rows={4}
+            onChange={(value) => onChangeDraftField("enemies", value)}
+          />
+
+          <CharacterBuilderTextarea
+            label="Outros vínculos"
+            value={draft.otherNotes}
+            placeholder="Mistérios, dívidas, promessas, segredos, presságios..."
+            title="Campo livre para vínculos, mistérios, pendências ou informações que não cabem nas outras categorias."
+            rows={4}
+            onChange={(value) => onChangeDraftField("otherNotes", value)}
+          />
+        </div>
+      </CharacterAboutSection>
+
+      <CharacterAboutSection
         title="História e notas"
-        description="Campos narrativos longos para história, observações e anotações reservadas."
+        description="História do personagem, notas gerais e anotações privadas do mestre."
       >
         <div className="space-y-4">
           <CharacterBuilderTextarea

@@ -255,7 +255,11 @@ export const CharacterSheetScalarFieldEnum = {
   ideals: 'ideals',
   personality: 'personality',
   backstory: 'backstory',
+  organizations: 'organizations',
+  allies: 'allies',
+  enemies: 'enemies',
   notes: 'notes',
+  otherNotes: 'otherNotes',
   gmNotes: 'gmNotes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

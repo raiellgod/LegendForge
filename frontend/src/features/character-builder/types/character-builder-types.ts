@@ -71,7 +71,11 @@ export type CharacterBuilderDraft = {
   ideals: string;
   personality: string;
   backstory: string;
+  organizations: string;
+  allies: string;
+  enemies: string;
   notes: string;
+  otherNotes: string;
   gmNotes: string;
 };
 
@@ -341,7 +345,11 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
   ideals: string | null;
   personality: string | null;
   backstory: string | null;
+  organizations: string | null;
+  allies: string | null;
+  enemies: string | null;
   notes: string | null;
+  otherNotes: string | null;
   gmNotes: string | null;
 
   characterClass: {

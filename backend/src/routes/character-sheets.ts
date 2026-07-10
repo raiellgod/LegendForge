@@ -115,7 +115,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ideals?: string | null;
     personality?: string | null;
     backstory?: string | null;
+    organizations?: string | null;
+    allies?: string | null;
+    enemies?: string | null;
     notes?: string | null;
+    otherNotes?: string | null;
     gmNotes?: string | null;
 
     status?: "DRAFT" | "READY" | "ARCHIVED";
@@ -1548,7 +1552,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           ideals: z.string().nullable().optional(),
           personality: z.string().nullable().optional(),
           backstory: z.string().nullable().optional(),
+          organizations: z.string().nullable().optional(),
+          allies: z.string().nullable().optional(),
+          enemies: z.string().nullable().optional(),
           notes: z.string().nullable().optional(),
+          otherNotes: z.string().nullable().optional(),
           gmNotes: z.string().nullable().optional(),
         }),
       },
@@ -1600,7 +1608,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         ideals,
         personality,
         backstory,
+        organizations,
+        allies,
+        enemies,
         notes,
+        otherNotes,
         gmNotes,
       } = request.body;
 
@@ -1871,7 +1883,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           ideals: ideals?.trim() || null,
           personality: personality?.trim() || null,
           backstory: backstory?.trim() || null,
+          organizations: organizations?.trim() || null,
+          allies: allies?.trim() || null,
+          enemies: enemies?.trim() || null,
           notes: notes?.trim() || null,
+          otherNotes: otherNotes?.trim() || null,
           gmNotes: gmNotes?.trim() || null,
         },
       });
@@ -2005,7 +2021,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             ideals: z.string().nullable().optional(),
             personality: z.string().nullable().optional(),
             backstory: z.string().nullable().optional(),
+            organizations: z.string().nullable().optional(),
+            allies: z.string().nullable().optional(),
+            enemies: z.string().nullable().optional(),
             notes: z.string().nullable().optional(),
+            otherNotes: z.string().nullable().optional(),
             gmNotes: z.string().nullable().optional(),
 
             status: z.enum(["DRAFT", "READY", "ARCHIVED"]).optional(),
@@ -2397,10 +2417,26 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           sheetData.backstory === undefined
             ? undefined
             : sheetData.backstory?.trim() || null,
+        organizations:
+          sheetData.organizations === undefined
+            ? undefined
+            : sheetData.organizations?.trim() || null,
+        allies:
+          sheetData.allies === undefined
+            ? undefined
+            : sheetData.allies?.trim() || null,
+        enemies:
+          sheetData.enemies === undefined
+            ? undefined
+            : sheetData.enemies?.trim() || null,
         notes:
           sheetData.notes === undefined
             ? undefined
             : sheetData.notes?.trim() || null,
+        otherNotes:
+          sheetData.otherNotes === undefined
+            ? undefined
+            : sheetData.otherNotes?.trim() || null,
         gmNotes:
           sheetData.gmNotes === undefined
             ? undefined
