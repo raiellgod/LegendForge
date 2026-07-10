@@ -108,7 +108,13 @@ const READY_SHEET_ATTRIBUTES: Array<{
 ];
 
 type ReadySheetTab =
-  "status" | "combat" | "bag" | "spells" | "features" | "profile" | "notes";
+  | "status"
+  | "combat"
+  | "bag"
+  | "spells"
+  | "features"
+  | "profile"
+  | "notes";
 
 type TokenImageFitOption = "FILL" | "COVER" | "CONTAIN";
 
@@ -632,19 +638,12 @@ function getProtectionProficiencyKeyForEquipment(
     return null;
   }
 
-  const searchableText = [
-    equipment.key,
-    equipment.name,
-    equipment.properties,
-  ]
+  const searchableText = [equipment.key, equipment.name, equipment.properties]
     .map(normalizeReadySheetEquipmentText)
     .filter(Boolean)
     .join(" ");
 
-  if (
-    searchableText.includes("heavy") ||
-    searchableText.includes("pesad")
-  ) {
+  if (searchableText.includes("heavy") || searchableText.includes("pesad")) {
     return "heavy-armor";
   }
 
@@ -656,10 +655,7 @@ function getProtectionProficiencyKeyForEquipment(
     return "medium-armor";
   }
 
-  if (
-    searchableText.includes("light") ||
-    searchableText.includes("leve")
-  ) {
+  if (searchableText.includes("light") || searchableText.includes("leve")) {
     return "light-armor";
   }
 
@@ -673,9 +669,8 @@ export function getEquipmentProtectionProficiency({
   equipment: ReadySheetDefensiveEquipment;
   protectionProficiencyKeys: string[];
 }) {
-  const requiredProficiencyKey = getProtectionProficiencyKeyForEquipment(
-    equipment,
-  );
+  const requiredProficiencyKey =
+    getProtectionProficiencyKeyForEquipment(equipment);
 
   if (!requiredProficiencyKey) {
     return {
@@ -1172,12 +1167,10 @@ function CharacterClassEntryCard({
 
 function FeatureCard({
   name,
-  sourceLabel,
   levelLabel,
   description,
 }: {
   name: string;
-  sourceLabel: string;
   levelLabel: string;
   description: string;
 }) {
@@ -1196,7 +1189,7 @@ function FeatureCard({
           </p>
 
           <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
-            {sourceLabel} · {levelLabel}
+            {levelLabel}
           </p>
         </div>
       </div>
@@ -1206,26 +1199,6 @@ function FeatureCard({
       </p>
     </article>
   );
-}
-
-function getFeatureSourceLabel(sourceType: string) {
-  if (sourceType === "ANCESTRY") {
-    return "Ancestralidade";
-  }
-
-  if (sourceType === "CLASS") {
-    return "Classe";
-  }
-
-  if (sourceType === "SUBCLASS") {
-    return "Subclasse";
-  }
-
-  if (sourceType === "BACKGROUND") {
-    return "Antecedente";
-  }
-
-  return "Feature";
 }
 
 function getCharacterLanguageSourceLabel(source: string | null | undefined) {
@@ -1592,7 +1565,6 @@ function LevelUpPreviewModal({
                   <FeatureCard
                     key={feature.id}
                     name={feature.name}
-                    sourceLabel={getFeatureSourceLabel(feature.sourceType)}
                     levelLabel={
                       feature.level ? `Nível ${feature.level}` : "Sem nível"
                     }
@@ -1902,43 +1874,43 @@ export function CharacterReadySheetView({
   }
 
   const effectiveWeaponProficiencyKeys = Array.from(
-  new Set([
-    ...(characterSheet?.characterClass?.weaponProficiencyKeys ?? []),
-    ...(characterSheet?.classes.flatMap(
-      (classEntry) => classEntry.characterClass.weaponProficiencyKeys,
-    ) ?? []),
-  ]),
-);
+    new Set([
+      ...(characterSheet?.characterClass?.weaponProficiencyKeys ?? []),
+      ...(characterSheet?.classes.flatMap(
+        (classEntry) => classEntry.characterClass.weaponProficiencyKeys,
+      ) ?? []),
+    ]),
+  );
 
-const effectiveProtectionProficiencyKeys = Array.from(
-  new Set([
-    ...(characterSheet?.characterClass?.protectionProficiencyKeys ?? []),
-    ...(characterSheet?.classes.flatMap(
-      (classEntry) => classEntry.characterClass.protectionProficiencyKeys,
-    ) ?? []),
-  ]),
-);
+  const effectiveProtectionProficiencyKeys = Array.from(
+    new Set([
+      ...(characterSheet?.characterClass?.protectionProficiencyKeys ?? []),
+      ...(characterSheet?.classes.flatMap(
+        (classEntry) => classEntry.characterClass.protectionProficiencyKeys,
+      ) ?? []),
+    ]),
+  );
 
-const effectiveToolProficiencyKeys = Array.from(
-  new Set([
-    ...(characterSheet?.characterClass?.toolProficiencyKeys ?? []),
-    ...(characterSheet?.classes.flatMap(
-      (classEntry) => classEntry.characterClass.toolProficiencyKeys,
-    ) ?? []),
-  ]),
-);
+  const effectiveToolProficiencyKeys = Array.from(
+    new Set([
+      ...(characterSheet?.characterClass?.toolProficiencyKeys ?? []),
+      ...(characterSheet?.classes.flatMap(
+        (classEntry) => classEntry.characterClass.toolProficiencyKeys,
+      ) ?? []),
+    ]),
+  );
 
-const weaponProficiencyNames = getUniqueReadySheetProficiencyNames(
-  effectiveWeaponProficiencyKeys,
-);
+  const weaponProficiencyNames = getUniqueReadySheetProficiencyNames(
+    effectiveWeaponProficiencyKeys,
+  );
 
-const protectionProficiencyNames = getUniqueReadySheetProficiencyNames(
-  effectiveProtectionProficiencyKeys,
-);
+  const protectionProficiencyNames = getUniqueReadySheetProficiencyNames(
+    effectiveProtectionProficiencyKeys,
+  );
 
-const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
-  effectiveToolProficiencyKeys,
-);
+  const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
+    effectiveToolProficiencyKeys,
+  );
 
   const attackRows =
     characterSheet?.equipment
@@ -2066,8 +2038,7 @@ const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
     0,
   );
 
-  const previewArmorClassFromProtections =
-    10 + equippedProtectionDefenseBonus;
+  const previewArmorClassFromProtections = 10 + equippedProtectionDefenseBonus;
 
   const armorClassHelper =
     equippedProtectionRows.length > 0
@@ -2869,7 +2840,11 @@ const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
                 </p>
 
                 <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
-                  <SheetBox label="CA" value={armorClass} helper={armorClassHelper} />
+                  <SheetBox
+                    label="CA"
+                    value={armorClass}
+                    helper={armorClassHelper}
+                  />
                   <SheetBox
                     label="Iniciativa"
                     value={initiativeBonus}
@@ -2884,7 +2859,7 @@ const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
                 </div>
               </section>
 
-                            <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
+              <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-2">
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
@@ -2892,7 +2867,8 @@ const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
                     </p>
 
                     <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
-                      Prévia mecânica para a futura CA real. A CA salva continua manual nesta micro.
+                      Prévia mecânica para a futura CA real. A CA salva continua
+                      manual nesta micro.
                     </p>
                   </div>
 
@@ -2929,7 +2905,8 @@ const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
                   </div>
                 ) : (
                   <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
-                    Nenhuma proteção equipada. Equipe uma armadura ou escudo para preparar a CA real.
+                    Nenhuma proteção equipada. Equipe uma armadura ou escudo
+                    para preparar a CA real.
                   </p>
                 )}
               </section>
@@ -3462,9 +3439,6 @@ const toolProficiencyNames = getUniqueReadySheetProficiencyNames(
                             <FeatureCard
                               key={feature.id}
                               name={feature.name}
-                              sourceLabel={getFeatureSourceLabel(
-                                feature.sourceType,
-                              )}
                               levelLabel={
                                 feature.level
                                   ? `Nível ${feature.level}`

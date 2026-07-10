@@ -144,7 +144,6 @@ function filterSpellByType(
 
   return true;
 }
-
 function getAvailableSpellsForClass({
   spells,
   selectedClass,
@@ -451,8 +450,9 @@ export function CharacterSpellsStep({
     currentLevelProgression?.spellsPrepared ?? 0,
   );
 
-  const highestAvailableSpellLevel =
-    getHighestAvailableSpellLevel(currentLevelProgression);
+  const highestAvailableSpellLevel = getHighestAvailableSpellLevel(
+    currentLevelProgression,
+  );
 
   const hasReachedCantripLimit = selectedCantrips.length >= cantripLimit;
   const hasReachedLeveledSpellLimit =
@@ -536,9 +536,7 @@ export function CharacterSpellsStep({
   return (
     <div className="mt-5 space-y-5">
       <div className="space-y-4">
-        <div
-          className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]"
-        >
+        <div className="rounded-2xl border border-forge-gold/25 bg-[#16091d] p-4 shadow-[-5px_5px_0_rgba(0,0,0,0.28)]">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <div className="flex items-center gap-2">
@@ -821,7 +819,7 @@ export function CharacterSpellsStep({
 
               return (
                 <CharacterSpellCard
-                  key={spell.id}
+                  key={spell.key}
                   spell={spell}
                   isSelected={selectionState.isSelected}
                   isDisabled={selectionState.isDisabled}
@@ -861,7 +859,7 @@ export function CharacterSpellsStep({
 
               return (
                 <CharacterSpellCard
-                  key={spell.id}
+                  key={spell.key}
                   spell={spell}
                   isSelected={selectionState.isSelected}
                   isDisabled={selectionState.isDisabled}
