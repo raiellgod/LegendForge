@@ -69,6 +69,7 @@ export const ModelName = {
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
+  LevelProgressionSpellLimit: 'LevelProgressionSpellLimit',
   ClassSpell: 'ClassSpell',
   Feature: 'Feature',
   Spell: 'Spell',
@@ -329,6 +330,7 @@ export const CharacterSheetSpellScalarFieldEnum = {
   id: 'id',
   characterSheetId: 'characterSheetId',
   spellId: 'spellId',
+  classId: 'classId',
   source: 'source',
   isPrepared: 'isPrepared',
   isAlwaysPrepared: 'isAlwaysPrepared',
@@ -433,6 +435,19 @@ export const LevelProgressionScalarFieldEnum = {
 } as const
 
 export type LevelProgressionScalarFieldEnum = (typeof LevelProgressionScalarFieldEnum)[keyof typeof LevelProgressionScalarFieldEnum]
+
+
+export const LevelProgressionSpellLimitScalarFieldEnum = {
+  id: 'id',
+  levelProgressionId: 'levelProgressionId',
+  spellLevel: 'spellLevel',
+  spellsKnown: 'spellsKnown',
+  spellsPrepared: 'spellsPrepared',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LevelProgressionSpellLimitScalarFieldEnum = (typeof LevelProgressionSpellLimitScalarFieldEnum)[keyof typeof LevelProgressionSpellLimitScalarFieldEnum]
 
 
 export const ClassSpellScalarFieldEnum = {

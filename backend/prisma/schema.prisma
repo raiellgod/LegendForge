@@ -438,6 +438,7 @@ model CharacterSheetSpell {
   id               String   @id @default(uuid())
   characterSheetId String
   spellId          String
+  classId          String?
   source           String?
   isPrepared       Boolean  @default(false)
   isAlwaysPrepared Boolean  @default(false)
@@ -447,12 +448,14 @@ model CharacterSheetSpell {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  characterSheet CharacterSheet @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
-  spell          Spell          @relation(fields: [spellId], references: [id], onDelete: Cascade)
+  characterSheet CharacterSheet  @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  spell          Spell           @relation(fields: [spellId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass? @relation(fields: [classId], references: [id], onDelete: SetNull)
 
   @@unique([characterSheetId, spellId])
   @@index([characterSheetId])
   @@index([spellId])
+  @@index([classId])
   @@index([isPrepared])
 }
 
@@ -525,6 +528,7 @@ model CharacterClass {
   features              Feature[]
   characterSheets       CharacterSheet[]
   characterSheetClasses CharacterSheetClass[]
+  characterSheetSpells  CharacterSheetSpell[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -580,14 +584,32 @@ model LevelProgression {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  system         GameSystem     @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  system         GameSystem                    @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass                @relation(fields: [classId], references: [id], onDelete: Cascade)
   features       Feature[]
+  spellLimits    LevelProgressionSpellLimit[]
 
   @@unique([classId, level])
   @@index([systemId])
   @@index([classId])
   @@index([level])
+}
+
+model LevelProgressionSpellLimit {
+  id                 String @id @default(uuid())
+  levelProgressionId String
+  spellLevel         Int
+  spellsKnown        Int    @default(0)
+  spellsPrepared     Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  levelProgression LevelProgression @relation(fields: [levelProgressionId], references: [id], onDelete: Cascade)
+
+  @@unique([levelProgressionId, spellLevel])
+  @@index([levelProgressionId])
+  @@index([spellLevel])
 }
 
 model ClassSpell {

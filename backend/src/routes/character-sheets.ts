@@ -24,6 +24,27 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
   const characterSpellKeysSchema = z.array(z.string()).optional();
   const characterLanguageKeysSchema = z.array(z.string()).optional();
 
+  const characterClassEntriesSchema = z
+    .array(
+      z.object({
+        classId: z.string().uuid("Invalid class id"),
+        subclassId: z
+          .string()
+          .uuid("Invalid subclass id")
+          .nullable()
+          .optional(),
+        level: z.number().int().min(1).max(20),
+        isPrimary: z.boolean().optional(),
+        order: z.number().int().min(0).max(20).optional(),
+      }),
+    )
+    .max(20)
+    .optional();
+
+  type CharacterClassEntryInput = NonNullable<
+    z.infer<typeof characterClassEntriesSchema>
+  >[number];
+
   type CharacterProficiencySource =
     | "builder"
     | "class"
@@ -34,6 +55,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
   type CharacterSpellEntry = {
     spellId: string;
+    classId: string | null;
     source: CharacterProficiencySource;
   };
 
@@ -71,6 +93,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ancestryId?: string | null;
     backgroundId?: string | null;
     subclassId?: string | null;
+    classEntries?: z.infer<typeof characterClassEntriesSchema>;
 
     name?: string;
     pronouns?: string | null;
@@ -477,6 +500,181 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     return Math.max(1, Math.min(20, Math.trunc(level)));
   }
 
+  function normalizeCharacterSheetClassEntries({
+    classEntries,
+    fallbackClassId,
+    fallbackSubclassId,
+    fallbackLevel,
+  }: {
+    classEntries: z.infer<typeof characterClassEntriesSchema>;
+    fallbackClassId: string | null | undefined;
+    fallbackSubclassId: string | null | undefined;
+    fallbackLevel: number | null | undefined;
+  }) {
+    if (!classEntries || classEntries.length === 0) {
+      const safeLevel = normalizeCharacterLevel(fallbackLevel);
+
+      return {
+        entries: [] as CharacterClassEntryInput[],
+        primaryClassId: fallbackClassId ?? null,
+        primarySubclassId: fallbackSubclassId ?? null,
+        totalLevel: safeLevel,
+        error: null as string | null,
+      };
+    }
+
+    const classIds = classEntries.map((classEntry) => classEntry.classId);
+    const uniqueClassIds = new Set(classIds);
+
+    if (uniqueClassIds.size !== classIds.length) {
+      return {
+        entries: [] as CharacterClassEntryInput[],
+        primaryClassId: null,
+        primarySubclassId: null,
+        totalLevel: 1,
+        error: "Duplicate classes are not allowed",
+      };
+    }
+
+    const totalLevel = classEntries.reduce(
+      (currentTotal, classEntry) => currentTotal + classEntry.level,
+      0,
+    );
+
+    if (totalLevel < 1 || totalLevel > 20) {
+      return {
+        entries: [] as CharacterClassEntryInput[],
+        primaryClassId: null,
+        primarySubclassId: null,
+        totalLevel: 1,
+        error: "Total character level must be between 1 and 20",
+      };
+    }
+
+    const explicitPrimaryEntries = classEntries.filter(
+      (classEntry) => classEntry.isPrimary,
+    );
+
+    if (explicitPrimaryEntries.length > 1) {
+      return {
+        entries: [] as CharacterClassEntryInput[],
+        primaryClassId: null,
+        primarySubclassId: null,
+        totalLevel: 1,
+        error: "Only one class can be marked as primary",
+      };
+    }
+
+    const orderedEntries = [...classEntries].sort(
+      (firstEntry, secondEntry) =>
+        (firstEntry.order ?? 0) - (secondEntry.order ?? 0),
+    );
+
+    const primaryEntry = explicitPrimaryEntries[0] ?? orderedEntries[0];
+
+    if (!primaryEntry) {
+      return {
+        entries: [] as CharacterClassEntryInput[],
+        primaryClassId: null,
+        primarySubclassId: null,
+        totalLevel: 1,
+        error: "At least one class entry is required",
+      };
+    }
+
+    return {
+      entries: orderedEntries.map((classEntry, index) => ({
+        ...classEntry,
+        order: index,
+        isPrimary: classEntry.classId === primaryEntry.classId,
+        subclassId: classEntry.subclassId ?? null,
+      })),
+      primaryClassId: primaryEntry.classId,
+      primarySubclassId: primaryEntry.subclassId ?? null,
+      totalLevel,
+      error: null,
+    };
+  }
+
+  async function validateCharacterSheetClassEntries({
+    systemId,
+    classEntries,
+  }: {
+    systemId: string;
+    classEntries: CharacterClassEntryInput[];
+  }) {
+    if (classEntries.length === 0) {
+      return null;
+    }
+
+    const classes = await prisma.characterClass.findMany({
+      where: {
+        systemId,
+        id: {
+          in: classEntries.map((classEntry) => classEntry.classId),
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const classIds = new Set(
+      classes.map((characterClass) => characterClass.id),
+    );
+
+    const missingClassEntry = classEntries.find(
+      (classEntry) => !classIds.has(classEntry.classId),
+    );
+
+    if (missingClassEntry) {
+      return "Character class not found for this system";
+    }
+
+    const entriesWithSubclass = classEntries.filter(
+      (classEntry) => classEntry.subclassId,
+    );
+
+    if (entriesWithSubclass.length === 0) {
+      return null;
+    }
+
+    const subclasses = await prisma.characterSubclass.findMany({
+      where: {
+        systemId,
+        id: {
+          in: entriesWithSubclass
+            .map((classEntry) => classEntry.subclassId)
+            .filter((subclassId): subclassId is string => Boolean(subclassId)),
+        },
+      },
+      select: {
+        id: true,
+        classId: true,
+      },
+    });
+
+    const subclassesById = new Map(
+      subclasses.map((subclass) => [subclass.id, subclass]),
+    );
+
+    const invalidSubclassEntry = entriesWithSubclass.find((classEntry) => {
+      if (!classEntry.subclassId) {
+        return false;
+      }
+
+      const subclass = subclassesById.get(classEntry.subclassId);
+
+      return !subclass || subclass.classId !== classEntry.classId;
+    });
+
+    if (invalidSubclassEntry) {
+      return "Subclass not found for this class and system";
+    }
+
+    return null;
+  }
+
   function getAttributeModifier(value: number | null | undefined) {
     if (typeof value !== "number" || !Number.isFinite(value)) {
       return 0;
@@ -506,61 +704,79 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     return hitPointsPerLevel * safeLevel;
   }
 
-  function getHighestAvailableSpellLevel(
-    progression: {
-      spellSlotsLevel1: number;
-      spellSlotsLevel2: number;
-      spellSlotsLevel3: number;
-      spellSlotsLevel4: number;
-      spellSlotsLevel5: number;
-      spellSlotsLevel6: number;
-      spellSlotsLevel7: number;
-      spellSlotsLevel8: number;
-      spellSlotsLevel9: number;
-    } | null,
-  ) {
-    if (!progression) {
-      return 0;
+  function calculateInitialMaxHitPointsForClassEntries({
+    classEntries,
+    classHitDiceById,
+    fallbackHitDie,
+    fallbackLevel,
+    constitutionValue,
+  }: {
+    classEntries: CharacterClassEntryInput[];
+    classHitDiceById: Map<string, number | null>;
+    fallbackHitDie: number | null | undefined;
+    fallbackLevel: number | null | undefined;
+    constitutionValue: number | null | undefined;
+  }) {
+    const constitutionModifier = getAttributeModifier(constitutionValue);
+
+    if (classEntries.length === 0) {
+      return calculateInitialMaxHitPoints({
+        hitDie: fallbackHitDie,
+        level: fallbackLevel,
+        constitutionValue,
+      });
     }
 
-    const spellSlotsByLevel = [
-      progression.spellSlotsLevel1,
-      progression.spellSlotsLevel2,
-      progression.spellSlotsLevel3,
-      progression.spellSlotsLevel4,
-      progression.spellSlotsLevel5,
-      progression.spellSlotsLevel6,
-      progression.spellSlotsLevel7,
-      progression.spellSlotsLevel8,
-      progression.spellSlotsLevel9,
-    ];
+    return classEntries.reduce((totalHitPoints, classEntry) => {
+      const hitDie = classHitDiceById.get(classEntry.classId);
 
-    for (let index = spellSlotsByLevel.length - 1; index >= 0; index -= 1) {
-      if ((spellSlotsByLevel[index] ?? 0) > 0) {
-        return index + 1;
+      if (typeof hitDie !== "number" || hitDie <= 0) {
+        return totalHitPoints;
       }
-    }
 
-    return 0;
+      const hitPointsPerLevel = Math.max(1, hitDie + constitutionModifier);
+
+      return totalHitPoints + hitPointsPerLevel * classEntry.level;
+    }, 0);
+  }
+
+  function getKnownSpellLimitForSpellLevel({
+    progression,
+    spellLevel,
+  }: {
+    progression:
+      | {
+          spellLimits: Array<{
+            spellLevel: number;
+            spellsKnown: number;
+          }>;
+        }
+      | null
+      | undefined;
+    spellLevel: number;
+  }) {
+    const spellLimit = progression?.spellLimits.find(
+      (currentSpellLimit) => currentSpellLimit.spellLevel === spellLevel,
+    );
+
+    return spellLimit?.spellsKnown ?? 0;
   }
 
   async function getCharacterSpellEntries({
     systemId,
     spellKeys,
-    classId,
-    characterLevel,
+    classEntries,
   }: {
     systemId: string;
     spellKeys: z.infer<typeof characterSpellKeysSchema>;
-    classId: string | null | undefined;
-    characterLevel: number | null | undefined;
+    classEntries: CharacterClassEntryInput[];
   }) {
     if (!spellKeys) {
-  return {
-    entries: [] as CharacterSpellEntry[],
-    error: null as string | null,
-  };
-}
+      return {
+        entries: [] as CharacterSpellEntry[],
+        error: null as string | null,
+      };
+    }
 
     const uniqueSpellKeys = Array.from(new Set(spellKeys));
 
@@ -571,47 +787,47 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       };
     }
 
-    if (!classId) {
+    if (classEntries.length === 0) {
       return {
         entries: [],
-        error: "Choose a class before choosing spells",
+        error: "Choose at least one class before choosing spells",
       };
     }
 
-    const safeLevel = normalizeCharacterLevel(characterLevel);
-
-    const characterClass = await prisma.characterClass.findFirst({
+    const characterClasses = await prisma.characterClass.findMany({
       where: {
-        id: classId,
         systemId,
+        id: {
+          in: classEntries.map((classEntry) => classEntry.classId),
+        },
       },
       include: {
-        levelProgressions: true,
+        levelProgressions: {
+          include: {
+            spellLimits: true,
+          },
+        },
         classSpells: true,
       },
     });
 
-    if (!characterClass) {
+    const classesById = new Map(
+      characterClasses.map((characterClass) => [
+        characterClass.id,
+        characterClass,
+      ]),
+    );
+
+    const missingClassEntry = classEntries.find(
+      (classEntry) => !classesById.has(classEntry.classId),
+    );
+
+    if (missingClassEntry) {
       return {
         entries: [],
         error: "Character class not found for this system",
       };
     }
-
-    const progression =
-      characterClass.levelProgressions.find(
-        (currentProgression) => currentProgression.level === safeLevel,
-      ) ?? null;
-
-    if (!progression) {
-      return {
-        entries: [],
-        error: `Class progression not found for level ${safeLevel}`,
-      };
-    }
-
-    const highestAvailableSpellLevel =
-      getHighestAvailableSpellLevel(progression);
 
     const spells = await prisma.spell.findMany({
       where: {
@@ -641,55 +857,65 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       };
     }
 
-    const classSpellsBySpellId = new Map(
-      characterClass.classSpells.map((classSpell) => [
-        classSpell.spellId,
-        classSpell,
-      ]),
-    );
+    const entries: CharacterSpellEntry[] = [];
 
     for (const spellKey of uniqueSpellKeys) {
       const spell = spellsByKey.get(spellKey)!;
-      const classSpell = classSpellsBySpellId.get(spell.id);
 
-      if (!classSpell) {
+      const compatibleClassEntry = classEntries.find((classEntry) => {
+        const characterClass = classesById.get(classEntry.classId);
+
+        if (!characterClass) {
+          return false;
+        }
+
+        const safeClassLevel = normalizeCharacterLevel(classEntry.level);
+
+        const progression =
+          characterClass.levelProgressions.find(
+            (currentProgression) => currentProgression.level === safeClassLevel,
+          ) ?? null;
+
+        if (!progression) {
+          return false;
+        }
+
+        const classSpell = characterClass.classSpells.find(
+          (currentClassSpell) => currentClassSpell.spellId === spell.id,
+        );
+
+        if (!classSpell) {
+          return false;
+        }
+
+        if ((classSpell.minimumClassLevel ?? 1) > safeClassLevel) {
+          return false;
+        }
+
+        return (
+          getKnownSpellLimitForSpellLevel({
+            progression,
+            spellLevel: spell.level,
+          }) > 0
+        );
+      });
+
+      if (!compatibleClassEntry) {
         return {
           entries: [],
-          error: `Spell ${spell.name} is not available for ${characterClass.name}`,
+          error: `Spell ${spell.name} is not available for the selected classes at their current levels`,
         };
       }
 
-      if ((classSpell.minimumClassLevel ?? 1) > safeLevel) {
-        return {
-          entries: [],
-          error: `Spell ${spell.name} requires ${characterClass.name} level ${
-            classSpell.minimumClassLevel ?? 1
-          }`,
-        };
-      }
-
-      if (spell.level === 0 && progression.cantripsKnown <= 0) {
-        return {
-          entries: [],
-          error: `${characterClass.name} cannot choose cantrips at level ${safeLevel}`,
-        };
-      }
-
-      if (spell.level > 0 && spell.level > highestAvailableSpellLevel) {
-        return {
-          entries: [],
-          error: `Spell ${spell.name} is level ${spell.level}, but ${characterClass.name} level ${safeLevel} can only choose spells up to level ${
-            highestAvailableSpellLevel || 0
-          }`,
-        };
-      }
+      entries.push({
+        spellId: spell.id,
+        classId: compatibleClassEntry.classId,
+        source: "class",
+      });
     }
 
     return {
-      entries: uniqueSpellKeys.map((key) => ({
-        spellId: spellsByKey.get(key)!.id,
-        source: "class" as CharacterProficiencySource,
-      })),
+      entries,
       error: null,
     };
   }
@@ -710,6 +936,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           data: {
             characterSheetId,
             spellId: entry.spellId,
+            classId: entry.classId,
             source: entry.source,
           },
         }),
@@ -947,57 +1174,89 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ]);
   }
 
-  async function syncPrimaryCharacterSheetClass({
+  async function syncCharacterSheetClasses({
     characterSheetId,
-    classId,
-    subclassId,
-    level,
+    classEntries,
+    fallbackClassId,
+    fallbackSubclassId,
+    fallbackLevel,
   }: {
     characterSheetId: string;
-    classId: string | null;
-    subclassId: string | null;
-    level: number;
+    classEntries: CharacterClassEntryInput[];
+    fallbackClassId: string | null;
+    fallbackSubclassId: string | null;
+    fallbackLevel: number;
   }) {
-    if (!classId) {
+    const entriesToSync =
+      classEntries.length > 0
+        ? classEntries
+        : fallbackClassId
+          ? [
+              {
+                classId: fallbackClassId,
+                subclassId: fallbackSubclassId,
+                level: fallbackLevel,
+                isPrimary: true,
+                order: 0,
+              },
+            ]
+          : [];
+
+    if (entriesToSync.length === 0) {
+      await prisma.characterSheetClass.deleteMany({
+        where: {
+          characterSheetId,
+        },
+      });
+
       return;
     }
 
+    const primaryEntry =
+      entriesToSync.find((classEntry) => classEntry.isPrimary) ??
+      entriesToSync[0];
+
+    const normalizedEntries = entriesToSync.map((classEntry, index) => ({
+      ...classEntry,
+      subclassId: classEntry.subclassId ?? null,
+      isPrimary: classEntry.classId === primaryEntry.classId,
+      order: index,
+    }));
+
     await prisma.$transaction([
-      prisma.characterSheetClass.updateMany({
+      prisma.characterSheetClass.deleteMany({
         where: {
           characterSheetId,
-          isPrimary: true,
           classId: {
-            not: classId,
+            notIn: normalizedEntries.map((classEntry) => classEntry.classId),
           },
-        },
-        data: {
-          isPrimary: false,
         },
       }),
 
-      prisma.characterSheetClass.upsert({
-        where: {
-          characterSheetId_classId: {
-            characterSheetId,
-            classId,
+      ...normalizedEntries.map((classEntry) =>
+        prisma.characterSheetClass.upsert({
+          where: {
+            characterSheetId_classId: {
+              characterSheetId,
+              classId: classEntry.classId,
+            },
           },
-        },
-        create: {
-          characterSheetId,
-          classId,
-          subclassId,
-          level,
-          isPrimary: true,
-          order: 1,
-        },
-        update: {
-          subclassId,
-          level,
-          isPrimary: true,
-          order: 1,
-        },
-      }),
+          create: {
+            characterSheetId,
+            classId: classEntry.classId,
+            subclassId: classEntry.subclassId,
+            level: classEntry.level,
+            isPrimary: classEntry.isPrimary,
+            order: classEntry.order,
+          },
+          update: {
+            subclassId: classEntry.subclassId,
+            level: classEntry.level,
+            isPrimary: classEntry.isPrimary,
+            order: classEntry.order,
+          },
+        }),
+      ),
     ]);
   }
 
@@ -1289,6 +1548,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           orderBy: {
             level: "asc",
           },
+          include: {
+            spellLimits: {
+              orderBy: {
+                spellLevel: "asc",
+              },
+            },
+          },
         },
       },
     },
@@ -1300,6 +1566,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             levelProgressions: {
               orderBy: {
                 level: "asc",
+              },
+              include: {
+                spellLimits: {
+                  orderBy: {
+                    spellLevel: "asc",
+                  },
+                },
               },
             },
           },
@@ -1335,6 +1608,19 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     spells: {
       include: {
         spell: true,
+        characterClass: {
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            spellcastingAbilityKey: true,
+          },
+        },
+      },
+      orderBy: {
+        spell: {
+          order: "asc",
+        },
       },
     },
     languages: {
@@ -1507,6 +1793,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           systemId: z.string().uuid("Invalid system id"),
 
           classId: z.string().uuid("Invalid class id").nullable().optional(),
+          classEntries: characterClassEntriesSchema,
           ancestryId: z
             .string()
             .uuid("Invalid ancestry id")
@@ -1576,6 +1863,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         campaignActorId,
         systemId,
         classId,
+        classEntries,
         ancestryId,
         backgroundId,
         name,
@@ -1697,10 +1985,40 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const selectedCharacterClass = classId
+      const normalizedClassEntriesResult = normalizeCharacterSheetClassEntries({
+        classEntries,
+        fallbackClassId: classId,
+        fallbackSubclassId: null,
+        fallbackLevel: level ?? 1,
+      });
+
+      if (normalizedClassEntriesResult.error) {
+        return reply.status(400).send({
+          message: normalizedClassEntriesResult.error,
+        });
+      }
+
+      const classEntriesValidationError =
+        await validateCharacterSheetClassEntries({
+          systemId,
+          classEntries: normalizedClassEntriesResult.entries,
+        });
+
+      if (classEntriesValidationError) {
+        return reply.status(400).send({
+          message: classEntriesValidationError,
+        });
+      }
+
+      const effectiveClassId = normalizedClassEntriesResult.primaryClassId;
+      const effectiveSubclassId =
+        normalizedClassEntriesResult.primarySubclassId;
+      const effectiveLevel = normalizedClassEntriesResult.totalLevel;
+
+      const selectedCharacterClass = effectiveClassId
         ? await prisma.characterClass.findFirst({
             where: {
-              id: classId,
+              id: effectiveClassId,
               systemId,
             },
             select: {
@@ -1711,7 +2029,32 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           })
         : null;
 
-      if (classId && !selectedCharacterClass) {
+      const selectedCharacterClassesForHitPoints =
+        normalizedClassEntriesResult.entries.length > 0
+          ? await prisma.characterClass.findMany({
+              where: {
+                systemId,
+                id: {
+                  in: normalizedClassEntriesResult.entries.map(
+                    (classEntry) => classEntry.classId,
+                  ),
+                },
+              },
+              select: {
+                id: true,
+                hitDie: true,
+              },
+            })
+          : [];
+
+      const classHitDiceById = new Map(
+        selectedCharacterClassesForHitPoints.map((characterClass) => [
+          characterClass.id,
+          characterClass.hitDie,
+        ]),
+      );
+
+      if (effectiveClassId && !selectedCharacterClass) {
         return reply.status(404).send({
           message: "Character class not found for this system",
         });
@@ -1803,8 +2146,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       const spellEntriesResult = await getCharacterSpellEntries({
         systemId,
         spellKeys,
-        classId: classId ?? null,
-        characterLevel: level ?? 1,
+        classEntries: normalizedClassEntriesResult.entries,
       });
 
       if (spellEntriesResult.error) {
@@ -1836,9 +2178,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const initialMaxHitPoints = calculateInitialMaxHitPoints({
-        hitDie: selectedCharacterClass?.hitDie ?? null,
-        level: level ?? 1,
+      const initialMaxHitPoints = calculateInitialMaxHitPointsForClassEntries({
+        classEntries: normalizedClassEntriesResult.entries,
+        classHitDiceById,
+        fallbackHitDie: selectedCharacterClass?.hitDie ?? null,
+        fallbackLevel: effectiveLevel,
         constitutionValue: attributes?.constitution ?? null,
       });
 
@@ -1849,7 +2193,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           campaignActorId: campaignActorId ?? null,
           ownerId: session.user.id,
 
-          classId: classId ?? null,
+          classId: effectiveClassId,
+          subclassId: effectiveSubclassId,
           ancestryId: ancestryId ?? null,
           backgroundId: backgroundId ?? null,
 
@@ -1859,7 +2204,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           portraitUrl: portraitUrl?.trim() || null,
           tokenImageUrl: tokenImageUrl?.trim() || null,
           tokenImageFit: tokenImageFit ?? "FILL",
-          level: level ?? 1,
+          level: effectiveLevel,
           hitPoints: initialMaxHitPoints,
           maxHitPoints: initialMaxHitPoints,
           classEquipmentMode: classEquipmentMode ?? "PACKAGE",
@@ -1925,11 +2270,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         );
       }
 
-      await syncPrimaryCharacterSheetClass({
+      await syncCharacterSheetClasses({
         characterSheetId: characterSheet.id,
-        classId: characterSheet.classId,
-        subclassId: characterSheet.subclassId,
-        level: characterSheet.level,
+        classEntries: normalizedClassEntriesResult.entries,
+        fallbackClassId: characterSheet.classId,
+        fallbackSubclassId: characterSheet.subclassId,
+        fallbackLevel: characterSheet.level,
       });
 
       const characterSheetWithRelations =
@@ -1963,6 +2309,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         body: z
           .object({
             classId: z.string().uuid("Invalid class id").nullable().optional(),
+            classEntries: characterClassEntriesSchema,
             ancestryId: z
               .string()
               .uuid("Invalid ancestry id")
@@ -2057,6 +2404,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         spellKeys,
         languageKeys,
         equipmentItems,
+        classEntries,
         ...sheetData
       } = request.body;
 
@@ -2104,6 +2452,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           characterClass: {
             select: {
               id: true,
+              hitDie: true,
               classSkillChoiceCount: true,
             },
           },
@@ -2140,6 +2489,37 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const normalizedClassEntriesResult = normalizeCharacterSheetClassEntries({
+        classEntries,
+        fallbackClassId: sheetData.classId ?? characterSheet.classId,
+        fallbackSubclassId: sheetData.subclassId ?? characterSheet.subclassId,
+        fallbackLevel: sheetData.level ?? characterSheet.level,
+      });
+
+      if (normalizedClassEntriesResult.error) {
+        return reply.status(400).send({
+          message: normalizedClassEntriesResult.error,
+        });
+      }
+
+      const classEntriesValidationError =
+        await validateCharacterSheetClassEntries({
+          systemId: characterSheet.systemId,
+          classEntries: normalizedClassEntriesResult.entries,
+        });
+
+      if (classEntriesValidationError) {
+        return reply.status(400).send({
+          message: classEntriesValidationError,
+        });
+      }
+
+      if (classEntries !== undefined) {
+        sheetData.classId = normalizedClassEntriesResult.primaryClassId;
+        sheetData.subclassId = normalizedClassEntriesResult.primarySubclassId;
+        sheetData.level = normalizedClassEntriesResult.totalLevel;
+      }
+
       const selectedCharacterClass =
         sheetData.classId === undefined
           ? characterSheet.characterClass
@@ -2151,10 +2531,36 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
                 },
                 select: {
                   id: true,
+                  hitDie: true,
                   classSkillChoiceCount: true,
                 },
               })
             : null;
+
+      const selectedCharacterClassesForHitPoints =
+        normalizedClassEntriesResult.entries.length > 0
+          ? await prisma.characterClass.findMany({
+              where: {
+                systemId: characterSheet.systemId,
+                id: {
+                  in: normalizedClassEntriesResult.entries.map(
+                    (classEntry) => classEntry.classId,
+                  ),
+                },
+              },
+              select: {
+                id: true,
+                hitDie: true,
+              },
+            })
+          : [];
+
+      const classHitDiceById = new Map(
+        selectedCharacterClassesForHitPoints.map((characterClass) => [
+          characterClass.id,
+          characterClass.hitDie,
+        ]),
+      );
 
       if (sheetData.classId && !selectedCharacterClass) {
         return reply.status(404).send({
@@ -2298,16 +2704,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         skillEntriesResult.entries,
       );
 
-      const spellValidationClassId =
-        sheetData.classId ?? characterSheet.classId;
-
-      const spellValidationLevel = sheetData.level ?? characterSheet.level;
-
       const spellEntriesResult = await getCharacterSpellEntries({
         systemId: characterSheet.systemId,
         spellKeys,
-        classId: spellValidationClassId,
-        characterLevel: spellValidationLevel,
+        classEntries: normalizedClassEntriesResult.entries,
       });
 
       if (spellEntriesResult.error) {
@@ -2339,8 +2739,48 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const currentConstitutionStat = await prisma.characterSheetStat.findFirst(
+        {
+          where: {
+            characterSheetId: sheetId,
+            stat: {
+              key: "constitution",
+            },
+          },
+          select: {
+            baseValue: true,
+          },
+        },
+      );
+
+      const shouldRecalculateInitialHitPoints =
+        characterSheet.status === "DRAFT" &&
+        (classEntries !== undefined ||
+          sheetData.classId !== undefined ||
+          sheetData.level !== undefined ||
+          attributes?.constitution !== undefined);
+
+      const nextConstitutionValue =
+        attributes?.constitution ?? currentConstitutionStat?.baseValue ?? null;
+
+      const recalculatedInitialMaxHitPoints = shouldRecalculateInitialHitPoints
+        ? calculateInitialMaxHitPointsForClassEntries({
+            classEntries: normalizedClassEntriesResult.entries,
+            classHitDiceById,
+            fallbackHitDie: selectedCharacterClass?.hitDie ?? null,
+            fallbackLevel: sheetData.level ?? characterSheet.level,
+            constitutionValue: nextConstitutionValue,
+          })
+        : null;
+
       const sanitizedData = {
         ...sheetData,
+        ...(recalculatedInitialMaxHitPoints !== null
+          ? {
+              hitPoints: recalculatedInitialMaxHitPoints,
+              maxHitPoints: recalculatedInitialMaxHitPoints,
+            }
+          : {}),
         pronouns:
           sheetData.pronouns === undefined
             ? undefined
@@ -2528,11 +2968,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           include: characterSheetInclude,
         });
 
-      await syncPrimaryCharacterSheetClass({
+      await syncCharacterSheetClasses({
         characterSheetId: updatedCharacterSheet.id,
-        classId: updatedCharacterSheet.classId,
-        subclassId: updatedCharacterSheet.subclassId,
-        level: updatedCharacterSheet.level,
+        classEntries: normalizedClassEntriesResult.entries,
+        fallbackClassId: updatedCharacterSheet.classId,
+        fallbackSubclassId: updatedCharacterSheet.subclassId,
+        fallbackLevel: updatedCharacterSheet.level,
       });
 
       const updatedCharacterSheetWithRelations =

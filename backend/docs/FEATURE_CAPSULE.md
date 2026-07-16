@@ -1,7 +1,6 @@
 # 📦 FEATURE CAPSULES — LegendForge
 
-> Atualizado para novo chat em 07/07/2026. Contexto consolidado após a sequência 4.6.6 — Idiomas por fonte.
-
+> Atualizado para novo chat em 16/07/2026. Contexto consolidado após a macro **4.7.7 — Magias iniciais por classe/nível**.
 
 ## 📌 Sobre
 
@@ -55,99 +54,94 @@ As cápsulas anteriores cobrem:
 39 — Equipment Attacks / Features / Level Up Preview
 40 — Multiclass Foundation
 41 — Seed Modularization / Equipment Images
+42 — Character Creation Rules: Skills Foundation
+43 — Character Languages by Source
+44 — Equipment Proficiencies by Source
+45 — Character Narrative Fields
+46 — Initial Multiclass Foundation
+47 — Initial Multiclass HP and Features
 ```
 
 ---
 
-# ⚡ Capsule 42 — Character Creation Rules: Skills Foundation
+# ⚡ Capsule 48 — Multiclass Spell Limits and Spell Sources
 
 ## 🎯 Goal
 
-Revisar a criação de ficha para começar a separar regras reais por fonte.
+Consolidar magias iniciais por classe/nível com suporte a multiclasse, separando magias conhecidas de magias preparadas e preparando origem interna por classe.
 
 ## ✅ Result
 
-- atributos por fonte;
-- perícias salvas com `source`;
-- antecedente virou sugestão visual, não proficiência automática;
-- classe passou a controlar quantidade de perícias;
-- backend valida limite;
-- finalização exige quantidade exata de perícias de classe;
-- revisão mostra proficiências da classe.
+- `LevelProgressionSpellLimit` modelado no Prisma.
+- `LevelProgression.spellLimits` criado.
+- `CharacterSheetSpell.classId` criado.
+- Seed preenche limites por nível de magia.
+- `/systems/:systemId/character-options` retorna `spellLimits`.
+- Frontend types recebem `CharacterBuilderSpellLimit`.
+- Builder usa `spellsKnown` por nível de magia.
+- Builder não usa `spellsPrepared` como limite de escolha.
+- Preparadas ficam para estado/mecânica futura da ficha.
+- Lista de magias é unificada por classes escolhidas.
+- Magia duplicada entre classes aparece uma vez só.
+- Origem interna prioriza classe principal quando compatível.
+- Backend valida magia contra múltiplas classes.
+- Backend salva `source` e `classId` em `CharacterSheetSpell`.
+- Backend retorna `classId` e `characterClass` em cada magia da ficha.
+- Frontend types aceitam origem interna da magia.
+- Ficha pronta mostra bloco **Conjuração** por classe.
+- Cards de magia continuam limpos, sem origem visual por card.
+- Ataque mágico fica preparado para usar a origem interna da magia.
 
----
+## 🧠 Decisions
 
-# ⚡ Capsule 43 — Character Languages by Source
-
-## 🎯 Goal
-
-Adicionar idiomas reais ao sistema, builder, backend e ficha pronta.
-
-## ✅ Result
-
-- `Language` modelado no Prisma.
-- `CharacterSheetLanguage` modelado no Prisma.
-- `GameSystem.languages` criado.
-- `Ancestry.languageKeys` criado.
-- `Background.languageKeys` criado.
-- `Background.languageChoiceCount` usado para escolhas extras.
-- `seed-data/languages.ts` criado.
-- Seed cadastra idiomas.
-- API de opções retorna `languages`.
-- API de opções retorna `languageKeys` de ancestralidades e antecedentes.
-- Types do frontend aceitam `languages` e `languageKeys`.
-- Draft possui `languageKeys`.
-- Backend POST/PATCH aceita `languageKeys`.
-- Backend salva idiomas na ficha.
-- Builder recebeu etapa **Idiomas**.
-- Review mostra idiomas.
-- Finalização valida idiomas.
-- Ficha pronta mostra idiomas no Perfil.
+```txt
+Magias conhecidas ≠ magias preparadas.
+Builder escolhe magias conhecidas.
+Preparadas serão estado/função futura da ficha.
+Mago/estudioso usa premissa de grimório: conhece mais do que prepara.
+Magias concedidas pelo mestre não contam no limite do builder/level up.
+Magias sempre conhecidas futuramente não contam no limite comum.
+```
 
 ## 🧪 Validation
 
 ```txt
 backend eslint limpo
 frontend lint limpo
+páginas sem erro
+ficha abre/finaliza normalmente
 ```
 
 ## 🔚 Completed micros
 
 ```txt
-[x] 4.6.6.1 — Modelar idiomas no schema/seed/API/types
-[x] 4.6.6.2 — Backend salva languageKeys no rascunho da ficha
-[x] 4.6.6.3 — Criar etapa de idiomas no builder
-[x] 4.6.6.4 — Validar idiomas ao finalizar ficha
-[x] 4.6.6.5 — Exibir idiomas na ficha pronta
+[x] 4.7.7.0 — Modelar limites de magia por nível
+[x] 4.7.7.1 — União final das permissões de magia por classe no builder
+[x] 4.7.7.2 — Backend valida magia contra múltiplas classes
+[x] 4.7.7.3 — Backend salva e retorna classId/source da magia
+[x] 4.7.7.4 — Frontend types recebem origem interna da magia
+[x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
 ```
 
 ---
 
-# 🔜 Capsule 44 — Equipment Proficiencies by Source
+# 🔜 Capsule 49 — Initial Pending Choices
 
 ## 🎯 Goal
 
-Transformar proficiências de equipamento em regra real por fonte.
+Mapear e preparar escolhas pendentes iniciais sem ainda implementar todo o fluxo de Level Up real.
 
 ## Planned
 
 ```txt
-[próximo] 4.6.7.1 — Revisar estado atual de proficiências de equipamento
-[ ] 4.6.7.2 — Resolver proficiências efetivas da ficha no backend/frontend
-[ ] 4.6.7.3 — Ataque de equipamento usa proficiência real
-[ ] 4.6.7.4 — Exibir fonte da proficiência na ficha/review
-[ ] 4.6.7.5 — Preparar armaduras/proteções para CA real
+[próximo] 4.7.8.1 — Mapear escolhas pendentes possíveis
+[ ] 4.7.8.2 — Subclasse pendente
+[ ] 4.7.8.3 — Magias/truques pendentes
+[ ] 4.7.8.4 — Proficiências pendentes
+[ ] 4.7.8.5 — Línguas pendentes
+[ ] 4.7.8.6 — Atributos/talentos futuramente
 ```
 
 ## Notes
 
-Já existem no sistema:
-
-```txt
-CharacterClass.weaponProficiencyKeys
-CharacterClass.protectionProficiencyKeys
-CharacterClass.toolProficiencyKeys
-```
-
-A próxima evolução é fazer a ficha pronta consumir essas listas em vez de assumir proficiência temporária em ataque de equipamento.
-
+As escolhas pendentes devem ser planejadas para servirem tanto ao personagem inicial quanto ao Level Up real depois.

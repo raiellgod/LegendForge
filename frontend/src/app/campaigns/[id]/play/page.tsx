@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 import type {
+  CharacterAttributeKey,
   CharacterBuilderDraft,
   CharacterBuilderModalProps,
   CharacterBuilderOptions,
@@ -263,6 +264,7 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
 
     classId: "",
     className: "",
+    classEntries: [],
 
     ancestryId: "",
     ancestryName: "",
@@ -302,6 +304,142 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
     notes: "",
     otherNotes: "",
     gmNotes: "",
+  };
+}
+
+function getCharacterBuilderClassEntriesFromSheet(
+  sheet: CharacterReadySheet,
+): CharacterBuilderDraft["classEntries"] {
+  if (sheet.classes && sheet.classes.length > 0) {
+    return sheet.classes.map((classEntry, index) => ({
+      id: classEntry.id,
+      classId: classEntry.classId,
+      className: classEntry.characterClass.name,
+      subclassId: classEntry.subclassId,
+      subclassName: classEntry.subclass?.name ?? null,
+      level: classEntry.level,
+      isPrimary: classEntry.isPrimary,
+      order: classEntry.order ?? index,
+    }));
+  }
+
+  if (!sheet.characterClass) {
+    return [];
+  }
+
+  return [
+    {
+      id: "primary",
+      classId: sheet.characterClass.id,
+      className: sheet.characterClass.name,
+      subclassId: sheet.subclass?.id ?? null,
+      subclassName: sheet.subclass?.name ?? null,
+      level: sheet.level,
+      isPrimary: true,
+      order: 0,
+    },
+  ];
+}
+
+function createCharacterBuilderDraftFromSheet(
+  sheet: CharacterReadySheet,
+): CharacterBuilderDraft {
+  const classEntries = getCharacterBuilderClassEntriesFromSheet(sheet);
+
+  const primaryClassEntry =
+    classEntries.find((classEntry) => classEntry.isPrimary) ??
+    classEntries[0] ??
+    null;
+
+  const totalLevel =
+    classEntries.length > 0
+      ? Math.max(
+          1,
+          Math.min(
+            20,
+            classEntries.reduce(
+              (currentTotal, classEntry) => currentTotal + classEntry.level,
+              0,
+            ),
+          ),
+        )
+      : sheet.level;
+
+  const attributes: CharacterBuilderDraft["attributes"] = {
+    ...DEFAULT_CHARACTER_ATTRIBUTES,
+  };
+
+  for (const statEntry of sheet.stats) {
+    const statKey = statEntry.stat.key;
+
+    if (statKey in attributes) {
+      attributes[statKey as CharacterAttributeKey] = statEntry.baseValue;
+    }
+  }
+
+  return {
+    name: sheet.name ?? "",
+    pronouns: sheet.pronouns ?? "",
+    concept: sheet.concept ?? "",
+    portraitUrl: sheet.portraitUrl ?? "",
+    tokenImageUrl: sheet.tokenImageUrl ?? "",
+    tokenImageFit: sheet.tokenImageFit ?? "FILL",
+    level: totalLevel,
+
+    classId: primaryClassEntry?.classId ?? sheet.characterClass?.id ?? "",
+    className: primaryClassEntry?.className ?? sheet.characterClass?.name ?? "",
+    classEntries,
+
+    ancestryId: sheet.ancestry?.id ?? "",
+    ancestryName: sheet.ancestry?.name ?? "",
+
+    backgroundId: sheet.background?.id ?? "",
+    backgroundName: sheet.background?.name ?? "",
+    languageKeys: sheet.languages
+      .filter((languageEntry) => languageEntry.source === "builder")
+      .map((languageEntry) => {
+        return languageEntry.language.key;
+      }),
+
+    attributes,
+    skillKeys: sheet.skills
+      .filter((skillEntry) => skillEntry.isProficient)
+      .map((skillEntry) => skillEntry.skill.key),
+    spellKeys: sheet.spells.map((spellEntry) => spellEntry.spell.key),
+    equipmentItems: sheet.equipment.map((equipmentEntry) => ({
+      key: equipmentEntry.equipment.key,
+      quantity: equipmentEntry.quantity,
+      source: equipmentEntry.source === "background" ? "background" : "class",
+      notes: equipmentEntry.notes ?? undefined,
+      isEquipped: equipmentEntry.isEquipped,
+    })),
+    classEquipmentMode: sheet.classEquipmentMode,
+    backgroundEquipmentMode: sheet.backgroundEquipmentMode,
+    startingGold: sheet.startingGold,
+
+    alignment: sheet.alignment ?? "",
+    faith: sheet.faith ?? "",
+    lifestyle: sheet.lifestyle ?? "",
+
+    hair: sheet.hair ?? "",
+    skin: sheet.skin ?? "",
+    eyes: sheet.eyes ?? "",
+    height: sheet.height ?? "",
+    weight: sheet.weight ?? "",
+    age: sheet.age ?? "",
+    gender: sheet.gender ?? "",
+
+    bonds: sheet.bonds ?? "",
+    flaws: sheet.flaws ?? "",
+    ideals: sheet.ideals ?? "",
+    personality: sheet.personality ?? "",
+    backstory: sheet.backstory ?? "",
+    organizations: sheet.organizations ?? "",
+    allies: sheet.allies ?? "",
+    enemies: sheet.enemies ?? "",
+    notes: sheet.notes ?? "",
+    otherNotes: sheet.otherNotes ?? "",
+    gmNotes: sheet.gmNotes ?? "",
   };
 }
 
@@ -771,6 +909,203 @@ function CharacterBuilderModal({
 
   const selectedOptionLabel = getSelectedOptionLabelByPronouns(draft.pronouns);
 
+  const orderedClassEntries = [...draft.classEntries].sort(
+    (firstEntry, secondEntry) => firstEntry.order - secondEntry.order,
+  );
+
+  const primaryClassEntry =
+    orderedClassEntries.find((classEntry) => classEntry.isPrimary) ??
+    orderedClassEntries[0] ??
+    null;
+
+  const classEntriesSummary =
+    orderedClassEntries.length > 0
+      ? orderedClassEntries
+          .map((classEntry) => `${classEntry.className} ${classEntry.level}`)
+          .join(" / ")
+      : selectedClassDisplayName || "Não definida";
+
+  const classEntriesTotalLevel = orderedClassEntries.reduce(
+    (totalLevel, classEntry) => totalLevel + classEntry.level,
+    0,
+  );
+
+  const classLevelDistributionStatus =
+    orderedClassEntries.length === 0
+      ? "Nenhuma classe definida"
+      : classEntriesTotalLevel === draft.level
+        ? "Distribuição válida"
+        : `Distribuição incompleta: ${classEntriesTotalLevel}/${draft.level}`;
+
+  function syncDraftLevelWithClassEntries(
+    nextDraft: CharacterBuilderDraft,
+  ): CharacterBuilderDraft {
+    if (nextDraft.classEntries.length === 0) {
+      return nextDraft;
+    }
+
+    return {
+      ...nextDraft,
+      level: Math.max(
+        1,
+        Math.min(
+          20,
+          nextDraft.classEntries.reduce(
+            (totalLevel, classEntry) => totalLevel + classEntry.level,
+            0,
+          ),
+        ),
+      ),
+    };
+  }
+
+  function setPrimaryClassEntry(classEntryId: string) {
+    if (draft.classEntries.length <= 1) {
+      return;
+    }
+
+    const currentPrimaryClassEntry = draft.classEntries.find(
+      (classEntry) => classEntry.isPrimary,
+    );
+
+    if (currentPrimaryClassEntry?.id === classEntryId) {
+      return;
+    }
+
+    const nextPrimaryClassEntry = draft.classEntries.find(
+      (classEntry) => classEntry.id === classEntryId,
+    );
+
+    if (!nextPrimaryClassEntry) {
+      return;
+    }
+
+    const nextClassEntries = draft.classEntries.map((classEntry) => ({
+      ...classEntry,
+      isPrimary: classEntry.id === classEntryId,
+    }));
+
+    onChangeDraft(
+      syncDraftLevelWithClassEntries({
+        ...draft,
+        classId: nextPrimaryClassEntry.classId,
+        className: nextPrimaryClassEntry.className,
+        classEntries: nextClassEntries,
+        spellKeys: [],
+      }),
+    );
+  }
+
+  function removeClassFromDraft(classEntryId: string) {
+    if (draft.classEntries.length <= 1) {
+      return;
+    }
+
+    const classEntryToRemove = draft.classEntries.find(
+      (classEntry) => classEntry.id === classEntryId,
+    );
+
+    if (!classEntryToRemove) {
+      return;
+    }
+
+    const remainingClassEntries = draft.classEntries
+      .filter((classEntry) => classEntry.id !== classEntryId)
+      .map((classEntry, index) => ({
+        ...classEntry,
+        order: index,
+      }));
+
+    const currentPrimaryWasRemoved = classEntryToRemove.isPrimary;
+
+    const nextPrimaryClassEntry = currentPrimaryWasRemoved
+      ? remainingClassEntries[0]
+      : (remainingClassEntries.find((classEntry) => classEntry.isPrimary) ??
+        remainingClassEntries[0]);
+
+    if (!nextPrimaryClassEntry) {
+      return;
+    }
+
+    const nextClassEntries = remainingClassEntries.map((classEntry) => ({
+      ...classEntry,
+      isPrimary: classEntry.id === nextPrimaryClassEntry.id,
+    }));
+
+    onChangeDraft(
+      syncDraftLevelWithClassEntries({
+        ...draft,
+        classId: nextPrimaryClassEntry.classId,
+        className: nextPrimaryClassEntry.className,
+        classEntries: nextClassEntries,
+        spellKeys: [],
+      }),
+    );
+  }
+
+  function selectClassForDraft(option: CharacterBuilderSelectableOption) {
+    const alreadySelectedClassEntry = draft.classEntries.find(
+      (classEntry) => classEntry.classId === option.id,
+    );
+
+    if (alreadySelectedClassEntry) {
+      removeClassFromDraft(alreadySelectedClassEntry.id);
+      return;
+    }
+
+    const nextClassLevel = draft.classEntries.length === 0 ? draft.level : 1;
+
+    if (draft.classEntries.length === 0) {
+      onChangeDraft(
+        syncDraftLevelWithClassEntries({
+          ...draft,
+          classId: option.id,
+          className: option.name,
+          classEntries: [
+            {
+              id: "primary",
+              classId: option.id,
+              className: option.name,
+              subclassId: null,
+              subclassName: null,
+              level: nextClassLevel,
+              isPrimary: true,
+              order: 0,
+            },
+          ],
+          spellKeys: [],
+        }),
+      );
+
+      onSelectOption("class", option);
+      return;
+    }
+
+    const nextClassEntries = [
+      ...draft.classEntries,
+      {
+        id: `class-${option.id}`,
+        classId: option.id,
+        className: option.name,
+        subclassId: null,
+        subclassName: null,
+        level: nextClassLevel,
+        isPrimary: false,
+        order: draft.classEntries.length,
+      },
+    ];
+
+    onChangeDraft(
+      syncDraftLevelWithClassEntries({
+        ...draft,
+        classEntries: nextClassEntries,
+        spellKeys: [],
+      }),
+    );
+
+    onSelectOption("class", option);
+  }
+
   const requiredSkillChoiceCount = selectedClass?.classSkillChoiceCount ?? 0;
   const requiredLanguageChoiceCount =
     selectedBackground?.languageChoiceCount ?? 0;
@@ -1137,7 +1472,53 @@ function CharacterBuilderModal({
                                     ),
                                   );
 
-                                  updateDraft("level", nextLevel);
+                                  if (draft.classEntries.length === 0) {
+                                    onChangeDraft({
+                                      ...draft,
+                                      level: nextLevel,
+                                    });
+
+                                    return;
+                                  }
+
+                                  const nextClassEntries =
+                                    draft.classEntries.map((classEntry) =>
+                                      classEntry.isPrimary
+                                        ? {
+                                            ...classEntry,
+                                            level: Math.max(
+                                              1,
+                                              Math.min(
+                                                20,
+                                                nextLevel -
+                                                  draft.classEntries
+                                                    .filter(
+                                                      (currentClassEntry) =>
+                                                        currentClassEntry.id !==
+                                                        classEntry.id,
+                                                    )
+                                                    .reduce(
+                                                      (
+                                                        totalLevel,
+                                                        currentClassEntry,
+                                                      ) =>
+                                                        totalLevel +
+                                                        currentClassEntry.level,
+                                                      0,
+                                                    ),
+                                              ),
+                                            ),
+                                          }
+                                        : classEntry,
+                                    );
+
+                                  onChangeDraft(
+                                    syncDraftLevelWithClassEntries({
+                                      ...draft,
+                                      classEntries: nextClassEntries,
+                                      spellKeys: [],
+                                    }),
+                                  );
                                 }}
                                 className="mt-1.5 h-11 w-full rounded-lg border border-zinc-700 bg-zinc-950/70 px-3 text-sm font-black text-zinc-100 outline-none transition focus:border-forge-gold"
                               />
@@ -1147,43 +1528,98 @@ function CharacterBuilderModal({
                       </section>
                     </div>
                   ) : activeStep.id === "class" ? (
-                    <CharacterBuilderOptionCards
-                      title="Classes disponíveis"
-                      description="Escolha a função principal do personagem na aventura."
-                      options={options.classes}
-                      isLoading={isLoadingOptions}
-                      error={optionsError}
-                      emptyMessage="Nenhuma classe encontrada para este sistema."
-                      selectedId={draft.classId}
-                      selectedLabel={selectedOptionLabel}
-                      getOptionName={(option) =>
-                        getGenderedCharacterOptionName({
-                          key: option.key,
-                          name: option.name,
-                          pronouns: draft.pronouns,
-                        })
-                      }
-                      getOptionTitle={(option) => {
-                        const hitDieText = option.hitDie
-                          ? `Dado de vida: d${option.hitDie}.`
-                          : "Dado de vida: em breve.";
-                        const optionName = getGenderedCharacterOptionName({
-                          key: option.key,
-                          name: option.name,
-                          pronouns: draft.pronouns,
-                        });
+                    <div className="space-y-4">
+                      <CharacterClassLevelDistributionPanel
+                        classEntries={draft.classEntries}
+                        totalLevel={draft.level}
+                        onSetPrimaryClassEntry={setPrimaryClassEntry}
+                        onChangeClassEntryLevel={(classEntryId, nextLevel) => {
+                          const nextClassEntries = draft.classEntries.map(
+                            (classEntry) =>
+                              classEntry.id === classEntryId
+                                ? {
+                                    ...classEntry,
+                                    level: nextLevel,
+                                  }
+                                : classEntry,
+                          );
 
-                        return `${optionName}: ${
-                          option.description ?? "Sem descrição cadastrada."
-                        } ${hitDieText} Stats importantes: em breve. Features da classe: em breve.`;
-                      }}
-                      onSelect={(option) => {
-                        updateDraft("classId", option.id);
-                        updateDraft("className", option.name);
-                        updateDraft("spellKeys", []);
-                        onSelectOption("class", option);
-                      }}
-                    />
+                          onChangeDraft(
+                            syncDraftLevelWithClassEntries({
+                              ...draft,
+                              classEntries: nextClassEntries,
+                              spellKeys: [],
+                            }),
+                          );
+                        }}
+                      />
+
+                      <CharacterBuilderOptionCards
+                        title="Classes disponíveis"
+                        description="Escolha a função principal do personagem na aventura."
+                        options={options.classes}
+                        isLoading={isLoadingOptions}
+                        error={optionsError}
+                        emptyMessage="Nenhuma classe encontrada para este sistema."
+                        selectedId=""
+                        selectedIds={draft.classEntries.map(
+                          (classEntry) => classEntry.classId,
+                        )}
+                        selectedLabel={selectedOptionLabel}
+                        getOptionSelectionKind={(option) => {
+                          const classEntry = draft.classEntries.find(
+                            (currentClassEntry) =>
+                              currentClassEntry.classId === option.id,
+                          );
+
+                          if (!classEntry) {
+                            return null;
+                          }
+
+                          return classEntry.isPrimary
+                            ? "primary"
+                            : "additional";
+                        }}
+                        getSelectedLabel={(option) => {
+                          const classEntry = draft.classEntries.find(
+                            (currentClassEntry) =>
+                              currentClassEntry.classId === option.id,
+                          );
+
+                          if (!classEntry) {
+                            return selectedOptionLabel;
+                          }
+
+                          return classEntry.isPrimary
+                            ? "Principal"
+                            : "Adicionada";
+                        }}
+                        getOptionName={(option) =>
+                          getGenderedCharacterOptionName({
+                            key: option.key,
+                            name: option.name,
+                            pronouns: draft.pronouns,
+                          })
+                        }
+                        getOptionTitle={(option) => {
+                          const hitDieText = option.hitDie
+                            ? `Dado de vida: d${option.hitDie}.`
+                            : "Dado de vida: em breve.";
+                          const optionName = getGenderedCharacterOptionName({
+                            key: option.key,
+                            name: option.name,
+                            pronouns: draft.pronouns,
+                          });
+
+                          return `${optionName}: ${
+                            option.description ?? "Sem descrição cadastrada."
+                          } ${hitDieText} Stats importantes: em breve. Features da classe: em breve.`;
+                        }}
+                        onSelect={(option) => {
+                          selectClassForDraft(option);
+                        }}
+                      />
+                    </div>
                   ) : activeStep.id === "ancestry" ? (
                     <CharacterBuilderOptionCards
                       title="Ancestralidades disponíveis"
@@ -1345,6 +1781,8 @@ function CharacterBuilderModal({
                   ) : activeStep.id === "spells" ? (
                     <CharacterSpellsStep
                       spells={options.spells}
+                      classes={options.classes}
+                      classEntries={draft.classEntries}
                       selectedClass={genderedSelectedClass}
                       selectedSpellKeys={draft.spellKeys}
                       characterLevel={draft.level}
@@ -1410,8 +1848,116 @@ function CharacterBuilderModal({
 
                   <div className="mt-5 space-y-3 text-sm">
                     <BuilderSummaryRow
-                      label="Nome"
-                      value={draft.name || "Não definido"}
+                      label="Classes"
+                      value={classEntriesSummary}
+                    />
+
+                    <div
+                      className={[
+                        "rounded-xl border p-3",
+                        orderedClassEntries.length > 0 &&
+                        classEntriesTotalLevel === draft.level
+                          ? "border-emerald-400/30 bg-emerald-500/10"
+                          : "border-amber-400/30 bg-amber-500/10",
+                      ].join(" ")}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-[9px] font-black uppercase tracking-[0.16em] text-zinc-500">
+                            Distribuição de níveis
+                          </p>
+
+                          <p className="mt-1 text-xs font-bold leading-relaxed text-zinc-400">
+                            {classLevelDistributionStatus}
+                          </p>
+                        </div>
+
+                        <span
+                          className={[
+                            "rounded-lg border px-2 py-1 text-xs font-black",
+                            orderedClassEntries.length > 0 &&
+                            classEntriesTotalLevel === draft.level
+                              ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-100"
+                              : "border-amber-400/30 bg-amber-500/15 text-amber-100",
+                          ].join(" ")}
+                        >
+                          {classEntriesTotalLevel}/{draft.level}
+                        </span>
+                      </div>
+
+                      <div className="mt-3 space-y-2">
+                        {orderedClassEntries.length > 0 ? (
+                          orderedClassEntries.map((classEntry) => (
+                            <div
+                              key={classEntry.id}
+                              className="rounded-lg border border-white/10 bg-zinc-950/50 px-3 py-2"
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="min-w-0">
+                                  <p className="break-words text-xs font-black text-zinc-100">
+                                    {classEntry.className}
+                                  </p>
+
+                                  <span
+                                    className={[
+                                      "mt-1 inline-flex rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em]",
+                                      classEntry.isPrimary
+                                        ? "border-forge-gold/40 bg-forge-gold/15 text-forge-gold"
+                                        : "border-white/10 bg-black/20 text-zinc-500",
+                                    ].join(" ")}
+                                  >
+                                    {classEntry.isPrimary
+                                      ? "Classe principal"
+                                      : "Classe adicional"}
+                                  </span>
+                                </div>
+
+                                <span className="shrink-0 text-xs font-black text-forge-gold">
+                                  Nível {classEntry.level}
+                                </span>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="rounded-lg border border-dashed border-white/10 bg-black/20 px-3 py-2 text-xs font-bold text-zinc-500">
+                            Escolha uma classe para iniciar a distribuição.
+                          </p>
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        disabled
+                        className="mt-4 w-full cursor-not-allowed rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-600"
+                        title="Use os cards abaixo para adicionar outra classe ao personagem."
+                      >
+                        + Use os cards abaixo para adicionar classe
+                      </button>
+                    </div>
+
+                    <BuilderSummaryRow
+                      label="Estrutura de classe"
+                      value={
+                        orderedClassEntries.length > 1
+                          ? `${orderedClassEntries.length} classes`
+                          : orderedClassEntries.length === 1
+                            ? "Classe única"
+                            : "Não definida"
+                      }
+                    />
+
+                    <BuilderSummaryRow
+                      label="Classe principal"
+                      value={primaryClassEntry?.className ?? "—"}
+                    />
+
+                    <BuilderSummaryRow
+                      label="Nível da classe principal"
+                      value={
+                        primaryClassEntry
+                          ? String(primaryClassEntry.level)
+                          : "—"
+                      }
                     />
 
                     <BuilderSummaryRow
@@ -1598,9 +2144,12 @@ function CharacterBuilderOptionCards({
   error,
   emptyMessage,
   selectedId,
+  selectedIds = [],
   selectedLabel = "Selecionado",
   getOptionName,
   getOptionTitle,
+  getOptionSelectionKind,
+  getSelectedLabel,
   onSelect,
 }: {
   title: string;
@@ -1610,9 +2159,14 @@ function CharacterBuilderOptionCards({
   error: string | null;
   emptyMessage: string;
   selectedId: string;
+  selectedIds?: string[];
   selectedLabel?: string;
   getOptionName?: (option: CharacterBuilderSelectableOption) => string;
   getOptionTitle?: (option: CharacterBuilderSelectableOption) => string;
+  getOptionSelectionKind?: (
+    option: CharacterBuilderSelectableOption,
+  ) => "primary" | "additional" | null;
+  getSelectedLabel?: (option: CharacterBuilderSelectableOption) => string;
   onSelect: (option: CharacterBuilderSelectableOption) => void;
 }) {
   if (isLoading) {
@@ -1657,7 +2211,15 @@ function CharacterBuilderOptionCards({
 
       <div className="grid gap-3 md:grid-cols-2">
         {options.map((option) => {
-          const isSelected = selectedId === option.id;
+          const optionSelectionKind =
+            getOptionSelectionKind?.(option) ??
+            (selectedId === option.id || selectedIds.includes(option.id)
+              ? "primary"
+              : null);
+
+          const isSelected = Boolean(optionSelectionKind);
+          const currentSelectedLabel =
+            getSelectedLabel?.(option) ?? selectedLabel;
           const optionDescription =
             option.description ?? "Sem descrição cadastrada.";
 
@@ -1674,9 +2236,11 @@ function CharacterBuilderOptionCards({
               title={titleText}
               className={[
                 "group min-h-28 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5",
-                isSelected
+                optionSelectionKind === "primary"
                   ? "border-forge-gold bg-forge-gold/10 shadow-[-4px_4px_0_rgba(234,179,8,0.20)]"
-                  : "border-forge-gold/15 bg-zinc-950/50 hover:border-forge-gold/70 hover:bg-forge-purple/20",
+                  : optionSelectionKind === "additional"
+                    ? "border-zinc-500/60 bg-zinc-800/50 shadow-[-4px_4px_0_rgba(113,113,122,0.18)] hover:border-zinc-400"
+                    : "border-forge-gold/15 bg-zinc-950/50 hover:border-forge-gold/70 hover:bg-forge-purple/20",
               ].join(" ")}
             >
               <div className="flex items-start justify-between gap-3">
@@ -1703,10 +2267,15 @@ function CharacterBuilderOptionCards({
 
                 {isSelected ? (
                   <span
-                    className="shrink-0 rounded-full border border-forge-gold bg-forge-gold px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-black"
+                    className={[
+                      "shrink-0 rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em]",
+                      optionSelectionKind === "additional"
+                        ? "border-zinc-400/50 bg-zinc-700 text-zinc-100"
+                        : "border-forge-gold bg-forge-gold text-black",
+                    ].join(" ")}
                     title="Opção selecionada"
                   >
-                    {selectedLabel}
+                    {currentSelectedLabel}
                   </span>
                 ) : null}
               </div>
@@ -1715,6 +2284,184 @@ function CharacterBuilderOptionCards({
         })}
       </div>
     </div>
+  );
+}
+
+function CharacterClassLevelDistributionPanel({
+  classEntries,
+  totalLevel,
+  onChangeClassEntryLevel,
+  onSetPrimaryClassEntry,
+}: {
+  classEntries: CharacterBuilderDraft["classEntries"];
+  totalLevel: number;
+  onChangeClassEntryLevel?: (classEntryId: string, nextLevel: number) => void;
+  onSetPrimaryClassEntry?: (classEntryId: string) => void;
+}) {
+  const orderedClassEntries = [...classEntries].sort(
+    (firstEntry, secondEntry) => firstEntry.order - secondEntry.order,
+  );
+
+  const classEntriesTotalLevel = orderedClassEntries.reduce(
+    (currentTotal, classEntry) => currentTotal + classEntry.level,
+    0,
+  );
+
+  const distributionStatus =
+    orderedClassEntries.length === 0
+      ? "Nenhuma classe definida"
+      : classEntriesTotalLevel === totalLevel
+        ? "Distribuição válida"
+        : `Distribuição incompleta: ${classEntriesTotalLevel}/${totalLevel}`;
+
+  const isDistributionValid =
+    orderedClassEntries.length > 0 && classEntriesTotalLevel === totalLevel;
+
+  const distributionStyles =
+    orderedClassEntries.length === 0
+      ? {
+          border: "border-white/10",
+          background: "bg-black/25",
+          text: "text-zinc-400",
+          badge: "border-white/10 bg-black/20 text-zinc-500",
+        }
+      : isDistributionValid
+        ? {
+            border: "border-emerald-400/30",
+            background: "bg-emerald-500/10",
+            text: "text-emerald-100",
+            badge: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
+          }
+        : {
+            border: "border-amber-400/30",
+            background: "bg-amber-500/10",
+            text: "text-amber-100",
+            badge: "border-amber-400/30 bg-amber-500/15 text-amber-100",
+          };
+
+  return (
+    <section
+      className={[
+        "rounded-2xl border p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]",
+        distributionStyles.border,
+        distributionStyles.background,
+      ].join(" ")}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-forge-gold">
+            Distribuição de níveis
+          </p>
+
+          <p
+            className={[
+              "mt-2 text-xs font-semibold leading-relaxed",
+              distributionStyles.text,
+            ].join(" ")}
+          >
+            {distributionStatus}
+          </p>
+        </div>
+
+        <span
+          className={[
+            "rounded-lg border px-2 py-1 text-xs font-black",
+            distributionStyles.badge,
+          ].join(" ")}
+        >
+          {classEntriesTotalLevel}/{totalLevel}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-2">
+        {orderedClassEntries.length > 0 ? (
+          orderedClassEntries.map((classEntry) => (
+            <div
+              key={classEntry.id}
+              className="rounded-xl border border-white/10 bg-zinc-950/50 px-3 py-2"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="break-words text-sm font-black text-zinc-100">
+                    {classEntry.className}
+                  </p>
+
+                  <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <span
+                      className={[
+                        "rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em]",
+                        classEntry.isPrimary
+                          ? "border-forge-gold/40 bg-forge-gold/15 text-forge-gold"
+                          : "border-white/10 bg-black/20 text-zinc-500",
+                      ].join(" ")}
+                    >
+                      {classEntry.isPrimary
+                        ? "Classe principal"
+                        : "Classe adicional"}
+                    </span>
+
+                    {orderedClassEntries.length > 1 &&
+                    !classEntry.isPrimary &&
+                    onSetPrimaryClassEntry ? (
+                      <button
+                        type="button"
+                        onClick={() => onSetPrimaryClassEntry(classEntry.id)}
+                        className="rounded-full border border-white/10 bg-black/20 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] text-zinc-400 transition hover:border-forge-gold/40 hover:text-forge-gold"
+                        title={`Definir ${classEntry.className} como classe principal`}
+                      >
+                        Tornar principal
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+
+                {onChangeClassEntryLevel ? (
+                  <label className="w-24 shrink-0">
+                    <span className="sr-only">
+                      Nível de {classEntry.className}
+                    </span>
+
+                    <input
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={classEntry.level}
+                      onChange={(event) => {
+                        const nextLevel = Math.max(
+                          1,
+                          Math.min(20, Number(event.target.value) || 1),
+                        );
+
+                        onChangeClassEntryLevel(classEntry.id, nextLevel);
+                      }}
+                      className="h-9 w-full rounded-lg border border-forge-gold/30 bg-black/35 px-2 text-right text-xs font-black text-forge-gold outline-none transition focus:border-forge-gold"
+                      title={`Nível de ${classEntry.className}`}
+                    />
+                  </label>
+                ) : (
+                  <span className="shrink-0 text-sm font-black text-forge-gold">
+                    Nível {classEntry.level}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="rounded-xl border border-dashed border-white/10 bg-black/20 px-3 py-2 text-xs font-bold text-zinc-500">
+            Escolha uma classe para iniciar a distribuição.
+          </p>
+        )}
+      </div>
+
+      <button
+        type="button"
+        disabled
+        className="mt-4 w-full cursor-not-allowed rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-600"
+        title="Use os cards da etapa Classe para adicionar outra classe ao personagem."
+      >
+        + Use os cards abaixo para adicionar classe
+      </button>
+    </section>
   );
 }
 
@@ -1777,6 +2524,7 @@ export default function CampaignPlayPage() {
       backgrounds: [],
       skills: [],
       spells: [],
+      features: [],
       equipment: [],
       languages: [],
     });
@@ -3509,6 +4257,7 @@ export default function CampaignPlayPage() {
         backgrounds: data.backgrounds ?? [],
         skills: data.skills ?? [],
         spells: data.spells ?? [],
+        features: data.features ?? [],
         equipment: data.equipment ?? [],
         languages: data.languages ?? [],
       });
@@ -3559,12 +4308,7 @@ export default function CampaignPlayPage() {
   ) {
     setCharacterBuilderDraft((currentDraft) => {
       if (type === "class") {
-        return {
-          ...currentDraft,
-          classId: option.id,
-          className: option.name,
-          spellKeys: [],
-        };
+        return currentDraft;
       }
 
       if (type === "ancestry") {
@@ -3644,6 +4388,15 @@ export default function CampaignPlayPage() {
           tokenImageFit: characterBuilderDraft.tokenImageFit,
           level: characterBuilderDraft.level,
           classId: characterBuilderDraft.classId || null,
+          classEntries: characterBuilderDraft.classEntries.map(
+            (classEntry, index) => ({
+              classId: classEntry.classId,
+              subclassId: classEntry.subclassId,
+              level: classEntry.level,
+              isPrimary: classEntry.isPrimary,
+              order: index,
+            }),
+          ),
           ancestryId: characterBuilderDraft.ancestryId || null,
           backgroundId: characterBuilderDraft.backgroundId || null,
           attributes: getPersistableCharacterAttributes(
@@ -3651,18 +4404,7 @@ export default function CampaignPlayPage() {
           ),
           skillKeys: characterBuilderDraft.skillKeys,
           spellKeys: characterBuilderDraft.spellKeys,
-          languageKeys: Array.from(
-            new Set([
-              ...(characterBuilderOptions.ancestries.find(
-                (ancestry) => ancestry.id === characterBuilderDraft.ancestryId,
-              )?.languageKeys ?? []),
-              ...(characterBuilderOptions.backgrounds.find(
-                (background) =>
-                  background.id === characterBuilderDraft.backgroundId,
-              )?.languageKeys ?? []),
-              ...characterBuilderDraft.languageKeys,
-            ]),
-          ),
+          languageKeys: characterBuilderDraft.languageKeys,
           equipmentItems: getStartingEquipmentItemsFromDraft(
             characterBuilderDraft,
             characterBuilderOptions,
@@ -3707,10 +4449,12 @@ export default function CampaignPlayPage() {
         throw new Error(data?.message ?? "Não foi possível salvar o rascunho.");
       }
 
-      setSavedCharacterSheetId(data.characterSheet.id);
-      setSavedCharacterSheetStatus(data.characterSheet.status ?? "DRAFT");
+      const nextSheet = data.characterSheet as CharacterReadySheet;
+
+      setSavedCharacterSheetId(nextSheet.id);
+      setSavedCharacterSheetStatus(nextSheet.status ?? "DRAFT");
+      setCharacterBuilderDraft(createCharacterBuilderDraftFromSheet(nextSheet));
       setCharacterSheets((currentSheets) => {
-        const nextSheet = data.characterSheet as CharacterReadySheet;
         const alreadyExists = currentSheets.some(
           (sheet) => sheet.id === nextSheet.id,
         );
@@ -3768,7 +4512,15 @@ export default function CampaignPlayPage() {
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(data?.message ?? "Não foi possível finalizar a ficha.");
+        const detailedErrors = Array.isArray(data?.errors)
+          ? data.errors.join(" ")
+          : "";
+
+        throw new Error(
+          detailedErrors
+            ? `${data?.message ?? "Não foi possível finalizar a ficha."} ${detailedErrors}`
+            : (data?.message ?? "Não foi possível finalizar a ficha."),
+        );
       }
 
       const finalizedSheet = data.characterSheet as CharacterReadySheet;

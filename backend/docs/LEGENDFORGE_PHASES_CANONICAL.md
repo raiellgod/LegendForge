@@ -1,6 +1,6 @@
 # 🧭 LegendForge — Fases Canônicas
 
-> Atualizado em 07/07/2026.  
+> Atualizado em 16/07/2026.  
 > Este documento deve ser tratado como **fonte de verdade absoluta** para o planejamento de fases macro e micros do LegendForge até o usuário substituir ou revisar esta lista.
 
 ---
@@ -36,64 +36,28 @@ pnpm lint
 
 ```txt
 [x] Fase 0 — Base inicial
-    Auth, estrutura inicial do monorepo, campanhas básicas, mesa mock, páginas principais e fundação visual.
-
 [x] Fase 1 — Mesa com atores reais
-    CampaignActor persistido, atores de campanha, painel de personagens, biblioteca/mesa inicial e ações básicas.
-
 [x] Fase 2 — Tokens reais na cena
-    SceneToken persistido, criação de tokens, mover/remover tokens, posição salva e relação ator/token.
-
 [x] Fase 3 — Sistema base/Seeds
-    Sistema base, atributos, perícias, classes, subclasses, ancestrais, antecedentes, magias, equipamentos e seeds iniciais.
 
 [em finalização] Fase 4 — Criação/Ficha de personagem
-    Builder de personagem, ficha pronta, rolagens automáticas, equipamentos, magias, features, imagens, pop-out e fundação de Level Up.
-
 [em finalização] Fase 4.5 — Polimentos finais e fundação de progressão
-    Polimentos de mesa, chat, grid, ciclo ator/token, rolagens avançadas e fundação inicial de Level Up.
-
-[em andamento] Fase 4.6 — Regras avançadas da criação de ficha
-    Validações reais de criação: magias por nível permitido, PV inicial, atributos por fonte, proficiências por fonte, línguas, magias por fonte e notas avançadas.
-
-[planejada] Fase 4.7 — Multiclasse e Level Up real
-    Criação inicial multiclasse, distribuição de níveis por classe, Level Up por classe, mudanças reais na ficha, escolhas pendentes e liberação para jogador.
+[concluída funcionalmente] Fase 4.6 — Regras avançadas da criação de ficha
+[em andamento] Fase 4.7 — Multiclasse e Level Up real
+[planejada] Fase 4.8 — Sub-ancestralidades e variações de origem
 
 [ ] Fase 5 — Biblioteca completa
-    Biblioteca real de sistema/campanha, itens, magias, templates, NPCs, criaturas, organização e envio para mesa.
-
 [ ] Fase 6 — Diário real
-    Anotações, handouts, diário da campanha, entradas públicas/privadas e ligação com cenas/personagens.
-
 [ ] Fase 7 — Configurações da campanha/mesa
-    Configurações avançadas de campanha, permissões, grid, escala, sistema, regras e preferências da mesa.
-
 [ ] Fase 8 — Sincronização em tempo real
-    Chat, rolagens, tokens, mapa, ferramentas, presença e atualizações entre usuários.
-
 [ ] Fase 9 — Combate e iniciativa
-    Turnos reais, ordem de iniciativa, condições, ações, alvos e fluxo de combate.
-
 [ ] Fase 10 — Cenas/mapas múltiplos
-    Múltiplas cenas por campanha, troca de cena, mapas, tokens por cena e navegação do mestre.
-
 [ ] Fase 11 — Bestiário completo
-    Criaturas com bloco próprio, ataques, habilidades, resistências, sentidos, tamanho, recompensas e uso em combate.
-
 [ ] Fase 12 — Inventário, lojas e economia
-    Inventário avançado, lojas, compras, vendas, moedas, peso, recipientes e disponibilidade por campanha.
-
 [ ] Fase 13 — Sistema de efeitos/status
-    Condições, buffs/debuffs, efeitos temporários, duração, origem e impacto mecânico.
-
 [ ] Fase 14 — Permissões avançadas e moderação
-    Controle fino por player/GM/owner, visibilidade, expulsão, aprovação e segurança da mesa.
-
 [ ] Fase 15 — Deploy/produção
-    Preparar ambiente real, variáveis, banco, build, hospedagem, domínio e testes de produção.
-
 [ ] Fase 16 — Polimento de portfólio/produto
-    README final, prints, vídeo, landing, seed demo, UX polish e apresentação profissional.
 ```
 
 ---
@@ -118,8 +82,9 @@ pnpm lint
 [x] Fase 4.30 — Documentação/checkpoint anterior
 [x] Fase 4.31 — Modularização/seed-content e imagens de equipamento
 [em finalização] Fase 4.5 — Polimentos finais e fundação de progressão
-[em andamento] Fase 4.6 — Regras avançadas da criação de ficha
-[planejada] Fase 4.7 — Multiclasse e Level Up real
+[concluída funcionalmente] Fase 4.6 — Regras avançadas da criação de ficha
+[em andamento] Fase 4.7 — Multiclasse e Level Up real
+[planejada] Fase 4.8 — Sub-ancestralidades e variações de origem
 ```
 
 ---
@@ -130,282 +95,126 @@ pnpm lint
 
 ```txt
 [x] 4.5.1 — Polimento rápido da mesa, chat e grid
-    - zoom padrão ajustado
-    - limpeza visual da mesa
-    - botão de limpar chat
-    - token não fica opaco ao trocar ferramenta
-    - bloqueio correto de movimento fora da ferramenta Selecionar
-    - ajustes no painel de configurações
-
 [x] 4.5.2 — Ciclo ator/token
-    - devolver ator para biblioteca remove tokens da cena
-    - limpeza local dos tokens
-    - regra mais segura para biblioteca/mesa
-
 [x] 4.5.3 — Tamanho automático de token e limpeza do seletor
-    - token novo entra 1x1 por padrão
-    - descrições simplificadas de tamanho
-    - textos do modal de ação do ator mais limpos
-
 [x] 4.5.4 — Linguagem, unidades e identidade do sistema
-    - altura exibida em metros
-    - peso em kg
-    - termos de armor/proteção ajustados
-    - identidade do sistema atualizada para 5e Homebrew — Ecos da Ruína
-
 [x] 4.5.5 — Magias novas e conteúdo imediato
-    - Bola de Fogo
-    - Esfera de Putrefação
-    - vínculos com classes conjuradoras
-
 [x] 4.5.6 — Rolagens avançadas
-    [x] 4.5.6.1 — Regra de saldo vantagem/desvantagem
-    [x] 4.5.6.2 — Aplicar maior Xd6 ao d20
-    [x] 4.5.6.3 — Mostrar breakdown no chat
-    [x] 4.5.6.4 — Controles na UI de rolagem manual
-    [x] 4.5.6.5 — Integrar vantagem/desvantagem nas rolagens da ficha
-    [x] 4.5.6.6 — Zerar vantagens/desvantagens depois da rolagem
-    [x] 4.5.6.7 — Teste de morte com uma rolagem
-
 [x] 4.5.7 — Fundação inicial de Level Up
-    [x] 4.5.7.1 — Permitir personagem de one-shot acima do nível 1
-    [x] 4.5.7.2 — Persistir nível inicial e sincronizar classe principal
-    [x] 4.5.7.3 — Level Up liberado pelo mestre, sem XP visível para jogador
-    [x] 4.5.7.4 — Preparar API/service para confirmar Level Up
-    [x] 4.5.7.5 — Ligar botão Confirmar Level Up no modal e atualizar ficha
-    [x] 4.5.7.6 — Testar Level Up real do mestre
-    [x] 4.5.7.7 — Campo levelUpAvailable persistido
-```
-
-## Pendências planejadas
-
-Estas pendências não devem ser tratadas como bugs esquecidos. Elas são evolução planejada.
-
-```txt
-[PENDENTE PLANEJADO] Bloquear magias acima do nível permitido
-[PENDENTE PLANEJADO] PV inicial vindo da classe
-[PENDENTE PLANEJADO] Builder respeitar nível inicial real em magias/revisão
-[PENDENTE PLANEJADO] Criação inicial multiclasse
-[PENDENTE PLANEJADO] Level Up com mudanças reais na ficha
-[PENDENTE PLANEJADO] Mestre liberar Level Up para jogador confirmar
-[PENDENTE PLANEJADO] Atributos por ancestralidade/antecedente
-[PENDENTE PLANEJADO] Proficiências por fonte
-[PENDENTE PLANEJADO] Línguas por fonte
-[PENDENTE PLANEJADO] Magias/truques por classe, ancestralidade, antecedente e feature
-[PENDENTE PLANEJADO] Notas avançadas da ficha
 ```
 
 ---
 
 # 4. Fase 4.6 — Regras avançadas da criação de ficha
 
-Objetivo: deixar a criação de personagem mais correta mecanicamente antes de avançar para multiclasse e Level Up real.
-
 ```txt
 [x] 4.6.1 — Bloquear magias acima do nível permitido na criação
-    - personagem nível 1 não pode escolher magia nível 3
-    - frontend não mostra opções inválidas
-    - backend rejeita envio manual inválido
-    - validação usa classe, nível da classe, progressão e slots disponíveis
-
 [x] 4.6.2 — Corrigir criação da ficha com PV inicial vindo da classe
-    - usar hitDie da classe
-    - usar modificador de Constituição
-    - nível 1 usa dado cheio
-    - níveis acima de 1 usam média fixa inicialmente
-    - hitPoints nasce igual maxHitPoints
-
 [x] 4.6.3 — Builder/review/magias respeitam nível inicial real
-    - revisão mostra draft.level
-    - etapa de magias usa draft.level
-    - limites de truques/magias usam progressão do nível escolhido
-    - personagem one-shot nível 5 não é tratado como nível 1
-
 [x] 4.6.4 — Atributos por fonte
-    - bônus de ancestralidade
-    - bônus de antecedente, se o sistema permitir
-    - fonte do bônus salva/discriminada
-    - revisão mostra de onde veio cada aumento
-
-[em consolidação] 4.6.5 — Proficiências por fonte
-    [x] perícias por classe
-    [x] perícias por antecedente como sugestão/estrutura
-    [x] classes possuem weaponProficiencyKeys
-    [x] classes possuem protectionProficiencyKeys
-    [x] classes possuem toolProficiencyKeys
-    [x] ataque de equipamento usa proficiência real
-    [x] ficha mostra fonte da proficiência de equipamento
-    [x] proteções/armaduras são preparadas para CA real
-    [x] ferramentas/instrumentos/kits são preparados para uso mecânico futuro
-
+[x] 4.6.5 — Proficiências por fonte
 [x] 4.6.6 — Línguas por fonte
-    - línguas conhecidas fixas
-    - escolhas de línguas por ancestralidade
-    - escolhas de línguas por antecedente
-    - escolhas futuras por feature/talento
-
-[adiado] 4.6.7 — Magias/truques por fonte
-    - classe
-    - ancestralidade
-    - antecedente
-    - talento/feature
-    - separar magia conhecida, preparada, sempre conhecida e magia extra
-
-[ em andamento] 4.6.8 — Melhorar notas da criação de ficha
-    - organizações
-    - aliados
-    - inimigos
-    - backstory
-    - outros
-    - vínculos
-    - defeitos
-    - ideais
-    - traços de personalidade
-    - notas do mestre
-
-    [x] 4.6.8.1 — Revisar estado atual das notas narrativas
-
-[x] 4.6.8.2 — Modelar campos narrativos avançados
-    - organizations
-    - allies
-    - enemies
-    - otherNotes
-
-[ ] 4.6.8.3 — Backend aceita e salva campos narrativos avançados
-    - POST/PATCH
-    - retorno da ficha pronta
-    - sem validação complexa
-
-[ ] 4.6.8.4 — Types e draft aceitam campos narrativos avançados
-    - CharacterBuilderDraft
-    - CharacterReadySheet
-    - valores iniciais do draft, se necessário
-
-[ ] 4.6.8.5 — Melhorar etapa Sobre
-    - criar bloco “Relações e mundo”
-    - organizações
-    - aliados
-    - inimigos
-    - outros
-
-[ ] 4.6.8.6 — Melhorar Review narrativo
-    - mostrar personalidade
-    - história
-    - relações
-    - notas
-
-[ ] 4.6.8.7 — Melhorar aba Notas da ficha pronta
-    - separar História
-    - Personalidade
-    - Relações
-    - Notas gerais
-    - Notas do mestre
-
-[ ] 4.6.8.8 — Lint, páginas e checkpoint final da Fase 4.6
+[x] 4.6.7 — Magias/truques por fonte
+[x] 4.6.8 — Melhorar notas da criação de ficha
 ```
+
+---
 
 # 5. Fase 4.7 — Multiclasse e Level Up real
 
 Objetivo: transformar criação e progressão em fluxo real, não apenas “somar nível”.
 
 ```txt
-[ ] 4.7.1 — Modelar draft de classes múltiplas no builder
-    - substituir classe única por lista de classes
-    - manter compatibilidade com classe principal
+[x] 4.7.1 — Modelar draft de classes múltiplas no builder
+    [x] 4.7.1.1 — Criar CharacterBuilderClassDraftEntry
+    [x] 4.7.1.2 — Adicionar classEntries ao CharacterBuilderDraft
+    [x] 4.7.1.3 — Manter classId/className como compatibilidade
+    [x] 4.7.1.4 — Sincronizar classe única atual com classEntries
+    [x] 4.7.1.5 — Sincronizar nível inicial com nível da classe principal
+    [x] 4.7.1.6 — Corrigir atualização em lote do draft para não perder classEntries
 
-[ ] 4.7.2 — Tela de distribuição de níveis por classe
-    - nível total
-    - classe A nível X
-    - classe B nível Y
-    - soma das classes precisa bater com nível total
+[x] 4.7.2 — Tela de distribuição de níveis por classe
+    [x] 4.7.2.1 — Mostrar distribuição no resumo lateral
+    [x] 4.7.2.2 — Mostrar distribuição na etapa Classe
+    [x] 4.7.2.3 — Preparar botão “Adicionar classe em breve” desabilitado
+    [x] 4.7.2.4 — Permitir editar nível da classe principal pela tela de Classe
+    [x] 4.7.2.5 — Validar visualmente soma dos níveis da distribuição
 
-[ ] 4.7.3 — Definir classe principal
-    - usada para identidade visual
-    - usada como fallback de ficha
-    - não apaga as outras classes
+[x] 4.7.3 — Definir classe principal
+    [x] 4.7.3.1 — Exibir badge “Classe principal” de forma mais clara
+    [x] 4.7.3.2 — Preparar função setPrimaryClassEntry
+    [x] 4.7.3.3 — Manter classId/className sincronizados com a classe principal
+    [x] 4.7.3.4 — Travar troca de principal quando houver apenas uma classe
 
-[ ] 4.7.4 — Criação inicial multiclasse
-    - personagem pode nascer Bardo 3 / Necromante 2
-    - CharacterSheetClass criado para cada classe
-    - nível total = soma das classes
+[x] 4.7.4 — Criação inicial multiclasse
+    [x] 4.7.4.1 — Habilitar adicionar segunda classe no draft
+    [x] 4.7.4.2 — Impedir classe duplicada
+    [x] 4.7.4.3 — Permitir remover classe adicional
+    [x] 4.7.4.4 — Ajustar nível total como soma das classes
+    [x] 4.7.4.5 — Backend recebe classEntries opcional
+    [x] 4.7.4.6 — Backend cria CharacterSheetClass para cada classe
+    [x] 4.7.4.7 — Manter fallback classId/className para classe principal
 
-[ ] 4.7.5 — Calcular PV inicial multiclasse
-    - nível 1 da primeira classe usa dado cheio
-    - níveis seguintes usam regra fixa/média
-    - CON aplicado por nível
-    - soma por classe
+[x] 4.7.5 — Calcular PV inicial multiclasse
+    [x] 4.7.5.1 — Definir regra final de PV multiclasse do LegendForge
+    [x] 4.7.5.2 — Calcular PV por classe no backend
+    [x] 4.7.5.3 — Aplicar CON por nível
+    [x] 4.7.5.4 — Atualizar maxHitPoints/hitPoints inicial
+    [x] 4.7.5.5 — Mostrar resumo de PV no Review
 
-[ ] 4.7.6 — Features iniciais por classe/nível
-    - features de Bardo até nível 3
-    - features de Necromante até nível 2
-    - features de subclasse quando houver
+[x] 4.7.6 — Features iniciais por classe/nível
+    [x] 4.7.6.1 — Buscar features por cada CharacterSheetClass
+    [x] 4.7.6.2 — Incluir features até o nível daquela classe
+    [x] 4.7.6.3 — Incluir features de subclasse quando houver
+    [x] 4.7.6.4 — Ajustar aba Features da ficha pronta para múltiplas classes
 
-[ ] 4.7.7 — Magias iniciais por classe/nível
-    - cada classe calcula suas permissões
-    - evitar magia de nível inválido
-    - separar magias de fontes diferentes
+[x] 4.7.7 — Magias iniciais por classe/nível
+    [x] 4.7.7.0 — Modelar limites de magia por nível
+    [x] 4.7.7.1 — União final das permissões de magia por classe no builder
+    [x] 4.7.7.2 — Backend valida magia contra múltiplas classes
+    [x] 4.7.7.3 — Backend salva e retorna classId/source da magia
+    [x] 4.7.7.4 — Frontend types recebem origem interna da magia
+    [x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
 
-[ ] 4.7.8 — Escolhas pendentes iniciais
-    - subclasse
-    - novas magias
-    - truques
-    - proficiências
-    - línguas
-    - atributos/talentos futuramente
+[próximo] 4.7.8 — Escolhas pendentes iniciais
+    [ ] 4.7.8.1 — Mapear escolhas pendentes possíveis
+    [ ] 4.7.8.2 — Subclasse pendente
+    [ ] 4.7.8.3 — Magias/truques pendentes
+    [ ] 4.7.8.4 — Proficiências pendentes
+    [ ] 4.7.8.5 — Línguas pendentes
+    [ ] 4.7.8.6 — Atributos/talentos futuramente
 
 [ ] 4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
-    - nível total atual
-    - nível atual da classe escolhida
-    - próximo nível da classe escolhida
-    - próxima progressão daquela classe
-
 [ ] 4.7.10 — Criar plano de mudanças do Level Up
-    - PV
-    - proficiência
-    - features
-    - magias/truques
-    - slots
-    - subclasse
-    - escolhas pendentes
-
 [ ] 4.7.11 — Tela de resumo das mudanças do Level Up
-    - “Bardo 2 → 3”
-    - “Nível total 4 → 5”
-    - “PV +7”
-    - “Nova feature”
-    - “Escolha de subclasse liberada”
-
 [ ] 4.7.12 — Telas de escolhas pendentes do Level Up
-    - escolher subclasse
-    - escolher magias
-    - escolher truques
-    - escolher proficiência
-    - escolher idioma
-    - escolher atributo/talento futuramente
-
 [ ] 4.7.13 — Aplicar mudanças reais na ficha ao confirmar
-    - aumenta CharacterSheet.level
-    - aumenta CharacterSheetClass.level
-    - recalcula PV
-    - salva escolhas
-    - limpa levelUpAvailable
-
 [ ] 4.7.14 — Mestre libera/bloqueia Level Up
-    - botão visível para GM
-    - muda levelUpAvailable
-
 [ ] 4.7.15 — Jogador vê Level Up apenas quando liberado
-    - sem XP visível
-    - botão aparece apenas para ficha própria liberada
-
 [ ] 4.7.16 — Jogador confirma Level Up liberado
-    - usa fluxo real
-    - resolve escolhas pendentes
-    - aplica mudanças
-
 [ ] 4.7.17 — Feedback no chat após Level Up
-    - mensagem pública ou do sistema
-    - resumo do avanço
+```
+
+---
+
+# 5.5. Fase 4.8 — Sub-ancestralidades e variações de origem
+
+Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade principal.
+
+```txt
+[ ] Fase 4.8 — Sub-ancestralidades e variações de origem
+    [ ] 4.8.1 — Modelar SubAncestry no Prisma
+    [ ] 4.8.2 — Seed inicial de sub-ancestralidades
+    [ ] 4.8.3 — Expor sub-ancestralidades no /character-options
+    [ ] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
+    [ ] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
+    [ ] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
+```
+
+Exemplo:
+
+```txt
+Sylvaris → Sylvaris Alto
 ```
 
 ---
@@ -595,17 +404,15 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
 A próxima micro de desenvolvimento é:
 
 ```txt
-4.6.5.R1 — Revisar estado atual de proficiências de equipamento
+4.7.8.1 — Mapear escolhas pendentes possíveis
 ```
 
-Objetivo da `4.6.5.R1`:
+Objetivo:
 
 ```txt
-- entender como weaponProficiencyKeys/protectionProficiencyKeys/toolProficiencyKeys estão modeladas no schema/seed/API/types
-- entender como chegam ao frontend
-- localizar onde o ataque de equipamento calcula proficiência temporária
-- localizar onde a ficha mostra “Proficiência temporária: sim” ou equivalente
-- decidir o menor caminho seguro para aplicar proficiência real por fonte
+- entender quais escolhas podem ficar pendentes no personagem inicial
+- separar pendência de subclasse, magias, truques, proficiências, idiomas e atributos/talentos futuros
+- preparar a estrutura sem implementar todo o Level Up real ainda
 ```
 
 Arquivos prováveis:
@@ -614,12 +421,10 @@ Arquivos prováveis:
 backend/src/routes/character-sheets.ts
 backend/src/routes/systems.ts
 backend/prisma/schema.prisma
-backend/prisma/seed-data/classes.ts
-backend/prisma/seed-data/equipment.ts
+frontend/src/app/campaigns/[id]/play/page.tsx
 frontend/src/features/character-builder/types/character-builder-types.ts
-frontend/src/features/character-builder/utils/character-sheet-calculations.ts
-frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
 frontend/src/features/character-builder/steps/CharacterReviewStep.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
 ```
 
 ---

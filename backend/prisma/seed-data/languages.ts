@@ -1,7 +1,7 @@
 export const languages = [
   {
     name: "Comum",
-    key: "comum",
+    key: "common",
     description:
       "Idioma de circulação ampla usado em comércio, cidades, rotas e comunicação cotidiana entre povos diferentes.",
   },

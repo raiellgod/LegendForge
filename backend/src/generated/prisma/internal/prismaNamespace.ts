@@ -402,6 +402,7 @@ export const ModelName = {
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
+  LevelProgressionSpellLimit: 'LevelProgressionSpellLimit',
   ClassSpell: 'ClassSpell',
   Feature: 'Feature',
   Spell: 'Spell',
@@ -430,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterClass" | "characterSubclass" | "levelProgression" | "classSpell" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1766,6 +1767,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LevelProgressionSpellLimit: {
+      payload: Prisma.$LevelProgressionSpellLimitPayload<ExtArgs>
+      fields: Prisma.LevelProgressionSpellLimitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LevelProgressionSpellLimitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LevelProgressionSpellLimitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>
+        }
+        findFirst: {
+          args: Prisma.LevelProgressionSpellLimitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LevelProgressionSpellLimitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>
+        }
+        findMany: {
+          args: Prisma.LevelProgressionSpellLimitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>[]
+        }
+        create: {
+          args: Prisma.LevelProgressionSpellLimitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>
+        }
+        createMany: {
+          args: Prisma.LevelProgressionSpellLimitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LevelProgressionSpellLimitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>[]
+        }
+        delete: {
+          args: Prisma.LevelProgressionSpellLimitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>
+        }
+        update: {
+          args: Prisma.LevelProgressionSpellLimitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>
+        }
+        deleteMany: {
+          args: Prisma.LevelProgressionSpellLimitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LevelProgressionSpellLimitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LevelProgressionSpellLimitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>[]
+        }
+        upsert: {
+          args: Prisma.LevelProgressionSpellLimitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LevelProgressionSpellLimitPayload>
+        }
+        aggregate: {
+          args: Prisma.LevelProgressionSpellLimitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLevelProgressionSpellLimit>
+        }
+        groupBy: {
+          args: Prisma.LevelProgressionSpellLimitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LevelProgressionSpellLimitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LevelProgressionSpellLimitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LevelProgressionSpellLimitCountAggregateOutputType> | number
+        }
+      }
+    }
     ClassSpell: {
       payload: Prisma.$ClassSpellPayload<ExtArgs>
       fields: Prisma.ClassSpellFieldRefs
@@ -2996,6 +3071,7 @@ export const CharacterSheetSpellScalarFieldEnum = {
   id: 'id',
   characterSheetId: 'characterSheetId',
   spellId: 'spellId',
+  classId: 'classId',
   source: 'source',
   isPrepared: 'isPrepared',
   isAlwaysPrepared: 'isAlwaysPrepared',
@@ -3100,6 +3176,19 @@ export const LevelProgressionScalarFieldEnum = {
 } as const
 
 export type LevelProgressionScalarFieldEnum = (typeof LevelProgressionScalarFieldEnum)[keyof typeof LevelProgressionScalarFieldEnum]
+
+
+export const LevelProgressionSpellLimitScalarFieldEnum = {
+  id: 'id',
+  levelProgressionId: 'levelProgressionId',
+  spellLevel: 'spellLevel',
+  spellsKnown: 'spellsKnown',
+  spellsPrepared: 'spellsPrepared',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LevelProgressionSpellLimitScalarFieldEnum = (typeof LevelProgressionSpellLimitScalarFieldEnum)[keyof typeof LevelProgressionSpellLimitScalarFieldEnum]
 
 
 export const ClassSpellScalarFieldEnum = {
@@ -3778,6 +3867,7 @@ export type GlobalOmitConfig = {
   characterClass?: Prisma.CharacterClassOmit
   characterSubclass?: Prisma.CharacterSubclassOmit
   levelProgression?: Prisma.LevelProgressionOmit
+  levelProgressionSpellLimit?: Prisma.LevelProgressionSpellLimitOmit
   classSpell?: Prisma.ClassSpellOmit
   feature?: Prisma.FeatureOmit
   spell?: Prisma.SpellOmit

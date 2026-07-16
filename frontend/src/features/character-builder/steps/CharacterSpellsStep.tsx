@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import type {
+  CharacterBuilderClassDraftEntry,
   CharacterBuilderClassOption,
   CharacterBuilderSpellOption,
 } from "../types/character-builder-types";
@@ -14,6 +15,8 @@ import {
 
 type CharacterSpellsStepProps = {
   spells: CharacterBuilderSpellOption[];
+  classes: CharacterBuilderClassOption[];
+  classEntries: CharacterBuilderClassDraftEntry[];
   selectedClass: CharacterBuilderClassOption | undefined;
   selectedSpellKeys: string[];
   characterLevel: number;
@@ -23,6 +26,14 @@ type CharacterSpellsStepProps = {
 };
 
 type SpellTypeFilter = "all" | "cantrips" | "spells";
+
+type SpellClassPermission = {
+  classEntryId: string;
+  classId: string;
+  className: string;
+  classLevel: number;
+  isPrimary: boolean;
+};
 
 function normalizeCharacterLevel(level: number) {
   if (!Number.isFinite(level)) {
@@ -43,38 +54,15 @@ function getLevelProgression(
   );
 }
 
-function getHighestAvailableSpellLevel(
-  progression:
-    | CharacterBuilderClassOption["levelProgressions"][number]
-    | null
-    | undefined,
+function getOrderedClassEntries(
+  classEntries: CharacterBuilderClassDraftEntry[],
 ) {
-  if (!progression) {
-    return 0;
-  }
-
-  const spellSlotsByLevel = [
-    progression.spellSlotsLevel1,
-    progression.spellSlotsLevel2,
-    progression.spellSlotsLevel3,
-    progression.spellSlotsLevel4,
-    progression.spellSlotsLevel5,
-    progression.spellSlotsLevel6,
-    progression.spellSlotsLevel7,
-    progression.spellSlotsLevel8,
-    progression.spellSlotsLevel9,
-  ];
-
-  for (let index = spellSlotsByLevel.length - 1; index >= 0; index -= 1) {
-    if ((spellSlotsByLevel[index] ?? 0) > 0) {
-      return index + 1;
-    }
-  }
-
-  return 0;
+  return [...classEntries].sort(
+    (firstEntry, secondEntry) => firstEntry.order - secondEntry.order,
+  );
 }
 
-function canUseSpellAtProgression({
+function canUseSpellAtCharacterLevel({
   spell,
   progression,
 }: {
@@ -88,13 +76,11 @@ function canUseSpellAtProgression({
     return false;
   }
 
-  if (isCantrip(spell)) {
-    return progression.cantripsKnown > 0;
-  }
+  const spellLimit = progression.spellLimits.find(
+    (currentSpellLimit) => currentSpellLimit.spellLevel === spell.level,
+  );
 
-  const highestAvailableSpellLevel = getHighestAvailableSpellLevel(progression);
-
-  return spell.level > 0 && spell.level <= highestAvailableSpellLevel;
+  return (spellLimit?.spellsKnown ?? 0) > 0;
 }
 
 function getSpellTitle(spell: CharacterBuilderSpellOption) {
@@ -171,11 +157,64 @@ function getAvailableSpellsForClass({
       return false;
     }
 
-    return canUseSpellAtProgression({
+    return canUseSpellAtCharacterLevel({
       spell,
       progression,
     });
   });
+}
+
+function getKnownSpellLimitsByLevel(
+  spellClassPermissions: Array<{
+    progression:
+      | CharacterBuilderClassOption["levelProgressions"][number]
+      | null
+      | undefined;
+  }>,
+) {
+  const limitsByLevel = new Map<number, number>();
+
+  for (const permission of spellClassPermissions) {
+    for (const spellLimit of permission.progression?.spellLimits ?? []) {
+      limitsByLevel.set(
+        spellLimit.spellLevel,
+        (limitsByLevel.get(spellLimit.spellLevel) ?? 0) +
+          spellLimit.spellsKnown,
+      );
+    }
+  }
+
+  return limitsByLevel;
+}
+
+function getSelectedSpellCountsByLevel(
+  selectedSpells: CharacterBuilderSpellOption[],
+) {
+  const countsByLevel = new Map<number, number>();
+
+  for (const spell of selectedSpells) {
+    countsByLevel.set(spell.level, (countsByLevel.get(spell.level) ?? 0) + 1);
+  }
+
+  return countsByLevel;
+}
+
+function shouldReplaceSpellPermission({
+  currentPermission,
+  nextPermission,
+}: {
+  currentPermission: SpellClassPermission | undefined;
+  nextPermission: SpellClassPermission;
+}) {
+  if (!currentPermission) {
+    return true;
+  }
+
+  if (nextPermission.isPrimary && !currentPermission.isPrimary) {
+    return true;
+  }
+
+  return false;
 }
 
 function CharacterSpellCard({
@@ -357,6 +396,8 @@ function CharacterSpellCard({
 
 export function CharacterSpellsStep({
   spells,
+  classes,
+  classEntries,
   selectedClass,
   selectedSpellKeys,
   characterLevel,
@@ -370,13 +411,130 @@ export function CharacterSpellsStep({
 
   const safeCharacterLevel = normalizeCharacterLevel(characterLevel);
 
-  const availableSpells = useMemo(() => {
-    return getAvailableSpellsForClass({
-      spells,
-      selectedClass,
-      characterLevel: safeCharacterLevel,
-    });
-  }, [safeCharacterLevel, selectedClass, spells]);
+  const orderedClassEntries = useMemo(() => {
+    return getOrderedClassEntries(classEntries);
+  }, [classEntries]);
+
+  const spellClassEntries = useMemo(() => {
+    if (orderedClassEntries.length > 0) {
+      return orderedClassEntries;
+    }
+
+    if (!selectedClass) {
+      return [];
+    }
+
+    return [
+      {
+        id: "primary",
+        classId: selectedClass.id,
+        className: selectedClass.name,
+        subclassId: null,
+        subclassName: null,
+        level: safeCharacterLevel,
+        isPrimary: true,
+        order: 0,
+      },
+    ];
+  }, [orderedClassEntries, safeCharacterLevel, selectedClass]);
+
+  const spellClassPermissions = useMemo(() => {
+    return spellClassEntries
+      .map((classEntry) => {
+        const classOption =
+          classes.find(
+            (currentClass) => currentClass.id === classEntry.classId,
+          ) ?? selectedClass;
+
+        if (!classOption) {
+          return null;
+        }
+
+        const safeClassLevel = normalizeCharacterLevel(classEntry.level);
+        const progression = getLevelProgression(classOption, safeClassLevel);
+
+        return {
+          classEntry,
+          classOption,
+          progression,
+          classLevel: safeClassLevel,
+        };
+      })
+      .filter((permission): permission is NonNullable<typeof permission> =>
+        Boolean(permission),
+      );
+  }, [classes, selectedClass, spellClassEntries]);
+
+  const availableSpellData = useMemo(() => {
+    const availableSpellMap = new Map<string, CharacterBuilderSpellOption>();
+    const spellPermissionsByKey = new Map<string, SpellClassPermission>();
+
+    for (const permission of spellClassPermissions) {
+      const classSpells = getAvailableSpellsForClass({
+        spells,
+        selectedClass: permission.classOption,
+        characterLevel: permission.classLevel,
+      });
+
+      for (const spell of classSpells) {
+        const nextPermission: SpellClassPermission = {
+          classEntryId: permission.classEntry.id,
+          classId: permission.classOption.id,
+          className: permission.classEntry.className,
+          classLevel: permission.classLevel,
+          isPrimary: permission.classEntry.isPrimary,
+        };
+
+        const currentPermission = spellPermissionsByKey.get(spell.key);
+
+        availableSpellMap.set(spell.key, spell);
+
+        if (
+          shouldReplaceSpellPermission({
+            currentPermission,
+            nextPermission,
+          })
+        ) {
+          spellPermissionsByKey.set(spell.key, nextPermission);
+        }
+      }
+    }
+
+    const availableSpells = Array.from(availableSpellMap.values()).sort(
+      (firstSpell, secondSpell) => {
+        if (firstSpell.level !== secondSpell.level) {
+          return firstSpell.level - secondSpell.level;
+        }
+
+        return firstSpell.name.localeCompare(secondSpell.name, "pt-BR");
+      },
+    );
+
+    return {
+      availableSpells,
+      spellPermissionsByKey,
+    };
+  }, [spellClassPermissions, spells]);
+
+  const availableSpells = availableSpellData.availableSpells;
+  const spellPermissionsByKey = availableSpellData.spellPermissionsByKey;
+
+  const selectedClassName =
+    spellClassPermissions.length > 0
+      ? spellClassPermissions
+          .map(
+            (permission) =>
+              `${permission.classEntry.className} ${permission.classLevel}`,
+          )
+          .join(" / ")
+      : (selectedClass?.name ?? "classe não selecionada");
+
+  const selectedSpellClassLevel =
+    spellClassPermissions.length > 0
+      ? Math.max(
+          ...spellClassPermissions.map((permission) => permission.classLevel),
+        )
+      : safeCharacterLevel;
 
   const spellSchools = useMemo(() => {
     return Array.from(
@@ -416,9 +574,12 @@ export function CharacterSpellsStep({
 
   const totalCantrips = availableSpells.filter(isCantrip).length;
   const totalLeveledSpells = availableSpells.filter(isLeveledSpell).length;
-  const selectedClassName = selectedClass?.name ?? "classe não selecionada";
-  const hasSelectedClass = Boolean(selectedClass);
+
+  const hasSelectedClass = spellClassPermissions.length > 0;
   const hasAvailableSpellOptions = availableSpells.length > 0;
+
+    const hasInternalSpellPermissions =
+    availableSpells.length === spellPermissionsByKey.size;
 
   const selectedSpells = availableSpells.filter((spell) =>
     selectedSpellKeys.includes(spell.key),
@@ -438,25 +599,37 @@ export function CharacterSpellsStep({
   const hasSelectedSpells = selectedSpells.length > 0;
   const hasUnavailableSelectedSpells = unavailableSelectedSpells.length > 0;
 
-  const currentLevelProgression = getLevelProgression(
-    selectedClass,
-    safeCharacterLevel,
+  const knownSpellLimitsByLevel = getKnownSpellLimitsByLevel(
+    spellClassPermissions,
   );
 
-  const cantripLimit = currentLevelProgression?.cantripsKnown ?? 0;
+  const selectedSpellCountsByLevel =
+    getSelectedSpellCountsByLevel(selectedSpells);
 
-  const leveledSpellLimit = Math.max(
-    currentLevelProgression?.spellsKnown ?? 0,
-    currentLevelProgression?.spellsPrepared ?? 0,
+  const cantripLimit = knownSpellLimitsByLevel.get(0) ?? 0;
+
+  const leveledSpellLimit = Array.from(knownSpellLimitsByLevel.entries())
+    .filter(([spellLevel]) => spellLevel > 0)
+    .reduce((totalLimit, [, spellLimit]) => totalLimit + spellLimit, 0);
+
+  const totalKnownSpellLimit = cantripLimit + leveledSpellLimit;
+
+  const highestAvailableSpellLevel = Math.max(
+    0,
+    ...Array.from(knownSpellLimitsByLevel.keys()).filter(
+      (spellLevel) => spellLevel > 0,
+    ),
   );
 
-  const highestAvailableSpellLevel = getHighestAvailableSpellLevel(
-    currentLevelProgression,
-  );
+  const hasReachedCantripLimit =
+    (selectedSpellCountsByLevel.get(0) ?? 0) >= cantripLimit;
 
-  const hasReachedCantripLimit = selectedCantrips.length >= cantripLimit;
-  const hasReachedLeveledSpellLimit =
-    selectedLeveledSpells.length >= leveledSpellLimit;
+  function hasReachedSpellLevelLimit(spellLevel: number) {
+    const spellLimit = knownSpellLimitsByLevel.get(spellLevel) ?? 0;
+    const selectedCount = selectedSpellCountsByLevel.get(spellLevel) ?? 0;
+
+    return selectedCount >= spellLimit;
+  }
 
   function getSpellSelectionState(spell: CharacterBuilderSpellOption) {
     const isSelected = selectedSpellKeys.includes(spell.key);
@@ -477,11 +650,15 @@ export function CharacterSpellsStep({
       };
     }
 
-    if (isLeveledSpell(spell) && hasReachedLeveledSpellLimit) {
+    if (isLeveledSpell(spell) && hasReachedSpellLevelLimit(spell.level)) {
+      const spellLevelLimit = knownSpellLimitsByLevel.get(spell.level) ?? 0;
+
       return {
         isSelected,
         isDisabled: true,
-        disabledReason: `Limite de ${leveledSpellLimit} magia(s) atingido para ${selectedClassName}. Desmarque outra magia para escolher esta.`,
+        disabledReason: `Limite de ${spellLevelLimit} magia(s) de ${getSpellLevelLabel(
+          spell.level,
+        ).toLowerCase()} atingido. Desmarque outra magia deste nível para escolher esta.`,
       };
     }
 
@@ -504,10 +681,12 @@ export function CharacterSpellsStep({
       : "Sem magias para esta classe";
 
   const temporaryValidationDescription = hasSelectedSpells
-    ? `Você marcou ${selectedCantrips.length}/${cantripLimit} truque(s) e ${selectedLeveledSpells.length}/${leveledSpellLimit} magia(s) disponíveis para ${selectedClassName}. Ao atualizar o rascunho, essas escolhas são gravadas na ficha.`
+    ? `Você marcou ${selectedSpellKeys.length}/${totalKnownSpellLimit} magia(s) conhecidas no total. Os limites agora são separados por nível de magia.`
     : hasAvailableSpellOptions
-      ? `Esta classe pode escolher até ${cantripLimit} truque(s) e ${leveledSpellLimit} magia(s) no nível ${safeCharacterLevel}. Maior nível de magia permitido: ${highestAvailableSpellLevel || "nenhum"}.`
-      : "A classe selecionada não possui magias disponíveis no nível inicial.";
+      ? `O personagem pode escolher ${cantripLimit} truque(s) e ${leveledSpellLimit} magia(s) niveladas como conhecidas. Maior nível de magia permitido: ${
+          highestAvailableSpellLevel || "nenhum"
+        }.`
+      : "As classes escolhidas não possuem magias disponíveis no nível inicial.";
 
   if (isLoading) {
     return (
@@ -553,16 +732,42 @@ export function CharacterSpellsStep({
               </div>
 
               <h3 className="mt-2 text-xl font-black text-zinc-100">
-                Truques e magias da classe
+                Truques e magias de {selectedClassName}
               </h3>
 
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-300">
-                Esta lista mostra apenas as magias que a classe selecionada pode
-                aprender no nível inicial. A validação de quantidade por nível
-                entra no próximo passo.
+                Esta lista une as magias disponíveis para as classes escolhidas.
+                Em personagem multiclasse, cada classe contribui com suas
+                permissões, mas a seleção final usa limites totais de truques e
+                magias.
               </p>
             </div>
           </div>
+
+          {spellClassPermissions.length > 1 ? (
+            <div className="mt-4 rounded-xl border border-zinc-800 bg-black/25 p-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+                Classes consideradas
+              </p>
+
+              <p className="mt-1 text-xs font-bold leading-relaxed text-zinc-400">
+                A lista abaixo une as magias disponíveis para todas as classes
+                do personagem. A origem por classe será salva internamente em
+                uma próxima etapa.
+              </p>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {spellClassPermissions.map((permission) => (
+                  <span
+                    key={permission.classEntry.id}
+                    className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-forge-gold"
+                  >
+                    {permission.classEntry.className} {permission.classLevel}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
 
           <p
             className={[
@@ -573,10 +778,16 @@ export function CharacterSpellsStep({
             ].join(" ")}
             title="A lista de magias agora usa a relação ClassSpell cadastrada no seed."
           >
-            Classe atual: {selectedClassName}.{" "}
+            Classes mágicas: {selectedClassName}.{" "}
             {hasAvailableSpellOptions
-              ? `Magias disponíveis para esta classe no nível ${safeCharacterLevel}: ${availableSpells.length}.`
-              : `Nenhuma magia disponível para esta classe no nível ${safeCharacterLevel}.`}
+              ? `Magias disponíveis para as classes consideradas: ${
+                  availableSpells.length
+                }. ${
+                  hasInternalSpellPermissions
+                    ? "Origem interna preparada."
+                    : "Algumas magias ainda não possuem origem interna."
+                }`
+              : "Nenhuma magia disponível para as classes consideradas."}
           </p>
         </div>
 
@@ -625,7 +836,7 @@ export function CharacterSpellsStep({
             title={`Magias escolhidas: ${selectedLeveledSpells.length} de ${leveledSpellLimit} permitidas para ${selectedClassName}.`}
           >
             <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-              Magias escolhidas
+              Niveladas escolhidas
             </p>
 
             <p className="mt-2 text-2xl font-black leading-none text-purple-200">
@@ -637,10 +848,10 @@ export function CharacterSpellsStep({
         {hasUnavailableSelectedSpells ? (
           <div
             className="rounded-2xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-xs font-bold leading-relaxed text-amber-100 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]"
-            title="Estas magias estavam selecionadas no rascunho/ficha, mas não pertencem à classe atual segundo a tabela ClassSpell."
+            title="Estas magias estavam selecionadas no rascunho/ficha, mas não pertencem às classes escolhidas segundo a tabela ClassSpell."
           >
             Existem {unavailableSelectedSpells.length} magia(s) selecionada(s)
-            que não pertencem à classe atual:{" "}
+            que não pertencem às classes escolhidas:{" "}
             {unavailableSelectedSpells.map((spell) => spell.name).join(", ")}.
             Ao revisar a seleção, mantenha apenas magias disponíveis para{" "}
             {selectedClassName}.
@@ -684,6 +895,8 @@ export function CharacterSpellsStep({
               </p>
             </div>
 
+
+
             <div className="grid grid-cols-2 gap-2 sm:min-w-60">
               <div
                 className="rounded-xl border border-forge-gold/20 bg-black/25 px-3 py-2 text-center"
@@ -713,6 +926,58 @@ export function CharacterSpellsStep({
             </div>
           </div>
         </div>
+
+                    <div className="rounded-2xl border border-zinc-800 bg-black/25 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
+                    Limites por nível
+                  </p>
+
+                  <p className="mt-1 text-sm font-black text-zinc-100">
+                    Magias conhecidas
+                  </p>
+                </div>
+
+                <span className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold">
+                  {selectedSpellKeys.length}/{totalKnownSpellLimit}
+                </span>
+              </div>
+
+              <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+                {Array.from(knownSpellLimitsByLevel.entries())
+                  .filter(([, spellLimit]) => spellLimit > 0)
+                  .sort(
+                    ([firstLevel], [secondLevel]) => firstLevel - secondLevel,
+                  )
+                  .map(([spellLevel, spellLimit]) => {
+                    const selectedCount =
+                      selectedSpellCountsByLevel.get(spellLevel) ?? 0;
+
+                    return (
+                      <div
+                        key={spellLevel}
+                        className={[
+                          "rounded-xl border px-3 py-2",
+                          selectedCount > spellLimit
+                            ? "border-red-400/40 bg-red-500/10"
+                            : selectedCount === spellLimit
+                              ? "border-emerald-400/30 bg-emerald-500/10"
+                              : "border-zinc-800 bg-zinc-950/50",
+                        ].join(" ")}
+                      >
+                        <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                          {getSpellLevelLabel(spellLevel)}
+                        </p>
+
+                        <p className="mt-1 text-lg font-black text-zinc-100">
+                          {selectedCount}/{spellLimit}
+                        </p>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
 
         <div
           className="rounded-2xl border border-zinc-800 bg-black/25 p-4"
@@ -788,7 +1053,7 @@ export function CharacterSpellsStep({
         <div className="rounded-2xl border border-zinc-800 bg-black/20 p-5 text-sm font-bold text-zinc-400">
           {hasAvailableSpellOptions
             ? "Nenhuma magia encontrada com os filtros atuais."
-            : `Nenhuma magia disponível para a classe selecionada no nível ${safeCharacterLevel}.`}
+            : `Nenhuma magia disponível para a classe selecionada no nível ${selectedSpellClassLevel}.`}
         </div>
       ) : null}
 

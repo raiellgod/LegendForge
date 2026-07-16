@@ -27,6 +27,17 @@ export type CharacterBuilderEquipmentDraftItem = {
   isEquipped?: boolean;
 };
 
+export type CharacterBuilderClassDraftEntry = {
+  id: string;
+  classId: string;
+  className: string;
+  subclassId: string | null;
+  subclassName: string | null;
+  level: number;
+  isPrimary: boolean;
+  order: number;
+};
+
 export type CharacterBuilderDraft = {
   name: string;
   pronouns: string;
@@ -38,6 +49,7 @@ export type CharacterBuilderDraft = {
 
   classId: string;
   className: string;
+  classEntries: CharacterBuilderClassDraftEntry[];
 
   ancestryId: string;
   ancestryName: string;
@@ -86,6 +98,12 @@ export type CharacterBuilderOption = {
   description: string | null;
 };
 
+export type CharacterBuilderSpellLimit = {
+  spellLevel: number;
+  spellsKnown: number;
+  spellsPrepared: number;
+};
+
 export type CharacterBuilderClassLevelProgression = {
   level: number;
   proficiencyBonus: number | null;
@@ -101,6 +119,7 @@ export type CharacterBuilderClassLevelProgression = {
   spellSlotsLevel7: number;
   spellSlotsLevel8: number;
   spellSlotsLevel9: number;
+  spellLimits: CharacterBuilderSpellLimit[];
 };
 
 export type CharacterBuilderClassSpellAccess = {
@@ -200,6 +219,7 @@ export type CharacterBuilderOptions = {
   backgrounds: CharacterBuilderBackgroundOption[];
   skills: CharacterBuilderSkillOption[];
   spells: CharacterBuilderSpellOption[];
+  features: CharacterBuilderFeatureOption[];
   equipment: CharacterBuilderEquipmentOption[];
   languages: CharacterBuilderLanguageOption[];
 };
@@ -214,6 +234,20 @@ export type CharacterSheetStatResponse = {
     name?: string;
     shortName?: string;
   };
+};
+
+export type CharacterBuilderFeatureOption = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+  sourceType: string;
+  level: number | null;
+  order: number;
+  ancestryId: string | null;
+  classId: string | null;
+  subclassId: string | null;
+  levelProgressionId: string | null;
 };
 
 export type CharacterReadySheetFeature = {
@@ -245,6 +279,7 @@ export type CharacterReadySheetLevelProgressionPreview = {
   spellSlotsLevel7: number;
   spellSlotsLevel8: number;
   spellSlotsLevel9: number;
+  spellLimits: CharacterBuilderSpellLimit[];
 };
 
 export type CharacterReadySheetClassEntry = {
@@ -308,6 +343,14 @@ export type CharacterSheetCombatState = {
   inspiration: boolean;
 };
 
+
+export type CharacterReadySheetSpellClass = {
+  id: string;
+  key: string;
+  name: string;
+  spellcastingAbilityKey: CharacterAttributeKey | null;
+};
+
 export type CharacterReadySheet = CharacterSheetCombatState & {
   id: string;
   campaignId: string;
@@ -363,22 +406,7 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     weaponProficiencyKeys: string[];
     protectionProficiencyKeys: string[];
     toolProficiencyKeys: string[];
-    levelProgressions: Array<{
-      level: number;
-      proficiencyBonus: number | null;
-      cantripsKnown: number;
-      spellsKnown: number;
-      spellsPrepared: number;
-      spellSlotsLevel1: number;
-      spellSlotsLevel2: number;
-      spellSlotsLevel3: number;
-      spellSlotsLevel4: number;
-      spellSlotsLevel5: number;
-      spellSlotsLevel6: number;
-      spellSlotsLevel7: number;
-      spellSlotsLevel8: number;
-      spellSlotsLevel9: number;
-    }>;
+    levelProgressions: CharacterBuilderClassLevelProgression[];
   } | null;
 
   subclass: {
@@ -435,6 +463,8 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
 
   spells: Array<{
     source: string | null;
+    classId: string | null;
+    characterClass: CharacterReadySheetSpellClass | null;
     spell: CharacterBuilderSpellOption;
   }>;
 

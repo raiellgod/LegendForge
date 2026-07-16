@@ -1,11 +1,10 @@
 # 📊 DEV STATE — LegendForge
 
-> Atualizado para novo chat em 07/07/2026. Contexto consolidado após a sequência 4.6.6 — Idiomas por fonte.
-
+> Atualizado para novo chat em 16/07/2026. Contexto consolidado após a macro **4.7.7 — Magias iniciais por classe/nível**.
 
 ## 📅 Last Update
 
-07/07/2026
+16/07/2026
 
 ---
 
@@ -25,20 +24,23 @@ Gerenciador: pnpm
 ```txt
 Backend eslint: limpo
 Frontend lint: limpo
+Página/ficha: sem erros aparentes
+Ficha: abre e finaliza normalmente
 ```
 
-Confirmado pelo usuário após a 4.6.6.5.
+Confirmado pelo usuário após a conclusão da 4.7.7.
 
 ---
 
 ## ✅ Última sequência concluída
 
 ```txt
-[x] 4.6.6.1 — Modelar idiomas no schema/seed/API/types
-[x] 4.6.6.2 — Backend salva languageKeys no rascunho da ficha
-[x] 4.6.6.3 — Criar etapa de idiomas no builder
-[x] 4.6.6.4 — Validar idiomas ao finalizar ficha
-[x] 4.6.6.5 — Exibir idiomas na ficha pronta
+[x] 4.7.7.0 — Modelar limites de magia por nível
+[x] 4.7.7.1 — União final das permissões de magia por classe no builder
+[x] 4.7.7.2 — Backend valida magia contra múltiplas classes
+[x] 4.7.7.3 — Backend salva e retorna classId/source da magia
+[x] 4.7.7.4 — Frontend types recebem origem interna da magia
+[x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
 ```
 
 Commit sugerido:
@@ -47,7 +49,7 @@ Commit sugerido:
 git diff --stat
 git status
 git add .
-git commit -m "feat: add character language choices"
+git commit -m "feat: support multiclass spell limits"
 ```
 
 ---
@@ -59,9 +61,6 @@ git commit -m "feat: add character language choices"
 ```txt
 backend/prisma/schema.prisma
 backend/prisma/seed.ts
-backend/prisma/seed-data/languages.ts
-backend/prisma/seed-data/ancestries.ts
-backend/prisma/seed-data/backgrounds.ts
 backend/src/routes/systems.ts
 backend/src/routes/character-sheets.ts
 ```
@@ -69,11 +68,8 @@ backend/src/routes/character-sheets.ts
 ### Frontend
 
 ```txt
-frontend/src/app/campaigns/[id]/play/page.tsx
-frontend/src/features/character-builder/constants/character-builder-steps.ts
 frontend/src/features/character-builder/types/character-builder-types.ts
-frontend/src/features/character-builder/steps/CharacterLanguagesStep.tsx
-frontend/src/features/character-builder/steps/CharacterReviewStep.tsx
+frontend/src/features/character-builder/steps/CharacterSpellsStep.tsx
 frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
 ```
 
@@ -88,6 +84,9 @@ frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
 - carrega rascunho;
 - etapa Conceito;
 - etapa Classe;
+- distribuição de níveis por classe;
+- classe principal;
+- multiclasse inicial;
 - etapa Ancestralidade;
 - etapa Antecedente;
 - etapa Atributos;
@@ -99,24 +98,41 @@ frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
 - etapa Revisão;
 - finaliza ficha.
 
-### Idiomas
+### Multiclasse inicial
 
-- idiomas carregam da API de opções do sistema;
-- ancestralidade/antecedente podem conceder idiomas automáticos;
-- antecedente pode exigir escolhas extras;
-- builder salva `draft.languageKeys`;
-- POST/PATCH salvam `languageKeys`;
-- finalização valida idiomas;
-- review mostra idiomas;
-- ficha pronta mostra idiomas no Perfil.
+- `classEntries` no draft;
+- `CharacterSheetClass` no banco;
+- `CharacterSheet.level` como nível total;
+- `CharacterSheetClass.level` como nível por classe;
+- PV inicial por classe usando dado máximo + CON por nível;
+- features iniciais por classe/nível.
+
+### Magias pós 4.7.7
+
+- `LevelProgressionSpellLimit` modelado.
+- Seed preenche `spellLimits`.
+- API de opções retorna `spellLimits`.
+- Frontend types aceitam `spellLimits`.
+- Builder usa `spellsKnown` por nível de magia.
+- Builder não usa `spellsPrepared` para limite de escolha.
+- Preparadas ficam para mecânica futura.
+- Lista de magias é união das classes escolhidas.
+- Magia duplicada entre classes aparece uma vez só.
+- Backend valida magia contra qualquer classe escolhida.
+- Backend salva `CharacterSheetSpell.classId`.
+- Backend retorna `classId` e `characterClass` em cada magia da ficha.
+- Frontend types aceitam origem interna.
+- Ficha mostra bloco Conjuração por classe.
+- Cards de magia continuam limpos, sem origem visual por card.
 
 ### Ficha pronta
 
-- Modal dentro da mesa;
+- modal dentro da mesa;
 - pop-out;
 - rolagens pela ficha;
 - rolagens do pop-out retornam à mesa;
 - status, combate, bolsa, magia, features, perfil e notas;
+- bloco Conjuração por classe;
 - idiomas no Perfil;
 - imagens de equipamento em Bolsa/Combate.
 
@@ -131,6 +147,7 @@ Pedir versão atual do usuário antes de reescrever:
 ```txt
 play/page.tsx
 CharacterReadySheetView.tsx
+CharacterSpellsStep.tsx
 character-sheets.ts
 systems.ts
 schema.prisma
@@ -143,11 +160,6 @@ Antes de commit:
 
 ```bash
 git diff --stat
-```
-
-Depois:
-
-```bash
 git status
 ```
 
@@ -158,6 +170,7 @@ Usar arquivo inteiro em mudanças grandes, principalmente:
 ```txt
 page.tsx
 CharacterReadySheetView.tsx
+CharacterSpellsStep.tsx
 character-sheets.ts
 ```
 
@@ -170,25 +183,27 @@ Usar em mudanças pequenas e com âncora clara.
 ## 🔜 Próxima micro recomendada
 
 ```txt
-4.6.7 — Proficiências de equipamento por fonte
+4.7.8 — Escolhas pendentes iniciais
 ```
 
 Plano provável:
 
 ```txt
-4.6.7.1 — Revisar modelagem atual de proficiências de equipamento
-4.6.7.2 — Backend retorna proficiências resolvidas da ficha
-4.6.7.3 — Ficha pronta calcula ataque usando proficiência real
-4.6.7.4 — Review/ficha mostram fonte da proficiência
-4.6.7.5 — Preparar proteções/armaduras para CA real
+4.7.8.1 — Mapear escolhas pendentes possíveis
+4.7.8.2 — Subclasse pendente
+4.7.8.3 — Magias/truques pendentes
+4.7.8.4 — Proficiências pendentes
+4.7.8.5 — Línguas pendentes
+4.7.8.6 — Atributos/talentos futuramente
 ```
 
 Ponto de partida provável:
 
 ```txt
 backend/src/routes/character-sheets.ts
-frontend/src/features/character-builder/utils/character-sheet-calculations.ts
-frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
+backend/src/routes/systems.ts
 frontend/src/features/character-builder/types/character-builder-types.ts
+frontend/src/features/character-builder/steps/CharacterReviewStep.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
+frontend/src/app/campaigns/[id]/play/page.tsx
 ```
-

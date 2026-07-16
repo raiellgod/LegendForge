@@ -63,6 +63,12 @@ type ClassMagicProgression = SpellSlotProgression & {
   spellsPrepared: number;
 };
 
+type SpellKnownPreparedLimit = {
+  spellLevel: number;
+  spellsKnown: number;
+  spellsPrepared: number;
+};
+
 const zeroSpellSlots: SpellSlotProgression = {
   spellSlotsLevel1: 0,
   spellSlotsLevel2: 0,
@@ -312,6 +318,89 @@ function getHalfCasterSpellSlots(level: number): SpellSlotProgression {
   return getFullCasterSpellSlots(casterLevel);
 }
 
+function getHighestSpellSlotLevel(spellSlots: SpellSlotProgression) {
+  const spellSlotEntries = [
+    [1, spellSlots.spellSlotsLevel1],
+    [2, spellSlots.spellSlotsLevel2],
+    [3, spellSlots.spellSlotsLevel3],
+    [4, spellSlots.spellSlotsLevel4],
+    [5, spellSlots.spellSlotsLevel5],
+    [6, spellSlots.spellSlotsLevel6],
+    [7, spellSlots.spellSlotsLevel7],
+    [8, spellSlots.spellSlotsLevel8],
+    [9, spellSlots.spellSlotsLevel9],
+  ] as const;
+
+  const highestEntry = [...spellSlotEntries]
+    .reverse()
+    .find(([, slotCount]) => slotCount > 0);
+
+  return highestEntry?.[0] ?? 0;
+}
+
+function distributeLeveledSpellCountBySpellLevel({
+  totalSpellCount,
+  highestSpellLevel,
+}: {
+  totalSpellCount: number;
+  highestSpellLevel: number;
+}) {
+  if (totalSpellCount <= 0 || highestSpellLevel <= 0) {
+    return new Map<number, number>();
+  }
+
+  const spellCountsByLevel = new Map<number, number>();
+
+  for (let spellLevel = 1; spellLevel <= highestSpellLevel; spellLevel += 1) {
+    spellCountsByLevel.set(spellLevel, 0);
+  }
+
+  for (let index = 0; index < totalSpellCount; index += 1) {
+    const spellLevel = (index % highestSpellLevel) + 1;
+
+    spellCountsByLevel.set(
+      spellLevel,
+      (spellCountsByLevel.get(spellLevel) ?? 0) + 1,
+    );
+  }
+
+  return spellCountsByLevel;
+}
+
+function getSpellLimitsBySpellLevel(
+  magicProgression: ClassMagicProgression,
+): SpellKnownPreparedLimit[] {
+  const highestSpellLevel = getHighestSpellSlotLevel(magicProgression);
+
+  const knownLeveledSpellCounts = distributeLeveledSpellCountBySpellLevel({
+    totalSpellCount: magicProgression.spellsKnown,
+    highestSpellLevel,
+  });
+
+  const preparedLeveledSpellCounts = distributeLeveledSpellCountBySpellLevel({
+    totalSpellCount: magicProgression.spellsPrepared,
+    highestSpellLevel,
+  });
+
+  const spellLimits: SpellKnownPreparedLimit[] = [
+    {
+      spellLevel: 0,
+      spellsKnown: magicProgression.cantripsKnown,
+      spellsPrepared: 0,
+    },
+  ];
+
+  for (let spellLevel = 1; spellLevel <= highestSpellLevel; spellLevel += 1) {
+    spellLimits.push({
+      spellLevel,
+      spellsKnown: knownLeveledSpellCounts.get(spellLevel) ?? 0,
+      spellsPrepared: preparedLeveledSpellCounts.get(spellLevel) ?? 0,
+    });
+  }
+
+  return spellLimits;
+}
+
 function getKnownCasterProgression(level: number) {
   return {
     cantripsKnown: level >= 10 ? 4 : level >= 4 ? 3 : 2,
@@ -467,6 +556,38 @@ async function main() {
     console.log(
       `Perícia criada/validada: ${skill.name} → ${skillData.statName}`,
     );
+  }
+
+    const canonicalCommonLanguage = await prisma.language.findUnique({
+    where: {
+      systemId_key: {
+        systemId: system.id,
+        key: "common",
+      },
+    },
+  });
+
+  const legacyCommonLanguageByName = await prisma.language.findFirst({
+    where: {
+      systemId: system.id,
+      name: "Comum",
+    },
+  });
+
+  if (!canonicalCommonLanguage && legacyCommonLanguageByName) {
+    await prisma.language.update({
+      where: {
+        id: legacyCommonLanguageByName.id,
+      },
+      data: {
+        key: "common",
+        name: "Comum",
+        description:
+          "Idioma comum usado como língua franca entre povos, cidades e viajantes.",
+      },
+    });
+
+    console.log("Idioma legado migrado para key canonical: common");
   }
 
   for (const [index, languageData] of languages.entries()) {
@@ -626,6 +747,27 @@ async function main() {
       });
 
       createdLevelProgressions.set(`${classData.key}:${level}`, progression.id);
+
+      const spellLimits = getSpellLimitsBySpellLevel(magicProgression);
+
+      await prisma.$transaction([
+        prisma.levelProgressionSpellLimit.deleteMany({
+          where: {
+            levelProgressionId: progression.id,
+          },
+        }),
+
+        ...spellLimits.map((spellLimit) =>
+          prisma.levelProgressionSpellLimit.create({
+            data: {
+              levelProgressionId: progression.id,
+              spellLevel: spellLimit.spellLevel,
+              spellsKnown: spellLimit.spellsKnown,
+              spellsPrepared: spellLimit.spellsPrepared,
+            },
+          }),
+        ),
+      ]);
 
       console.log(
         `Progressão validada: ${classData.name} nível ${progression.level}`,

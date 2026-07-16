@@ -2143,103 +2143,146 @@ export function CharacterReadySheetView({
       ? "Esta ficha já possui múltiplas classes cadastradas."
       : "Estrutura pronta para receber multiclasse no Level Up.";
 
-  const spellcastingClassEntry =
-    sheetClassEntries.find(
-      (classEntry) => classEntry.characterClass.spellcastingAbilityKey,
-    ) ?? primarySheetClassEntry;
+  const spellcastingSources = [
+    ...sheetClassEntries
+      .filter((classEntry) => classEntry.characterClass.spellcastingAbilityKey)
+      .map((classEntry) => ({
+        classId: classEntry.characterClass.id,
+        className: classEntry.characterClass.name,
+        classLevel: classEntry.level,
+        isPrimary: classEntry.isPrimary,
+        spellcastingAbilityKey:
+          classEntry.characterClass.spellcastingAbilityKey,
+        levelProgressions: classEntry.characterClass.levelProgressions,
+      })),
+    ...(sheetClassEntries.length === 0 &&
+    characterSheet?.characterClass?.spellcastingAbilityKey
+      ? [
+          {
+            classId: characterSheet.characterClass.id,
+            className: characterSheet.characterClass.name,
+            classLevel: sheetLevel,
+            isPrimary: true,
+            spellcastingAbilityKey:
+              characterSheet.characterClass.spellcastingAbilityKey,
+            levelProgressions: characterSheet.characterClass.levelProgressions,
+          },
+        ]
+      : []),
+  ];
 
-  const spellcastingClass = spellcastingClassEntry
-    ? `${spellcastingClassEntry.characterClass.name} ${spellcastingClassEntry.level}`
-    : (characterSheet?.characterClass?.name ?? "—");
+  const spellcastingSummaries = spellcastingSources
+    .map((spellcastingSource) => {
+      const abilityKey = getSpellcastingAbilityKey(
+        spellcastingSource.spellcastingAbilityKey,
+      );
 
-  const spellcastingClassLevel = spellcastingClassEntry?.level ?? sheetLevel;
+      if (!abilityKey || !characterSheet) {
+        return null;
+      }
 
-  const spellcastingAbilityKey = getSpellcastingAbilityKey(
-    spellcastingClassEntry?.characterClass.spellcastingAbilityKey ??
-      characterSheet?.characterClass?.spellcastingAbilityKey,
-  );
-
-  const spellcastingAbilityModifier = characterSheet
-    ? getSpellcastingAbilityModifier({
+      const abilityModifier = getSpellcastingAbilityModifier({
         stats: sheetStats,
-        spellcastingAbilityKey,
-      })
-    : null;
+        spellcastingAbilityKey: abilityKey,
+      });
 
-  const spellSaveDcValue = characterSheet
-    ? getSpellSaveDc({
+      const spellSaveDcValue = getSpellSaveDc({
         stats: sheetStats,
         level: sheetLevel,
-        spellcastingAbilityKey,
-      })
-    : null;
+        spellcastingAbilityKey: abilityKey,
+      });
 
-  const spellAttackBonusValue = characterSheet
-    ? getSpellAttackBonus({
+      const spellAttackBonusValue = getSpellAttackBonus({
         stats: sheetStats,
         level: sheetLevel,
-        spellcastingAbilityKey,
-      })
-    : null;
+        spellcastingAbilityKey: abilityKey,
+      });
 
-  const currentLevelProgression =
-    spellcastingClassEntry?.characterClass.levelProgressions.find(
-      (progression) => progression.level === spellcastingClassLevel,
-    ) ??
-    characterSheet?.characterClass?.levelProgressions.find(
-      (progression) => progression.level === sheetLevel,
-    ) ??
-    null;
+      const progression =
+        spellcastingSource.levelProgressions.find(
+          (currentProgression) =>
+            currentProgression.level === spellcastingSource.classLevel,
+        ) ?? null;
 
-  const spellSlotRows = getSpellSlotRowsFromProgression(
-    currentLevelProgression,
-  );
+      const spellSlotRows = getSpellSlotRowsFromProgression(progression);
+      const spellSlotsSummary =
+        spellSlotRows.length > 0
+          ? spellSlotRows.map((slot) => `N${slot.level}: ${slot.total}`).join(" · ")
+          : "Sem espaços";
 
-  const hasSpellSlots = spellSlotRows.length > 0;
+      return {
+        classId: spellcastingSource.classId,
+        className: spellcastingSource.className,
+        classLevel: spellcastingSource.classLevel,
+        isPrimary: spellcastingSource.isPrimary,
+        abilityKey,
+        abilityLabel: `${getAttributeLabel(abilityKey)} (${getAttributeShortLabel(
+          abilityKey,
+        )} ${formatSignedNumber(abilityModifier ?? 0)})`,
+        spellSaveDc:
+          spellSaveDcValue === null ? "—" : String(spellSaveDcValue),
+        spellAttackBonus:
+          spellAttackBonusValue === null
+            ? "—"
+            : formatSignedNumber(spellAttackBonusValue),
+        spellAttackBonusValue,
+        spellSlotsSummary,
+      };
+    })
+    .filter(
+      (
+        spellcastingSummary,
+      ): spellcastingSummary is NonNullable<typeof spellcastingSummary> =>
+        Boolean(spellcastingSummary),
+    );
 
-  const spellSlotsSummary = hasSpellSlots
-    ? spellSlotRows.map((slot) => `N${slot.level}: ${slot.total}`).join(" · ")
-    : "Sem espaços";
+  const primarySpellcastingSummary = spellcastingSummaries[0] ?? null;
 
-  const spellcastingAbility = spellcastingAbilityKey
-    ? `${getAttributeLabel(spellcastingAbilityKey)} (${getAttributeShortLabel(
-        spellcastingAbilityKey,
-      )} ${formatSignedNumber(spellcastingAbilityModifier ?? 0)})`
-    : "—";
+  function getSpellcastingSummaryForSheetSpell(
+    sheetSpell: CharacterReadySheet["spells"][number],
+  ) {
+    const spellClassId = sheetSpell.classId ?? sheetSpell.characterClass?.id;
 
-  const spellSaveDc =
-    spellSaveDcValue === null ? "—" : String(spellSaveDcValue);
+    if (spellClassId) {
+      const matchingSummary = spellcastingSummaries.find(
+        (spellcastingSummary) => spellcastingSummary.classId === spellClassId,
+      );
 
-  const spellAttackBonus =
-    spellAttackBonusValue === null
-      ? "—"
-      : formatSignedNumber(spellAttackBonusValue);
+      if (matchingSummary) {
+        return matchingSummary;
+      }
+    }
+
+    return primarySpellcastingSummary;
+  }
+
 
   const spellSummaryCards = [
     {
-      label: "Classe",
-      value: spellcastingClass,
-      helper: "conjuradora ativa",
+      label: "Classes mágicas",
+      value:
+        spellcastingSummaries.length > 0
+          ? String(spellcastingSummaries.length)
+          : "0",
+      helper:
+        spellcastingSummaries.length > 1
+          ? "conjurações separadas"
+          : "conjuração",
     },
     {
-      label: "Habilidade",
-      value: spellcastingAbility,
-      helper: "atributo",
+      label: "Magias",
+      value: String(characterSheet?.spells.length ?? 0),
+      helper: "conhecidas",
     },
     {
-      label: "CD",
-      value: spellSaveDc,
-      helper: "magia",
+      label: "Ataque base",
+      value: primarySpellcastingSummary?.spellAttackBonus ?? "—",
+      helper: "primeira classe",
     },
     {
-      label: "Ataque",
-      value: spellAttackBonus,
-      helper: "mágico",
-    },
-    {
-      label: "Espaços",
-      value: spellSlotsSummary,
-      helper: "por nível",
+      label: "CD base",
+      value: primarySpellcastingSummary?.spellSaveDc ?? "—",
+      helper: "primeira classe",
     },
   ];
 
@@ -2292,16 +2335,56 @@ export function CharacterReadySheetView({
     },
   );
 
+  const classFeatureGroups = sheetClassEntries.map((classEntry) => {
+    const classFeatures = featureRows.filter((feature) => {
+      if (feature.sourceType === "CLASS") {
+        return feature.classId === classEntry.classId;
+      }
+
+      if (feature.sourceType === "SUBCLASS") {
+        return (
+          Boolean(classEntry.subclassId) &&
+          feature.subclassId === classEntry.subclassId
+        );
+      }
+
+      return false;
+    });
+
+    const featureCountLabel =
+      classFeatures.length === 1
+        ? "1 feature disponível"
+        : `${classFeatures.length} features disponíveis`;
+
+    return {
+      id: `class-${classEntry.id}`,
+      title: `${classEntry.characterClass.name} ${classEntry.level}`,
+      helper: [
+        classEntry.isPrimary ? "Classe principal" : "Classe adicional",
+        classEntry.subclass?.name ?? "Sem subclasse",
+        featureCountLabel,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      features: classFeatures,
+    };
+  });
+
+  const groupedClassFeatureIds = new Set(
+    classFeatureGroups.flatMap((group) =>
+      group.features.map((feature) => feature.id),
+    ),
+  );
+
+  const fallbackClassFeatureRows = featureRows.filter((feature) => {
+    return (
+      (feature.sourceType === "CLASS" || feature.sourceType === "SUBCLASS") &&
+      !groupedClassFeatureIds.has(feature.id)
+    );
+  });
+
   const ancestryFeatureRows = featureRows.filter(
     (feature) => feature.sourceType === "ANCESTRY",
-  );
-
-  const classFeatureRows = featureRows.filter(
-    (feature) => feature.sourceType === "CLASS",
-  );
-
-  const subclassFeatureRows = featureRows.filter(
-    (feature) => feature.sourceType === "SUBCLASS",
   );
 
   const otherFeatureRows = featureRows.filter(
@@ -2310,31 +2393,41 @@ export function CharacterReadySheetView({
   );
 
   const featureGroups = [
-    {
-      id: "class",
-      title: "Features de classe",
-      helper: characterSheet?.characterClass?.name ?? "Classe não definida",
-      features: classFeatureRows,
-    },
-    {
-      id: "subclass",
-      title: "Features de subclasse",
-      helper: characterSheet?.subclass?.name ?? "Subclasse não definida",
-      features: subclassFeatureRows,
-    },
-    {
-      id: "ancestry",
-      title: "Traços de ancestralidade",
-      helper: characterSheet?.ancestry?.name ?? "Ancestralidade não definida",
-      features: ancestryFeatureRows,
-    },
-    {
-      id: "other",
-      title: "Outras features",
-      helper: "Fontes adicionais",
-      features: otherFeatureRows,
-    },
-  ].filter((group) => group.features.length > 0);
+    ...classFeatureGroups,
+    ...(fallbackClassFeatureRows.length > 0
+      ? [
+          {
+            id: "class-fallback",
+            title: "Features de classe sem vínculo novo",
+            helper:
+              characterSheet?.characterClass?.name ??
+              "Compatibilidade com ficha antiga",
+            features: fallbackClassFeatureRows,
+          },
+        ]
+      : []),
+    ...(ancestryFeatureRows.length > 0
+      ? [
+          {
+            id: "ancestry",
+            title: "Traços de ancestralidade",
+            helper:
+              characterSheet?.ancestry?.name ?? "Ancestralidade não definida",
+            features: ancestryFeatureRows,
+          },
+        ]
+      : []),
+    ...(otherFeatureRows.length > 0
+      ? [
+          {
+            id: "other",
+            title: "Outras features",
+            helper: "Fontes adicionais",
+            features: otherFeatureRows,
+          },
+        ]
+      : []),
+  ];
 
   const appearanceRows = [
     {
@@ -2536,8 +2629,11 @@ export function CharacterReadySheetView({
               </h2>
 
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-white/10 bg-black/25 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-white/50">
-                  {classAndLevel}
+                <span
+                  className="rounded-full border border-white/10 bg-black/25 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-white/50"
+                  title={classSummaryLabel}
+                >
+                  {classSummaryLabel}
                 </span>
 
                 <span className="rounded-full border border-white/10 bg-black/25 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-white/50">
@@ -3195,7 +3291,7 @@ export function CharacterReadySheetView({
       ) : activeTab === "spells" ? (
         <div className="min-h-0 flex-1 overflow-y-auto p-2 sm:p-3">
           <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">
                   Página de magias
@@ -3204,9 +3300,15 @@ export function CharacterReadySheetView({
                 <h3 className="mt-1 text-xl font-black text-forge-gold">
                   Conjuração
                 </h3>
+
+                <p className="mt-1 max-w-2xl text-xs font-semibold leading-relaxed text-white/45">
+                  A ficha separa a conjuração por classe. A origem interna da
+                  magia fica salva para cálculos de atributo, CD e ataque
+                  mágico, sem aparecer em cada card.
+                </p>
               </div>
 
-              <div className="grid w-full gap-2 sm:grid-cols-2 xl:w-auto xl:grid-cols-5">
+              <div className="grid w-full gap-2 sm:grid-cols-2 xl:w-auto xl:grid-cols-4">
                 {spellSummaryCards.map((summaryCard) => (
                   <div
                     key={summaryCard.label}
@@ -3228,6 +3330,75 @@ export function CharacterReadySheetView({
                 ))}
               </div>
             </div>
+
+            {spellcastingSummaries.length > 0 ? (
+              <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {spellcastingSummaries.map((spellcastingSummary) => (
+                  <article
+                    key={spellcastingSummary.classId}
+                    className="rounded-xl border border-white/10 bg-black/25 p-3 shadow-[-3px_3px_0_rgba(0,0,0,0.18)]"
+                    title={`${spellcastingSummary.className}: ${spellcastingSummary.abilityLabel}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="min-w-0 break-words text-sm font-black leading-snug text-forge-gold">
+                          {spellcastingSummary.className}{" "}
+                          {spellcastingSummary.classLevel}
+                        </p>
+
+                        <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+                          {spellcastingSummary.isPrimary
+                            ? "Classe principal"
+                            : "Classe conjuradora"}
+                        </p>
+                      </div>
+
+                      <span className="shrink-0 rounded-full border border-forge-gold/25 bg-forge-gold/10 px-2 py-0.5 text-[9px] font-black text-forge-gold">
+                        {getAttributeShortLabel(spellcastingSummary.abilityKey)}
+                      </span>
+                    </div>
+
+                    <div className="mt-3 grid gap-2 text-[10px] font-semibold text-white/45">
+                      <p className="rounded-lg border border-white/10 bg-black/20 px-2 py-1">
+                        <span className="font-black text-white/35">
+                          Atributo:
+                        </span>{" "}
+                        {spellcastingSummary.abilityLabel}
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <p className="rounded-lg border border-forge-gold/15 bg-forge-gold/5 px-2 py-1">
+                          <span className="font-black text-white/35">CD:</span>{" "}
+                          <span className="font-black text-forge-gold">
+                            {spellcastingSummary.spellSaveDc}
+                          </span>
+                        </p>
+
+                        <p className="rounded-lg border border-forge-gold/15 bg-forge-gold/5 px-2 py-1">
+                          <span className="font-black text-white/35">
+                            Ataque:
+                          </span>{" "}
+                          <span className="font-black text-forge-gold">
+                            {spellcastingSummary.spellAttackBonus}
+                          </span>
+                        </p>
+                      </div>
+
+                      <p className="rounded-lg border border-white/10 bg-black/20 px-2 py-1">
+                        <span className="font-black text-white/35">
+                          Espaços:
+                        </span>{" "}
+                        {spellcastingSummary.spellSlotsSummary}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                Nenhuma classe conjuradora configurada nesta ficha.
+              </p>
+            )}
           </section>
 
           <div className="mt-4 space-y-4">
@@ -3248,6 +3419,9 @@ export function CharacterReadySheetView({
                             sheetSpell.spell.description,
                           );
 
+                        const spellcastingSummary =
+                          getSpellcastingSummaryForSheetSpell(sheetSpell);
+
                         return (
                           <SpellCard
                             key={sheetSpell.spell.key}
@@ -3262,7 +3436,10 @@ export function CharacterReadySheetView({
                             damageLabel={getSpellDamageLabelFromText(
                               sheetSpell.spell.description,
                             )}
-                            isAttackDisabled={spellAttackBonusValue === null}
+                            isAttackDisabled={
+                              !spellcastingSummary ||
+                              spellcastingSummary.spellAttackBonusValue === null
+                            }
                             attackDisabledReason="Esta classe não possui atributo de conjuração. Ataque mágico indisponível."
                             isExpanded={expandedSpellKeys.includes(
                               sheetSpell.spell.key,
@@ -3271,14 +3448,18 @@ export function CharacterReadySheetView({
                               toggleExpandedSpell(sheetSpell.spell.key)
                             }
                             onRollAttack={() => {
-                              if (spellAttackBonusValue === null) {
+                              if (
+                                !spellcastingSummary ||
+                                spellcastingSummary.spellAttackBonusValue === null
+                              ) {
                                 return;
                               }
 
                               onRollSheetAction({
                                 kind: "d20",
                                 label: `Ataque mágico — ${sheetSpell.spell.name}`,
-                                modifier: spellAttackBonusValue,
+                                modifier:
+                                  spellcastingSummary.spellAttackBonusValue,
                               });
                             }}
                             onRollDamage={
@@ -3329,6 +3510,11 @@ export function CharacterReadySheetView({
                                     sheetSpell.spell.description,
                                   );
 
+                                const spellcastingSummary =
+                                  getSpellcastingSummaryForSheetSpell(
+                                    sheetSpell,
+                                  );
+
                                 return (
                                   <SpellCard
                                     key={sheetSpell.spell.key}
@@ -3344,7 +3530,9 @@ export function CharacterReadySheetView({
                                       sheetSpell.spell.description,
                                     )}
                                     isAttackDisabled={
-                                      spellAttackBonusValue === null
+                                      !spellcastingSummary ||
+                                      spellcastingSummary.spellAttackBonusValue ===
+                                        null
                                     }
                                     attackDisabledReason="Esta classe não possui atributo de conjuração. Ataque mágico indisponível."
                                     isExpanded={expandedSpellKeys.includes(
@@ -3354,14 +3542,19 @@ export function CharacterReadySheetView({
                                       toggleExpandedSpell(sheetSpell.spell.key)
                                     }
                                     onRollAttack={() => {
-                                      if (spellAttackBonusValue === null) {
+                                      if (
+                                        !spellcastingSummary ||
+                                        spellcastingSummary.spellAttackBonusValue ===
+                                          null
+                                      ) {
                                         return;
                                       }
 
                                       onRollSheetAction({
                                         kind: "d20",
                                         label: `Ataque mágico — ${sheetSpell.spell.name}`,
-                                        modifier: spellAttackBonusValue,
+                                        modifier:
+                                  spellcastingSummary.spellAttackBonusValue,
                                       });
                                     }}
                                     onRollDamage={
@@ -3410,9 +3603,9 @@ export function CharacterReadySheetView({
                     </p>
 
                     <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
-                      Recursos vindos da classe, subclasse e ancestralidade do
-                      personagem. Nesta primeira versão eles são exibidos como
-                      texto mecânico/narrativo.
+                      Recursos agrupados por classe, subclasse e ancestralidade
+                      do personagem. Nesta primeira versão eles são exibidos
+                      como texto mecânico/narrativo.
                     </p>
                   </div>
                 </div>
@@ -3434,23 +3627,30 @@ export function CharacterReadySheetView({
                           </p>
                         </div>
 
-                        <div className="mt-2 grid gap-2">
-                          {group.features.map((feature) => (
-                            <FeatureCard
-                              key={feature.id}
-                              name={feature.name}
-                              levelLabel={
-                                feature.level
-                                  ? `Nível ${feature.level}`
-                                  : "Sem nível"
-                              }
-                              description={
-                                feature.description?.trim() ||
-                                "Sem descrição cadastrada."
-                              }
-                            />
-                          ))}
-                        </div>
+                        {group.features.length > 0 ? (
+                          <div className="mt-2 grid gap-2">
+                            {group.features.map((feature) => (
+                              <FeatureCard
+                                key={feature.id}
+                                name={feature.name}
+                                levelLabel={
+                                  feature.level
+                                    ? `Nível ${feature.level}`
+                                    : "Sem nível"
+                                }
+                                description={
+                                  feature.description?.trim() ||
+                                  "Sem descrição cadastrada."
+                                }
+                              />
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="mt-2 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                            Nenhuma feature desbloqueada para esta classe no
+                            nível atual.
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -3533,7 +3733,8 @@ export function CharacterReadySheetView({
 
                 <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
                   O nível total do personagem continua separado dos níveis de
-                  classe. A multiclasse será aplicada por esta lista.
+                  classe. Features, PV, magias e Level Up devem usar esta lista
+                  como fonte real da multiclasse.
                 </p>
               </section>
 
@@ -3930,10 +4131,7 @@ export function CharacterReadySheetView({
                   value={characterSheet?.bonds}
                 />
 
-                <NarrativeField
-                  label="Ideais"
-                  value={characterSheet?.ideals}
-                />
+                <NarrativeField label="Ideais" value={characterSheet?.ideals} />
 
                 <NarrativeField
                   label="Defeitos"

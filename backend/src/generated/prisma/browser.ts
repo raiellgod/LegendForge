@@ -108,6 +108,11 @@ export type CharacterSubclass = Prisma.CharacterSubclassModel
  */
 export type LevelProgression = Prisma.LevelProgressionModel
 /**
+ * Model LevelProgressionSpellLimit
+ * 
+ */
+export type LevelProgressionSpellLimit = Prisma.LevelProgressionSpellLimitModel
+/**
  * Model ClassSpell
  * 
  */

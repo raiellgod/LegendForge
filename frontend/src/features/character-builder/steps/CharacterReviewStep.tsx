@@ -7,6 +7,7 @@ import type {
   CharacterBuilderClassOption,
   CharacterBuilderDraft,
   CharacterBuilderOptions,
+  CharacterBuilderFeatureOption,
   CharacterBuilderLanguageOption,
   CharacterBuilderSkillOption,
   CharacterBuilderSpellOption,
@@ -66,7 +67,6 @@ function getAttributeSourceBonus({
   );
 }
 
-
 const proficiencyLabelsByKey: Record<string, string> = {
   "simple-weapons": "Armas simples",
   "martial-weapons": "Armas marciais",
@@ -105,6 +105,10 @@ function formatProficiencyKey(key: string) {
       })
       .join(" ")
   );
+}
+
+function formatReviewSignedNumber(value: number) {
+  return value > 0 ? `+${value}` : String(value);
 }
 
 type CharacterReviewStepProps = {
@@ -159,8 +163,9 @@ export function CharacterReviewStep({
       .map((skillKey) => {
         return options.skills.find((skill) => skill.key === skillKey);
       })
-      .filter((skill): skill is CharacterBuilderSkillOption => Boolean(skill)) ??
-    [];
+      .filter((skill): skill is CharacterBuilderSkillOption =>
+        Boolean(skill),
+      ) ?? [];
 
   const automaticLanguageKeys = Array.from(
     new Set([
@@ -173,18 +178,16 @@ export function CharacterReviewStep({
     .map((languageKey) => {
       return options.languages.find((language) => language.key === languageKey);
     })
-    .filter(
-      (language): language is CharacterBuilderLanguageOption =>
-        Boolean(language),
+    .filter((language): language is CharacterBuilderLanguageOption =>
+      Boolean(language),
     );
 
   const selectedLanguages = draft.languageKeys
     .map((languageKey) => {
       return options.languages.find((language) => language.key === languageKey);
     })
-    .filter(
-      (language): language is CharacterBuilderLanguageOption =>
-        Boolean(language),
+    .filter((language): language is CharacterBuilderLanguageOption =>
+      Boolean(language),
     );
 
   const requiredLanguageChoiceCount =
@@ -198,6 +201,154 @@ export function CharacterReviewStep({
 
   const toolProficiencyNames =
     selectedClass?.toolProficiencyKeys.map(formatProficiencyKey) ?? [];
+
+  const orderedClassEntries = [...draft.classEntries].sort(
+    (firstEntry, secondEntry) => firstEntry.order - secondEntry.order,
+  );
+
+  const reviewClassEntries =
+    orderedClassEntries.length > 0
+      ? orderedClassEntries
+      : selectedClass
+        ? [
+            {
+              id: "primary",
+              classId: selectedClass.id,
+              className: selectedClass.name,
+              subclassId: null,
+              subclassName: null,
+              level: safeCharacterLevel,
+              isPrimary: true,
+              order: 0,
+            },
+          ]
+        : [];
+
+  const classSummaryLabel =
+    reviewClassEntries.length > 0
+      ? reviewClassEntries
+          .map((classEntry) => `${classEntry.className} ${classEntry.level}`)
+          .join(" / ")
+      : (selectedClass?.name ?? draft.className) || "Não definida";
+
+  const constitutionSourceBonus = getAttributeSourceBonus({
+    attributeKey: "constitution",
+    selectedAncestry,
+    selectedBackground,
+  });
+
+  const constitutionBaseValue = draft.attributes.constitution;
+
+  const constitutionFinalValue =
+    typeof constitutionBaseValue === "number"
+      ? constitutionBaseValue + constitutionSourceBonus
+      : null;
+
+  const constitutionModifier =
+    typeof constitutionFinalValue === "number"
+      ? Math.floor((constitutionFinalValue - 10) / 2)
+      : 0;
+
+  const hitPointReviewRows = reviewClassEntries.map((classEntry) => {
+    const classOption = options.classes.find(
+      (currentClass) => currentClass.id === classEntry.classId,
+    );
+
+    const hitDie = classOption?.hitDie ?? null;
+
+    const hitPointsPerLevel =
+      typeof hitDie === "number" && hitDie > 0
+        ? Math.max(1, hitDie + constitutionModifier)
+        : 0;
+
+    const totalHitPoints = hitPointsPerLevel * classEntry.level;
+
+    return {
+      id: classEntry.id,
+      className: classEntry.className,
+      level: classEntry.level,
+      hitDie,
+      hitPointsPerLevel,
+      totalHitPoints,
+      formula:
+        typeof hitDie === "number" && hitDie > 0
+          ? `${classEntry.level} × (d${hitDie} máximo ${hitDie} ${formatReviewSignedNumber(
+              constitutionModifier,
+            )} CON)`
+          : "Dado de vida não cadastrado",
+    };
+  });
+
+  const totalInitialHitPoints = hitPointReviewRows.reduce(
+    (totalHitPoints, row) => totalHitPoints + row.totalHitPoints,
+    0,
+  );
+
+  const predictedClassFeatureGroups = reviewClassEntries
+    .map((classEntry) => {
+      const classFeatures = options.features
+        .filter((feature) => {
+          const isClassFeature =
+            feature.classId === classEntry.classId &&
+            feature.subclassId === null;
+
+          const isSubclassFeature =
+            Boolean(classEntry.subclassId) &&
+            feature.subclassId === classEntry.subclassId;
+
+          const isUnlocked =
+            typeof feature.level === "number"
+              ? feature.level <= classEntry.level
+              : true;
+
+          return (isClassFeature || isSubclassFeature) && isUnlocked;
+        })
+        .sort((firstFeature, secondFeature) => {
+          const firstLevel = firstFeature.level ?? 0;
+          const secondLevel = secondFeature.level ?? 0;
+
+          if (firstLevel !== secondLevel) {
+            return firstLevel - secondLevel;
+          }
+
+          if (firstFeature.order !== secondFeature.order) {
+            return firstFeature.order - secondFeature.order;
+          }
+
+          return firstFeature.name.localeCompare(secondFeature.name, "pt-BR");
+        });
+
+      return {
+        id: classEntry.id,
+        title: `${classEntry.className} ${classEntry.level}`,
+        helper: classEntry.isPrimary ? "Classe principal" : "Classe adicional",
+        features: classFeatures,
+      };
+    })
+    .filter((group) => group.features.length > 0);
+
+  const predictedAncestryFeatures = selectedAncestry
+    ? options.features
+        .filter((feature) => feature.ancestryId === selectedAncestry.id)
+        .sort((firstFeature, secondFeature) => {
+          const firstLevel = firstFeature.level ?? 0;
+          const secondLevel = secondFeature.level ?? 0;
+
+          if (firstLevel !== secondLevel) {
+            return firstLevel - secondLevel;
+          }
+
+          if (firstFeature.order !== secondFeature.order) {
+            return firstFeature.order - secondFeature.order;
+          }
+
+          return firstFeature.name.localeCompare(secondFeature.name, "pt-BR");
+        })
+    : [];
+
+  const hasPredictedFeatures =
+    predictedClassFeatureGroups.length > 0 ||
+    predictedAncestryFeatures.length > 0;
 
   return (
     <div className="mt-5 space-y-5">
@@ -230,10 +381,7 @@ export function CharacterReviewStep({
         description="Classe, ancestralidade, antecedente e nível atual do personagem."
       >
         <div className="grid gap-3 md:grid-cols-2">
-          <CharacterReviewFact
-            label="Classe"
-            value={(selectedClass?.name ?? draft.className) || "Não definida"}
-          />
+          <CharacterReviewFact label="Classes" value={classSummaryLabel} />
 
           <CharacterReviewFact
             label="Ancestralidade"
@@ -316,6 +464,83 @@ export function CharacterReviewStep({
         <p className="text-xs font-bold text-zinc-500">
           {assignedAttributesCount}/6 atributos preenchidos.
         </p>
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="PV inicial previsto"
+        description="Cálculo de pontos de vida usando o dado máximo de cada classe e o modificador de Constituição."
+      >
+        <div className="rounded-xl border border-forge-gold/25 bg-forge-gold/10 px-4 py-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold">
+            Total previsto
+          </p>
+
+          <p className="mt-1 text-2xl font-black text-zinc-100">
+            {totalInitialHitPoints} PV
+          </p>
+        </div>
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
+        title="Features previstas"
+        description="Recursos que devem aparecer na ficha final a partir das classes, subclasses e ancestralidade escolhidas."
+      >
+        {hasPredictedFeatures ? (
+          <div className="space-y-4">
+            {predictedClassFeatureGroups.map((group) => (
+              <section
+                key={group.id}
+                className="rounded-xl border border-zinc-800 bg-black/20 p-3"
+              >
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold">
+                    {group.title}
+                  </p>
+
+                  <p className="mt-1 text-xs font-bold text-zinc-500">
+                    {group.helper}
+                  </p>
+                </div>
+
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  {group.features.map((feature) => (
+                    <CharacterReviewFeatureCard
+                      key={feature.id}
+                      feature={feature}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))}
+
+            {predictedAncestryFeatures.length > 0 ? (
+              <section className="rounded-xl border border-zinc-800 bg-black/20 p-3">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold">
+                    Traços de ancestralidade
+                  </p>
+
+                  <p className="mt-1 text-xs font-bold text-zinc-500">
+                    {selectedAncestry?.name ?? "Ancestralidade"}
+                  </p>
+                </div>
+
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  {predictedAncestryFeatures.map((feature) => (
+                    <CharacterReviewFeatureCard
+                      key={feature.id}
+                      feature={feature}
+                    />
+                  ))}
+                </div>
+              </section>
+            ) : null}
+          </div>
+        ) : (
+          <CharacterReviewEmptyText>
+            Nenhuma feature prevista para as escolhas atuais.
+          </CharacterReviewEmptyText>
+        )}
       </CharacterReviewSection>
 
       <CharacterReviewSection
@@ -634,6 +859,29 @@ export function CharacterReviewStep({
         </div>
       </CharacterReviewSection>
     </div>
+  );
+}
+
+function CharacterReviewFeatureCard({
+  feature,
+}: {
+  feature: CharacterBuilderFeatureOption;
+}) {
+  return (
+    <article
+      className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-3"
+      title={feature.description ?? "Sem descrição cadastrada."}
+    >
+      <p className="text-sm font-black text-forge-gold">{feature.name}</p>
+
+      <p className="mt-1 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">
+        {feature.level ? `Nível ${feature.level}` : "Sem nível"}
+      </p>
+
+      <p className="mt-2 whitespace-pre-wrap text-xs font-bold leading-relaxed text-zinc-400">
+        {feature.description?.trim() || "Sem descrição cadastrada."}
+      </p>
+    </article>
   );
 }
 

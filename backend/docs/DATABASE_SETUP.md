@@ -1,13 +1,12 @@
 # 🧠 DATABASE SETUP — LegendForge
 
-> Atualizado para novo chat em 07/07/2026. Contexto consolidado após a sequência 4.6.6 — Idiomas por fonte.
-
+> Atualizado para novo chat em 16/07/2026. Contexto consolidado após a macro **4.7.7 — Magias iniciais por classe/nível**.
 
 ## 📌 Status atual
 
 Banco funcional com Prisma/PostgreSQL, Better Auth, campanhas, mesa, sistema RPG, fichas e relações avançadas.
 
-Última expansão concluída: **4.6.6 — Idiomas por fonte**.
+Última expansão concluída: **4.7.7 — Magias iniciais por classe/nível**.
 
 ---
 
@@ -47,6 +46,7 @@ Feature
 Spell
 Equipment
 LevelProgression
+LevelProgressionSpellLimit
 ClassSpell
 ```
 
@@ -64,9 +64,108 @@ CharacterSheetClass
 
 ---
 
-## 🗣️ Idiomas — 4.6.6
+## 🪄 Magias — estado pós 4.7.7
 
 ### Novos/atualizados
+
+```txt
+LevelProgressionSpellLimit
+LevelProgression.spellLimits
+CharacterSheetSpell.classId
+CharacterClass.characterSheetSpells
+```
+
+### LevelProgressionSpellLimit
+
+Responsabilidade:
+
+```txt
+Define quantas magias conhecidas/preparadas uma classe recebe por nível de magia em cada nível de classe.
+```
+
+Campos esperados:
+
+```txt
+id
+levelProgressionId
+spellLevel
+spellsKnown
+spellsPrepared
+createdAt
+updatedAt
+```
+
+Regras:
+
+```txt
+@@unique([levelProgressionId, spellLevel])
+@@index([levelProgressionId])
+@@index([spellLevel])
+```
+
+Interpretação:
+
+```txt
+spellLevel 0 = truques
+spellsKnown = limite usado no builder
+spellsPrepared = limite futuro para preparação da ficha
+```
+
+### CharacterSheetSpell
+
+Responsabilidade:
+
+```txt
+Magias realmente conhecidas/registradas pela ficha.
+```
+
+Campos relevantes:
+
+```txt
+characterSheetId
+spellId
+classId
+source
+isPrepared
+isAlwaysPrepared
+uses
+maxUses
+notes
+```
+
+`classId` é origem interna da magia para cálculo futuro de:
+
+```txt
+atributo de conjuração
+CD
+ataque mágico
+regras por classe
+```
+
+Não deve poluir visualmente o card de magia.
+
+Fontes previstas:
+
+```txt
+class
+ancestry
+background
+feature
+manual
+GM/futuro
+```
+
+Observação:
+
+```txt
+Magias concedidas pelo mestre não contam nos limites de builder/level up.
+```
+
+---
+
+## 🗣️ Idiomas — estado
+
+### Modelos
 
 ```txt
 Language
@@ -78,78 +177,7 @@ GameSystem.languages
 CharacterSheet.languages
 ```
 
-### Language
-
-Responsabilidade:
-
-```txt
-Cadastro de idiomas disponíveis por sistema.
-```
-
-Campos esperados:
-
-```txt
-id
-systemId
-key
-name
-description
-order
-createdAt
-updatedAt
-```
-
-Regras:
-
-```txt
-@@unique([systemId, key])
-@@unique([systemId, name])
-```
-
-### CharacterSheetLanguage
-
-Responsabilidade:
-
-```txt
-Idiomas conhecidos por uma ficha, com fonte.
-```
-
-Campos esperados:
-
-```txt
-id
-characterSheetId
-languageId
-source
-createdAt
-updatedAt
-```
-
-Regras:
-
-```txt
-@@unique([characterSheetId, languageId])
-```
-
-Fonte atual:
-
-```txt
-builder
-```
-
-Fontes previstas:
-
-```txt
-class
-background
-ancestry
-feature
-manual
-```
-
----
-
-## 🧩 Regras atuais de idioma
+### Regras atuais
 
 Automáticos:
 
@@ -180,7 +208,27 @@ Validação de finalização:
 
 ---
 
-## ⚔️ Equipamentos — estado antes da próxima micro
+## 🧩 Regras atuais de multiclasse
+
+```txt
+CharacterSheet.level = nível total
+CharacterSheetClass.level = nível por classe
+CharacterSheetClass.isPrimary = classe principal/identidade/fallback
+```
+
+Classe principal não deve ser fonte única de regra mecânica quando existir `CharacterSheetClass`.
+
+Regras reais devem preferir:
+
+```txt
+CharacterSheet.classes
+CharacterSheetClass.classId
+CharacterSheetClass.level
+```
+
+---
+
+## ⚔️ Equipamentos — estado
 
 `Equipment` já possui campos estruturados para ataque:
 
@@ -203,17 +251,9 @@ damageBonus
 imageUrl
 ```
 
-A ficha pronta calcula ataque real por equipamento, mas ainda há pendência:
+A ficha pronta calcula ataque por equipamento usando proficiências efetivas das classes.
 
-```txt
-Proficiência de equipamento ainda precisa ser aplicada por fonte real.
-```
-
-Próxima micro recomendada:
-
-```txt
-4.6.7 — Proficiências de equipamento por fonte
-```
+Proteções/armaduras já estão preparadas para CA real futura, mas a CA final ainda permanece manual/preview.
 
 ---
 
@@ -251,53 +291,12 @@ levelUpPreview calculado no backend
 
 ---
 
-## 🪄 Magia/progressão
-
-Já implementado:
-
-```txt
-CharacterClass.spellcastingAbilityKey
-LevelProgression
-ClassSpell
-CharacterSheetSpell
-```
-
-A ficha pronta usa:
-
-```txt
-CD = 8 + proficiência + modificador de conjuração
-Ataque mágico = proficiência + modificador de conjuração
-Slots = LevelProgression da classe conjuradora ativa
-```
-
----
-
-## ⬆️ Multiclasse / Level Up
-
-Já implementado como fundação:
-
-```txt
-CharacterSheet.level = nível total
-CharacterSheetClass.level = nível por classe
-```
-
-Ainda futuro:
-
-```txt
-- level up real completo
-- adicionar nova classe
-- escolhas de subclasse no level up
-- ASI/talentos
-- PV por classe no level up
-```
-
----
-
-## ❌ Futuro do banco
+## 🔮 Futuro do banco
 
 Ainda não implementado:
 
 ```txt
+SubAncestry/SubAncestralidade
 ChatMessage persistido
 RollLog persistido
 Scene real/múltiplas cenas
@@ -306,8 +305,8 @@ Drawing persistido
 NPC sheet
 Creature sheet / bestiary
 Spell slot usage
+Prepared spell state avançado
 Conditions/effects
 Inventory transactions/shops
 File uploads
 ```
-

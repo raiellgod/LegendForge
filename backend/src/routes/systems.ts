@@ -149,6 +149,13 @@ export async function systemRoutes(app: FastifyInstance) {
                   spellSlotsLevel7: z.number(),
                   spellSlotsLevel8: z.number(),
                   spellSlotsLevel9: z.number(),
+                  spellLimits: z.array(
+                    z.object({
+                      spellLevel: z.number(),
+                      spellsKnown: z.number(),
+                      spellsPrepared: z.number(),
+                    }),
+                  ),
                 }),
               ),
               classSpells: z.array(
@@ -224,6 +231,21 @@ export async function systemRoutes(app: FastifyInstance) {
               requiresConcentration: z.boolean(),
             }),
           ),
+          features: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              sourceType: z.string(),
+              level: z.number().nullable(),
+              order: z.number(),
+              ancestryId: z.string().nullable(),
+              classId: z.string().nullable(),
+              subclassId: z.string().nullable(),
+              levelProgressionId: z.string().nullable(),
+            }),
+          ),
           equipment: z.array(
             z.object({
               id: z.string(),
@@ -291,233 +313,282 @@ export async function systemRoutes(app: FastifyInstance) {
         });
       }
 
-      const [classes, ancestries, backgrounds, languages, skills, spells, equipment] =
-        await Promise.all([
-          prisma.characterClass.findMany({
-            where: {
-              systemId,
-            },
-            orderBy: {
-              order: "asc",
-            },
-            select: {
-              id: true,
-              key: true,
-              name: true,
-              description: true,
-              primaryRole: true,
-              hitDie: true,
-              spellcastingAbilityKey: true,
-              subclassSelectionLevel: true,
-              classSkillChoiceCount: true,
-              weaponProficiencyKeys: true,
-              protectionProficiencyKeys: true,
-              toolProficiencyKeys: true,
-              levelProgressions: {
-                orderBy: {
-                  level: "asc",
-                },
-                select: {
-                  level: true,
-                  proficiencyBonus: true,
-                  cantripsKnown: true,
-                  spellsKnown: true,
-                  spellsPrepared: true,
-                  spellSlotsLevel1: true,
-                  spellSlotsLevel2: true,
-                  spellSlotsLevel3: true,
-                  spellSlotsLevel4: true,
-                  spellSlotsLevel5: true,
-                  spellSlotsLevel6: true,
-                  spellSlotsLevel7: true,
-                  spellSlotsLevel8: true,
-                  spellSlotsLevel9: true,
-                },
-              },
-              classSpells: {
-                orderBy: [
-                  {
-                    minimumClassLevel: "asc",
-                  },
-                  {
-                    spell: {
-                      level: "asc",
-                    },
-                  },
-                  {
-                    spell: {
-                      name: "asc",
-                    },
-                  },
-                ],
-                select: {
-                  minimumClassLevel: true,
-                  isAlwaysKnown: true,
-                  spell: {
-                    select: {
-                      key: true,
-                    },
-                  },
-                },
-              },
-            },
-          }),
-
-          prisma.ancestry.findMany({
-            where: {
-              systemId,
-            },
-            orderBy: {
-              order: "asc",
-            },
-            select: {
-              id: true,
-              key: true,
-              name: true,
-              description: true,
-              defaultSizeCategory: true,
-              attributeBonuses: true,
-              languageKeys: true,
-            },
-          }),
-
-          prisma.background.findMany({
-            where: {
-              systemId,
-            },
-            orderBy: {
-              order: "asc",
-            },
-            select: {
-              id: true,
-              key: true,
-              name: true,
-              description: true,
-              skillKeys: true,
-              toolNames: true,
-              languageChoiceCount: true,
-              languageKeys: true,
-              startingGold: true,
-              attributeBonuses: true,
-            },
-          }),
-
-          prisma.language.findMany({
-            where: {
-              systemId,
-            },
-            orderBy: [
-              {
-                order: "asc",
-              },
-              {
-                name: "asc",
-              },
-            ],
-            select: {
-              id: true,
-              key: true,
-              name: true,
-              description: true,
-            },
-          }),
-
-          prisma.skill.findMany({
-            where: {
-              systemId,
-            },
-            orderBy: {
-              name: "asc",
-            },
-            select: {
-              id: true,
-              key: true,
-              name: true,
-              description: true,
-              statId: true,
-              stat: {
-                select: {
-                  id: true,
-                  key: true,
-                  name: true,
-                  shortName: true,
-                },
-              },
-            },
-          }),
-
-          prisma.spell.findMany({
-            where: {
-              systemId,
-            },
-            orderBy: [
-              {
+      const [
+        classes,
+        ancestries,
+        backgrounds,
+        languages,
+        skills,
+        spells,
+        features,
+        equipment,
+      ] = await Promise.all([
+        prisma.characterClass.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: {
+            order: "asc",
+          },
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            primaryRole: true,
+            hitDie: true,
+            spellcastingAbilityKey: true,
+            subclassSelectionLevel: true,
+            classSkillChoiceCount: true,
+            weaponProficiencyKeys: true,
+            protectionProficiencyKeys: true,
+            toolProficiencyKeys: true,
+            levelProgressions: {
+              orderBy: {
                 level: "asc",
               },
-              {
-                name: "asc",
+              select: {
+                level: true,
+                proficiencyBonus: true,
+                cantripsKnown: true,
+                spellsKnown: true,
+                spellsPrepared: true,
+                spellSlotsLevel1: true,
+                spellSlotsLevel2: true,
+                spellSlotsLevel3: true,
+                spellSlotsLevel4: true,
+                spellSlotsLevel5: true,
+                spellSlotsLevel6: true,
+                spellSlotsLevel7: true,
+                spellSlotsLevel8: true,
+                spellSlotsLevel9: true,
+                spellLimits: {
+                  orderBy: {
+                    spellLevel: "asc",
+                  },
+                  select: {
+                    spellLevel: true,
+                    spellsKnown: true,
+                    spellsPrepared: true,
+                  },
+                },
               },
-            ],
-            select: {
-              id: true,
-              key: true,
-              name: true,
-              description: true,
-              level: true,
-              school: true,
-              castingTime: true,
-              range: true,
-              duration: true,
-              components: true,
-              isRitual: true,
-              requiresConcentration: true,
             },
-          }),
+            classSpells: {
+              orderBy: [
+                {
+                  minimumClassLevel: "asc",
+                },
+                {
+                  spell: {
+                    level: "asc",
+                  },
+                },
+                {
+                  spell: {
+                    name: "asc",
+                  },
+                },
+              ],
+              select: {
+                minimumClassLevel: true,
+                isAlwaysKnown: true,
+                spell: {
+                  select: {
+                    key: true,
+                  },
+                },
+              },
+            },
+          },
+        }),
 
-          prisma.equipment.findMany({
-            where: {
-              systemId,
+        prisma.ancestry.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: {
+            order: "asc",
+          },
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            defaultSizeCategory: true,
+            attributeBonuses: true,
+            languageKeys: true,
+          },
+        }),
+
+        prisma.background.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: {
+            order: "asc",
+          },
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            skillKeys: true,
+            toolNames: true,
+            languageChoiceCount: true,
+            languageKeys: true,
+            startingGold: true,
+            attributeBonuses: true,
+          },
+        }),
+
+        prisma.language.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              order: "asc",
             },
-            orderBy: [
-              {
-                category: "asc",
-              },
-              {
-                order: "asc",
-              },
-              {
-                name: "asc",
-              },
-            ],
-            select: {
-              id: true,
-              key: true,
-              name: true,
-              description: true,
-              category: true,
-              damage: true,
-              damageFormula: true,
-              damageType: true,
-              defense: true,
-              cost: true,
-              weight: true,
-              properties: true,
-              attackType: true,
-              attackAbilityKey: true,
-              alternativeAbilityKey: true,
-              weaponGroup: true,
-              normalRange: true,
-              longRange: true,
-              isFinesse: true,
-              isThrown: true,
-              isTwoHanded: true,
-              isVersatile: true,
-              versatileDamageFormula: true,
-              attackBonus: true,
-              damageBonus: true,
+            {
+              name: "asc",
             },
-          }),
-        ]);
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+          },
+        }),
+
+        prisma.skill.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: {
+            name: "asc",
+          },
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            statId: true,
+            stat: {
+              select: {
+                id: true,
+                key: true,
+                name: true,
+                shortName: true,
+              },
+            },
+          },
+        }),
+
+        prisma.spell.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              level: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            level: true,
+            school: true,
+            castingTime: true,
+            range: true,
+            duration: true,
+            components: true,
+            isRitual: true,
+            requiresConcentration: true,
+          },
+        }),
+        prisma.feature.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              sourceType: "asc",
+            },
+            {
+              level: "asc",
+            },
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            sourceType: true,
+            level: true,
+            order: true,
+            ancestryId: true,
+            classId: true,
+            subclassId: true,
+            levelProgressionId: true,
+          },
+        }),
+        prisma.equipment.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              category: "asc",
+            },
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            category: true,
+            damage: true,
+            damageFormula: true,
+            damageType: true,
+            defense: true,
+            cost: true,
+            weight: true,
+            properties: true,
+            attackType: true,
+            attackAbilityKey: true,
+            alternativeAbilityKey: true,
+            weaponGroup: true,
+            normalRange: true,
+            longRange: true,
+            isFinesse: true,
+            isThrown: true,
+            isTwoHanded: true,
+            isVersatile: true,
+            versatileDamageFormula: true,
+            attackBonus: true,
+            damageBonus: true,
+          },
+        }),
+      ]);
 
       const normalizedClasses = classes.map((characterClass) => {
         return {
@@ -549,6 +620,11 @@ export async function systemRoutes(app: FastifyInstance) {
               spellSlotsLevel7: progression.spellSlotsLevel7,
               spellSlotsLevel8: progression.spellSlotsLevel8,
               spellSlotsLevel9: progression.spellSlotsLevel9,
+              spellLimits: progression.spellLimits.map((spellLimit) => ({
+                spellLevel: spellLimit.spellLevel,
+                spellsKnown: spellLimit.spellsKnown,
+                spellsPrepared: spellLimit.spellsPrepared,
+              })),
             }),
           ),
           classSpells: characterClass.classSpells.map((classSpell) => ({
@@ -648,6 +724,7 @@ export async function systemRoutes(app: FastifyInstance) {
         languages,
         skills,
         spells: normalizedSpells,
+        features,
         equipment: normalizedEquipment,
       });
     },

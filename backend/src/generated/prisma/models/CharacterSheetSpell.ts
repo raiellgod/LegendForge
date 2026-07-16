@@ -40,6 +40,7 @@ export type CharacterSheetSpellMinAggregateOutputType = {
   id: string | null
   characterSheetId: string | null
   spellId: string | null
+  classId: string | null
   source: string | null
   isPrepared: boolean | null
   isAlwaysPrepared: boolean | null
@@ -54,6 +55,7 @@ export type CharacterSheetSpellMaxAggregateOutputType = {
   id: string | null
   characterSheetId: string | null
   spellId: string | null
+  classId: string | null
   source: string | null
   isPrepared: boolean | null
   isAlwaysPrepared: boolean | null
@@ -68,6 +70,7 @@ export type CharacterSheetSpellCountAggregateOutputType = {
   id: number
   characterSheetId: number
   spellId: number
+  classId: number
   source: number
   isPrepared: number
   isAlwaysPrepared: number
@@ -94,6 +97,7 @@ export type CharacterSheetSpellMinAggregateInputType = {
   id?: true
   characterSheetId?: true
   spellId?: true
+  classId?: true
   source?: true
   isPrepared?: true
   isAlwaysPrepared?: true
@@ -108,6 +112,7 @@ export type CharacterSheetSpellMaxAggregateInputType = {
   id?: true
   characterSheetId?: true
   spellId?: true
+  classId?: true
   source?: true
   isPrepared?: true
   isAlwaysPrepared?: true
@@ -122,6 +127,7 @@ export type CharacterSheetSpellCountAggregateInputType = {
   id?: true
   characterSheetId?: true
   spellId?: true
+  classId?: true
   source?: true
   isPrepared?: true
   isAlwaysPrepared?: true
@@ -223,6 +229,7 @@ export type CharacterSheetSpellGroupByOutputType = {
   id: string
   characterSheetId: string
   spellId: string
+  classId: string | null
   source: string | null
   isPrepared: boolean
   isAlwaysPrepared: boolean
@@ -260,6 +267,7 @@ export type CharacterSheetSpellWhereInput = {
   id?: Prisma.StringFilter<"CharacterSheetSpell"> | string
   characterSheetId?: Prisma.StringFilter<"CharacterSheetSpell"> | string
   spellId?: Prisma.StringFilter<"CharacterSheetSpell"> | string
+  classId?: Prisma.StringNullableFilter<"CharacterSheetSpell"> | string | null
   source?: Prisma.StringNullableFilter<"CharacterSheetSpell"> | string | null
   isPrepared?: Prisma.BoolFilter<"CharacterSheetSpell"> | boolean
   isAlwaysPrepared?: Prisma.BoolFilter<"CharacterSheetSpell"> | boolean
@@ -270,12 +278,14 @@ export type CharacterSheetSpellWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"CharacterSheetSpell"> | Date | string
   characterSheet?: Prisma.XOR<Prisma.CharacterSheetScalarRelationFilter, Prisma.CharacterSheetWhereInput>
   spell?: Prisma.XOR<Prisma.SpellScalarRelationFilter, Prisma.SpellWhereInput>
+  characterClass?: Prisma.XOR<Prisma.CharacterClassNullableScalarRelationFilter, Prisma.CharacterClassWhereInput> | null
 }
 
 export type CharacterSheetSpellOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   characterSheetId?: Prisma.SortOrder
   spellId?: Prisma.SortOrder
+  classId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrderInput | Prisma.SortOrder
   isPrepared?: Prisma.SortOrder
   isAlwaysPrepared?: Prisma.SortOrder
@@ -286,6 +296,7 @@ export type CharacterSheetSpellOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   characterSheet?: Prisma.CharacterSheetOrderByWithRelationInput
   spell?: Prisma.SpellOrderByWithRelationInput
+  characterClass?: Prisma.CharacterClassOrderByWithRelationInput
 }
 
 export type CharacterSheetSpellWhereUniqueInput = Prisma.AtLeast<{
@@ -296,6 +307,7 @@ export type CharacterSheetSpellWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CharacterSheetSpellWhereInput | Prisma.CharacterSheetSpellWhereInput[]
   characterSheetId?: Prisma.StringFilter<"CharacterSheetSpell"> | string
   spellId?: Prisma.StringFilter<"CharacterSheetSpell"> | string
+  classId?: Prisma.StringNullableFilter<"CharacterSheetSpell"> | string | null
   source?: Prisma.StringNullableFilter<"CharacterSheetSpell"> | string | null
   isPrepared?: Prisma.BoolFilter<"CharacterSheetSpell"> | boolean
   isAlwaysPrepared?: Prisma.BoolFilter<"CharacterSheetSpell"> | boolean
@@ -306,12 +318,14 @@ export type CharacterSheetSpellWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"CharacterSheetSpell"> | Date | string
   characterSheet?: Prisma.XOR<Prisma.CharacterSheetScalarRelationFilter, Prisma.CharacterSheetWhereInput>
   spell?: Prisma.XOR<Prisma.SpellScalarRelationFilter, Prisma.SpellWhereInput>
+  characterClass?: Prisma.XOR<Prisma.CharacterClassNullableScalarRelationFilter, Prisma.CharacterClassWhereInput> | null
 }, "id" | "characterSheetId_spellId">
 
 export type CharacterSheetSpellOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   characterSheetId?: Prisma.SortOrder
   spellId?: Prisma.SortOrder
+  classId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrderInput | Prisma.SortOrder
   isPrepared?: Prisma.SortOrder
   isAlwaysPrepared?: Prisma.SortOrder
@@ -334,6 +348,7 @@ export type CharacterSheetSpellScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"CharacterSheetSpell"> | string
   characterSheetId?: Prisma.StringWithAggregatesFilter<"CharacterSheetSpell"> | string
   spellId?: Prisma.StringWithAggregatesFilter<"CharacterSheetSpell"> | string
+  classId?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheetSpell"> | string | null
   source?: Prisma.StringNullableWithAggregatesFilter<"CharacterSheetSpell"> | string | null
   isPrepared?: Prisma.BoolWithAggregatesFilter<"CharacterSheetSpell"> | boolean
   isAlwaysPrepared?: Prisma.BoolWithAggregatesFilter<"CharacterSheetSpell"> | boolean
@@ -356,12 +371,14 @@ export type CharacterSheetSpellCreateInput = {
   updatedAt?: Date | string
   characterSheet: Prisma.CharacterSheetCreateNestedOneWithoutSpellsInput
   spell: Prisma.SpellCreateNestedOneWithoutCharacterSpellsInput
+  characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetSpellsInput
 }
 
 export type CharacterSheetSpellUncheckedCreateInput = {
   id?: string
   characterSheetId: string
   spellId: string
+  classId?: string | null
   source?: string | null
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -384,12 +401,14 @@ export type CharacterSheetSpellUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheet?: Prisma.CharacterSheetUpdateOneRequiredWithoutSpellsNestedInput
   spell?: Prisma.SpellUpdateOneRequiredWithoutCharacterSpellsNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetSpellsNestedInput
 }
 
 export type CharacterSheetSpellUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   characterSheetId?: Prisma.StringFieldUpdateOperationsInput | string
   spellId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isAlwaysPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -404,6 +423,7 @@ export type CharacterSheetSpellCreateManyInput = {
   id?: string
   characterSheetId: string
   spellId: string
+  classId?: string | null
   source?: string | null
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -430,6 +450,7 @@ export type CharacterSheetSpellUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   characterSheetId?: Prisma.StringFieldUpdateOperationsInput | string
   spellId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isAlwaysPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -459,6 +480,7 @@ export type CharacterSheetSpellCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   characterSheetId?: Prisma.SortOrder
   spellId?: Prisma.SortOrder
+  classId?: Prisma.SortOrder
   source?: Prisma.SortOrder
   isPrepared?: Prisma.SortOrder
   isAlwaysPrepared?: Prisma.SortOrder
@@ -478,6 +500,7 @@ export type CharacterSheetSpellMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   characterSheetId?: Prisma.SortOrder
   spellId?: Prisma.SortOrder
+  classId?: Prisma.SortOrder
   source?: Prisma.SortOrder
   isPrepared?: Prisma.SortOrder
   isAlwaysPrepared?: Prisma.SortOrder
@@ -492,6 +515,7 @@ export type CharacterSheetSpellMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   characterSheetId?: Prisma.SortOrder
   spellId?: Prisma.SortOrder
+  classId?: Prisma.SortOrder
   source?: Prisma.SortOrder
   isPrepared?: Prisma.SortOrder
   isAlwaysPrepared?: Prisma.SortOrder
@@ -549,6 +573,48 @@ export type CharacterSheetSpellUncheckedUpdateManyWithoutCharacterSheetNestedInp
   deleteMany?: Prisma.CharacterSheetSpellScalarWhereInput | Prisma.CharacterSheetSpellScalarWhereInput[]
 }
 
+export type CharacterSheetSpellCreateNestedManyWithoutCharacterClassInput = {
+  create?: Prisma.XOR<Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput, Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput> | Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput[] | Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput[]
+  connectOrCreate?: Prisma.CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput | Prisma.CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput[]
+  createMany?: Prisma.CharacterSheetSpellCreateManyCharacterClassInputEnvelope
+  connect?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+}
+
+export type CharacterSheetSpellUncheckedCreateNestedManyWithoutCharacterClassInput = {
+  create?: Prisma.XOR<Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput, Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput> | Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput[] | Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput[]
+  connectOrCreate?: Prisma.CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput | Prisma.CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput[]
+  createMany?: Prisma.CharacterSheetSpellCreateManyCharacterClassInputEnvelope
+  connect?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+}
+
+export type CharacterSheetSpellUpdateManyWithoutCharacterClassNestedInput = {
+  create?: Prisma.XOR<Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput, Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput> | Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput[] | Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput[]
+  connectOrCreate?: Prisma.CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput | Prisma.CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput[]
+  upsert?: Prisma.CharacterSheetSpellUpsertWithWhereUniqueWithoutCharacterClassInput | Prisma.CharacterSheetSpellUpsertWithWhereUniqueWithoutCharacterClassInput[]
+  createMany?: Prisma.CharacterSheetSpellCreateManyCharacterClassInputEnvelope
+  set?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+  disconnect?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+  delete?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+  connect?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+  update?: Prisma.CharacterSheetSpellUpdateWithWhereUniqueWithoutCharacterClassInput | Prisma.CharacterSheetSpellUpdateWithWhereUniqueWithoutCharacterClassInput[]
+  updateMany?: Prisma.CharacterSheetSpellUpdateManyWithWhereWithoutCharacterClassInput | Prisma.CharacterSheetSpellUpdateManyWithWhereWithoutCharacterClassInput[]
+  deleteMany?: Prisma.CharacterSheetSpellScalarWhereInput | Prisma.CharacterSheetSpellScalarWhereInput[]
+}
+
+export type CharacterSheetSpellUncheckedUpdateManyWithoutCharacterClassNestedInput = {
+  create?: Prisma.XOR<Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput, Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput> | Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput[] | Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput[]
+  connectOrCreate?: Prisma.CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput | Prisma.CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput[]
+  upsert?: Prisma.CharacterSheetSpellUpsertWithWhereUniqueWithoutCharacterClassInput | Prisma.CharacterSheetSpellUpsertWithWhereUniqueWithoutCharacterClassInput[]
+  createMany?: Prisma.CharacterSheetSpellCreateManyCharacterClassInputEnvelope
+  set?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+  disconnect?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+  delete?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+  connect?: Prisma.CharacterSheetSpellWhereUniqueInput | Prisma.CharacterSheetSpellWhereUniqueInput[]
+  update?: Prisma.CharacterSheetSpellUpdateWithWhereUniqueWithoutCharacterClassInput | Prisma.CharacterSheetSpellUpdateWithWhereUniqueWithoutCharacterClassInput[]
+  updateMany?: Prisma.CharacterSheetSpellUpdateManyWithWhereWithoutCharacterClassInput | Prisma.CharacterSheetSpellUpdateManyWithWhereWithoutCharacterClassInput[]
+  deleteMany?: Prisma.CharacterSheetSpellScalarWhereInput | Prisma.CharacterSheetSpellScalarWhereInput[]
+}
+
 export type CharacterSheetSpellCreateNestedManyWithoutSpellInput = {
   create?: Prisma.XOR<Prisma.CharacterSheetSpellCreateWithoutSpellInput, Prisma.CharacterSheetSpellUncheckedCreateWithoutSpellInput> | Prisma.CharacterSheetSpellCreateWithoutSpellInput[] | Prisma.CharacterSheetSpellUncheckedCreateWithoutSpellInput[]
   connectOrCreate?: Prisma.CharacterSheetSpellCreateOrConnectWithoutSpellInput | Prisma.CharacterSheetSpellCreateOrConnectWithoutSpellInput[]
@@ -602,11 +668,13 @@ export type CharacterSheetSpellCreateWithoutCharacterSheetInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   spell: Prisma.SpellCreateNestedOneWithoutCharacterSpellsInput
+  characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetSpellsInput
 }
 
 export type CharacterSheetSpellUncheckedCreateWithoutCharacterSheetInput = {
   id?: string
   spellId: string
+  classId?: string | null
   source?: string | null
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -650,6 +718,7 @@ export type CharacterSheetSpellScalarWhereInput = {
   id?: Prisma.StringFilter<"CharacterSheetSpell"> | string
   characterSheetId?: Prisma.StringFilter<"CharacterSheetSpell"> | string
   spellId?: Prisma.StringFilter<"CharacterSheetSpell"> | string
+  classId?: Prisma.StringNullableFilter<"CharacterSheetSpell"> | string | null
   source?: Prisma.StringNullableFilter<"CharacterSheetSpell"> | string | null
   isPrepared?: Prisma.BoolFilter<"CharacterSheetSpell"> | boolean
   isAlwaysPrepared?: Prisma.BoolFilter<"CharacterSheetSpell"> | boolean
@@ -658,6 +727,60 @@ export type CharacterSheetSpellScalarWhereInput = {
   notes?: Prisma.StringNullableFilter<"CharacterSheetSpell"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CharacterSheetSpell"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CharacterSheetSpell"> | Date | string
+}
+
+export type CharacterSheetSpellCreateWithoutCharacterClassInput = {
+  id?: string
+  source?: string | null
+  isPrepared?: boolean
+  isAlwaysPrepared?: boolean
+  uses?: number | null
+  maxUses?: number | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterSheet: Prisma.CharacterSheetCreateNestedOneWithoutSpellsInput
+  spell: Prisma.SpellCreateNestedOneWithoutCharacterSpellsInput
+}
+
+export type CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput = {
+  id?: string
+  characterSheetId: string
+  spellId: string
+  source?: string | null
+  isPrepared?: boolean
+  isAlwaysPrepared?: boolean
+  uses?: number | null
+  maxUses?: number | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CharacterSheetSpellCreateOrConnectWithoutCharacterClassInput = {
+  where: Prisma.CharacterSheetSpellWhereUniqueInput
+  create: Prisma.XOR<Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput, Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput>
+}
+
+export type CharacterSheetSpellCreateManyCharacterClassInputEnvelope = {
+  data: Prisma.CharacterSheetSpellCreateManyCharacterClassInput | Prisma.CharacterSheetSpellCreateManyCharacterClassInput[]
+  skipDuplicates?: boolean
+}
+
+export type CharacterSheetSpellUpsertWithWhereUniqueWithoutCharacterClassInput = {
+  where: Prisma.CharacterSheetSpellWhereUniqueInput
+  update: Prisma.XOR<Prisma.CharacterSheetSpellUpdateWithoutCharacterClassInput, Prisma.CharacterSheetSpellUncheckedUpdateWithoutCharacterClassInput>
+  create: Prisma.XOR<Prisma.CharacterSheetSpellCreateWithoutCharacterClassInput, Prisma.CharacterSheetSpellUncheckedCreateWithoutCharacterClassInput>
+}
+
+export type CharacterSheetSpellUpdateWithWhereUniqueWithoutCharacterClassInput = {
+  where: Prisma.CharacterSheetSpellWhereUniqueInput
+  data: Prisma.XOR<Prisma.CharacterSheetSpellUpdateWithoutCharacterClassInput, Prisma.CharacterSheetSpellUncheckedUpdateWithoutCharacterClassInput>
+}
+
+export type CharacterSheetSpellUpdateManyWithWhereWithoutCharacterClassInput = {
+  where: Prisma.CharacterSheetSpellScalarWhereInput
+  data: Prisma.XOR<Prisma.CharacterSheetSpellUpdateManyMutationInput, Prisma.CharacterSheetSpellUncheckedUpdateManyWithoutCharacterClassInput>
 }
 
 export type CharacterSheetSpellCreateWithoutSpellInput = {
@@ -671,11 +794,13 @@ export type CharacterSheetSpellCreateWithoutSpellInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSheet: Prisma.CharacterSheetCreateNestedOneWithoutSpellsInput
+  characterClass?: Prisma.CharacterClassCreateNestedOneWithoutCharacterSheetSpellsInput
 }
 
 export type CharacterSheetSpellUncheckedCreateWithoutSpellInput = {
   id?: string
   characterSheetId: string
+  classId?: string | null
   source?: string | null
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -715,6 +840,7 @@ export type CharacterSheetSpellUpdateManyWithWhereWithoutSpellInput = {
 export type CharacterSheetSpellCreateManyCharacterSheetInput = {
   id?: string
   spellId: string
+  classId?: string | null
   source?: string | null
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -736,11 +862,13 @@ export type CharacterSheetSpellUpdateWithoutCharacterSheetInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   spell?: Prisma.SpellUpdateOneRequiredWithoutCharacterSpellsNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetSpellsNestedInput
 }
 
 export type CharacterSheetSpellUncheckedUpdateWithoutCharacterSheetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   spellId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isAlwaysPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -753,6 +881,63 @@ export type CharacterSheetSpellUncheckedUpdateWithoutCharacterSheetInput = {
 
 export type CharacterSheetSpellUncheckedUpdateManyWithoutCharacterSheetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  spellId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAlwaysPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  uses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CharacterSheetSpellCreateManyCharacterClassInput = {
+  id?: string
+  characterSheetId: string
+  spellId: string
+  source?: string | null
+  isPrepared?: boolean
+  isAlwaysPrepared?: boolean
+  uses?: number | null
+  maxUses?: number | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CharacterSheetSpellUpdateWithoutCharacterClassInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAlwaysPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  uses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheet?: Prisma.CharacterSheetUpdateOneRequiredWithoutSpellsNestedInput
+  spell?: Prisma.SpellUpdateOneRequiredWithoutCharacterSpellsNestedInput
+}
+
+export type CharacterSheetSpellUncheckedUpdateWithoutCharacterClassInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  characterSheetId?: Prisma.StringFieldUpdateOperationsInput | string
+  spellId?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isAlwaysPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  uses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CharacterSheetSpellUncheckedUpdateManyWithoutCharacterClassInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  characterSheetId?: Prisma.StringFieldUpdateOperationsInput | string
   spellId?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -767,6 +952,7 @@ export type CharacterSheetSpellUncheckedUpdateManyWithoutCharacterSheetInput = {
 export type CharacterSheetSpellCreateManySpellInput = {
   id?: string
   characterSheetId: string
+  classId?: string | null
   source?: string | null
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -788,11 +974,13 @@ export type CharacterSheetSpellUpdateWithoutSpellInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheet?: Prisma.CharacterSheetUpdateOneRequiredWithoutSpellsNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneWithoutCharacterSheetSpellsNestedInput
 }
 
 export type CharacterSheetSpellUncheckedUpdateWithoutSpellInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   characterSheetId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isAlwaysPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -806,6 +994,7 @@ export type CharacterSheetSpellUncheckedUpdateWithoutSpellInput = {
 export type CharacterSheetSpellUncheckedUpdateManyWithoutSpellInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   characterSheetId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isAlwaysPrepared?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -822,6 +1011,7 @@ export type CharacterSheetSpellSelect<ExtArgs extends runtime.Types.Extensions.I
   id?: boolean
   characterSheetId?: boolean
   spellId?: boolean
+  classId?: boolean
   source?: boolean
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -832,12 +1022,14 @@ export type CharacterSheetSpellSelect<ExtArgs extends runtime.Types.Extensions.I
   updatedAt?: boolean
   characterSheet?: boolean | Prisma.CharacterSheetDefaultArgs<ExtArgs>
   spell?: boolean | Prisma.SpellDefaultArgs<ExtArgs>
+  characterClass?: boolean | Prisma.CharacterSheetSpell$characterClassArgs<ExtArgs>
 }, ExtArgs["result"]["characterSheetSpell"]>
 
 export type CharacterSheetSpellSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   characterSheetId?: boolean
   spellId?: boolean
+  classId?: boolean
   source?: boolean
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -848,12 +1040,14 @@ export type CharacterSheetSpellSelectCreateManyAndReturn<ExtArgs extends runtime
   updatedAt?: boolean
   characterSheet?: boolean | Prisma.CharacterSheetDefaultArgs<ExtArgs>
   spell?: boolean | Prisma.SpellDefaultArgs<ExtArgs>
+  characterClass?: boolean | Prisma.CharacterSheetSpell$characterClassArgs<ExtArgs>
 }, ExtArgs["result"]["characterSheetSpell"]>
 
 export type CharacterSheetSpellSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   characterSheetId?: boolean
   spellId?: boolean
+  classId?: boolean
   source?: boolean
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -864,12 +1058,14 @@ export type CharacterSheetSpellSelectUpdateManyAndReturn<ExtArgs extends runtime
   updatedAt?: boolean
   characterSheet?: boolean | Prisma.CharacterSheetDefaultArgs<ExtArgs>
   spell?: boolean | Prisma.SpellDefaultArgs<ExtArgs>
+  characterClass?: boolean | Prisma.CharacterSheetSpell$characterClassArgs<ExtArgs>
 }, ExtArgs["result"]["characterSheetSpell"]>
 
 export type CharacterSheetSpellSelectScalar = {
   id?: boolean
   characterSheetId?: boolean
   spellId?: boolean
+  classId?: boolean
   source?: boolean
   isPrepared?: boolean
   isAlwaysPrepared?: boolean
@@ -880,18 +1076,21 @@ export type CharacterSheetSpellSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CharacterSheetSpellOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "characterSheetId" | "spellId" | "source" | "isPrepared" | "isAlwaysPrepared" | "uses" | "maxUses" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheetSpell"]>
+export type CharacterSheetSpellOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "characterSheetId" | "spellId" | "classId" | "source" | "isPrepared" | "isAlwaysPrepared" | "uses" | "maxUses" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["characterSheetSpell"]>
 export type CharacterSheetSpellInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   characterSheet?: boolean | Prisma.CharacterSheetDefaultArgs<ExtArgs>
   spell?: boolean | Prisma.SpellDefaultArgs<ExtArgs>
+  characterClass?: boolean | Prisma.CharacterSheetSpell$characterClassArgs<ExtArgs>
 }
 export type CharacterSheetSpellIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   characterSheet?: boolean | Prisma.CharacterSheetDefaultArgs<ExtArgs>
   spell?: boolean | Prisma.SpellDefaultArgs<ExtArgs>
+  characterClass?: boolean | Prisma.CharacterSheetSpell$characterClassArgs<ExtArgs>
 }
 export type CharacterSheetSpellIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   characterSheet?: boolean | Prisma.CharacterSheetDefaultArgs<ExtArgs>
   spell?: boolean | Prisma.SpellDefaultArgs<ExtArgs>
+  characterClass?: boolean | Prisma.CharacterSheetSpell$characterClassArgs<ExtArgs>
 }
 
 export type $CharacterSheetSpellPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -899,11 +1098,13 @@ export type $CharacterSheetSpellPayload<ExtArgs extends runtime.Types.Extensions
   objects: {
     characterSheet: Prisma.$CharacterSheetPayload<ExtArgs>
     spell: Prisma.$SpellPayload<ExtArgs>
+    characterClass: Prisma.$CharacterClassPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     characterSheetId: string
     spellId: string
+    classId: string | null
     source: string | null
     isPrepared: boolean
     isAlwaysPrepared: boolean
@@ -1308,6 +1509,7 @@ export interface Prisma__CharacterSheetSpellClient<T, Null = never, ExtArgs exte
   readonly [Symbol.toStringTag]: "PrismaPromise"
   characterSheet<T extends Prisma.CharacterSheetDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSheetDefaultArgs<ExtArgs>>): Prisma.Prisma__CharacterSheetClient<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   spell<T extends Prisma.SpellDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpellDefaultArgs<ExtArgs>>): Prisma.Prisma__SpellClient<runtime.Types.Result.GetResult<Prisma.$SpellPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  characterClass<T extends Prisma.CharacterSheetSpell$characterClassArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterSheetSpell$characterClassArgs<ExtArgs>>): Prisma.Prisma__CharacterClassClient<runtime.Types.Result.GetResult<Prisma.$CharacterClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1340,6 +1542,7 @@ export interface CharacterSheetSpellFieldRefs {
   readonly id: Prisma.FieldRef<"CharacterSheetSpell", 'String'>
   readonly characterSheetId: Prisma.FieldRef<"CharacterSheetSpell", 'String'>
   readonly spellId: Prisma.FieldRef<"CharacterSheetSpell", 'String'>
+  readonly classId: Prisma.FieldRef<"CharacterSheetSpell", 'String'>
   readonly source: Prisma.FieldRef<"CharacterSheetSpell", 'String'>
   readonly isPrepared: Prisma.FieldRef<"CharacterSheetSpell", 'Boolean'>
   readonly isAlwaysPrepared: Prisma.FieldRef<"CharacterSheetSpell", 'Boolean'>
@@ -1741,6 +1944,25 @@ export type CharacterSheetSpellDeleteManyArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many CharacterSheetSpells to delete.
    */
   limit?: number
+}
+
+/**
+ * CharacterSheetSpell.characterClass
+ */
+export type CharacterSheetSpell$characterClassArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterClass
+   */
+  select?: Prisma.CharacterClassSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterClass
+   */
+  omit?: Prisma.CharacterClassOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterClassInclude<ExtArgs> | null
+  where?: Prisma.CharacterClassWhereInput
 }
 
 /**
