@@ -72,6 +72,9 @@ export const ModelName = {
   LevelProgressionSpellLimit: 'LevelProgressionSpellLimit',
   ClassSpell: 'ClassSpell',
   Feature: 'Feature',
+  FeatureChoiceGroup: 'FeatureChoiceGroup',
+  FeatureChoiceOption: 'FeatureChoiceOption',
+  CharacterSheetFeatureChoice: 'CharacterSheetFeatureChoice',
   Spell: 'Spell',
   Equipment: 'Equipment',
   Stat: 'Stat',
@@ -482,6 +485,51 @@ export const FeatureScalarFieldEnum = {
 } as const
 
 export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
+
+
+export const FeatureChoiceGroupScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  ancestryId: 'ancestryId',
+  backgroundId: 'backgroundId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  levelProgressionId: 'levelProgressionId',
+  key: 'key',
+  name: 'name',
+  description: 'description',
+  choiceCount: 'choiceCount',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeatureChoiceGroupScalarFieldEnum = (typeof FeatureChoiceGroupScalarFieldEnum)[keyof typeof FeatureChoiceGroupScalarFieldEnum]
+
+
+export const FeatureChoiceOptionScalarFieldEnum = {
+  id: 'id',
+  choiceGroupId: 'choiceGroupId',
+  featureId: 'featureId',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeatureChoiceOptionScalarFieldEnum = (typeof FeatureChoiceOptionScalarFieldEnum)[keyof typeof FeatureChoiceOptionScalarFieldEnum]
+
+
+export const CharacterSheetFeatureChoiceScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  choiceGroupId: 'choiceGroupId',
+  featureId: 'featureId',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetFeatureChoiceScalarFieldEnum = (typeof CharacterSheetFeatureChoiceScalarFieldEnum)[keyof typeof CharacterSheetFeatureChoiceScalarFieldEnum]
 
 
 export const SpellScalarFieldEnum = {

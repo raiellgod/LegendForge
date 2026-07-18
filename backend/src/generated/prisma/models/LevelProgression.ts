@@ -383,6 +383,7 @@ export type LevelProgressionWhereInput = {
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterClass?: Prisma.XOR<Prisma.CharacterClassScalarRelationFilter, Prisma.CharacterClassWhereInput>
   features?: Prisma.FeatureListRelationFilter
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   spellLimits?: Prisma.LevelProgressionSpellLimitListRelationFilter
 }
 
@@ -409,6 +410,7 @@ export type LevelProgressionOrderByWithRelationInput = {
   system?: Prisma.GameSystemOrderByWithRelationInput
   characterClass?: Prisma.CharacterClassOrderByWithRelationInput
   features?: Prisma.FeatureOrderByRelationAggregateInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupOrderByRelationAggregateInput
   spellLimits?: Prisma.LevelProgressionSpellLimitOrderByRelationAggregateInput
 }
 
@@ -439,6 +441,7 @@ export type LevelProgressionWhereUniqueInput = Prisma.AtLeast<{
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterClass?: Prisma.XOR<Prisma.CharacterClassScalarRelationFilter, Prisma.CharacterClassWhereInput>
   features?: Prisma.FeatureListRelationFilter
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   spellLimits?: Prisma.LevelProgressionSpellLimitListRelationFilter
 }, "id" | "classId_level">
 
@@ -515,6 +518,7 @@ export type LevelProgressionCreateInput = {
   system: Prisma.GameSystemCreateNestedOneWithoutLevelProgressionsInput
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutLevelProgressionsInput
   features?: Prisma.FeatureCreateNestedManyWithoutLevelProgressionInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutLevelProgressionInput
   spellLimits?: Prisma.LevelProgressionSpellLimitCreateNestedManyWithoutLevelProgressionInput
 }
 
@@ -539,6 +543,7 @@ export type LevelProgressionUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutLevelProgressionInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutLevelProgressionInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedCreateNestedManyWithoutLevelProgressionInput
 }
 
@@ -563,6 +568,7 @@ export type LevelProgressionUpdateInput = {
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutLevelProgressionsNestedInput
   features?: Prisma.FeatureUpdateManyWithoutLevelProgressionNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutLevelProgressionNestedInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUpdateManyWithoutLevelProgressionNestedInput
 }
 
@@ -587,6 +593,7 @@ export type LevelProgressionUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutLevelProgressionNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutLevelProgressionNestedInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedUpdateManyWithoutLevelProgressionNestedInput
 }
 
@@ -893,6 +900,22 @@ export type LevelProgressionUpdateOneWithoutFeaturesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LevelProgressionUpdateToOneWithWhereWithoutFeaturesInput, Prisma.LevelProgressionUpdateWithoutFeaturesInput>, Prisma.LevelProgressionUncheckedUpdateWithoutFeaturesInput>
 }
 
+export type LevelProgressionCreateNestedOneWithoutFeatureChoiceGroupsInput = {
+  create?: Prisma.XOR<Prisma.LevelProgressionCreateWithoutFeatureChoiceGroupsInput, Prisma.LevelProgressionUncheckedCreateWithoutFeatureChoiceGroupsInput>
+  connectOrCreate?: Prisma.LevelProgressionCreateOrConnectWithoutFeatureChoiceGroupsInput
+  connect?: Prisma.LevelProgressionWhereUniqueInput
+}
+
+export type LevelProgressionUpdateOneWithoutFeatureChoiceGroupsNestedInput = {
+  create?: Prisma.XOR<Prisma.LevelProgressionCreateWithoutFeatureChoiceGroupsInput, Prisma.LevelProgressionUncheckedCreateWithoutFeatureChoiceGroupsInput>
+  connectOrCreate?: Prisma.LevelProgressionCreateOrConnectWithoutFeatureChoiceGroupsInput
+  upsert?: Prisma.LevelProgressionUpsertWithoutFeatureChoiceGroupsInput
+  disconnect?: Prisma.LevelProgressionWhereInput | boolean
+  delete?: Prisma.LevelProgressionWhereInput | boolean
+  connect?: Prisma.LevelProgressionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LevelProgressionUpdateToOneWithWhereWithoutFeatureChoiceGroupsInput, Prisma.LevelProgressionUpdateWithoutFeatureChoiceGroupsInput>, Prisma.LevelProgressionUncheckedUpdateWithoutFeatureChoiceGroupsInput>
+}
+
 export type LevelProgressionCreateWithoutSystemInput = {
   id?: string
   level: number
@@ -913,6 +936,7 @@ export type LevelProgressionCreateWithoutSystemInput = {
   updatedAt?: Date | string
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutLevelProgressionsInput
   features?: Prisma.FeatureCreateNestedManyWithoutLevelProgressionInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutLevelProgressionInput
   spellLimits?: Prisma.LevelProgressionSpellLimitCreateNestedManyWithoutLevelProgressionInput
 }
 
@@ -936,6 +960,7 @@ export type LevelProgressionUncheckedCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutLevelProgressionInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutLevelProgressionInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedCreateNestedManyWithoutLevelProgressionInput
 }
 
@@ -1010,6 +1035,7 @@ export type LevelProgressionCreateWithoutCharacterClassInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLevelProgressionsInput
   features?: Prisma.FeatureCreateNestedManyWithoutLevelProgressionInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutLevelProgressionInput
   spellLimits?: Prisma.LevelProgressionSpellLimitCreateNestedManyWithoutLevelProgressionInput
 }
 
@@ -1033,6 +1059,7 @@ export type LevelProgressionUncheckedCreateWithoutCharacterClassInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutLevelProgressionInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutLevelProgressionInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedCreateNestedManyWithoutLevelProgressionInput
 }
 
@@ -1083,6 +1110,7 @@ export type LevelProgressionCreateWithoutSpellLimitsInput = {
   system: Prisma.GameSystemCreateNestedOneWithoutLevelProgressionsInput
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutLevelProgressionsInput
   features?: Prisma.FeatureCreateNestedManyWithoutLevelProgressionInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutLevelProgressionInput
 }
 
 export type LevelProgressionUncheckedCreateWithoutSpellLimitsInput = {
@@ -1106,6 +1134,7 @@ export type LevelProgressionUncheckedCreateWithoutSpellLimitsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutLevelProgressionInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutLevelProgressionInput
 }
 
 export type LevelProgressionCreateOrConnectWithoutSpellLimitsInput = {
@@ -1145,6 +1174,7 @@ export type LevelProgressionUpdateWithoutSpellLimitsInput = {
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutLevelProgressionsNestedInput
   features?: Prisma.FeatureUpdateManyWithoutLevelProgressionNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutLevelProgressionNestedInput
 }
 
 export type LevelProgressionUncheckedUpdateWithoutSpellLimitsInput = {
@@ -1168,6 +1198,7 @@ export type LevelProgressionUncheckedUpdateWithoutSpellLimitsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutLevelProgressionNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutLevelProgressionNestedInput
 }
 
 export type LevelProgressionCreateWithoutFeaturesInput = {
@@ -1190,6 +1221,7 @@ export type LevelProgressionCreateWithoutFeaturesInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLevelProgressionsInput
   characterClass: Prisma.CharacterClassCreateNestedOneWithoutLevelProgressionsInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutLevelProgressionInput
   spellLimits?: Prisma.LevelProgressionSpellLimitCreateNestedManyWithoutLevelProgressionInput
 }
 
@@ -1213,6 +1245,7 @@ export type LevelProgressionUncheckedCreateWithoutFeaturesInput = {
   spellSlotsLevel9?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutLevelProgressionInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedCreateNestedManyWithoutLevelProgressionInput
 }
 
@@ -1252,6 +1285,7 @@ export type LevelProgressionUpdateWithoutFeaturesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutLevelProgressionsNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutLevelProgressionNestedInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUpdateManyWithoutLevelProgressionNestedInput
 }
 
@@ -1275,6 +1309,119 @@ export type LevelProgressionUncheckedUpdateWithoutFeaturesInput = {
   spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutLevelProgressionNestedInput
+  spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedUpdateManyWithoutLevelProgressionNestedInput
+}
+
+export type LevelProgressionCreateWithoutFeatureChoiceGroupsInput = {
+  id?: string
+  level: number
+  proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutLevelProgressionsInput
+  characterClass: Prisma.CharacterClassCreateNestedOneWithoutLevelProgressionsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutLevelProgressionInput
+  spellLimits?: Prisma.LevelProgressionSpellLimitCreateNestedManyWithoutLevelProgressionInput
+}
+
+export type LevelProgressionUncheckedCreateWithoutFeatureChoiceGroupsInput = {
+  id?: string
+  systemId: string
+  classId: string
+  level: number
+  proficiencyBonus?: number | null
+  cantripsKnown?: number
+  spellsKnown?: number
+  spellsPrepared?: number
+  spellSlotsLevel1?: number
+  spellSlotsLevel2?: number
+  spellSlotsLevel3?: number
+  spellSlotsLevel4?: number
+  spellSlotsLevel5?: number
+  spellSlotsLevel6?: number
+  spellSlotsLevel7?: number
+  spellSlotsLevel8?: number
+  spellSlotsLevel9?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutLevelProgressionInput
+  spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedCreateNestedManyWithoutLevelProgressionInput
+}
+
+export type LevelProgressionCreateOrConnectWithoutFeatureChoiceGroupsInput = {
+  where: Prisma.LevelProgressionWhereUniqueInput
+  create: Prisma.XOR<Prisma.LevelProgressionCreateWithoutFeatureChoiceGroupsInput, Prisma.LevelProgressionUncheckedCreateWithoutFeatureChoiceGroupsInput>
+}
+
+export type LevelProgressionUpsertWithoutFeatureChoiceGroupsInput = {
+  update: Prisma.XOR<Prisma.LevelProgressionUpdateWithoutFeatureChoiceGroupsInput, Prisma.LevelProgressionUncheckedUpdateWithoutFeatureChoiceGroupsInput>
+  create: Prisma.XOR<Prisma.LevelProgressionCreateWithoutFeatureChoiceGroupsInput, Prisma.LevelProgressionUncheckedCreateWithoutFeatureChoiceGroupsInput>
+  where?: Prisma.LevelProgressionWhereInput
+}
+
+export type LevelProgressionUpdateToOneWithWhereWithoutFeatureChoiceGroupsInput = {
+  where?: Prisma.LevelProgressionWhereInput
+  data: Prisma.XOR<Prisma.LevelProgressionUpdateWithoutFeatureChoiceGroupsInput, Prisma.LevelProgressionUncheckedUpdateWithoutFeatureChoiceGroupsInput>
+}
+
+export type LevelProgressionUpdateWithoutFeatureChoiceGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutLevelProgressionsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutLevelProgressionNestedInput
+  spellLimits?: Prisma.LevelProgressionSpellLimitUpdateManyWithoutLevelProgressionNestedInput
+}
+
+export type LevelProgressionUncheckedUpdateWithoutFeatureChoiceGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  proficiencyBonus?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cantripsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsKnown?: Prisma.IntFieldUpdateOperationsInput | number
+  spellsPrepared?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel1?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel2?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel3?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel4?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel5?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel6?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel7?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel8?: Prisma.IntFieldUpdateOperationsInput | number
+  spellSlotsLevel9?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutLevelProgressionNestedInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedUpdateManyWithoutLevelProgressionNestedInput
 }
 
@@ -1319,6 +1466,7 @@ export type LevelProgressionUpdateWithoutSystemInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterClass?: Prisma.CharacterClassUpdateOneRequiredWithoutLevelProgressionsNestedInput
   features?: Prisma.FeatureUpdateManyWithoutLevelProgressionNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutLevelProgressionNestedInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUpdateManyWithoutLevelProgressionNestedInput
 }
 
@@ -1342,6 +1490,7 @@ export type LevelProgressionUncheckedUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutLevelProgressionNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutLevelProgressionNestedInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedUpdateManyWithoutLevelProgressionNestedInput
 }
 
@@ -1407,6 +1556,7 @@ export type LevelProgressionUpdateWithoutCharacterClassInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLevelProgressionsNestedInput
   features?: Prisma.FeatureUpdateManyWithoutLevelProgressionNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutLevelProgressionNestedInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUpdateManyWithoutLevelProgressionNestedInput
 }
 
@@ -1430,6 +1580,7 @@ export type LevelProgressionUncheckedUpdateWithoutCharacterClassInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutLevelProgressionNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutLevelProgressionNestedInput
   spellLimits?: Prisma.LevelProgressionSpellLimitUncheckedUpdateManyWithoutLevelProgressionNestedInput
 }
 
@@ -1461,11 +1612,13 @@ export type LevelProgressionUncheckedUpdateManyWithoutCharacterClassInput = {
 
 export type LevelProgressionCountOutputType = {
   features: number
+  featureChoiceGroups: number
   spellLimits: number
 }
 
 export type LevelProgressionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   features?: boolean | LevelProgressionCountOutputTypeCountFeaturesArgs
+  featureChoiceGroups?: boolean | LevelProgressionCountOutputTypeCountFeatureChoiceGroupsArgs
   spellLimits?: boolean | LevelProgressionCountOutputTypeCountSpellLimitsArgs
 }
 
@@ -1484,6 +1637,13 @@ export type LevelProgressionCountOutputTypeDefaultArgs<ExtArgs extends runtime.T
  */
 export type LevelProgressionCountOutputTypeCountFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FeatureWhereInput
+}
+
+/**
+ * LevelProgressionCountOutputType without action
+ */
+export type LevelProgressionCountOutputTypeCountFeatureChoiceGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeatureChoiceGroupWhereInput
 }
 
 /**
@@ -1517,6 +1677,7 @@ export type LevelProgressionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterClass?: boolean | Prisma.CharacterClassDefaultArgs<ExtArgs>
   features?: boolean | Prisma.LevelProgression$featuresArgs<ExtArgs>
+  featureChoiceGroups?: boolean | Prisma.LevelProgression$featureChoiceGroupsArgs<ExtArgs>
   spellLimits?: boolean | Prisma.LevelProgression$spellLimitsArgs<ExtArgs>
   _count?: boolean | Prisma.LevelProgressionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["levelProgression"]>
@@ -1596,6 +1757,7 @@ export type LevelProgressionInclude<ExtArgs extends runtime.Types.Extensions.Int
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterClass?: boolean | Prisma.CharacterClassDefaultArgs<ExtArgs>
   features?: boolean | Prisma.LevelProgression$featuresArgs<ExtArgs>
+  featureChoiceGroups?: boolean | Prisma.LevelProgression$featureChoiceGroupsArgs<ExtArgs>
   spellLimits?: boolean | Prisma.LevelProgression$spellLimitsArgs<ExtArgs>
   _count?: boolean | Prisma.LevelProgressionCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1614,6 +1776,7 @@ export type $LevelProgressionPayload<ExtArgs extends runtime.Types.Extensions.In
     system: Prisma.$GameSystemPayload<ExtArgs>
     characterClass: Prisma.$CharacterClassPayload<ExtArgs>
     features: Prisma.$FeaturePayload<ExtArgs>[]
+    featureChoiceGroups: Prisma.$FeatureChoiceGroupPayload<ExtArgs>[]
     spellLimits: Prisma.$LevelProgressionSpellLimitPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2033,6 +2196,7 @@ export interface Prisma__LevelProgressionClient<T, Null = never, ExtArgs extends
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   characterClass<T extends Prisma.CharacterClassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CharacterClassDefaultArgs<ExtArgs>>): Prisma.Prisma__CharacterClassClient<runtime.Types.Result.GetResult<Prisma.$CharacterClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   features<T extends Prisma.LevelProgression$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LevelProgression$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  featureChoiceGroups<T extends Prisma.LevelProgression$featureChoiceGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LevelProgression$featureChoiceGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeatureChoiceGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   spellLimits<T extends Prisma.LevelProgression$spellLimitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LevelProgression$spellLimitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LevelProgressionSpellLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2499,6 +2663,30 @@ export type LevelProgression$featuresArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.FeatureScalarFieldEnum | Prisma.FeatureScalarFieldEnum[]
+}
+
+/**
+ * LevelProgression.featureChoiceGroups
+ */
+export type LevelProgression$featureChoiceGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FeatureChoiceGroup
+   */
+  select?: Prisma.FeatureChoiceGroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FeatureChoiceGroup
+   */
+  omit?: Prisma.FeatureChoiceGroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeatureChoiceGroupInclude<ExtArgs> | null
+  where?: Prisma.FeatureChoiceGroupWhereInput
+  orderBy?: Prisma.FeatureChoiceGroupOrderByWithRelationInput | Prisma.FeatureChoiceGroupOrderByWithRelationInput[]
+  cursor?: Prisma.FeatureChoiceGroupWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FeatureChoiceGroupScalarFieldEnum | Prisma.FeatureChoiceGroupScalarFieldEnum[]
 }
 
 /**

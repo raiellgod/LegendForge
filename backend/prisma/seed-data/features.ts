@@ -329,4 +329,48 @@ export const features = [
     description:
       "O Ceifador Ósseo molda ossos e energia fúnebre em lâminas temporárias para combate próximo.",
   },
+    {
+    sourceType: "CHOICE",
+    ancestryKey: null,
+    classKey: null,
+    subclassKey: null,
+    level: null,
+    name: "Arquearia",
+    key: "combat-style-archery",
+    description:
+      "O personagem recebe treinamento voltado a ataques com armas de longo alcance, priorizando precisão, controle de distância e leitura de trajetória.",
+  },
+  {
+    sourceType: "CHOICE",
+    ancestryKey: null,
+    classKey: null,
+    subclassKey: null,
+    level: null,
+    name: "Defesa",
+    key: "combat-style-defense",
+    description:
+      "O personagem adota uma postura defensiva disciplinada, aproveitando melhor proteções, posicionamento e cobertura durante o combate.",
+  },
+  {
+    sourceType: "CHOICE",
+    ancestryKey: null,
+    classKey: null,
+    subclassKey: null,
+    level: null,
+    name: "Duelismo",
+    key: "combat-style-dueling",
+    description:
+      "O personagem especializa-se em lutar com uma arma principal, controlando distância, ritmo e abertura contra um único adversário.",
+  },
+  {
+    sourceType: "CHOICE",
+    ancestryKey: null,
+    classKey: null,
+    subclassKey: null,
+    level: null,
+    name: "Combate com Duas Armas",
+    key: "combat-style-two-weapon-fighting",
+    description:
+      "O personagem treina coordenação e equilíbrio para combater utilizando uma arma em cada mão.",
+  },
 ] as const;

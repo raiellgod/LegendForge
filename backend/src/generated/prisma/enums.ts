@@ -97,11 +97,12 @@ export type CreatureSize = (typeof CreatureSize)[keyof typeof CreatureSize]
 
 
 export const FeatureSourceType = {
-  SYSTEM: 'SYSTEM',
   ANCESTRY: 'ANCESTRY',
+  BACKGROUND: 'BACKGROUND',
   CLASS: 'CLASS',
   SUBCLASS: 'SUBCLASS',
-  BACKGROUND: 'BACKGROUND'
+  LEVEL: 'LEVEL',
+  CHOICE: 'CHOICE'
 } as const
 
 export type FeatureSourceType = (typeof FeatureSourceType)[keyof typeof FeatureSourceType]

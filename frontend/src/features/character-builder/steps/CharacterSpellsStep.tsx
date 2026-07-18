@@ -35,6 +35,14 @@ type SpellClassPermission = {
   isPrimary: boolean;
 };
 
+type KnownSpellChoiceStatus = {
+  spellLevel: number;
+  required: number;
+  selected: number;
+  missing: number;
+  isComplete: boolean;
+};
+
 function normalizeCharacterLevel(level: number) {
   if (!Number.isFinite(level)) {
     return 1;
@@ -197,6 +205,33 @@ function getSelectedSpellCountsByLevel(
   }
 
   return countsByLevel;
+}
+
+function getKnownSpellChoiceStatuses({
+  limitsByLevel,
+  selectedCountsByLevel,
+}: {
+  limitsByLevel: Map<number, number>;
+  selectedCountsByLevel: Map<number, number>;
+}): KnownSpellChoiceStatus[] {
+  return Array.from(limitsByLevel.entries())
+    .filter(([, required]) => required > 0)
+    .sort(
+      ([firstSpellLevel], [secondSpellLevel]) =>
+        firstSpellLevel - secondSpellLevel,
+    )
+    .map(([spellLevel, required]) => {
+      const selected = selectedCountsByLevel.get(spellLevel) ?? 0;
+      const missing = Math.max(0, required - selected);
+
+      return {
+        spellLevel,
+        required,
+        selected,
+        missing,
+        isComplete: missing === 0,
+      };
+    });
 }
 
 function shouldReplaceSpellPermission({
@@ -578,7 +613,7 @@ export function CharacterSpellsStep({
   const hasSelectedClass = spellClassPermissions.length > 0;
   const hasAvailableSpellOptions = availableSpells.length > 0;
 
-    const hasInternalSpellPermissions =
+  const hasInternalSpellPermissions =
     availableSpells.length === spellPermissionsByKey.size;
 
   const selectedSpells = availableSpells.filter((spell) =>
@@ -596,7 +631,6 @@ export function CharacterSpellsStep({
 
   const selectedCantrips = selectedSpells.filter(isCantrip);
   const selectedLeveledSpells = selectedSpells.filter(isLeveledSpell);
-  const hasSelectedSpells = selectedSpells.length > 0;
   const hasUnavailableSelectedSpells = unavailableSelectedSpells.length > 0;
 
   const knownSpellLimitsByLevel = getKnownSpellLimitsByLevel(
@@ -606,6 +640,26 @@ export function CharacterSpellsStep({
   const selectedSpellCountsByLevel =
     getSelectedSpellCountsByLevel(selectedSpells);
 
+  const knownSpellChoiceStatuses = getKnownSpellChoiceStatuses({
+    limitsByLevel: knownSpellLimitsByLevel,
+    selectedCountsByLevel: selectedSpellCountsByLevel,
+  });
+
+  const pendingKnownSpellChoices = knownSpellChoiceStatuses.filter(
+    (choiceStatus) => !choiceStatus.isComplete,
+  );
+
+  const completedKnownSpellChoices = knownSpellChoiceStatuses.filter(
+    (choiceStatus) => choiceStatus.isComplete,
+  );
+
+  const missingKnownSpellCount = pendingKnownSpellChoices.reduce(
+    (totalMissing, choiceStatus) => totalMissing + choiceStatus.missing,
+    0,
+  );
+
+  const hasPendingKnownSpellChoices = pendingKnownSpellChoices.length > 0;
+
   const cantripLimit = knownSpellLimitsByLevel.get(0) ?? 0;
 
   const leveledSpellLimit = Array.from(knownSpellLimitsByLevel.entries())
@@ -613,13 +667,6 @@ export function CharacterSpellsStep({
     .reduce((totalLimit, [, spellLimit]) => totalLimit + spellLimit, 0);
 
   const totalKnownSpellLimit = cantripLimit + leveledSpellLimit;
-
-  const highestAvailableSpellLevel = Math.max(
-    0,
-    ...Array.from(knownSpellLimitsByLevel.keys()).filter(
-      (spellLevel) => spellLevel > 0,
-    ),
-  );
 
   const hasReachedCantripLimit =
     (selectedSpellCountsByLevel.get(0) ?? 0) >= cantripLimit;
@@ -674,19 +721,17 @@ export function CharacterSpellsStep({
     typeFilter !== "all" ||
     schoolFilter !== "all";
 
-  const temporaryValidationTitle = hasSelectedSpells
-    ? "Seleção dentro da progressão"
-    : hasAvailableSpellOptions
-      ? "Escolha as magias permitidas"
-      : "Sem magias para esta classe";
+  const temporaryValidationTitle = !hasAvailableSpellOptions
+    ? "Sem magias para estas classes"
+    : hasPendingKnownSpellChoices
+      ? "Escolhas de magia pendentes"
+      : "Escolhas de magia completas";
 
-  const temporaryValidationDescription = hasSelectedSpells
-    ? `Você marcou ${selectedSpellKeys.length}/${totalKnownSpellLimit} magia(s) conhecidas no total. Os limites agora são separados por nível de magia.`
-    : hasAvailableSpellOptions
-      ? `O personagem pode escolher ${cantripLimit} truque(s) e ${leveledSpellLimit} magia(s) niveladas como conhecidas. Maior nível de magia permitido: ${
-          highestAvailableSpellLevel || "nenhum"
-        }.`
-      : "As classes escolhidas não possuem magias disponíveis no nível inicial.";
+  const temporaryValidationDescription = !hasAvailableSpellOptions
+    ? "As classes escolhidas não possuem magias conhecidas disponíveis nos níveis atuais."
+    : hasPendingKnownSpellChoices
+      ? `Você escolheu ${selectedSpells.length}/${totalKnownSpellLimit} magia(s) conhecidas. Ainda faltam ${missingKnownSpellCount} escolha(s) distribuídas em ${pendingKnownSpellChoices.length} nível(is) de magia.`
+      : `Todas as ${totalKnownSpellLimit} escolhas de magias conhecidas foram preenchidas em ${completedKnownSpellChoices.length} nível(is) de magia.`;
 
   if (isLoading) {
     return (
@@ -861,21 +906,23 @@ export function CharacterSpellsStep({
         <div
           className={[
             "rounded-2xl border px-4 py-3 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]",
-            hasSelectedSpells
-              ? "border-emerald-400/30 bg-emerald-500/10"
-              : "border-zinc-700 bg-black/25",
+            !hasAvailableSpellOptions
+              ? "border-zinc-700 bg-black/25"
+              : hasPendingKnownSpellChoices
+                ? "border-amber-400/30 bg-amber-500/10"
+                : "border-emerald-400/30 bg-emerald-500/10",
           ].join(" ")}
         >
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <div className="flex items-center gap-2">
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
-                  Validação temporária
+                  Estado das escolhas
                 </p>
 
                 <span
                   className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[10px] font-black text-zinc-500"
-                  aria-label="Informação sobre validação temporária de magias"
+                  aria-label="Informação sobre as escolhas de magias conhecidas"
                 >
                   i
                 </span>
@@ -884,7 +931,11 @@ export function CharacterSpellsStep({
               <p
                 className={[
                   "mt-1 text-sm font-black",
-                  hasSelectedSpells ? "text-emerald-100" : "text-zinc-200",
+                  !hasAvailableSpellOptions
+                    ? "text-zinc-200"
+                    : hasPendingKnownSpellChoices
+                      ? "text-amber-100"
+                      : "text-emerald-100",
                 ].join(" ")}
               >
                 {temporaryValidationTitle}
@@ -893,9 +944,39 @@ export function CharacterSpellsStep({
               <p className="mt-1 text-xs leading-relaxed text-zinc-400">
                 {temporaryValidationDescription}
               </p>
+
+              {hasPendingKnownSpellChoices ? (
+                <div className="mt-3 space-y-2">
+                  {pendingKnownSpellChoices.map((choiceStatus) => (
+                    <div
+                      key={choiceStatus.spellLevel}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-400/25 bg-black/25 px-3 py-2"
+                    >
+                      <div>
+                        <p className="text-xs font-black text-amber-100">
+                          {getSpellLevelLabel(choiceStatus.spellLevel)}
+                        </p>
+
+                        <p className="mt-0.5 text-[10px] font-bold text-zinc-400">
+                          {choiceStatus.selected}/{choiceStatus.required}{" "}
+                          escolhidas
+                        </p>
+                      </div>
+
+                      <span className="rounded-full border border-amber-400/30 bg-amber-500/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-100">
+                        Falta {choiceStatus.missing}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : hasAvailableSpellOptions ? (
+                <div className="mt-3 rounded-xl border border-emerald-400/25 bg-black/25 px-3 py-2">
+                  <p className="text-xs font-black text-emerald-100">
+                    Nenhuma escolha de magia pendente.
+                  </p>
+                </div>
+              ) : null}
             </div>
-
-
 
             <div className="grid grid-cols-2 gap-2 sm:min-w-60">
               <div
@@ -927,57 +1008,62 @@ export function CharacterSpellsStep({
           </div>
         </div>
 
-                    <div className="rounded-2xl border border-zinc-800 bg-black/25 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
-                    Limites por nível
-                  </p>
+        <div className="rounded-2xl border border-zinc-800 bg-black/25 p-4 shadow-[-4px_4px_0_rgba(0,0,0,0.22)]">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-zinc-500">
+                Limites por nível
+              </p>
 
-                  <p className="mt-1 text-sm font-black text-zinc-100">
-                    Magias conhecidas
-                  </p>
-                </div>
-
-                <span className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold">
-                  {selectedSpellKeys.length}/{totalKnownSpellLimit}
-                </span>
-              </div>
-
-              <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
-                {Array.from(knownSpellLimitsByLevel.entries())
-                  .filter(([, spellLimit]) => spellLimit > 0)
-                  .sort(
-                    ([firstLevel], [secondLevel]) => firstLevel - secondLevel,
-                  )
-                  .map(([spellLevel, spellLimit]) => {
-                    const selectedCount =
-                      selectedSpellCountsByLevel.get(spellLevel) ?? 0;
-
-                    return (
-                      <div
-                        key={spellLevel}
-                        className={[
-                          "rounded-xl border px-3 py-2",
-                          selectedCount > spellLimit
-                            ? "border-red-400/40 bg-red-500/10"
-                            : selectedCount === spellLimit
-                              ? "border-emerald-400/30 bg-emerald-500/10"
-                              : "border-zinc-800 bg-zinc-950/50",
-                        ].join(" ")}
-                      >
-                        <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
-                          {getSpellLevelLabel(spellLevel)}
-                        </p>
-
-                        <p className="mt-1 text-lg font-black text-zinc-100">
-                          {selectedCount}/{spellLimit}
-                        </p>
-                      </div>
-                    );
-                  })}
-              </div>
+              <p className="mt-1 text-sm font-black text-zinc-100">
+                Magias conhecidas
+              </p>
             </div>
+
+            <span className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold">
+              {selectedSpells.length}/{totalKnownSpellLimit}
+            </span>
+          </div>
+
+          <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+            {knownSpellChoiceStatuses.map((choiceStatus) => (
+              <div
+                key={choiceStatus.spellLevel}
+                className={[
+                  "rounded-xl border px-3 py-2",
+                  choiceStatus.isComplete
+                    ? "border-emerald-400/30 bg-emerald-500/10"
+                    : "border-amber-400/30 bg-amber-500/10",
+                ].join(" ")}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-[9px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                      {getSpellLevelLabel(choiceStatus.spellLevel)}
+                    </p>
+
+                    <p className="mt-1 text-lg font-black text-zinc-100">
+                      {choiceStatus.selected}/{choiceStatus.required}
+                    </p>
+                  </div>
+
+                  <span
+                    className={[
+                      "rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em]",
+                      choiceStatus.isComplete
+                        ? "border-emerald-400/30 bg-emerald-500/10 text-emerald-100"
+                        : "border-amber-400/30 bg-amber-500/10 text-amber-100",
+                    ].join(" ")}
+                  >
+                    {choiceStatus.isComplete
+                      ? "Completo"
+                      : `Falta ${choiceStatus.missing}`}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div
           className="rounded-2xl border border-zinc-800 bg-black/25 p-4"

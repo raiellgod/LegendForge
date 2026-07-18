@@ -111,6 +111,202 @@ function formatReviewSignedNumber(value: number) {
   return value > 0 ? `+${value}` : String(value);
 }
 
+function normalizeReviewClassLevel(level: number) {
+  if (!Number.isFinite(level)) {
+    return 1;
+  }
+
+  return Math.max(1, Math.min(20, Math.trunc(level)));
+}
+
+function getApplicableReviewFeatureChoiceGroups({
+  options,
+  classEntries,
+  ancestryId,
+  backgroundId,
+}: {
+  options: CharacterBuilderOptions;
+  classEntries: CharacterBuilderDraft["classEntries"];
+  ancestryId: string | null;
+  backgroundId: string | null;
+}) {
+  return options.featureChoiceGroups
+    .filter((choiceGroup) => {
+      if (
+        choiceGroup.ancestryId &&
+        choiceGroup.ancestryId !== ancestryId
+      ) {
+        return false;
+      }
+
+      if (
+        choiceGroup.backgroundId &&
+        choiceGroup.backgroundId !== backgroundId
+      ) {
+        return false;
+      }
+
+      if (
+        choiceGroup.classId &&
+        !classEntries.some(
+          (classEntry) =>
+            classEntry.classId === choiceGroup.classId,
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        choiceGroup.subclassId &&
+        !classEntries.some(
+          (classEntry) =>
+            classEntry.subclassId === choiceGroup.subclassId,
+        )
+      ) {
+        return false;
+      }
+
+      if (choiceGroup.levelProgressionId && choiceGroup.classId) {
+        const matchingClassEntry = classEntries.find(
+          (classEntry) =>
+            classEntry.classId === choiceGroup.classId,
+        );
+
+        if (!matchingClassEntry) {
+          return false;
+        }
+
+        const characterClass = options.classes.find(
+          (currentClass) =>
+            currentClass.id === choiceGroup.classId,
+        );
+
+        if (!characterClass) {
+          return false;
+        }
+
+        const safeClassLevel = normalizeReviewClassLevel(
+          matchingClassEntry.level,
+        );
+
+        const hasAvailableProgression =
+          characterClass.levelProgressions.some(
+            (progression) =>
+              progression.level <= safeClassLevel,
+          );
+
+        if (!hasAvailableProgression) {
+          return false;
+        }
+      }
+
+      return true;
+    })
+    .sort((firstGroup, secondGroup) => {
+      return (
+        firstGroup.order - secondGroup.order ||
+        firstGroup.name.localeCompare(
+          secondGroup.name,
+          "pt-BR",
+        )
+      );
+    });
+}
+
+function getReviewKnownSpellLimitsByLevel({
+  classEntries,
+  classes,
+}: {
+  classEntries: CharacterBuilderDraft["classEntries"];
+  classes: CharacterBuilderClassOption[];
+}) {
+  const limitsByLevel = new Map<number, number>();
+
+  for (const classEntry of classEntries) {
+    const classOption = classes.find(
+      (currentClass) => currentClass.id === classEntry.classId,
+    );
+
+    if (!classOption) {
+      continue;
+    }
+
+    const safeClassLevel = normalizeReviewClassLevel(classEntry.level);
+
+    const progression = classOption.levelProgressions.find(
+      (currentProgression) => currentProgression.level === safeClassLevel,
+    );
+
+    for (const spellLimit of progression?.spellLimits ?? []) {
+      limitsByLevel.set(
+        spellLimit.spellLevel,
+        (limitsByLevel.get(spellLimit.spellLevel) ?? 0) +
+          spellLimit.spellsKnown,
+      );
+    }
+  }
+
+  return limitsByLevel;
+}
+
+function getReviewSelectedSpellCountsByLevel(
+  spells: CharacterBuilderSpellOption[],
+) {
+  const countsByLevel = new Map<number, number>();
+
+  for (const spell of spells) {
+    countsByLevel.set(spell.level, (countsByLevel.get(spell.level) ?? 0) + 1);
+  }
+
+  return countsByLevel;
+}
+
+function getReviewSpellChoiceStatuses({
+  limitsByLevel,
+  selectedCountsByLevel,
+}: {
+  limitsByLevel: Map<number, number>;
+  selectedCountsByLevel: Map<number, number>;
+}): CharacterReviewSpellChoiceStatus[] {
+  return Array.from(limitsByLevel.entries())
+    .filter(([, required]) => required > 0)
+    .sort(
+      ([firstSpellLevel], [secondSpellLevel]) =>
+        firstSpellLevel - secondSpellLevel,
+    )
+    .map(([spellLevel, required]) => {
+      const selected = selectedCountsByLevel.get(spellLevel) ?? 0;
+      const missing = Math.max(0, required - selected);
+
+      return {
+        spellLevel,
+        required,
+        selected,
+        missing,
+        isComplete: missing === 0,
+      };
+    });
+}
+
+type CharacterReviewSpellChoiceStatus = {
+  spellLevel: number;
+  required: number;
+  selected: number;
+  missing: number;
+  isComplete: boolean;
+};
+
+type CharacterReviewFeatureChoiceStatus = {
+  groupId: string;
+  groupName: string;
+  groupDescription: string | null;
+  required: number;
+  selected: number;
+  missing: number;
+  isComplete: boolean;
+  selectedFeatureNames: string[];
+};
+
 type CharacterReviewStepProps = {
   draft: CharacterBuilderDraft;
   options: CharacterBuilderOptions;
@@ -224,12 +420,172 @@ export function CharacterReviewStep({
           ]
         : [];
 
+  const knownSpellLimitsByLevel = getReviewKnownSpellLimitsByLevel({
+    classEntries: reviewClassEntries,
+    classes: options.classes,
+  });
+
+  const selectedSpellCountsByLevel =
+    getReviewSelectedSpellCountsByLevel(selectedSpells);
+
+  const spellChoiceStatuses = getReviewSpellChoiceStatuses({
+    limitsByLevel: knownSpellLimitsByLevel,
+    selectedCountsByLevel: selectedSpellCountsByLevel,
+  });
+
+  const pendingSpellChoiceStatuses = spellChoiceStatuses.filter(
+    (choiceStatus) => !choiceStatus.isComplete,
+  );
+
+  const totalRequiredKnownSpells = spellChoiceStatuses.reduce(
+    (totalRequired, choiceStatus) => totalRequired + choiceStatus.required,
+    0,
+  );
+
+  const totalSelectedKnownSpells = spellChoiceStatuses.reduce(
+    (totalSelected, choiceStatus) =>
+      totalSelected + Math.min(choiceStatus.selected, choiceStatus.required),
+    0,
+  );
+
+  const totalMissingKnownSpells = pendingSpellChoiceStatuses.reduce(
+    (totalMissing, choiceStatus) => totalMissing + choiceStatus.missing,
+    0,
+  );
+
+  const hasKnownSpellChoices = spellChoiceStatuses.length > 0;
+  const hasPendingKnownSpellChoices = pendingSpellChoiceStatuses.length > 0;
+
+    const applicableFeatureChoiceGroups =
+    getApplicableReviewFeatureChoiceGroups({
+      options,
+      classEntries: reviewClassEntries,
+      ancestryId: selectedAncestry?.id ?? null,
+      backgroundId: selectedBackground?.id ?? null,
+    });
+
+  const featureChoiceStatuses: CharacterReviewFeatureChoiceStatus[] =
+    applicableFeatureChoiceGroups.map((choiceGroup) => {
+      const validSelections =
+        draft.featureChoiceSelections.filter((selection) => {
+          if (selection.choiceGroupId !== choiceGroup.id) {
+            return false;
+          }
+
+          return choiceGroup.options.some(
+            (option) =>
+              option.feature.id === selection.featureId,
+          );
+        });
+
+      const selectedFeatureNames = validSelections
+        .map((selection) => {
+          return choiceGroup.options.find(
+            (option) =>
+              option.feature.id === selection.featureId,
+          )?.feature.name;
+        })
+        .filter((featureName): featureName is string => {
+          return Boolean(featureName);
+        });
+
+      const selected = validSelections.length;
+      const missing = Math.max(
+        0,
+        choiceGroup.choiceCount - selected,
+      );
+
+      return {
+        groupId: choiceGroup.id,
+        groupName: choiceGroup.name,
+        groupDescription: choiceGroup.description,
+        required: choiceGroup.choiceCount,
+        selected,
+        missing,
+        isComplete: selected === choiceGroup.choiceCount,
+        selectedFeatureNames,
+      };
+    });
+
+  const pendingFeatureChoiceStatuses =
+    featureChoiceStatuses.filter(
+      (choiceStatus) => !choiceStatus.isComplete,
+    );
+
+  const totalRequiredFeatureChoices =
+    featureChoiceStatuses.reduce(
+      (totalRequired, choiceStatus) =>
+        totalRequired + choiceStatus.required,
+      0,
+    );
+
+  const totalSelectedFeatureChoices =
+    featureChoiceStatuses.reduce(
+      (totalSelected, choiceStatus) =>
+        totalSelected +
+        Math.min(
+          choiceStatus.selected,
+          choiceStatus.required,
+        ),
+      0,
+    );
+
+  const totalMissingFeatureChoices =
+    pendingFeatureChoiceStatuses.reduce(
+      (totalMissing, choiceStatus) =>
+        totalMissing + choiceStatus.missing,
+      0,
+    );
+
+  const hasFeatureChoiceGroups =
+    featureChoiceStatuses.length > 0;
+
+  const hasPendingFeatureChoices =
+    pendingFeatureChoiceStatuses.length > 0;
+
   const classSummaryLabel =
     reviewClassEntries.length > 0
       ? reviewClassEntries
           .map((classEntry) => `${classEntry.className} ${classEntry.level}`)
           .join(" / ")
       : (selectedClass?.name ?? draft.className) || "Não definida";
+
+  const subclassReviewRows = reviewClassEntries.map((classEntry) => {
+    const characterClass = options.classes.find(
+      (currentClass) => currentClass.id === classEntry.classId,
+    );
+
+    const subclassSelectionLevel =
+      characterClass?.subclassSelectionLevel ?? null;
+
+    const hasSubclassSelectionLevel =
+      typeof subclassSelectionLevel === "number";
+
+    const isSubclassUnlocked =
+      hasSubclassSelectionLevel && classEntry.level >= subclassSelectionLevel;
+
+    const hasSubclassOptions = (characterClass?.subclasses.length ?? 0) > 0;
+
+    const isPending =
+      isSubclassUnlocked && hasSubclassOptions && !classEntry.subclassId;
+
+    return {
+      id: classEntry.id,
+      className: classEntry.className,
+      classLevel: classEntry.level,
+      subclassSelectionLevel,
+      subclassName: classEntry.subclassName,
+      hasSubclassSelectionLevel,
+      isSubclassUnlocked,
+      hasSubclassOptions,
+      isPending,
+      isPrimary: classEntry.isPrimary,
+    };
+  });
+
+  const pendingSubclassCount = subclassReviewRows.filter(
+    (row) => row.isPending,
+  ).length;
 
   const constitutionSourceBonus = getAttributeSourceBonus({
     attributeKey: "constitution",
@@ -406,6 +762,106 @@ export function CharacterReviewStep({
       </CharacterReviewSection>
 
       <CharacterReviewSection
+        title="Subclasses"
+        description="Estado da escolha de subclasse para cada classe do personagem."
+      >
+        <div
+          className={[
+            "rounded-xl border px-4 py-3",
+            pendingSubclassCount > 0
+              ? "border-amber-400/30 bg-amber-500/10"
+              : "border-emerald-400/30 bg-emerald-500/10",
+          ].join(" ")}
+        >
+          <p
+            className={[
+              "text-[10px] font-black uppercase tracking-[0.18em]",
+              pendingSubclassCount > 0 ? "text-amber-200" : "text-emerald-200",
+            ].join(" ")}
+          >
+            Estado das escolhas
+          </p>
+
+          <p className="mt-1 text-sm font-black text-zinc-100">
+            {pendingSubclassCount > 0
+              ? `${pendingSubclassCount} escolha(s) de subclasse pendente(s)`
+              : "Nenhuma escolha de subclasse pendente"}
+          </p>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          {subclassReviewRows.map((row) => {
+            const statusLabel = !row.hasSubclassSelectionLevel
+              ? "Sem nível configurado"
+              : !row.isSubclassUnlocked
+                ? `Liberada no nível ${row.subclassSelectionLevel}`
+                : !row.hasSubclassOptions
+                  ? "Sem subclasses cadastradas"
+                  : row.isPending
+                    ? "Escolha pendente"
+                    : (row.subclassName ?? "Subclasse escolhida");
+
+            const helperText = !row.hasSubclassSelectionLevel
+              ? "Esta classe ainda não possui um nível de seleção de subclasse configurado."
+              : !row.isSubclassUnlocked
+                ? `A classe está no nível ${row.classLevel}. A escolha será liberada no nível ${row.subclassSelectionLevel}.`
+                : !row.hasSubclassOptions
+                  ? "A classe alcançou o nível exigido, mas não possui subclasses disponíveis no sistema."
+                  : row.isPending
+                    ? "Volte à etapa Classe e escolha uma subclasse antes de finalizar."
+                    : `Subclasse selecionada para ${row.className}.`;
+
+            return (
+              <article
+                key={row.id}
+                className={[
+                  "rounded-xl border p-3",
+                  row.isPending
+                    ? "border-amber-400/30 bg-amber-500/10"
+                    : row.isSubclassUnlocked &&
+                        row.hasSubclassOptions &&
+                        row.subclassName
+                      ? "border-emerald-400/30 bg-emerald-500/10"
+                      : "border-zinc-800 bg-zinc-950/60",
+                ].join(" ")}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-black text-zinc-100">
+                      {row.className} {row.classLevel}
+                    </p>
+
+                    <p className="mt-1 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                      {row.isPrimary ? "Classe principal" : "Classe adicional"}
+                    </p>
+                  </div>
+
+                  <span
+                    className={[
+                      "rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em]",
+                      row.isPending
+                        ? "border-amber-400/30 bg-amber-500/15 text-amber-100"
+                        : row.isSubclassUnlocked &&
+                            row.hasSubclassOptions &&
+                            row.subclassName
+                          ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-100"
+                          : "border-white/10 bg-black/20 text-zinc-500",
+                    ].join(" ")}
+                  >
+                    {statusLabel}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-xs font-semibold leading-relaxed text-zinc-400">
+                  {helperText}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
         title="Atributos"
         description="Valores distribuídos e modificadores calculados."
       >
@@ -541,6 +997,121 @@ export function CharacterReviewStep({
             Nenhuma feature prevista para as escolhas atuais.
           </CharacterReviewEmptyText>
         )}
+      </CharacterReviewSection>
+
+            <CharacterReviewSection
+        title="Escolhas de features"
+        description="Estilos, técnicas e recursos opcionais que exigem uma decisão do jogador."
+      >
+        <div
+          className={[
+            "rounded-xl border px-4 py-3",
+            !hasFeatureChoiceGroups
+              ? "border-zinc-800 bg-zinc-950/50"
+              : hasPendingFeatureChoices
+                ? "border-amber-400/30 bg-amber-500/10"
+                : "border-emerald-400/30 bg-emerald-500/10",
+          ].join(" ")}
+        >
+          <p
+            className={[
+              "text-[10px] font-black uppercase tracking-[0.18em]",
+              !hasFeatureChoiceGroups
+                ? "text-zinc-500"
+                : hasPendingFeatureChoices
+                  ? "text-amber-200"
+                  : "text-emerald-200",
+            ].join(" ")}
+          >
+            Estado das escolhas
+          </p>
+
+          <p className="mt-1 text-sm font-black text-zinc-100">
+            {!hasFeatureChoiceGroups
+              ? "Esta combinação de fontes não possui escolhas opcionais de features."
+              : hasPendingFeatureChoices
+                ? `${totalMissingFeatureChoices} escolha(s) de feature pendente(s)`
+                : "Nenhuma escolha de feature pendente"}
+          </p>
+
+          {hasFeatureChoiceGroups ? (
+            <p className="mt-1 text-xs font-bold text-zinc-400">
+              {totalSelectedFeatureChoices}/
+              {totalRequiredFeatureChoices} escolhas preenchidas.
+            </p>
+          ) : null}
+        </div>
+
+        {hasFeatureChoiceGroups ? (
+          <div className="grid gap-3 md:grid-cols-2">
+            {featureChoiceStatuses.map((choiceStatus) => (
+              <article
+                key={choiceStatus.groupId}
+                className={[
+                  "rounded-xl border p-4",
+                  choiceStatus.isComplete
+                    ? "border-emerald-400/30 bg-emerald-500/10"
+                    : "border-amber-400/30 bg-amber-500/10",
+                ].join(" ")}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-black text-zinc-100">
+                      {choiceStatus.groupName}
+                    </p>
+
+                    <p className="mt-1 text-xs font-bold leading-relaxed text-zinc-500">
+                      {choiceStatus.groupDescription ??
+                        "Grupo de escolhas opcionais."}
+                    </p>
+                  </div>
+
+                  <span
+                    className={[
+                      "shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em]",
+                      choiceStatus.isComplete
+                        ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-100"
+                        : "border-amber-400/30 bg-amber-500/15 text-amber-100",
+                    ].join(" ")}
+                  >
+                    {choiceStatus.isComplete
+                      ? "Completo"
+                      : `Falta ${choiceStatus.missing}`}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-lg font-black text-zinc-100">
+                  {choiceStatus.selected}/{choiceStatus.required}
+                </p>
+
+                {choiceStatus.selectedFeatureNames.length > 0 ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {choiceStatus.selectedFeatureNames.map(
+                      (featureName) => (
+                        <span
+                          key={featureName}
+                          className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold"
+                        >
+                          {featureName}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                ) : (
+                  <p className="mt-3 text-xs font-semibold leading-relaxed text-amber-100">
+                    Nenhuma opção escolhida para este grupo.
+                  </p>
+                )}
+
+                {!choiceStatus.isComplete ? (
+                  <p className="mt-3 text-xs font-semibold leading-relaxed text-amber-100">
+                    Volte à etapa Features e complete esta escolha.
+                  </p>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        ) : null}
       </CharacterReviewSection>
 
       <CharacterReviewSection
@@ -682,8 +1253,94 @@ export function CharacterReviewStep({
 
       <CharacterReviewSection
         title="Magias"
-        description="Truques e magias selecionadas para o personagem."
+        description="Truques e magias conhecidas selecionadas para o personagem."
       >
+        <div
+          className={[
+            "rounded-xl border px-4 py-3",
+            !hasKnownSpellChoices
+              ? "border-zinc-800 bg-zinc-950/50"
+              : hasPendingKnownSpellChoices
+                ? "border-amber-400/30 bg-amber-500/10"
+                : "border-emerald-400/30 bg-emerald-500/10",
+          ].join(" ")}
+        >
+          <p
+            className={[
+              "text-[10px] font-black uppercase tracking-[0.18em]",
+              !hasKnownSpellChoices
+                ? "text-zinc-500"
+                : hasPendingKnownSpellChoices
+                  ? "text-amber-200"
+                  : "text-emerald-200",
+            ].join(" ")}
+          >
+            Estado das escolhas
+          </p>
+
+          <p className="mt-1 text-sm font-black text-zinc-100">
+            {!hasKnownSpellChoices
+              ? "Esta combinação de classes não possui escolhas de magia conhecidas."
+              : hasPendingKnownSpellChoices
+                ? `${totalMissingKnownSpells} escolha(s) de magia pendente(s)`
+                : "Nenhuma escolha de magia pendente"}
+          </p>
+
+          {hasKnownSpellChoices ? (
+            <p className="mt-1 text-xs font-bold text-zinc-400">
+              {totalSelectedKnownSpells}/{totalRequiredKnownSpells} escolhas
+              preenchidas.
+            </p>
+          ) : null}
+        </div>
+
+        {hasKnownSpellChoices ? (
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {spellChoiceStatuses.map((choiceStatus) => (
+              <article
+                key={choiceStatus.spellLevel}
+                className={[
+                  "rounded-xl border p-3",
+                  choiceStatus.isComplete
+                    ? "border-emerald-400/30 bg-emerald-500/10"
+                    : "border-amber-400/30 bg-amber-500/10",
+                ].join(" ")}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500">
+                      {getSpellLevelLabel(choiceStatus.spellLevel)}
+                    </p>
+
+                    <p className="mt-1 text-lg font-black text-zinc-100">
+                      {choiceStatus.selected}/{choiceStatus.required}
+                    </p>
+                  </div>
+
+                  <span
+                    className={[
+                      "rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em]",
+                      choiceStatus.isComplete
+                        ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-100"
+                        : "border-amber-400/30 bg-amber-500/15 text-amber-100",
+                    ].join(" ")}
+                  >
+                    {choiceStatus.isComplete
+                      ? "Completo"
+                      : `Falta ${choiceStatus.missing}`}
+                  </span>
+                </div>
+
+                {!choiceStatus.isComplete ? (
+                  <p className="mt-2 text-xs font-semibold leading-relaxed text-amber-100">
+                    Volte à etapa Magias e complete as escolhas deste nível.
+                  </p>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        ) : null}
+
         <div className="grid gap-4 md:grid-cols-2">
           <CharacterReviewSpellList
             title="Truques"

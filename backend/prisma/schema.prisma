@@ -68,11 +68,12 @@ enum CreatureSize {
 }
 
 enum FeatureSourceType {
-  SYSTEM
   ANCESTRY
+  BACKGROUND
   CLASS
   SUBCLASS
-  BACKGROUND
+  LEVEL
+  CHOICE
 }
 
 enum CharacterSheetStatus {
@@ -205,19 +206,20 @@ model GameSystem {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  stats             Stat[]
-  skills            Skill[]
-  ancestries        Ancestry[]
-  backgrounds       Background[]
-  classes           CharacterClass[]
-  subclasses        CharacterSubclass[]
-  features          Feature[]
-  spells            Spell[]
-  equipment         Equipment[]
-  languages         Language[]
-  characterSheets   CharacterSheet[]
-  levelProgressions LevelProgression[]
-  campaigns         Campaign[]
+  stats               Stat[]
+  skills              Skill[]
+  ancestries          Ancestry[]
+  backgrounds         Background[]
+  classes             CharacterClass[]
+  subclasses          CharacterSubclass[]
+  features            Feature[]
+  spells              Spell[]
+  equipment           Equipment[]
+  languages           Language[]
+  characterSheets     CharacterSheet[]
+  levelProgressions   LevelProgression[]
+  featureChoiceGroups FeatureChoiceGroup[]
+  campaigns           Campaign[]
 }
 
 model Ancestry {
@@ -233,9 +235,10 @@ model Ancestry {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
-  system          GameSystem       @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  features        Feature[]
-  characterSheets CharacterSheet[]
+  system              GameSystem           @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  features            Feature[]
+  featureChoiceGroups FeatureChoiceGroup[]
+  characterSheets     CharacterSheet[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -259,9 +262,10 @@ model Background {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  system          GameSystem       @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  features        Feature[]
-  characterSheets CharacterSheet[]
+  system              GameSystem           @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  features            Feature[]
+  featureChoiceGroups FeatureChoiceGroup[]
+  characterSheets     CharacterSheet[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -340,12 +344,13 @@ model CharacterSheet {
   subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
   gameSessions   GameSession[]
 
-  stats     CharacterSheetStat[]
-  skills    CharacterSheetSkill[]
-  spells    CharacterSheetSpell[]
-  equipment CharacterSheetEquipment[]
-  classes   CharacterSheetClass[]
-  languages CharacterSheetLanguage[]
+  stats          CharacterSheetStat[]
+  skills         CharacterSheetSkill[]
+  spells         CharacterSheetSpell[]
+  equipment      CharacterSheetEquipment[]
+  classes        CharacterSheetClass[]
+  languages      CharacterSheetLanguage[]
+  featureChoices CharacterSheetFeatureChoice[]
 
   @@index([campaignId])
   @@index([systemId])
@@ -526,6 +531,7 @@ model CharacterClass {
   levelProgressions     LevelProgression[]
   classSpells           ClassSpell[]
   features              Feature[]
+  featureChoiceGroups   FeatureChoiceGroup[]
   characterSheets       CharacterSheet[]
   characterSheetClasses CharacterSheetClass[]
   characterSheetSpells  CharacterSheetSpell[]
@@ -550,6 +556,7 @@ model CharacterSubclass {
   system                GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
   characterClass        CharacterClass        @relation(fields: [classId], references: [id], onDelete: Cascade)
   features              Feature[]
+  featureChoiceGroups   FeatureChoiceGroup[]
   characterSheets       CharacterSheet[]
   characterSheetClasses CharacterSheetClass[]
 
@@ -584,10 +591,11 @@ model LevelProgression {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  system         GameSystem                    @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterClass CharacterClass                @relation(fields: [classId], references: [id], onDelete: Cascade)
-  features       Feature[]
-  spellLimits    LevelProgressionSpellLimit[]
+  system              GameSystem                   @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterClass      CharacterClass               @relation(fields: [classId], references: [id], onDelete: Cascade)
+  features            Feature[]
+  featureChoiceGroups FeatureChoiceGroup[]
+  spellLimits         LevelProgressionSpellLimit[]
 
   @@unique([classId, level])
   @@index([systemId])
@@ -654,6 +662,9 @@ model Feature {
   subclass         CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: Cascade)
   levelProgression LevelProgression?  @relation(fields: [levelProgressionId], references: [id], onDelete: SetNull)
 
+  choiceOptions   FeatureChoiceOption[]
+  sheetSelections CharacterSheetFeatureChoice[]
+
   @@unique([systemId, key])
   @@index([systemId])
   @@index([ancestryId])
@@ -664,6 +675,79 @@ model Feature {
   @@index([sourceType])
   @@index([level])
   @@index([order])
+}
+
+model FeatureChoiceGroup {
+  id                 String   @id @default(uuid())
+  systemId           String
+  ancestryId         String?
+  backgroundId       String?
+  classId            String?
+  subclassId         String?
+  levelProgressionId String?
+  key                String
+  name               String
+  description        String?
+  choiceCount        Int      @default(1)
+  order              Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  system           GameSystem         @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  ancestry         Ancestry?          @relation(fields: [ancestryId], references: [id], onDelete: Cascade)
+  background       Background?        @relation(fields: [backgroundId], references: [id], onDelete: Cascade)
+  characterClass   CharacterClass?    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subclass         CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: Cascade)
+  levelProgression LevelProgression?  @relation(fields: [levelProgressionId], references: [id], onDelete: SetNull)
+
+  options    FeatureChoiceOption[]
+  selections CharacterSheetFeatureChoice[]
+
+  @@unique([systemId, key])
+  @@index([systemId])
+  @@index([ancestryId])
+  @@index([backgroundId])
+  @@index([classId])
+  @@index([subclassId])
+  @@index([levelProgressionId])
+  @@index([order])
+}
+
+model FeatureChoiceOption {
+  id            String   @id @default(uuid())
+  choiceGroupId String
+  featureId     String
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  choiceGroup FeatureChoiceGroup @relation(fields: [choiceGroupId], references: [id], onDelete: Cascade)
+  feature     Feature            @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@unique([choiceGroupId, featureId])
+  @@index([choiceGroupId])
+  @@index([featureId])
+  @@index([order])
+}
+
+model CharacterSheetFeatureChoice {
+  id               String   @id @default(uuid())
+  characterSheetId String
+  choiceGroupId    String
+  featureId        String
+  source           String   @default("builder")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  characterSheet CharacterSheet     @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  choiceGroup    FeatureChoiceGroup @relation(fields: [choiceGroupId], references: [id], onDelete: Cascade)
+  feature        Feature            @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@unique([characterSheetId, choiceGroupId, featureId])
+  @@index([characterSheetId])
+  @@index([choiceGroupId])
+  @@index([featureId])
+  @@index([source])
 }
 
 model Spell {

@@ -6,6 +6,7 @@ import { backgrounds } from "./seed-data/backgrounds.js";
 import { classSpellAccess } from "./seed-data/class-spells.js";
 import { classes } from "./seed-data/classes.js";
 import { equipment } from "./seed-data/equipment.js";
+import { featureChoiceGroups } from "./seed-data/feature-choice-groups.js";
 import { features } from "./seed-data/features.js";
 import { languages } from "./seed-data/languages.js";
 import { skills } from "./seed-data/skills.js";
@@ -489,6 +490,7 @@ async function main() {
   const createdClasses = new Map<string, string>();
   const createdSubclasses = new Map<string, string>();
   const createdLevelProgressions = new Map<string, string>();
+  const createdFeatures = new Map<string, string>();
   const createdSpells = new Map<string, string>();
 
   for (const [index, statData] of stats.entries()) {
@@ -889,7 +891,161 @@ async function main() {
       },
     });
 
+    createdFeatures.set(featureData.key, feature.id);
+
     console.log(`Feature criada/validada: ${feature.name}`);
+  }
+
+    for (const groupData of featureChoiceGroups) {
+    const ancestryId = groupData.ancestryKey
+      ? createdAncestries.get(groupData.ancestryKey)
+      : null;
+
+    const backgroundId = groupData.backgroundKey
+      ? await prisma.background
+          .findUnique({
+            where: {
+              systemId_key: {
+                systemId: system.id,
+                key: groupData.backgroundKey,
+              },
+            },
+            select: {
+              id: true,
+            },
+          })
+          .then((background) => background?.id ?? null)
+      : null;
+
+    const classId = groupData.classKey
+      ? createdClasses.get(groupData.classKey)
+      : null;
+
+    const subclassId =
+      groupData.classKey && groupData.subclassKey
+        ? createdSubclasses.get(
+            `${groupData.classKey}:${groupData.subclassKey}`,
+          )
+        : null;
+
+    const levelProgressionId =
+      groupData.classKey && groupData.level
+        ? createdLevelProgressions.get(
+            `${groupData.classKey}:${groupData.level}`,
+          )
+        : null;
+
+    if (groupData.ancestryKey && !ancestryId) {
+      throw new Error(
+        `Ancestralidade "${groupData.ancestryKey}" não encontrada para o grupo "${groupData.name}".`,
+      );
+    }
+
+    if (groupData.backgroundKey && !backgroundId) {
+      throw new Error(
+        `Antecedente "${groupData.backgroundKey}" não encontrado para o grupo "${groupData.name}".`,
+      );
+    }
+
+    if (groupData.classKey && !classId) {
+      throw new Error(
+        `Classe "${groupData.classKey}" não encontrada para o grupo "${groupData.name}".`,
+      );
+    }
+
+    if (groupData.subclassKey && !subclassId) {
+      throw new Error(
+        `Subclasse "${groupData.subclassKey}" não encontrada para o grupo "${groupData.name}".`,
+      );
+    }
+
+    if (groupData.level && groupData.classKey && !levelProgressionId) {
+      throw new Error(
+        `Progressão "${groupData.classKey}:${groupData.level}" não encontrada para o grupo "${groupData.name}".`,
+      );
+    }
+
+    if (groupData.choiceCount < 1) {
+      throw new Error(
+        `O grupo "${groupData.name}" precisa exigir pelo menos uma escolha.`,
+      );
+    }
+
+    if (groupData.choiceCount > groupData.optionFeatureKeys.length) {
+      throw new Error(
+        `O grupo "${groupData.name}" exige mais escolhas do que possui opções.`,
+      );
+    }
+
+    const choiceGroup = await prisma.featureChoiceGroup.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: groupData.key,
+        },
+      },
+      update: {
+        ancestryId,
+        backgroundId,
+        classId,
+        subclassId,
+        levelProgressionId,
+        name: groupData.name,
+        description: groupData.description,
+        choiceCount: groupData.choiceCount,
+        order: groupData.order,
+      },
+      create: {
+        systemId: system.id,
+        ancestryId,
+        backgroundId,
+        classId,
+        subclassId,
+        levelProgressionId,
+        key: groupData.key,
+        name: groupData.name,
+        description: groupData.description,
+        choiceCount: groupData.choiceCount,
+        order: groupData.order,
+      },
+    });
+
+    const optionFeatureIds = groupData.optionFeatureKeys.map((featureKey) => {
+      const featureId = createdFeatures.get(featureKey);
+
+      if (!featureId) {
+        throw new Error(
+          `Feature "${featureKey}" não encontrada para o grupo "${groupData.name}".`,
+        );
+      }
+
+      return {
+        featureKey,
+        featureId,
+      };
+    });
+
+    await prisma.$transaction([
+      prisma.featureChoiceOption.deleteMany({
+        where: {
+          choiceGroupId: choiceGroup.id,
+        },
+      }),
+
+      ...optionFeatureIds.map(({ featureId }, optionIndex) =>
+        prisma.featureChoiceOption.create({
+          data: {
+            choiceGroupId: choiceGroup.id,
+            featureId,
+            order: optionIndex + 1,
+          },
+        }),
+      ),
+    ]);
+
+    console.log(
+      `Grupo de escolha validado: ${choiceGroup.name} → ${optionFeatureIds.length} opções`,
+    );
   }
 
   for (const [index, spellData] of spells.entries()) {

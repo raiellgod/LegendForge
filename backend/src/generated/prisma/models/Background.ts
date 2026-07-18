@@ -282,6 +282,7 @@ export type BackgroundWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Background"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   features?: Prisma.FeatureListRelationFilter
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
 }
 
@@ -302,6 +303,7 @@ export type BackgroundOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   features?: Prisma.FeatureOrderByRelationAggregateInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupOrderByRelationAggregateInput
   characterSheets?: Prisma.CharacterSheetOrderByRelationAggregateInput
 }
 
@@ -327,6 +329,7 @@ export type BackgroundWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Background"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   features?: Prisma.FeatureListRelationFilter
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
 }, "id" | "systemId_name" | "systemId_key">
 
@@ -388,6 +391,7 @@ export type BackgroundCreateInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutBackgroundsInput
   features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
 }
 
@@ -407,6 +411,7 @@ export type BackgroundUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
@@ -426,6 +431,7 @@ export type BackgroundUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutBackgroundsNestedInput
   features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
 }
 
@@ -445,6 +451,7 @@ export type BackgroundUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
@@ -679,6 +686,22 @@ export type BackgroundUpdateOneWithoutFeaturesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BackgroundUpdateToOneWithWhereWithoutFeaturesInput, Prisma.BackgroundUpdateWithoutFeaturesInput>, Prisma.BackgroundUncheckedUpdateWithoutFeaturesInput>
 }
 
+export type BackgroundCreateNestedOneWithoutFeatureChoiceGroupsInput = {
+  create?: Prisma.XOR<Prisma.BackgroundCreateWithoutFeatureChoiceGroupsInput, Prisma.BackgroundUncheckedCreateWithoutFeatureChoiceGroupsInput>
+  connectOrCreate?: Prisma.BackgroundCreateOrConnectWithoutFeatureChoiceGroupsInput
+  connect?: Prisma.BackgroundWhereUniqueInput
+}
+
+export type BackgroundUpdateOneWithoutFeatureChoiceGroupsNestedInput = {
+  create?: Prisma.XOR<Prisma.BackgroundCreateWithoutFeatureChoiceGroupsInput, Prisma.BackgroundUncheckedCreateWithoutFeatureChoiceGroupsInput>
+  connectOrCreate?: Prisma.BackgroundCreateOrConnectWithoutFeatureChoiceGroupsInput
+  upsert?: Prisma.BackgroundUpsertWithoutFeatureChoiceGroupsInput
+  disconnect?: Prisma.BackgroundWhereInput | boolean
+  delete?: Prisma.BackgroundWhereInput | boolean
+  connect?: Prisma.BackgroundWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BackgroundUpdateToOneWithWhereWithoutFeatureChoiceGroupsInput, Prisma.BackgroundUpdateWithoutFeatureChoiceGroupsInput>, Prisma.BackgroundUncheckedUpdateWithoutFeatureChoiceGroupsInput>
+}
+
 export type BackgroundCreateWithoutSystemInput = {
   id?: string
   name: string
@@ -694,6 +717,7 @@ export type BackgroundCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
 }
 
@@ -712,6 +736,7 @@ export type BackgroundUncheckedCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
@@ -777,6 +802,7 @@ export type BackgroundCreateWithoutCharacterSheetsInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutBackgroundsInput
   features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundUncheckedCreateWithoutCharacterSheetsInput = {
@@ -795,6 +821,7 @@ export type BackgroundUncheckedCreateWithoutCharacterSheetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundCreateOrConnectWithoutCharacterSheetsInput = {
@@ -829,6 +856,7 @@ export type BackgroundUpdateWithoutCharacterSheetsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutBackgroundsNestedInput
   features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundUncheckedUpdateWithoutCharacterSheetsInput = {
@@ -847,6 +875,7 @@ export type BackgroundUncheckedUpdateWithoutCharacterSheetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundCreateWithoutFeaturesInput = {
@@ -864,6 +893,7 @@ export type BackgroundCreateWithoutFeaturesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutBackgroundsInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
 }
 
@@ -882,6 +912,7 @@ export type BackgroundUncheckedCreateWithoutFeaturesInput = {
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
@@ -916,6 +947,7 @@ export type BackgroundUpdateWithoutFeaturesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutBackgroundsNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
 }
 
@@ -934,6 +966,99 @@ export type BackgroundUncheckedUpdateWithoutFeaturesInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
+}
+
+export type BackgroundCreateWithoutFeatureChoiceGroupsInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
+  languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
+  startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutBackgroundsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
+}
+
+export type BackgroundUncheckedCreateWithoutFeatureChoiceGroupsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
+  languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
+  startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
+}
+
+export type BackgroundCreateOrConnectWithoutFeatureChoiceGroupsInput = {
+  where: Prisma.BackgroundWhereUniqueInput
+  create: Prisma.XOR<Prisma.BackgroundCreateWithoutFeatureChoiceGroupsInput, Prisma.BackgroundUncheckedCreateWithoutFeatureChoiceGroupsInput>
+}
+
+export type BackgroundUpsertWithoutFeatureChoiceGroupsInput = {
+  update: Prisma.XOR<Prisma.BackgroundUpdateWithoutFeatureChoiceGroupsInput, Prisma.BackgroundUncheckedUpdateWithoutFeatureChoiceGroupsInput>
+  create: Prisma.XOR<Prisma.BackgroundCreateWithoutFeatureChoiceGroupsInput, Prisma.BackgroundUncheckedCreateWithoutFeatureChoiceGroupsInput>
+  where?: Prisma.BackgroundWhereInput
+}
+
+export type BackgroundUpdateToOneWithWhereWithoutFeatureChoiceGroupsInput = {
+  where?: Prisma.BackgroundWhereInput
+  data: Prisma.XOR<Prisma.BackgroundUpdateWithoutFeatureChoiceGroupsInput, Prisma.BackgroundUncheckedUpdateWithoutFeatureChoiceGroupsInput>
+}
+
+export type BackgroundUpdateWithoutFeatureChoiceGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
+  languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutBackgroundsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
+}
+
+export type BackgroundUncheckedUpdateWithoutFeatureChoiceGroupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
+  languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
@@ -968,6 +1093,7 @@ export type BackgroundUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
 }
 
@@ -986,6 +1112,7 @@ export type BackgroundUncheckedUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
@@ -1012,11 +1139,13 @@ export type BackgroundUncheckedUpdateManyWithoutSystemInput = {
 
 export type BackgroundCountOutputType = {
   features: number
+  featureChoiceGroups: number
   characterSheets: number
 }
 
 export type BackgroundCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   features?: boolean | BackgroundCountOutputTypeCountFeaturesArgs
+  featureChoiceGroups?: boolean | BackgroundCountOutputTypeCountFeatureChoiceGroupsArgs
   characterSheets?: boolean | BackgroundCountOutputTypeCountCharacterSheetsArgs
 }
 
@@ -1035,6 +1164,13 @@ export type BackgroundCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.E
  */
 export type BackgroundCountOutputTypeCountFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FeatureWhereInput
+}
+
+/**
+ * BackgroundCountOutputType without action
+ */
+export type BackgroundCountOutputTypeCountFeatureChoiceGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeatureChoiceGroupWhereInput
 }
 
 /**
@@ -1062,6 +1198,7 @@ export type BackgroundSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   features?: boolean | Prisma.Background$featuresArgs<ExtArgs>
+  featureChoiceGroups?: boolean | Prisma.Background$featureChoiceGroupsArgs<ExtArgs>
   characterSheets?: boolean | Prisma.Background$characterSheetsArgs<ExtArgs>
   _count?: boolean | Prisma.BackgroundCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["background"]>
@@ -1123,6 +1260,7 @@ export type BackgroundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type BackgroundInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   features?: boolean | Prisma.Background$featuresArgs<ExtArgs>
+  featureChoiceGroups?: boolean | Prisma.Background$featureChoiceGroupsArgs<ExtArgs>
   characterSheets?: boolean | Prisma.Background$characterSheetsArgs<ExtArgs>
   _count?: boolean | Prisma.BackgroundCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1138,6 +1276,7 @@ export type $BackgroundPayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
     features: Prisma.$FeaturePayload<ExtArgs>[]
+    featureChoiceGroups: Prisma.$FeatureChoiceGroupPayload<ExtArgs>[]
     characterSheets: Prisma.$CharacterSheetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1551,6 +1690,7 @@ export interface Prisma__BackgroundClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   features<T extends Prisma.Background$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Background$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  featureChoiceGroups<T extends Prisma.Background$featureChoiceGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Background$featureChoiceGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeatureChoiceGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterSheets<T extends Prisma.Background$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Background$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2012,6 +2152,30 @@ export type Background$featuresArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.FeatureScalarFieldEnum | Prisma.FeatureScalarFieldEnum[]
+}
+
+/**
+ * Background.featureChoiceGroups
+ */
+export type Background$featureChoiceGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FeatureChoiceGroup
+   */
+  select?: Prisma.FeatureChoiceGroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FeatureChoiceGroup
+   */
+  omit?: Prisma.FeatureChoiceGroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeatureChoiceGroupInclude<ExtArgs> | null
+  where?: Prisma.FeatureChoiceGroupWhereInput
+  orderBy?: Prisma.FeatureChoiceGroupOrderByWithRelationInput | Prisma.FeatureChoiceGroupOrderByWithRelationInput[]
+  cursor?: Prisma.FeatureChoiceGroupWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FeatureChoiceGroupScalarFieldEnum | Prisma.FeatureChoiceGroupScalarFieldEnum[]
 }
 
 /**

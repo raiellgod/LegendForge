@@ -24,6 +24,16 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
   const characterSpellKeysSchema = z.array(z.string()).optional();
   const characterLanguageKeysSchema = z.array(z.string()).optional();
 
+  const characterFeatureChoiceSelectionsSchema = z
+    .array(
+      z.object({
+        choiceGroupId: z.string().uuid("Invalid feature choice group id"),
+        featureId: z.string().uuid("Invalid feature id"),
+      }),
+    )
+    .max(100)
+    .optional();
+
   const characterClassEntriesSchema = z
     .array(
       z.object({
@@ -57,6 +67,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     spellId: string;
     classId: string | null;
     source: CharacterProficiencySource;
+  };
+
+  type CharacterFeatureChoiceEntry = {
+    choiceGroupId: string;
+    featureId: string;
+    source: "builder";
   };
 
   const characterProficiencySourcePriority: Record<
@@ -106,6 +122,9 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     skillKeys?: z.infer<typeof characterSkillKeysSchema>;
     spellKeys?: z.infer<typeof characterSpellKeysSchema>;
     languageKeys?: z.infer<typeof characterLanguageKeysSchema>;
+    featureChoiceSelections?: z.infer<
+      typeof characterFeatureChoiceSelectionsSchema
+    >;
     equipmentItems?: z.infer<typeof characterEquipmentItemsSchema>;
 
     classEquipmentMode?: "PACKAGE" | "GOLD";
@@ -1537,6 +1556,230 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     };
   }
 
+  async function getCharacterFeatureChoiceEntries({
+    systemId,
+    featureChoiceSelections,
+    classEntries,
+    fallbackClassId,
+    fallbackSubclassId,
+    fallbackLevel,
+    ancestryId,
+    backgroundId,
+  }: {
+    systemId: string;
+    featureChoiceSelections: z.infer<
+      typeof characterFeatureChoiceSelectionsSchema
+    >;
+    classEntries: CharacterClassEntryInput[];
+    fallbackClassId: string | null | undefined;
+    fallbackSubclassId: string | null | undefined;
+    fallbackLevel: number | null | undefined;
+    ancestryId: string | null | undefined;
+    backgroundId: string | null | undefined;
+  }) {
+    if (featureChoiceSelections === undefined) {
+      return {
+        entries: [] as CharacterFeatureChoiceEntry[],
+        error: null as string | null,
+      };
+    }
+
+    const uniqueSelections = Array.from(
+      new Map(
+        featureChoiceSelections.map((selection) => [
+          `${selection.choiceGroupId}:${selection.featureId}`,
+          selection,
+        ]),
+      ).values(),
+    );
+
+    if (uniqueSelections.length === 0) {
+      return {
+        entries: [] as CharacterFeatureChoiceEntry[],
+        error: null as string | null,
+      };
+    }
+
+    const choiceGroupIds = Array.from(
+      new Set(uniqueSelections.map((selection) => selection.choiceGroupId)),
+    );
+
+    const choiceGroups = await prisma.featureChoiceGroup.findMany({
+      where: {
+        systemId,
+        id: {
+          in: choiceGroupIds,
+        },
+      },
+      include: {
+        options: {
+          select: {
+            featureId: true,
+          },
+        },
+        levelProgression: {
+          select: {
+            classId: true,
+            level: true,
+          },
+        },
+      },
+    });
+
+    const choiceGroupsById = new Map(
+      choiceGroups.map((choiceGroup) => [choiceGroup.id, choiceGroup]),
+    );
+
+    const missingChoiceGroupId = choiceGroupIds.find(
+      (choiceGroupId) => !choiceGroupsById.has(choiceGroupId),
+    );
+
+    if (missingChoiceGroupId) {
+      return {
+        entries: [],
+        error: "Feature choice group not found for this character system",
+      };
+    }
+
+    const effectiveClassEntries =
+      classEntries.length > 0
+        ? classEntries
+        : fallbackClassId
+          ? [
+              {
+                classId: fallbackClassId,
+                subclassId: fallbackSubclassId ?? null,
+                level: normalizeCharacterLevel(fallbackLevel),
+                isPrimary: true,
+                order: 0,
+              },
+            ]
+          : [];
+
+    const applicableSelections: CharacterFeatureChoiceEntry[] = [];
+
+    for (const selection of uniqueSelections) {
+      const choiceGroup = choiceGroupsById.get(selection.choiceGroupId);
+
+      if (!choiceGroup) {
+        continue;
+      }
+
+      const featureBelongsToGroup = choiceGroup.options.some(
+        (option) => option.featureId === selection.featureId,
+      );
+
+      if (!featureBelongsToGroup) {
+        return {
+          entries: [],
+          error: `Feature does not belong to the choice group "${choiceGroup.name}"`,
+        };
+      }
+
+      const matchesAncestry =
+        !choiceGroup.ancestryId || choiceGroup.ancestryId === ancestryId;
+
+      const matchesBackground =
+        !choiceGroup.backgroundId || choiceGroup.backgroundId === backgroundId;
+
+      const matchesClass =
+        !choiceGroup.classId ||
+        effectiveClassEntries.some(
+          (classEntry) => classEntry.classId === choiceGroup.classId,
+        );
+
+      const matchesSubclass =
+        !choiceGroup.subclassId ||
+        effectiveClassEntries.some(
+          (classEntry) => classEntry.subclassId === choiceGroup.subclassId,
+        );
+
+      const matchesLevelProgression =
+        !choiceGroup.levelProgression ||
+        effectiveClassEntries.some(
+          (classEntry) =>
+            classEntry.classId === choiceGroup.levelProgression?.classId &&
+            classEntry.level >= (choiceGroup.levelProgression?.level ?? 1),
+        );
+
+      const isChoiceGroupApplicable =
+        matchesAncestry &&
+        matchesBackground &&
+        matchesClass &&
+        matchesSubclass &&
+        matchesLevelProgression;
+
+      // Escolhas antigas e incompatíveis são removidas quando a
+      // classe, subclasse, ancestralidade ou antecedente muda.
+      if (!isChoiceGroupApplicable) {
+        continue;
+      }
+
+      applicableSelections.push({
+        choiceGroupId: selection.choiceGroupId,
+        featureId: selection.featureId,
+        source: "builder",
+      });
+    }
+
+    const selectionCountByGroupId = new Map<string, number>();
+
+    for (const selection of applicableSelections) {
+      selectionCountByGroupId.set(
+        selection.choiceGroupId,
+        (selectionCountByGroupId.get(selection.choiceGroupId) ?? 0) + 1,
+      );
+    }
+
+    for (const [
+      choiceGroupId,
+      selectedCount,
+    ] of selectionCountByGroupId.entries()) {
+      const choiceGroup = choiceGroupsById.get(choiceGroupId);
+
+      if (!choiceGroup) {
+        continue;
+      }
+
+      if (selectedCount > choiceGroup.choiceCount) {
+        return {
+          entries: [],
+          error: `The feature choice group "${choiceGroup.name}" allows ${choiceGroup.choiceCount} choice(s), but ${selectedCount} were provided`,
+        };
+      }
+    }
+
+    return {
+      entries: applicableSelections,
+      error: null,
+    };
+  }
+
+  async function replaceCharacterSheetFeatureChoices(
+    characterSheetId: string,
+    entries: CharacterFeatureChoiceEntry[],
+  ) {
+    await prisma.$transaction([
+      prisma.characterSheetFeatureChoice.deleteMany({
+        where: {
+          characterSheetId,
+          source: "builder",
+        },
+      }),
+
+      ...entries.map((entry) =>
+        prisma.characterSheetFeatureChoice.create({
+          data: {
+            characterSheetId,
+            choiceGroupId: entry.choiceGroupId,
+            featureId: entry.featureId,
+            source: entry.source,
+          },
+        }),
+      ),
+    ]);
+  }
+
   const characterSheetInclude = {
     campaignActor: true,
     system: true,
@@ -1631,6 +1874,15 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     equipment: {
       include: {
         equipment: true,
+      },
+    },
+    featureChoices: {
+      include: {
+        choiceGroup: true,
+        feature: true,
+      },
+      orderBy: {
+        createdAt: "asc",
       },
     },
   } satisfies Prisma.CharacterSheetInclude;
@@ -1816,6 +2068,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           skillKeys: characterSkillKeysSchema,
           spellKeys: characterSpellKeysSchema,
           languageKeys: characterLanguageKeysSchema,
+          featureChoiceSelections: characterFeatureChoiceSelectionsSchema,
           equipmentItems: characterEquipmentItemsSchema,
           classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
           backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
@@ -1876,6 +2129,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         skillKeys,
         spellKeys,
         languageKeys,
+        featureChoiceSelections,
         equipmentItems,
         classEquipmentMode,
         backgroundEquipmentMode,
@@ -2178,6 +2432,25 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const featureChoiceEntriesResult = await getCharacterFeatureChoiceEntries(
+        {
+          systemId,
+          featureChoiceSelections,
+          classEntries: normalizedClassEntriesResult.entries,
+          fallbackClassId: effectiveClassId,
+          fallbackSubclassId: effectiveSubclassId,
+          fallbackLevel: effectiveLevel,
+          ancestryId: ancestryId ?? null,
+          backgroundId: backgroundId ?? null,
+        },
+      );
+
+      if (featureChoiceEntriesResult.error) {
+        return reply.status(400).send({
+          message: featureChoiceEntriesResult.error,
+        });
+      }
+
       const initialMaxHitPoints = calculateInitialMaxHitPointsForClassEntries({
         classEntries: normalizedClassEntriesResult.entries,
         classHitDiceById,
@@ -2270,6 +2543,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         );
       }
 
+      if (featureChoiceSelections !== undefined) {
+        await replaceCharacterSheetFeatureChoices(
+          characterSheet.id,
+          featureChoiceEntriesResult.entries,
+        );
+      }
+
       await syncCharacterSheetClasses({
         characterSheetId: characterSheet.id,
         classEntries: normalizedClassEntriesResult.entries,
@@ -2337,6 +2617,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             skillKeys: characterSkillKeysSchema,
             spellKeys: characterSpellKeysSchema,
             languageKeys: characterLanguageKeysSchema,
+            featureChoiceSelections: characterFeatureChoiceSelectionsSchema,
             equipmentItems: characterEquipmentItemsSchema,
             classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
             backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
@@ -2403,6 +2684,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         skillKeys,
         spellKeys,
         languageKeys,
+        featureChoiceSelections,
         equipmentItems,
         classEntries,
         ...sheetData
@@ -2486,6 +2768,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       if (!isOwner && !isGM && !isSheetOwner) {
         return reply.status(403).send({
           message: "You cannot edit this character sheet",
+        });
+      }
+
+      if (characterSheet.status !== "DRAFT") {
+        return reply.status(400).send({
+          message:
+            "Somente fichas em rascunho podem ser alteradas pelo builder.",
         });
       }
 
@@ -2739,6 +3028,25 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const featureChoiceEntriesResult = await getCharacterFeatureChoiceEntries(
+        {
+          systemId: characterSheet.systemId,
+          featureChoiceSelections,
+          classEntries: normalizedClassEntriesResult.entries,
+          fallbackClassId: sheetData.classId ?? characterSheet.classId,
+          fallbackSubclassId: sheetData.subclassId ?? characterSheet.subclassId,
+          fallbackLevel: sheetData.level ?? characterSheet.level,
+          ancestryId: selectedAncestry?.id ?? null,
+          backgroundId: selectedBackground?.id ?? null,
+        },
+      );
+
+      if (featureChoiceEntriesResult.error) {
+        return reply.status(400).send({
+          message: featureChoiceEntriesResult.error,
+        });
+      }
+
       const currentConstitutionStat = await prisma.characterSheetStat.findFirst(
         {
           where: {
@@ -2957,6 +3265,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         await replaceCharacterSheetEquipment(
           sheetId,
           equipmentEntriesResult.entries,
+        );
+      }
+
+      if (featureChoiceSelections !== undefined) {
+        await replaceCharacterSheetFeatureChoices(
+          sheetId,
+          featureChoiceEntriesResult.entries,
         );
       }
 
@@ -3310,9 +3625,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     return initials || "PC";
   }
 
-  function getReadyValidationErrors(characterSheet: {
+  async function getReadyValidationErrors(characterSheet: {
+    systemId: string;
     name: string;
+    level: number;
     classId: string | null;
+    subclassId: string | null;
     ancestryId: string | null;
     backgroundId: string | null;
     ancestry: {
@@ -3324,7 +3642,31 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     } | null;
     characterClass: {
       classSkillChoiceCount: number;
+      subclassSelectionLevel: number | null;
+      levelProgressions: Array<{
+        level: number;
+        spellLimits: Array<{
+          spellLevel: number;
+          spellsKnown: number;
+        }>;
+      }>;
     } | null;
+    classes: Array<{
+      classId: string;
+      level: number;
+      subclassId: string | null;
+      characterClass: {
+        name: string;
+        subclassSelectionLevel: number | null;
+        levelProgressions: Array<{
+          level: number;
+          spellLimits: Array<{
+            spellLevel: number;
+            spellsKnown: number;
+          }>;
+        }>;
+      };
+    }>;
     stats: Array<{
       stat: {
         key: string;
@@ -3333,11 +3675,22 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     skills: Array<{
       source: string | null;
     }>;
+    spells: Array<{
+      source: string | null;
+      spell: {
+        level: number;
+      };
+    }>;
     languages: Array<{
       source: string | null;
       language: {
         key: string;
       };
+    }>;
+    featureChoices: Array<{
+      choiceGroupId: string;
+      featureId: string;
+      source: string;
     }>;
   }) {
     const errors: string[] = [];
@@ -3356,6 +3709,44 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
     if (!characterSheet.backgroundId) {
       errors.push("Escolha um antecedente.");
+    }
+
+    const classEntries =
+      characterSheet.classes.length > 0
+        ? characterSheet.classes
+        : characterSheet.classId
+          ? [
+              {
+                classId: characterSheet.classId,
+                level: characterSheet.level,
+                subclassId: characterSheet.subclassId,
+                characterClass: {
+                  name: "Classe principal",
+                  subclassSelectionLevel:
+                    characterSheet.characterClass?.subclassSelectionLevel ??
+                    null,
+                  levelProgressions:
+                    characterSheet.characterClass?.levelProgressions ?? [],
+                },
+              },
+            ]
+          : [];
+
+    const pendingSubclassEntries = classEntries.filter((classEntry) => {
+      const subclassSelectionLevel =
+        classEntry.characterClass.subclassSelectionLevel;
+
+      return (
+        typeof subclassSelectionLevel === "number" &&
+        classEntry.level >= subclassSelectionLevel &&
+        !classEntry.subclassId
+      );
+    });
+
+    for (const pendingClassEntry of pendingSubclassEntries) {
+      errors.push(
+        `Escolha uma subclasse para ${pendingClassEntry.characterClass.name} antes de finalizar a ficha.`,
+      );
     }
 
     const requiredStatKeys = [
@@ -3393,6 +3784,95 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       );
     }
 
+    const requiredKnownSpellLimitsByLevel = new Map<number, number>();
+
+    for (const classEntry of classEntries) {
+      const safeClassLevel = normalizeCharacterLevel(classEntry.level);
+
+      const progression =
+        classEntry.characterClass.levelProgressions.find(
+          (currentProgression) => currentProgression.level === safeClassLevel,
+        ) ?? null;
+
+      for (const spellLimit of progression?.spellLimits ?? []) {
+        if (spellLimit.spellsKnown <= 0) {
+          continue;
+        }
+
+        requiredKnownSpellLimitsByLevel.set(
+          spellLimit.spellLevel,
+          (requiredKnownSpellLimitsByLevel.get(spellLimit.spellLevel) ?? 0) +
+            spellLimit.spellsKnown,
+        );
+      }
+    }
+
+    const selectedKnownSpellCountsByLevel = new Map<number, number>();
+
+    for (const characterSpell of characterSheet.spells) {
+      // Magias manuais ou concedidas pelo mestre não entram nos
+      // limites de escolhas do builder.
+      if (
+        characterSpell.source !== "class" &&
+        characterSpell.source !== "builder"
+      ) {
+        continue;
+      }
+
+      const spellLevel = characterSpell.spell.level;
+
+      selectedKnownSpellCountsByLevel.set(
+        spellLevel,
+        (selectedKnownSpellCountsByLevel.get(spellLevel) ?? 0) + 1,
+      );
+    }
+
+    for (const [
+      spellLevel,
+      requiredKnownSpellCount,
+    ] of requiredKnownSpellLimitsByLevel.entries()) {
+      const selectedKnownSpellCount =
+        selectedKnownSpellCountsByLevel.get(spellLevel) ?? 0;
+
+      if (selectedKnownSpellCount === requiredKnownSpellCount) {
+        continue;
+      }
+
+      const spellLevelLabel =
+        spellLevel === 0 ? "truque(s)" : `magia(s) de nível ${spellLevel}`;
+
+      if (selectedKnownSpellCount < requiredKnownSpellCount) {
+        errors.push(
+          `Escolha exatamente ${requiredKnownSpellCount} ${spellLevelLabel} conhecido(s) antes de finalizar a ficha. Atualmente foram escolhidos ${selectedKnownSpellCount}.`,
+        );
+
+        continue;
+      }
+
+      errors.push(
+        `O limite de ${requiredKnownSpellCount} ${spellLevelLabel} conhecido(s) foi ultrapassado. Atualmente existem ${selectedKnownSpellCount}.`,
+      );
+    }
+
+    for (const [
+      spellLevel,
+      selectedKnownSpellCount,
+    ] of selectedKnownSpellCountsByLevel.entries()) {
+      const requiredKnownSpellCount =
+        requiredKnownSpellLimitsByLevel.get(spellLevel) ?? 0;
+
+      if (selectedKnownSpellCount <= 0 || requiredKnownSpellCount > 0) {
+        continue;
+      }
+
+      const spellLevelLabel =
+        spellLevel === 0 ? "truque(s)" : `magia(s) de nível ${spellLevel}`;
+
+      errors.push(
+        `As classes escolhidas não permitem ${spellLevelLabel} conhecido(s) nos níveis atuais.`,
+      );
+    }
+
     const automaticLanguageKeys = new Set([
       ...(characterSheet.ancestry?.languageKeys ?? []),
       ...(characterSheet.background?.languageKeys ?? []),
@@ -3426,6 +3906,130 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     if (uniqueBuilderLanguageKeys.size !== requiredLanguageChoiceCount) {
       errors.push(
         `Escolha exatamente ${requiredLanguageChoiceCount} idioma(s) extra(s) do antecedente antes de finalizar a ficha.`,
+      );
+    }
+
+    const featureChoiceGroups =
+      await prisma.featureChoiceGroup.findMany({
+        where: {
+          systemId: characterSheet.systemId,
+        },
+        include: {
+          options: {
+            select: {
+              featureId: true,
+            },
+          },
+          levelProgression: {
+            select: {
+              classId: true,
+              level: true,
+            },
+          },
+        },
+        orderBy: [
+          {
+            order: "asc",
+          },
+          {
+            name: "asc",
+          },
+        ],
+      });
+
+    const applicableFeatureChoiceGroups =
+      featureChoiceGroups.filter((choiceGroup) => {
+        const matchesAncestry =
+          !choiceGroup.ancestryId ||
+          choiceGroup.ancestryId === characterSheet.ancestryId;
+
+        const matchesBackground =
+          !choiceGroup.backgroundId ||
+          choiceGroup.backgroundId === characterSheet.backgroundId;
+
+        const matchesClass =
+          !choiceGroup.classId ||
+          classEntries.some(
+            (classEntry) =>
+              classEntry.classId === choiceGroup.classId,
+          );
+
+        const matchesSubclass =
+          !choiceGroup.subclassId ||
+          classEntries.some(
+            (classEntry) =>
+              classEntry.subclassId === choiceGroup.subclassId,
+          );
+
+        const matchesLevelProgression =
+          !choiceGroup.levelProgression ||
+          classEntries.some((classEntry) => {
+            return (
+              classEntry.classId ===
+                choiceGroup.levelProgression?.classId &&
+              normalizeCharacterLevel(classEntry.level) >=
+                (choiceGroup.levelProgression?.level ?? 1)
+            );
+          });
+
+        return (
+          matchesAncestry &&
+          matchesBackground &&
+          matchesClass &&
+          matchesSubclass &&
+          matchesLevelProgression
+        );
+      });
+
+    const builderFeatureChoices =
+      characterSheet.featureChoices.filter(
+        (featureChoice) => featureChoice.source === "builder",
+      );
+
+    for (const choiceGroup of applicableFeatureChoiceGroups) {
+      const groupSelections = builderFeatureChoices.filter(
+        (featureChoice) =>
+          featureChoice.choiceGroupId === choiceGroup.id,
+      );
+
+      const uniqueSelectedFeatureIds = new Set(
+        groupSelections.map(
+          (featureChoice) => featureChoice.featureId,
+        ),
+      );
+
+      const allowedFeatureIds = new Set(
+        choiceGroup.options.map((option) => option.featureId),
+      );
+
+      const invalidSelectedFeatureId = Array.from(
+        uniqueSelectedFeatureIds,
+      ).find((featureId) => !allowedFeatureIds.has(featureId));
+
+      if (invalidSelectedFeatureId) {
+        errors.push(
+          `Existe uma opção inválida selecionada no grupo "${choiceGroup.name}".`,
+        );
+
+        continue;
+      }
+
+      const selectedCount = uniqueSelectedFeatureIds.size;
+
+      if (selectedCount === choiceGroup.choiceCount) {
+        continue;
+      }
+
+      if (selectedCount < choiceGroup.choiceCount) {
+        errors.push(
+          `Escolha exatamente ${choiceGroup.choiceCount} opção(ões) no grupo "${choiceGroup.name}" antes de finalizar a ficha. Atualmente foram escolhidas ${selectedCount}.`,
+        );
+
+        continue;
+      }
+
+      errors.push(
+        `O grupo "${choiceGroup.name}" permite exatamente ${choiceGroup.choiceCount} escolha(s), mas possui ${selectedCount}.`,
       );
     }
 
@@ -3515,7 +4119,14 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const validationErrors = getReadyValidationErrors(characterSheet);
+      if (characterSheet.status !== "DRAFT") {
+        return reply.status(400).send({
+          message: "Somente fichas em rascunho podem ser finalizadas.",
+        });
+      }
+
+      const validationErrors =
+        await getReadyValidationErrors(characterSheet);
 
       if (validationErrors.length > 0) {
         return reply.status(400).send({

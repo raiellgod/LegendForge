@@ -165,6 +165,16 @@ export async function systemRoutes(app: FastifyInstance) {
                   isAlwaysKnown: z.boolean(),
                 }),
               ),
+              subclasses: z.array(
+                z.object({
+                  id: z.string(),
+                  key: z.string(),
+                  name: z.string(),
+                  description: z.string().nullable(),
+                  classId: z.string(),
+                  order: z.number(),
+                }),
+              ),
             }),
           ),
           ancestries: z.array(
@@ -246,6 +256,40 @@ export async function systemRoutes(app: FastifyInstance) {
               levelProgressionId: z.string().nullable(),
             }),
           ),
+          featureChoiceGroups: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              choiceCount: z.number(),
+              order: z.number(),
+              ancestryId: z.string().nullable(),
+              backgroundId: z.string().nullable(),
+              classId: z.string().nullable(),
+              subclassId: z.string().nullable(),
+              levelProgressionId: z.string().nullable(),
+              options: z.array(
+                z.object({
+                  id: z.string(),
+                  order: z.number(),
+                  feature: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                    description: z.string().nullable(),
+                    sourceType: z.string(),
+                    level: z.number().nullable(),
+                    order: z.number(),
+                    ancestryId: z.string().nullable(),
+                    classId: z.string().nullable(),
+                    subclassId: z.string().nullable(),
+                    levelProgressionId: z.string().nullable(),
+                  }),
+                }),
+              ),
+            }),
+          ),
           equipment: z.array(
             z.object({
               id: z.string(),
@@ -321,6 +365,7 @@ export async function systemRoutes(app: FastifyInstance) {
         skills,
         spells,
         features,
+        featureChoiceGroups,
         equipment,
       ] = await Promise.all([
         prisma.characterClass.findMany({
@@ -398,6 +443,19 @@ export async function systemRoutes(app: FastifyInstance) {
                     key: true,
                   },
                 },
+              },
+            },
+            subclasses: {
+              orderBy: {
+                order: "asc",
+              },
+              select: {
+                id: true,
+                key: true,
+                name: true,
+                description: true,
+                classId: true,
+                order: true,
               },
             },
           },
@@ -545,6 +603,63 @@ export async function systemRoutes(app: FastifyInstance) {
             levelProgressionId: true,
           },
         }),
+        prisma.featureChoiceGroup.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            choiceCount: true,
+            order: true,
+            ancestryId: true,
+            backgroundId: true,
+            classId: true,
+            subclassId: true,
+            levelProgressionId: true,
+            options: {
+              orderBy: [
+                {
+                  order: "asc",
+                },
+                {
+                  feature: {
+                    name: "asc",
+                  },
+                },
+              ],
+              select: {
+                id: true,
+                order: true,
+                feature: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                    description: true,
+                    sourceType: true,
+                    level: true,
+                    order: true,
+                    ancestryId: true,
+                    classId: true,
+                    subclassId: true,
+                    levelProgressionId: true,
+                  },
+                },
+              },
+            },
+          },
+        }),
         prisma.equipment.findMany({
           where: {
             systemId,
@@ -631,6 +746,14 @@ export async function systemRoutes(app: FastifyInstance) {
             spellKey: classSpell.spell.key,
             minimumClassLevel: classSpell.minimumClassLevel,
             isAlwaysKnown: classSpell.isAlwaysKnown,
+          })),
+          subclasses: characterClass.subclasses.map((subclass) => ({
+            id: subclass.id,
+            key: subclass.key,
+            name: subclass.name,
+            description: subclass.description,
+            classId: subclass.classId,
+            order: subclass.order,
           })),
         };
       });
@@ -725,6 +848,7 @@ export async function systemRoutes(app: FastifyInstance) {
         skills,
         spells: normalizedSpells,
         features,
+        featureChoiceGroups,
         equipment: normalizedEquipment,
       });
     },

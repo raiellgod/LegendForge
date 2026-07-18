@@ -43,6 +43,12 @@ export const characterBuilderSteps: CharacterBuilderStep[] = [
     description: "Selecione truques, magias e poderes conhecidos.",
   },
   {
+    id: "features",
+    title: "Features",
+    description:
+      "Escolha estilos, técnicas e outros recursos opcionais do personagem.",
+  },
+  {
     id: "equipment",
     title: "Equipamentos",
     description: "Escolha armas, armaduras, ferramentas e itens iniciais.",

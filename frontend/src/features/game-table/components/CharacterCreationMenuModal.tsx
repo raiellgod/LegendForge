@@ -1,15 +1,38 @@
 type CharacterCreationMenuModalProps = {
   isOpen: boolean;
+  isGM: boolean;
+  hasCharacterDraft: boolean;
   onClose: () => void;
-  onStartCharacterBuilder: () => void;
+  onStartNewCharacter: () => void;
+  onContinueCharacterDraft: () => void;
   onStartNpcCreation: () => void;
   onStartCreatureCreation: () => void;
 };
 
+type CharacterCreationAction =
+  | "new-character"
+  | "continue-character-draft"
+  | "npc"
+  | "creature"
+  | "bestiary"
+  | "npc-template"
+  | "direct-sheet";
+
+type CharacterCreationOption = {
+  action: CharacterCreationAction;
+  title: string;
+  description: string;
+  label: string;
+  isAvailable: boolean;
+};
+
 export function CharacterCreationMenuModal({
   isOpen,
+  isGM,
+  hasCharacterDraft,
   onClose,
-  onStartCharacterBuilder,
+  onStartNewCharacter,
+  onContinueCharacterDraft,
   onStartNpcCreation,
   onStartCreatureCreation,
 }: CharacterCreationMenuModalProps) {
@@ -17,30 +40,39 @@ export function CharacterCreationMenuModal({
     return null;
   }
 
-  const creationOptions = [
+  const creationOptions: CharacterCreationOption[] = [
     {
-      action: "character",
-      title: "Criar personagem",
+      action: "new-character",
+      title: "Novo personagem",
       description:
-        "Construa uma ficha completa de personagem de jogador. Futuramente cada usuário terá apenas um personagem ativo por campanha.",
+        "Inicie uma ficha nova do zero. Informações de outro personagem ou rascunho não serão carregadas neste fluxo.",
       label: "Disponível",
       isAvailable: true,
+    },
+    {
+      action: "continue-character-draft",
+      title: "Continuar rascunho",
+      description: hasCharacterDraft
+        ? "Retome a ficha de personagem salva anteriormente como rascunho. Fichas já finalizadas não são abertas no builder."
+        : "Nenhum rascunho de personagem foi encontrado para você nesta campanha.",
+      label: hasCharacterDraft ? "Disponível" : "Sem rascunho",
+      isAvailable: hasCharacterDraft,
     },
     {
       action: "npc",
       title: "Criar NPC",
       description:
         "Crie um NPC próprio da campanha. A ficha mecânica completa virá depois com NpcSheet, atributos, perícias, magias, equipamentos e regras de combate.",
-      label: "Disponível",
-      isAvailable: true,
+      label: isGM ? "Disponível" : "Somente Mestre",
+      isAvailable: isGM,
     },
     {
       action: "creature",
       title: "Criar criatura/inimigo",
       description:
         "Crie uma criatura ou inimigo próprio da campanha. O bloco mecânico completo virá depois com bestiário, ações, ataques, vida, defesa e habilidades.",
-      label: "Disponível",
-      isAvailable: true,
+      label: isGM ? "Disponível" : "Somente Mestre",
+      isAvailable: isGM,
     },
     {
       action: "bestiary",
@@ -68,9 +100,30 @@ export function CharacterCreationMenuModal({
     },
   ];
 
+  function handleSelectOption(action: CharacterCreationAction) {
+    if (action === "new-character") {
+      onStartNewCharacter();
+      return;
+    }
+
+    if (action === "continue-character-draft") {
+      onContinueCharacterDraft();
+      return;
+    }
+
+    if (action === "npc") {
+      onStartNpcCreation();
+      return;
+    }
+
+    if (action === "creature") {
+      onStartCreatureCreation();
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
-      <div className="w-full max-w-5xl rounded-2xl border border-forge-gold/35 bg-[#18091f] shadow-[-10px_10px_0_rgba(0,0,0,0.45)]">
+      <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-2xl border border-forge-gold/35 bg-[#18091f] shadow-[-10px_10px_0_rgba(0,0,0,0.45)]">
         <div className="flex items-start justify-between gap-4 border-b border-forge-gold/20 px-6 py-5">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-forge-gold/70">
@@ -78,14 +131,13 @@ export function CharacterCreationMenuModal({
             </p>
 
             <h2 className="mt-2 text-2xl font-black text-zinc-100">
-              O que deseja criar?
+              O que deseja fazer?
             </h2>
 
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-300">
-              Escolha um caminho inicial. Personagens usam o builder completo.
-              NPCs e criaturas podem nascer na campanha. Templates e bestiário
-              futuramente copiarão atores prontos para a biblioteca desta
-              campanha.
+              Comece um personagem novo ou retome futuramente um rascunho
+              existente. NPCs e criaturas continuam sendo opções exclusivas do
+              Mestre.
             </p>
           </div>
 
@@ -101,24 +153,10 @@ export function CharacterCreationMenuModal({
         <div className="grid gap-4 p-6 md:grid-cols-2">
           {creationOptions.map((option) => (
             <button
-              key={option.title}
+              key={option.action}
               type="button"
               disabled={!option.isAvailable}
-              onClick={() => {
-                if (option.action === "character") {
-                  onStartCharacterBuilder();
-                  return;
-                }
-
-                if (option.action === "npc") {
-                  onStartNpcCreation();
-                  return;
-                }
-
-                if (option.action === "creature") {
-                  onStartCreatureCreation();
-                }
-              }}
+              onClick={() => handleSelectOption(option.action)}
               className={[
                 "group relative min-h-40 rounded-2xl border p-5 text-left transition",
                 "shadow-[-6px_6px_0_rgba(0,0,0,0.35)]",
@@ -152,7 +190,7 @@ export function CharacterCreationMenuModal({
 
               <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
                 <span className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">
-                  {option.isAvailable ? "Disponível agora" : "Fluxo futuro"}
+                  {option.isAvailable ? "Disponível agora" : "Indisponível"}
                 </span>
 
                 <span
@@ -163,7 +201,7 @@ export function CharacterCreationMenuModal({
                       : "text-zinc-600",
                   ].join(" ")}
                 >
-                  Entrar →
+                  {option.isAvailable ? "Entrar →" : "Em breve"}
                 </span>
               </div>
             </button>

@@ -1,6 +1,6 @@
 # 🧭 LegendForge — Fases Canônicas
 
-> Atualizado em 16/07/2026.  
+> Atualizado em 18/07/2026.  
 > Este documento deve ser tratado como **fonte de verdade absoluta** para o planejamento de fases macro e micros do LegendForge até o usuário substituir ou revisar esta lista.
 
 ---
@@ -176,13 +176,57 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
     [x] 4.7.7.4 — Frontend types recebem origem interna da magia
     [x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
 
-[próximo] 4.7.8 — Escolhas pendentes iniciais
-    [ ] 4.7.8.1 — Mapear escolhas pendentes possíveis
-    [ ] 4.7.8.2 — Subclasse pendente
-    [ ] 4.7.8.3 — Magias/truques pendentes
-    [ ] 4.7.8.4 — Proficiências pendentes
-    [ ] 4.7.8.5 — Línguas pendentes
-    [ ] 4.7.8.6 — Atributos/talentos futuramente
+[em andamento] 4.7.8 — Escolhas pendentes iniciais
+    [x] 4.7.8.1 — Mapear escolhas pendentes possíveis
+    [x] 4.7.8.2 — Subclasse pendente
+        [x] 4.7.8.2.1 — Expor subclasses dentro de cada classe
+        [x] 4.7.8.2.2 — Permitir escolher subclasse por classEntry
+        [x] 4.7.8.2.3 — Mostrar pendência no Review
+        [x] 4.7.8.2.4 — Bloquear finalização com subclasse obrigatória faltando
+
+    [x] 4.7.8.3 — Corrigir fluxo de entrada e persistência do builder
+        [x] 4.7.8.3.1 — Separar “Novo personagem” de “Continuar rascunho”
+        [x] 4.7.8.3.2 — Novo personagem sempre inicia com draft vazio
+        [x] 4.7.8.3.3 — Continuar carrega somente ficha com status DRAFT
+        [x] 4.7.8.3.4 — Finalizar ficha sem exigir salvamento prévio
+        [x] 4.7.8.3.5 — Atualizar rascunho automaticamente antes de finalizar
+        [x] 4.7.8.3.6 — Limpar estado local do builder após finalizar
+        [x] 4.7.8.3.7 — Garantir que ficha READY nunca reabra como rascunho
+        [x] 4.7.8.3.8 — Testar criação nova, continuação e finalização ponta a ponta
+
+    [x] 4.7.8.4 — Magias/truques pendentes
+        [x] 4.7.8.4.1 — Calcular limites exigidos por nível de magia
+        [x] 4.7.8.4.2 — Comparar escolhas atuais com os limites
+        [x] 4.7.8.4.3 — Exibir pendências na etapa Magias
+        [x] 4.7.8.4.4 — Exibir pendências na Revisão
+        [x] 4.7.8.4.5 — Bloquear avanço/finalização no frontend
+        [x] 4.7.8.4.6 — Validar pendências no backend
+        [x] 4.7.8.4.7 — Testar classe única e multiclasse
+
+    [x] 4.7.8.5 — Features pendentes
+        [x] 4.7.8.5.1 — Auditar modelagem atual de Feature
+        [x] 4.7.8.5.2 — Definir features automáticas versus escolhas
+        [x] 4.7.8.5.3 — Criar modelagem Prisma dos grupos de escolha
+        [x] 4.7.8.5.4 — Criar migration e seed inicial
+        [x] 4.7.8.5.5 — Expor grupos no character-options
+        [x] 4.7.8.5.6 — Adicionar escolhas ao draft e persistência
+        [x] 4.7.8.5.7 — Criar CharacterFeaturesStep
+        [x] 4.7.8.5.8 — Exibir pendências de features na Revisão
+        [x] 4.7.8.5.9 — Bloquear avanço e finalização no frontend
+        [x] 4.7.8.5.10 — Validar escolhas obrigatórias de features no backend
+        [x] 4.7.8.5.11 — Testar classe única, classe sem grupo e multiclasse
+
+    [em andamento] 4.7.8.6 — Refatoração estrutural do CharacterBuilderModal
+        [próximo] 4.7.8.6.1 — Auditar dependências do modal e definir fronteiras
+        [ ] 4.7.8.6.2 — Extrair helpers puros de linguagem e gênero
+        [ ] 4.7.8.6.3 — Extrair validações e cálculos do builder
+        [ ] 4.7.8.6.4 — Extrair componentes auxiliares usados apenas pelo modal
+        [ ] 4.7.8.6.5 — Criar CharacterBuilderModal.tsx
+        [ ] 4.7.8.6.6 — Substituir implementação local pelo import
+        [ ] 4.7.8.6.7 — Limpar imports e código morto do page.tsx
+        [ ] 4.7.8.6.8 — Teste completo de regressão
+
+    [ ] 4.7.8.7 — Atributos/talentos futuramente
 
 [ ] 4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
 [ ] 4.7.10 — Criar plano de mudanças do Level Up
@@ -404,27 +448,46 @@ Sylvaris → Sylvaris Alto
 A próxima micro de desenvolvimento é:
 
 ```txt
-4.7.8.1 — Mapear escolhas pendentes possíveis
+4.7.8.6.1 — Auditar dependências do modal e definir fronteiras
 ```
 
 Objetivo:
 
 ```txt
-- entender quais escolhas podem ficar pendentes no personagem inicial
-- separar pendência de subclasse, magias, truques, proficiências, idiomas e atributos/talentos futuros
-- preparar a estrutura sem implementar todo o Level Up real ainda
+- mapear tudo que o CharacterBuilderModal usa hoje dentro de page.tsx
+- separar dependências em lógica reutilizável, componentes do builder e integração com a mesa
+- manter page.tsx responsável por estado externo, carregamento, salvamento e finalização
+- preparar a extração progressiva sem alterar comportamento
+```
+
+Fronteira planejada:
+
+```txt
+Permanece em page.tsx
+→ abrir/fechar o builder
+→ carregar character-options
+→ criar/retomar rascunho
+→ salvar/finalizar
+→ atualizar fichas, atores e estado da campanha
+
+Será movido para features/character-builder
+→ layout e navegação do modal
+→ renderização das etapas
+→ validações visuais
+→ resumo lateral
+→ distribuição de níveis
+→ mensagens de pendência
+→ helpers e componentes exclusivos do builder
 ```
 
 Arquivos prováveis:
 
 ```txt
-backend/src/routes/character-sheets.ts
-backend/src/routes/systems.ts
-backend/prisma/schema.prisma
 frontend/src/app/campaigns/[id]/play/page.tsx
+frontend/src/features/character-builder/components/CharacterBuilderModal.tsx
 frontend/src/features/character-builder/types/character-builder-types.ts
-frontend/src/features/character-builder/steps/CharacterReviewStep.tsx
-frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
+frontend/src/features/character-builder/utils/builder-gender.ts
+frontend/src/features/character-builder/utils/builder-validation.ts
 ```
 
 ---

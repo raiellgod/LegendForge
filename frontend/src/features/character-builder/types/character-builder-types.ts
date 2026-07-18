@@ -61,6 +61,7 @@ export type CharacterBuilderDraft = {
   attributes: CharacterBuilderAttributes;
   skillKeys: string[];
   spellKeys: string[];
+  featureChoiceSelections: CharacterBuilderFeatureChoiceSelection[];
   equipmentItems: CharacterBuilderEquipmentDraftItem[];
   classEquipmentMode: CharacterBuilderEquipmentMode;
   backgroundEquipmentMode: CharacterBuilderEquipmentMode;
@@ -128,6 +129,11 @@ export type CharacterBuilderClassSpellAccess = {
   isAlwaysKnown: boolean;
 };
 
+export type CharacterBuilderSubclassOption = CharacterBuilderOption & {
+  classId: string;
+  order: number;
+};
+
 export type CharacterBuilderClassOption = CharacterBuilderOption & {
   hitDie: number | null;
   spellcastingAbilityKey: CharacterAttributeKey | null;
@@ -138,6 +144,7 @@ export type CharacterBuilderClassOption = CharacterBuilderOption & {
   toolProficiencyKeys: string[];
   levelProgressions: CharacterBuilderClassLevelProgression[];
   classSpells: CharacterBuilderClassSpellAccess[];
+  subclasses: CharacterBuilderSubclassOption[];
 };
 
 export type CharacterBuilderAncestryOption = CharacterBuilderOption & {
@@ -220,6 +227,7 @@ export type CharacterBuilderOptions = {
   skills: CharacterBuilderSkillOption[];
   spells: CharacterBuilderSpellOption[];
   features: CharacterBuilderFeatureOption[];
+  featureChoiceGroups: CharacterBuilderFeatureChoiceGroup[];
   equipment: CharacterBuilderEquipmentOption[];
   languages: CharacterBuilderLanguageOption[];
 };
@@ -250,6 +258,32 @@ export type CharacterBuilderFeatureOption = {
   levelProgressionId: string | null;
 };
 
+export type CharacterBuilderFeatureChoiceOption = {
+  id: string;
+  order: number;
+  feature: CharacterBuilderFeatureOption;
+};
+
+export type CharacterBuilderFeatureChoiceGroup = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+  choiceCount: number;
+  order: number;
+  ancestryId: string | null;
+  backgroundId: string | null;
+  classId: string | null;
+  subclassId: string | null;
+  levelProgressionId: string | null;
+  options: CharacterBuilderFeatureChoiceOption[];
+};
+
+export type CharacterBuilderFeatureChoiceSelection = {
+  choiceGroupId: string;
+  featureId: string;
+};
+
 export type CharacterReadySheetFeature = {
   id: string;
   key: string;
@@ -262,6 +296,23 @@ export type CharacterReadySheetFeature = {
   classId: string | null;
   subclassId: string | null;
   levelProgressionId: string | null;
+};
+
+export type CharacterReadySheetFeatureChoice = {
+  id: string;
+  characterSheetId: string;
+  choiceGroupId: string;
+  featureId: string;
+  source: string;
+  choiceGroup: {
+    id: string;
+    key: string;
+    name: string;
+    description: string | null;
+    choiceCount: number;
+    order: number;
+  };
+  feature: CharacterBuilderFeatureOption;
 };
 
 export type CharacterReadySheetLevelProgressionPreview = {
@@ -342,7 +393,6 @@ export type CharacterSheetCombatState = {
   speed: number;
   inspiration: boolean;
 };
-
 
 export type CharacterReadySheetSpellClass = {
   id: string;
@@ -482,6 +532,7 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
   }>;
 
   features: CharacterReadySheetFeature[];
+  featureChoices: CharacterReadySheetFeatureChoice[];
   levelUpPreview: CharacterReadySheetLevelUpPreview;
 };
 

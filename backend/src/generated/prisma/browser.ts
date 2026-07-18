@@ -123,6 +123,21 @@ export type ClassSpell = Prisma.ClassSpellModel
  */
 export type Feature = Prisma.FeatureModel
 /**
+ * Model FeatureChoiceGroup
+ * 
+ */
+export type FeatureChoiceGroup = Prisma.FeatureChoiceGroupModel
+/**
+ * Model FeatureChoiceOption
+ * 
+ */
+export type FeatureChoiceOption = Prisma.FeatureChoiceOptionModel
+/**
+ * Model CharacterSheetFeatureChoice
+ * 
+ */
+export type CharacterSheetFeatureChoice = Prisma.CharacterSheetFeatureChoiceModel
+/**
  * Model Spell
  * 
  */

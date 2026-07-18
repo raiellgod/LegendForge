@@ -47,6 +47,7 @@ import { CharacterAttributesStep } from "@/features/character-builder/steps/Char
 import { CharacterSkillsStep } from "@/features/character-builder/steps/CharacterSkillsStep";
 import { CharacterLanguagesStep } from "@/features/character-builder/steps/CharacterLanguagesStep";
 import { CharacterSpellsStep } from "@/features/character-builder/steps/CharacterSpellsStep";
+import { CharacterFeaturesStep } from "@/features/character-builder/steps/CharacterFeaturesStep";
 import { CharacterEquipmentStep } from "@/features/character-builder/steps/CharacterEquipmentStep";
 import { CharacterAboutStep } from "@/features/character-builder/steps/CharacterAboutStep";
 import { CharacterReviewStep } from "@/features/character-builder/steps/CharacterReviewStep";
@@ -276,6 +277,7 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
     attributes: { ...DEFAULT_CHARACTER_ATTRIBUTES },
     skillKeys: [],
     spellKeys: [],
+    featureChoiceSelections: [],
     equipmentItems: [],
     classEquipmentMode: "PACKAGE",
     backgroundEquipmentMode: "PACKAGE",
@@ -406,6 +408,12 @@ function createCharacterBuilderDraftFromSheet(
       .filter((skillEntry) => skillEntry.isProficient)
       .map((skillEntry) => skillEntry.skill.key),
     spellKeys: sheet.spells.map((spellEntry) => spellEntry.spell.key),
+    featureChoiceSelections: (sheet.featureChoices ?? [])
+      .filter((featureChoice) => featureChoice.source === "builder")
+      .map((featureChoice) => ({
+        choiceGroupId: featureChoice.choiceGroupId,
+        featureId: featureChoice.featureId,
+      })),
     equipmentItems: sheet.equipment.map((equipmentEntry) => ({
       key: equipmentEntry.equipment.key,
       quantity: equipmentEntry.quantity,
@@ -913,6 +921,288 @@ function CharacterBuilderModal({
     (firstEntry, secondEntry) => firstEntry.order - secondEntry.order,
   );
 
+  const pendingSubclassEntries = orderedClassEntries.filter((classEntry) => {
+    const characterClass = options.classes.find(
+      (currentClass) => currentClass.id === classEntry.classId,
+    );
+
+    const subclassSelectionLevel =
+      characterClass?.subclassSelectionLevel ?? null;
+
+    return (
+      typeof subclassSelectionLevel === "number" &&
+      classEntry.level >= subclassSelectionLevel &&
+      !classEntry.subclassId
+    );
+  });
+
+  const hasPendingSubclassChoices = pendingSubclassEntries.length > 0;
+
+  const spellValidationClassEntries =
+    orderedClassEntries.length > 0
+      ? orderedClassEntries
+      : selectedClass
+        ? [
+            {
+              id: "primary",
+              classId: selectedClass.id,
+              className: selectedClass.name,
+              subclassId: null,
+              subclassName: null,
+              level: draft.level,
+              isPrimary: true,
+              order: 0,
+            },
+          ]
+        : [];
+
+  const requiredKnownSpellLimitsByLevel = new Map<number, number>();
+
+  for (const classEntry of spellValidationClassEntries) {
+    const classOption = options.classes.find(
+      (currentClass) => currentClass.id === classEntry.classId,
+    );
+
+    if (!classOption) {
+      continue;
+    }
+
+    const safeClassLevel = Math.max(
+      1,
+      Math.min(20, Math.trunc(classEntry.level)),
+    );
+
+    const progression = classOption.levelProgressions.find(
+      (currentProgression) => currentProgression.level === safeClassLevel,
+    );
+
+    for (const spellLimit of progression?.spellLimits ?? []) {
+      if (spellLimit.spellsKnown <= 0) {
+        continue;
+      }
+
+      requiredKnownSpellLimitsByLevel.set(
+        spellLimit.spellLevel,
+        (requiredKnownSpellLimitsByLevel.get(spellLimit.spellLevel) ?? 0) +
+          spellLimit.spellsKnown,
+      );
+    }
+  }
+
+  const validSelectedBuilderSpells = options.spells.filter((spell) => {
+    if (!draft.spellKeys.includes(spell.key)) {
+      return false;
+    }
+
+    return spellValidationClassEntries.some((classEntry) => {
+      const classOption = options.classes.find(
+        (currentClass) => currentClass.id === classEntry.classId,
+      );
+
+      if (!classOption) {
+        return false;
+      }
+
+      const safeClassLevel = Math.max(
+        1,
+        Math.min(20, Math.trunc(classEntry.level)),
+      );
+
+      const progression = classOption.levelProgressions.find(
+        (currentProgression) => currentProgression.level === safeClassLevel,
+      );
+
+      const spellLimit = progression?.spellLimits.find(
+        (currentSpellLimit) => currentSpellLimit.spellLevel === spell.level,
+      );
+
+      const classSpell = classOption.classSpells.find(
+        (currentClassSpell) => currentClassSpell.spellKey === spell.key,
+      );
+
+      return (
+        Boolean(classSpell) &&
+        (classSpell?.minimumClassLevel ?? 1) <= safeClassLevel &&
+        (spellLimit?.spellsKnown ?? 0) > 0
+      );
+    });
+  });
+
+  const selectedKnownSpellCountsByLevel = new Map<number, number>();
+
+  for (const spell of validSelectedBuilderSpells) {
+    selectedKnownSpellCountsByLevel.set(
+      spell.level,
+      (selectedKnownSpellCountsByLevel.get(spell.level) ?? 0) + 1,
+    );
+  }
+
+  const pendingKnownSpellChoices = Array.from(
+    requiredKnownSpellLimitsByLevel.entries(),
+  )
+    .filter(([, required]) => required > 0)
+    .sort(
+      ([firstSpellLevel], [secondSpellLevel]) =>
+        firstSpellLevel - secondSpellLevel,
+    )
+    .map(([spellLevel, required]) => {
+      const selected = selectedKnownSpellCountsByLevel.get(spellLevel) ?? 0;
+
+      return {
+        spellLevel,
+        required,
+        selected,
+        missing: Math.max(0, required - selected),
+      };
+    })
+    .filter((choiceStatus) => choiceStatus.missing > 0);
+
+  const missingKnownSpellCount = pendingKnownSpellChoices.reduce(
+    (totalMissing, choiceStatus) => totalMissing + choiceStatus.missing,
+    0,
+  );
+
+  const hasPendingKnownSpellChoices = pendingKnownSpellChoices.length > 0;
+
+    const applicableFeatureChoiceGroups =
+    options.featureChoiceGroups
+      .filter((choiceGroup) => {
+        if (
+          choiceGroup.ancestryId &&
+          choiceGroup.ancestryId !== selectedAncestry?.id
+        ) {
+          return false;
+        }
+
+        if (
+          choiceGroup.backgroundId &&
+          choiceGroup.backgroundId !== selectedBackground?.id
+        ) {
+          return false;
+        }
+
+        if (
+          choiceGroup.classId &&
+          !spellValidationClassEntries.some(
+            (classEntry) =>
+              classEntry.classId === choiceGroup.classId,
+          )
+        ) {
+          return false;
+        }
+
+        if (
+          choiceGroup.subclassId &&
+          !spellValidationClassEntries.some(
+            (classEntry) =>
+              classEntry.subclassId === choiceGroup.subclassId,
+          )
+        ) {
+          return false;
+        }
+
+        if (
+          choiceGroup.levelProgressionId &&
+          choiceGroup.classId
+        ) {
+          const matchingClassEntry =
+            spellValidationClassEntries.find(
+              (classEntry) =>
+                classEntry.classId === choiceGroup.classId,
+            );
+
+          if (!matchingClassEntry) {
+            return false;
+          }
+
+          const characterClass = options.classes.find(
+            (currentClass) =>
+              currentClass.id === choiceGroup.classId,
+          );
+
+          if (!characterClass) {
+            return false;
+          }
+
+          const safeClassLevel = Math.max(
+            1,
+            Math.min(
+              20,
+              Math.trunc(matchingClassEntry.level),
+            ),
+          );
+
+          const hasAvailableProgression =
+            characterClass.levelProgressions.some(
+              (progression) =>
+                progression.level <= safeClassLevel,
+            );
+
+          if (!hasAvailableProgression) {
+            return false;
+          }
+        }
+
+        return true;
+      })
+      .sort((firstGroup, secondGroup) => {
+        return (
+          firstGroup.order - secondGroup.order ||
+          firstGroup.name.localeCompare(
+            secondGroup.name,
+            "pt-BR",
+          )
+        );
+      });
+
+        const featureChoiceStatuses =
+    applicableFeatureChoiceGroups.map((choiceGroup) => {
+      const validSelections =
+        draft.featureChoiceSelections.filter((selection) => {
+          if (
+            selection.choiceGroupId !== choiceGroup.id
+          ) {
+            return false;
+          }
+
+          return choiceGroup.options.some(
+            (option) =>
+              option.feature.id === selection.featureId,
+          );
+        });
+
+      const selected = validSelections.length;
+      const missing = Math.max(
+        0,
+        choiceGroup.choiceCount - selected,
+      );
+
+      return {
+        choiceGroupId: choiceGroup.id,
+        choiceGroupName: choiceGroup.name,
+        required: choiceGroup.choiceCount,
+        selected,
+        missing,
+        isComplete:
+          selected === choiceGroup.choiceCount,
+      };
+    });
+
+  const pendingFeatureChoiceStatuses =
+    featureChoiceStatuses.filter(
+      (choiceStatus) => !choiceStatus.isComplete,
+    );
+
+  const missingFeatureChoiceCount =
+    pendingFeatureChoiceStatuses.reduce(
+      (totalMissing, choiceStatus) =>
+        totalMissing + choiceStatus.missing,
+      0,
+    );
+
+  const hasPendingFeatureChoices =
+    pendingFeatureChoiceStatuses.length > 0;
+
   const primaryClassEntry =
     orderedClassEntries.find((classEntry) => classEntry.isPrimary) ??
     orderedClassEntries[0] ??
@@ -994,6 +1284,45 @@ function CharacterBuilderModal({
         spellKeys: [],
       }),
     );
+  }
+
+  function setSubclassForClassEntry(classEntryId: string, subclassId: string) {
+    const targetClassEntry = draft.classEntries.find(
+      (classEntry) => classEntry.id === classEntryId,
+    );
+
+    if (!targetClassEntry) {
+      return;
+    }
+
+    const targetClass = options.classes.find(
+      (characterClass) => characterClass.id === targetClassEntry.classId,
+    );
+
+    if (!targetClass) {
+      return;
+    }
+
+    const selectedSubclass =
+      targetClass.subclasses.find((subclass) => subclass.id === subclassId) ??
+      null;
+
+    const nextClassEntries = draft.classEntries.map((classEntry) => {
+      if (classEntry.id !== classEntryId) {
+        return classEntry;
+      }
+
+      return {
+        ...classEntry,
+        subclassId: selectedSubclass?.id ?? null,
+        subclassName: selectedSubclass?.name ?? null,
+      };
+    });
+
+    onChangeDraft({
+      ...draft,
+      classEntries: nextClassEntries,
+    });
   }
 
   function removeClassFromDraft(classEntryId: string) {
@@ -1162,7 +1491,7 @@ function CharacterBuilderModal({
     }
 
     if (stepId === "class") {
-      return Boolean(draft.classId);
+      return Boolean(draft.classId) && !hasPendingSubclassChoices;
     }
 
     if (stepId === "ancestry") {
@@ -1208,6 +1537,14 @@ function CharacterBuilderModal({
       return draft.languageKeys.length >= requiredLanguageChoiceCount;
     }
 
+    if (stepId === "spells") {
+      return !hasPendingKnownSpellChoices;
+    }
+
+    if (stepId === "features") {
+      return !hasPendingFeatureChoices;
+    }
+
     return true;
   }
 
@@ -1218,6 +1555,14 @@ function CharacterBuilderModal({
 
     if (stepId === "class" && !draft.classId) {
       return "Escolha uma classe antes de avançar.";
+    }
+
+    if (stepId === "class" && hasPendingSubclassChoices) {
+      const pendingClassNames = pendingSubclassEntries
+        .map((classEntry) => classEntry.className)
+        .join(", ");
+
+      return `Escolha a subclasse obrigatória de: ${pendingClassNames}.`;
     }
 
     if (stepId === "ancestry" && !draft.ancestryId) {
@@ -1240,6 +1585,32 @@ function CharacterBuilderModal({
       return `Escolha ${requiredLanguageChoiceCount} idioma(s) extra(s) do antecedente. Idiomas fixos da ancestralidade e do antecedente já aparecem como automáticos. Atualmente você escolheu ${selectedLanguageChoiceCount}.`;
     }
 
+    if (stepId === "spells" && hasPendingKnownSpellChoices) {
+      const pendingLevelsText = pendingKnownSpellChoices
+        .map((choiceStatus) => {
+          const levelLabel =
+            choiceStatus.spellLevel === 0
+              ? "truques"
+              : `nível ${choiceStatus.spellLevel}`;
+
+          return `${levelLabel}: faltam ${choiceStatus.missing}`;
+        })
+        .join("; ");
+
+      return `Complete as escolhas de magias conhecidas antes de avançar. ${pendingLevelsText}.`;
+    }
+
+    if (stepId === "features" && hasPendingFeatureChoices) {
+      const pendingGroupsText =
+        pendingFeatureChoiceStatuses
+          .map((choiceStatus) => {
+            return `${choiceStatus.choiceGroupName}: faltam ${choiceStatus.missing}`;
+          })
+          .join("; ");
+
+      return `Complete as escolhas de features antes de avançar. ${pendingGroupsText}.`;
+    }
+
     return null;
   }
 
@@ -1259,6 +1630,35 @@ function CharacterBuilderModal({
 
   const currentStepValidationMessage = getStepValidationMessage(activeStep.id);
   const canGoToNextStep = !currentStepValidationMessage;
+
+  const finalizationValidationMessages: string[] = [];
+
+  if (hasPendingSubclassChoices) {
+    finalizationValidationMessages.push(
+      `Escolha a subclasse obrigatória de: ${pendingSubclassEntries
+        .map((classEntry) => classEntry.className)
+        .join(", ")}.`,
+    );
+  }
+
+  if (hasPendingKnownSpellChoices) {
+    finalizationValidationMessages.push(
+      `Complete as escolhas de magias conhecidas. Ainda faltam ${missingKnownSpellCount} escolha(s).`,
+    );
+  }
+
+    if (hasPendingFeatureChoices) {
+    finalizationValidationMessages.push(
+      `Complete as escolhas de features. Ainda faltam ${missingFeatureChoiceCount} escolha(s).`,
+    );
+  }
+
+  const finalizationValidationMessage =
+    finalizationValidationMessages.length > 0
+      ? finalizationValidationMessages.join(" ")
+      : null;
+
+  const canFinalizeCharacterSheet = finalizationValidationMessages.length === 0;
 
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm">
@@ -1395,9 +1795,12 @@ function CharacterBuilderModal({
                     {activeStep.description}
                   </p>
 
-                  {currentStepValidationMessage ? (
+                  {currentStepValidationMessage ||
+                  (activeStep.id === "review" &&
+                    finalizationValidationMessage) ? (
                     <p className="mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-sm font-bold text-amber-100">
-                      {currentStepValidationMessage}
+                      {currentStepValidationMessage ??
+                        finalizationValidationMessage}
                     </p>
                   ) : (
                     <p className="mt-3 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-sm font-bold text-emerald-100">
@@ -1535,13 +1938,34 @@ function CharacterBuilderModal({
                         onSetPrimaryClassEntry={setPrimaryClassEntry}
                         onChangeClassEntryLevel={(classEntryId, nextLevel) => {
                           const nextClassEntries = draft.classEntries.map(
-                            (classEntry) =>
-                              classEntry.id === classEntryId
-                                ? {
-                                    ...classEntry,
-                                    level: nextLevel,
-                                  }
-                                : classEntry,
+                            (classEntry) => {
+                              if (classEntry.id !== classEntryId) {
+                                return classEntry;
+                              }
+
+                              const characterClass = options.classes.find(
+                                (currentClass) =>
+                                  currentClass.id === classEntry.classId,
+                              );
+
+                              const subclassSelectionLevel =
+                                characterClass?.subclassSelectionLevel ?? null;
+
+                              const shouldRemoveSubclass =
+                                typeof subclassSelectionLevel === "number" &&
+                                nextLevel < subclassSelectionLevel;
+
+                              return {
+                                ...classEntry,
+                                level: nextLevel,
+                                subclassId: shouldRemoveSubclass
+                                  ? null
+                                  : classEntry.subclassId,
+                                subclassName: shouldRemoveSubclass
+                                  ? null
+                                  : classEntry.subclassName,
+                              };
+                            },
                           );
 
                           onChangeDraft(
@@ -1553,6 +1977,154 @@ function CharacterBuilderModal({
                           );
                         }}
                       />
+
+                      {orderedClassEntries.length > 0 ? (
+                        <section className="rounded-2xl border border-zinc-800 bg-black/20 p-4">
+                          <div>
+                            <p className="text-xs font-black uppercase tracking-[0.2em] text-forge-gold">
+                              Subclasses
+                            </p>
+
+                            <p className="mt-1 text-xs font-semibold leading-relaxed text-zinc-500">
+                              Cada classe escolhe sua própria subclasse quando
+                              alcança o nível exigido por aquela classe.
+                            </p>
+                          </div>
+
+                          <div className="mt-4 grid gap-3">
+                            {orderedClassEntries.map((classEntry) => {
+                              const characterClass = options.classes.find(
+                                (currentClass) =>
+                                  currentClass.id === classEntry.classId,
+                              );
+
+                              if (!characterClass) {
+                                return null;
+                              }
+
+                              const subclassSelectionLevel =
+                                characterClass.subclassSelectionLevel;
+
+                              const hasSubclassSelectionLevel =
+                                typeof subclassSelectionLevel === "number";
+
+                              const isSubclassUnlocked =
+                                hasSubclassSelectionLevel &&
+                                classEntry.level >= subclassSelectionLevel;
+
+                              const hasSubclassOptions =
+                                characterClass.subclasses.length > 0;
+
+                              return (
+                                <article
+                                  key={classEntry.id}
+                                  className={[
+                                    "rounded-xl border p-3",
+                                    isSubclassUnlocked
+                                      ? classEntry.subclassId
+                                        ? "border-emerald-400/25 bg-emerald-500/10"
+                                        : "border-amber-400/25 bg-amber-500/10"
+                                      : "border-white/10 bg-black/25",
+                                  ].join(" ")}
+                                >
+                                  <div className="flex flex-wrap items-start justify-between gap-3">
+                                    <div>
+                                      <p className="text-sm font-black text-zinc-100">
+                                        {classEntry.className}{" "}
+                                        {classEntry.level}
+                                      </p>
+
+                                      <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-500">
+                                        {classEntry.isPrimary
+                                          ? "Classe principal"
+                                          : "Classe adicional"}
+                                      </p>
+                                    </div>
+
+                                    {hasSubclassSelectionLevel ? (
+                                      <span
+                                        className={[
+                                          "rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em]",
+                                          isSubclassUnlocked
+                                            ? "border-forge-gold/30 bg-forge-gold/10 text-forge-gold"
+                                            : "border-white/10 bg-black/25 text-zinc-500",
+                                        ].join(" ")}
+                                      >
+                                        Subclasse no nível{" "}
+                                        {subclassSelectionLevel}
+                                      </span>
+                                    ) : (
+                                      <span className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-zinc-500">
+                                        Sem nível definido
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  {!hasSubclassSelectionLevel ? (
+                                    <p className="mt-3 text-xs font-semibold leading-relaxed text-zinc-500">
+                                      Esta classe ainda não possui nível de
+                                      escolha de subclasse configurado.
+                                    </p>
+                                  ) : !isSubclassUnlocked ? (
+                                    <p className="mt-3 text-xs font-semibold leading-relaxed text-zinc-500">
+                                      A escolha será liberada quando esta classe
+                                      alcançar o nível {subclassSelectionLevel}.
+                                    </p>
+                                  ) : !hasSubclassOptions ? (
+                                    <p className="mt-3 rounded-lg border border-amber-400/20 bg-amber-500/10 px-3 py-2 text-xs font-semibold leading-relaxed text-amber-100">
+                                      A classe alcançou o nível de subclasse,
+                                      mas não possui subclasses cadastradas.
+                                    </p>
+                                  ) : (
+                                    <label className="mt-3 block">
+                                      <span className="text-[10px] font-black uppercase tracking-[0.16em] text-zinc-500">
+                                        Subclasse
+                                      </span>
+
+                                      <select
+                                        value={classEntry.subclassId ?? ""}
+                                        onChange={(event) =>
+                                          setSubclassForClassEntry(
+                                            classEntry.id,
+                                            event.target.value,
+                                          )
+                                        }
+                                        className="mt-2 h-11 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 text-sm font-black text-zinc-100 outline-none transition focus:border-forge-gold"
+                                      >
+                                        <option value="">
+                                          Escolha uma subclasse
+                                        </option>
+
+                                        {characterClass.subclasses.map(
+                                          (subclass) => (
+                                            <option
+                                              key={subclass.id}
+                                              value={subclass.id}
+                                            >
+                                              {subclass.name}
+                                            </option>
+                                          ),
+                                        )}
+                                      </select>
+
+                                      {classEntry.subclassId ? (
+                                        <p className="mt-2 text-xs font-semibold text-emerald-200">
+                                          Subclasse escolhida:{" "}
+                                          {classEntry.subclassName}
+                                        </p>
+                                      ) : (
+                                        <p className="mt-2 text-xs font-semibold text-amber-100">
+                                          Esta escolha está pendente.
+                                        </p>
+                                      )}
+                                    </label>
+                                  )}
+                                </article>
+                              );
+                            })}
+                          </div>
+                        </section>
+                      ) : null}
 
                       <CharacterBuilderOptionCards
                         title="Classes disponíveis"
@@ -1798,6 +2370,25 @@ function CharacterBuilderModal({
                                 return currentSpellKey !== spellKey;
                               })
                             : [...draft.spellKeys, spellKey],
+                        );
+                      }}
+                    />
+                  ) : activeStep.id === "features" ? (
+                    <CharacterFeaturesStep
+                      featureChoiceGroups={options.featureChoiceGroups}
+                      classes={options.classes}
+                      classEntries={draft.classEntries}
+                      selectedClass={genderedSelectedClass}
+                      selectedAncestry={genderedSelectedAncestry}
+                      selectedBackground={genderedSelectedBackground}
+                      characterLevel={draft.level}
+                      selections={draft.featureChoiceSelections}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      onChangeSelections={(featureChoiceSelections) => {
+                        updateDraft(
+                          "featureChoiceSelections",
+                          featureChoiceSelections,
                         );
                       }}
                     />
@@ -2085,22 +2676,33 @@ function CharacterBuilderModal({
           </button>
 
           <div className="hidden items-center gap-2 md:flex">
-            {characterBuilderSteps.map((step, index) => (
-              <button
-                key={step.id}
-                type="button"
-                onClick={() => onChangeStep(step.id)}
-                className={[
-                  "h-3 w-8 rounded-full transition",
-                  step.id === activeStep.id
-                    ? "bg-amber-300"
-                    : index < activeStepIndex
-                      ? "bg-emerald-500"
-                      : "bg-zinc-700",
-                ].join(" ")}
-                aria-label={`Ir para etapa ${step.title}`}
-              />
-            ))}
+            {characterBuilderSteps.map((step, index) => {
+              const canEnterThisStep = canEnterStep(step.id);
+
+              return (
+                <button
+                  key={step.id}
+                  type="button"
+                  disabled={!canEnterThisStep}
+                  onClick={() => {
+                    if (canEnterThisStep) {
+                      onChangeStep(step.id);
+                    }
+                  }}
+                  className={[
+                    "h-3 w-8 rounded-full transition",
+                    !canEnterThisStep
+                      ? "cursor-not-allowed bg-zinc-800 opacity-40"
+                      : step.id === activeStep.id
+                        ? "bg-amber-300"
+                        : index < activeStepIndex
+                          ? "bg-emerald-500"
+                          : "bg-zinc-700 hover:bg-zinc-600",
+                  ].join(" ")}
+                  aria-label={`Ir para etapa ${step.title}`}
+                />
+              );
+            })}
           </div>
 
           <button
@@ -2108,7 +2710,9 @@ function CharacterBuilderModal({
             disabled={
               nextStep
                 ? !canGoToNextStep
-                : isFinalizingSheet || savedCharacterSheetStatus === "READY"
+                : !canFinalizeCharacterSheet ||
+                  isFinalizingSheet ||
+                  savedCharacterSheetStatus === "READY"
             }
             onClick={() => {
               if (nextStep && canGoToNextStep) {
@@ -2116,7 +2720,7 @@ function CharacterBuilderModal({
                 return;
               }
 
-              if (!nextStep) {
+              if (!nextStep && canFinalizeCharacterSheet) {
                 onFinalizeSheet();
               }
             }}
@@ -2525,6 +3129,7 @@ export default function CampaignPlayPage() {
       skills: [],
       spells: [],
       features: [],
+      featureChoiceGroups: [],
       equipment: [],
       languages: [],
     });
@@ -2778,6 +3383,16 @@ export default function CampaignPlayPage() {
     isOwner && isApprovedParticipant && !isGM && !hasApprovedGm;
 
   const roleLabel = isGM ? "Mestre" : "Jogador";
+
+  const currentUserCharacterDraft = user
+    ? (characterSheets.find(
+        (characterSheet) =>
+          characterSheet.status === "DRAFT" &&
+          characterSheet.ownerId === user.id,
+      ) ?? null)
+    : null;
+
+  const hasCurrentUserCharacterDraft = currentUserCharacterDraft !== null;
 
   const visibleActors = getVisibleActorsForUser(campaignActors, isGM);
   const visibleTableActors = visibleActors.filter(
@@ -4258,6 +4873,7 @@ export default function CampaignPlayPage() {
         skills: data.skills ?? [],
         spells: data.spells ?? [],
         features: data.features ?? [],
+        featureChoiceGroups: data.featureChoiceGroups ?? [],
         equipment: data.equipment ?? [],
         languages: data.languages ?? [],
       });
@@ -4289,13 +4905,42 @@ export default function CampaignPlayPage() {
     void handleLoadCharacterBuilderOptions();
   }
 
-  function handleOpenCharacterCreationEntryPoint() {
-    if (isGM) {
-      setIsCharacterCreationMenuOpen(true);
+  function continueCharacterBuilderDraft() {
+    if (!currentUserCharacterDraft) {
+      setActionError(
+        "Nenhum rascunho de personagem foi encontrado para você nesta campanha.",
+      );
       return;
     }
 
-    startCharacterBuilderCreation();
+    if (currentUserCharacterDraft.status !== "DRAFT") {
+      setActionError(
+        "A ficha encontrada já foi finalizada e não pode ser aberta como rascunho.",
+      );
+      return;
+    }
+
+    setCharacterBuilderDraft(
+      createCharacterBuilderDraftFromSheet(currentUserCharacterDraft),
+    );
+    setSavedCharacterSheetId(currentUserCharacterDraft.id);
+    setSavedCharacterSheetStatus("DRAFT");
+    setCharacterDraftSaveError(null);
+    setCharacterDraftSaveSuccess(null);
+    setIsSavingCharacterDraft(false);
+    setIsFinalizingCharacterSheet(false);
+    setCharacterBuilderOptionsError(null);
+    setActionError("");
+
+    setIsCharacterCreationMenuOpen(false);
+    setActiveCharacterBuilderStep("concept");
+    setIsCharacterBuilderOpen(true);
+
+    void handleLoadCharacterBuilderOptions();
+  }
+
+  function handleOpenCharacterCreationEntryPoint() {
+    setIsCharacterCreationMenuOpen(true);
   }
 
   function handleSelectCharacterBuilderOption(
@@ -4335,140 +4980,155 @@ export default function CampaignPlayPage() {
     });
   }
 
-  async function handleSaveCharacterBuilderDraft() {
+  async function persistCharacterBuilderDraft() {
     if (!campaign) {
-      setCharacterDraftSaveError("Campanha não encontrada.");
-      return;
+      throw new Error("Campanha não encontrada.");
     }
 
     if (!campaign.systemId) {
-      setCharacterDraftSaveError(
-        "Esta campanha ainda não possui um sistema definido.",
-      );
-      return;
+      throw new Error("Esta campanha ainda não possui um sistema definido.");
     }
 
     const trimmedName = characterBuilderDraft.name.trim();
 
     if (!trimmedName) {
-      setCharacterDraftSaveError(
-        "Informe o nome do personagem antes de salvar.",
-      );
-      return;
+      throw new Error("Informe o nome do personagem antes de salvar.");
     }
 
+    if (savedCharacterSheetStatus === "READY") {
+      throw new Error(
+        "Esta ficha já foi finalizada e não pode ser aberta ou salva como rascunho.",
+      );
+    }
+
+    const existingSheetId = savedCharacterSheetId;
+
+    const requestUrl = existingSheetId
+      ? `http://localhost:8081/campaigns/${campaign.id}/character-sheets/${existingSheetId}`
+      : `http://localhost:8081/campaigns/${campaign.id}/character-sheets`;
+
+    const requestMethod = existingSheetId ? "PATCH" : "POST";
+
+    const response = await fetch(requestUrl, {
+      method: requestMethod,
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        systemId: campaign.systemId,
+        name: trimmedName,
+        pronouns: characterBuilderDraft.pronouns.trim(),
+        concept: characterBuilderDraft.concept.trim(),
+        portraitUrl: existingSheetId
+          ? characterBuilderDraft.portraitUrl.trim() || null
+          : characterBuilderDraft.portraitUrl.trim(),
+        tokenImageUrl: existingSheetId
+          ? characterBuilderDraft.tokenImageUrl.trim() || null
+          : characterBuilderDraft.tokenImageUrl.trim(),
+        tokenImageFit: characterBuilderDraft.tokenImageFit,
+        level: characterBuilderDraft.level,
+        classId: characterBuilderDraft.classId || null,
+        classEntries: characterBuilderDraft.classEntries.map(
+          (classEntry, index) => ({
+            classId: classEntry.classId,
+            subclassId: classEntry.subclassId,
+            level: classEntry.level,
+            isPrimary: classEntry.isPrimary,
+            order: index,
+          }),
+        ),
+        ancestryId: characterBuilderDraft.ancestryId || null,
+        backgroundId: characterBuilderDraft.backgroundId || null,
+        attributes: getPersistableCharacterAttributes(
+          characterBuilderDraft.attributes,
+        ),
+        skillKeys: characterBuilderDraft.skillKeys,
+        spellKeys: characterBuilderDraft.spellKeys,
+        languageKeys: characterBuilderDraft.languageKeys,
+        featureChoiceSelections:
+          characterBuilderDraft.featureChoiceSelections,
+        equipmentItems: getStartingEquipmentItemsFromDraft(
+          characterBuilderDraft,
+          characterBuilderOptions,
+        ),
+        classEquipmentMode: characterBuilderDraft.classEquipmentMode,
+        backgroundEquipmentMode: characterBuilderDraft.backgroundEquipmentMode,
+        startingGold: getStartingGoldFromDraft(
+          characterBuilderDraft,
+          characterBuilderOptions,
+        ),
+
+        alignment: characterBuilderDraft.alignment.trim(),
+        faith: characterBuilderDraft.faith.trim(),
+        lifestyle: characterBuilderDraft.lifestyle.trim(),
+
+        hair: characterBuilderDraft.hair.trim(),
+        skin: characterBuilderDraft.skin.trim(),
+        eyes: characterBuilderDraft.eyes.trim(),
+        height: characterBuilderDraft.height.trim(),
+        weight: characterBuilderDraft.weight.trim(),
+        age: characterBuilderDraft.age.trim(),
+        gender: characterBuilderDraft.gender.trim(),
+
+        bonds: characterBuilderDraft.bonds.trim(),
+        flaws: characterBuilderDraft.flaws.trim(),
+        ideals: characterBuilderDraft.ideals.trim(),
+        personality: characterBuilderDraft.personality.trim(),
+        backstory: characterBuilderDraft.backstory.trim(),
+        organizations: characterBuilderDraft.organizations.trim(),
+        allies: characterBuilderDraft.allies.trim(),
+        enemies: characterBuilderDraft.enemies.trim(),
+        notes: characterBuilderDraft.notes.trim(),
+        otherNotes: characterBuilderDraft.otherNotes.trim(),
+        gmNotes: characterBuilderDraft.gmNotes.trim(),
+      }),
+    });
+
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      throw new Error(data?.message ?? "Não foi possível salvar o rascunho.");
+    }
+
+    const persistedSheet = data.characterSheet as CharacterReadySheet;
+
+    setSavedCharacterSheetId(persistedSheet.id);
+    setSavedCharacterSheetStatus(persistedSheet.status ?? "DRAFT");
+    setCharacterBuilderDraft(
+      createCharacterBuilderDraftFromSheet(persistedSheet),
+    );
+
+    setCharacterSheets((currentSheets) => {
+      const alreadyExists = currentSheets.some(
+        (sheet) => sheet.id === persistedSheet.id,
+      );
+
+      if (alreadyExists) {
+        return currentSheets.map((sheet) =>
+          sheet.id === persistedSheet.id ? persistedSheet : sheet,
+        );
+      }
+
+      return [persistedSheet, ...currentSheets];
+    });
+
+    return {
+      persistedSheet,
+      wasExistingDraft: Boolean(existingSheetId),
+    };
+  }
+
+  async function handleSaveCharacterBuilderDraft() {
     setIsSavingCharacterDraft(true);
     setCharacterDraftSaveError(null);
     setCharacterDraftSaveSuccess(null);
 
     try {
-      const requestUrl = savedCharacterSheetId
-        ? `http://localhost:8081/campaigns/${campaign.id}/character-sheets/${savedCharacterSheetId}`
-        : `http://localhost:8081/campaigns/${campaign.id}/character-sheets`;
+      const { wasExistingDraft } = await persistCharacterBuilderDraft();
 
-      const requestMethod = savedCharacterSheetId ? "PATCH" : "POST";
-
-      const response = await fetch(requestUrl, {
-        method: requestMethod,
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          systemId: campaign.systemId,
-          name: trimmedName,
-          pronouns: characterBuilderDraft.pronouns.trim(),
-          concept: characterBuilderDraft.concept.trim(),
-          portraitUrl: savedCharacterSheetId
-            ? characterBuilderDraft.portraitUrl.trim() || null
-            : characterBuilderDraft.portraitUrl.trim(),
-          tokenImageUrl: savedCharacterSheetId
-            ? characterBuilderDraft.tokenImageUrl.trim() || null
-            : characterBuilderDraft.tokenImageUrl.trim(),
-          tokenImageFit: characterBuilderDraft.tokenImageFit,
-          level: characterBuilderDraft.level,
-          classId: characterBuilderDraft.classId || null,
-          classEntries: characterBuilderDraft.classEntries.map(
-            (classEntry, index) => ({
-              classId: classEntry.classId,
-              subclassId: classEntry.subclassId,
-              level: classEntry.level,
-              isPrimary: classEntry.isPrimary,
-              order: index,
-            }),
-          ),
-          ancestryId: characterBuilderDraft.ancestryId || null,
-          backgroundId: characterBuilderDraft.backgroundId || null,
-          attributes: getPersistableCharacterAttributes(
-            characterBuilderDraft.attributes,
-          ),
-          skillKeys: characterBuilderDraft.skillKeys,
-          spellKeys: characterBuilderDraft.spellKeys,
-          languageKeys: characterBuilderDraft.languageKeys,
-          equipmentItems: getStartingEquipmentItemsFromDraft(
-            characterBuilderDraft,
-            characterBuilderOptions,
-          ),
-          classEquipmentMode: characterBuilderDraft.classEquipmentMode,
-          backgroundEquipmentMode:
-            characterBuilderDraft.backgroundEquipmentMode,
-          startingGold: getStartingGoldFromDraft(
-            characterBuilderDraft,
-            characterBuilderOptions,
-          ),
-
-          alignment: characterBuilderDraft.alignment.trim(),
-          faith: characterBuilderDraft.faith.trim(),
-          lifestyle: characterBuilderDraft.lifestyle.trim(),
-
-          hair: characterBuilderDraft.hair.trim(),
-          skin: characterBuilderDraft.skin.trim(),
-          eyes: characterBuilderDraft.eyes.trim(),
-          height: characterBuilderDraft.height.trim(),
-          weight: characterBuilderDraft.weight.trim(),
-          age: characterBuilderDraft.age.trim(),
-          gender: characterBuilderDraft.gender.trim(),
-
-          bonds: characterBuilderDraft.bonds.trim(),
-          flaws: characterBuilderDraft.flaws.trim(),
-          ideals: characterBuilderDraft.ideals.trim(),
-          personality: characterBuilderDraft.personality.trim(),
-          backstory: characterBuilderDraft.backstory.trim(),
-          organizations: characterBuilderDraft.organizations.trim(),
-          allies: characterBuilderDraft.allies.trim(),
-          enemies: characterBuilderDraft.enemies.trim(),
-          notes: characterBuilderDraft.notes.trim(),
-          otherNotes: characterBuilderDraft.otherNotes.trim(),
-          gmNotes: characterBuilderDraft.gmNotes.trim(),
-        }),
-      });
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        throw new Error(data?.message ?? "Não foi possível salvar o rascunho.");
-      }
-
-      const nextSheet = data.characterSheet as CharacterReadySheet;
-
-      setSavedCharacterSheetId(nextSheet.id);
-      setSavedCharacterSheetStatus(nextSheet.status ?? "DRAFT");
-      setCharacterBuilderDraft(createCharacterBuilderDraftFromSheet(nextSheet));
-      setCharacterSheets((currentSheets) => {
-        const alreadyExists = currentSheets.some(
-          (sheet) => sheet.id === nextSheet.id,
-        );
-
-        if (alreadyExists) {
-          return currentSheets.map((sheet) =>
-            sheet.id === nextSheet.id ? nextSheet : sheet,
-          );
-        }
-
-        return [nextSheet, ...currentSheets];
-      });
       setCharacterDraftSaveSuccess(
-        savedCharacterSheetId
+        wasExistingDraft
           ? "Rascunho atualizado com sucesso."
           : "Rascunho salvo com sucesso.",
       );
@@ -4489,20 +5149,15 @@ export default function CampaignPlayPage() {
       return;
     }
 
-    if (!savedCharacterSheetId) {
-      setCharacterDraftSaveError(
-        "Salve o rascunho antes de finalizar a ficha.",
-      );
-      return;
-    }
-
     setIsFinalizingCharacterSheet(true);
     setCharacterDraftSaveError(null);
     setCharacterDraftSaveSuccess(null);
 
     try {
+      const { persistedSheet } = await persistCharacterBuilderDraft();
+
       const response = await fetch(
-        `http://localhost:8081/campaigns/${campaign.id}/character-sheets/${savedCharacterSheetId}/finalize`,
+        `http://localhost:8081/campaigns/${campaign.id}/character-sheets/${persistedSheet.id}/finalize`,
         {
           method: "POST",
           credentials: "include",
@@ -4518,14 +5173,21 @@ export default function CampaignPlayPage() {
 
         throw new Error(
           detailedErrors
-            ? `${data?.message ?? "Não foi possível finalizar a ficha."} ${detailedErrors}`
+            ? `${
+                data?.message ?? "Não foi possível finalizar a ficha."
+              } ${detailedErrors}`
             : (data?.message ?? "Não foi possível finalizar a ficha."),
         );
       }
 
       const finalizedSheet = data.characterSheet as CharacterReadySheet;
 
+      setSavedCharacterSheetId(finalizedSheet.id);
       setSavedCharacterSheetStatus("READY");
+      setCharacterBuilderDraft(
+        createCharacterBuilderDraftFromSheet(finalizedSheet),
+      );
+
       setCharacterSheets((currentSheets) => {
         const alreadyExists = currentSheets.some(
           (sheet) => sheet.id === finalizedSheet.id,
@@ -4539,11 +5201,19 @@ export default function CampaignPlayPage() {
 
         return [finalizedSheet, ...currentSheets];
       });
-      setCharacterDraftSaveSuccess(
-        "Ficha finalizada e enviada para Personagens.",
-      );
+
       setActiveRightTab("characters");
       setIsCharacterBuilderOpen(false);
+      setIsCharacterCreationMenuOpen(false);
+
+      setCharacterBuilderDraft(createEmptyCharacterBuilderDraft());
+      setSavedCharacterSheetId(null);
+      setSavedCharacterSheetStatus(null);
+      setActiveCharacterBuilderStep("concept");
+
+      setCharacterDraftSaveError(null);
+      setCharacterDraftSaveSuccess(null);
+      setIsSavingCharacterDraft(false);
 
       const refreshedActors = await getCampaignActors(campaign.id);
       setCampaignActors(refreshedActors);
@@ -4849,9 +5519,12 @@ export default function CampaignPlayPage() {
       </div>
 
       <CharacterCreationMenuModal
-        isOpen={isGM && isCharacterCreationMenuOpen}
+        isOpen={isCharacterCreationMenuOpen}
+        isGM={isGM}
+        hasCharacterDraft={hasCurrentUserCharacterDraft}
         onClose={() => setIsCharacterCreationMenuOpen(false)}
-        onStartCharacterBuilder={startCharacterBuilderCreation}
+        onStartNewCharacter={startCharacterBuilderCreation}
+        onContinueCharacterDraft={continueCharacterBuilderDraft}
         onStartNpcCreation={() => {
           setNpcCreationDraft(createEmptySimpleActorCreationDraft());
           setNpcCreationError(null);

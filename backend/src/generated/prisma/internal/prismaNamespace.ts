@@ -405,6 +405,9 @@ export const ModelName = {
   LevelProgressionSpellLimit: 'LevelProgressionSpellLimit',
   ClassSpell: 'ClassSpell',
   Feature: 'Feature',
+  FeatureChoiceGroup: 'FeatureChoiceGroup',
+  FeatureChoiceOption: 'FeatureChoiceOption',
+  CharacterSheetFeatureChoice: 'CharacterSheetFeatureChoice',
   Spell: 'Spell',
   Equipment: 'Equipment',
   Stat: 'Stat',
@@ -431,7 +434,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "featureChoiceGroup" | "featureChoiceOption" | "characterSheetFeatureChoice" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1989,6 +1992,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FeatureChoiceGroup: {
+      payload: Prisma.$FeatureChoiceGroupPayload<ExtArgs>
+      fields: Prisma.FeatureChoiceGroupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FeatureChoiceGroupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FeatureChoiceGroupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>
+        }
+        findFirst: {
+          args: Prisma.FeatureChoiceGroupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FeatureChoiceGroupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>
+        }
+        findMany: {
+          args: Prisma.FeatureChoiceGroupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>[]
+        }
+        create: {
+          args: Prisma.FeatureChoiceGroupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>
+        }
+        createMany: {
+          args: Prisma.FeatureChoiceGroupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FeatureChoiceGroupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>[]
+        }
+        delete: {
+          args: Prisma.FeatureChoiceGroupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>
+        }
+        update: {
+          args: Prisma.FeatureChoiceGroupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>
+        }
+        deleteMany: {
+          args: Prisma.FeatureChoiceGroupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FeatureChoiceGroupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FeatureChoiceGroupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>[]
+        }
+        upsert: {
+          args: Prisma.FeatureChoiceGroupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceGroupPayload>
+        }
+        aggregate: {
+          args: Prisma.FeatureChoiceGroupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFeatureChoiceGroup>
+        }
+        groupBy: {
+          args: Prisma.FeatureChoiceGroupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeatureChoiceGroupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FeatureChoiceGroupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeatureChoiceGroupCountAggregateOutputType> | number
+        }
+      }
+    }
+    FeatureChoiceOption: {
+      payload: Prisma.$FeatureChoiceOptionPayload<ExtArgs>
+      fields: Prisma.FeatureChoiceOptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FeatureChoiceOptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FeatureChoiceOptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>
+        }
+        findFirst: {
+          args: Prisma.FeatureChoiceOptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FeatureChoiceOptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>
+        }
+        findMany: {
+          args: Prisma.FeatureChoiceOptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>[]
+        }
+        create: {
+          args: Prisma.FeatureChoiceOptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>
+        }
+        createMany: {
+          args: Prisma.FeatureChoiceOptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FeatureChoiceOptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>[]
+        }
+        delete: {
+          args: Prisma.FeatureChoiceOptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>
+        }
+        update: {
+          args: Prisma.FeatureChoiceOptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.FeatureChoiceOptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FeatureChoiceOptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FeatureChoiceOptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.FeatureChoiceOptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeatureChoiceOptionPayload>
+        }
+        aggregate: {
+          args: Prisma.FeatureChoiceOptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFeatureChoiceOption>
+        }
+        groupBy: {
+          args: Prisma.FeatureChoiceOptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeatureChoiceOptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FeatureChoiceOptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeatureChoiceOptionCountAggregateOutputType> | number
+        }
+      }
+    }
+    CharacterSheetFeatureChoice: {
+      payload: Prisma.$CharacterSheetFeatureChoicePayload<ExtArgs>
+      fields: Prisma.CharacterSheetFeatureChoiceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterSheetFeatureChoiceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterSheetFeatureChoiceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterSheetFeatureChoiceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterSheetFeatureChoiceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>
+        }
+        findMany: {
+          args: Prisma.CharacterSheetFeatureChoiceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>[]
+        }
+        create: {
+          args: Prisma.CharacterSheetFeatureChoiceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>
+        }
+        createMany: {
+          args: Prisma.CharacterSheetFeatureChoiceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterSheetFeatureChoiceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterSheetFeatureChoiceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>
+        }
+        update: {
+          args: Prisma.CharacterSheetFeatureChoiceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterSheetFeatureChoiceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterSheetFeatureChoiceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterSheetFeatureChoiceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterSheetFeatureChoiceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetFeatureChoicePayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterSheetFeatureChoiceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterSheetFeatureChoice>
+        }
+        groupBy: {
+          args: Prisma.CharacterSheetFeatureChoiceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetFeatureChoiceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterSheetFeatureChoiceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetFeatureChoiceCountAggregateOutputType> | number
+        }
+      }
+    }
     Spell: {
       payload: Prisma.$SpellPayload<ExtArgs>
       fields: Prisma.SpellFieldRefs
@@ -3225,6 +3450,51 @@ export const FeatureScalarFieldEnum = {
 export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
 
 
+export const FeatureChoiceGroupScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  ancestryId: 'ancestryId',
+  backgroundId: 'backgroundId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  levelProgressionId: 'levelProgressionId',
+  key: 'key',
+  name: 'name',
+  description: 'description',
+  choiceCount: 'choiceCount',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeatureChoiceGroupScalarFieldEnum = (typeof FeatureChoiceGroupScalarFieldEnum)[keyof typeof FeatureChoiceGroupScalarFieldEnum]
+
+
+export const FeatureChoiceOptionScalarFieldEnum = {
+  id: 'id',
+  choiceGroupId: 'choiceGroupId',
+  featureId: 'featureId',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeatureChoiceOptionScalarFieldEnum = (typeof FeatureChoiceOptionScalarFieldEnum)[keyof typeof FeatureChoiceOptionScalarFieldEnum]
+
+
+export const CharacterSheetFeatureChoiceScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  choiceGroupId: 'choiceGroupId',
+  featureId: 'featureId',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetFeatureChoiceScalarFieldEnum = (typeof CharacterSheetFeatureChoiceScalarFieldEnum)[keyof typeof CharacterSheetFeatureChoiceScalarFieldEnum]
+
+
 export const SpellScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -3870,6 +4140,9 @@ export type GlobalOmitConfig = {
   levelProgressionSpellLimit?: Prisma.LevelProgressionSpellLimitOmit
   classSpell?: Prisma.ClassSpellOmit
   feature?: Prisma.FeatureOmit
+  featureChoiceGroup?: Prisma.FeatureChoiceGroupOmit
+  featureChoiceOption?: Prisma.FeatureChoiceOptionOmit
+  characterSheetFeatureChoice?: Prisma.CharacterSheetFeatureChoiceOmit
   spell?: Prisma.SpellOmit
   equipment?: Prisma.EquipmentOmit
   stat?: Prisma.StatOmit
