@@ -217,11 +217,11 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
         [x] 4.7.8.5.11 — Testar classe única, classe sem grupo e multiclasse
 
     [em andamento] 4.7.8.6 — Refatoração estrutural do CharacterBuilderModal
-        [próximo] 4.7.8.6.1 — Auditar dependências do modal e definir fronteiras
-        [ ] 4.7.8.6.2 — Extrair helpers puros de linguagem e gênero
-        [ ] 4.7.8.6.3 — Extrair validações e cálculos do builder
-        [ ] 4.7.8.6.4 — Extrair componentes auxiliares usados apenas pelo modal
-        [ ] 4.7.8.6.5 — Criar CharacterBuilderModal.tsx
+        [x] 4.7.8.6.1 — Auditar dependências do modal e definir fronteiras
+        [x] 4.7.8.6.2 — Extrair helpers puros de linguagem e gênero
+        [x] 4.7.8.6.3 — Extrair validações e cálculos do builder
+        [x] 4.7.8.6.4 — Extrair componentes auxiliares usados apenas pelo modal
+        [x] 4.7.8.6.5 — Criar CharacterBuilderModal.tsx
         [ ] 4.7.8.6.6 — Substituir implementação local pelo import
         [ ] 4.7.8.6.7 — Limpar imports e código morto do page.tsx
         [ ] 4.7.8.6.8 — Teste completo de regressão
