@@ -13,6 +13,7 @@ import { skills } from "./seed-data/skills.js";
 import { spells } from "./seed-data/spells.js";
 import { stats } from "./seed-data/stats.js";
 import { subclasses } from "./seed-data/subclasses.js";
+import { talents } from "./seed-data/talents.js";
 
 const SYSTEM_NAME = "5e Homebrew — Ecos da Ruína";
 const SYSTEM_SLUG = "meu-sistema";
@@ -24,6 +25,15 @@ function createKeyFromName(name: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
+}
+
+function getProgressionChoiceCountByClassLevel(
+  classKey: string,
+  level: number,
+) {
+  void classKey;
+
+  return level === 4 || level === 8 ? 1 : 0;
 }
 
 function getProficiencyBonusByLevel(level: number) {
@@ -560,7 +570,7 @@ async function main() {
     );
   }
 
-    const canonicalCommonLanguage = await prisma.language.findUnique({
+  const canonicalCommonLanguage = await prisma.language.findUnique({
     where: {
       systemId_key: {
         systemId: system.id,
@@ -715,6 +725,10 @@ async function main() {
         update: {
           systemId: system.id,
           proficiencyBonus: getProficiencyBonusByLevel(level),
+          progressionChoiceCount: getProgressionChoiceCountByClassLevel(
+            classData.key,
+            level,
+          ),
           cantripsKnown: magicProgression.cantripsKnown,
           spellsKnown: magicProgression.spellsKnown,
           spellsPrepared: magicProgression.spellsPrepared,
@@ -733,6 +747,10 @@ async function main() {
           classId,
           level,
           proficiencyBonus: getProficiencyBonusByLevel(level),
+          progressionChoiceCount: getProgressionChoiceCountByClassLevel(
+            classData.key,
+            level,
+          ),
           cantripsKnown: magicProgression.cantripsKnown,
           spellsKnown: magicProgression.spellsKnown,
           spellsPrepared: magicProgression.spellsPrepared,
@@ -896,7 +914,7 @@ async function main() {
     console.log(`Feature criada/validada: ${feature.name}`);
   }
 
-    for (const groupData of featureChoiceGroups) {
+  for (const groupData of featureChoiceGroups) {
     const ancestryId = groupData.ancestryKey
       ? createdAncestries.get(groupData.ancestryKey)
       : null;
@@ -1238,6 +1256,37 @@ async function main() {
     });
 
     console.log(`Antecedente criado/validado: ${background.name}`);
+  }
+
+    for (const [index, talentData] of talents.entries()) {
+    const talent = await prisma.talent.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: talentData.key,
+        },
+      },
+      update: {
+        name: talentData.name,
+        description: talentData.description,
+        prerequisites: talentData.prerequisites,
+        attributeBonuses: talentData.attributeBonuses,
+        isRepeatable: talentData.isRepeatable,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        key: talentData.key,
+        name: talentData.name,
+        description: talentData.description,
+        prerequisites: talentData.prerequisites,
+        attributeBonuses: talentData.attributeBonuses,
+        isRepeatable: talentData.isRepeatable,
+        order: index + 1,
+      },
+    });
+
+    console.log(`Talento criado/validado: ${talent.name}`);
   }
 
   console.log("Seed concluído com sucesso.");

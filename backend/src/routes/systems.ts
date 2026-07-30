@@ -137,6 +137,7 @@ export async function systemRoutes(app: FastifyInstance) {
                 z.object({
                   level: z.number(),
                   proficiencyBonus: z.number().nullable(),
+                  progressionChoiceCount: z.number(),
                   cantripsKnown: z.number(),
                   spellsKnown: z.number(),
                   spellsPrepared: z.number(),
@@ -256,6 +257,18 @@ export async function systemRoutes(app: FastifyInstance) {
               levelProgressionId: z.string().nullable(),
             }),
           ),
+          talents: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              isRepeatable: z.boolean(),
+              prerequisites: z.record(z.string(), z.unknown()),
+              attributeBonuses: z.record(z.string(), z.number()),
+              order: z.number(),
+            }),
+          ),
           featureChoiceGroups: z.array(
             z.object({
               id: z.string(),
@@ -365,6 +378,7 @@ export async function systemRoutes(app: FastifyInstance) {
         skills,
         spells,
         features,
+        talents,
         featureChoiceGroups,
         equipment,
       ] = await Promise.all([
@@ -395,6 +409,7 @@ export async function systemRoutes(app: FastifyInstance) {
               select: {
                 level: true,
                 proficiencyBonus: true,
+                progressionChoiceCount: true,
                 cantripsKnown: true,
                 spellsKnown: true,
                 spellsPrepared: true,
@@ -603,6 +618,31 @@ export async function systemRoutes(app: FastifyInstance) {
             levelProgressionId: true,
           },
         }),
+
+        prisma.talent.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            isRepeatable: true,
+            prerequisites: true,
+            attributeBonuses: true,
+            order: true,
+          },
+        }),
+
         prisma.featureChoiceGroup.findMany({
           where: {
             systemId,
@@ -723,6 +763,7 @@ export async function systemRoutes(app: FastifyInstance) {
             (progression) => ({
               level: progression.level,
               proficiencyBonus: progression.proficiencyBonus,
+              progressionChoiceCount: progression.progressionChoiceCount,
               cantripsKnown: progression.cantripsKnown,
               spellsKnown: progression.spellsKnown,
               spellsPrepared: progression.spellsPrepared,
@@ -827,6 +868,20 @@ export async function systemRoutes(app: FastifyInstance) {
         );
       }
 
+            function normalizeTalentPrerequisites(
+        prerequisites: unknown,
+      ): Record<string, unknown> {
+        if (
+          !prerequisites ||
+          typeof prerequisites !== "object" ||
+          Array.isArray(prerequisites)
+        ) {
+          return {};
+        }
+
+        return { ...prerequisites };
+      }
+
       const normalizedAncestries = ancestries.map((ancestry) => ({
         ...ancestry,
         attributeBonuses: normalizeAttributeBonuses(ancestry.attributeBonuses),
@@ -839,6 +894,12 @@ export async function systemRoutes(app: FastifyInstance) {
         ),
       }));
 
+            const normalizedTalents = talents.map((talent) => ({
+        ...talent,
+        prerequisites: normalizeTalentPrerequisites(talent.prerequisites),
+        attributeBonuses: normalizeAttributeBonuses(talent.attributeBonuses),
+      }));
+
       return reply.status(200).send({
         system,
         classes: normalizedClasses,
@@ -848,6 +909,7 @@ export async function systemRoutes(app: FastifyInstance) {
         skills,
         spells: normalizedSpells,
         features,
+        talents: normalizedTalents,
         featureChoiceGroups,
         equipment: normalizedEquipment,
       });

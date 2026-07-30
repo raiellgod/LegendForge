@@ -15,7 +15,11 @@ import type {
 
 import { CHARACTER_ATTRIBUTE_DEFINITIONS } from "../constants/character-builder-constants";
 
-import { formatAttributeModifier } from "../utils/attributes";
+import {
+  formatAttributeModifier,
+  getCharacterAttributeBreakdown,
+  getConsolidatedCharacterAttributes,
+} from "../utils/attributes";
 
 import {
   countFilledAboutFields,
@@ -50,21 +54,6 @@ const characterAttributeKeys = new Set<string>([
 
 function isCharacterAttributeKey(key: string): key is CharacterAttributeKey {
   return characterAttributeKeys.has(key);
-}
-
-function getAttributeSourceBonus({
-  attributeKey,
-  selectedAncestry,
-  selectedBackground,
-}: {
-  attributeKey: keyof CharacterBuilderDraft["attributes"];
-  selectedAncestry: CharacterBuilderAncestryOption | undefined;
-  selectedBackground: CharacterBuilderBackgroundOption | undefined;
-}) {
-  return (
-    (selectedAncestry?.attributeBonuses[attributeKey] ?? 0) +
-    (selectedBackground?.attributeBonuses[attributeKey] ?? 0)
-  );
 }
 
 const proficiencyLabelsByKey: Record<string, string> = {
@@ -111,6 +100,26 @@ function formatReviewSignedNumber(value: number) {
   return value > 0 ? `+${value}` : String(value);
 }
 
+function formatReviewProgressionAttributeBonuses(
+  attributeBonuses: Partial<Record<CharacterAttributeKey, number>>,
+) {
+  const formattedBonuses = CHARACTER_ATTRIBUTE_DEFINITIONS.flatMap(
+    (attribute) => {
+      const bonusValue = attributeBonuses[attribute.key];
+
+      if (typeof bonusValue !== "number" || bonusValue === 0) {
+        return [];
+      }
+
+      return [`${attribute.name} ${formatReviewSignedNumber(bonusValue)}`];
+    },
+  );
+
+  return formattedBonuses.length > 0
+    ? formattedBonuses.join(" · ")
+    : "Nenhum bônus de atributo";
+}
+
 function normalizeReviewClassLevel(level: number) {
   if (!Number.isFinite(level)) {
     return 1;
@@ -132,10 +141,7 @@ function getApplicableReviewFeatureChoiceGroups({
 }) {
   return options.featureChoiceGroups
     .filter((choiceGroup) => {
-      if (
-        choiceGroup.ancestryId &&
-        choiceGroup.ancestryId !== ancestryId
-      ) {
+      if (choiceGroup.ancestryId && choiceGroup.ancestryId !== ancestryId) {
         return false;
       }
 
@@ -149,8 +155,7 @@ function getApplicableReviewFeatureChoiceGroups({
       if (
         choiceGroup.classId &&
         !classEntries.some(
-          (classEntry) =>
-            classEntry.classId === choiceGroup.classId,
+          (classEntry) => classEntry.classId === choiceGroup.classId,
         )
       ) {
         return false;
@@ -159,8 +164,7 @@ function getApplicableReviewFeatureChoiceGroups({
       if (
         choiceGroup.subclassId &&
         !classEntries.some(
-          (classEntry) =>
-            classEntry.subclassId === choiceGroup.subclassId,
+          (classEntry) => classEntry.subclassId === choiceGroup.subclassId,
         )
       ) {
         return false;
@@ -168,8 +172,7 @@ function getApplicableReviewFeatureChoiceGroups({
 
       if (choiceGroup.levelProgressionId && choiceGroup.classId) {
         const matchingClassEntry = classEntries.find(
-          (classEntry) =>
-            classEntry.classId === choiceGroup.classId,
+          (classEntry) => classEntry.classId === choiceGroup.classId,
         );
 
         if (!matchingClassEntry) {
@@ -177,8 +180,7 @@ function getApplicableReviewFeatureChoiceGroups({
         }
 
         const characterClass = options.classes.find(
-          (currentClass) =>
-            currentClass.id === choiceGroup.classId,
+          (currentClass) => currentClass.id === choiceGroup.classId,
         );
 
         if (!characterClass) {
@@ -189,11 +191,9 @@ function getApplicableReviewFeatureChoiceGroups({
           matchingClassEntry.level,
         );
 
-        const hasAvailableProgression =
-          characterClass.levelProgressions.some(
-            (progression) =>
-              progression.level <= safeClassLevel,
-          );
+        const hasAvailableProgression = characterClass.levelProgressions.some(
+          (progression) => progression.level <= safeClassLevel,
+        );
 
         if (!hasAvailableProgression) {
           return false;
@@ -205,10 +205,7 @@ function getApplicableReviewFeatureChoiceGroups({
     .sort((firstGroup, secondGroup) => {
       return (
         firstGroup.order - secondGroup.order ||
-        firstGroup.name.localeCompare(
-          secondGroup.name,
-          "pt-BR",
-        )
+        firstGroup.name.localeCompare(secondGroup.name, "pt-BR")
       );
     });
 }
@@ -350,6 +347,13 @@ export function CharacterReviewStep({
 
   const aboutFieldsCount = countFilledAboutFields(draft);
 
+  const consolidatedAttributes = getConsolidatedCharacterAttributes({
+    draft,
+    talents: options.talents,
+    selectedAncestry,
+    selectedBackground,
+  });
+
   const assignedAttributesCount = CHARACTER_ATTRIBUTE_DEFINITIONS.filter(
     (attribute) => draft.attributes[attribute.key] !== null,
   ).length;
@@ -456,33 +460,31 @@ export function CharacterReviewStep({
   const hasKnownSpellChoices = spellChoiceStatuses.length > 0;
   const hasPendingKnownSpellChoices = pendingSpellChoiceStatuses.length > 0;
 
-    const applicableFeatureChoiceGroups =
-    getApplicableReviewFeatureChoiceGroups({
-      options,
-      classEntries: reviewClassEntries,
-      ancestryId: selectedAncestry?.id ?? null,
-      backgroundId: selectedBackground?.id ?? null,
-    });
+  const applicableFeatureChoiceGroups = getApplicableReviewFeatureChoiceGroups({
+    options,
+    classEntries: reviewClassEntries,
+    ancestryId: selectedAncestry?.id ?? null,
+    backgroundId: selectedBackground?.id ?? null,
+  });
 
   const featureChoiceStatuses: CharacterReviewFeatureChoiceStatus[] =
     applicableFeatureChoiceGroups.map((choiceGroup) => {
-      const validSelections =
-        draft.featureChoiceSelections.filter((selection) => {
+      const validSelections = draft.featureChoiceSelections.filter(
+        (selection) => {
           if (selection.choiceGroupId !== choiceGroup.id) {
             return false;
           }
 
           return choiceGroup.options.some(
-            (option) =>
-              option.feature.id === selection.featureId,
+            (option) => option.feature.id === selection.featureId,
           );
-        });
+        },
+      );
 
       const selectedFeatureNames = validSelections
         .map((selection) => {
           return choiceGroup.options.find(
-            (option) =>
-              option.feature.id === selection.featureId,
+            (option) => option.feature.id === selection.featureId,
           )?.feature.name;
         })
         .filter((featureName): featureName is string => {
@@ -490,10 +492,7 @@ export function CharacterReviewStep({
         });
 
       const selected = validSelections.length;
-      const missing = Math.max(
-        0,
-        choiceGroup.choiceCount - selected,
-      );
+      const missing = Math.max(0, choiceGroup.choiceCount - selected);
 
       return {
         groupId: choiceGroup.id,
@@ -507,41 +506,29 @@ export function CharacterReviewStep({
       };
     });
 
-  const pendingFeatureChoiceStatuses =
-    featureChoiceStatuses.filter(
-      (choiceStatus) => !choiceStatus.isComplete,
-    );
+  const pendingFeatureChoiceStatuses = featureChoiceStatuses.filter(
+    (choiceStatus) => !choiceStatus.isComplete,
+  );
 
-  const totalRequiredFeatureChoices =
-    featureChoiceStatuses.reduce(
-      (totalRequired, choiceStatus) =>
-        totalRequired + choiceStatus.required,
-      0,
-    );
+  const totalRequiredFeatureChoices = featureChoiceStatuses.reduce(
+    (totalRequired, choiceStatus) => totalRequired + choiceStatus.required,
+    0,
+  );
 
-  const totalSelectedFeatureChoices =
-    featureChoiceStatuses.reduce(
-      (totalSelected, choiceStatus) =>
-        totalSelected +
-        Math.min(
-          choiceStatus.selected,
-          choiceStatus.required,
-        ),
-      0,
-    );
+  const totalSelectedFeatureChoices = featureChoiceStatuses.reduce(
+    (totalSelected, choiceStatus) =>
+      totalSelected + Math.min(choiceStatus.selected, choiceStatus.required),
+    0,
+  );
 
-  const totalMissingFeatureChoices =
-    pendingFeatureChoiceStatuses.reduce(
-      (totalMissing, choiceStatus) =>
-        totalMissing + choiceStatus.missing,
-      0,
-    );
+  const totalMissingFeatureChoices = pendingFeatureChoiceStatuses.reduce(
+    (totalMissing, choiceStatus) => totalMissing + choiceStatus.missing,
+    0,
+  );
 
-  const hasFeatureChoiceGroups =
-    featureChoiceStatuses.length > 0;
+  const hasFeatureChoiceGroups = featureChoiceStatuses.length > 0;
 
-  const hasPendingFeatureChoices =
-    pendingFeatureChoiceStatuses.length > 0;
+  const hasPendingFeatureChoices = pendingFeatureChoiceStatuses.length > 0;
 
   const classSummaryLabel =
     reviewClassEntries.length > 0
@@ -587,18 +574,96 @@ export function CharacterReviewStep({
     (row) => row.isPending,
   ).length;
 
-  const constitutionSourceBonus = getAttributeSourceBonus({
-    attributeKey: "constitution",
-    selectedAncestry,
-    selectedBackground,
-  });
+  const progressionReviewRows = [...draft.progressionChoices]
+    .sort((firstChoice, secondChoice) => {
+      const firstClassEntry = reviewClassEntries.find(
+        (classEntry) => classEntry.id === firstChoice.classEntryId,
+      );
 
-  const constitutionBaseValue = draft.attributes.constitution;
+      const secondClassEntry = reviewClassEntries.find(
+        (classEntry) => classEntry.id === secondChoice.classEntryId,
+      );
 
-  const constitutionFinalValue =
-    typeof constitutionBaseValue === "number"
-      ? constitutionBaseValue + constitutionSourceBonus
-      : null;
+      const firstOrder = firstClassEntry?.order ?? Number.MAX_SAFE_INTEGER;
+      const secondOrder = secondClassEntry?.order ?? Number.MAX_SAFE_INTEGER;
+
+      if (firstOrder !== secondOrder) {
+        return firstOrder - secondOrder;
+      }
+
+      if (firstChoice.classLevel !== secondChoice.classLevel) {
+        return firstChoice.classLevel - secondChoice.classLevel;
+      }
+
+      return firstChoice.choiceIndex - secondChoice.choiceIndex;
+    })
+    .map((progressionChoice) => {
+      const classEntry = reviewClassEntries.find(
+        (currentClassEntry) =>
+          currentClassEntry.id === progressionChoice.classEntryId,
+      );
+
+      const selectedTalent = progressionChoice.talentId
+        ? options.talents.find(
+            (talent) => talent.id === progressionChoice.talentId,
+          )
+        : null;
+
+      const isAttributeIncrease =
+        progressionChoice.type === "ATTRIBUTE_INCREASE";
+
+      const isTalent =
+        progressionChoice.type === "TALENT" && Boolean(selectedTalent);
+
+      const isResolved = isAttributeIncrease || isTalent;
+
+      const choiceLabel = isAttributeIncrease
+        ? progressionChoice.attributeIncreaseMode === "FOCUSED"
+          ? "Aumento focado"
+          : progressionChoice.attributeIncreaseMode === "SPLIT"
+            ? "Aumento dividido"
+            : "Aumento de atributo"
+        : isTalent
+          ? "Talento"
+          : "Escolha pendente";
+
+      const choiceValue = isAttributeIncrease
+        ? formatReviewProgressionAttributeBonuses(
+            progressionChoice.attributeIncreases,
+          )
+        : selectedTalent?.name ?? "Nenhum talento selecionado";
+
+      const helperParts = [
+        classEntry?.className ?? progressionChoice.className,
+        `nível ${progressionChoice.classLevel}`,
+        `escolha ${progressionChoice.choiceIndex + 1}`,
+      ];
+
+      return {
+        id: `${progressionChoice.classEntryId}:${progressionChoice.classLevel}:${progressionChoice.choiceIndex}`,
+        className: classEntry?.className ?? progressionChoice.className,
+        classLevel: progressionChoice.classLevel,
+        choiceLabel,
+        choiceValue,
+        isResolved,
+        helper: helperParts.join(" · "),
+        talentDescription: selectedTalent?.description ?? null,
+        talentAttributeBonuses: selectedTalent
+          ? formatReviewProgressionAttributeBonuses(
+              selectedTalent.attributeBonuses,
+            )
+          : null,
+      };
+    });
+
+  const resolvedProgressionCount = progressionReviewRows.filter(
+    (row) => row.isResolved,
+  ).length;
+
+  const pendingProgressionCount =
+    progressionReviewRows.length - resolvedProgressionCount;
+
+  const constitutionFinalValue = consolidatedAttributes.constitution;
 
   const constitutionModifier =
     typeof constitutionFinalValue === "number"
@@ -867,15 +932,16 @@ export function CharacterReviewStep({
       >
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {CHARACTER_ATTRIBUTE_DEFINITIONS.map((attribute) => {
-            const value = draft.attributes[attribute.key];
-            const sourceBonus = getAttributeSourceBonus({
+            const breakdown = getCharacterAttributeBreakdown({
               attributeKey: attribute.key,
+              draft,
+              talents: options.talents,
               selectedAncestry,
               selectedBackground,
             });
 
-            const finalValue =
-              typeof value === "number" ? value + sourceBonus : null;
+            const value = breakdown.baseValue;
+            const finalValue = breakdown.finalValue;
 
             return (
               <div
@@ -900,12 +966,12 @@ export function CharacterReviewStep({
                     </p>
 
                     <p className="mt-1 text-xs font-bold text-zinc-400">
-                      {typeof value === "number" && sourceBonus !== 0
-                        ? `base ${value} ${sourceBonus > 0 ? "+" : ""}${sourceBonus}`
+                      {typeof value === "number" && breakdown.totalBonus !== 0
+                        ? `base ${value} ${breakdown.totalBonus > 0 ? "+" : ""}${breakdown.totalBonus}`
                         : formatAttributeModifier(value)}
                     </p>
 
-                    {typeof finalValue === "number" && sourceBonus !== 0 ? (
+                    {typeof finalValue === "number" && breakdown.totalBonus !== 0 ? (
                       <p className="mt-1 text-xs font-bold text-zinc-500">
                         Mod. {formatAttributeModifier(finalValue)}
                       </p>
@@ -923,6 +989,117 @@ export function CharacterReviewStep({
       </CharacterReviewSection>
 
       <CharacterReviewSection
+        title="Progressão"
+        description="Aumentos de atributo e talentos concedidos pelos marcos de nível de cada classe."
+      >
+        <div
+          className={[
+            "rounded-xl border px-4 py-3",
+            progressionReviewRows.length === 0
+              ? "border-zinc-800 bg-zinc-950/50"
+              : pendingProgressionCount > 0
+                ? "border-amber-400/30 bg-amber-500/10"
+                : "border-emerald-400/30 bg-emerald-500/10",
+          ].join(" ")}
+        >
+          <p
+            className={[
+              "text-[10px] font-black uppercase tracking-[0.18em]",
+              progressionReviewRows.length === 0
+                ? "text-zinc-500"
+                : pendingProgressionCount > 0
+                  ? "text-amber-200"
+                  : "text-emerald-200",
+            ].join(" ")}
+          >
+            Estado das escolhas
+          </p>
+
+          <p className="mt-1 text-sm font-black text-zinc-100">
+            {progressionReviewRows.length === 0
+              ? "Este personagem não possui marcos de progressão."
+              : pendingProgressionCount > 0
+                ? `${resolvedProgressionCount} resolvida(s) · ${pendingProgressionCount} pendente(s)`
+                : `${resolvedProgressionCount} resolvida(s) · 0 pendentes`}
+          </p>
+        </div>
+
+        {progressionReviewRows.length > 0 ? (
+          <div className="grid gap-3 md:grid-cols-2">
+            {progressionReviewRows.map((progressionRow) => (
+              <article
+                key={progressionRow.id}
+                className={[
+                  "rounded-xl border p-4",
+                  progressionRow.isResolved
+                    ? "border-emerald-400/30 bg-emerald-500/10"
+                    : "border-amber-400/30 bg-amber-500/10",
+                ].join(" ")}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-black text-zinc-100">
+                      {progressionRow.className} · nível{" "}
+                      {progressionRow.classLevel}
+                    </p>
+
+                    <p className="mt-1 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">
+                      {progressionRow.choiceLabel}
+                    </p>
+                  </div>
+
+                  <span
+                    className={[
+                      "shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em]",
+                      progressionRow.isResolved
+                        ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-100"
+                        : "border-amber-400/30 bg-amber-500/15 text-amber-100",
+                    ].join(" ")}
+                  >
+                    {progressionRow.isResolved ? "Resolvido" : "Pendente"}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-base font-black text-forge-gold">
+                  {progressionRow.choiceValue}
+                </p>
+
+                <p className="mt-1 text-xs font-bold text-zinc-500">
+                  {progressionRow.helper}
+                </p>
+
+                {progressionRow.talentDescription ? (
+                  <p className="mt-3 whitespace-pre-wrap text-xs font-semibold leading-relaxed text-zinc-400">
+                    {progressionRow.talentDescription}
+                  </p>
+                ) : null}
+
+                {progressionRow.talentAttributeBonuses &&
+                progressionRow.talentAttributeBonuses !==
+                  "Nenhum bônus de atributo" ? (
+                  <p className="mt-3 text-xs font-black text-emerald-200">
+                    Bônus: {progressionRow.talentAttributeBonuses}
+                  </p>
+                ) : null}
+
+                {!progressionRow.isResolved ? (
+                  <p className="mt-3 text-xs font-semibold leading-relaxed text-amber-100">
+                    Volte à etapa Progressão e complete esta escolha antes de
+                    finalizar.
+                  </p>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        ) : (
+          <CharacterReviewEmptyText>
+            O nível atual das classes não concede aumentos de atributo ou
+            talentos.
+          </CharacterReviewEmptyText>
+        )}
+      </CharacterReviewSection>
+
+      <CharacterReviewSection
         title="PV inicial previsto"
         description="Cálculo de pontos de vida usando o dado máximo de cada classe e o modificador de Constituição."
       >
@@ -936,6 +1113,7 @@ export function CharacterReviewStep({
           </p>
         </div>
       </CharacterReviewSection>
+
 
       <CharacterReviewSection
         title="Features previstas"
@@ -999,7 +1177,7 @@ export function CharacterReviewStep({
         )}
       </CharacterReviewSection>
 
-            <CharacterReviewSection
+      <CharacterReviewSection
         title="Escolhas de features"
         description="Estilos, técnicas e recursos opcionais que exigem uma decisão do jogador."
       >
@@ -1036,8 +1214,8 @@ export function CharacterReviewStep({
 
           {hasFeatureChoiceGroups ? (
             <p className="mt-1 text-xs font-bold text-zinc-400">
-              {totalSelectedFeatureChoices}/
-              {totalRequiredFeatureChoices} escolhas preenchidas.
+              {totalSelectedFeatureChoices}/{totalRequiredFeatureChoices}{" "}
+              escolhas preenchidas.
             </p>
           ) : null}
         </div>
@@ -1086,16 +1264,14 @@ export function CharacterReviewStep({
 
                 {choiceStatus.selectedFeatureNames.length > 0 ? (
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {choiceStatus.selectedFeatureNames.map(
-                      (featureName) => (
-                        <span
-                          key={featureName}
-                          className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold"
-                        >
-                          {featureName}
-                        </span>
-                      ),
-                    )}
+                    {choiceStatus.selectedFeatureNames.map((featureName) => (
+                      <span
+                        key={featureName}
+                        className="rounded-full border border-forge-gold/30 bg-forge-gold/10 px-3 py-1 text-xs font-black text-forge-gold"
+                      >
+                        {featureName}
+                      </span>
+                    ))}
                   </div>
                 ) : (
                   <p className="mt-3 text-xs font-semibold leading-relaxed text-amber-100">
@@ -1141,24 +1317,8 @@ export function CharacterReviewStep({
                 );
               }
 
-              const sourceBonus = getAttributeSourceBonus({
-                attributeKey: statKey,
-                selectedAncestry,
-                selectedBackground,
-              });
-
-              const currentAttributeValue = draft.attributes[statKey];
-
-              const skillAttributes = {
-                ...draft.attributes,
-                [statKey]:
-                  typeof currentAttributeValue === "number"
-                    ? currentAttributeValue + sourceBonus
-                    : currentAttributeValue,
-              };
-
               const calculation = getSkillCalculation({
-                attributes: skillAttributes,
+                attributes: consolidatedAttributes,
                 statKey,
                 isProficient: true,
                 level: safeCharacterLevel,

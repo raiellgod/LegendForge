@@ -80,10 +80,19 @@ export function getAttributeValueFromStats(
   stats: ReadySheetStat[],
   attributeKey: CharacterAttributeKey,
 ) {
-  return (
-    stats.find((sheetStat) => sheetStat.stat.key === attributeKey)?.baseValue ??
-    null
+  const sheetStat = stats.find(
+    (currentSheetStat) => currentSheetStat.stat.key === attributeKey,
   );
+
+  if (!sheetStat) {
+    return null;
+  }
+
+  if (typeof sheetStat.overrideValue === "number") {
+    return sheetStat.overrideValue;
+  }
+
+  return sheetStat.baseValue + (sheetStat.bonusValue ?? 0);
 }
 
 export function getAttributeModifierFromStats(

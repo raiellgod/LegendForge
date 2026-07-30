@@ -399,12 +399,14 @@ export const ModelName = {
   CharacterSheetSpell: 'CharacterSheetSpell',
   CharacterSheetEquipment: 'CharacterSheetEquipment',
   CharacterSheetClass: 'CharacterSheetClass',
+  CharacterSheetProgressionChoice: 'CharacterSheetProgressionChoice',
   CharacterClass: 'CharacterClass',
   CharacterSubclass: 'CharacterSubclass',
   LevelProgression: 'LevelProgression',
   LevelProgressionSpellLimit: 'LevelProgressionSpellLimit',
   ClassSpell: 'ClassSpell',
   Feature: 'Feature',
+  Talent: 'Talent',
   FeatureChoiceGroup: 'FeatureChoiceGroup',
   FeatureChoiceOption: 'FeatureChoiceOption',
   CharacterSheetFeatureChoice: 'CharacterSheetFeatureChoice',
@@ -434,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "featureChoiceGroup" | "featureChoiceOption" | "characterSheetFeatureChoice" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterSheetProgressionChoice" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "talent" | "featureChoiceGroup" | "featureChoiceOption" | "characterSheetFeatureChoice" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1548,6 +1550,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CharacterSheetProgressionChoice: {
+      payload: Prisma.$CharacterSheetProgressionChoicePayload<ExtArgs>
+      fields: Prisma.CharacterSheetProgressionChoiceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CharacterSheetProgressionChoiceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CharacterSheetProgressionChoiceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>
+        }
+        findFirst: {
+          args: Prisma.CharacterSheetProgressionChoiceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CharacterSheetProgressionChoiceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>
+        }
+        findMany: {
+          args: Prisma.CharacterSheetProgressionChoiceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>[]
+        }
+        create: {
+          args: Prisma.CharacterSheetProgressionChoiceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>
+        }
+        createMany: {
+          args: Prisma.CharacterSheetProgressionChoiceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CharacterSheetProgressionChoiceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>[]
+        }
+        delete: {
+          args: Prisma.CharacterSheetProgressionChoiceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>
+        }
+        update: {
+          args: Prisma.CharacterSheetProgressionChoiceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>
+        }
+        deleteMany: {
+          args: Prisma.CharacterSheetProgressionChoiceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CharacterSheetProgressionChoiceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CharacterSheetProgressionChoiceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>[]
+        }
+        upsert: {
+          args: Prisma.CharacterSheetProgressionChoiceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CharacterSheetProgressionChoicePayload>
+        }
+        aggregate: {
+          args: Prisma.CharacterSheetProgressionChoiceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCharacterSheetProgressionChoice>
+        }
+        groupBy: {
+          args: Prisma.CharacterSheetProgressionChoiceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetProgressionChoiceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CharacterSheetProgressionChoiceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CharacterSheetProgressionChoiceCountAggregateOutputType> | number
+        }
+      }
+    }
     CharacterClass: {
       payload: Prisma.$CharacterClassPayload<ExtArgs>
       fields: Prisma.CharacterClassFieldRefs
@@ -1989,6 +2065,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.FeatureCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.FeatureCountAggregateOutputType> | number
+        }
+      }
+    }
+    Talent: {
+      payload: Prisma.$TalentPayload<ExtArgs>
+      fields: Prisma.TalentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TalentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TalentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>
+        }
+        findFirst: {
+          args: Prisma.TalentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TalentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>
+        }
+        findMany: {
+          args: Prisma.TalentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>[]
+        }
+        create: {
+          args: Prisma.TalentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>
+        }
+        createMany: {
+          args: Prisma.TalentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TalentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>[]
+        }
+        delete: {
+          args: Prisma.TalentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>
+        }
+        update: {
+          args: Prisma.TalentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>
+        }
+        deleteMany: {
+          args: Prisma.TalentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TalentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TalentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>[]
+        }
+        upsert: {
+          args: Prisma.TalentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TalentPayload>
+        }
+        aggregate: {
+          args: Prisma.TalentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTalent>
+        }
+        groupBy: {
+          args: Prisma.TalentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TalentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TalentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TalentCountAggregateOutputType> | number
         }
       }
     }
@@ -3341,6 +3491,23 @@ export const CharacterSheetClassScalarFieldEnum = {
 export type CharacterSheetClassScalarFieldEnum = (typeof CharacterSheetClassScalarFieldEnum)[keyof typeof CharacterSheetClassScalarFieldEnum]
 
 
+export const CharacterSheetProgressionChoiceScalarFieldEnum = {
+  id: 'id',
+  characterSheetId: 'characterSheetId',
+  classId: 'classId',
+  talentId: 'talentId',
+  classLevel: 'classLevel',
+  choiceIndex: 'choiceIndex',
+  type: 'type',
+  attributeIncreaseMode: 'attributeIncreaseMode',
+  attributeIncreases: 'attributeIncreases',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterSheetProgressionChoiceScalarFieldEnum = (typeof CharacterSheetProgressionChoiceScalarFieldEnum)[keyof typeof CharacterSheetProgressionChoiceScalarFieldEnum]
+
+
 export const CharacterClassScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -3384,6 +3551,7 @@ export const LevelProgressionScalarFieldEnum = {
   classId: 'classId',
   level: 'level',
   proficiencyBonus: 'proficiencyBonus',
+  progressionChoiceCount: 'progressionChoiceCount',
   cantripsKnown: 'cantripsKnown',
   spellsKnown: 'spellsKnown',
   spellsPrepared: 'spellsPrepared',
@@ -3448,6 +3616,23 @@ export const FeatureScalarFieldEnum = {
 } as const
 
 export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
+
+
+export const TalentScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  key: 'key',
+  name: 'name',
+  description: 'description',
+  isRepeatable: 'isRepeatable',
+  prerequisites: 'prerequisites',
+  attributeBonuses: 'attributeBonuses',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TalentScalarFieldEnum = (typeof TalentScalarFieldEnum)[keyof typeof TalentScalarFieldEnum]
 
 
 export const FeatureChoiceGroupScalarFieldEnum = {
@@ -3844,6 +4029,34 @@ export type ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel> = FieldRefIn
 
 
 /**
+ * Reference to a field of type 'CharacterProgressionChoiceType'
+ */
+export type EnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CharacterProgressionChoiceType'>
+    
+
+
+/**
+ * Reference to a field of type 'CharacterProgressionChoiceType[]'
+ */
+export type ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CharacterProgressionChoiceType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CharacterAttributeIncreaseMode'
+ */
+export type EnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CharacterAttributeIncreaseMode'>
+    
+
+
+/**
+ * Reference to a field of type 'CharacterAttributeIncreaseMode[]'
+ */
+export type ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CharacterAttributeIncreaseMode[]'>
+    
+
+
+/**
  * Reference to a field of type 'FeatureSourceType'
  */
 export type EnumFeatureSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeatureSourceType'>
@@ -4134,12 +4347,14 @@ export type GlobalOmitConfig = {
   characterSheetSpell?: Prisma.CharacterSheetSpellOmit
   characterSheetEquipment?: Prisma.CharacterSheetEquipmentOmit
   characterSheetClass?: Prisma.CharacterSheetClassOmit
+  characterSheetProgressionChoice?: Prisma.CharacterSheetProgressionChoiceOmit
   characterClass?: Prisma.CharacterClassOmit
   characterSubclass?: Prisma.CharacterSubclassOmit
   levelProgression?: Prisma.LevelProgressionOmit
   levelProgressionSpellLimit?: Prisma.LevelProgressionSpellLimitOmit
   classSpell?: Prisma.ClassSpellOmit
   feature?: Prisma.FeatureOmit
+  talent?: Prisma.TalentOmit
   featureChoiceGroup?: Prisma.FeatureChoiceGroupOmit
   featureChoiceOption?: Prisma.FeatureChoiceOptionOmit
   characterSheetFeatureChoice?: Prisma.CharacterSheetFeatureChoiceOmit

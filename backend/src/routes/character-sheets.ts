@@ -34,6 +34,144 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     .max(100)
     .optional();
 
+  const characterProgressionAttributeIncreasesSchema = z.object({
+    strength: z.number().int().min(0).max(2).optional(),
+    dexterity: z.number().int().min(0).max(2).optional(),
+    constitution: z.number().int().min(0).max(2).optional(),
+    intelligence: z.number().int().min(0).max(2).optional(),
+    wisdom: z.number().int().min(0).max(2).optional(),
+    charisma: z.number().int().min(0).max(2).optional(),
+  });
+
+  const characterTalentMinimumAttributesSchema = z.object({
+    strength: z.number().int().min(1).max(20).optional(),
+    dexterity: z.number().int().min(1).max(20).optional(),
+    constitution: z.number().int().min(1).max(20).optional(),
+    intelligence: z.number().int().min(1).max(20).optional(),
+    wisdom: z.number().int().min(1).max(20).optional(),
+    charisma: z.number().int().min(1).max(20).optional(),
+  });
+
+  const characterTalentPrerequisitesSchema = z
+    .object({
+      minimumCharacterLevel: z.number().int().min(1).max(20).optional(),
+
+      minimumAttributes: characterTalentMinimumAttributesSchema.optional(),
+
+      requiredClassKeys: z.array(z.string().min(1)).optional(),
+      requiredSubclassKeys: z.array(z.string().min(1)).optional(),
+      requiredAncestryKeys: z.array(z.string().min(1)).optional(),
+      requiredProficiencyKeys: z.array(z.string().min(1)).optional(),
+      requiredTalentKeys: z.array(z.string().min(1)).optional(),
+
+      requiresSpellcasting: z.boolean().optional(),
+    })
+    .passthrough();
+
+  const characterProgressionChoicesSchema = z
+    .array(
+      z.object({
+        classId: z.string().uuid("Invalid progression choice class id"),
+        classLevel: z.number().int().min(1).max(20),
+        choiceIndex: z.number().int().min(0).max(20),
+
+        type: z.enum(["ATTRIBUTE_INCREASE", "TALENT"]).nullable(),
+
+        attributeIncreaseMode: z.enum(["FOCUSED", "SPLIT"]).nullable(),
+
+        attributeIncreases: characterProgressionAttributeIncreasesSchema,
+
+        talentId: z
+          .string()
+          .uuid("Invalid progression choice talent id")
+          .nullable(),
+      }),
+    )
+    .max(100)
+    .optional();
+
+  type CharacterProgressionChoiceInput = NonNullable<
+    z.infer<typeof characterProgressionChoicesSchema>
+  >[number];
+
+  type CharacterTalentPrerequisites = z.infer<
+    typeof characterTalentPrerequisitesSchema
+  >;
+
+  type RequiredCharacterProgressionChoice = {
+    classId: string;
+    className: string;
+    classLevel: number;
+    choiceIndex: number;
+  };
+
+  function getCharacterProgressionChoiceIdentity(
+    choice:
+      | CharacterProgressionChoiceInput
+      | RequiredCharacterProgressionChoice,
+  ) {
+    return `${choice.classId}:${choice.classLevel}:${choice.choiceIndex}`;
+  }
+
+  function normalizeCharacterProgressionChoices(
+    progressionChoices: z.infer<typeof characterProgressionChoicesSchema>,
+  ) {
+    if (progressionChoices === undefined) {
+      return {
+        entries: [] as CharacterProgressionChoiceInput[],
+        error: null as string | null,
+      };
+    }
+
+    const choicesByIdentity = new Map<
+      string,
+      CharacterProgressionChoiceInput
+    >();
+
+    for (const choice of progressionChoices) {
+      const identity = getCharacterProgressionChoiceIdentity(choice);
+
+      if (choicesByIdentity.has(identity)) {
+        return {
+          entries: [] as CharacterProgressionChoiceInput[],
+          error:
+            `Duplicate progression choice for class ${choice.classId}, ` +
+            `class level ${choice.classLevel}, choice index ${choice.choiceIndex}`,
+        };
+      }
+
+      choicesByIdentity.set(identity, {
+        ...choice,
+        attributeIncreases: {
+          ...choice.attributeIncreases,
+        },
+      });
+    }
+
+    const entries = Array.from(choicesByIdentity.values()).sort(
+      (firstChoice, secondChoice) => {
+        const classComparison = firstChoice.classId.localeCompare(
+          secondChoice.classId,
+        );
+
+        if (classComparison !== 0) {
+          return classComparison;
+        }
+
+        if (firstChoice.classLevel !== secondChoice.classLevel) {
+          return firstChoice.classLevel - secondChoice.classLevel;
+        }
+
+        return firstChoice.choiceIndex - secondChoice.choiceIndex;
+      },
+    );
+
+    return {
+      entries,
+      error: null as string | null,
+    };
+  }
+
   const characterClassEntriesSchema = z
     .array(
       z.object({
@@ -125,6 +263,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     featureChoiceSelections?: z.infer<
       typeof characterFeatureChoiceSelectionsSchema
     >;
+    progressionChoices?: z.infer<typeof characterProgressionChoicesSchema>;
     equipmentItems?: z.infer<typeof characterEquipmentItemsSchema>;
 
     classEquipmentMode?: "PACKAGE" | "GOLD";
@@ -188,6 +327,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     Record<CharacterAttributeKey, number>
   >;
 
+  type CharacterAttributeValueMap = Partial<
+    Record<CharacterAttributeKey, number>
+  >;
+
   function isCharacterAttributeKey(key: string): key is CharacterAttributeKey {
     return characterAttributeKeys.has(key as CharacterAttributeKey);
   }
@@ -208,6 +351,19 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         );
       }),
     ) as CharacterAttributeBonusMap;
+  }
+
+  function normalizeCharacterTalentPrerequisites(
+    prerequisites: unknown,
+  ): CharacterTalentPrerequisites {
+    const parsedPrerequisites =
+      characterTalentPrerequisitesSchema.safeParse(prerequisites);
+
+    if (!parsedPrerequisites.success) {
+      return {};
+    }
+
+    return parsedPrerequisites.data;
   }
 
   function mergeAttributeBonusMaps(
@@ -689,6 +845,740 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
     if (invalidSubclassEntry) {
       return "Subclass not found for this class and system";
+    }
+
+    return null;
+  }
+
+  async function validateRequiredCharacterProgressionChoices({
+    systemId,
+    classEntries,
+    progressionChoices,
+    wasProvided,
+  }: {
+    systemId: string;
+    classEntries: CharacterClassEntryInput[];
+    progressionChoices: CharacterProgressionChoiceInput[];
+    wasProvided: boolean;
+  }) {
+    if (!wasProvided) {
+      return null;
+    }
+
+    if (classEntries.length === 0) {
+      if (progressionChoices.length > 0) {
+        return "Progression choices require at least one character class";
+      }
+
+      return null;
+    }
+
+    const characterClasses = await prisma.characterClass.findMany({
+      where: {
+        systemId,
+        id: {
+          in: classEntries.map((classEntry) => classEntry.classId),
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        levelProgressions: {
+          where: {
+            progressionChoiceCount: {
+              gt: 0,
+            },
+          },
+          select: {
+            level: true,
+            progressionChoiceCount: true,
+          },
+          orderBy: {
+            level: "asc",
+          },
+        },
+      },
+    });
+
+    const classesById = new Map(
+      characterClasses.map((characterClass) => [
+        characterClass.id,
+        characterClass,
+      ]),
+    );
+
+    const requiredChoices: RequiredCharacterProgressionChoice[] = [];
+
+    for (const classEntry of classEntries) {
+      const characterClass = classesById.get(classEntry.classId);
+
+      if (!characterClass) {
+        return "Character class not found for this system";
+      }
+
+      const applicableProgressions = characterClass.levelProgressions.filter(
+        (progression) => {
+          return progression.level <= classEntry.level;
+        },
+      );
+
+      for (const progression of applicableProgressions) {
+        for (
+          let choiceIndex = 0;
+          choiceIndex < progression.progressionChoiceCount;
+          choiceIndex += 1
+        ) {
+          requiredChoices.push({
+            classId: characterClass.id,
+            className: characterClass.name,
+            classLevel: progression.level,
+            choiceIndex,
+          });
+        }
+      }
+    }
+
+    const requiredChoicesByIdentity = new Map(
+      requiredChoices.map((choice) => [
+        getCharacterProgressionChoiceIdentity(choice),
+        choice,
+      ]),
+    );
+
+    const providedChoicesByIdentity = new Map(
+      progressionChoices.map((choice) => [
+        getCharacterProgressionChoiceIdentity(choice),
+        choice,
+      ]),
+    );
+
+    const unexpectedChoice = progressionChoices.find((choice) => {
+      const identity = getCharacterProgressionChoiceIdentity(choice);
+
+      return !requiredChoicesByIdentity.has(identity);
+    });
+
+    if (unexpectedChoice) {
+      return (
+        `Unexpected progression choice for class ${unexpectedChoice.classId}, ` +
+        `class level ${unexpectedChoice.classLevel}, ` +
+        `choice index ${unexpectedChoice.choiceIndex}`
+      );
+    }
+
+    const missingChoice = requiredChoices.find((choice) => {
+      const identity = getCharacterProgressionChoiceIdentity(choice);
+
+      return !providedChoicesByIdentity.has(identity);
+    });
+
+    if (missingChoice) {
+      return (
+        `Missing progression choice for class "${missingChoice.className}", ` +
+        `class level ${missingChoice.classLevel}, ` +
+        `choice index ${missingChoice.choiceIndex}`
+      );
+    }
+
+    if (progressionChoices.length !== requiredChoices.length) {
+      return (
+        `This character requires ${requiredChoices.length} progression ` +
+        `choice(s), but ${progressionChoices.length} were provided`
+      );
+    }
+
+    return null;
+  }
+
+  function validateFocusedCharacterProgressionChoices(
+    progressionChoices: CharacterProgressionChoiceInput[],
+  ) {
+    for (const choice of progressionChoices) {
+      if (
+        choice.type !== "ATTRIBUTE_INCREASE" ||
+        choice.attributeIncreaseMode !== "FOCUSED"
+      ) {
+        continue;
+      }
+
+      const positiveAttributeIncreases = Object.entries(
+        choice.attributeIncreases,
+      ).filter(([, increaseValue]) => {
+        return typeof increaseValue === "number" && increaseValue > 0;
+      });
+
+      const isValidFocusedIncrease =
+        positiveAttributeIncreases.length === 1 &&
+        positiveAttributeIncreases[0]?.[1] === 2;
+
+      if (!isValidFocusedIncrease) {
+        return (
+          `Focused attribute increase for class ${choice.classId}, ` +
+          `class level ${choice.classLevel}, ` +
+          `choice index ${choice.choiceIndex} must grant exactly +2 ` +
+          `to one attribute`
+        );
+      }
+    }
+
+    return null;
+  }
+
+  function validateSplitCharacterProgressionChoices(
+    progressionChoices: CharacterProgressionChoiceInput[],
+  ) {
+    for (const choice of progressionChoices) {
+      if (
+        choice.type !== "ATTRIBUTE_INCREASE" ||
+        choice.attributeIncreaseMode !== "SPLIT"
+      ) {
+        continue;
+      }
+
+      const positiveAttributeIncreases = Object.entries(
+        choice.attributeIncreases,
+      ).filter(([, increaseValue]) => {
+        return typeof increaseValue === "number" && increaseValue > 0;
+      });
+
+      const isValidSplitIncrease =
+        positiveAttributeIncreases.length === 2 &&
+        positiveAttributeIncreases.every(([, increaseValue]) => {
+          return increaseValue === 1;
+        });
+
+      if (!isValidSplitIncrease) {
+        return (
+          `Split attribute increase for class ${choice.classId}, ` +
+          `class level ${choice.classLevel}, ` +
+          `choice index ${choice.choiceIndex} must grant exactly +1 ` +
+          `to two different attributes`
+        );
+      }
+    }
+
+    return null;
+  }
+
+  function validateResolvedCharacterProgressionChoices(
+    progressionChoices: CharacterProgressionChoiceInput[],
+  ) {
+    for (const choice of progressionChoices) {
+      if (choice.type === null) {
+        return (
+          `Progression choice for class ${choice.classId}, ` +
+          `class level ${choice.classLevel}, ` +
+          `choice index ${choice.choiceIndex} is still pending`
+        );
+      }
+
+      const positiveAttributeIncreases = Object.entries(
+        choice.attributeIncreases,
+      ).filter(([, increaseValue]) => {
+        return typeof increaseValue === "number" && increaseValue > 0;
+      });
+
+      if (choice.type === "ATTRIBUTE_INCREASE") {
+        if (choice.attributeIncreaseMode === null) {
+          return (
+            `Attribute increase for class ${choice.classId}, ` +
+            `class level ${choice.classLevel}, ` +
+            `choice index ${choice.choiceIndex} must include an increase mode`
+          );
+        }
+
+        if (choice.talentId !== null) {
+          return (
+            `Attribute increase for class ${choice.classId}, ` +
+            `class level ${choice.classLevel}, ` +
+            `choice index ${choice.choiceIndex} cannot include a talent`
+          );
+        }
+
+        continue;
+      }
+
+      if (choice.attributeIncreaseMode !== null) {
+        return (
+          `Talent choice for class ${choice.classId}, ` +
+          `class level ${choice.classLevel}, ` +
+          `choice index ${choice.choiceIndex} cannot include an ` +
+          `attribute increase mode`
+        );
+      }
+
+      if (positiveAttributeIncreases.length > 0) {
+        return (
+          `Talent choice for class ${choice.classId}, ` +
+          `class level ${choice.classLevel}, ` +
+          `choice index ${choice.choiceIndex} cannot include ` +
+          `attribute increases`
+        );
+      }
+
+      if (!choice.talentId) {
+        return (
+          `Talent choice for class ${choice.classId}, ` +
+          `class level ${choice.classLevel}, ` +
+          `choice index ${choice.choiceIndex} must include a talent`
+        );
+      }
+    }
+
+    return null;
+  }
+
+  async function validateCharacterProgressionTalents({
+    systemId,
+    progressionChoices,
+  }: {
+    systemId: string;
+    progressionChoices: CharacterProgressionChoiceInput[];
+  }) {
+    const talentChoices = progressionChoices.filter((choice) => {
+      return choice.type === "TALENT";
+    });
+
+    if (talentChoices.length === 0) {
+      return null;
+    }
+
+    const choiceWithoutTalent = talentChoices.find((choice) => {
+      return !choice.talentId;
+    });
+
+    if (choiceWithoutTalent) {
+      return (
+        `Talent progression choice for class ${choiceWithoutTalent.classId}, ` +
+        `class level ${choiceWithoutTalent.classLevel}, ` +
+        `choice index ${choiceWithoutTalent.choiceIndex} must include a talent`
+      );
+    }
+
+    const talentIds = Array.from(
+      new Set(
+        talentChoices
+          .map((choice) => choice.talentId)
+          .filter((talentId): talentId is string => {
+            return Boolean(talentId);
+          }),
+      ),
+    );
+
+    const talents = await prisma.talent.findMany({
+      where: {
+        systemId,
+        id: {
+          in: talentIds,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        isRepeatable: true,
+      },
+    });
+
+    const talentsById = new Map(talents.map((talent) => [talent.id, talent]));
+
+    const existingTalentIds = new Set(talentsById.keys());
+
+    const invalidTalentChoice = talentChoices.find((choice) => {
+      return (
+        typeof choice.talentId === "string" &&
+        !existingTalentIds.has(choice.talentId)
+      );
+    });
+
+    if (invalidTalentChoice) {
+      return (
+        `Talent ${invalidTalentChoice.talentId} was not found ` +
+        `for this character system`
+      );
+    }
+
+    const talentSelectionCountById = new Map<string, number>();
+
+    for (const choice of talentChoices) {
+      if (!choice.talentId) {
+        continue;
+      }
+
+      talentSelectionCountById.set(
+        choice.talentId,
+        (talentSelectionCountById.get(choice.talentId) ?? 0) + 1,
+      );
+    }
+
+    for (const [
+      talentId,
+      selectionCount,
+    ] of talentSelectionCountById.entries()) {
+      if (selectionCount <= 1) {
+        continue;
+      }
+
+      const talent = talentsById.get(talentId);
+
+      if (!talent || talent.isRepeatable) {
+        continue;
+      }
+
+      return (
+        `Talent "${talent.name}" cannot be selected more than once. ` +
+        `It was selected ${selectionCount} times`
+      );
+    }
+
+    return null;
+  }
+
+  async function validateCharacterProgressionTalentPrerequisites({
+    systemId,
+    characterLevel,
+    classEntries,
+    ancestryId,
+    attributes,
+    progressionChoices,
+  }: {
+    systemId: string;
+    characterLevel: number;
+    classEntries: CharacterClassEntryInput[];
+    ancestryId: string | null;
+    attributes: CharacterAttributeValueMap;
+    progressionChoices: CharacterProgressionChoiceInput[];
+  }) {
+    const talentChoices = progressionChoices.filter(
+      (
+        choice,
+      ): choice is CharacterProgressionChoiceInput & {
+        type: "TALENT";
+        talentId: string;
+      } => {
+        return choice.type === "TALENT" && Boolean(choice.talentId);
+      },
+    );
+
+    if (talentChoices.length === 0) {
+      return null;
+    }
+
+    const selectedTalentIds = Array.from(
+      new Set(talentChoices.map((choice) => choice.talentId)),
+    );
+
+    const selectedClassIds = Array.from(
+      new Set(classEntries.map((classEntry) => classEntry.classId)),
+    );
+
+    const selectedSubclassIds = Array.from(
+      new Set(
+        classEntries
+          .map((classEntry) => classEntry.subclassId)
+          .filter((subclassId): subclassId is string => {
+            return Boolean(subclassId);
+          }),
+      ),
+    );
+
+    const [talents, characterClasses, subclasses, ancestry] = await Promise.all(
+      [
+        prisma.talent.findMany({
+          where: {
+            systemId,
+            id: {
+              in: selectedTalentIds,
+            },
+          },
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            prerequisites: true,
+          },
+        }),
+
+        selectedClassIds.length > 0
+          ? prisma.characterClass.findMany({
+              where: {
+                systemId,
+                id: {
+                  in: selectedClassIds,
+                },
+              },
+              select: {
+                id: true,
+                key: true,
+                spellcastingAbilityKey: true,
+              },
+            })
+          : Promise.resolve([]),
+
+        selectedSubclassIds.length > 0
+          ? prisma.characterSubclass.findMany({
+              where: {
+                systemId,
+                id: {
+                  in: selectedSubclassIds,
+                },
+              },
+              select: {
+                id: true,
+                key: true,
+              },
+            })
+          : Promise.resolve([]),
+
+        ancestryId
+          ? prisma.ancestry.findFirst({
+              where: {
+                id: ancestryId,
+                systemId,
+              },
+              select: {
+                id: true,
+                key: true,
+              },
+            })
+          : Promise.resolve(null),
+      ],
+    );
+
+    const talentsById = new Map(talents.map((talent) => [talent.id, talent]));
+
+    const selectedClassKeys = new Set(
+      characterClasses.map((characterClass) => characterClass.key),
+    );
+
+    const selectedSubclassKeys = new Set(
+      subclasses.map((subclass) => subclass.key),
+    );
+
+    const hasSpellcastingClass = characterClasses.some((characterClass) => {
+      return characterClass.spellcastingAbilityKey !== null;
+    });
+
+    for (const talentChoice of talentChoices) {
+      const talent = talentsById.get(talentChoice.talentId);
+
+      if (!talent) {
+        continue;
+      }
+
+      const prerequisites = normalizeCharacterTalentPrerequisites(
+        talent.prerequisites,
+      );
+
+      if (
+        prerequisites.minimumCharacterLevel !== undefined &&
+        characterLevel < prerequisites.minimumCharacterLevel
+      ) {
+        return (
+          `Talent "${talent.name}" requires character level ` +
+          `${prerequisites.minimumCharacterLevel} or higher`
+        );
+      }
+
+      for (const [attributeKey, minimumValue] of Object.entries(
+        prerequisites.minimumAttributes ?? {},
+      )) {
+        if (
+          !isCharacterAttributeKey(attributeKey) ||
+          typeof minimumValue !== "number"
+        ) {
+          continue;
+        }
+
+        const currentValue = attributes[attributeKey];
+
+        if (typeof currentValue !== "number" || currentValue < minimumValue) {
+          return (
+            `Talent "${talent.name}" requires attribute ` +
+            `${attributeKey} ${minimumValue} or higher`
+          );
+        }
+      }
+
+      for (const requiredClassKey of prerequisites.requiredClassKeys ?? []) {
+        if (!selectedClassKeys.has(requiredClassKey)) {
+          return (
+            `Talent "${talent.name}" requires class ` + `"${requiredClassKey}"`
+          );
+        }
+      }
+
+      for (const requiredSubclassKey of prerequisites.requiredSubclassKeys ??
+        []) {
+        if (!selectedSubclassKeys.has(requiredSubclassKey)) {
+          return (
+            `Talent "${talent.name}" requires subclass ` +
+            `"${requiredSubclassKey}"`
+          );
+        }
+      }
+
+      for (const requiredAncestryKey of prerequisites.requiredAncestryKeys ??
+        []) {
+        if (ancestry?.key !== requiredAncestryKey) {
+          return (
+            `Talent "${talent.name}" requires ancestry ` +
+            `"${requiredAncestryKey}"`
+          );
+        }
+      }
+
+      const otherSelectedTalentKeys = new Set(
+        talentChoices
+          .filter((otherChoice) => {
+            return (
+              getCharacterProgressionChoiceIdentity(otherChoice) !==
+              getCharacterProgressionChoiceIdentity(talentChoice)
+            );
+          })
+          .map((otherChoice) => {
+            return talentsById.get(otherChoice.talentId)?.key ?? null;
+          })
+          .filter((talentKey): talentKey is string => {
+            return Boolean(talentKey);
+          }),
+      );
+
+      for (const requiredTalentKey of prerequisites.requiredTalentKeys ?? []) {
+        if (!otherSelectedTalentKeys.has(requiredTalentKey)) {
+          return (
+            `Talent "${talent.name}" requires talent ` +
+            `"${requiredTalentKey}"`
+          );
+        }
+      }
+
+      if (
+        prerequisites.requiresSpellcasting !== undefined &&
+        hasSpellcastingClass !== prerequisites.requiresSpellcasting
+      ) {
+        return prerequisites.requiresSpellcasting
+          ? `Talent "${talent.name}" requires spellcasting`
+          : `Talent "${talent.name}" cannot be selected by a spellcaster`;
+      }
+    }
+
+    return null;
+  }
+    async function getCharacterProgressionAttributeBonuses({
+    systemId,
+    progressionChoices,
+  }: {
+    systemId: string;
+    progressionChoices: CharacterProgressionChoiceInput[];
+  }) {
+    const progressionAttributeBonuses =
+      progressionChoices.reduce<CharacterAttributeBonusMap>(
+        (currentBonuses, choice) => {
+          if (choice.type !== "ATTRIBUTE_INCREASE") {
+            return currentBonuses;
+          }
+
+          return mergeAttributeBonusMaps(
+            currentBonuses,
+            normalizeAttributeBonusMap(choice.attributeIncreases),
+          );
+        },
+        {},
+      );
+
+    const talentChoices = progressionChoices.filter(
+      (
+        choice,
+      ): choice is CharacterProgressionChoiceInput & {
+        type: "TALENT";
+        talentId: string;
+      } => {
+        return choice.type === "TALENT" && Boolean(choice.talentId);
+      },
+    );
+
+    const uniqueTalentIds = Array.from(
+      new Set(talentChoices.map((choice) => choice.talentId)),
+    );
+
+    const talents =
+      uniqueTalentIds.length > 0
+        ? await prisma.talent.findMany({
+            where: {
+              systemId,
+              id: {
+                in: uniqueTalentIds,
+              },
+            },
+            select: {
+              id: true,
+              attributeBonuses: true,
+            },
+          })
+        : [];
+
+    const talentsById = new Map(
+      talents.map((talent) => [talent.id, talent]),
+    );
+
+    const talentAttributeBonuses = mergeAttributeBonusMaps(
+      ...talentChoices.map((choice) => {
+        const talent = talentsById.get(choice.talentId);
+
+        return normalizeAttributeBonusMap(
+          talent?.attributeBonuses,
+        );
+      }),
+    );
+
+    return mergeAttributeBonusMaps(
+      progressionAttributeBonuses,
+      talentAttributeBonuses,
+    );
+  }
+
+    async function validateCharacterProgressionAttributeMaximum({
+    systemId,
+    attributes,
+    sourceAttributeBonuses,
+    progressionChoices,
+  }: {
+    systemId: string;
+    attributes: CharacterAttributeValueMap;
+    sourceAttributeBonuses: CharacterAttributeBonusMap;
+    progressionChoices: CharacterProgressionChoiceInput[];
+  }) {
+    const progressionAttributeBonuses =
+      await getCharacterProgressionAttributeBonuses({
+        systemId,
+        progressionChoices,
+      });
+
+    const consolidatedAttributeBonuses = mergeAttributeBonusMaps(
+      sourceAttributeBonuses,
+      progressionAttributeBonuses,
+    );
+
+    for (const [attributeKey, baseValue] of Object.entries(
+      attributes,
+    )) {
+      if (
+        !isCharacterAttributeKey(attributeKey) ||
+        typeof baseValue !== "number"
+      ) {
+        continue;
+      }
+
+      const finalValue =
+        baseValue +
+        (consolidatedAttributeBonuses[attributeKey] ?? 0);
+
+      if (finalValue > 20) {
+        return (
+          `Attribute ${attributeKey} cannot exceed 20 through standard ` +
+          `progression bonuses. Received final value ${finalValue}`
+        );
+      }
     }
 
     return null;
@@ -1780,6 +2670,76 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ]);
   }
 
+  async function upsertCharacterSheetProgressionChoices(
+    characterSheetId: string,
+    entries: CharacterProgressionChoiceInput[],
+  ) {
+    if (entries.length === 0) {
+      return;
+    }
+
+    await prisma.$transaction(
+      entries.map((choice) =>
+        prisma.characterSheetProgressionChoice.upsert({
+          where: {
+            characterSheetId_classId_classLevel_choiceIndex: {
+              characterSheetId,
+              classId: choice.classId,
+              classLevel: choice.classLevel,
+              choiceIndex: choice.choiceIndex,
+            },
+          },
+          create: {
+            characterSheetId,
+            classId: choice.classId,
+            classLevel: choice.classLevel,
+            choiceIndex: choice.choiceIndex,
+            type: choice.type,
+            attributeIncreaseMode: choice.attributeIncreaseMode,
+            attributeIncreases:
+              choice.attributeIncreases as Prisma.InputJsonValue,
+            talentId: choice.talentId,
+          },
+          update: {
+            type: choice.type,
+            attributeIncreaseMode: choice.attributeIncreaseMode,
+            attributeIncreases:
+              choice.attributeIncreases as Prisma.InputJsonValue,
+            talentId: choice.talentId,
+          },
+        }),
+      ),
+    );
+  }
+
+    async function removeObsoleteCharacterSheetProgressionChoices(
+    characterSheetId: string,
+    entries: CharacterProgressionChoiceInput[],
+  ) {
+    if (entries.length === 0) {
+      await prisma.characterSheetProgressionChoice.deleteMany({
+        where: {
+          characterSheetId,
+        },
+      });
+
+      return;
+    }
+
+    await prisma.characterSheetProgressionChoice.deleteMany({
+      where: {
+        characterSheetId,
+        NOT: {
+          OR: entries.map((choice) => ({
+            classId: choice.classId,
+            classLevel: choice.classLevel,
+            choiceIndex: choice.choiceIndex,
+          })),
+        },
+      },
+    });
+  }
+
   const characterSheetInclude = {
     campaignActor: true,
     system: true,
@@ -1885,6 +2845,29 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         createdAt: "asc",
       },
     },
+    progressionChoices: {
+      include: {
+        characterClass: {
+          select: {
+            id: true,
+            key: true,
+            name: true,
+          },
+        },
+        talent: true,
+      },
+      orderBy: [
+        {
+          classId: "asc",
+        },
+        {
+          classLevel: "asc",
+        },
+        {
+          choiceIndex: "asc",
+        },
+      ],
+    },
   } satisfies Prisma.CharacterSheetInclude;
 
   server.get(
@@ -1970,7 +2953,6 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     },
     async (request, reply) => {
       const session = await getAuthenticatedSession(request);
-
       if (!session?.user) {
         return reply.status(401).send({
           message: "Unauthorized",
@@ -2069,6 +3051,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           spellKeys: characterSpellKeysSchema,
           languageKeys: characterLanguageKeysSchema,
           featureChoiceSelections: characterFeatureChoiceSelectionsSchema,
+          progressionChoices: characterProgressionChoicesSchema,
           equipmentItems: characterEquipmentItemsSchema,
           classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
           backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
@@ -2130,6 +3113,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         spellKeys,
         languageKeys,
         featureChoiceSelections,
+        progressionChoices,
         equipmentItems,
         classEquipmentMode,
         backgroundEquipmentMode,
@@ -2157,6 +3141,15 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         otherNotes,
         gmNotes,
       } = request.body;
+
+      const normalizedProgressionChoicesResult =
+        normalizeCharacterProgressionChoices(progressionChoices);
+
+      if (normalizedProgressionChoicesResult.error) {
+        return reply.status(400).send({
+          message: normalizedProgressionChoicesResult.error,
+        });
+      }
 
       const campaign = await prisma.campaign.findFirst({
         where: {
@@ -2261,6 +3254,54 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       if (classEntriesValidationError) {
         return reply.status(400).send({
           message: classEntriesValidationError,
+        });
+      }
+
+      const progressionChoicesValidationError =
+        await validateRequiredCharacterProgressionChoices({
+          systemId,
+          classEntries: normalizedClassEntriesResult.entries,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+          wasProvided: progressionChoices !== undefined,
+        });
+
+      if (progressionChoicesValidationError) {
+        return reply.status(400).send({
+          message: progressionChoicesValidationError,
+        });
+      }
+
+      const focusedProgressionChoicesValidationError =
+        validateFocusedCharacterProgressionChoices(
+          normalizedProgressionChoicesResult.entries,
+        );
+
+      if (focusedProgressionChoicesValidationError) {
+        return reply.status(400).send({
+          message: focusedProgressionChoicesValidationError,
+        });
+      }
+
+      const splitProgressionChoicesValidationError =
+        validateSplitCharacterProgressionChoices(
+          normalizedProgressionChoicesResult.entries,
+        );
+
+      if (splitProgressionChoicesValidationError) {
+        return reply.status(400).send({
+          message: splitProgressionChoicesValidationError,
+        });
+      }
+
+      const progressionTalentsValidationError =
+        await validateCharacterProgressionTalents({
+          systemId,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+        });
+
+      if (progressionTalentsValidationError) {
+        return reply.status(400).send({
+          message: progressionTalentsValidationError,
         });
       }
 
@@ -2369,11 +3410,55 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         normalizeAttributeBonusMap(selectedBackground?.attributeBonuses),
       );
 
-      const attributeEntriesResult = await getCharacterAttributeEntries(
-        systemId,
-        attributes,
-        sourceAttributeBonuses,
-      );
+            const progressionAttributeBonuses =
+        await getCharacterProgressionAttributeBonuses({
+          systemId,
+          progressionChoices:
+            normalizedProgressionChoicesResult.entries,
+        });
+
+      const consolidatedAttributeBonuses =
+        mergeAttributeBonusMaps(
+          sourceAttributeBonuses,
+          progressionAttributeBonuses,
+        );
+
+      const progressionAttributeMaximumError =
+        await validateCharacterProgressionAttributeMaximum({
+          systemId,
+          attributes: attributes ?? {},
+          sourceAttributeBonuses,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+        });
+
+      if (progressionAttributeMaximumError) {
+        return reply.status(400).send({
+          message: progressionAttributeMaximumError,
+        });
+      }
+
+      const talentPrerequisitesValidationError =
+        await validateCharacterProgressionTalentPrerequisites({
+          systemId,
+          characterLevel: effectiveLevel,
+          classEntries: normalizedClassEntriesResult.entries,
+          ancestryId: selectedAncestry?.id ?? null,
+          attributes: attributes ?? {},
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+        });
+
+      if (talentPrerequisitesValidationError) {
+        return reply.status(400).send({
+          message: talentPrerequisitesValidationError,
+        });
+      }
+
+      const attributeEntriesResult =
+        await getCharacterAttributeEntries(
+          systemId,
+          attributes,
+          consolidatedAttributeBonuses,
+        );
 
       if (attributeEntriesResult.error) {
         return reply.status(400).send({
@@ -2451,12 +3536,18 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
+      const initialConstitutionValue =
+        typeof attributes?.constitution === "number"
+          ? attributes.constitution +
+            (consolidatedAttributeBonuses.constitution ?? 0)
+          : null;
+
       const initialMaxHitPoints = calculateInitialMaxHitPointsForClassEntries({
         classEntries: normalizedClassEntriesResult.entries,
         classHitDiceById,
         fallbackHitDie: selectedCharacterClass?.hitDie ?? null,
         fallbackLevel: effectiveLevel,
-        constitutionValue: attributes?.constitution ?? null,
+        constitutionValue: initialConstitutionValue,
       });
 
       const characterSheet = await prisma.characterSheet.create({
@@ -2550,6 +3641,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         );
       }
 
+      if (progressionChoices !== undefined) {
+        await upsertCharacterSheetProgressionChoices(
+          characterSheet.id,
+          normalizedProgressionChoicesResult.entries,
+        );
+      }
+
       await syncCharacterSheetClasses({
         characterSheetId: characterSheet.id,
         classEntries: normalizedClassEntriesResult.entries,
@@ -2618,6 +3716,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             spellKeys: characterSpellKeysSchema,
             languageKeys: characterLanguageKeysSchema,
             featureChoiceSelections: characterFeatureChoiceSelectionsSchema,
+            progressionChoices: characterProgressionChoicesSchema,
             equipmentItems: characterEquipmentItemsSchema,
             classEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
             backgroundEquipmentMode: z.enum(["PACKAGE", "GOLD"]).optional(),
@@ -2685,10 +3784,20 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         spellKeys,
         languageKeys,
         featureChoiceSelections,
+        progressionChoices,
         equipmentItems,
         classEntries,
         ...sheetData
       } = request.body;
+
+      const normalizedProgressionChoicesResult =
+        normalizeCharacterProgressionChoices(progressionChoices);
+
+      if (normalizedProgressionChoicesResult.error) {
+        return reply.status(400).send({
+          message: normalizedProgressionChoicesResult.error,
+        });
+      }
 
       const campaign = await prisma.campaign.findFirst({
         where: {
@@ -2738,6 +3847,23 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
               classSkillChoiceCount: true,
             },
           },
+          classes: {
+            select: {
+              classId: true,
+              subclassId: true,
+              level: true,
+              isPrimary: true,
+              order: true,
+            },
+            orderBy: [
+              {
+                isPrimary: "desc",
+              },
+              {
+                order: "asc",
+              },
+            ],
+          },
           ancestry: {
             select: {
               id: true,
@@ -2750,6 +3876,38 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
               attributeBonuses: true,
               skillKeys: true,
             },
+          },
+          stats: {
+            select: {
+              baseValue: true,
+              stat: {
+                select: {
+                  key: true,
+                },
+              },
+            },
+          },
+          progressionChoices: {
+            select: {
+              classId: true,
+              classLevel: true,
+              choiceIndex: true,
+              type: true,
+              attributeIncreaseMode: true,
+              attributeIncreases: true,
+              talentId: true,
+            },
+            orderBy: [
+              {
+                classId: "asc",
+              },
+              {
+                classLevel: "asc",
+              },
+              {
+                choiceIndex: "asc",
+              },
+            ],
           },
         },
       });
@@ -2800,6 +3958,67 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       if (classEntriesValidationError) {
         return reply.status(400).send({
           message: classEntriesValidationError,
+        });
+      }
+
+      const effectiveProgressionClassEntries =
+        classEntries !== undefined
+          ? normalizedClassEntriesResult.entries
+          : characterSheet.classes.map((classEntry) => ({
+              classId: classEntry.classId,
+              subclassId: classEntry.subclassId,
+              level: classEntry.level,
+              isPrimary: classEntry.isPrimary,
+              order: classEntry.order,
+            }));
+
+      const progressionChoicesValidationError =
+        await validateRequiredCharacterProgressionChoices({
+          systemId: characterSheet.systemId,
+          classEntries: effectiveProgressionClassEntries,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+          wasProvided: progressionChoices !== undefined,
+        });
+
+      if (progressionChoicesValidationError) {
+        return reply.status(400).send({
+          message: progressionChoicesValidationError,
+        });
+      }
+
+      const focusedProgressionChoicesValidationError =
+        validateFocusedCharacterProgressionChoices(
+          normalizedProgressionChoicesResult.entries,
+        );
+
+      if (focusedProgressionChoicesValidationError) {
+        return reply.status(400).send({
+          message: focusedProgressionChoicesValidationError,
+        });
+      }
+
+      const splitProgressionChoicesValidationError =
+        validateSplitCharacterProgressionChoices(
+          normalizedProgressionChoicesResult.entries,
+        );
+
+      if (splitProgressionChoicesValidationError) {
+        return reply.status(400).send({
+          message: splitProgressionChoicesValidationError,
+        });
+      }
+
+      const progressionTalentsValidationError =
+        progressionChoices !== undefined
+          ? await validateCharacterProgressionTalents({
+              systemId: characterSheet.systemId,
+              progressionChoices: normalizedProgressionChoicesResult.entries,
+            })
+          : null;
+
+      if (progressionTalentsValidationError) {
+        return reply.status(400).send({
+          message: progressionTalentsValidationError,
         });
       }
 
@@ -2965,11 +4184,94 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         normalizeAttributeBonusMap(selectedBackground?.attributeBonuses),
       );
 
-      const attributeEntriesResult = await getCharacterAttributeEntries(
-        characterSheet.systemId,
-        attributes,
-        sourceAttributeBonuses,
-      );
+            const currentProgressionChoices: CharacterProgressionChoiceInput[] =
+        characterSheet.progressionChoices.map((choice) => ({
+          classId: choice.classId,
+          classLevel: choice.classLevel,
+          choiceIndex: choice.choiceIndex,
+          type: choice.type,
+          attributeIncreaseMode: choice.attributeIncreaseMode,
+          attributeIncreases: normalizeAttributeBonusMap(
+            choice.attributeIncreases,
+          ),
+          talentId: choice.talentId,
+        }));
+
+      const effectiveProgressionChoices =
+        progressionChoices !== undefined
+          ? normalizedProgressionChoicesResult.entries
+          : currentProgressionChoices;
+
+      const progressionAttributeBonuses =
+        await getCharacterProgressionAttributeBonuses({
+          systemId: characterSheet.systemId,
+          progressionChoices: effectiveProgressionChoices,
+        });
+
+      const consolidatedAttributeBonuses =
+        mergeAttributeBonusMaps(
+          sourceAttributeBonuses,
+          progressionAttributeBonuses,
+        );
+
+      const currentBaseAttributes = Object.fromEntries(
+        characterSheet.stats
+          .filter((sheetStat) => {
+            return isCharacterAttributeKey(sheetStat.stat.key);
+          })
+          .map((sheetStat) => {
+            return [sheetStat.stat.key, sheetStat.baseValue];
+          }),
+      ) as CharacterAttributeValueMap;
+
+      const effectiveAttributes: CharacterAttributeValueMap = {
+        ...currentBaseAttributes,
+        ...(attributes ?? {}),
+      };
+
+      const progressionAttributeMaximumError =
+        progressionChoices !== undefined ||
+        attributes !== undefined ||
+        sheetData.ancestryId !== undefined ||
+        sheetData.backgroundId !== undefined
+          ? await validateCharacterProgressionAttributeMaximum({
+              systemId: characterSheet.systemId,
+              attributes: effectiveAttributes,
+              sourceAttributeBonuses,
+              progressionChoices: effectiveProgressionChoices,
+            })
+          : null;
+
+      if (progressionAttributeMaximumError) {
+        return reply.status(400).send({
+          message: progressionAttributeMaximumError,
+        });
+      }
+
+      const talentPrerequisitesValidationError =
+        progressionChoices !== undefined
+          ? await validateCharacterProgressionTalentPrerequisites({
+              systemId: characterSheet.systemId,
+              characterLevel: sheetData.level ?? characterSheet.level,
+              classEntries: effectiveProgressionClassEntries,
+              ancestryId: selectedAncestry?.id ?? null,
+              attributes: effectiveAttributes,
+              progressionChoices: normalizedProgressionChoicesResult.entries,
+            })
+          : null;
+
+      if (talentPrerequisitesValidationError) {
+        return reply.status(400).send({
+          message: talentPrerequisitesValidationError,
+        });
+      }
+
+      const attributeEntriesResult =
+        await getCharacterAttributeEntries(
+          characterSheet.systemId,
+          attributes,
+          consolidatedAttributeBonuses,
+        );
 
       if (attributeEntriesResult.error) {
         return reply.status(400).send({
@@ -3047,29 +4349,24 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const currentConstitutionStat = await prisma.characterSheetStat.findFirst(
-        {
-          where: {
-            characterSheetId: sheetId,
-            stat: {
-              key: "constitution",
-            },
-          },
-          select: {
-            baseValue: true,
-          },
-        },
-      );
-
       const shouldRecalculateInitialHitPoints =
         characterSheet.status === "DRAFT" &&
         (classEntries !== undefined ||
           sheetData.classId !== undefined ||
           sheetData.level !== undefined ||
-          attributes?.constitution !== undefined);
+          attributes?.constitution !== undefined ||
+          sheetData.ancestryId !== undefined ||
+          sheetData.backgroundId !== undefined ||
+          progressionChoices !== undefined);
+
+      const nextConstitutionBaseValue =
+        effectiveAttributes.constitution ?? null;
 
       const nextConstitutionValue =
-        attributes?.constitution ?? currentConstitutionStat?.baseValue ?? null;
+        typeof nextConstitutionBaseValue === "number"
+          ? nextConstitutionBaseValue +
+            (consolidatedAttributeBonuses.constitution ?? 0)
+          : null;
 
       const recalculatedInitialMaxHitPoints = shouldRecalculateInitialHitPoints
         ? calculateInitialMaxHitPointsForClassEntries({
@@ -3207,7 +4504,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       const shouldRefreshAttributeBonuses =
         attributes !== undefined ||
         sheetData.ancestryId !== undefined ||
-        sheetData.backgroundId !== undefined;
+        sheetData.backgroundId !== undefined ||
+        progressionChoices !== undefined;
 
       if (shouldRefreshAttributeBonuses) {
         if (attributes !== undefined) {
@@ -3238,7 +4536,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
                 statId: currentStat.statId,
                 baseValue: currentStat.baseValue,
                 bonusValue: isCharacterAttributeKey(statKey)
-                  ? (sourceAttributeBonuses[statKey] ?? 0)
+                  ? (consolidatedAttributeBonuses[statKey] ?? 0)
                   : 0,
               };
             }),
@@ -3272,6 +4570,18 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         await replaceCharacterSheetFeatureChoices(
           sheetId,
           featureChoiceEntriesResult.entries,
+        );
+      }
+
+      if (progressionChoices !== undefined) {
+        await removeObsoleteCharacterSheetProgressionChoices(
+          sheetId,
+          normalizedProgressionChoicesResult.entries,
+        );
+
+        await upsertCharacterSheetProgressionChoices(
+          sheetId,
+          normalizedProgressionChoicesResult.entries,
         );
       }
 
@@ -3909,36 +5219,35 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       );
     }
 
-    const featureChoiceGroups =
-      await prisma.featureChoiceGroup.findMany({
-        where: {
-          systemId: characterSheet.systemId,
-        },
-        include: {
-          options: {
-            select: {
-              featureId: true,
-            },
-          },
-          levelProgression: {
-            select: {
-              classId: true,
-              level: true,
-            },
+    const featureChoiceGroups = await prisma.featureChoiceGroup.findMany({
+      where: {
+        systemId: characterSheet.systemId,
+      },
+      include: {
+        options: {
+          select: {
+            featureId: true,
           },
         },
-        orderBy: [
-          {
-            order: "asc",
+        levelProgression: {
+          select: {
+            classId: true,
+            level: true,
           },
-          {
-            name: "asc",
-          },
-        ],
-      });
+        },
+      },
+      orderBy: [
+        {
+          order: "asc",
+        },
+        {
+          name: "asc",
+        },
+      ],
+    });
 
-    const applicableFeatureChoiceGroups =
-      featureChoiceGroups.filter((choiceGroup) => {
+    const applicableFeatureChoiceGroups = featureChoiceGroups.filter(
+      (choiceGroup) => {
         const matchesAncestry =
           !choiceGroup.ancestryId ||
           choiceGroup.ancestryId === characterSheet.ancestryId;
@@ -3950,23 +5259,20 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         const matchesClass =
           !choiceGroup.classId ||
           classEntries.some(
-            (classEntry) =>
-              classEntry.classId === choiceGroup.classId,
+            (classEntry) => classEntry.classId === choiceGroup.classId,
           );
 
         const matchesSubclass =
           !choiceGroup.subclassId ||
           classEntries.some(
-            (classEntry) =>
-              classEntry.subclassId === choiceGroup.subclassId,
+            (classEntry) => classEntry.subclassId === choiceGroup.subclassId,
           );
 
         const matchesLevelProgression =
           !choiceGroup.levelProgression ||
           classEntries.some((classEntry) => {
             return (
-              classEntry.classId ===
-                choiceGroup.levelProgression?.classId &&
+              classEntry.classId === choiceGroup.levelProgression?.classId &&
               normalizeCharacterLevel(classEntry.level) >=
                 (choiceGroup.levelProgression?.level ?? 1)
             );
@@ -3979,23 +5285,20 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           matchesSubclass &&
           matchesLevelProgression
         );
-      });
+      },
+    );
 
-    const builderFeatureChoices =
-      characterSheet.featureChoices.filter(
-        (featureChoice) => featureChoice.source === "builder",
-      );
+    const builderFeatureChoices = characterSheet.featureChoices.filter(
+      (featureChoice) => featureChoice.source === "builder",
+    );
 
     for (const choiceGroup of applicableFeatureChoiceGroups) {
       const groupSelections = builderFeatureChoices.filter(
-        (featureChoice) =>
-          featureChoice.choiceGroupId === choiceGroup.id,
+        (featureChoice) => featureChoice.choiceGroupId === choiceGroup.id,
       );
 
       const uniqueSelectedFeatureIds = new Set(
-        groupSelections.map(
-          (featureChoice) => featureChoice.featureId,
-        ),
+        groupSelections.map((featureChoice) => featureChoice.featureId),
       );
 
       const allowedFeatureIds = new Set(
@@ -4047,6 +5350,9 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           campaignId: z.string().uuid("Invalid campaign id"),
           sheetId: z.string().uuid("Invalid character sheet id"),
         }),
+        body: z.object({
+          progressionChoices: characterProgressionChoicesSchema.unwrap(),
+        }),
       },
     },
     async (request, reply) => {
@@ -4059,6 +5365,8 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       const { campaignId, sheetId } = request.params;
+
+      const { progressionChoices } = request.body;
 
       const campaign = await prisma.campaign.findFirst({
         where: {
@@ -4125,8 +5433,140 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const validationErrors =
-        await getReadyValidationErrors(characterSheet);
+      const normalizedProgressionChoicesResult =
+        normalizeCharacterProgressionChoices(progressionChoices);
+
+      if (normalizedProgressionChoicesResult.error) {
+        return reply.status(400).send({
+          message: normalizedProgressionChoicesResult.error,
+        });
+      }
+
+      const effectiveProgressionClassEntries: CharacterClassEntryInput[] =
+        characterSheet.classes.length > 0
+          ? characterSheet.classes.map((classEntry) => ({
+              classId: classEntry.classId,
+              subclassId: classEntry.subclassId,
+              level: classEntry.level,
+              isPrimary: classEntry.isPrimary,
+              order: classEntry.order,
+            }))
+          : characterSheet.classId
+            ? [
+                {
+                  classId: characterSheet.classId,
+                  subclassId: characterSheet.subclassId,
+                  level: characterSheet.level,
+                  isPrimary: true,
+                  order: 0,
+                },
+              ]
+            : [];
+
+      const progressionValidationErrors: string[] = [];
+
+      const requiredProgressionChoicesValidationError =
+        await validateRequiredCharacterProgressionChoices({
+          systemId: characterSheet.systemId,
+          classEntries: effectiveProgressionClassEntries,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+          wasProvided: true,
+        });
+
+      if (requiredProgressionChoicesValidationError) {
+        progressionValidationErrors.push(
+          requiredProgressionChoicesValidationError,
+        );
+      }
+
+      const resolvedProgressionChoicesValidationError =
+        validateResolvedCharacterProgressionChoices(
+          normalizedProgressionChoicesResult.entries,
+        );
+
+      if (resolvedProgressionChoicesValidationError) {
+        progressionValidationErrors.push(
+          resolvedProgressionChoicesValidationError,
+        );
+      }
+
+      const focusedProgressionChoicesValidationError =
+        validateFocusedCharacterProgressionChoices(
+          normalizedProgressionChoicesResult.entries,
+        );
+
+      if (focusedProgressionChoicesValidationError) {
+        progressionValidationErrors.push(
+          focusedProgressionChoicesValidationError,
+        );
+      }
+
+      const splitProgressionChoicesValidationError =
+        validateSplitCharacterProgressionChoices(
+          normalizedProgressionChoicesResult.entries,
+        );
+
+      if (splitProgressionChoicesValidationError) {
+        progressionValidationErrors.push(
+          splitProgressionChoicesValidationError,
+        );
+      }
+
+      const progressionTalentsValidationError =
+        await validateCharacterProgressionTalents({
+          systemId: characterSheet.systemId,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+        });
+
+      if (progressionTalentsValidationError) {
+        progressionValidationErrors.push(progressionTalentsValidationError);
+      }
+
+      const currentBaseAttributes = Object.fromEntries(
+        characterSheet.stats
+          .filter((sheetStat) => {
+            return isCharacterAttributeKey(sheetStat.stat.key);
+          })
+          .map((sheetStat) => {
+            return [sheetStat.stat.key, sheetStat.baseValue];
+          }),
+      ) as CharacterAttributeValueMap;
+
+      const sourceAttributeBonuses = mergeAttributeBonusMaps(
+        normalizeAttributeBonusMap(characterSheet.ancestry?.attributeBonuses),
+        normalizeAttributeBonusMap(characterSheet.background?.attributeBonuses),
+      );
+
+      const progressionAttributeMaximumError =
+        await validateCharacterProgressionAttributeMaximum({
+          systemId: characterSheet.systemId,
+          attributes: currentBaseAttributes,
+          sourceAttributeBonuses,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+        });
+
+      if (progressionAttributeMaximumError) {
+        progressionValidationErrors.push(progressionAttributeMaximumError);
+      }
+
+      const talentPrerequisitesValidationError =
+        await validateCharacterProgressionTalentPrerequisites({
+          systemId: characterSheet.systemId,
+          characterLevel: characterSheet.level,
+          classEntries: effectiveProgressionClassEntries,
+          ancestryId: characterSheet.ancestryId,
+          attributes: currentBaseAttributes,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
+        });
+
+      if (talentPrerequisitesValidationError) {
+        progressionValidationErrors.push(talentPrerequisitesValidationError);
+      }
+
+      const validationErrors = [
+        ...(await getReadyValidationErrors(characterSheet)),
+        ...progressionValidationErrors,
+      ];
 
       if (validationErrors.length > 0) {
         return reply.status(400).send({

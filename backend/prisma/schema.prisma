@@ -82,6 +82,16 @@ enum CharacterSheetStatus {
   ARCHIVED
 }
 
+enum CharacterProgressionChoiceType {
+  ATTRIBUTE_INCREASE
+  TALENT
+}
+
+enum CharacterAttributeIncreaseMode {
+  FOCUSED
+  SPLIT
+}
+
 enum SpellSchool {
   ABJURATION
   CONJURATION
@@ -213,6 +223,7 @@ model GameSystem {
   classes             CharacterClass[]
   subclasses          CharacterSubclass[]
   features            Feature[]
+  talents             Talent[]
   spells              Spell[]
   equipment           Equipment[]
   languages           Language[]
@@ -344,13 +355,14 @@ model CharacterSheet {
   subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
   gameSessions   GameSession[]
 
-  stats          CharacterSheetStat[]
-  skills         CharacterSheetSkill[]
-  spells         CharacterSheetSpell[]
-  equipment      CharacterSheetEquipment[]
-  classes        CharacterSheetClass[]
-  languages      CharacterSheetLanguage[]
-  featureChoices CharacterSheetFeatureChoice[]
+  stats              CharacterSheetStat[]
+  skills             CharacterSheetSkill[]
+  spells             CharacterSheetSpell[]
+  equipment          CharacterSheetEquipment[]
+  classes            CharacterSheetClass[]
+  languages          CharacterSheetLanguage[]
+  featureChoices     CharacterSheetFeatureChoice[]
+  progressionChoices CharacterSheetProgressionChoice[]
 
   @@index([campaignId])
   @@index([systemId])
@@ -508,6 +520,33 @@ model CharacterSheetClass {
   @@index([order])
 }
 
+model CharacterSheetProgressionChoice {
+  id               String  @id @default(uuid())
+  characterSheetId String
+  classId          String
+  talentId         String?
+  classLevel       Int
+  choiceIndex      Int
+
+  type                  CharacterProgressionChoiceType?
+  attributeIncreaseMode CharacterAttributeIncreaseMode?
+  attributeIncreases    Json                            @default("{}")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  characterSheet CharacterSheet @relation(fields: [characterSheetId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  talent         Talent?        @relation(fields: [talentId], references: [id], onDelete: SetNull)
+
+  @@unique([characterSheetId, classId, classLevel, choiceIndex])
+  @@index([characterSheetId])
+  @@index([classId])
+  @@index([talentId])
+  @@index([type])
+  @@index([classLevel])
+}
+
 model CharacterClass {
   id                        String   @id @default(uuid())
   systemId                  String
@@ -526,15 +565,16 @@ model CharacterClass {
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @default(now()) @updatedAt
 
-  system                GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  subclasses            CharacterSubclass[]
-  levelProgressions     LevelProgression[]
-  classSpells           ClassSpell[]
-  features              Feature[]
-  featureChoiceGroups   FeatureChoiceGroup[]
-  characterSheets       CharacterSheet[]
-  characterSheetClasses CharacterSheetClass[]
-  characterSheetSpells  CharacterSheetSpell[]
+  system                           GameSystem                        @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  subclasses                       CharacterSubclass[]
+  levelProgressions                LevelProgression[]
+  classSpells                      ClassSpell[]
+  features                         Feature[]
+  featureChoiceGroups              FeatureChoiceGroup[]
+  characterSheets                  CharacterSheet[]
+  characterSheetClasses            CharacterSheetClass[]
+  characterSheetSpells             CharacterSheetSpell[]
+  characterSheetProgressionChoices CharacterSheetProgressionChoice[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -568,11 +608,12 @@ model CharacterSubclass {
 }
 
 model LevelProgression {
-  id               String @id @default(uuid())
-  systemId         String
-  classId          String
-  level            Int
-  proficiencyBonus Int?
+  id                     String @id @default(uuid())
+  systemId               String
+  classId                String
+  level                  Int
+  proficiencyBonus       Int?
+  progressionChoiceCount Int    @default(0)
 
   cantripsKnown  Int @default(0)
   spellsKnown    Int @default(0)
@@ -674,6 +715,28 @@ model Feature {
   @@index([levelProgressionId])
   @@index([sourceType])
   @@index([level])
+  @@index([order])
+}
+
+model Talent {
+  id               String   @id @default(uuid())
+  systemId         String
+  key              String
+  name             String
+  description      String?
+  isRepeatable     Boolean  @default(false)
+  prerequisites    Json     @default("{}")
+  attributeBonuses Json     @default("{}")
+  order            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  system                      GameSystem                        @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterProgressionChoices CharacterSheetProgressionChoice[]
+
+  @@unique([systemId, key])
+  @@unique([systemId, name])
+  @@index([systemId])
   @@index([order])
 }
 

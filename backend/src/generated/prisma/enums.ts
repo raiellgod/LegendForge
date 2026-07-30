@@ -117,6 +117,22 @@ export const CharacterSheetStatus = {
 export type CharacterSheetStatus = (typeof CharacterSheetStatus)[keyof typeof CharacterSheetStatus]
 
 
+export const CharacterProgressionChoiceType = {
+  ATTRIBUTE_INCREASE: 'ATTRIBUTE_INCREASE',
+  TALENT: 'TALENT'
+} as const
+
+export type CharacterProgressionChoiceType = (typeof CharacterProgressionChoiceType)[keyof typeof CharacterProgressionChoiceType]
+
+
+export const CharacterAttributeIncreaseMode = {
+  FOCUSED: 'FOCUSED',
+  SPLIT: 'SPLIT'
+} as const
+
+export type CharacterAttributeIncreaseMode = (typeof CharacterAttributeIncreaseMode)[keyof typeof CharacterAttributeIncreaseMode]
+
+
 export const SpellSchool = {
   ABJURATION: 'ABJURATION',
   CONJURATION: 'CONJURATION',

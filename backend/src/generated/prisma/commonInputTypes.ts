@@ -304,6 +304,40 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumCharacterProgressionChoiceTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterProgressionChoiceType | Prisma.EnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CharacterProgressionChoiceType[] | Prisma.ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CharacterProgressionChoiceType[] | Prisma.ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCharacterProgressionChoiceTypeNullableFilter<$PrismaModel> | $Enums.CharacterProgressionChoiceType | null
+}
+
+export type EnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterAttributeIncreaseMode | Prisma.EnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CharacterAttributeIncreaseMode[] | Prisma.ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CharacterAttributeIncreaseMode[] | Prisma.ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel> | $Enums.CharacterAttributeIncreaseMode | null
+}
+
+export type EnumCharacterProgressionChoiceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterProgressionChoiceType | Prisma.EnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CharacterProgressionChoiceType[] | Prisma.ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CharacterProgressionChoiceType[] | Prisma.ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCharacterProgressionChoiceTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CharacterProgressionChoiceType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCharacterProgressionChoiceTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCharacterProgressionChoiceTypeNullableFilter<$PrismaModel>
+}
+
+export type EnumCharacterAttributeIncreaseModeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterAttributeIncreaseMode | Prisma.EnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CharacterAttributeIncreaseMode[] | Prisma.ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CharacterAttributeIncreaseMode[] | Prisma.ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CharacterAttributeIncreaseMode | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel>
+}
+
 export type EnumFeatureSourceTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.FeatureSourceType | Prisma.EnumFeatureSourceTypeFieldRefInput<$PrismaModel>
   in?: $Enums.FeatureSourceType[] | Prisma.ListEnumFeatureSourceTypeFieldRefInput<$PrismaModel>
@@ -809,6 +843,40 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumCharacterProgressionChoiceTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterProgressionChoiceType | Prisma.EnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CharacterProgressionChoiceType[] | Prisma.ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CharacterProgressionChoiceType[] | Prisma.ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCharacterProgressionChoiceTypeNullableFilter<$PrismaModel> | $Enums.CharacterProgressionChoiceType | null
+}
+
+export type NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterAttributeIncreaseMode | Prisma.EnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CharacterAttributeIncreaseMode[] | Prisma.ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CharacterAttributeIncreaseMode[] | Prisma.ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel> | $Enums.CharacterAttributeIncreaseMode | null
+}
+
+export type NestedEnumCharacterProgressionChoiceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterProgressionChoiceType | Prisma.EnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CharacterProgressionChoiceType[] | Prisma.ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CharacterProgressionChoiceType[] | Prisma.ListEnumCharacterProgressionChoiceTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCharacterProgressionChoiceTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CharacterProgressionChoiceType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCharacterProgressionChoiceTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCharacterProgressionChoiceTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumCharacterAttributeIncreaseModeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterAttributeIncreaseMode | Prisma.EnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CharacterAttributeIncreaseMode[] | Prisma.ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CharacterAttributeIncreaseMode[] | Prisma.ListEnumCharacterAttributeIncreaseModeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CharacterAttributeIncreaseMode | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumFeatureSourceTypeFilter<$PrismaModel = never> = {

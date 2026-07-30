@@ -17,6 +17,7 @@ import {
   shouldReplaceGenderAutomatically,
 } from "@/features/character-builder/utils/builder-gender";
 import { getCharacterBuilderValidationState } from "@/features/character-builder/utils/builder-validation";
+import { isCharacterProgressionChoiceResolved } from "@/features/character-builder/utils/progression-choices";
 import {
   getStartingEquipmentItemsFromDraft,
   getStartingGoldFromDraft,
@@ -35,6 +36,7 @@ import { CharacterSkillsStep } from "@/features/character-builder/steps/Characte
 import { CharacterLanguagesStep } from "@/features/character-builder/steps/CharacterLanguagesStep";
 import { CharacterSpellsStep } from "@/features/character-builder/steps/CharacterSpellsStep";
 import { CharacterFeaturesStep } from "@/features/character-builder/steps/CharacterFeaturesStep";
+import { CharacterProgressionStep } from "@/features/character-builder/steps/CharacterProgressionStep";
 import { CharacterEquipmentStep } from "@/features/character-builder/steps/CharacterEquipmentStep";
 import { CharacterAboutStep } from "@/features/character-builder/steps/CharacterAboutStep";
 import { CharacterReviewStep } from "@/features/character-builder/steps/CharacterReviewStep";
@@ -185,6 +187,7 @@ export function CharacterBuilderModal({
     selectedCantripCount,
     selectedLeveledSpellCount,
 
+    consolidatedAttributes,
     assignedAttributeValues,
     attributeTotal,
     strongestAttribute,
@@ -202,6 +205,13 @@ export function CharacterBuilderModal({
     selectedBackground,
     selectedClassDisplayName,
   });
+
+  const resolvedProgressionChoiceCount = draft.progressionChoices.filter(
+    (choice) => isCharacterProgressionChoiceResolved(choice),
+  ).length;
+
+  const pendingProgressionChoiceCount =
+    draft.progressionChoices.length - resolvedProgressionChoiceCount;
 
   function syncDraftLevelWithClassEntries(
     nextDraft: CharacterBuilderDraft,
@@ -1149,6 +1159,19 @@ export function CharacterBuilderModal({
                         );
                       }}
                     />
+                  ) : activeStep.id === "progression" ? (
+                    <CharacterProgressionStep
+                      draft={draft}
+                      classes={options.classes}
+                      ancestries={options.ancestries}
+                      backgrounds={options.backgrounds}
+                      talents={options.talents}
+                      isLoading={isLoadingOptions}
+                      error={optionsError}
+                      onChangeProgressionChoices={(progressionChoices) => {
+                        updateDraft("progressionChoices", progressionChoices);
+                      }}
+                    />
                   ) : activeStep.id === "equipment" ? (
                     <CharacterEquipmentStep
                       equipment={options.equipment}
@@ -1337,9 +1360,9 @@ export function CharacterBuilderModal({
                       value={
                         strongestAttribute
                           ? `${strongestAttribute.shortName} ${
-                              draft.attributes[strongestAttribute.key]
+                              consolidatedAttributes[strongestAttribute.key]
                             } (${formatAttributeModifier(
-                              draft.attributes[strongestAttribute.key],
+                              consolidatedAttributes[strongestAttribute.key],
                             )})`
                           : "Não definido"
                       }
@@ -1363,6 +1386,15 @@ export function CharacterBuilderModal({
                     <BuilderSummaryRow
                       label="Truques/Magias"
                       value={`${selectedCantripCount}/${selectedLeveledSpellCount}`}
+                    />
+
+                    <BuilderSummaryRow
+                      label="Progressão"
+                      value={
+                        draft.progressionChoices.length === 0
+                          ? "Nenhum marco"
+                          : `${resolvedProgressionChoiceCount} resolvidas · ${pendingProgressionChoiceCount} pendentes`
+                      }
                     />
 
                     <BuilderSummaryRow

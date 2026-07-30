@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { FormEvent, PointerEvent } from "react";
+import type { FormEvent, PointerEvent, SetStateAction } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -18,6 +18,11 @@ import type {
 import { DEFAULT_CHARACTER_ATTRIBUTES } from "@/features/character-builder/constants/character-builder-constants";
 
 import { getPersistableCharacterAttributes } from "@/features/character-builder/utils/attributes";
+
+import {
+  getRequiredCharacterProgressionChoices,
+  synchronizeCharacterProgressionChoices,
+} from "@/features/character-builder/utils/progression-choices";
 
 import { getInitiativeBonus } from "@/features/character-builder/utils/character-sheet-calculations";
 
@@ -254,6 +259,7 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
     skillKeys: [],
     spellKeys: [],
     featureChoiceSelections: [],
+    progressionChoices: [],
     equipmentItems: [],
     classEquipmentMode: "PACKAGE",
     backgroundEquipmentMode: "PACKAGE",
@@ -283,6 +289,34 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
     otherNotes: "",
     gmNotes: "",
   };
+}
+
+function getPersistableCharacterProgressionChoices(
+  draft: CharacterBuilderDraft,
+) {
+  return draft.progressionChoices.map((choice) => {
+    const classEntry = draft.classEntries.find((currentClassEntry) => {
+      return currentClassEntry.id === choice.classEntryId;
+    });
+
+    if (!classEntry) {
+      throw new Error(
+        `Não foi possível localizar a classe do marco de nível ${choice.classLevel}.`,
+      );
+    }
+
+    return {
+      classId: classEntry.classId,
+      classLevel: choice.classLevel,
+      choiceIndex: choice.choiceIndex,
+      type: choice.type,
+      attributeIncreaseMode: choice.attributeIncreaseMode,
+      attributeIncreases: {
+        ...choice.attributeIncreases,
+      },
+      talentId: choice.talentId,
+    };
+  });
 }
 
 function getCharacterBuilderClassEntriesFromSheet(
@@ -319,10 +353,58 @@ function getCharacterBuilderClassEntriesFromSheet(
   ];
 }
 
+function getCharacterBuilderProgressionChoicesFromSheet(
+  sheet: CharacterReadySheet,
+  classEntries: CharacterBuilderDraft["classEntries"],
+): CharacterBuilderDraft["progressionChoices"] {
+  return (sheet.progressionChoices ?? [])
+    .map((progressionChoice) => {
+      const classEntry = classEntries.find((currentClassEntry) => {
+        return currentClassEntry.classId === progressionChoice.classId;
+      });
+
+      if (!classEntry) {
+        return null;
+      }
+
+      return {
+        classEntryId: classEntry.id,
+        classId: progressionChoice.classId,
+        className:
+          progressionChoice.characterClass?.name ?? classEntry.className,
+        classLevel: progressionChoice.classLevel,
+        choiceIndex: progressionChoice.choiceIndex,
+
+        type: progressionChoice.type,
+
+        attributeIncreaseMode:
+          progressionChoice.attributeIncreaseMode,
+        attributeIncreases: {
+          ...progressionChoice.attributeIncreases,
+        },
+
+        talentId: progressionChoice.talentId,
+      };
+    })
+    .filter(
+      (
+        progressionChoice,
+      ): progressionChoice is CharacterBuilderDraft["progressionChoices"][number] => {
+        return progressionChoice !== null;
+      },
+    );
+}
+
 function createCharacterBuilderDraftFromSheet(
   sheet: CharacterReadySheet,
 ): CharacterBuilderDraft {
   const classEntries = getCharacterBuilderClassEntriesFromSheet(sheet);
+
+  const progressionChoices =
+    getCharacterBuilderProgressionChoicesFromSheet(
+      sheet,
+      classEntries,
+    );
 
   const primaryClassEntry =
     classEntries.find((classEntry) => classEntry.isPrimary) ??
@@ -390,6 +472,7 @@ function createCharacterBuilderDraftFromSheet(
         choiceGroupId: featureChoice.choiceGroupId,
         featureId: featureChoice.featureId,
       })),
+    progressionChoices,
     equipmentItems: sheet.equipment.map((equipmentEntry) => ({
       key: equipmentEntry.equipment.key,
       quantity: equipmentEntry.quantity,
@@ -487,6 +570,7 @@ export default function CampaignPlayPage() {
       skills: [],
       spells: [],
       features: [],
+      talents: [],
       featureChoiceGroups: [],
       equipment: [],
       languages: [],
@@ -497,6 +581,40 @@ export default function CampaignPlayPage() {
   ] = useState(false);
   const [characterBuilderOptionsError, setCharacterBuilderOptionsError] =
     useState<string | null>(null);
+  function synchronizeProgressionChoicesForDraft(
+    draft: CharacterBuilderDraft,
+    classes = characterBuilderOptions.classes,
+  ): CharacterBuilderDraft {
+    const requiredChoices = getRequiredCharacterProgressionChoices({
+      classEntries: draft.classEntries,
+      classes,
+    });
+
+    const progressionChoices = synchronizeCharacterProgressionChoices({
+      requiredChoices,
+      currentChoices: draft.progressionChoices,
+    });
+
+    if (progressionChoices === draft.progressionChoices) {
+      return draft;
+    }
+
+    return {
+      ...draft,
+      progressionChoices,
+    };
+  }
+
+  function handleChangeCharacterBuilderDraft(
+    action: SetStateAction<CharacterBuilderDraft>,
+  ) {
+    setCharacterBuilderDraft((currentDraft) => {
+      const nextDraft =
+        typeof action === "function" ? action(currentDraft) : action;
+
+      return synchronizeProgressionChoicesForDraft(nextDraft);
+    });
+  }
   const [zoom, setZoom] = useState(90);
   const [scenePan, setScenePan] = useState({ x: 0, y: 0 });
   const [scenePanStart, setScenePanStart] = useState<{
@@ -2224,16 +2342,26 @@ export default function CampaignPlayPage() {
         );
       }
 
-      setCharacterBuilderOptions({
+      const nextCharacterBuilderOptions: CharacterBuilderOptions = {
         classes: data.classes ?? [],
         ancestries: data.ancestries ?? [],
         backgrounds: data.backgrounds ?? [],
         skills: data.skills ?? [],
         spells: data.spells ?? [],
         features: data.features ?? [],
+        talents: data.talents ?? [],
         featureChoiceGroups: data.featureChoiceGroups ?? [],
         equipment: data.equipment ?? [],
         languages: data.languages ?? [],
+      };
+
+      setCharacterBuilderOptions(nextCharacterBuilderOptions);
+
+      setCharacterBuilderDraft((currentDraft) => {
+        return synchronizeProgressionChoicesForDraft(
+          currentDraft,
+          nextCharacterBuilderOptions.classes,
+        );
       });
     } catch (error) {
       setCharacterBuilderOptionsError(
@@ -2367,6 +2495,10 @@ export default function CampaignPlayPage() {
 
     const requestMethod = existingSheetId ? "PATCH" : "POST";
 
+    const progressionChoices = getPersistableCharacterProgressionChoices(
+      characterBuilderDraft,
+    );
+
     const response = await fetch(requestUrl, {
       method: requestMethod,
       credentials: "include",
@@ -2405,6 +2537,7 @@ export default function CampaignPlayPage() {
         spellKeys: characterBuilderDraft.spellKeys,
         languageKeys: characterBuilderDraft.languageKeys,
         featureChoiceSelections: characterBuilderDraft.featureChoiceSelections,
+        progressionChoices,
         equipmentItems: getStartingEquipmentItemsFromDraft(
           characterBuilderDraft,
           characterBuilderOptions,
@@ -2511,6 +2644,10 @@ export default function CampaignPlayPage() {
     setCharacterDraftSaveSuccess(null);
 
     try {
+      const progressionChoices = getPersistableCharacterProgressionChoices(
+        characterBuilderDraft,
+      );
+
       const { persistedSheet } = await persistCharacterBuilderDraft();
 
       const response = await fetch(
@@ -2518,6 +2655,12 @@ export default function CampaignPlayPage() {
         {
           method: "POST",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            progressionChoices,
+          }),
         },
       );
 
@@ -2937,7 +3080,7 @@ export default function CampaignPlayPage() {
         saveSuccess={characterDraftSaveSuccess}
         onSaveDraft={handleSaveCharacterBuilderDraft}
         onFinalizeSheet={handleFinalizeCharacterSheet}
-        onChangeDraft={setCharacterBuilderDraft}
+        onChangeDraft={handleChangeCharacterBuilderDraft}
         onSelectOption={handleSelectCharacterBuilderOption}
         onChangeStep={setActiveCharacterBuilderStep}
         onClose={() => setIsCharacterBuilderOpen(false)}

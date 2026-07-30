@@ -45,8 +45,13 @@ export const characterBuilderSteps: CharacterBuilderStep[] = [
   {
     id: "features",
     title: "Features",
+    description: "Resolva as escolhas de features disponíveis.",
+  },
+  {
+    id: "progression",
+    title: "Progressão",
     description:
-      "Escolha estilos, técnicas e outros recursos opcionais do personagem.",
+      "Resolva aumentos de atributo e talentos concedidos pelos níveis de classe.",
   },
   {
     id: "equipment",

@@ -15,6 +15,17 @@ export type CharacterAttributeBonusMap = Partial<
   Record<CharacterAttributeKey, number>
 >;
 
+export type CharacterBuilderTalentPrerequisites = {
+  minimumCharacterLevel?: number;
+  minimumAttributes?: CharacterAttributeBonusMap;
+  requiredClassKeys?: string[];
+  requiredSubclassKeys?: string[];
+  requiredAncestryKeys?: string[];
+  requiredProficiencyKeys?: string[];
+  requiredTalentKeys?: string[];
+  requiresSpellcasting?: boolean;
+};
+
 export type CharacterBuilderEquipmentMode = "PACKAGE" | "GOLD";
 
 export type CharacterSheetStatus = "DRAFT" | "READY" | "ARCHIVED";
@@ -36,6 +47,27 @@ export type CharacterBuilderClassDraftEntry = {
   level: number;
   isPrimary: boolean;
   order: number;
+};
+
+export type CharacterBuilderProgressionChoiceType =
+  | "ATTRIBUTE_INCREASE"
+  | "TALENT";
+
+export type CharacterBuilderAttributeIncreaseMode = "FOCUSED" | "SPLIT";
+
+export type CharacterBuilderProgressionChoice = {
+  classEntryId: string;
+  classId: string;
+  className: string;
+  classLevel: number;
+  choiceIndex: number;
+
+  type: CharacterBuilderProgressionChoiceType | null;
+
+  attributeIncreaseMode: CharacterBuilderAttributeIncreaseMode | null;
+  attributeIncreases: CharacterAttributeBonusMap;
+
+  talentId: string | null;
 };
 
 export type CharacterBuilderDraft = {
@@ -62,6 +94,7 @@ export type CharacterBuilderDraft = {
   skillKeys: string[];
   spellKeys: string[];
   featureChoiceSelections: CharacterBuilderFeatureChoiceSelection[];
+  progressionChoices: CharacterBuilderProgressionChoice[];
   equipmentItems: CharacterBuilderEquipmentDraftItem[];
   classEquipmentMode: CharacterBuilderEquipmentMode;
   backgroundEquipmentMode: CharacterBuilderEquipmentMode;
@@ -108,6 +141,7 @@ export type CharacterBuilderSpellLimit = {
 export type CharacterBuilderClassLevelProgression = {
   level: number;
   proficiencyBonus: number | null;
+  progressionChoiceCount: number;
   cantripsKnown: number;
   spellsKnown: number;
   spellsPrepared: number;
@@ -174,6 +208,13 @@ export type CharacterBuilderSkillOption = CharacterBuilderOption & {
 
 export type CharacterBuilderLanguageOption = CharacterBuilderOption;
 
+export type CharacterBuilderTalentOption = CharacterBuilderOption & {
+  isRepeatable: boolean;
+  prerequisites: CharacterBuilderTalentPrerequisites;
+  attributeBonuses: CharacterAttributeBonusMap;
+  order: number;
+};
+
 export type CharacterBuilderSpellOption = CharacterBuilderOption & {
   level: number;
   school: string;
@@ -227,6 +268,7 @@ export type CharacterBuilderOptions = {
   skills: CharacterBuilderSkillOption[];
   spells: CharacterBuilderSpellOption[];
   features: CharacterBuilderFeatureOption[];
+  talents: CharacterBuilderTalentOption[];
   featureChoiceGroups: CharacterBuilderFeatureChoiceGroup[];
   equipment: CharacterBuilderEquipmentOption[];
   languages: CharacterBuilderLanguageOption[];
@@ -313,6 +355,31 @@ export type CharacterReadySheetFeatureChoice = {
     order: number;
   };
   feature: CharacterBuilderFeatureOption;
+};
+
+export type CharacterReadySheetProgressionChoice = {
+  id: string;
+  characterSheetId: string;
+  classId: string;
+  talentId: string | null;
+
+  classLevel: number;
+  choiceIndex: number;
+
+  type: CharacterBuilderProgressionChoiceType | null;
+  attributeIncreaseMode: CharacterBuilderAttributeIncreaseMode | null;
+  attributeIncreases: CharacterAttributeBonusMap;
+
+  createdAt: string;
+  updatedAt: string;
+
+  characterClass: {
+    id: string;
+    key: string;
+    name: string;
+  };
+
+  talent: CharacterBuilderTalentOption | null;
 };
 
 export type CharacterReadySheetLevelProgressionPreview = {
@@ -533,6 +600,7 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
 
   features: CharacterReadySheetFeature[];
   featureChoices: CharacterReadySheetFeatureChoice[];
+  progressionChoices: CharacterReadySheetProgressionChoice[];
   levelUpPreview: CharacterReadySheetLevelUpPreview;
 };
 

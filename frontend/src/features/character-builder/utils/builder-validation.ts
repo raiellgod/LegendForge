@@ -10,10 +10,16 @@ import type {
   CharacterBuilderOptions,
 } from "@/features/character-builder/types/character-builder-types";
 
+import {
+  getConsolidatedCharacterAttributes,
+  MAX_STANDARD_CHARACTER_ATTRIBUTE,
+} from "@/features/character-builder/utils/attributes";
+
+import { isCharacterProgressionChoiceResolved } from "@/features/character-builder/utils/progression-choices";
+
 import { isCantrip } from "@/features/character-builder/utils/spells";
 
-type CharacterBuilderClassOption =
-  CharacterBuilderOptions["classes"][number];
+type CharacterBuilderClassOption = CharacterBuilderOptions["classes"][number];
 
 type CharacterBuilderAncestryOption =
   CharacterBuilderOptions["ancestries"][number];
@@ -42,25 +48,22 @@ export function getCharacterBuilderValidationState({
     (firstEntry, secondEntry) => firstEntry.order - secondEntry.order,
   );
 
-  const pendingSubclassEntries = orderedClassEntries.filter(
-    (classEntry) => {
-      const characterClass = options.classes.find(
-        (currentClass) => currentClass.id === classEntry.classId,
-      );
+  const pendingSubclassEntries = orderedClassEntries.filter((classEntry) => {
+    const characterClass = options.classes.find(
+      (currentClass) => currentClass.id === classEntry.classId,
+    );
 
-      const subclassSelectionLevel =
-        characterClass?.subclassSelectionLevel ?? null;
+    const subclassSelectionLevel =
+      characterClass?.subclassSelectionLevel ?? null;
 
-      return (
-        typeof subclassSelectionLevel === "number" &&
-        classEntry.level >= subclassSelectionLevel &&
-        !classEntry.subclassId
-      );
-    },
-  );
+    return (
+      typeof subclassSelectionLevel === "number" &&
+      classEntry.level >= subclassSelectionLevel &&
+      !classEntry.subclassId
+    );
+  });
 
-  const hasPendingSubclassChoices =
-    pendingSubclassEntries.length > 0;
+  const hasPendingSubclassChoices = pendingSubclassEntries.length > 0;
 
   const spellValidationClassEntries =
     orderedClassEntries.length > 0
@@ -80,13 +83,11 @@ export function getCharacterBuilderValidationState({
           ]
         : [];
 
-  const requiredKnownSpellLimitsByLevel =
-    new Map<number, number>();
+  const requiredKnownSpellLimitsByLevel = new Map<number, number>();
 
   for (const classEntry of spellValidationClassEntries) {
     const classOption = options.classes.find(
-      (currentClass) =>
-        currentClass.id === classEntry.classId,
+      (currentClass) => currentClass.id === classEntry.classId,
     );
 
     if (!classOption) {
@@ -99,8 +100,7 @@ export function getCharacterBuilderValidationState({
     );
 
     const progression = classOption.levelProgressions.find(
-      (currentProgression) =>
-        currentProgression.level === safeClassLevel,
+      (currentProgression) => currentProgression.level === safeClassLevel,
     );
 
     for (const spellLimit of progression?.spellLimits ?? []) {
@@ -110,79 +110,57 @@ export function getCharacterBuilderValidationState({
 
       requiredKnownSpellLimitsByLevel.set(
         spellLimit.spellLevel,
-        (requiredKnownSpellLimitsByLevel.get(
-          spellLimit.spellLevel,
-        ) ?? 0) + spellLimit.spellsKnown,
+        (requiredKnownSpellLimitsByLevel.get(spellLimit.spellLevel) ?? 0) +
+          spellLimit.spellsKnown,
       );
     }
   }
 
-  const validSelectedBuilderSpells = options.spells.filter(
-    (spell) => {
-      if (!draft.spellKeys.includes(spell.key)) {
+  const validSelectedBuilderSpells = options.spells.filter((spell) => {
+    if (!draft.spellKeys.includes(spell.key)) {
+      return false;
+    }
+
+    return spellValidationClassEntries.some((classEntry) => {
+      const classOption = options.classes.find(
+        (currentClass) => currentClass.id === classEntry.classId,
+      );
+
+      if (!classOption) {
         return false;
       }
 
-      return spellValidationClassEntries.some(
-        (classEntry) => {
-          const classOption = options.classes.find(
-            (currentClass) =>
-              currentClass.id === classEntry.classId,
-          );
-
-          if (!classOption) {
-            return false;
-          }
-
-          const safeClassLevel = Math.max(
-            1,
-            Math.min(
-              20,
-              Math.trunc(classEntry.level),
-            ),
-          );
-
-          const progression =
-            classOption.levelProgressions.find(
-              (currentProgression) =>
-                currentProgression.level ===
-                safeClassLevel,
-            );
-
-          const spellLimit =
-            progression?.spellLimits.find(
-              (currentSpellLimit) =>
-                currentSpellLimit.spellLevel ===
-                spell.level,
-            );
-
-          const classSpell =
-            classOption.classSpells.find(
-              (currentClassSpell) =>
-                currentClassSpell.spellKey ===
-                spell.key,
-            );
-
-          return (
-            Boolean(classSpell) &&
-            (classSpell?.minimumClassLevel ?? 1) <=
-              safeClassLevel &&
-            (spellLimit?.spellsKnown ?? 0) > 0
-          );
-        },
+      const safeClassLevel = Math.max(
+        1,
+        Math.min(20, Math.trunc(classEntry.level)),
       );
-    },
-  );
 
-  const selectedKnownSpellCountsByLevel =
-    new Map<number, number>();
+      const progression = classOption.levelProgressions.find(
+        (currentProgression) => currentProgression.level === safeClassLevel,
+      );
+
+      const spellLimit = progression?.spellLimits.find(
+        (currentSpellLimit) => currentSpellLimit.spellLevel === spell.level,
+      );
+
+      const classSpell = classOption.classSpells.find(
+        (currentClassSpell) => currentClassSpell.spellKey === spell.key,
+      );
+
+      return (
+        Boolean(classSpell) &&
+        (classSpell?.minimumClassLevel ?? 1) <= safeClassLevel &&
+        (spellLimit?.spellsKnown ?? 0) > 0
+      );
+    });
+  });
+
+  const selectedKnownSpellCountsByLevel = new Map<number, number>();
 
   for (const spell of validSelectedBuilderSpells) {
     selectedKnownSpellCountsByLevel.set(
       spell.level,
-      (selectedKnownSpellCountsByLevel.get(
-        spell.level,
-      ) ?? 0) + 1,
+      (selectedKnownSpellCountsByLevel.get(spell.level) ?? 0) + 1,
     );
   }
 
@@ -195,10 +173,7 @@ export function getCharacterBuilderValidationState({
         firstSpellLevel - secondSpellLevel,
     )
     .map(([spellLevel, required]) => {
-      const selected =
-        selectedKnownSpellCountsByLevel.get(
-          spellLevel,
-        ) ?? 0;
+      const selected = selectedKnownSpellCountsByLevel.get(spellLevel) ?? 0;
 
       return {
         spellLevel,
@@ -207,198 +182,145 @@ export function getCharacterBuilderValidationState({
         missing: Math.max(0, required - selected),
       };
     })
-    .filter(
-      (choiceStatus) => choiceStatus.missing > 0,
-    );
+    .filter((choiceStatus) => choiceStatus.missing > 0);
 
-  const missingKnownSpellCount =
-    pendingKnownSpellChoices.reduce(
-      (totalMissing, choiceStatus) =>
-        totalMissing + choiceStatus.missing,
-      0,
-    );
+  const missingKnownSpellCount = pendingKnownSpellChoices.reduce(
+    (totalMissing, choiceStatus) => totalMissing + choiceStatus.missing,
+    0,
+  );
 
-  const hasPendingKnownSpellChoices =
-    pendingKnownSpellChoices.length > 0;
+  const hasPendingKnownSpellChoices = pendingKnownSpellChoices.length > 0;
 
-  const applicableFeatureChoiceGroups =
-    options.featureChoiceGroups
-      .filter((choiceGroup) => {
-        if (
-          choiceGroup.ancestryId &&
-          choiceGroup.ancestryId !==
-            selectedAncestry?.id
-        ) {
-          return false;
-        }
+  const applicableFeatureChoiceGroups = options.featureChoiceGroups
+    .filter((choiceGroup) => {
+      if (
+        choiceGroup.ancestryId &&
+        choiceGroup.ancestryId !== selectedAncestry?.id
+      ) {
+        return false;
+      }
 
-        if (
-          choiceGroup.backgroundId &&
-          choiceGroup.backgroundId !==
-            selectedBackground?.id
-        ) {
-          return false;
-        }
+      if (
+        choiceGroup.backgroundId &&
+        choiceGroup.backgroundId !== selectedBackground?.id
+      ) {
+        return false;
+      }
 
-        if (
-          choiceGroup.classId &&
-          !spellValidationClassEntries.some(
-            (classEntry) =>
-              classEntry.classId ===
-              choiceGroup.classId,
-          )
-        ) {
-          return false;
-        }
+      if (
+        choiceGroup.classId &&
+        !spellValidationClassEntries.some(
+          (classEntry) => classEntry.classId === choiceGroup.classId,
+        )
+      ) {
+        return false;
+      }
 
-        if (
-          choiceGroup.subclassId &&
-          !spellValidationClassEntries.some(
-            (classEntry) =>
-              classEntry.subclassId ===
-              choiceGroup.subclassId,
-          )
-        ) {
-          return false;
-        }
+      if (
+        choiceGroup.subclassId &&
+        !spellValidationClassEntries.some(
+          (classEntry) => classEntry.subclassId === choiceGroup.subclassId,
+        )
+      ) {
+        return false;
+      }
 
-        if (
-          choiceGroup.levelProgressionId &&
-          choiceGroup.classId
-        ) {
-          const matchingClassEntry =
-            spellValidationClassEntries.find(
-              (classEntry) =>
-                classEntry.classId ===
-                choiceGroup.classId,
-            );
-
-          if (!matchingClassEntry) {
-            return false;
-          }
-
-          const characterClass =
-            options.classes.find(
-              (currentClass) =>
-                currentClass.id ===
-                choiceGroup.classId,
-            );
-
-          if (!characterClass) {
-            return false;
-          }
-
-          const safeClassLevel = Math.max(
-            1,
-            Math.min(
-              20,
-              Math.trunc(
-                matchingClassEntry.level,
-              ),
-            ),
-          );
-
-          const hasAvailableProgression =
-            characterClass.levelProgressions.some(
-              (progression) =>
-                progression.level <= safeClassLevel,
-            );
-
-          if (!hasAvailableProgression) {
-            return false;
-          }
-        }
-
-        return true;
-      })
-      .sort((firstGroup, secondGroup) => {
-        return (
-          firstGroup.order - secondGroup.order ||
-          firstGroup.name.localeCompare(
-            secondGroup.name,
-            "pt-BR",
-          )
-        );
-      });
-
-  const featureChoiceStatuses =
-    applicableFeatureChoiceGroups.map(
-      (choiceGroup) => {
-        const validSelections =
-          draft.featureChoiceSelections.filter(
-            (selection) => {
-              if (
-                selection.choiceGroupId !==
-                choiceGroup.id
-              ) {
-                return false;
-              }
-
-              return choiceGroup.options.some(
-                (option) =>
-                  option.feature.id ===
-                  selection.featureId,
-              );
-            },
-          );
-
-        const selected = validSelections.length;
-
-        const missing = Math.max(
-          0,
-          choiceGroup.choiceCount - selected,
+      if (choiceGroup.levelProgressionId && choiceGroup.classId) {
+        const matchingClassEntry = spellValidationClassEntries.find(
+          (classEntry) => classEntry.classId === choiceGroup.classId,
         );
 
-        return {
-          choiceGroupId: choiceGroup.id,
-          choiceGroupName: choiceGroup.name,
-          required: choiceGroup.choiceCount,
-          selected,
-          missing,
-          isComplete:
-            selected === choiceGroup.choiceCount,
-        };
-      },
-    );
+        if (!matchingClassEntry) {
+          return false;
+        }
 
-  const pendingFeatureChoiceStatuses =
-    featureChoiceStatuses.filter(
-      (choiceStatus) => !choiceStatus.isComplete,
-    );
+        const characterClass = options.classes.find(
+          (currentClass) => currentClass.id === choiceGroup.classId,
+        );
 
-  const missingFeatureChoiceCount =
-    pendingFeatureChoiceStatuses.reduce(
-      (totalMissing, choiceStatus) =>
-        totalMissing + choiceStatus.missing,
-      0,
-    );
+        if (!characterClass) {
+          return false;
+        }
 
-  const hasPendingFeatureChoices =
-    pendingFeatureChoiceStatuses.length > 0;
+        const safeClassLevel = Math.max(
+          1,
+          Math.min(20, Math.trunc(matchingClassEntry.level)),
+        );
+
+        const hasAvailableProgression = characterClass.levelProgressions.some(
+          (progression) => progression.level <= safeClassLevel,
+        );
+
+        if (!hasAvailableProgression) {
+          return false;
+        }
+      }
+
+      return true;
+    })
+    .sort((firstGroup, secondGroup) => {
+      return (
+        firstGroup.order - secondGroup.order ||
+        firstGroup.name.localeCompare(secondGroup.name, "pt-BR")
+      );
+    });
+
+  const featureChoiceStatuses = applicableFeatureChoiceGroups.map(
+    (choiceGroup) => {
+      const validSelections = draft.featureChoiceSelections.filter(
+        (selection) => {
+          if (selection.choiceGroupId !== choiceGroup.id) {
+            return false;
+          }
+
+          return choiceGroup.options.some(
+            (option) => option.feature.id === selection.featureId,
+          );
+        },
+      );
+
+      const selected = validSelections.length;
+
+      const missing = Math.max(0, choiceGroup.choiceCount - selected);
+
+      return {
+        choiceGroupId: choiceGroup.id,
+        choiceGroupName: choiceGroup.name,
+        required: choiceGroup.choiceCount,
+        selected,
+        missing,
+        isComplete: selected === choiceGroup.choiceCount,
+      };
+    },
+  );
+
+  const pendingFeatureChoiceStatuses = featureChoiceStatuses.filter(
+    (choiceStatus) => !choiceStatus.isComplete,
+  );
+
+  const missingFeatureChoiceCount = pendingFeatureChoiceStatuses.reduce(
+    (totalMissing, choiceStatus) => totalMissing + choiceStatus.missing,
+    0,
+  );
+
+  const hasPendingFeatureChoices = pendingFeatureChoiceStatuses.length > 0;
 
   const primaryClassEntry =
-    orderedClassEntries.find(
-      (classEntry) => classEntry.isPrimary,
-    ) ??
+    orderedClassEntries.find((classEntry) => classEntry.isPrimary) ??
     orderedClassEntries[0] ??
     null;
 
   const classEntriesSummary =
     orderedClassEntries.length > 0
       ? orderedClassEntries
-          .map(
-            (classEntry) =>
-              `${classEntry.className} ${classEntry.level}`,
-          )
+          .map((classEntry) => `${classEntry.className} ${classEntry.level}`)
           .join(" / ")
       : selectedClassDisplayName || "Não definida";
 
-  const classEntriesTotalLevel =
-    orderedClassEntries.reduce(
-      (totalLevel, classEntry) =>
-        totalLevel + classEntry.level,
-      0,
-    );
+  const classEntriesTotalLevel = orderedClassEntries.reduce(
+    (totalLevel, classEntry) => totalLevel + classEntry.level,
+    0,
+  );
 
   const classLevelDistributionStatus =
     orderedClassEntries.length === 0
@@ -407,8 +329,7 @@ export function getCharacterBuilderValidationState({
         ? "Distribuição válida"
         : `Distribuição incompleta: ${classEntriesTotalLevel}/${draft.level}`;
 
-  const requiredSkillChoiceCount =
-    selectedClass?.classSkillChoiceCount ?? 0;
+  const requiredSkillChoiceCount = selectedClass?.classSkillChoiceCount ?? 0;
 
   const requiredLanguageChoiceCount =
     selectedBackground?.languageChoiceCount ?? 0;
@@ -422,63 +343,74 @@ export function getCharacterBuilderValidationState({
 
   const selectedSkillCount = draft.skillKeys.length;
 
-  const selectedLanguageChoiceCount =
-    draft.languageKeys.length;
+  const selectedLanguageChoiceCount = draft.languageKeys.length;
 
   const selectedSpellCount = draft.spellKeys.length;
 
-  const selectedCantripCount =
-    draft.spellKeys.filter((spellKey) => {
-      const spell = options.spells.find(
-        (currentSpell) =>
-          currentSpell.key === spellKey,
+  const selectedCantripCount = draft.spellKeys.filter((spellKey) => {
+    const spell = options.spells.find(
+      (currentSpell) => currentSpell.key === spellKey,
+    );
+
+    return spell ? isCantrip(spell) : false;
+  }).length;
+
+  const selectedLeveledSpellCount = selectedSpellCount - selectedCantripCount;
+
+  const consolidatedAttributes = getConsolidatedCharacterAttributes({
+    draft,
+    talents: options.talents,
+    selectedAncestry,
+    selectedBackground,
+  });
+
+  const pendingProgressionChoices = draft.progressionChoices.filter(
+    (choice) => {
+      return !isCharacterProgressionChoiceResolved(choice);
+    },
+  );
+
+  const hasPendingProgressionChoices = pendingProgressionChoices.length > 0;
+
+  const attributesOverMaximum = CHARACTER_ATTRIBUTE_DEFINITIONS.filter(
+    (attribute) => {
+      const finalValue = consolidatedAttributes[attribute.key];
+
+      return (
+        typeof finalValue === "number" &&
+        finalValue > MAX_STANDARD_CHARACTER_ATTRIBUTE
       );
+    },
+  );
 
-      return spell ? isCantrip(spell) : false;
-    }).length;
+  const hasAttributesOverMaximum = attributesOverMaximum.length > 0;
 
-  const selectedLeveledSpellCount =
-    selectedSpellCount - selectedCantripCount;
+  const assignedAttributeValues = CHARACTER_ATTRIBUTE_DEFINITIONS.map(
+    (attribute) => consolidatedAttributes[attribute.key],
+  ).filter((value): value is number => value !== null);
 
-  const assignedAttributeValues =
-    CHARACTER_ATTRIBUTE_DEFINITIONS.map(
-      (attribute) =>
-        draft.attributes[attribute.key],
-    ).filter(
-      (value): value is number => value !== null,
-    );
-
-  const attributeTotal =
-    assignedAttributeValues.reduce(
-      (total, value) => total + value,
-      0,
-    );
+  const attributeTotal = assignedAttributeValues.reduce(
+    (total, value) => total + value,
+    0,
+  );
 
   const strongestAttribute =
     assignedAttributeValues.length > 0
-      ? CHARACTER_ATTRIBUTE_DEFINITIONS.reduce(
-          (strongest, attribute) => {
-            const currentValue =
-              draft.attributes[attribute.key];
+      ? CHARACTER_ATTRIBUTE_DEFINITIONS.reduce((strongest, attribute) => {
+          const currentValue = consolidatedAttributes[attribute.key];
 
-            const strongestValue =
-              draft.attributes[strongest.key];
+          const strongestValue = consolidatedAttributes[strongest.key];
 
-            if (currentValue === null) {
-              return strongest;
-            }
-
-            if (
-              strongestValue === null ||
-              currentValue > strongestValue
-            ) {
-              return attribute;
-            }
-
+          if (currentValue === null) {
             return strongest;
-          },
-          CHARACTER_ATTRIBUTE_DEFINITIONS[0]!,
-        )
+          }
+
+          if (strongestValue === null || currentValue > strongestValue) {
+            return attribute;
+          }
+
+          return strongest;
+        }, CHARACTER_ATTRIBUTE_DEFINITIONS[0]!)
       : null;
 
   function isStepComplete(stepId: string) {
@@ -487,10 +419,7 @@ export function getCharacterBuilderValidationState({
     }
 
     if (stepId === "class") {
-      return (
-        Boolean(draft.classId) &&
-        !hasPendingSubclassChoices
-      );
+      return Boolean(draft.classId) && !hasPendingSubclassChoices;
     }
 
     if (stepId === "ancestry") {
@@ -502,52 +431,38 @@ export function getCharacterBuilderValidationState({
     }
 
     if (stepId === "attributes") {
-      const attributeValues =
-        CHARACTER_ATTRIBUTE_DEFINITIONS.map(
-          (attribute) =>
-            draft.attributes[attribute.key],
-        );
+      const attributeValues = CHARACTER_ATTRIBUTE_DEFINITIONS.map(
+        (attribute) => draft.attributes[attribute.key],
+      );
 
-      const allAttributesWereChosen =
-        attributeValues.every(
-          (value): value is number =>
-            value !== null,
-        );
+      const allAttributesWereChosen = attributeValues.every(
+        (value): value is number => value !== null,
+      );
 
       if (!allAttributesWereChosen) {
         return false;
       }
 
-      const usesOnlyStandardArrayValues =
-        attributeValues.every((value) =>
-          STANDARD_ARRAY_ATTRIBUTE_VALUES.includes(
-            value,
-          ),
-        );
+      const usesOnlyStandardArrayValues = attributeValues.every((value) =>
+        STANDARD_ARRAY_ATTRIBUTE_VALUES.includes(value),
+      );
 
       const usesEachValueOnlyOnce =
         new Set(attributeValues).size ===
         STANDARD_ARRAY_ATTRIBUTE_VALUES.length;
 
-      return (
-        usesOnlyStandardArrayValues &&
-        usesEachValueOnlyOnce
-      );
+      return usesOnlyStandardArrayValues && usesEachValueOnlyOnce;
     }
 
     if (stepId === "skills") {
       return (
         Boolean(draft.classId) &&
-        draft.skillKeys.length >=
-          requiredSkillChoiceCount
+        draft.skillKeys.length >= requiredSkillChoiceCount
       );
     }
 
     if (stepId === "languages") {
-      return (
-        draft.languageKeys.length >=
-        requiredLanguageChoiceCount
-      );
+      return draft.languageKeys.length >= requiredLanguageChoiceCount;
     }
 
     if (stepId === "spells") {
@@ -558,16 +473,15 @@ export function getCharacterBuilderValidationState({
       return !hasPendingFeatureChoices;
     }
 
+    if (stepId === "progression") {
+      return !hasPendingProgressionChoices && !hasAttributesOverMaximum;
+    }
+
     return true;
   }
 
-  function getStepValidationMessage(
-    stepId: string,
-  ) {
-    if (
-      stepId === "concept" &&
-      !draft.name.trim()
-    ) {
+  function getStepValidationMessage(stepId: string) {
+    if (stepId === "concept" && !draft.name.trim()) {
       return "Informe o nome do personagem antes de avançar.";
     }
 
@@ -575,97 +489,78 @@ export function getCharacterBuilderValidationState({
       return "Escolha uma classe antes de avançar.";
     }
 
-    if (
-      stepId === "class" &&
-      hasPendingSubclassChoices
-    ) {
-      const pendingClassNames =
-        pendingSubclassEntries
-          .map(
-            (classEntry) =>
-              classEntry.className,
-          )
-          .join(", ");
+    if (stepId === "class" && hasPendingSubclassChoices) {
+      const pendingClassNames = pendingSubclassEntries
+        .map((classEntry) => classEntry.className)
+        .join(", ");
 
       return `Escolha a subclasse obrigatória de: ${pendingClassNames}.`;
     }
 
-    if (
-      stepId === "ancestry" &&
-      !draft.ancestryId
-    ) {
+    if (stepId === "ancestry" && !draft.ancestryId) {
       return "Escolha uma ancestralidade antes de avançar.";
     }
 
-    if (
-      stepId === "background" &&
-      !draft.backgroundId
-    ) {
+    if (stepId === "background" && !draft.backgroundId) {
       return "Escolha um antecedente antes de avançar.";
     }
 
-    if (
-      stepId === "attributes" &&
-      !isStepComplete("attributes")
-    ) {
+    if (stepId === "attributes" && !isStepComplete("attributes")) {
       return "Distribua os valores fixos 15, 14, 13, 12, 10 e 8 sem repetir nenhum valor.";
     }
 
-    if (
-      stepId === "skills" &&
-      !isStepComplete("skills")
-    ) {
+    if (stepId === "skills" && !isStepComplete("skills")) {
       return `Escolha ${requiredSkillChoiceCount} perícias da classe. O antecedente apenas sugere opções. Atualmente você escolheu ${selectedSkillCount}.`;
     }
 
-    if (
-      stepId === "languages" &&
-      !isStepComplete("languages")
-    ) {
+    if (stepId === "languages" && !isStepComplete("languages")) {
       return `Escolha ${requiredLanguageChoiceCount} idioma(s) extra(s) do antecedente. Idiomas fixos da ancestralidade e do antecedente já aparecem como automáticos. Atualmente você escolheu ${selectedLanguageChoiceCount}.`;
     }
 
-    if (
-      stepId === "spells" &&
-      hasPendingKnownSpellChoices
-    ) {
-      const pendingLevelsText =
-        pendingKnownSpellChoices
-          .map((choiceStatus) => {
-            const levelLabel =
-              choiceStatus.spellLevel === 0
-                ? "truques"
-                : `nível ${choiceStatus.spellLevel}`;
+    if (stepId === "spells" && hasPendingKnownSpellChoices) {
+      const pendingLevelsText = pendingKnownSpellChoices
+        .map((choiceStatus) => {
+          const levelLabel =
+            choiceStatus.spellLevel === 0
+              ? "truques"
+              : `nível ${choiceStatus.spellLevel}`;
 
-            return `${levelLabel}: faltam ${choiceStatus.missing}`;
-          })
-          .join("; ");
+          return `${levelLabel}: faltam ${choiceStatus.missing}`;
+        })
+        .join("; ");
 
       return `Complete as escolhas de magias conhecidas antes de avançar. ${pendingLevelsText}.`;
     }
 
-    if (
-      stepId === "features" &&
-      hasPendingFeatureChoices
-    ) {
-      const pendingGroupsText =
-        pendingFeatureChoiceStatuses
-          .map((choiceStatus) => {
-            return `${choiceStatus.choiceGroupName}: faltam ${choiceStatus.missing}`;
-          })
-          .join("; ");
+    if (stepId === "features" && hasPendingFeatureChoices) {
+      const pendingGroupsText = pendingFeatureChoiceStatuses
+        .map((choiceStatus) => {
+          return `${choiceStatus.choiceGroupName}: faltam ${choiceStatus.missing}`;
+        })
+        .join("; ");
 
       return `Complete as escolhas de features antes de avançar. ${pendingGroupsText}.`;
+    }
+
+    if (stepId === "progression" && hasPendingProgressionChoices) {
+      return `Complete as escolhas de progressão antes de avançar. Ainda faltam ${pendingProgressionChoices.length} escolha(s).`;
+    }
+
+    if (stepId === "progression" && hasAttributesOverMaximum) {
+      const attributeNames = attributesOverMaximum
+        .map((attribute) => attribute.name)
+        .join(", ");
+
+      return `Os seguintes atributos ultrapassaram o limite padrão de 20: ${attributeNames}.`;
     }
 
     return null;
   }
 
   function canEnterStep(stepId: string) {
-    const targetStepIndex =
-      characterBuilderSteps.findIndex(
-        (step) => step.id === stepId,
-      );
+    const targetStepIndex = characterBuilderSteps.findIndex(
+      (step) => step.id === stepId,
+    );
 
     if (targetStepIndex <= 0) {
       return true;
@@ -673,21 +568,15 @@ export function getCharacterBuilderValidationState({
 
     return characterBuilderSteps
       .slice(0, targetStepIndex)
-      .every((step) =>
-        isStepComplete(step.id),
-      );
+      .every((step) => isStepComplete(step.id));
   }
 
-  const finalizationValidationMessages: string[] =
-    [];
+  const finalizationValidationMessages: string[] = [];
 
   if (hasPendingSubclassChoices) {
     finalizationValidationMessages.push(
       `Escolha a subclasse obrigatória de: ${pendingSubclassEntries
-        .map(
-          (classEntry) =>
-            classEntry.className,
-        )
+        .map((classEntry) => classEntry.className)
         .join(", ")}.`,
     );
   }
@@ -704,13 +593,24 @@ export function getCharacterBuilderValidationState({
     );
   }
 
+  if (hasPendingProgressionChoices) {
+    finalizationValidationMessages.push(
+      `Complete as escolhas de progressão. Ainda faltam ${pendingProgressionChoices.length} escolha(s).`,
+    );
+  }
+
+  if (hasAttributesOverMaximum) {
+    finalizationValidationMessages.push(
+      `Nenhum atributo pode ultrapassar ${MAX_STANDARD_CHARACTER_ATTRIBUTE} por aumentos normais de progressão.`,
+    );
+  }
+
   const finalizationValidationMessage =
     finalizationValidationMessages.length > 0
       ? finalizationValidationMessages.join(" ")
       : null;
 
-  const canFinalizeCharacterSheet =
-    finalizationValidationMessages.length === 0;
+  const canFinalizeCharacterSheet = finalizationValidationMessages.length === 0;
 
   return {
     orderedClassEntries,
@@ -745,6 +645,12 @@ export function getCharacterBuilderValidationState({
     selectedSpellCount,
     selectedCantripCount,
     selectedLeveledSpellCount,
+
+    consolidatedAttributes,
+    pendingProgressionChoices,
+    hasPendingProgressionChoices,
+    attributesOverMaximum,
+    hasAttributesOverMaximum,
 
     assignedAttributeValues,
     attributeTotal,

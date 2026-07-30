@@ -1,40 +1,36 @@
-# 🧭 LegendForge — Fases Canônicas
+🧭 LegendForge — Fases Canônicas
 
-> Atualizado em 18/07/2026.  
-> Este documento deve ser tratado como **fonte de verdade absoluta** para o planejamento de fases macro e micros do LegendForge até o usuário substituir ou revisar esta lista.
+Atualizado em 24/07/2026.Este documento deve ser tratado como fonte de verdade absoluta para o planejamento de fases macro e micros do LegendForge até o usuário substituir ou revisar esta lista.
 
----
+Regras de condução do projeto
 
-## Regras de condução do projeto
+Responder em português.
 
-- Responder em português.
-- Atuar como pair-programmer + professor.
-- Trabalhar em passos pequenos, funcionais e testáveis.
-- Em mudanças pequenas, usar formato **Procure / Troque**.
-- Em mudanças grandes, entregar arquivo inteiro baseado na versão atual enviada pelo usuário.
-- Não presumir estrutura antiga de arquivos grandes.
-- Antes de qualquer commit, sempre rodar/pedir:
+Atuar como pair-programmer + professor.
 
-```bash
+Trabalhar em passos pequenos, funcionais e testáveis.
+
+Em mudanças pequenas, usar formato Procure / Troque.
+
+Em mudanças grandes, entregar arquivo inteiro baseado na versão atual enviada pelo usuário.
+
+Não presumir estrutura antiga de arquivos grandes.
+
+Antes de qualquer commit, sempre rodar/pedir:
+
 git diff --stat
 git status
-```
 
-- Comandos de lint atuais:
+Comandos de lint atuais:
 
-```bash
 cd backend
 pnpm eslint
 
 cd ../frontend
 pnpm lint
-```
 
----
+1. Fases macro canônicas
 
-# 1. Fases macro canônicas
-
-```txt
 [x] Fase 0 — Base inicial
 [x] Fase 1 — Mesa com atores reais
 [x] Fase 2 — Tokens reais na cena
@@ -58,13 +54,9 @@ pnpm lint
 [ ] Fase 14 — Permissões avançadas e moderação
 [ ] Fase 15 — Deploy/produção
 [ ] Fase 16 — Polimento de portfólio/produto
-```
 
----
+2. Fase 4 — Estado macro atual
 
-# 2. Fase 4 — Estado macro atual
-
-```txt
 [x] Fase 4.15 — Atributos
 [x] Fase 4.16 — Perícias
 [x] Fase 4.17 — Magias
@@ -85,15 +77,11 @@ pnpm lint
 [concluída funcionalmente] Fase 4.6 — Regras avançadas da criação de ficha
 [em andamento] Fase 4.7 — Multiclasse e Level Up real
 [planejada] Fase 4.8 — Sub-ancestralidades e variações de origem
-```
 
----
+3. Fase 4.5 — Polimentos finais e fundação de progressão
 
-# 3. Fase 4.5 — Polimentos finais e fundação de progressão
+Micros concluídas
 
-## Micros concluídas
-
-```txt
 [x] 4.5.1 — Polimento rápido da mesa, chat e grid
 [x] 4.5.2 — Ciclo ator/token
 [x] 4.5.3 — Tamanho automático de token e limpeza do seletor
@@ -101,13 +89,9 @@ pnpm lint
 [x] 4.5.5 — Magias novas e conteúdo imediato
 [x] 4.5.6 — Rolagens avançadas
 [x] 4.5.7 — Fundação inicial de Level Up
-```
 
----
+4. Fase 4.6 — Regras avançadas da criação de ficha
 
-# 4. Fase 4.6 — Regras avançadas da criação de ficha
-
-```txt
 [x] 4.6.1 — Bloquear magias acima do nível permitido na criação
 [x] 4.6.2 — Corrigir criação da ficha com PV inicial vindo da classe
 [x] 4.6.3 — Builder/review/magias respeitam nível inicial real
@@ -116,15 +100,11 @@ pnpm lint
 [x] 4.6.6 — Línguas por fonte
 [x] 4.6.7 — Magias/truques por fonte
 [x] 4.6.8 — Melhorar notas da criação de ficha
-```
 
----
-
-# 5. Fase 4.7 — Multiclasse e Level Up real
+5. Fase 4.7 — Multiclasse e Level Up real
 
 Objetivo: transformar criação e progressão em fluxo real, não apenas “somar nível”.
 
-```txt
 [x] 4.7.1 — Modelar draft de classes múltiplas no builder
     [x] 4.7.1.1 — Criar CharacterBuilderClassDraftEntry
     [x] 4.7.1.2 — Adicionar classEntries ao CharacterBuilderDraft
@@ -216,17 +196,66 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
         [x] 4.7.8.5.10 — Validar escolhas obrigatórias de features no backend
         [x] 4.7.8.5.11 — Testar classe única, classe sem grupo e multiclasse
 
-    [em andamento] 4.7.8.6 — Refatoração estrutural do CharacterBuilderModal
+    [x] 4.7.8.6 — Refatoração estrutural do CharacterBuilderModal
         [x] 4.7.8.6.1 — Auditar dependências do modal e definir fronteiras
         [x] 4.7.8.6.2 — Extrair helpers puros de linguagem e gênero
         [x] 4.7.8.6.3 — Extrair validações e cálculos do builder
         [x] 4.7.8.6.4 — Extrair componentes auxiliares usados apenas pelo modal
         [x] 4.7.8.6.5 — Criar CharacterBuilderModal.tsx
-        [ ] 4.7.8.6.6 — Substituir implementação local pelo import
-        [ ] 4.7.8.6.7 — Limpar imports e código morto do page.tsx
-        [ ] 4.7.8.6.8 — Teste completo de regressão
+        [x] 4.7.8.6.6 — Substituir implementação local pelo import
+        [x] 4.7.8.6.7 — Limpar imports e código morto do page.tsx
+        [x] 4.7.8.6.8 — Teste completo de regressão
 
-    [ ] 4.7.8.7 — Atributos/talentos futuramente
+    [em andamento] 4.7.8.7 — Atributos/talentos pendentes na criação inicial
+        [x] 4.7.8.7.1 — Auditar a modelagem atual de progressão, atributos e talents
+        [x] 4.7.8.7.2 — Definir regra oficial de ASI versus talento
+        [x] 4.7.8.7.3 — Modelar opções de aumento de atributo por progressão
+        [x] 4.7.8.7.4 — Modelar talentos e seus pré-requisitos
+        [x] 4.7.8.7.5 — Expor escolhas aplicáveis em character-options
+        [x] 4.7.8.7.6 — Adicionar escolhas ao CharacterBuilderDraft
+        [x] 4.7.8.7.7 — Criar etapa ou painel de escolhas de progressão
+                [x] 4.7.8.7.7.1 — Calcular marcos exigidos pelas classEntries
+                [x] 4.7.8.7.7.2 — Sincronizar progressionChoices quando classes ou níveis mudarem
+                [x] 4.7.8.7.7.3 — Criar CharacterProgressionStep
+                [x] 4.7.8.7.7.4 — Adicionar a etapa ao fluxo do builder
+                [x] 4.7.8.7.7.5 — Implementar escolha entre atributo e talento
+                [x] 4.7.8.7.7.6 — Implementar aumento focado e dividido
+                [x] 4.7.8.7.7.7 — Exibir talentos e pré-requisitos
+                [x] 4.7.8.7.7.8 — Validar pré-requisitos dos talentos
+                [x] 4.7.8.7.7.9 — Validar limite 20 e bônus consolidados
+        [x] 4.7.8.7.8 — Exibir pendências e valores consolidados na Revisão
+        [x] 4.7.8.7.9 — Bloquear avanço e finalização no frontend
+        [x] 4.7.8.7.10 — Validar escolhas obrigatórias no backend
+                [x] 4.7.8.7.10.1 — Criar schema Zod de progressionChoices
+                [x] 4.7.8.7.10.2 — Normalizar identidade dos marcos por classe, nível e índice
+                [x] 4.7.8.7.10.3 — Validar quantidade de marcos exigidos por classEntries
+                [x] 4.7.8.7.10.4 — Validar aumento focado +2
+                [x] 4.7.8.7.10.5 — Validar aumento dividido +1/+1 em atributos diferentes
+                [x] 4.7.8.7.10.6 — Validar limite padrão 20 com bônus consolidados
+                [x] 4.7.8.7.10.7 — Validar talento existente e pertencente ao sistema
+                [x] 4.7.8.7.10.8 — Validar talento não repetível
+                [x] 4.7.8.7.10.9 — Validar pré-requisitos verificáveis no backend
+                [x] 4.7.8.7.10.10 — Bloquear criação/finalização com escolhas inválidas ou pendentes
+                [x] 4.7.8.7.10.11 — Testar classe única e multiclasse no backend
+        [x] 4.7.8.7.11 — Persistir aumentos e talentos na ficha
+                [x] 4.7.8.7.11.1 — Modelar CharacterSheetProgressionChoice no Prisma
+                [x] 4.7.8.7.11.2 — Criar migration e regenerar Prisma Client
+                [x] 4.7.8.7.11.3 — Persistir escolhas ao criar ou atualizar rascunho
+                [x] 4.7.8.7.11.4 — Remover escolhas obsoletas na atualização
+                [x] 4.7.8.7.11.5 — Retornar progressionChoices nas consultas da ficha
+                [x] 4.7.8.7.11.6 — Atualizar tipos de resposta do frontend
+                [x] 4.7.8.7.11.7 — Enviar progressionChoices no payload do builder
+                [x] 4.7.8.7.11.8 — Reconstruir o draft ao reabrir a ficha
+                [x] 4.7.8.7.11.9 — Persistir bônus de progressão em CharacterSheetStat
+                [x] 4.7.8.7.11.10 — Aplicar talentos e progressão na ficha pronta
+                [x] 4.7.8.7.11.11 — Validar PV, perícias e derivados após recarregar
+        [x] 4.7.8.7.12 — Testar classe única, multiclasse e personagem nível 1
+                [x] 4.7.8.7.12.1 — Criar personagem de classe única com ASI
+                [x] 4.7.8.7.12.2 — Criar personagem de classe única com talento
+                [x] 4.7.8.7.12.3 — Criar personagem multiclasse com marcos independentes
+                [x] 4.7.8.7.12.4 — Salvar, fechar e reabrir rascunho
+                [x] 4.7.8.7.12.5 — Finalizar e conferir ficha pronta
+                [x] 4.7.8.7.12.6 — Confirmar personagem nível 1 sem marcos
 
 [ ] 4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
 [ ] 4.7.10 — Criar plano de mudanças do Level Up
@@ -237,15 +266,11 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
 [ ] 4.7.15 — Jogador vê Level Up apenas quando liberado
 [ ] 4.7.16 — Jogador confirma Level Up liberado
 [ ] 4.7.17 — Feedback no chat após Level Up
-```
 
----
-
-# 5.5. Fase 4.8 — Sub-ancestralidades e variações de origem
+5.5. Fase 4.8 — Sub-ancestralidades e variações de origem
 
 Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade principal.
 
-```txt
 [ ] Fase 4.8 — Sub-ancestralidades e variações de origem
     [ ] 4.8.1 — Modelar SubAncestry no Prisma
     [ ] 4.8.2 — Seed inicial de sub-ancestralidades
@@ -253,19 +278,13 @@ Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade prin
     [ ] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
     [ ] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
     [ ] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
-```
 
 Exemplo:
 
-```txt
 Sylvaris → Sylvaris Alto
-```
 
----
+6. Fase 5 — Biblioteca completa
 
-# 6. Fase 5 — Biblioteca completa
-
-```txt
 [ ] 5.1 — Biblioteca real da campanha
 [ ] 5.2 — Biblioteca real do sistema
 [ ] 5.3 — Organização por categorias
@@ -276,13 +295,9 @@ Sylvaris → Sylvaris Alto
 [ ] 5.8 — Biblioteca de criaturas
 [ ] 5.9 — Enviar NPC/criatura da biblioteca para mesa
 [ ] 5.10 — Editar instância da campanha sem alterar template original
-```
 
----
+7. Fase 6 — Diário real
 
-# 7. Fase 6 — Diário real
-
-```txt
 [ ] 6.1 — Entradas de diário da campanha
 [ ] 6.2 — Handouts
 [ ] 6.3 — Notas públicas
@@ -290,26 +305,18 @@ Sylvaris → Sylvaris Alto
 [ ] 6.5 — Associar diário a personagem
 [ ] 6.6 — Associar diário a cena/mapa
 [ ] 6.7 — Visibilidade por player/GM
-```
 
----
+8. Fase 7 — Configurações da campanha/mesa
 
-# 8. Fase 7 — Configurações da campanha/mesa
-
-```txt
 [ ] 7.1 — Configurações gerais da campanha
 [ ] 7.2 — Configurações de grid
 [ ] 7.3 — Configuração de escala/distância
 [ ] 7.4 — Configurações de permissões de mesa
 [ ] 7.5 — Configurações de regras opcionais
 [ ] 7.6 — Preferências visuais da mesa
-```
 
----
+9. Fase 8 — Sincronização em tempo real
 
-# 9. Fase 8 — Sincronização em tempo real
-
-```txt
 [ ] 8.1 — Chat em tempo real
 [ ] 8.2 — Rolagens em tempo real
 [ ] 8.3 — Movimento de token em tempo real
@@ -317,13 +324,9 @@ Sylvaris → Sylvaris Alto
 [ ] 8.5 — Presença de usuários
 [ ] 8.6 — Ferramentas compartilhadas
 [ ] 8.7 — Sincronização da ficha/pop-out
-```
 
----
+10. Fase 9 — Combate e iniciativa
 
-# 10. Fase 9 — Combate e iniciativa
-
-```txt
 [ ] 9.1 — Turn tracker real
 [ ] 9.2 — Ordem de iniciativa persistida
 [ ] 9.3 — Avançar turno
@@ -333,13 +336,9 @@ Sylvaris → Sylvaris Alto
 [ ] 9.7 — Aplicar dano/cura
 [ ] 9.8 — Condições no combate
 [ ] 9.9 — Integração com criaturas/NPCs
-```
 
----
+11. Fase 10 — Cenas/mapas múltiplos
 
-# 11. Fase 10 — Cenas/mapas múltiplos
-
-```txt
 [ ] 10.1 — Criar múltiplas cenas
 [ ] 10.2 — Lista de cenas da campanha
 [ ] 10.3 — Trocar cena ativa
@@ -347,13 +346,9 @@ Sylvaris → Sylvaris Alto
 [ ] 10.5 — Mapa/imagem por cena
 [ ] 10.6 — Configuração de grid por cena
 [ ] 10.7 — Névoa/desenhos/medidas por cena
-```
 
----
+12. Fase 11 — Bestiário completo
 
-# 12. Fase 11 — Bestiário completo
-
-```txt
 [ ] 11.1 — Modelagem de criatura do bestiário
 [ ] 11.2 — Bloco de estatísticas de criatura
 [ ] 11.3 — Ataques de criatura
@@ -365,13 +360,9 @@ Sylvaris → Sylvaris Alto
 [ ] 11.9 — Criatura do bestiário para biblioteca da campanha
 [ ] 11.10 — Ficha própria de criatura
 [ ] 11.11 — Builder de criatura
-```
 
----
+13. Fase 12 — Inventário, lojas e economia
 
-# 13. Fase 12 — Inventário, lojas e economia
-
-```txt
 [ ] 12.1 — Inventário avançado
 [ ] 12.2 — Peso/carga
 [ ] 12.3 — Recipientes
@@ -380,13 +371,9 @@ Sylvaris → Sylvaris Alto
 [ ] 12.6 — Comprar/vender
 [ ] 12.7 — Disponibilidade por campanha
 [ ] 12.8 — Recompensas e saque
-```
 
----
+14. Fase 13 — Sistema de efeitos/status
 
-# 14. Fase 13 — Sistema de efeitos/status
-
-```txt
 [ ] 13.1 — Condições
 [ ] 13.2 — Buffs/debuffs
 [ ] 13.3 — Efeitos temporários
@@ -394,13 +381,9 @@ Sylvaris → Sylvaris Alto
 [ ] 13.5 — Origem do efeito
 [ ] 13.6 — Impacto mecânico em rolagens
 [ ] 13.7 — Impacto em CA/defesa/PV/magia
-```
 
----
+15. Fase 14 — Permissões avançadas e moderação
 
-# 15. Fase 14 — Permissões avançadas e moderação
-
-```txt
 [ ] 14.1 — Permissões finas por campanha
 [ ] 14.2 — Permissões por cena
 [ ] 14.3 — Permissões por ator/ficha
@@ -408,13 +391,9 @@ Sylvaris → Sylvaris Alto
 [ ] 14.5 — Expulsar/banir da campanha
 [ ] 14.6 — Transferir ownership futuramente
 [ ] 14.7 — Logs de ações administrativas
-```
 
----
+16. Fase 15 — Deploy/produção
 
-# 16. Fase 15 — Deploy/produção
-
-```txt
 [ ] 15.1 — Revisar variáveis de ambiente
 [ ] 15.2 — Build frontend
 [ ] 15.3 — Build backend
@@ -424,13 +403,9 @@ Sylvaris → Sylvaris Alto
 [ ] 15.7 — Deploy frontend
 [ ] 15.8 — Deploy backend
 [ ] 15.9 — Teste ponta a ponta em produção
-```
 
----
+17. Fase 16 — Polimento de portfólio/produto
 
-# 17. Fase 16 — Polimento de portfólio/produto
-
-```txt
 [ ] 16.1 — README final
 [ ] 16.2 — Prints do projeto
 [ ] 16.3 — Vídeo curto de demonstração
@@ -439,60 +414,31 @@ Sylvaris → Sylvaris Alto
 [ ] 16.6 — Ajuste de UX final
 [ ] 16.7 — Checklist de portfólio
 [ ] 16.8 — Texto para LinkedIn/GitHub
-```
 
----
-
-# 18. Próximo passo obrigatório
+## 18. Próximo passo obrigatório
 
 A próxima micro de desenvolvimento é:
 
-```txt
-4.7.8.6.1 — Auditar dependências do modal e definir fronteiras
-```
+4.7.8.7.11.1 — Modelar CharacterSheetProgressionChoice no Prisma
 
 Objetivo:
 
-```txt
-- mapear tudo que o CharacterBuilderModal usa hoje dentro de page.tsx
-- separar dependências em lógica reutilizável, componentes do builder e integração com a mesa
-- manter page.tsx responsável por estado externo, carregamento, salvamento e finalização
-- preparar a extração progressiva sem alterar comportamento
-```
+- criar a persistência real dos marcos de progressão da ficha
+- vincular cada escolha à ficha e à classe que concedeu o marco
+- preservar identidade por classe, nível da classe e índice da escolha
+- suportar aumento de atributo ou talento
+- permitir atualização e remoção de escolhas obsoletas
+- preparar reconstrução completa do rascunho
+- não aplicar ainda os bônus em CharacterSheetStat nesta micro
 
-Fronteira planejada:
+Arquivos-base atuais:
 
-```txt
-Permanece em page.tsx
-→ abrir/fechar o builder
-→ carregar character-options
-→ criar/retomar rascunho
-→ salvar/finalizar
-→ atualizar fichas, atores e estado da campanha
-
-Será movido para features/character-builder
-→ layout e navegação do modal
-→ renderização das etapas
-→ validações visuais
-→ resumo lateral
-→ distribuição de níveis
-→ mensagens de pendência
-→ helpers e componentes exclusivos do builder
-```
-
-Arquivos prováveis:
-
-```txt
-frontend/src/app/campaigns/[id]/play/page.tsx
-frontend/src/features/character-builder/components/CharacterBuilderModal.tsx
+backend/prisma/schema.prisma
+backend/src/routes/character-sheets.ts
 frontend/src/features/character-builder/types/character-builder-types.ts
-frontend/src/features/character-builder/utils/builder-gender.ts
-frontend/src/features/character-builder/utils/builder-validation.ts
-```
+frontend/src/app/campaigns/[id]/play/page.tsx
 
----
-
-# 19. Nota de verdade canônica
+19. Nota de verdade canônica
 
 Este arquivo substitui listas antigas e resumidas de fases do LegendForge.
 

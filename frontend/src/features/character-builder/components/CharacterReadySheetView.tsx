@@ -722,15 +722,20 @@ type SpellSlotRow = {
   total: number;
 };
 
-type CharacterReadySheetClass = NonNullable<
-  CharacterReadySheet["characterClass"]
->;
-
-type CharacterReadySheetLevelProgression =
-  CharacterReadySheetClass["levelProgressions"][number];
+type CharacterReadySheetSpellSlotProgression = {
+  spellSlotsLevel1: number;
+  spellSlotsLevel2: number;
+  spellSlotsLevel3: number;
+  spellSlotsLevel4: number;
+  spellSlotsLevel5: number;
+  spellSlotsLevel6: number;
+  spellSlotsLevel7: number;
+  spellSlotsLevel8: number;
+  spellSlotsLevel9: number;
+};
 
 function getSpellSlotRowsFromProgression(
-  progression: CharacterReadySheetLevelProgression | null | undefined,
+  progression: CharacterReadySheetSpellSlotProgression | null | undefined,
 ): SpellSlotRow[] {
   if (!progression) {
     return [];
@@ -750,7 +755,7 @@ function getSpellSlotRowsFromProgression(
 }
 
 function getSpellSlotSummaryFromProgression(
-  progression: CharacterReadySheetLevelProgression | null | undefined,
+  progression: CharacterReadySheetSpellSlotProgression | null | undefined,
 ) {
   const slotRows = getSpellSlotRowsFromProgression(progression);
 
@@ -1199,6 +1204,30 @@ function FeatureCard({
       </p>
     </article>
   );
+}
+
+function formatProgressionAttributeBonuses(
+  attributeBonuses: Partial<Record<CharacterAttributeKey, number>>,
+) {
+  const formattedBonuses = Object.entries(attributeBonuses)
+    .filter((entry): entry is [CharacterAttributeKey, number] => {
+      const [attributeKey, bonusValue] = entry;
+
+      return (
+        typeof bonusValue === "number" &&
+        bonusValue > 0 &&
+        READY_SHEET_ATTRIBUTES.some(
+          (attribute) => attribute.key === attributeKey,
+        )
+      );
+    })
+    .map(([attributeKey, bonusValue]) => {
+      return `${getAttributeLabel(attributeKey)} +${bonusValue}`;
+    });
+
+  return formattedBonuses.length > 0
+    ? formattedBonuses.join(" · ")
+    : "Sem bônus de atributo";
 }
 
 function getCharacterLanguageSourceLabel(source: string | null | undefined) {
@@ -1776,7 +1805,6 @@ export function CharacterReadySheetView({
           attributeKey: attribute.key,
           level: sheetLevel,
           isProficient,
-          bonusValue: sheetStat?.bonusValue ?? 0,
           overrideValue: sheetStat?.overrideValue ?? null,
         })
       : 0;
@@ -2207,7 +2235,9 @@ export function CharacterReadySheetView({
       const spellSlotRows = getSpellSlotRowsFromProgression(progression);
       const spellSlotsSummary =
         spellSlotRows.length > 0
-          ? spellSlotRows.map((slot) => `N${slot.level}: ${slot.total}`).join(" · ")
+          ? spellSlotRows
+              .map((slot) => `N${slot.level}: ${slot.total}`)
+              .join(" · ")
           : "Sem espaços";
 
       return {
@@ -2219,8 +2249,7 @@ export function CharacterReadySheetView({
         abilityLabel: `${getAttributeLabel(abilityKey)} (${getAttributeShortLabel(
           abilityKey,
         )} ${formatSignedNumber(abilityModifier ?? 0)})`,
-        spellSaveDc:
-          spellSaveDcValue === null ? "—" : String(spellSaveDcValue),
+        spellSaveDc: spellSaveDcValue === null ? "—" : String(spellSaveDcValue),
         spellAttackBonus:
           spellAttackBonusValue === null
             ? "—"
@@ -2255,7 +2284,6 @@ export function CharacterReadySheetView({
 
     return primarySpellcastingSummary;
   }
-
 
   const spellSummaryCards = [
     {
@@ -2312,6 +2340,47 @@ export function CharacterReadySheetView({
         : isSubclassChoiceAvailable
           ? "Esta pendência será resolvida no fluxo de Level Up."
           : `A subclasse ainda não está disponível no nível ${sheetLevel}.`;
+
+  const progressionChoiceRows = [
+    ...(characterSheet?.progressionChoices ?? []),
+  ].sort((firstChoice, secondChoice) => {
+    const classComparison = firstChoice.characterClass.name.localeCompare(
+      secondChoice.characterClass.name,
+      "pt-BR",
+    );
+
+    if (classComparison !== 0) {
+      return classComparison;
+    }
+
+    if (firstChoice.classLevel !== secondChoice.classLevel) {
+      return firstChoice.classLevel - secondChoice.classLevel;
+    }
+
+    return firstChoice.choiceIndex - secondChoice.choiceIndex;
+  });
+
+  const talentProgressionRows = progressionChoiceRows.filter(
+    (
+      progressionChoice,
+    ): progressionChoice is (typeof progressionChoiceRows)[number] & {
+      type: "TALENT";
+      talentId: string;
+      talent: NonNullable<(typeof progressionChoiceRows)[number]["talent"]>;
+    } => {
+      return (
+        progressionChoice.type === "TALENT" &&
+        Boolean(progressionChoice.talentId) &&
+        Boolean(progressionChoice.talent)
+      );
+    },
+  );
+
+  const attributeProgressionRows = progressionChoiceRows.filter(
+    (progressionChoice) => {
+      return progressionChoice.type === "ATTRIBUTE_INCREASE";
+    },
+  );
 
   const featureRows = [...(characterSheet?.features ?? [])].sort(
     (firstFeature, secondFeature) => {
@@ -3450,7 +3519,8 @@ export function CharacterReadySheetView({
                             onRollAttack={() => {
                               if (
                                 !spellcastingSummary ||
-                                spellcastingSummary.spellAttackBonusValue === null
+                                spellcastingSummary.spellAttackBonusValue ===
+                                  null
                               ) {
                                 return;
                               }
@@ -3554,7 +3624,7 @@ export function CharacterReadySheetView({
                                         kind: "d20",
                                         label: `Ataque mágico — ${sheetSpell.spell.name}`,
                                         modifier:
-                                  spellcastingSummary.spellAttackBonusValue,
+                                          spellcastingSummary.spellAttackBonusValue,
                                       });
                                     }}
                                     onRollDamage={
@@ -3595,6 +3665,93 @@ export function CharacterReadySheetView({
         <div className="min-h-0 flex-1 overflow-y-auto p-2 sm:p-3">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
             <main className="space-y-4">
+              <section className="rounded-2xl border border-forge-gold/25 bg-black/20 p-3">
+                <div className="border-b border-white/10 pb-2">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
+                    Talentos e aumentos de progressão
+                  </p>
+
+                  <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+                    Escolhas permanentes recebidas nos marcos de nível das
+                    classes do personagem.
+                  </p>
+                </div>
+
+                {progressionChoiceRows.length > 0 ? (
+                  <div className="mt-3 space-y-4">
+                    {talentProgressionRows.length > 0 ? (
+                      <div>
+                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-forge-gold">
+                          Talentos
+                        </p>
+
+                        <div className="mt-2 grid gap-2">
+                          {talentProgressionRows.map((progressionChoice) => {
+                            const talent = progressionChoice.talent;
+
+                            const talentAttributeBonus =
+                              formatProgressionAttributeBonuses(
+                                talent.attributeBonuses,
+                              );
+
+                            const talentDescription = [
+                              talent.description?.trim() ||
+                                "Sem descrição cadastrada.",
+                              talentAttributeBonus !== "Sem bônus de atributo"
+                                ? `Bônus: ${talentAttributeBonus}.`
+                                : null,
+                            ]
+                              .filter(Boolean)
+                              .join("\n\n");
+
+                            return (
+                              <FeatureCard
+                                key={progressionChoice.id}
+                                name={talent.name}
+                                levelLabel={`${progressionChoice.characterClass.name} · nível ${progressionChoice.classLevel}`}
+                                description={talentDescription}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {attributeProgressionRows.length > 0 ? (
+                      <div>
+                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-forge-gold">
+                          Aumentos de atributo
+                        </p>
+
+                        <div className="mt-2 grid gap-2">
+                          {attributeProgressionRows.map(
+                            (progressionChoice) => (
+                              <CompactListRow
+                                key={progressionChoice.id}
+                                title={formatProgressionAttributeBonuses(
+                                  progressionChoice.attributeIncreases,
+                                )}
+                                helper={`${progressionChoice.characterClass.name} · nível ${progressionChoice.classLevel} · ${
+                                  progressionChoice.attributeIncreaseMode ===
+                                  "FOCUSED"
+                                    ? "Aumento focado"
+                                    : "Aumento dividido"
+                                }`}
+                              />
+                            ),
+                          )}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                    Esta ficha ainda não possui talentos ou aumentos concedidos
+                    por marcos de progressão.
+                  </p>
+                )}
+              </section>
+
               <section className="rounded-2xl border border-white/10 bg-black/20 p-3">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-2">
                   <div>

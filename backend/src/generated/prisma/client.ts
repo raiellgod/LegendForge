@@ -115,6 +115,11 @@ export type CharacterSheetEquipment = Prisma.CharacterSheetEquipmentModel
  */
 export type CharacterSheetClass = Prisma.CharacterSheetClassModel
 /**
+ * Model CharacterSheetProgressionChoice
+ * 
+ */
+export type CharacterSheetProgressionChoice = Prisma.CharacterSheetProgressionChoiceModel
+/**
  * Model CharacterClass
  * 
  */
@@ -144,6 +149,11 @@ export type ClassSpell = Prisma.ClassSpellModel
  * 
  */
 export type Feature = Prisma.FeatureModel
+/**
+ * Model Talent
+ * 
+ */
+export type Talent = Prisma.TalentModel
 /**
  * Model FeatureChoiceGroup
  * 
