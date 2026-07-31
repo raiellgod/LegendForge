@@ -385,6 +385,7 @@ export type CharacterReadySheetProgressionChoice = {
 export type CharacterReadySheetLevelProgressionPreview = {
   level: number;
   proficiencyBonus: number | null;
+  progressionChoiceCount: number;
   cantripsKnown: number;
   spellsKnown: number;
   spellsPrepared: number;
@@ -430,19 +431,139 @@ export type CharacterReadySheetClassEntry = {
   } | null;
 };
 
-export type CharacterReadySheetLevelUpPreview = {
-  currentLevel: number;
-  nextLevel: number;
-  currentProgression: CharacterReadySheetLevelProgressionPreview | null;
-  nextProgression: CharacterReadySheetLevelProgressionPreview | null;
-  newFeatures: CharacterReadySheetFeature[];
+export type CharacterReadySheetClassLevelUpPreview = {
+  classEntryId: string;
+  classId: string;
+  className: string;
   subclass: {
     id: string;
     name: string;
   } | null;
+  isPrimary: boolean;
+
+  currentCharacterLevel: number;
+  nextCharacterLevel: number;
+
+  currentClassLevel: number;
+  nextClassLevel: number;
+
+  currentProgression: CharacterReadySheetLevelProgressionPreview | null;
+  nextProgression: CharacterReadySheetLevelProgressionPreview | null;
+
+  newFeatures: CharacterReadySheetFeature[];
+
+  hitPointsPlan: {
+    currentHitPoints: number;
+    currentMaxHitPoints: number;
+    hitDie: number;
+    constitutionValue: number | null;
+    constitutionModifier: number;
+    hitPointGain: number;
+    nextHitPoints: number;
+    nextMaxHitPoints: number;
+  } | null;
+
+  proficiencyPlan: {
+    currentCharacterLevel: number;
+    nextCharacterLevel: number;
+    currentProficiencyBonus: number;
+    nextProficiencyBonus: number;
+    bonusIncrease: number;
+    hasChanged: boolean;
+  };
+
+  featuresPlan: {
+    currentClassLevel: number;
+    nextClassLevel: number;
+    unlockedFeatures: CharacterReadySheetFeature[];
+    unlockedFeatureCount: number;
+    hasUnlockedFeatures: boolean;
+  };
+
+  featureChoicesPlan: {
+    currentClassLevel: number;
+    nextClassLevel: number;
+    unlockedChoiceGroups: Array<{
+      id: string;
+      key: string;
+      name: string;
+      description: string | null;
+      choiceCount: number;
+      order: number;
+      classId: string | null;
+      subclassId: string | null;
+      levelProgressionId: string | null;
+      options: Array<{
+        id: string;
+        order: number;
+        feature: CharacterReadySheetFeature;
+      }>;
+    }>;
+    unlockedChoiceGroupCount: number;
+    pendingChoiceCount: number;
+    requiresFeatureChoices: boolean;
+  };
+
+  spellcastingPlan: {
+    currentClassLevel: number;
+    nextClassLevel: number;
+
+    currentCantripsKnown: number;
+    nextCantripsKnown: number;
+    cantripsKnownIncrease: number;
+
+    currentSpellsKnown: number;
+    nextSpellsKnown: number;
+    spellsKnownIncrease: number;
+
+    currentSpellsPrepared: number;
+    nextSpellsPrepared: number;
+    spellsPreparedIncrease: number;
+
+    currentSpellSlots: Array<{
+      spellLevel: number;
+      total: number;
+    }>;
+
+    nextSpellSlots: Array<{
+      spellLevel: number;
+      total: number;
+    }>;
+
+    hasSpellcastingChanges: boolean;
+  };
+
+  subclassPlan: {
+    currentClassLevel: number;
+    nextClassLevel: number;
+    subclassSelectionLevel: number | null;
+    currentSubclass: {
+      id: string;
+      name: string;
+    } | null;
+    isSubclassChoiceAvailable: boolean;
+    isSubclassChoicePending: boolean;
+    requiresSubclassChoice: boolean;
+  };
+
+  progressionChoicesPlan: {
+    currentClassLevel: number;
+    nextClassLevel: number;
+    unlockedChoiceCount: number;
+    requiresProgressionChoices: boolean;
+    pendingChoices: Array<{
+      classEntryId: string;
+      classId: string;
+      className: string;
+      classLevel: number;
+      choiceIndex: number;
+    }>;
+  };
+
   subclassSelectionLevel: number | null;
   isSubclassChoiceAvailable: boolean;
   isSubclassChoicePending: boolean;
+
   canPreviewNextLevel: boolean;
 };
 
@@ -601,7 +722,7 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
   features: CharacterReadySheetFeature[];
   featureChoices: CharacterReadySheetFeatureChoice[];
   progressionChoices: CharacterReadySheetProgressionChoice[];
-  levelUpPreview: CharacterReadySheetLevelUpPreview;
+  levelUpPreviews: CharacterReadySheetClassLevelUpPreview[];
 };
 
 export type StartingEquipmentPlan = {

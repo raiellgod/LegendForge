@@ -1464,7 +1464,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
     return null;
   }
-    async function getCharacterProgressionAttributeBonuses({
+  async function getCharacterProgressionAttributeBonuses({
     systemId,
     progressionChoices,
   }: {
@@ -1517,17 +1517,13 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           })
         : [];
 
-    const talentsById = new Map(
-      talents.map((talent) => [talent.id, talent]),
-    );
+    const talentsById = new Map(talents.map((talent) => [talent.id, talent]));
 
     const talentAttributeBonuses = mergeAttributeBonusMaps(
       ...talentChoices.map((choice) => {
         const talent = talentsById.get(choice.talentId);
 
-        return normalizeAttributeBonusMap(
-          talent?.attributeBonuses,
-        );
+        return normalizeAttributeBonusMap(talent?.attributeBonuses);
       }),
     );
 
@@ -1537,7 +1533,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     );
   }
 
-    async function validateCharacterProgressionAttributeMaximum({
+  async function validateCharacterProgressionAttributeMaximum({
     systemId,
     attributes,
     sourceAttributeBonuses,
@@ -1559,9 +1555,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       progressionAttributeBonuses,
     );
 
-    for (const [attributeKey, baseValue] of Object.entries(
-      attributes,
-    )) {
+    for (const [attributeKey, baseValue] of Object.entries(attributes)) {
       if (
         !isCharacterAttributeKey(attributeKey) ||
         typeof baseValue !== "number"
@@ -1570,8 +1564,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       const finalValue =
-        baseValue +
-        (consolidatedAttributeBonuses[attributeKey] ?? 0);
+        baseValue + (consolidatedAttributeBonuses[attributeKey] ?? 0);
 
       if (finalValue > 20) {
         return (
@@ -1590,6 +1583,14 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     }
 
     return Math.floor((value - 10) / 2);
+  }
+
+  function getProficiencyBonusByCharacterLevel(
+    level: number | null | undefined,
+  ) {
+    const safeLevel = normalizeCharacterLevel(level);
+
+    return 2 + Math.floor((safeLevel - 1) / 4);
   }
 
   function calculateInitialMaxHitPoints({
@@ -2181,11 +2182,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     classId: string | null;
     subclassId: string | null;
     level: number;
-    classes?: CharacterSheetClassFeatureSource[];
   };
 
   function getCharacterSheetClassFeatureSources(
-    characterSheet: CharacterSheetFeatureSource,
+    characterSheet: CharacterSheetFeatureSource & {
+      classes?: CharacterSheetClassFeatureSource[];
+    },
   ) {
     if (characterSheet.classes && characterSheet.classes.length > 0) {
       return characterSheet.classes.map((classEntry) => ({
@@ -2209,7 +2211,9 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
   }
 
   async function getAvailableFeaturesForCharacterSheet(
-    characterSheet: CharacterSheetFeatureSource,
+    characterSheet: CharacterSheetFeatureSource & {
+      classes?: CharacterSheetClassFeatureSource[];
+    },
   ) {
     const featureConditions = [];
 
@@ -2280,34 +2284,35 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     });
   }
 
-  async function getFeaturesUnlockedAtLevel(
-    characterSheet: CharacterSheetFeatureSource,
-    targetLevel: number,
-  ) {
-    const featureConditions = [];
-
-    if (characterSheet.classId) {
-      featureConditions.push({
-        classId: characterSheet.classId,
+  async function getFeaturesUnlockedForClassAtLevel({
+    systemId,
+    classId,
+    subclassId,
+    targetClassLevel,
+  }: {
+    systemId: string;
+    classId: string;
+    subclassId: string | null;
+    targetClassLevel: number;
+  }) {
+    const featureConditions: Prisma.FeatureWhereInput[] = [
+      {
+        classId,
         subclassId: null,
-        level: targetLevel,
-      });
-    }
+        level: targetClassLevel,
+      },
+    ];
 
-    if (characterSheet.subclassId) {
+    if (subclassId) {
       featureConditions.push({
-        subclassId: characterSheet.subclassId,
-        level: targetLevel,
+        subclassId,
+        level: targetClassLevel,
       });
-    }
-
-    if (featureConditions.length === 0) {
-      return [];
     }
 
     return prisma.feature.findMany({
       where: {
-        systemId: characterSheet.systemId,
+        systemId,
         OR: featureConditions,
       },
       select: {
@@ -2337,15 +2342,85 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     });
   }
 
-  async function getLevelUpPreviewForCharacterSheet(
-    characterSheet: CharacterSheetFeatureSource & {
-      characterClass: {
-        levelProgressions: Array<{
-          level: number;
-          proficiencyBonus: number | null;
-          cantripsKnown: number;
-          spellsKnown: number;
-          spellsPrepared: number;
+  async function getFeatureChoiceGroupsUnlockedForClassAtLevel({
+    systemId,
+    classId,
+    subclassId,
+    targetClassLevel,
+  }: {
+    systemId: string;
+    classId: string;
+    subclassId: string | null;
+    targetClassLevel: number;
+  }) {
+    return prisma.featureChoiceGroup.findMany({
+      where: {
+        systemId,
+        levelProgression: {
+          classId,
+          level: targetClassLevel,
+        },
+        AND: [
+          {
+            OR: [{ classId: null }, { classId }],
+          },
+          {
+            OR: [
+              { subclassId: null },
+              ...(subclassId ? [{ subclassId }] : []),
+            ],
+          },
+        ],
+      },
+      select: {
+        id: true,
+        key: true,
+        name: true,
+        description: true,
+        choiceCount: true,
+        order: true,
+        classId: true,
+        subclassId: true,
+        levelProgressionId: true,
+        options: {
+          select: {
+            id: true,
+            order: true,
+            feature: {
+              select: {
+                id: true,
+                key: true,
+                name: true,
+                description: true,
+                sourceType: true,
+                level: true,
+                order: true,
+                ancestryId: true,
+                classId: true,
+                subclassId: true,
+                levelProgressionId: true,
+              },
+            },
+          },
+          orderBy: {
+            order: "asc",
+          },
+        },
+      },
+      orderBy: [
+        {
+          order: "asc",
+        },
+        {
+          name: "asc",
+        },
+      ],
+    });
+  }
+
+  function getSpellSlotPlanEntries(
+    progression:
+      | {
           spellSlotsLevel1: number;
           spellSlotsLevel2: number;
           spellSlotsLevel3: number;
@@ -2355,60 +2430,404 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           spellSlotsLevel7: number;
           spellSlotsLevel8: number;
           spellSlotsLevel9: number;
-        }>;
-        subclassSelectionLevel: number | null;
-      } | null;
-      subclass: {
+        }
+      | null
+      | undefined,
+  ) {
+    if (!progression) {
+      return [];
+    }
+
+    return [
+      { spellLevel: 1, total: progression.spellSlotsLevel1 },
+      { spellLevel: 2, total: progression.spellSlotsLevel2 },
+      { spellLevel: 3, total: progression.spellSlotsLevel3 },
+      { spellLevel: 4, total: progression.spellSlotsLevel4 },
+      { spellLevel: 5, total: progression.spellSlotsLevel5 },
+      { spellLevel: 6, total: progression.spellSlotsLevel6 },
+      { spellLevel: 7, total: progression.spellSlotsLevel7 },
+      { spellLevel: 8, total: progression.spellSlotsLevel8 },
+      { spellLevel: 9, total: progression.spellSlotsLevel9 },
+    ].filter((slotEntry) => slotEntry.total > 0);
+  }
+
+  async function getLevelUpPreviewsForCharacterSheet(
+    characterSheet: CharacterSheetFeatureSource & {
+      classes?: Array<{
         id: string;
-        name: string;
-      } | null;
+        classId: string;
+        subclassId: string | null;
+        level: number;
+        isPrimary: boolean;
+        characterClass: {
+          id: string;
+          name: string;
+          hitDie: number | null;
+          subclassSelectionLevel: number | null;
+          levelProgressions: Array<{
+            level: number;
+            proficiencyBonus: number | null;
+            progressionChoiceCount: number;
+            cantripsKnown: number;
+            spellsKnown: number;
+            spellsPrepared: number;
+            spellSlotsLevel1: number;
+            spellSlotsLevel2: number;
+            spellSlotsLevel3: number;
+            spellSlotsLevel4: number;
+            spellSlotsLevel5: number;
+            spellSlotsLevel6: number;
+            spellSlotsLevel7: number;
+            spellSlotsLevel8: number;
+            spellSlotsLevel9: number;
+            spellLimits: Array<{
+              spellLevel: number;
+              spellsKnown: number;
+              spellsPrepared: number;
+            }>;
+          }>;
+        };
+        subclass: {
+          id: string;
+          name: string;
+        } | null;
+      }>;
+      hitPoints: number;
+      maxHitPoints: number;
+      stats: Array<{
+        baseValue: number;
+        bonusValue: number | null;
+        overrideValue: number | null;
+        stat: {
+          key: string;
+        };
+      }>;
     },
   ) {
-    const currentLevel = characterSheet.level;
-    const nextLevel = currentLevel + 1;
+    const classEntries = characterSheet.classes ?? [];
 
-    const currentProgression =
-      characterSheet.characterClass?.levelProgressions.find(
-        (progression) => progression.level === currentLevel,
-      ) ?? null;
+    const constitutionStat =
+      characterSheet.stats.find((sheetStat) => {
+        return sheetStat.stat.key === "constitution";
+      }) ?? null;
 
-    const nextProgression =
-      characterSheet.characterClass?.levelProgressions.find(
-        (progression) => progression.level === nextLevel,
-      ) ?? null;
+    const constitutionValue = constitutionStat
+      ? (constitutionStat.overrideValue ??
+        constitutionStat.baseValue + (constitutionStat.bonusValue ?? 0))
+      : null;
 
-    const newFeatures = await getFeaturesUnlockedAtLevel(
-      characterSheet,
-      nextLevel,
+    const constitutionModifier = getAttributeModifier(constitutionValue);
+
+    return Promise.all(
+      classEntries.map(async (classEntry) => {
+        const currentCharacterLevel = characterSheet.level;
+        const nextCharacterLevel = currentCharacterLevel + 1;
+
+        const currentProficiencyBonus =
+          getProficiencyBonusByCharacterLevel(currentCharacterLevel);
+
+        const nextProficiencyBonus =
+          getProficiencyBonusByCharacterLevel(nextCharacterLevel);
+
+        const proficiencyPlan = {
+          currentCharacterLevel,
+          nextCharacterLevel,
+          currentProficiencyBonus,
+          nextProficiencyBonus,
+          bonusIncrease: nextProficiencyBonus - currentProficiencyBonus,
+          hasChanged: nextProficiencyBonus !== currentProficiencyBonus,
+        };
+
+        const currentClassLevel = classEntry.level;
+        const nextClassLevel = currentClassLevel + 1;
+
+        const currentProgression =
+          classEntry.characterClass.levelProgressions.find(
+            (progression) => progression.level === currentClassLevel,
+          ) ?? null;
+
+        const nextProgression =
+          classEntry.characterClass.levelProgressions.find(
+            (progression) => progression.level === nextClassLevel,
+          ) ?? null;
+
+        const currentSpellSlots = getSpellSlotPlanEntries(currentProgression);
+        const nextSpellSlots = getSpellSlotPlanEntries(nextProgression);
+
+        const currentCantripsKnown = currentProgression?.cantripsKnown ?? 0;
+        const nextCantripsKnown = nextProgression?.cantripsKnown ?? 0;
+
+        const currentSpellsKnown = currentProgression?.spellsKnown ?? 0;
+        const nextSpellsKnown = nextProgression?.spellsKnown ?? 0;
+
+        const currentSpellsPrepared = currentProgression?.spellsPrepared ?? 0;
+        const nextSpellsPrepared = nextProgression?.spellsPrepared ?? 0;
+
+        const hasSpellSlotChanges =
+          JSON.stringify(currentSpellSlots) !== JSON.stringify(nextSpellSlots);
+
+        const spellcastingPlan = {
+          currentClassLevel,
+          nextClassLevel,
+
+          currentCantripsKnown,
+          nextCantripsKnown,
+          cantripsKnownIncrease: nextCantripsKnown - currentCantripsKnown,
+
+          currentSpellsKnown,
+          nextSpellsKnown,
+          spellsKnownIncrease: nextSpellsKnown - currentSpellsKnown,
+
+          currentSpellsPrepared,
+          nextSpellsPrepared,
+          spellsPreparedIncrease:
+            nextSpellsPrepared - currentSpellsPrepared,
+
+          currentSpellSlots,
+          nextSpellSlots,
+
+          hasSpellcastingChanges:
+            currentCantripsKnown !== nextCantripsKnown ||
+            currentSpellsKnown !== nextSpellsKnown ||
+            currentSpellsPrepared !== nextSpellsPrepared ||
+            hasSpellSlotChanges,
+        };
+
+        const newFeatures = await getFeaturesUnlockedForClassAtLevel({
+          systemId: characterSheet.systemId,
+          classId: classEntry.classId,
+          subclassId: classEntry.subclassId,
+          targetClassLevel: nextClassLevel,
+        });
+
+        const featuresPlan = {
+          currentClassLevel,
+          nextClassLevel,
+          unlockedFeatures: newFeatures,
+          unlockedFeatureCount: newFeatures.length,
+          hasUnlockedFeatures: newFeatures.length > 0,
+        };
+
+        const unlockedFeatureChoiceGroups =
+          await getFeatureChoiceGroupsUnlockedForClassAtLevel({
+            systemId: characterSheet.systemId,
+            classId: classEntry.classId,
+            subclassId: classEntry.subclassId,
+            targetClassLevel: nextClassLevel,
+          });
+
+        const pendingFeatureChoiceCount = unlockedFeatureChoiceGroups.reduce(
+          (currentTotal, choiceGroup) => {
+            return currentTotal + Math.max(0, choiceGroup.choiceCount);
+          },
+          0,
+        );
+
+        const featureChoicesPlan = {
+          currentClassLevel,
+          nextClassLevel,
+          unlockedChoiceGroups: unlockedFeatureChoiceGroups,
+          unlockedChoiceGroupCount: unlockedFeatureChoiceGroups.length,
+          pendingChoiceCount: pendingFeatureChoiceCount,
+          requiresFeatureChoices: pendingFeatureChoiceCount > 0,
+        };
+
+        const subclassSelectionLevel =
+          classEntry.characterClass.subclassSelectionLevel ?? null;
+
+        const isSubclassChoiceAvailable =
+          typeof subclassSelectionLevel === "number" &&
+          nextClassLevel >= subclassSelectionLevel;
+
+        const isSubclassChoicePending =
+          isSubclassChoiceAvailable && !classEntry.subclass;
+
+        const subclassPlan = {
+          currentClassLevel,
+          nextClassLevel,
+          subclassSelectionLevel,
+          currentSubclass: classEntry.subclass,
+          isSubclassChoiceAvailable,
+          isSubclassChoicePending,
+          requiresSubclassChoice: isSubclassChoicePending,
+        };
+
+        const unlockedChoiceCount = Math.max(
+          0,
+          nextProgression?.progressionChoiceCount ?? 0,
+        );
+
+        const pendingChoices = Array.from(
+          { length: unlockedChoiceCount },
+          (_, choiceIndex) => ({
+            classEntryId: classEntry.id,
+            classId: classEntry.classId,
+            className: classEntry.characterClass.name,
+            classLevel: nextClassLevel,
+            choiceIndex,
+          }),
+        );
+
+        const progressionChoicesPlan = {
+          currentClassLevel,
+          nextClassLevel,
+          unlockedChoiceCount,
+          requiresProgressionChoices: unlockedChoiceCount > 0,
+          pendingChoices,
+        };
+
+        const hitDie = classEntry.characterClass.hitDie;
+
+        const hitPointGain =
+          typeof hitDie === "number" && hitDie > 0
+            ? Math.max(1, hitDie + constitutionModifier)
+            : null;
+
+        const hitPointsPlan =
+          hitPointGain === null
+            ? null
+            : {
+                currentHitPoints: characterSheet.hitPoints,
+                currentMaxHitPoints: characterSheet.maxHitPoints,
+                hitDie,
+                constitutionValue,
+                constitutionModifier,
+                hitPointGain,
+                nextHitPoints: characterSheet.hitPoints + hitPointGain,
+                nextMaxHitPoints: characterSheet.maxHitPoints + hitPointGain,
+              };
+
+        const pendingSubclassChoiceCount =
+          subclassPlan.requiresSubclassChoice ? 1 : 0;
+
+        const pendingProgressionChoiceCount =
+          progressionChoicesPlan.unlockedChoiceCount;
+
+        const totalPendingChoiceCount =
+          pendingSubclassChoiceCount +
+          featureChoicesPlan.pendingChoiceCount +
+          pendingProgressionChoiceCount;
+
+        const levelUpPlan = {
+          currentCharacterLevel,
+          nextCharacterLevel,
+          currentClassLevel,
+          nextClassLevel,
+
+          classEntry: {
+            id: classEntry.id,
+            classId: classEntry.classId,
+            className: classEntry.characterClass.name,
+            subclass: classEntry.subclass,
+            isPrimary: classEntry.isPrimary,
+          },
+
+          canPreviewNextLevel:
+            nextCharacterLevel <= 20 &&
+            nextClassLevel <= 20 &&
+            Boolean(nextProgression),
+
+          hitPoints: hitPointsPlan,
+          proficiency: proficiencyPlan,
+          features: featuresPlan,
+          featureChoices: featureChoicesPlan,
+          spellcasting: spellcastingPlan,
+          subclass: subclassPlan,
+          progressionChoices: progressionChoicesPlan,
+
+          requirements: {
+            requiresSubclassChoice: subclassPlan.requiresSubclassChoice,
+            requiresFeatureChoices: featureChoicesPlan.requiresFeatureChoices,
+            requiresProgressionChoices:
+              progressionChoicesPlan.requiresProgressionChoices,
+
+            pendingSubclassChoiceCount,
+            pendingFeatureChoiceCount: featureChoicesPlan.pendingChoiceCount,
+            pendingProgressionChoiceCount,
+            totalPendingChoiceCount,
+
+            hasPendingChoices: totalPendingChoiceCount > 0,
+          },
+        };
+
+        return {
+          classEntryId: classEntry.id,
+          classId: classEntry.classId,
+          className: classEntry.characterClass.name,
+          subclass: classEntry.subclass,
+          isPrimary: classEntry.isPrimary,
+
+          currentCharacterLevel,
+          nextCharacterLevel,
+
+          currentClassLevel,
+          nextClassLevel,
+
+          currentProgression,
+          nextProgression,
+          newFeatures,
+          hitPointsPlan,
+          proficiencyPlan,
+          featuresPlan,
+          featureChoicesPlan,
+          spellcastingPlan,
+          subclassPlan,
+          progressionChoicesPlan,
+          levelUpPlan,
+
+          subclassSelectionLevel,
+          isSubclassChoiceAvailable,
+          isSubclassChoicePending,
+
+          canPreviewNextLevel:
+            nextCharacterLevel <= 20 &&
+            nextClassLevel <= 20 &&
+            Boolean(nextProgression),
+        };
+      }),
     );
-
-    const subclassSelectionLevel =
-      characterSheet.characterClass?.subclassSelectionLevel ?? null;
-
-    const isSubclassChoiceAvailable =
-      typeof subclassSelectionLevel === "number" &&
-      nextLevel >= subclassSelectionLevel;
-
-    const isSubclassChoicePending =
-      isSubclassChoiceAvailable && !characterSheet.subclass;
-
-    return {
-      currentLevel,
-      nextLevel,
-      currentProgression,
-      nextProgression,
-      newFeatures,
-      subclass: characterSheet.subclass,
-      subclassSelectionLevel,
-      isSubclassChoiceAvailable,
-      isSubclassChoicePending,
-      canPreviewNextLevel: Boolean(nextProgression),
-    };
   }
 
   async function withAvailableFeatures<
     T extends CharacterSheetFeatureSource & {
-      classes?: CharacterSheetClassFeatureSource[];
+      classes?: Array<
+        CharacterSheetClassFeatureSource & {
+          id: string;
+          isPrimary: boolean;
+          characterClass: {
+            id: string;
+            name: string;
+            hitDie: number | null;
+            subclassSelectionLevel: number | null;
+            levelProgressions: Array<{
+              level: number;
+              proficiencyBonus: number | null;
+              progressionChoiceCount: number;
+              cantripsKnown: number;
+              spellsKnown: number;
+              spellsPrepared: number;
+              spellSlotsLevel1: number;
+              spellSlotsLevel2: number;
+              spellSlotsLevel3: number;
+              spellSlotsLevel4: number;
+              spellSlotsLevel5: number;
+              spellSlotsLevel6: number;
+              spellSlotsLevel7: number;
+              spellSlotsLevel8: number;
+              spellSlotsLevel9: number;
+              spellLimits: Array<{
+                spellLevel: number;
+                spellsKnown: number;
+                spellsPrepared: number;
+              }>;
+            }>;
+          };
+          subclass: {
+            id: string;
+            name: string;
+          } | null;
+        }
+      >;
       characterClass: {
         levelProgressions: Array<{
           level: number;
@@ -2432,17 +2851,28 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         id: string;
         name: string;
       } | null;
+      hitPoints: number;
+      maxHitPoints: number;
+      stats: Array<{
+        baseValue: number;
+        bonusValue: number | null;
+        overrideValue: number | null;
+        stat: {
+          key: string;
+        };
+      }>;
     },
   >(characterSheet: T) {
     const features =
       await getAvailableFeaturesForCharacterSheet(characterSheet);
-    const levelUpPreview =
-      await getLevelUpPreviewForCharacterSheet(characterSheet);
+
+    const levelUpPreviews =
+      await getLevelUpPreviewsForCharacterSheet(characterSheet);
 
     return {
       ...characterSheet,
       features,
-      levelUpPreview,
+      levelUpPreviews,
     };
   }
 
@@ -2712,7 +3142,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     );
   }
 
-    async function removeObsoleteCharacterSheetProgressionChoices(
+  async function removeObsoleteCharacterSheetProgressionChoices(
     characterSheetId: string,
     entries: CharacterProgressionChoiceInput[],
   ) {
@@ -3410,18 +3840,16 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         normalizeAttributeBonusMap(selectedBackground?.attributeBonuses),
       );
 
-            const progressionAttributeBonuses =
+      const progressionAttributeBonuses =
         await getCharacterProgressionAttributeBonuses({
           systemId,
-          progressionChoices:
-            normalizedProgressionChoicesResult.entries,
+          progressionChoices: normalizedProgressionChoicesResult.entries,
         });
 
-      const consolidatedAttributeBonuses =
-        mergeAttributeBonusMaps(
-          sourceAttributeBonuses,
-          progressionAttributeBonuses,
-        );
+      const consolidatedAttributeBonuses = mergeAttributeBonusMaps(
+        sourceAttributeBonuses,
+        progressionAttributeBonuses,
+      );
 
       const progressionAttributeMaximumError =
         await validateCharacterProgressionAttributeMaximum({
@@ -3453,12 +3881,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const attributeEntriesResult =
-        await getCharacterAttributeEntries(
-          systemId,
-          attributes,
-          consolidatedAttributeBonuses,
-        );
+      const attributeEntriesResult = await getCharacterAttributeEntries(
+        systemId,
+        attributes,
+        consolidatedAttributeBonuses,
+      );
 
       if (attributeEntriesResult.error) {
         return reply.status(400).send({
@@ -4184,7 +4611,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         normalizeAttributeBonusMap(selectedBackground?.attributeBonuses),
       );
 
-            const currentProgressionChoices: CharacterProgressionChoiceInput[] =
+      const currentProgressionChoices: CharacterProgressionChoiceInput[] =
         characterSheet.progressionChoices.map((choice) => ({
           classId: choice.classId,
           classLevel: choice.classLevel,
@@ -4208,11 +4635,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           progressionChoices: effectiveProgressionChoices,
         });
 
-      const consolidatedAttributeBonuses =
-        mergeAttributeBonusMaps(
-          sourceAttributeBonuses,
-          progressionAttributeBonuses,
-        );
+      const consolidatedAttributeBonuses = mergeAttributeBonusMaps(
+        sourceAttributeBonuses,
+        progressionAttributeBonuses,
+      );
 
       const currentBaseAttributes = Object.fromEntries(
         characterSheet.stats
@@ -4266,12 +4692,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const attributeEntriesResult =
-        await getCharacterAttributeEntries(
-          characterSheet.systemId,
-          attributes,
-          consolidatedAttributeBonuses,
-        );
+      const attributeEntriesResult = await getCharacterAttributeEntries(
+        characterSheet.systemId,
+        attributes,
+        consolidatedAttributeBonuses,
+      );
 
       if (attributeEntriesResult.error) {
         return reply.status(400).send({

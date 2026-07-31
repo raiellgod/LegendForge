@@ -256,16 +256,25 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
                 [x] 4.7.8.7.12.4 — Salvar, fechar e reabrir rascunho
                 [x] 4.7.8.7.12.5 — Finalizar e conferir ficha pronta
                 [x] 4.7.8.7.12.6 — Confirmar personagem nível 1 sem marcos
-
-[ ] 4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
-[ ] 4.7.10 — Criar plano de mudanças do Level Up
-[ ] 4.7.11 — Tela de resumo das mudanças do Level Up
-[ ] 4.7.12 — Telas de escolhas pendentes do Level Up
-[ ] 4.7.13 — Aplicar mudanças reais na ficha ao confirmar
-[ ] 4.7.14 — Mestre libera/bloqueia Level Up
-[ ] 4.7.15 — Jogador vê Level Up apenas quando liberado
-[ ] 4.7.16 — Jogador confirma Level Up liberado
-[ ] 4.7.17 — Feedback no chat após Level Up
+        [x] 4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
+            [x] 4.7.9.1 — Auditar o preview atual de Level Up
+            [x] 4.7.9.2 — Mapear as CharacterSheetClass disponíveis
+            [x] 4.7.9.3 — Criar estado da classe escolhida para subir
+            [x] 4.7.9.4 — Exibir seletor de classe no modal
+            [x] 4.7.9.5 — Calcular nível atual e próximo nível da classe escolhida
+            [x] 4.7.9.6 — Recalcular PV previsto pela classe escolhida
+            [x] 4.7.9.7 — Recalcular features liberadas pela classe escolhida
+            [x] 4.7.9.8 — Recalcular progressão mágica da classe escolhida
+            [x] 4.7.9.9 — Detectar novos marcos de ASI/talento
+            [x] 4.7.9.10 — Validar classe única e multiclasse
+        [x] 4.7.10 — Criar plano de mudanças do Level Up
+        [ ] 4.7.11 — Tela de resumo das mudanças do Level Up
+        [ ] 4.7.12 — Telas de escolhas pendentes do Level Up
+        [ ] 4.7.13 — Aplicar mudanças reais na ficha ao confirmar
+        [ ] 4.7.14 — Mestre libera/bloqueia Level Up
+        [ ] 4.7.15 — Jogador vê Level Up apenas quando liberado
+        [ ] 4.7.16 — Jogador confirma Level Up liberado
+        [ ] 4.7.17 — Feedback no chat após Level Up
 
 5.5. Fase 4.8 — Sub-ancestralidades e variações de origem
 
@@ -415,28 +424,20 @@ Sylvaris → Sylvaris Alto
 [ ] 16.7 — Checklist de portfólio
 [ ] 16.8 — Texto para LinkedIn/GitHub
 
-## 18. Próximo passo obrigatório
+18. Próximo passo obrigatório
 
 A próxima micro de desenvolvimento é:
 
-4.7.8.7.11.1 — Modelar CharacterSheetProgressionChoice no Prisma
+4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
 
 Objetivo:
 
-- criar a persistência real dos marcos de progressão da ficha
-- vincular cada escolha à ficha e à classe que concedeu o marco
-- preservar identidade por classe, nível da classe e índice da escolha
-- suportar aumento de atributo ou talento
-- permitir atualização e remoção de escolhas obsoletas
-- preparar reconstrução completa do rascunho
-- não aplicar ainda os bônus em CharacterSheetStat nesta micro
-
-Arquivos-base atuais:
-
-backend/prisma/schema.prisma
-backend/src/routes/character-sheets.ts
-frontend/src/features/character-builder/types/character-builder-types.ts
-frontend/src/app/campaigns/[id]/play/page.tsx
+- permitir escolher qual classe receberá o próximo nível
+- calcular a prévia usando a CharacterSheetClass selecionada
+- separar nível total do personagem do nível daquela classe
+- recalcular PV, features, magias e marcos da classe escolhida
+- preparar o plano detalhado das mudanças do Level Up
+- não aplicar ainda as mudanças reais na ficha
 
 19. Nota de verdade canônica
 

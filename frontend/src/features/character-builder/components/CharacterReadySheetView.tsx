@@ -754,16 +754,19 @@ function getSpellSlotRowsFromProgression(
   ].filter((slot) => slot.total > 0);
 }
 
-function getSpellSlotSummaryFromProgression(
-  progression: CharacterReadySheetSpellSlotProgression | null | undefined,
+function getSpellSlotSummaryFromPlanEntries(
+  spellSlots: Array<{
+    spellLevel: number;
+    total: number;
+  }>,
 ) {
-  const slotRows = getSpellSlotRowsFromProgression(progression);
-
-  if (slotRows.length === 0) {
+  if (spellSlots.length === 0) {
     return "Sem espaços";
   }
 
-  return slotRows.map((slot) => `N${slot.level}: ${slot.total}`).join(" · ");
+  return spellSlots
+    .map((spellSlot) => `N${spellSlot.spellLevel}: ${spellSlot.total}`)
+    .join(" · ");
 }
 
 function getProgressionChangeLabel(
@@ -1294,48 +1297,105 @@ function LevelUpPreviewModal({
   className: string;
   selectedClassOption: LevelUpClassOption | null;
   classOptions: LevelUpClassOption[];
-  levelUpPreview: CharacterReadySheet["levelUpPreview"] | null | undefined;
+  levelUpPreview:
+    | CharacterReadySheet["levelUpPreviews"][number]
+    | null
+    | undefined;
   isConfirmingLevelUp: boolean;
   levelUpError: string | null;
   onSelectClass: (classOptionId: string) => void;
   onConfirmLevelUp: (data: { classEntryId?: string }) => Promise<void>;
   onClose: () => void;
 }) {
-  const currentLevel = levelUpPreview?.currentLevel ?? 1;
-  const nextLevel = levelUpPreview?.nextLevel ?? currentLevel + 1;
-  const currentProgression = levelUpPreview?.currentProgression ?? null;
-  const nextProgression = levelUpPreview?.nextProgression ?? null;
+  const currentCharacterLevel =
+    levelUpPreview?.currentCharacterLevel ?? 1;
 
-  const proficiencyChange = getProgressionChangeLabel(
-    currentProgression?.proficiencyBonus,
-    nextProgression?.proficiencyBonus,
-  );
+  const nextCharacterLevel =
+    levelUpPreview?.nextCharacterLevel ?? currentCharacterLevel + 1;
 
-  const cantripsChange = getProgressionChangeLabel(
-    currentProgression?.cantripsKnown,
-    nextProgression?.cantripsKnown,
-  );
+  const currentClassLevel =
+    levelUpPreview?.currentClassLevel ??
+    selectedClassOption?.currentClassLevel ??
+    1;
 
-  const spellsKnownChange = getProgressionChangeLabel(
-    currentProgression?.spellsKnown,
-    nextProgression?.spellsKnown,
-  );
+  const nextClassLevel =
+    levelUpPreview?.nextClassLevel ??
+    selectedClassOption?.nextClassLevel ??
+    currentClassLevel + 1;
 
-  const spellsPreparedChange = getProgressionChangeLabel(
-    currentProgression?.spellsPrepared,
-    nextProgression?.spellsPrepared,
-  );
+  const proficiencyPlan = levelUpPreview?.proficiencyPlan ?? null;
 
-  const currentSlots = getSpellSlotSummaryFromProgression(currentProgression);
-  const nextSlots = getSpellSlotSummaryFromProgression(nextProgression);
+  const proficiencyChange = proficiencyPlan
+    ? getProgressionChangeLabel(
+        proficiencyPlan.currentProficiencyBonus,
+        proficiencyPlan.nextProficiencyBonus,
+      )
+    : "—";
+
+  const spellcastingPlan = levelUpPreview?.spellcastingPlan ?? null;
+
+  const cantripsChange = spellcastingPlan
+    ? getProgressionChangeLabel(
+        spellcastingPlan.currentCantripsKnown,
+        spellcastingPlan.nextCantripsKnown,
+      )
+    : "—";
+
+  const spellsKnownChange = spellcastingPlan
+    ? getProgressionChangeLabel(
+        spellcastingPlan.currentSpellsKnown,
+        spellcastingPlan.nextSpellsKnown,
+      )
+    : "—";
+
+  const spellsPreparedChange = spellcastingPlan
+    ? getProgressionChangeLabel(
+        spellcastingPlan.currentSpellsPrepared,
+        spellcastingPlan.nextSpellsPrepared,
+      )
+    : "—";
+
+  const currentSlots = spellcastingPlan
+    ? getSpellSlotSummaryFromPlanEntries(spellcastingPlan.currentSpellSlots)
+    : "Sem espaços";
+
+  const nextSlots = spellcastingPlan
+    ? getSpellSlotSummaryFromPlanEntries(spellcastingPlan.nextSpellSlots)
+    : "Sem espaços";
 
   const slotChange =
     currentSlots === nextSlots ? nextSlots : `${currentSlots} → ${nextSlots}`;
 
-  const newFeatures = levelUpPreview?.newFeatures ?? [];
-  const hasNewFeatures = newFeatures.length > 0;
+  const featuresPlan = levelUpPreview?.featuresPlan ?? null;
+  const unlockedFeatures = featuresPlan?.unlockedFeatures ?? [];
+  const unlockedFeatureCount = featuresPlan?.unlockedFeatureCount ?? 0;
+  const hasUnlockedFeatures = featuresPlan?.hasUnlockedFeatures ?? false;
+
+  const featureChoicesPlan = levelUpPreview?.featureChoicesPlan ?? null;
+  const unlockedFeatureChoiceGroups =
+    featureChoicesPlan?.unlockedChoiceGroups ?? [];
+  const unlockedFeatureChoiceGroupCount =
+    featureChoicesPlan?.unlockedChoiceGroupCount ?? 0;
+  const pendingFeatureChoiceCount =
+    featureChoicesPlan?.pendingChoiceCount ?? 0;
+  const requiresFeatureChoices =
+    featureChoicesPlan?.requiresFeatureChoices ?? false;
 
   const canPreviewNextLevel = levelUpPreview?.canPreviewNextLevel ?? false;
+
+  const progressionChoicesPlan =
+    levelUpPreview?.progressionChoicesPlan ?? null;
+
+  const unlockedProgressionChoiceCount =
+    progressionChoicesPlan?.unlockedChoiceCount ?? 0;
+
+  const hasUnlockedProgressionChoices =
+    progressionChoicesPlan?.requiresProgressionChoices ?? false;
+
+  const pendingProgressionChoices =
+    progressionChoicesPlan?.pendingChoices ?? [];
+
+  const hitPointsPlan = levelUpPreview?.hitPointsPlan ?? null;
 
   const canConfirmLevelUp =
     canPreviewNextLevel && Boolean(selectedClassOption) && !isConfirmingLevelUp;
@@ -1350,37 +1410,27 @@ function LevelUpPreviewModal({
     });
   }
 
-  const selectedSubclassSelectionLevel =
-    selectedClassOption?.subclassSelectionLevel ?? null;
-
-  const isSelectedSubclassAlreadyChosen = Boolean(
-    selectedClassOption?.subclassName,
-  );
-
-  const isSelectedSubclassUnlockedByThisLevel =
-    selectedClassOption &&
-    typeof selectedSubclassSelectionLevel === "number" &&
-    selectedClassOption.nextClassLevel >= selectedSubclassSelectionLevel;
+  const subclassPlan = levelUpPreview?.subclassPlan ?? null;
 
   const selectedSubclassStatusLabel = !selectedClassOption
     ? "Nenhuma classe escolhida"
-    : isSelectedSubclassAlreadyChosen
-      ? selectedClassOption.subclassName
-      : !selectedSubclassSelectionLevel
-        ? "Sem regra de subclasse"
-        : isSelectedSubclassUnlockedByThisLevel
-          ? "Escolha de subclasse pendente"
-          : `Disponível no nível ${selectedSubclassSelectionLevel}`;
+    : subclassPlan?.currentSubclass
+      ? subclassPlan.currentSubclass.name
+      : subclassPlan?.requiresSubclassChoice
+        ? "Escolha de subclasse pendente"
+        : subclassPlan?.subclassSelectionLevel
+          ? `Disponível no nível ${subclassPlan.subclassSelectionLevel}`
+          : "Sem regra de subclasse";
 
   const selectedSubclassStatusHelper = !selectedClassOption
     ? "Escolha uma classe para ver a regra de subclasse."
-    : isSelectedSubclassAlreadyChosen
+    : subclassPlan?.currentSubclass
       ? `Subclasse atual de ${selectedClassOption.className}.`
-      : !selectedSubclassSelectionLevel
-        ? "Esta classe ainda não informa nível de escolha de subclasse."
-        : isSelectedSubclassUnlockedByThisLevel
-          ? "Quando o Level Up real existir, esta etapa deverá permitir escolher uma subclasse para esta classe."
-          : `${selectedClassOption.className} ainda não alcança o nível de subclasse neste avanço.`;
+      : subclassPlan?.requiresSubclassChoice
+        ? `O avanço de ${subclassPlan.currentClassLevel} para ${subclassPlan.nextClassLevel} exige escolher uma subclasse. A escolha real será resolvida na etapa própria do Level Up.`
+        : subclassPlan?.subclassSelectionLevel
+          ? `${selectedClassOption.className} ainda não alcança o nível de subclasse neste avanço.`
+          : "Esta classe ainda não informa nível de escolha de subclasse.";
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
@@ -1419,7 +1469,7 @@ function LevelUpPreviewModal({
             </p>
 
             <p className="mt-1 text-2xl font-black text-forge-gold">
-              {currentLevel}
+              {currentCharacterLevel}
             </p>
 
             <p className="mt-1 text-[10px] font-semibold text-white/35">
@@ -1433,7 +1483,7 @@ function LevelUpPreviewModal({
             </p>
 
             <p className="mt-1 text-2xl font-black text-forge-gold">
-              {nextLevel}
+              {nextCharacterLevel}
             </p>
 
             <p className="mt-1 text-[10px] font-semibold text-white/35">
@@ -1448,7 +1498,7 @@ function LevelUpPreviewModal({
 
             <p className="mt-1 min-w-0 break-words text-base font-black text-forge-gold">
               {selectedClassOption
-                ? `${selectedClassOption.className} ${selectedClassOption.currentClassLevel} → ${selectedClassOption.nextClassLevel}`
+                ? `${selectedClassOption.className} ${currentClassLevel} → ${nextClassLevel}`
                 : className}
             </p>
 
@@ -1546,30 +1596,61 @@ function LevelUpPreviewModal({
               <div className="mt-3 grid gap-2 md:grid-cols-2">
                 <CompactListRow
                   title={`Proficiência: ${proficiencyChange}`}
-                  helper="Bônus de proficiência da classe/progressão atual."
+                  helper={
+                    proficiencyPlan?.hasChanged
+                      ? `Aumento de ${formatSignedNumber(
+                          proficiencyPlan.bonusIncrease,
+                        )} pelo nível total ${proficiencyPlan.currentCharacterLevel} → ${proficiencyPlan.nextCharacterLevel}.`
+                      : "O bônus de proficiência permanece igual neste nível total."
+                  }
                 />
 
                 <CompactListRow
                   title={`Truques: ${cantripsChange}`}
-                  helper="Quantidade de truques conhecidos pela progressão."
+                  helper={
+                    spellcastingPlan?.cantripsKnownIncrease
+                      ? `Aumento de ${formatSignedNumber(
+                          spellcastingPlan.cantripsKnownIncrease,
+                        )} truque(s) conhecido(s).`
+                      : "A quantidade de truques conhecidos permanece igual."
+                  }
                 />
 
                 <CompactListRow
                   title={`Magias conhecidas: ${spellsKnownChange}`}
-                  helper="Quantidade de magias conhecidas, quando aplicável."
+                  helper={
+                    spellcastingPlan?.spellsKnownIncrease
+                      ? `Aumento de ${formatSignedNumber(
+                          spellcastingPlan.spellsKnownIncrease,
+                        )} magia(s) conhecida(s).`
+                      : "A quantidade de magias conhecidas permanece igual."
+                  }
                 />
 
                 <CompactListRow
                   title={`Magias preparadas: ${spellsPreparedChange}`}
-                  helper="Quantidade de magias preparadas, quando aplicável."
+                  helper={
+                    spellcastingPlan?.spellsPreparedIncrease
+                      ? `Aumento de ${formatSignedNumber(
+                          spellcastingPlan.spellsPreparedIncrease,
+                        )} magia(s) preparada(s).`
+                      : "A quantidade de magias preparadas permanece igual."
+                  }
                 />
 
-                <CompactListRow title="Espaços de magia" helper={slotChange} />
+                <CompactListRow
+                  title="Espaços de magia"
+                  helper={
+                    spellcastingPlan?.hasSpellcastingChanges
+                      ? slotChange
+                      : "Nenhuma alteração mágica neste nível de classe."
+                  }
+                />
 
                 <CompactListRow
-                  title={`${newFeatures.length} feature(s) nova(s)`}
+                  title={`${unlockedFeatureCount} feature(s) nova(s)`}
                   helper={
-                    hasNewFeatures
+                    hasUnlockedFeatures
                       ? "Veja a lista abaixo."
                       : "Nenhuma feature nova neste nível."
                   }
@@ -1583,14 +1664,167 @@ function LevelUpPreviewModal({
             )}
           </div>
 
+          <div
+            className={[
+              "rounded-xl border p-3",
+              hasUnlockedProgressionChoices
+                ? "border-emerald-400/30 bg-emerald-500/10"
+                : "border-white/10 bg-black/25",
+            ].join(" ")}
+          >
+            <p
+              className={[
+                "text-[10px] font-black uppercase tracking-[0.16em]",
+                hasUnlockedProgressionChoices
+                  ? "text-emerald-100/80"
+                  : "text-white/40",
+              ].join(" ")}
+            >
+              Marco de progressão
+            </p>
+
+            {hasUnlockedProgressionChoices ? (
+              <>
+                <p className="mt-2 text-base font-black text-emerald-100">
+                  {unlockedProgressionChoiceCount} escolha(s) liberada(s)
+                </p>
+
+                <p className="mt-1 text-xs font-semibold leading-relaxed text-emerald-100/70">
+                  Este avanço exige resolver escolha entre aumento de atributo
+                  ou talento. A seleção real será implementada na etapa própria
+                  do Level Up.
+                </p>
+
+                {pendingProgressionChoices.length > 0 ? (
+                  <div className="mt-3 grid gap-2">
+                    {pendingProgressionChoices.map((pendingChoice) => (
+                      <CompactListRow
+                        key={`${pendingChoice.classEntryId}:${pendingChoice.classLevel}:${pendingChoice.choiceIndex}`}
+                        title={`${pendingChoice.className} ${pendingChoice.classLevel} · escolha ${pendingChoice.choiceIndex + 1}`}
+                        helper="Escolha pendente entre aumento de atributo ou talento."
+                      />
+                    ))}
+                  </div>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <p className="mt-2 text-base font-black text-white/55">
+                  Nenhuma escolha liberada
+                </p>
+
+                <p className="mt-1 text-xs font-semibold leading-relaxed text-white/35">
+                  O próximo nível desta classe não concede aumento de atributo
+                  nem talento.
+                </p>
+              </>
+            )}
+          </div>
+
+          <div
+            className={[
+              "rounded-xl border p-3",
+              requiresFeatureChoices
+                ? "border-sky-400/30 bg-sky-500/10"
+                : "border-white/10 bg-black/25",
+            ].join(" ")}
+          >
+            <p
+              className={[
+                "text-[10px] font-black uppercase tracking-[0.16em]",
+                requiresFeatureChoices ? "text-sky-100/80" : "text-white/40",
+              ].join(" ")}
+            >
+              Escolhas internas de features
+            </p>
+
+            {requiresFeatureChoices ? (
+              <>
+                <p className="mt-2 text-base font-black text-sky-100">
+                  {pendingFeatureChoiceCount} escolha(s) pendente(s) em{" "}
+                  {unlockedFeatureChoiceGroupCount} grupo(s)
+                </p>
+
+                <p className="mt-1 text-xs font-semibold leading-relaxed text-sky-100/70">
+                  Este avanço libera grupos de opções vinculados às features da
+                  classe. A seleção real será feita na etapa própria do Level Up.
+                </p>
+
+                <div className="mt-3 grid gap-2">
+                  {unlockedFeatureChoiceGroups.map((choiceGroup) => {
+                    const optionNames = choiceGroup.options
+                      .map((option) => option.feature.name)
+                      .join(" · ");
+
+                    return (
+                      <CompactListRow
+                        key={choiceGroup.id}
+                        title={`${choiceGroup.name} · escolha ${choiceGroup.choiceCount}`}
+                        value={`${choiceGroup.options.length} opção(ões)`}
+                        helper={
+                          optionNames ||
+                          choiceGroup.description ||
+                          "Nenhuma opção cadastrada para este grupo."
+                        }
+                      />
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="mt-2 text-base font-black text-white/55">
+                  Nenhuma escolha interna liberada
+                </p>
+
+                <p className="mt-1 text-xs font-semibold leading-relaxed text-white/35">
+                  O próximo nível desta classe não libera grupos de escolhas
+                  vinculados às features.
+                </p>
+              </>
+            )}
+          </div>
+
+          <div className="rounded-xl border border-forge-gold/25 bg-black/25 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
+              Pontos de vida previstos
+            </p>
+
+            {hitPointsPlan ? (
+              <div className="mt-3 grid gap-2 md:grid-cols-3">
+                <CompactListRow
+                  title={`PV atual: ${hitPointsPlan.currentHitPoints}/${hitPointsPlan.currentMaxHitPoints}`}
+                  helper="Valores registrados atualmente na ficha."
+                />
+
+                <CompactListRow
+                  title={`Ganho neste avanço: +${hitPointsPlan.hitPointGain} PV`}
+                  helper={`d${hitPointsPlan.hitDie} + ${formatSignedNumber(
+                    hitPointsPlan.constitutionModifier,
+                  )} de Constituição, respeitando o mínimo de 1 PV.`}
+                />
+
+                <CompactListRow
+                  title={`PV previsto: ${hitPointsPlan.nextHitPoints}/${hitPointsPlan.nextMaxHitPoints}`}
+                  helper="O plano aumenta PV atual e máximo pelo mesmo valor, preservando o dano sofrido."
+                />
+              </div>
+            ) : (
+              <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+                A classe escolhida não possui dado de vida válido cadastrado.
+                Não foi possível calcular o ganho de PV deste avanço.
+              </p>
+            )}
+          </div>
+
           <div className="rounded-xl border border-white/10 bg-black/25 p-3">
             <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
               Features liberadas neste avanço
             </p>
 
-            {hasNewFeatures ? (
+            {hasUnlockedFeatures ? (
               <div className="mt-3 grid gap-2">
-                {newFeatures.map((feature) => (
+                {unlockedFeatures.map((feature) => (
                   <FeatureCard
                     key={feature.id}
                     name={feature.name}
@@ -1610,7 +1844,14 @@ function LevelUpPreviewModal({
             )}
           </div>
 
-          <div className="rounded-xl border border-forge-gold/25 bg-black/25 p-3">
+          <div
+            className={[
+              "rounded-xl border p-3",
+              subclassPlan?.requiresSubclassChoice
+                ? "border-amber-400/35 bg-amber-500/10"
+                : "border-forge-gold/25 bg-black/25",
+            ].join(" ")}
+          >
             <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
               Subclasse da classe escolhida
             </p>
@@ -2662,6 +2903,17 @@ export function CharacterReadySheetView({
     ? `${selectedLevelUpClassOption.className} ${selectedLevelUpClassOption.currentClassLevel}`
     : classSummaryLabel;
 
+  const selectedLevelUpPreview =
+    characterSheet?.levelUpPreviews.find(
+      (levelUpPreview) =>
+        levelUpPreview.classEntryId === selectedLevelUpClassOption?.id,
+    ) ??
+    characterSheet?.levelUpPreviews.find(
+      (levelUpPreview) => levelUpPreview.isPrimary,
+    ) ??
+    characterSheet?.levelUpPreviews[0] ??
+    null;
+
   function handleOpenLevelUpPreview() {
     setSelectedLevelUpClassOptionId(
       selectedLevelUpClassOption?.id ?? levelUpClassOptions[0]?.id ?? null,
@@ -2864,7 +3116,7 @@ export function CharacterReadySheetView({
           className={levelUpClassName}
           selectedClassOption={selectedLevelUpClassOption}
           classOptions={levelUpClassOptions}
-          levelUpPreview={characterSheet?.levelUpPreview}
+          levelUpPreview={selectedLevelUpPreview}
           isConfirmingLevelUp={isConfirmingLevelUp}
           levelUpError={levelUpError}
           onSelectClass={setSelectedLevelUpClassOptionId}
