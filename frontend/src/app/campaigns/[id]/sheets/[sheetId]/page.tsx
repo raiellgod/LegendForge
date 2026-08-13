@@ -8,6 +8,7 @@ import { authClient } from "@/lib/auth-client";
 import type {
   CharacterBuilderOptions,
   CharacterReadySheet,
+  CharacterSheetLevelUpConfirmationPayload,
 } from "@/features/character-builder/types/character-builder-types";
 
 import {
@@ -38,7 +39,11 @@ function createEmptyCharacterBuilderOptions(): CharacterBuilderOptions {
     backgrounds: [],
     skills: [],
     spells: [],
+    features: [],
+    talents: [],
+    featureChoiceGroups: [],
     equipment: [],
+    languages: [],
   };
 }
 
@@ -114,7 +119,11 @@ export default function CharacterSheetPopoutPage() {
             backgrounds: optionsData.backgrounds ?? [],
             skills: optionsData.skills ?? [],
             spells: optionsData.spells ?? [],
+            features: optionsData.features ?? [],
+            talents: optionsData.talents ?? [],
+            featureChoiceGroups: optionsData.featureChoiceGroups ?? [],
             equipment: optionsData.equipment ?? [],
+            languages: optionsData.languages ?? [],
           });
         }
       } catch (error) {
@@ -172,7 +181,9 @@ export default function CharacterSheetPopoutPage() {
     }
   }
 
-    async function handleConfirmLevelUp(data: { classEntryId?: string }) {
+  async function handleConfirmLevelUp(
+    data: CharacterSheetLevelUpConfirmationPayload,
+  ) {
     if (!characterSheet) {
       setLevelUpError("Ficha não encontrada para confirmar Level Up.");
       return;

@@ -12,6 +12,7 @@ import type {
   CharacterBuilderDraft,
   CharacterBuilderOptions,
   CharacterReadySheet,
+  CharacterSheetLevelUpConfirmationPayload,
   CharacterSheetStatus,
 } from "@/features/character-builder/types/character-builder-types";
 
@@ -997,9 +998,9 @@ export default function CampaignPlayPage() {
     }
   }
 
-  async function handleConfirmCharacterSheetLevelUp(data: {
-    classEntryId?: string;
-  }) {
+  async function handleConfirmCharacterSheetLevelUp(
+    data: CharacterSheetLevelUpConfirmationPayload,
+  ) {
     const selectedSheet = selectedActor
       ? getCharacterSheetByActor(selectedActor)
       : null;
@@ -3245,7 +3246,9 @@ function ActorSheetModal({
       tokenImageFit: CharacterReadySheet["tokenImageFit"];
     },
   ) => Promise<void>;
-  onConfirmLevelUp: (data: { classEntryId?: string }) => Promise<void>;
+  onConfirmLevelUp: (
+    data: CharacterSheetLevelUpConfirmationPayload,
+  ) => Promise<void>;
   onRollSheetAction: (request: CharacterReadySheetRollRequest) => void;
   onClose: () => void;
 }) {

@@ -2451,8 +2451,226 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     ].filter((slotEntry) => slotEntry.total > 0);
   }
 
+  async function getLevelUpChoiceOptions({
+    characterSheetId,
+    systemId,
+    classId,
+    nextClassLevel,
+    requiresSubclassChoice,
+    progressionChoiceCount,
+    cantripsKnownIncrease,
+    spellsKnownIncrease,
+    currentAttributes,
+  }: {
+    characterSheetId: string;
+    systemId: string;
+    classId: string;
+    nextClassLevel: number;
+    requiresSubclassChoice: boolean;
+    progressionChoiceCount: number;
+    cantripsKnownIncrease: number;
+    spellsKnownIncrease: number;
+    currentAttributes: CharacterAttributeValueMap;
+  }) {
+    const [characterClass, talents, selectedTalents, knownClassSpells] =
+      await Promise.all([
+        prisma.characterClass.findFirst({
+          where: {
+            id: classId,
+            systemId,
+          },
+          select: {
+            subclasses: {
+              select: {
+                id: true,
+                key: true,
+                name: true,
+                description: true,
+                classId: true,
+                order: true,
+              },
+              orderBy: [{ order: "asc" }, { name: "asc" }],
+            },
+            classSpells: {
+              where: {
+                minimumClassLevel: {
+                  lte: nextClassLevel,
+                },
+              },
+              select: {
+                minimumClassLevel: true,
+                isAlwaysKnown: true,
+                spell: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                    description: true,
+                    level: true,
+                    school: true,
+                    castingTime: true,
+                    range: true,
+                    duration: true,
+                    components: true,
+                    isRitual: true,
+                    requiresConcentration: true,
+                    order: true,
+                  },
+                },
+              },
+              orderBy: [
+                {
+                  spell: {
+                    level: "asc",
+                  },
+                },
+                {
+                  spell: {
+                    order: "asc",
+                  },
+                },
+                {
+                  spell: {
+                    name: "asc",
+                  },
+                },
+              ],
+            },
+          },
+        }),
+
+        progressionChoiceCount > 0
+          ? prisma.talent.findMany({
+              where: {
+                systemId,
+              },
+              select: {
+                id: true,
+                key: true,
+                name: true,
+                description: true,
+                isRepeatable: true,
+                prerequisites: true,
+                attributeBonuses: true,
+                order: true,
+              },
+              orderBy: [{ order: "asc" }, { name: "asc" }],
+            })
+          : Promise.resolve([]),
+
+        progressionChoiceCount > 0
+          ? prisma.characterSheetProgressionChoice.findMany({
+              where: {
+                characterSheetId,
+                talentId: {
+                  not: null,
+                },
+              },
+              select: {
+                talentId: true,
+              },
+            })
+          : Promise.resolve([]),
+
+        cantripsKnownIncrease > 0 || spellsKnownIncrease > 0
+          ? prisma.characterSheetSpell.findMany({
+              where: {
+                characterSheetId,
+                classId,
+              },
+              select: {
+                spellId: true,
+              },
+            })
+          : Promise.resolve([]),
+      ]);
+
+    const selectedTalentIds = selectedTalents
+      .map((choice) => choice.talentId)
+      .filter((talentId): talentId is string => Boolean(talentId));
+
+    const selectedTalentCountById = new Map<string, number>();
+
+    for (const talentId of selectedTalentIds) {
+      selectedTalentCountById.set(
+        talentId,
+        (selectedTalentCountById.get(talentId) ?? 0) + 1,
+      );
+    }
+
+    const talentOptions = talents.map((talent) => {
+      const selectedCount = selectedTalentCountById.get(talent.id) ?? 0;
+      const isAlreadySelected = selectedCount > 0;
+      const isSelectable = talent.isRepeatable || !isAlreadySelected;
+
+      return {
+        ...talent,
+        prerequisites: normalizeCharacterTalentPrerequisites(
+          talent.prerequisites,
+        ),
+        attributeBonuses: normalizeAttributeBonusMap(talent.attributeBonuses),
+        selectedCount,
+        isAlreadySelected,
+        isSelectable,
+        blockedReason: isSelectable
+          ? null
+          : "Este talento já foi escolhido e não pode ser repetido.",
+      };
+    });
+
+    const knownSpellIds = new Set(
+      knownClassSpells.map((knownSpell) => knownSpell.spellId),
+    );
+
+    const availableSpellEntries = (characterClass?.classSpells ?? []).filter(
+      (classSpell) => !knownSpellIds.has(classSpell.spell.id),
+    );
+
+    const cantripOptions = availableSpellEntries
+      .filter((classSpell) => classSpell.spell.level === 0)
+      .map((classSpell) => ({
+        ...classSpell.spell,
+        minimumClassLevel: classSpell.minimumClassLevel,
+        isAlwaysKnown: classSpell.isAlwaysKnown,
+      }));
+
+    const spellOptions = availableSpellEntries
+      .filter((classSpell) => classSpell.spell.level > 0)
+      .map((classSpell) => ({
+        ...classSpell.spell,
+        minimumClassLevel: classSpell.minimumClassLevel,
+        isAlwaysKnown: classSpell.isAlwaysKnown,
+      }));
+
+    return {
+      subclass: {
+        required: requiresSubclassChoice,
+        options: characterClass?.subclasses ?? [],
+      },
+
+      progression: {
+        requiredChoiceCount: progressionChoiceCount,
+        currentAttributes,
+        talents: talentOptions,
+      },
+
+      featureChoices: {
+        // Os grupos e suas opções continuam no featureChoicesPlan.
+        usesFeatureChoicesPlan: true,
+      },
+
+      spells: {
+        requiredCantripCount: Math.max(0, cantripsKnownIncrease),
+        requiredSpellCount: Math.max(0, spellsKnownIncrease),
+        cantrips: cantripOptions,
+        spells: spellOptions,
+      },
+    };
+  }
+
   async function getLevelUpPreviewsForCharacterSheet(
     characterSheet: CharacterSheetFeatureSource & {
+      id: string;
       classes?: Array<{
         id: string;
         classId: string;
@@ -2517,6 +2735,23 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       : null;
 
     const constitutionModifier = getAttributeModifier(constitutionValue);
+
+    const currentAttributes = characterSheet.stats.reduce<CharacterAttributeValueMap>(
+      (attributeMap, sheetStat) => {
+        const statKey = sheetStat.stat.key;
+
+        if (!isCharacterAttributeKey(statKey)) {
+          return attributeMap;
+        }
+
+        attributeMap[statKey] =
+          sheetStat.overrideValue ??
+          sheetStat.baseValue + (sheetStat.bonusValue ?? 0);
+
+        return attributeMap;
+      },
+      {},
+    );
 
     return Promise.all(
       classEntries.map(async (classEntry) => {
@@ -2676,6 +2911,18 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           pendingChoices,
         };
 
+        const choiceOptions = await getLevelUpChoiceOptions({
+          characterSheetId: characterSheet.id,
+          systemId: characterSheet.systemId,
+          classId: classEntry.classId,
+          nextClassLevel,
+          requiresSubclassChoice: subclassPlan.requiresSubclassChoice,
+          progressionChoiceCount: unlockedChoiceCount,
+          cantripsKnownIncrease: spellcastingPlan.cantripsKnownIncrease,
+          spellsKnownIncrease: spellcastingPlan.spellsKnownIncrease,
+          currentAttributes,
+        });
+
         const hitDie = classEntry.characterClass.hitDie;
 
         const hitPointGain =
@@ -2734,6 +2981,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           spellcasting: spellcastingPlan,
           subclass: subclassPlan,
           progressionChoices: progressionChoicesPlan,
+          choiceOptions,
 
           requirements: {
             requiresSubclassChoice: subclassPlan.requiresSubclassChoice,
@@ -2773,6 +3021,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           spellcastingPlan,
           subclassPlan,
           progressionChoicesPlan,
+          choiceOptions,
           levelUpPlan,
 
           subclassSelectionLevel,
@@ -2790,6 +3039,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
   async function withAvailableFeatures<
     T extends CharacterSheetFeatureSource & {
+      id: string;
       classes?: Array<
         CharacterSheetClassFeatureSource & {
           id: string;
@@ -5159,14 +5409,55 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           campaignId: z.string().uuid("Invalid campaign id"),
           sheetId: z.string().uuid("Invalid character sheet id"),
         }),
-        body: z
-          .object({
-            classEntryId: z
-              .string()
-              .uuid("Invalid character sheet class id")
-              .optional(),
-          })
-          .optional(),
+        body: z.object({
+          classEntryId: z
+            .string()
+            .uuid("Invalid character sheet class id"),
+
+          subclassId: z
+            .string()
+            .uuid("Invalid subclass id")
+            .nullable(),
+
+          progressionChoices: z
+            .array(
+              z.object({
+                classId: z.string().uuid("Invalid progression choice class id"),
+                classLevel: z.number().int().min(1).max(20),
+                choiceIndex: z.number().int().min(0).max(20),
+                type: z.enum(["ATTRIBUTE_INCREASE", "TALENT"]),
+                attributeIncreaseMode: z
+                  .enum(["FOCUSED", "SPLIT"])
+                  .nullable(),
+                attributeIncreases:
+                  characterProgressionAttributeIncreasesSchema,
+                talentId: z
+                  .string()
+                  .uuid("Invalid progression choice talent id")
+                  .nullable(),
+              }),
+            )
+            .max(100),
+
+          featureChoiceSelections: z
+            .array(
+              z.object({
+                choiceGroupId: z
+                  .string()
+                  .uuid("Invalid feature choice group id"),
+                featureId: z.string().uuid("Invalid feature id"),
+              }),
+            )
+            .max(100),
+
+          cantripIds: z
+            .array(z.string().uuid("Invalid cantrip id"))
+            .max(100),
+
+          spellIds: z
+            .array(z.string().uuid("Invalid spell id"))
+            .max(100),
+        }),
       },
     },
     async (request, reply) => {
@@ -5179,7 +5470,14 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       const { campaignId, sheetId } = request.params;
-      const { classEntryId } = request.body ?? {};
+      const {
+        classEntryId,
+        subclassId,
+        progressionChoices,
+        featureChoiceSelections,
+        cantripIds,
+        spellIds,
+      } = request.body;
 
       const campaign = await prisma.campaign.findFirst({
         where: {
@@ -5235,9 +5533,19 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             include: {
               characterClass: {
                 include: {
-                  levelProgressions: true,
+                  levelProgressions: {
+                    include: {
+                      spellLimits: true,
+                    },
+                  },
+                  classSpells: {
+                    include: {
+                      spell: true,
+                    },
+                  },
                 },
               },
+              subclass: true,
             },
             orderBy: [
               {
@@ -5251,6 +5559,14 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
               },
             ],
           },
+          stats: {
+            include: {
+              stat: true,
+            },
+          },
+          spells: true,
+          featureChoices: true,
+          progressionChoices: true,
         },
       });
 
@@ -5273,23 +5589,20 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       }
 
       const selectedClassEntry =
-        (classEntryId
-          ? characterSheet.classes.find(
-              (classEntry) => classEntry.id === classEntryId,
-            )
-          : null) ??
-        characterSheet.classes.find((classEntry) => classEntry.isPrimary) ??
-        characterSheet.classes[0] ??
-        null;
+        characterSheet.classes.find(
+          (classEntry) => classEntry.id === classEntryId,
+        ) ?? null;
 
       if (!selectedClassEntry) {
         return reply.status(400).send({
-          message: "Character sheet has no class to level up",
+          message: "Selected character class entry was not found",
         });
       }
 
-      const nextClassLevel = selectedClassEntry.level + 1;
-      const nextCharacterLevel = characterSheet.level + 1;
+      const currentClassLevel = selectedClassEntry.level;
+      const nextClassLevel = currentClassLevel + 1;
+      const currentCharacterLevel = characterSheet.level;
+      const nextCharacterLevel = currentCharacterLevel + 1;
 
       if (nextClassLevel > 20) {
         return reply.status(400).send({
@@ -5297,38 +5610,664 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const hasNextClassProgression =
-        selectedClassEntry.characterClass.levelProgressions.some(
-          (progression) => progression.level === nextClassLevel,
-        );
+      const currentProgression =
+        selectedClassEntry.characterClass.levelProgressions.find(
+          (progression) => progression.level === currentClassLevel,
+        ) ?? null;
 
-      if (!hasNextClassProgression) {
+      const nextProgression =
+        selectedClassEntry.characterClass.levelProgressions.find(
+          (progression) => progression.level === nextClassLevel,
+        ) ?? null;
+
+      if (!nextProgression) {
         return reply.status(400).send({
           message:
             "Selected class has no progression registered for the next level",
         });
       }
 
-      await prisma.$transaction([
-        prisma.characterSheet.update({
+      /*
+       * 4.7.13 — validação da escolha de subclasse.
+       *
+       * A subclasse só é aceita quando este avanço realmente libera a escolha.
+       * Para classes que já possuem subclasse, o payload deve permanecer null.
+       */
+      const subclassSelectionLevel =
+        selectedClassEntry.characterClass.subclassSelectionLevel ?? null;
+
+      const requiresSubclassChoice =
+        typeof subclassSelectionLevel === "number" &&
+        nextClassLevel >= subclassSelectionLevel &&
+        !selectedClassEntry.subclassId;
+
+      if (requiresSubclassChoice && !subclassId) {
+        return reply.status(400).send({
+          message: "This Level Up requires a subclass choice",
+        });
+      }
+
+      if (!requiresSubclassChoice && subclassId) {
+        return reply.status(400).send({
+          message: "This Level Up does not allow a new subclass choice",
+        });
+      }
+
+      let selectedSubclass: {
+        id: string;
+        classId: string;
+      } | null = null;
+
+      if (subclassId) {
+        selectedSubclass = await prisma.characterSubclass.findFirst({
+          where: {
+            id: subclassId,
+            systemId: characterSheet.systemId,
+            classId: selectedClassEntry.classId,
+          },
+          select: {
+            id: true,
+            classId: true,
+          },
+        });
+
+        if (!selectedSubclass) {
+          return reply.status(400).send({
+            message: "Subclass not found for the selected class and system",
+          });
+        }
+      }
+
+      const effectiveSubclassId =
+        selectedSubclass?.id ?? selectedClassEntry.subclassId ?? null;
+
+      const advancedClassEntries: CharacterClassEntryInput[] =
+        characterSheet.classes.map((classEntry) => ({
+          classId: classEntry.classId,
+          subclassId:
+            classEntry.id === selectedClassEntry.id
+              ? effectiveSubclassId
+              : classEntry.subclassId,
+          level:
+            classEntry.id === selectedClassEntry.id
+              ? nextClassLevel
+              : classEntry.level,
+          isPrimary: classEntry.isPrimary,
+          order: classEntry.order,
+        }));
+
+      const classValidationError = await validateCharacterSheetClassEntries({
+        systemId: characterSheet.systemId,
+        classEntries: advancedClassEntries,
+      });
+
+      if (classValidationError) {
+        return reply.status(400).send({
+          message: classValidationError,
+        });
+      }
+
+      /*
+       * 4.7.13 — escolhas de progressão.
+       *
+       * O payload contém somente as escolhas liberadas neste avanço.
+       * As escolhas anteriores são preservadas e usadas na validação do
+       * histórico completo do personagem.
+       */
+      const normalizedNewProgressionChoicesResult =
+        normalizeCharacterProgressionChoices(progressionChoices);
+
+      if (normalizedNewProgressionChoicesResult.error) {
+        return reply.status(400).send({
+          message: normalizedNewProgressionChoicesResult.error,
+        });
+      }
+
+      const newProgressionChoices =
+        normalizedNewProgressionChoicesResult.entries;
+
+      const requiredProgressionChoiceCount = Math.max(
+        0,
+        nextProgression.progressionChoiceCount ?? 0,
+      );
+
+      if (newProgressionChoices.length !== requiredProgressionChoiceCount) {
+        return reply.status(400).send({
+          message:
+            `This Level Up requires ${requiredProgressionChoiceCount} ` +
+            `progression choice(s), but ${newProgressionChoices.length} were provided`,
+        });
+      }
+
+      for (const choice of newProgressionChoices) {
+        if (
+          choice.classId !== selectedClassEntry.classId ||
+          choice.classLevel !== nextClassLevel ||
+          choice.choiceIndex < 0 ||
+          choice.choiceIndex >= requiredProgressionChoiceCount
+        ) {
+          return reply.status(400).send({
+            message:
+              "Progression choice does not belong to the selected class Level Up",
+          });
+        }
+      }
+
+      const resolvedProgressionError =
+        validateResolvedCharacterProgressionChoices(newProgressionChoices);
+
+      if (resolvedProgressionError) {
+        return reply.status(400).send({
+          message: resolvedProgressionError,
+        });
+      }
+
+      const focusedProgressionError =
+        validateFocusedCharacterProgressionChoices(newProgressionChoices);
+
+      if (focusedProgressionError) {
+        return reply.status(400).send({
+          message: focusedProgressionError,
+        });
+      }
+
+      const splitProgressionError =
+        validateSplitCharacterProgressionChoices(newProgressionChoices);
+
+      if (splitProgressionError) {
+        return reply.status(400).send({
+          message: splitProgressionError,
+        });
+      }
+
+      const existingProgressionChoices: CharacterProgressionChoiceInput[] =
+        characterSheet.progressionChoices.map((choice) => ({
+          classId: choice.classId,
+          classLevel: choice.classLevel,
+          choiceIndex: choice.choiceIndex,
+          type: choice.type,
+          attributeIncreaseMode: choice.attributeIncreaseMode,
+          attributeIncreases: normalizeAttributeBonusMap(
+            choice.attributeIncreases,
+          ),
+          talentId: choice.talentId,
+        }));
+
+      const allProgressionChoices = [
+        ...existingProgressionChoices.filter((existingChoice) => {
+          return !newProgressionChoices.some(
+            (newChoice) =>
+              getCharacterProgressionChoiceIdentity(newChoice) ===
+              getCharacterProgressionChoiceIdentity(existingChoice),
+          );
+        }),
+        ...newProgressionChoices,
+      ];
+
+      const requiredProgressionError =
+        await validateRequiredCharacterProgressionChoices({
+          systemId: characterSheet.systemId,
+          classEntries: advancedClassEntries,
+          progressionChoices: allProgressionChoices,
+          wasProvided: true,
+        });
+
+      if (requiredProgressionError) {
+        return reply.status(400).send({
+          message: requiredProgressionError,
+        });
+      }
+
+      const progressionTalentError = await validateCharacterProgressionTalents({
+        systemId: characterSheet.systemId,
+        progressionChoices: allProgressionChoices,
+      });
+
+      if (progressionTalentError) {
+        return reply.status(400).send({
+          message: progressionTalentError,
+        });
+      }
+
+      const currentAttributes =
+        characterSheet.stats.reduce<CharacterAttributeValueMap>(
+          (attributeMap, sheetStat) => {
+            const statKey = sheetStat.stat.key;
+
+            if (!isCharacterAttributeKey(statKey)) {
+              return attributeMap;
+            }
+
+            attributeMap[statKey] =
+              sheetStat.overrideValue ??
+              sheetStat.baseValue + (sheetStat.bonusValue ?? 0);
+
+            return attributeMap;
+          },
+          {},
+        );
+
+      const talentPrerequisiteError =
+        await validateCharacterProgressionTalentPrerequisites({
+          systemId: characterSheet.systemId,
+          characterLevel: nextCharacterLevel,
+          classEntries: advancedClassEntries,
+          ancestryId: characterSheet.ancestryId,
+          attributes: currentAttributes,
+          progressionChoices: allProgressionChoices,
+        });
+
+      if (talentPrerequisiteError) {
+        return reply.status(400).send({
+          message: talentPrerequisiteError,
+        });
+      }
+
+      const progressionAttributeMaximumError =
+        await validateCharacterProgressionAttributeMaximum({
+          systemId: characterSheet.systemId,
+          attributes: currentAttributes,
+          sourceAttributeBonuses: {},
+          progressionChoices: newProgressionChoices,
+        });
+
+      if (progressionAttributeMaximumError) {
+        return reply.status(400).send({
+          message: progressionAttributeMaximumError,
+        });
+      }
+
+      const newProgressionAttributeBonuses =
+        await getCharacterProgressionAttributeBonuses({
+          systemId: characterSheet.systemId,
+          progressionChoices: newProgressionChoices,
+        });
+
+      /*
+       * 4.7.13 — escolhas internas de features.
+       *
+       * Validamos somente os grupos liberados exatamente neste avanço. Os
+       * grupos anteriores permanecem intactos.
+       */
+      const unlockedFeatureChoiceGroups =
+        await getFeatureChoiceGroupsUnlockedForClassAtLevel({
+          systemId: characterSheet.systemId,
+          classId: selectedClassEntry.classId,
+          subclassId: selectedClassEntry.subclassId,
+          targetClassLevel: nextClassLevel,
+        });
+
+      const unlockedFeatureChoiceGroupsById = new Map(
+        unlockedFeatureChoiceGroups.map((choiceGroup) => [
+          choiceGroup.id,
+          choiceGroup,
+        ]),
+      );
+
+      const uniqueFeatureChoiceSelections = Array.from(
+        new Map(
+          featureChoiceSelections.map((selection) => [
+            `${selection.choiceGroupId}:${selection.featureId}`,
+            selection,
+          ]),
+        ).values(),
+      );
+
+      if (
+        uniqueFeatureChoiceSelections.length !== featureChoiceSelections.length
+      ) {
+        return reply.status(400).send({
+          message: "Duplicate feature choice selections are not allowed",
+        });
+      }
+
+      const unexpectedFeatureChoice = uniqueFeatureChoiceSelections.find(
+        (selection) =>
+          !unlockedFeatureChoiceGroupsById.has(selection.choiceGroupId),
+      );
+
+      if (unexpectedFeatureChoice) {
+        return reply.status(400).send({
+          message:
+            "Feature choice does not belong to a group unlocked by this Level Up",
+        });
+      }
+
+      for (const choiceGroup of unlockedFeatureChoiceGroups) {
+        const groupSelections = uniqueFeatureChoiceSelections.filter(
+          (selection) => selection.choiceGroupId === choiceGroup.id,
+        );
+
+        if (groupSelections.length !== choiceGroup.choiceCount) {
+          return reply.status(400).send({
+            message:
+              `The feature choice group "${choiceGroup.name}" requires ` +
+              `${choiceGroup.choiceCount} choice(s), but ` +
+              `${groupSelections.length} were provided`,
+          });
+        }
+
+        const allowedFeatureIds = new Set(
+          choiceGroup.options.map((option) => option.feature.id),
+        );
+
+        const invalidFeatureSelection = groupSelections.find(
+          (selection) => !allowedFeatureIds.has(selection.featureId),
+        );
+
+        if (invalidFeatureSelection) {
+          return reply.status(400).send({
+            message:
+              `Feature does not belong to the choice group "${choiceGroup.name}"`,
+          });
+        }
+      }
+
+      /*
+       * 4.7.13 — novas magias conhecidas.
+       *
+       * Os IDs enviados devem pertencer à lista da classe, estar liberados
+       * pelo novo nível e ainda não existir na ficha.
+       */
+      const uniqueCantripIds = Array.from(new Set(cantripIds));
+      const uniqueSpellIds = Array.from(new Set(spellIds));
+
+      if (uniqueCantripIds.length !== cantripIds.length) {
+        return reply.status(400).send({
+          message: "Duplicate cantrip choices are not allowed",
+        });
+      }
+
+      if (uniqueSpellIds.length !== spellIds.length) {
+        return reply.status(400).send({
+          message: "Duplicate spell choices are not allowed",
+        });
+      }
+
+      const duplicatedAcrossSpellGroups = uniqueCantripIds.find((spellId) =>
+        uniqueSpellIds.includes(spellId),
+      );
+
+      if (duplicatedAcrossSpellGroups) {
+        return reply.status(400).send({
+          message: "The same spell cannot be selected twice in one Level Up",
+        });
+      }
+
+      const currentCantripsKnown = currentProgression?.cantripsKnown ?? 0;
+      const nextCantripsKnown = nextProgression.cantripsKnown ?? 0;
+      const requiredCantripCount = Math.max(
+        0,
+        nextCantripsKnown - currentCantripsKnown,
+      );
+
+      const currentSpellsKnown = currentProgression?.spellsKnown ?? 0;
+      const nextSpellsKnown = nextProgression.spellsKnown ?? 0;
+      const requiredSpellCount = Math.max(
+        0,
+        nextSpellsKnown - currentSpellsKnown,
+      );
+
+      if (uniqueCantripIds.length !== requiredCantripCount) {
+        return reply.status(400).send({
+          message:
+            `This Level Up requires ${requiredCantripCount} new cantrip(s), ` +
+            `but ${uniqueCantripIds.length} were provided`,
+        });
+      }
+
+      if (uniqueSpellIds.length !== requiredSpellCount) {
+        return reply.status(400).send({
+          message:
+            `This Level Up requires ${requiredSpellCount} new known spell(s), ` +
+            `but ${uniqueSpellIds.length} were provided`,
+        });
+      }
+
+      const selectedSpellIds = [...uniqueCantripIds, ...uniqueSpellIds];
+
+      const selectedSpells =
+        selectedSpellIds.length > 0
+          ? await prisma.spell.findMany({
+              where: {
+                systemId: characterSheet.systemId,
+                id: {
+                  in: selectedSpellIds,
+                },
+              },
+              select: {
+                id: true,
+                name: true,
+                level: true,
+              },
+            })
+          : [];
+
+      if (selectedSpells.length !== selectedSpellIds.length) {
+        return reply.status(400).send({
+          message: "One or more selected spells were not found for this system",
+        });
+      }
+
+      const selectedSpellsById = new Map(
+        selectedSpells.map((spell) => [spell.id, spell]),
+      );
+
+      const invalidCantrip = uniqueCantripIds.find(
+        (spellId) => selectedSpellsById.get(spellId)?.level !== 0,
+      );
+
+      if (invalidCantrip) {
+        return reply.status(400).send({
+          message: "A selected cantrip is not a level 0 spell",
+        });
+      }
+
+      const invalidKnownSpell = uniqueSpellIds.find(
+        (spellId) => (selectedSpellsById.get(spellId)?.level ?? 0) <= 0,
+      );
+
+      if (invalidKnownSpell) {
+        return reply.status(400).send({
+          message: "A selected known spell must be level 1 or higher",
+        });
+      }
+
+      const classSpellsBySpellId = new Map(
+        selectedClassEntry.characterClass.classSpells.map((classSpell) => [
+          classSpell.spellId,
+          classSpell,
+        ]),
+      );
+
+      const unavailableSpellId = selectedSpellIds.find((spellId) => {
+        const classSpell = classSpellsBySpellId.get(spellId);
+
+        return (
+          !classSpell ||
+          (classSpell.minimumClassLevel ?? 1) > nextClassLevel
+        );
+      });
+
+      if (unavailableSpellId) {
+        return reply.status(400).send({
+          message:
+            "A selected spell is not available to this class at the next level",
+        });
+      }
+
+      const alreadyKnownSpellIds = new Set(
+        characterSheet.spells.map((characterSpell) => characterSpell.spellId),
+      );
+
+      const alreadyKnownSpellId = selectedSpellIds.find((spellId) =>
+        alreadyKnownSpellIds.has(spellId),
+      );
+
+      if (alreadyKnownSpellId) {
+        return reply.status(400).send({
+          message: "A selected spell is already known by this character",
+        });
+      }
+
+      /*
+       * 4.7.13 — PV.
+       *
+       * Regra oficial do MVP: dado máximo da classe + modificador atual de CON,
+       * preservando o dano sofrido porque PV atual e máximo sobem pelo mesmo
+       * valor.
+       */
+      const constitutionStat =
+        characterSheet.stats.find(
+          (sheetStat) => sheetStat.stat.key === "constitution",
+        ) ?? null;
+
+      const constitutionValue = constitutionStat
+        ? (constitutionStat.overrideValue ??
+          constitutionStat.baseValue + (constitutionStat.bonusValue ?? 0))
+        : null;
+
+      const constitutionModifier = getAttributeModifier(constitutionValue);
+      const hitDie = selectedClassEntry.characterClass.hitDie;
+
+      if (typeof hitDie !== "number" || hitDie <= 0) {
+        return reply.status(400).send({
+          message: "Selected class has no valid hit die for Level Up",
+        });
+      }
+
+      const hitPointGain = Math.max(1, hitDie + constitutionModifier);
+      const nextHitPoints = characterSheet.hitPoints + hitPointGain;
+      const nextMaxHitPoints = characterSheet.maxHitPoints + hitPointGain;
+
+      /*
+       * 4.7.13.11 — aplicação transacional.
+       *
+       * Nenhuma alteração abaixo é persistida parcialmente: nível, PV,
+       * subclasse, atributos/talentos, feature choices e magias são aplicados
+       * na mesma transação.
+       */
+      await prisma.$transaction(async (transaction) => {
+        await transaction.characterSheet.update({
           where: {
             id: characterSheet.id,
           },
           data: {
             level: nextCharacterLevel,
+            hitPoints: nextHitPoints,
+            maxHitPoints: nextMaxHitPoints,
             levelUpAvailable: false,
+            ...(selectedClassEntry.isPrimary && selectedSubclass
+              ? {
+                  subclassId: selectedSubclass.id,
+                }
+              : {}),
           },
-        }),
+        });
 
-        prisma.characterSheetClass.update({
+        await transaction.characterSheetClass.update({
           where: {
             id: selectedClassEntry.id,
           },
           data: {
             level: nextClassLevel,
+            ...(selectedSubclass
+              ? {
+                  subclassId: selectedSubclass.id,
+                }
+              : {}),
           },
-        }),
-      ]);
+        });
+
+        for (const [attributeKey, increaseValue] of Object.entries(
+          newProgressionAttributeBonuses,
+        )) {
+          if (
+            !isCharacterAttributeKey(attributeKey) ||
+            typeof increaseValue !== "number" ||
+            increaseValue === 0
+          ) {
+            continue;
+          }
+
+          const currentStat = characterSheet.stats.find(
+            (sheetStat) => sheetStat.stat.key === attributeKey,
+          );
+
+          if (!currentStat) {
+            throw new Error(
+              `Character attribute ${attributeKey} was not found during Level Up`,
+            );
+          }
+
+          await transaction.characterSheetStat.update({
+            where: {
+              characterSheetId_statId: {
+                characterSheetId: characterSheet.id,
+                statId: currentStat.statId,
+              },
+            },
+            data: {
+              bonusValue: (currentStat.bonusValue ?? 0) + increaseValue,
+            },
+          });
+        }
+
+        for (const choice of newProgressionChoices) {
+          await transaction.characterSheetProgressionChoice.upsert({
+            where: {
+              characterSheetId_classId_classLevel_choiceIndex: {
+                characterSheetId: characterSheet.id,
+                classId: choice.classId,
+                classLevel: choice.classLevel,
+                choiceIndex: choice.choiceIndex,
+              },
+            },
+            create: {
+              characterSheetId: characterSheet.id,
+              classId: choice.classId,
+              classLevel: choice.classLevel,
+              choiceIndex: choice.choiceIndex,
+              type: choice.type,
+              attributeIncreaseMode: choice.attributeIncreaseMode,
+              attributeIncreases:
+                choice.attributeIncreases as Prisma.InputJsonValue,
+              talentId: choice.talentId,
+            },
+            update: {
+              type: choice.type,
+              attributeIncreaseMode: choice.attributeIncreaseMode,
+              attributeIncreases:
+                choice.attributeIncreases as Prisma.InputJsonValue,
+              talentId: choice.talentId,
+            },
+          });
+        }
+
+        if (uniqueFeatureChoiceSelections.length > 0) {
+          await transaction.characterSheetFeatureChoice.createMany({
+            data: uniqueFeatureChoiceSelections.map((selection) => ({
+              characterSheetId: characterSheet.id,
+              choiceGroupId: selection.choiceGroupId,
+              featureId: selection.featureId,
+              source: "builder",
+            })),
+            skipDuplicates: true,
+          });
+        }
+
+        if (selectedSpellIds.length > 0) {
+          await transaction.characterSheetSpell.createMany({
+            data: selectedSpellIds.map((spellId) => ({
+              characterSheetId: characterSheet.id,
+              spellId,
+              classId: selectedClassEntry.classId,
+              source: "class",
+            })),
+            skipDuplicates: true,
+          });
+        }
+      });
 
       const updatedCharacterSheet =
         await prisma.characterSheet.findUniqueOrThrow({

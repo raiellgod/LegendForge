@@ -183,7 +183,7 @@ export async function campaignRoutes(app: FastifyInstance) {
           description: campaign.description,
           coverImage: campaign.coverImage,
           isActive: campaign.isActive,
-          nextSession: campaign.sessions[0]
+          nextSession: campaign.sessions[0]?.scheduledAt
             ? {
                 scheduledAt: campaign.sessions[0].scheduledAt.toISOString(),
               }

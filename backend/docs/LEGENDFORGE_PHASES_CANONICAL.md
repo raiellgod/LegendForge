@@ -268,9 +268,9 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
             [x] 4.7.9.9 — Detectar novos marcos de ASI/talento
             [x] 4.7.9.10 — Validar classe única e multiclasse
         [x] 4.7.10 — Criar plano de mudanças do Level Up
-        [ ] 4.7.11 — Tela de resumo das mudanças do Level Up
-        [ ] 4.7.12 — Telas de escolhas pendentes do Level Up
-        [ ] 4.7.13 — Aplicar mudanças reais na ficha ao confirmar
+        [x] 4.7.11 — Tela de resumo das mudanças do Level Up
+        [x] 4.7.12 — Telas de escolhas pendentes do Level Up
+        [x] 4.7.13 — Aplicar mudanças reais na ficha ao confirmar
         [ ] 4.7.14 — Mestre libera/bloqueia Level Up
         [ ] 4.7.15 — Jogador vê Level Up apenas quando liberado
         [ ] 4.7.16 — Jogador confirma Level Up liberado

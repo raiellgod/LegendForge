@@ -5,6 +5,7 @@ import type {
   CharacterAttributeKey,
   CharacterBuilderSkillOption,
   CharacterReadySheet,
+  CharacterSheetLevelUpConfirmationPayload,
 } from "@/features/character-builder/types/character-builder-types";
 
 import type { CampaignActor } from "@/features/game-table/types/game-table-types";
@@ -66,7 +67,7 @@ export type CharacterReadySheetViewProps = {
     },
   ) => Promise<void>;
   onRollSheetAction: (request: CharacterReadySheetRollRequest) => void;
-  onConfirmLevelUp: (data: { classEntryId?: string }) => Promise<void>;
+  onConfirmLevelUp: (data: CharacterSheetLevelUpConfirmationPayload) => Promise<void>;
   onClose: () => void;
 };
 
@@ -1304,26 +1305,64 @@ function LevelUpPreviewModal({
   isConfirmingLevelUp: boolean;
   levelUpError: string | null;
   onSelectClass: (classOptionId: string) => void;
-  onConfirmLevelUp: (data: { classEntryId?: string }) => Promise<void>;
+  onConfirmLevelUp: (data: CharacterSheetLevelUpConfirmationPayload) => Promise<void>;
   onClose: () => void;
 }) {
+  const levelUpPlan = levelUpPreview?.levelUpPlan ?? null;
+  const choiceOptions = levelUpPlan?.choiceOptions ?? null;
+
+  const [selectedSubclassByClass, setSelectedSubclassByClass] = useState<
+    Record<string, string>
+  >({});
+
+  const [selectedFeatureIdsByGroup, setSelectedFeatureIdsByGroup] = useState<
+    Record<string, string[]>
+  >({});
+
+  const [selectedCantripIdsByClass, setSelectedCantripIdsByClass] = useState<
+    Record<string, string[]>
+  >({});
+
+  const [selectedSpellIdsByClass, setSelectedSpellIdsByClass] = useState<
+    Record<string, string[]>
+  >({});
+
+  const [progressionChoiceDrafts, setProgressionChoiceDrafts] = useState<
+    Record<
+      string,
+      {
+        type: "ATTRIBUTE_INCREASE" | "TALENT" | null;
+        attributeIncreaseMode: "FOCUSED" | "SPLIT" | null;
+        attributeKeys: CharacterAttributeKey[];
+        talentId: string | null;
+      }
+    >
+  >({});
+
   const currentCharacterLevel =
-    levelUpPreview?.currentCharacterLevel ?? 1;
+    levelUpPlan?.currentCharacterLevel ??
+    levelUpPreview?.currentCharacterLevel ??
+    1;
 
   const nextCharacterLevel =
-    levelUpPreview?.nextCharacterLevel ?? currentCharacterLevel + 1;
+    levelUpPlan?.nextCharacterLevel ??
+    levelUpPreview?.nextCharacterLevel ??
+    currentCharacterLevel + 1;
 
   const currentClassLevel =
+    levelUpPlan?.currentClassLevel ??
     levelUpPreview?.currentClassLevel ??
     selectedClassOption?.currentClassLevel ??
     1;
 
   const nextClassLevel =
+    levelUpPlan?.nextClassLevel ??
     levelUpPreview?.nextClassLevel ??
     selectedClassOption?.nextClassLevel ??
     currentClassLevel + 1;
 
-  const proficiencyPlan = levelUpPreview?.proficiencyPlan ?? null;
+  const proficiencyPlan =
+    levelUpPlan?.proficiency ?? levelUpPreview?.proficiencyPlan ?? null;
 
   const proficiencyChange = proficiencyPlan
     ? getProgressionChangeLabel(
@@ -1332,7 +1371,8 @@ function LevelUpPreviewModal({
       )
     : "—";
 
-  const spellcastingPlan = levelUpPreview?.spellcastingPlan ?? null;
+  const spellcastingPlan =
+    levelUpPlan?.spellcasting ?? levelUpPreview?.spellcastingPlan ?? null;
 
   const cantripsChange = spellcastingPlan
     ? getProgressionChangeLabel(
@@ -1366,12 +1406,14 @@ function LevelUpPreviewModal({
   const slotChange =
     currentSlots === nextSlots ? nextSlots : `${currentSlots} → ${nextSlots}`;
 
-  const featuresPlan = levelUpPreview?.featuresPlan ?? null;
+  const featuresPlan =
+    levelUpPlan?.features ?? levelUpPreview?.featuresPlan ?? null;
   const unlockedFeatures = featuresPlan?.unlockedFeatures ?? [];
   const unlockedFeatureCount = featuresPlan?.unlockedFeatureCount ?? 0;
   const hasUnlockedFeatures = featuresPlan?.hasUnlockedFeatures ?? false;
 
-  const featureChoicesPlan = levelUpPreview?.featureChoicesPlan ?? null;
+  const featureChoicesPlan =
+    levelUpPlan?.featureChoices ?? levelUpPreview?.featureChoicesPlan ?? null;
   const unlockedFeatureChoiceGroups =
     featureChoicesPlan?.unlockedChoiceGroups ?? [];
   const unlockedFeatureChoiceGroupCount =
@@ -1381,10 +1423,15 @@ function LevelUpPreviewModal({
   const requiresFeatureChoices =
     featureChoicesPlan?.requiresFeatureChoices ?? false;
 
-  const canPreviewNextLevel = levelUpPreview?.canPreviewNextLevel ?? false;
+  const canPreviewNextLevel =
+    levelUpPlan?.canPreviewNextLevel ??
+    levelUpPreview?.canPreviewNextLevel ??
+    false;
 
   const progressionChoicesPlan =
-    levelUpPreview?.progressionChoicesPlan ?? null;
+    levelUpPlan?.progressionChoices ??
+    levelUpPreview?.progressionChoicesPlan ??
+    null;
 
   const unlockedProgressionChoiceCount =
     progressionChoicesPlan?.unlockedChoiceCount ?? 0;
@@ -1395,22 +1442,14 @@ function LevelUpPreviewModal({
   const pendingProgressionChoices =
     progressionChoicesPlan?.pendingChoices ?? [];
 
-  const hitPointsPlan = levelUpPreview?.hitPointsPlan ?? null;
+  const hitPointsPlan =
+    levelUpPlan?.hitPoints ?? levelUpPreview?.hitPointsPlan ?? null;
 
-  const canConfirmLevelUp =
-    canPreviewNextLevel && Boolean(selectedClassOption) && !isConfirmingLevelUp;
+  const canStartLevelUpConfirmation =
+    canPreviewNextLevel && Boolean(selectedClassOption);
 
-  async function handleConfirmLevelUp() {
-    if (!selectedClassOption || isConfirmingLevelUp) {
-      return;
-    }
-
-    await onConfirmLevelUp({
-      classEntryId: selectedClassOption.id,
-    });
-  }
-
-  const subclassPlan = levelUpPreview?.subclassPlan ?? null;
+  const subclassPlan =
+    levelUpPlan?.subclass ?? levelUpPreview?.subclassPlan ?? null;
 
   const selectedSubclassStatusLabel = !selectedClassOption
     ? "Nenhuma classe escolhida"
@@ -1432,6 +1471,392 @@ function LevelUpPreviewModal({
           ? `${selectedClassOption.className} ainda não alcança o nível de subclasse neste avanço.`
           : "Esta classe ainda não informa nível de escolha de subclasse.";
 
+  const selectedClassKey = selectedClassOption?.id ?? "";
+
+  const selectedSubclassId = selectedClassKey
+    ? (selectedSubclassByClass[selectedClassKey] ?? "")
+    : "";
+
+  const requiredCantripCount =
+    choiceOptions?.spells.requiredCantripCount ?? 0;
+  const requiredSpellCount = choiceOptions?.spells.requiredSpellCount ?? 0;
+
+  const selectedCantripIds = selectedClassKey
+    ? (selectedCantripIdsByClass[selectedClassKey] ?? [])
+    : [];
+
+  const selectedSpellIds = selectedClassKey
+    ? (selectedSpellIdsByClass[selectedClassKey] ?? [])
+    : [];
+
+  function toggleLimitedSelection({
+    currentIds,
+    targetId,
+    limit,
+  }: {
+    currentIds: string[];
+    targetId: string;
+    limit: number;
+  }) {
+    if (currentIds.includes(targetId)) {
+      return currentIds.filter((currentId) => currentId !== targetId);
+    }
+
+    if (currentIds.length >= limit) {
+      return currentIds;
+    }
+
+    return [...currentIds, targetId];
+  }
+
+  function toggleFeatureChoice(
+    choiceGroupId: string,
+    featureId: string,
+    choiceCount: number,
+  ) {
+    setSelectedFeatureIdsByGroup((currentSelections) => ({
+      ...currentSelections,
+      [choiceGroupId]: toggleLimitedSelection({
+        currentIds: currentSelections[choiceGroupId] ?? [],
+        targetId: featureId,
+        limit: choiceCount,
+      }),
+    }));
+  }
+
+  function getProgressionChoiceKey(
+    classEntryId: string,
+    classLevel: number,
+    choiceIndex: number,
+  ) {
+    return `${classEntryId}:${classLevel}:${choiceIndex}`;
+  }
+
+  function getProgressionChoiceDraft(
+    classEntryId: string,
+    classLevel: number,
+    choiceIndex: number,
+  ) {
+    const key = getProgressionChoiceKey(
+      classEntryId,
+      classLevel,
+      choiceIndex,
+    );
+
+    return (
+      progressionChoiceDrafts[key] ?? {
+        type: null,
+        attributeIncreaseMode: null,
+        attributeKeys: [],
+        talentId: null,
+      }
+    );
+  }
+
+  function updateProgressionChoiceDraft(
+    classEntryId: string,
+    classLevel: number,
+    choiceIndex: number,
+    updater: (
+      currentDraft: {
+        type: "ATTRIBUTE_INCREASE" | "TALENT" | null;
+        attributeIncreaseMode: "FOCUSED" | "SPLIT" | null;
+        attributeKeys: CharacterAttributeKey[];
+        talentId: string | null;
+      },
+    ) => {
+      type: "ATTRIBUTE_INCREASE" | "TALENT" | null;
+      attributeIncreaseMode: "FOCUSED" | "SPLIT" | null;
+      attributeKeys: CharacterAttributeKey[];
+      talentId: string | null;
+    },
+  ) {
+    const key = getProgressionChoiceKey(
+      classEntryId,
+      classLevel,
+      choiceIndex,
+    );
+
+    setProgressionChoiceDrafts((currentDrafts) => ({
+      ...currentDrafts,
+      [key]: updater(
+        currentDrafts[key] ?? {
+          type: null,
+          attributeIncreaseMode: null,
+          attributeKeys: [],
+          talentId: null,
+        },
+      ),
+    }));
+  }
+
+  function isProgressionChoiceResolved(
+    classEntryId: string,
+    classLevel: number,
+    choiceIndex: number,
+  ) {
+    const draft = getProgressionChoiceDraft(
+      classEntryId,
+      classLevel,
+      choiceIndex,
+    );
+
+    if (draft.type === "TALENT") {
+      const selectedTalent = choiceOptions?.progression.talents.find(
+        (talent) => talent.id === draft.talentId,
+      );
+
+      return Boolean(selectedTalent?.isSelectable);
+    }
+
+    if (
+      draft.type !== "ATTRIBUTE_INCREASE" ||
+      draft.attributeIncreaseMode === null
+    ) {
+      return false;
+    }
+
+    if (draft.attributeIncreaseMode === "FOCUSED") {
+      if (draft.attributeKeys.length !== 1) {
+        return false;
+      }
+
+      const currentValue =
+        choiceOptions?.progression.currentAttributes[
+          draft.attributeKeys[0]
+        ] ?? 0;
+
+      return currentValue + 2 <= 20;
+    }
+
+    if (draft.attributeKeys.length !== 2) {
+      return false;
+    }
+
+    return draft.attributeKeys.every((attributeKey) => {
+      const currentValue =
+        choiceOptions?.progression.currentAttributes[attributeKey] ?? 0;
+
+      return currentValue + 1 <= 20;
+    });
+  }
+
+  const automaticLevelUpSummary = [
+    {
+      label: "Nível total",
+      value: `${currentCharacterLevel} → ${nextCharacterLevel}`,
+      helper: "Avanço total do personagem.",
+    },
+    {
+      label: "Nível da classe",
+      value: selectedClassOption
+        ? `${currentClassLevel} → ${nextClassLevel}`
+        : "—",
+      helper: selectedClassOption
+        ? selectedClassOption.className
+        : "Escolha uma classe.",
+    },
+    {
+      label: "Pontos de vida",
+      value: hitPointsPlan
+        ? `+${hitPointsPlan.hitPointGain} PV`
+        : "Sem cálculo",
+      helper: hitPointsPlan
+        ? `${hitPointsPlan.currentMaxHitPoints} → ${hitPointsPlan.nextMaxHitPoints} PV máximos`
+        : "Dado de vida não configurado.",
+    },
+    {
+      label: "Proficiência",
+      value: proficiencyChange,
+      helper: proficiencyPlan?.hasChanged
+        ? `Aumento de ${formatSignedNumber(proficiencyPlan.bonusIncrease)}.`
+        : "Permanece igual.",
+    },
+    {
+      label: "Features",
+      value: String(unlockedFeatureCount),
+      helper: hasUnlockedFeatures
+        ? "Nova(s) feature(s) automática(s)."
+        : "Nenhuma feature automática.",
+    },
+    {
+      label: "Magias",
+      value: spellcastingPlan?.hasSpellcastingChanges
+        ? "Com mudanças"
+        : "Sem mudanças",
+      helper: spellcastingPlan?.hasSpellcastingChanges
+        ? `Truques ${cantripsChange} · Conhecidas ${spellsKnownChange}`
+        : "A progressão mágica permanece igual.",
+    },
+  ];
+
+  const levelUpRequirements = levelUpPlan?.requirements ?? null;
+
+  const pendingSubclassChoiceCount =
+    subclassPlan?.requiresSubclassChoice && !selectedSubclassId ? 1 : 0;
+
+  const consolidatedPendingFeatureChoiceCount =
+    unlockedFeatureChoiceGroups.reduce((pendingCount, choiceGroup) => {
+      const selectedCount =
+        selectedFeatureIdsByGroup[choiceGroup.id]?.length ?? 0;
+
+      return pendingCount + Math.max(0, choiceGroup.choiceCount - selectedCount);
+    }, 0);
+
+  const consolidatedPendingProgressionChoiceCount =
+    pendingProgressionChoices.reduce((pendingCount, pendingChoice) => {
+      return (
+        pendingCount +
+        (isProgressionChoiceResolved(
+          pendingChoice.classEntryId,
+          pendingChoice.classLevel,
+          pendingChoice.choiceIndex,
+        )
+          ? 0
+          : 1)
+      );
+    }, 0);
+
+  const pendingSpellChoiceCount =
+    Math.max(0, requiredCantripCount - selectedCantripIds.length) +
+    Math.max(0, requiredSpellCount - selectedSpellIds.length);
+
+  const totalPendingChoiceCount =
+    pendingSubclassChoiceCount +
+    consolidatedPendingFeatureChoiceCount +
+    consolidatedPendingProgressionChoiceCount +
+    pendingSpellChoiceCount;
+
+  const hadChoiceRequirements =
+    Boolean(levelUpRequirements?.hasPendingChoices) ||
+    requiredCantripCount > 0 ||
+    requiredSpellCount > 0;
+
+  const pendingChoiceSummary = [
+    {
+      label: "Subclasse",
+      count: pendingSubclassChoiceCount,
+      helper:
+        pendingSubclassChoiceCount > 0
+          ? "Escolha de subclasse necessária."
+          : "Nenhuma escolha de subclasse.",
+    },
+    {
+      label: "Features",
+      count: consolidatedPendingFeatureChoiceCount,
+      helper:
+        consolidatedPendingFeatureChoiceCount > 0
+          ? "Opções internas de features pendentes."
+          : "Nenhuma escolha interna de feature.",
+    },
+    {
+      label: "Atributo ou talento",
+      count: consolidatedPendingProgressionChoiceCount,
+      helper:
+        consolidatedPendingProgressionChoiceCount > 0
+          ? "Escolha de progressão necessária."
+          : "Nenhuma escolha de progressão.",
+    },
+    {
+      label: "Magias",
+      count: pendingSpellChoiceCount,
+      helper:
+        pendingSpellChoiceCount > 0
+          ? "Novas magias ou truques precisam ser escolhidos."
+          : "Nenhuma escolha mágica pendente.",
+    },
+  ];
+
+  const hasLevelUpChoiceBlockers = totalPendingChoiceCount > 0;
+
+  const levelUpConfirmationBlockReason = !selectedClassOption
+    ? "Escolha qual classe receberá o nível."
+    : !canPreviewNextLevel
+      ? "Não existe progressão cadastrada para o próximo nível desta classe."
+      : hasLevelUpChoiceBlockers
+        ? `${totalPendingChoiceCount} escolha(s) precisam ser resolvidas antes da confirmação.`
+        : null;
+
+  const canConfirmLevelUp =
+    canStartLevelUpConfirmation &&
+    !hasLevelUpChoiceBlockers &&
+    !isConfirmingLevelUp;
+
+  function buildLevelUpConfirmationPayload():
+    | CharacterSheetLevelUpConfirmationPayload
+    | null {
+    if (!selectedClassOption || hasLevelUpChoiceBlockers) {
+      return null;
+    }
+
+    const progressionChoices =
+      pendingProgressionChoices.flatMap((pendingChoice) => {
+        const draft = getProgressionChoiceDraft(
+          pendingChoice.classEntryId,
+          pendingChoice.classLevel,
+          pendingChoice.choiceIndex,
+        );
+
+        if (!draft.type) {
+          return [];
+        }
+
+        const attributeIncreases = Object.fromEntries(
+          draft.attributeKeys.map((attributeKey) => [
+            attributeKey,
+            draft.attributeIncreaseMode === "FOCUSED" ? 2 : 1,
+          ]),
+        ) as Partial<Record<CharacterAttributeKey, number>>;
+
+        return [
+          {
+            classId: pendingChoice.classId,
+            classLevel: pendingChoice.classLevel,
+            choiceIndex: pendingChoice.choiceIndex,
+            type: draft.type,
+            attributeIncreaseMode:
+              draft.type === "ATTRIBUTE_INCREASE"
+                ? draft.attributeIncreaseMode
+                : null,
+            attributeIncreases:
+              draft.type === "ATTRIBUTE_INCREASE" ? attributeIncreases : {},
+            talentId: draft.type === "TALENT" ? draft.talentId : null,
+          },
+        ];
+      });
+
+    const featureChoiceSelections = unlockedFeatureChoiceGroups.flatMap(
+      (choiceGroup) =>
+        (selectedFeatureIdsByGroup[choiceGroup.id] ?? []).map((featureId) => ({
+          choiceGroupId: choiceGroup.id,
+          featureId,
+        })),
+    );
+
+    return {
+      classEntryId: selectedClassOption.id,
+      subclassId: selectedSubclassId || null,
+      progressionChoices,
+      featureChoiceSelections,
+      cantripIds: selectedCantripIds,
+      spellIds: selectedSpellIds,
+    };
+  }
+
+  async function handleConfirmLevelUp() {
+    if (!canConfirmLevelUp) {
+      return;
+    }
+
+    const payload = buildLevelUpConfirmationPayload();
+
+    if (!payload) {
+      return;
+    }
+
+    await onConfirmLevelUp(payload);
+  }
+
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
       <section className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-forge-gold/45 bg-[#160b1c] p-4 shadow-[-12px_12px_0_rgba(0,0,0,0.45)]">
@@ -1446,8 +1871,8 @@ function LevelUpPreviewModal({
             </h3>
 
             <p className="mt-1 text-xs font-semibold leading-relaxed text-white/45">
-              Prévia do próximo avanço. Apenas o Mestre pode liberar Level Up.
-              Nesta micro, nada é salvo ainda.
+              Revise as mudanças e resolva as escolhas antes de confirmar o
+              avanço real.
             </p>
           </div>
 
@@ -1586,10 +2011,128 @@ function LevelUpPreviewModal({
           )}
         </div>
 
+        <div className="mt-4 rounded-xl border border-forge-gold/25 bg-forge-gold/5 p-3">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-forge-gold/80">
+                Resumo das mudanças automáticas
+              </p>
+
+              <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/35">
+                Alterações calculadas pelo sistema antes das escolhas do jogador.
+              </p>
+            </div>
+
+            <span className="rounded-full border border-forge-gold/25 bg-black/25 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.14em] text-forge-gold">
+              Prévia
+            </span>
+          </div>
+
+          {canPreviewNextLevel ? (
+            <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+              {automaticLevelUpSummary.map((summaryItem) => (
+                <div
+                  key={summaryItem.label}
+                  className="rounded-xl border border-white/10 bg-black/25 px-3 py-2"
+                >
+                  <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+                    {summaryItem.label}
+                  </p>
+
+                  <p className="mt-1 min-w-0 break-words text-sm font-black text-forge-gold">
+                    {summaryItem.value}
+                  </p>
+
+                  <p className="mt-1 text-[9px] font-semibold leading-relaxed text-white/35">
+                    {summaryItem.helper}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs font-semibold leading-relaxed text-white/45">
+              O resumo automático não está disponível porque não existe
+              progressão cadastrada para o próximo nível desta classe.
+            </p>
+          )}
+        </div>
+
+        <div
+          className={[
+            "mt-4 rounded-xl border p-3",
+            totalPendingChoiceCount > 0
+              ? "border-amber-400/30 bg-amber-500/10"
+              : "border-emerald-400/30 bg-emerald-500/10",
+          ].join(" ")}
+        >
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p
+                className={[
+                  "text-[10px] font-black uppercase tracking-[0.16em]",
+                  totalPendingChoiceCount > 0
+                    ? "text-amber-100/80"
+                    : "text-emerald-100/80",
+                ].join(" ")}
+              >
+                Resumo das escolhas pendentes
+              </p>
+
+              <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/40">
+                Escolhas que precisarão ser resolvidas antes da aplicação real
+                do Level Up.
+              </p>
+            </div>
+
+            <span
+              className={[
+                "rounded-full border px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.14em]",
+                totalPendingChoiceCount > 0
+                  ? "border-amber-400/30 bg-black/25 text-amber-100"
+                  : "border-emerald-400/30 bg-black/25 text-emerald-100",
+              ].join(" ")}
+            >
+              {totalPendingChoiceCount > 0
+                ? `${totalPendingChoiceCount} pendente(s)`
+                : "Nenhuma pendência"}
+            </span>
+          </div>
+
+          <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+            {pendingChoiceSummary.map((summaryItem) => (
+              <div
+                key={summaryItem.label}
+                className="rounded-xl border border-white/10 bg-black/25 px-3 py-2"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/35">
+                    {summaryItem.label}
+                  </p>
+
+                  <span
+                    className={[
+                      "shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-black",
+                      summaryItem.count > 0
+                        ? "border-amber-400/30 bg-amber-500/10 text-amber-100"
+                        : "border-white/10 bg-black/25 text-white/35",
+                    ].join(" ")}
+                  >
+                    {summaryItem.count}
+                  </span>
+                </div>
+
+                <p className="mt-1 text-[9px] font-semibold leading-relaxed text-white/40">
+                  {summaryItem.helper}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="mt-4 grid gap-3">
           <div className="rounded-xl border border-white/10 bg-black/25 p-3">
             <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40">
-              Mudanças do próximo nível
+              Detalhes das mudanças automáticas
             </p>
 
             {canPreviewNextLevel ? (
@@ -1865,19 +2408,517 @@ function LevelUpPreviewModal({
             </p>
           </div>
 
+          {subclassPlan?.requiresSubclassChoice ? (
+            <div className="rounded-xl border border-amber-400/35 bg-amber-500/10 p-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-amber-100/80">
+                Escolha de subclasse
+              </p>
+
+              <p className="mt-1 text-xs font-semibold leading-relaxed text-white/45">
+                Escolha uma subclasse para {selectedClassOption?.className ?? "a classe"}.
+              </p>
+
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                {(choiceOptions?.subclass.options ?? []).map((subclass) => {
+                  const isSelected = selectedSubclassId === subclass.id;
+
+                  return (
+                    <button
+                      key={subclass.id}
+                      type="button"
+                      onClick={() =>
+                        setSelectedSubclassByClass((currentSelections) => ({
+                          ...currentSelections,
+                          [selectedClassKey]: subclass.id,
+                        }))
+                      }
+                      className={[
+                        "rounded-xl border p-3 text-left transition",
+                        isSelected
+                          ? "border-forge-gold bg-forge-gold/10"
+                          : "border-white/10 bg-black/25 hover:border-forge-gold/40",
+                      ].join(" ")}
+                    >
+                      <p className="text-sm font-black text-forge-gold">
+                        {subclass.name}
+                      </p>
+                      <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/40">
+                        {subclass.description ?? "Sem descrição cadastrada."}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+
+          {pendingProgressionChoices.length > 0 ? (
+            <div className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-emerald-100/80">
+                Aumento de atributo ou talento
+              </p>
+
+              <div className="mt-3 grid gap-3">
+                {pendingProgressionChoices.map((pendingChoice) => {
+                  const draft = getProgressionChoiceDraft(
+                    pendingChoice.classEntryId,
+                    pendingChoice.classLevel,
+                    pendingChoice.choiceIndex,
+                  );
+
+                  return (
+                    <div
+                      key={getProgressionChoiceKey(
+                        pendingChoice.classEntryId,
+                        pendingChoice.classLevel,
+                        pendingChoice.choiceIndex,
+                      )}
+                      className="rounded-xl border border-white/10 bg-black/25 p-3"
+                    >
+                      <p className="text-xs font-black text-white/70">
+                        {pendingChoice.className} {pendingChoice.classLevel} · escolha{" "}
+                        {pendingChoice.choiceIndex + 1}
+                      </p>
+
+                      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                        {(["ATTRIBUTE_INCREASE", "TALENT"] as const).map(
+                          (choiceType) => (
+                            <button
+                              key={choiceType}
+                              type="button"
+                              onClick={() =>
+                                updateProgressionChoiceDraft(
+                                  pendingChoice.classEntryId,
+                                  pendingChoice.classLevel,
+                                  pendingChoice.choiceIndex,
+                                  () => ({
+                                    type: choiceType,
+                                    attributeIncreaseMode: null,
+                                    attributeKeys: [],
+                                    talentId: null,
+                                  }),
+                                )
+                              }
+                              className={[
+                                "rounded-xl border px-3 py-2 text-left text-xs font-black transition",
+                                draft.type === choiceType
+                                  ? "border-forge-gold bg-forge-gold/10 text-forge-gold"
+                                  : "border-white/10 bg-black/25 text-white/45",
+                              ].join(" ")}
+                            >
+                              {choiceType === "ATTRIBUTE_INCREASE"
+                                ? "Aumentar atributos"
+                                : "Escolher talento"}
+                            </button>
+                          ),
+                        )}
+                      </div>
+
+                      {draft.type === "ATTRIBUTE_INCREASE" ? (
+                        <div className="mt-3">
+                          <div className="grid gap-2 sm:grid-cols-2">
+                            {(["FOCUSED", "SPLIT"] as const).map((mode) => (
+                              <button
+                                key={mode}
+                                type="button"
+                                onClick={() =>
+                                  updateProgressionChoiceDraft(
+                                    pendingChoice.classEntryId,
+                                    pendingChoice.classLevel,
+                                    pendingChoice.choiceIndex,
+                                    (currentDraft) => ({
+                                      ...currentDraft,
+                                      attributeIncreaseMode: mode,
+                                      attributeKeys: [],
+                                      talentId: null,
+                                    }),
+                                  )
+                                }
+                                className={[
+                                  "rounded-xl border px-3 py-2 text-left text-[10px] font-black transition",
+                                  draft.attributeIncreaseMode === mode
+                                    ? "border-emerald-400/50 bg-emerald-500/10 text-emerald-100"
+                                    : "border-white/10 bg-black/25 text-white/40",
+                                ].join(" ")}
+                              >
+                                {mode === "FOCUSED"
+                                  ? "+2 em um atributo"
+                                  : "+1 em dois atributos"}
+                              </button>
+                            ))}
+                          </div>
+
+                          {draft.attributeIncreaseMode ? (
+                            <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                              {READY_SHEET_ATTRIBUTES.map((attribute) => {
+                                const currentValue =
+                                  choiceOptions?.progression.currentAttributes[
+                                    attribute.key
+                                  ] ?? 0;
+                                const increase =
+                                  draft.attributeIncreaseMode === "FOCUSED" ? 2 : 1;
+                                const isSelected = draft.attributeKeys.includes(
+                                  attribute.key,
+                                );
+                                const limit =
+                                  draft.attributeIncreaseMode === "FOCUSED" ? 1 : 2;
+                                const isBlocked = currentValue + increase > 20;
+
+                                return (
+                                  <button
+                                    key={attribute.key}
+                                    type="button"
+                                    disabled={isBlocked}
+                                    onClick={() =>
+                                      updateProgressionChoiceDraft(
+                                        pendingChoice.classEntryId,
+                                        pendingChoice.classLevel,
+                                        pendingChoice.choiceIndex,
+                                        (currentDraft) => ({
+                                          ...currentDraft,
+                                          attributeKeys: toggleLimitedSelection({
+                                            currentIds: currentDraft.attributeKeys,
+                                            targetId: attribute.key,
+                                            limit,
+                                          }) as CharacterAttributeKey[],
+                                        }),
+                                      )
+                                    }
+                                    className={[
+                                      "rounded-xl border px-3 py-2 text-left transition",
+                                      isSelected
+                                        ? "border-forge-gold bg-forge-gold/10"
+                                        : "border-white/10 bg-black/25",
+                                      isBlocked ? "cursor-not-allowed opacity-35" : "",
+                                    ].join(" ")}
+                                  >
+                                    <p className="text-xs font-black text-forge-gold">
+                                      {attribute.shortName}: {currentValue} →{" "}
+                                      {Math.min(20, currentValue + increase)}
+                                    </p>
+                                    <p className="mt-1 text-[9px] font-semibold text-white/35">
+                                      {attribute.label}
+                                    </p>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : null}
+
+                      {draft.type === "TALENT" ? (
+                        <div className="mt-3 grid gap-2 md:grid-cols-2">
+                          {(choiceOptions?.progression.talents ?? []).map(
+                            (talent) => {
+                              const isSelected = draft.talentId === talent.id;
+
+                              return (
+                                <button
+                                  key={talent.id}
+                                  type="button"
+                                  disabled={!talent.isSelectable}
+                                  onClick={() =>
+                                    updateProgressionChoiceDraft(
+                                      pendingChoice.classEntryId,
+                                      pendingChoice.classLevel,
+                                      pendingChoice.choiceIndex,
+                                      (currentDraft) => ({
+                                        ...currentDraft,
+                                        talentId: talent.id,
+                                        attributeIncreaseMode: null,
+                                        attributeKeys: [],
+                                      }),
+                                    )
+                                  }
+                                  className={[
+                                    "rounded-xl border p-3 text-left transition",
+                                    isSelected
+                                      ? "border-forge-gold bg-forge-gold/10"
+                                      : "border-white/10 bg-black/25",
+                                    !talent.isSelectable
+                                      ? "cursor-not-allowed opacity-35"
+                                      : "hover:border-forge-gold/40",
+                                  ].join(" ")}
+                                >
+                                  <p className="text-sm font-black text-forge-gold">
+                                    {talent.name}
+                                  </p>
+                                  <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/40">
+                                    {talent.blockedReason ??
+                                      talent.description ??
+                                      "Sem descrição cadastrada."}
+                                  </p>
+                                </button>
+                              );
+                            },
+                          )}
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+
+          {unlockedFeatureChoiceGroups.length > 0 ? (
+            <div className="rounded-xl border border-sky-400/30 bg-sky-500/10 p-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-sky-100/80">
+                Escolhas internas de features
+              </p>
+
+              <div className="mt-3 grid gap-3">
+                {unlockedFeatureChoiceGroups.map((choiceGroup) => {
+                  const selectedIds =
+                    selectedFeatureIdsByGroup[choiceGroup.id] ?? [];
+
+                  return (
+                    <div
+                      key={choiceGroup.id}
+                      className="rounded-xl border border-white/10 bg-black/25 p-3"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-black text-sky-100">
+                            {choiceGroup.name}
+                          </p>
+                          <p className="mt-1 text-[10px] font-semibold text-white/40">
+                            Escolha {choiceGroup.choiceCount} · selecionado{" "}
+                            {selectedIds.length}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 grid gap-2 md:grid-cols-2">
+                        {choiceGroup.options.map((option) => {
+                          const isSelected = selectedIds.includes(
+                            option.feature.id,
+                          );
+
+                          return (
+                            <button
+                              key={option.id}
+                              type="button"
+                              onClick={() =>
+                                toggleFeatureChoice(
+                                  choiceGroup.id,
+                                  option.feature.id,
+                                  choiceGroup.choiceCount,
+                                )
+                              }
+                              className={[
+                                "rounded-xl border p-3 text-left transition",
+                                isSelected
+                                  ? "border-sky-400/50 bg-sky-500/10"
+                                  : "border-white/10 bg-black/25 hover:border-sky-400/35",
+                              ].join(" ")}
+                            >
+                              <p className="text-sm font-black text-sky-100">
+                                {option.feature.name}
+                              </p>
+                              <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/40">
+                                {option.feature.description ??
+                                  "Sem descrição cadastrada."}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+
+          {requiredCantripCount > 0 || requiredSpellCount > 0 ? (
+            <div className="rounded-xl border border-violet-400/30 bg-violet-500/10 p-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-violet-100/80">
+                Novas magias
+              </p>
+
+              {requiredCantripCount > 0 ? (
+                <div className="mt-3">
+                  <p className="text-xs font-black text-violet-100">
+                    Truques · {selectedCantripIds.length}/{requiredCantripCount}
+                  </p>
+
+                  <div className="mt-2 grid gap-2 md:grid-cols-2">
+                    {(choiceOptions?.spells.cantrips ?? []).map((spell) => {
+                      const isSelected = selectedCantripIds.includes(spell.id);
+
+                      return (
+                        <button
+                          key={spell.id}
+                          type="button"
+                          onClick={() =>
+                            setSelectedCantripIdsByClass((currentSelections) => ({
+                              ...currentSelections,
+                              [selectedClassKey]: toggleLimitedSelection({
+                                currentIds:
+                                  currentSelections[selectedClassKey] ?? [],
+                                targetId: spell.id,
+                                limit: requiredCantripCount,
+                              }),
+                            }))
+                          }
+                          className={[
+                            "rounded-xl border p-3 text-left transition",
+                            isSelected
+                              ? "border-violet-400/50 bg-violet-500/10"
+                              : "border-white/10 bg-black/25 hover:border-violet-400/35",
+                          ].join(" ")}
+                        >
+                          <p className="text-sm font-black text-violet-100">
+                            {spell.name}
+                          </p>
+                          <p className="mt-1 text-[10px] font-semibold text-white/40">
+                            Truque · {spell.school}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+
+              {requiredSpellCount > 0 ? (
+                <div className="mt-4">
+                  <p className="text-xs font-black text-violet-100">
+                    Magias conhecidas · {selectedSpellIds.length}/
+                    {requiredSpellCount}
+                  </p>
+
+                  <div className="mt-2 grid gap-2 md:grid-cols-2">
+                    {(choiceOptions?.spells.spells ?? []).map((spell) => {
+                      const isSelected = selectedSpellIds.includes(spell.id);
+
+                      return (
+                        <button
+                          key={spell.id}
+                          type="button"
+                          onClick={() =>
+                            setSelectedSpellIdsByClass((currentSelections) => ({
+                              ...currentSelections,
+                              [selectedClassKey]: toggleLimitedSelection({
+                                currentIds:
+                                  currentSelections[selectedClassKey] ?? [],
+                                targetId: spell.id,
+                                limit: requiredSpellCount,
+                              }),
+                            }))
+                          }
+                          className={[
+                            "rounded-xl border p-3 text-left transition",
+                            isSelected
+                              ? "border-violet-400/50 bg-violet-500/10"
+                              : "border-white/10 bg-black/25 hover:border-violet-400/35",
+                          ].join(" ")}
+                        >
+                          <p className="text-sm font-black text-violet-100">
+                            {spell.name}
+                          </p>
+                          <p className="mt-1 text-[10px] font-semibold text-white/40">
+                            Nível {spell.level} · {spell.school}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
+          {hadChoiceRequirements ? (
+            <div className="rounded-xl border border-forge-gold/25 bg-forge-gold/5 p-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-forge-gold/80">
+                Resumo final das escolhas
+              </p>
+
+              <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                <CompactListRow
+                  title="Subclasse"
+                  value={selectedSubclassId ? "Resolvida" : "Pendente"}
+                  helper={
+                    choiceOptions?.subclass.options.find(
+                      (subclass) => subclass.id === selectedSubclassId,
+                    )?.name ?? "Nenhuma subclasse selecionada."
+                  }
+                />
+                <CompactListRow
+                  title="Features"
+                  value={
+                    consolidatedPendingFeatureChoiceCount === 0
+                      ? "Resolvidas"
+                      : `${consolidatedPendingFeatureChoiceCount} pendente(s)`
+                  }
+                />
+                <CompactListRow
+                  title="Progressão"
+                  value={
+                    consolidatedPendingProgressionChoiceCount === 0
+                      ? "Resolvida"
+                      : `${consolidatedPendingProgressionChoiceCount} pendente(s)`
+                  }
+                />
+                <CompactListRow
+                  title="Magias"
+                  value={
+                    pendingSpellChoiceCount === 0
+                      ? "Resolvidas"
+                      : `${pendingSpellChoiceCount} pendente(s)`
+                  }
+                />
+              </div>
+            </div>
+          ) : null}
+
           <div className="rounded-xl border border-yellow-400/25 bg-yellow-500/10 p-3">
             <p className="text-[10px] font-black uppercase tracking-[0.16em] text-yellow-100/70">
               Observação técnica
             </p>
 
             <p className="mt-2 text-xs font-semibold leading-relaxed text-yellow-100/70">
-              Por enquanto este modal não salva o Level Up. Isso é intencional:
-              antes de confirmar level real, precisamos separar nível total do
-              personagem e nível de classe para não criar dívida técnica com
-              multiclasse.
+              Ao confirmar, o modal enviará em um único payload a classe
+              escolhida, a subclasse, a progressão, as features e as novas magias.
+              A aplicação transacional será validada pelo backend.
             </p>
           </div>
         </div>
+
+        {levelUpConfirmationBlockReason ? (
+          <div className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-red-100/80">
+                  Confirmação bloqueada
+                </p>
+
+                <p className="mt-1 text-xs font-semibold leading-relaxed text-red-100/65">
+                  {levelUpConfirmationBlockReason}
+                </p>
+              </div>
+
+              {hasLevelUpChoiceBlockers ? (
+                <span className="rounded-full border border-red-400/30 bg-black/25 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.14em] text-red-100">
+                  Resolva as escolhas
+                </span>
+              ) : null}
+            </div>
+          </div>
+        ) : (
+          <div className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-emerald-100/80">
+              Pronto para confirmar
+            </p>
+
+            <p className="mt-1 text-xs font-semibold leading-relaxed text-emerald-100/65">
+              Nenhuma escolha obrigatória está pendente para esta classe.
+            </p>
+          </div>
+        )}
 
         <div className="mt-4 flex flex-wrap justify-end gap-2 border-t border-white/10 pt-3">
           <button
@@ -1907,10 +2948,15 @@ function LevelUpPreviewModal({
             title={
               canConfirmLevelUp
                 ? "Confirmar Level Up desta classe."
-                : "Não é possível confirmar Level Up agora."
+                : levelUpConfirmationBlockReason ??
+                  "Não é possível confirmar Level Up agora."
             }
           >
-            {isConfirmingLevelUp ? "Confirmando..." : "Confirmar Level Up"}
+            {isConfirmingLevelUp
+              ? "Confirmando..."
+              : hasLevelUpChoiceBlockers
+                ? "Escolhas pendentes"
+                : "Confirmar Level Up"}
           </button>
         </div>
       </section>

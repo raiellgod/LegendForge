@@ -70,6 +70,30 @@ export type CharacterBuilderProgressionChoice = {
   talentId: string | null;
 };
 
+export type CharacterSheetLevelUpProgressionChoiceInput = {
+  classId: string;
+  classLevel: number;
+  choiceIndex: number;
+  type: CharacterBuilderProgressionChoiceType;
+  attributeIncreaseMode: CharacterBuilderAttributeIncreaseMode | null;
+  attributeIncreases: CharacterAttributeBonusMap;
+  talentId: string | null;
+};
+
+export type CharacterSheetLevelUpFeatureChoiceInput = {
+  choiceGroupId: string;
+  featureId: string;
+};
+
+export type CharacterSheetLevelUpConfirmationPayload = {
+  classEntryId: string;
+  subclassId: string | null;
+  progressionChoices: CharacterSheetLevelUpProgressionChoiceInput[];
+  featureChoiceSelections: CharacterSheetLevelUpFeatureChoiceInput[];
+  cantripIds: string[];
+  spellIds: string[];
+};
+
 export type CharacterBuilderDraft = {
   name: string;
   pronouns: string;
@@ -171,6 +195,8 @@ export type CharacterBuilderSubclassOption = CharacterBuilderOption & {
 export type CharacterBuilderClassOption = CharacterBuilderOption & {
   hitDie: number | null;
   spellcastingAbilityKey: CharacterAttributeKey | null;
+  choiceOptions: CharacterReadySheetClassLevelUpPreview["levelUpPlan"]["choiceOptions"];
+
   subclassSelectionLevel: number | null;
   classSkillChoiceCount: number;
   weaponProficiencyKeys: string[];
@@ -558,6 +584,95 @@ export type CharacterReadySheetClassLevelUpPreview = {
       classLevel: number;
       choiceIndex: number;
     }>;
+  };
+
+  levelUpPlan: {
+    currentCharacterLevel: number;
+    nextCharacterLevel: number;
+    currentClassLevel: number;
+    nextClassLevel: number;
+
+    classEntry: {
+      id: string;
+      classId: string;
+      className: string;
+      subclass: {
+        id: string;
+        name: string;
+      } | null;
+      isPrimary: boolean;
+    };
+
+    canPreviewNextLevel: boolean;
+
+    hitPoints: CharacterReadySheetClassLevelUpPreview["hitPointsPlan"];
+    proficiency: CharacterReadySheetClassLevelUpPreview["proficiencyPlan"];
+    features: CharacterReadySheetClassLevelUpPreview["featuresPlan"];
+    featureChoices: CharacterReadySheetClassLevelUpPreview["featureChoicesPlan"];
+    spellcasting: CharacterReadySheetClassLevelUpPreview["spellcastingPlan"];
+    subclass: CharacterReadySheetClassLevelUpPreview["subclassPlan"];
+    progressionChoices: CharacterReadySheetClassLevelUpPreview["progressionChoicesPlan"];
+
+    choiceOptions: {
+      subclass: {
+        required: boolean;
+        options: Array<{
+          id: string;
+          key: string;
+          name: string;
+          description: string | null;
+          classId: string;
+          order: number;
+        }>;
+      };
+
+      progression: {
+        requiredChoiceCount: number;
+        currentAttributes: Partial<Record<CharacterAttributeKey, number>>;
+        talents: Array<
+          CharacterBuilderTalentOption & {
+            selectedCount: number;
+            isAlreadySelected: boolean;
+            isSelectable: boolean;
+            blockedReason: string | null;
+          }
+        >;
+      };
+
+      featureChoices: {
+        usesFeatureChoicesPlan: boolean;
+      };
+
+      spells: {
+        requiredCantripCount: number;
+        requiredSpellCount: number;
+        cantrips: Array<
+          CharacterBuilderSpellOption & {
+            minimumClassLevel: number;
+            isAlwaysKnown: boolean;
+          }
+        >;
+        spells: Array<
+          CharacterBuilderSpellOption & {
+            minimumClassLevel: number;
+            isAlwaysKnown: boolean;
+          }
+        >;
+      };
+    };
+
+    requirements: {
+      requiresSubclassChoice: boolean;
+      requiresFeatureChoices: boolean;
+      requiresProgressionChoices: boolean;
+
+      pendingSubclassChoiceCount: number;
+      pendingFeatureChoiceCount: number;
+      pendingProgressionChoiceCount: number;
+      totalPendingChoiceCount: number;
+
+      hasPendingChoices: boolean;
+    };
   };
 
   subclassSelectionLevel: number | null;

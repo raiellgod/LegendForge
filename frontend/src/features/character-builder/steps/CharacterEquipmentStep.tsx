@@ -288,7 +288,11 @@ export function CharacterEquipmentStep({
     backgrounds: selectedBackground ? [selectedBackground] : [],
     skills: [],
     spells: [],
+    features: [],
+    talents: [],
+    featureChoiceGroups: [],
     equipment,
+    languages: [],
   });
 
   const previewGold = getStartingGoldFromDraft(draft, {
@@ -297,7 +301,11 @@ export function CharacterEquipmentStep({
     backgrounds: selectedBackground ? [selectedBackground] : [],
     skills: [],
     spells: [],
+    features: [],
+    talents: [],
+    featureChoiceGroups: [],
     equipment,
+    languages: [],
   });
 
   const missingPreviewItemKeys = previewItems

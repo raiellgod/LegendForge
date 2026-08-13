@@ -5,7 +5,10 @@ import type {
   SceneToken,
 } from "../types/game-table-types";
 
-import type { CharacterReadySheet } from "@/features/character-builder/types/character-builder-types";
+import type {
+  CharacterReadySheet,
+  CharacterSheetLevelUpConfirmationPayload,
+} from "@/features/character-builder/types/character-builder-types";
 
 export async function getCampaign(id: string): Promise<Campaign> {
   const response = await fetch(`http://localhost:8081/campaigns/${id}`, {
@@ -155,9 +158,7 @@ export async function updateCampaignCharacterSheetLevelUpAvailability(
 export async function confirmCampaignCharacterSheetLevelUp(
   campaignId: string,
   characterSheetId: string,
-  data: {
-    classEntryId?: string;
-  } = {},
+  data: CharacterSheetLevelUpConfirmationPayload,
 ): Promise<CharacterReadySheet> {
   const response = await fetch(
     `http://localhost:8081/campaigns/${campaignId}/character-sheets/${characterSheetId}/level-up`,
