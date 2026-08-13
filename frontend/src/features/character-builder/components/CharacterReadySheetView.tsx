@@ -54,9 +54,12 @@ export type CharacterReadySheetViewProps = {
   characterSheet: CharacterReadySheet | null;
   allSkills: CharacterBuilderSkillOption[];
   isGM: boolean;
+  canManageLevelUp?: boolean;
   isSavingImages: boolean;
   isConfirmingLevelUp: boolean;
   levelUpError: string | null;
+  isUpdatingLevelUpAvailability?: boolean;
+  levelUpAvailabilityError?: string | null;
   popoutUrl?: string;
   onSaveImages: (
     characterSheetId: string,
@@ -67,6 +70,10 @@ export type CharacterReadySheetViewProps = {
     },
   ) => Promise<void>;
   onRollSheetAction: (request: CharacterReadySheetRollRequest) => void;
+  onUpdateLevelUpAvailability?: (
+    characterSheetId: string,
+    levelUpAvailable: boolean,
+  ) => Promise<void>;
   onConfirmLevelUp: (data: CharacterSheetLevelUpConfirmationPayload) => Promise<void>;
   onClose: () => void;
 };
@@ -1290,6 +1297,7 @@ function LevelUpPreviewModal({
   levelUpPreview,
   isConfirmingLevelUp,
   levelUpError,
+  canSubmitLevelUp,
   onSelectClass,
   onConfirmLevelUp,
   onClose,
@@ -1304,6 +1312,7 @@ function LevelUpPreviewModal({
     | undefined;
   isConfirmingLevelUp: boolean;
   levelUpError: string | null;
+  canSubmitLevelUp: boolean;
   onSelectClass: (classOptionId: string) => void;
   onConfirmLevelUp: (data: CharacterSheetLevelUpConfirmationPayload) => Promise<void>;
   onClose: () => void;
@@ -1769,15 +1778,18 @@ function LevelUpPreviewModal({
 
   const hasLevelUpChoiceBlockers = totalPendingChoiceCount > 0;
 
-  const levelUpConfirmationBlockReason = !selectedClassOption
-    ? "Escolha qual classe receberá o nível."
-    : !canPreviewNextLevel
-      ? "Não existe progressão cadastrada para o próximo nível desta classe."
-      : hasLevelUpChoiceBlockers
-        ? `${totalPendingChoiceCount} escolha(s) precisam ser resolvidas antes da confirmação.`
-        : null;
+  const levelUpConfirmationBlockReason = !canSubmitLevelUp
+    ? "Este usuário não pode confirmar o Level Up desta ficha."
+    : !selectedClassOption
+      ? "Escolha qual classe receberá o nível."
+      : !canPreviewNextLevel
+        ? "Não existe progressão cadastrada para o próximo nível desta classe."
+        : hasLevelUpChoiceBlockers
+          ? `${totalPendingChoiceCount} escolha(s) precisam ser resolvidas antes da confirmação.`
+          : null;
 
   const canConfirmLevelUp =
+    canSubmitLevelUp &&
     canStartLevelUpConfirmation &&
     !hasLevelUpChoiceBlockers &&
     !isConfirmingLevelUp;
@@ -2989,12 +3001,16 @@ export function CharacterReadySheetView({
   characterSheet,
   allSkills,
   isGM,
+  canManageLevelUp = isGM,
   isSavingImages,
   isConfirmingLevelUp,
   levelUpError,
+  isUpdatingLevelUpAvailability = false,
+  levelUpAvailabilityError = null,
   popoutUrl,
   onSaveImages,
   onRollSheetAction,
+  onUpdateLevelUpAvailability,
   onConfirmLevelUp,
   onClose,
 }: CharacterReadySheetViewProps) {
@@ -3960,6 +3976,27 @@ export function CharacterReadySheetView({
     characterSheet?.levelUpPreviews[0] ??
     null;
 
+  const isLevelUpAvailable = Boolean(characterSheet?.levelUpAvailable);
+
+  async function handleToggleLevelUpAvailability() {
+    if (
+      !characterSheet ||
+      !canManageLevelUp ||
+      !onUpdateLevelUpAvailability ||
+      isUpdatingLevelUpAvailability
+    ) {
+      return;
+    }
+
+    await onUpdateLevelUpAvailability(
+      characterSheet.id,
+      !isLevelUpAvailable,
+    );
+  }
+
+  const canUseLevelUp =
+    canManageLevelUp || isLevelUpAvailable;
+
   function handleOpenLevelUpPreview() {
     setSelectedLevelUpClassOptionId(
       selectedLevelUpClassOption?.id ?? levelUpClassOptions[0]?.id ?? null,
@@ -4156,7 +4193,7 @@ export function CharacterReadySheetView({
         </div>
       </header>
 
-      {isGM && isLevelUpPreviewOpen ? (
+      {canUseLevelUp && isLevelUpPreviewOpen ? (
         <LevelUpPreviewModal
           characterName={displayName}
           className={levelUpClassName}
@@ -4165,6 +4202,7 @@ export function CharacterReadySheetView({
           levelUpPreview={selectedLevelUpPreview}
           isConfirmingLevelUp={isConfirmingLevelUp}
           levelUpError={levelUpError}
+          canSubmitLevelUp={canUseLevelUp}
           onSelectClass={setSelectedLevelUpClassOptionId}
           onConfirmLevelUp={onConfirmLevelUp}
           onClose={() => setIsLevelUpPreviewOpen(false)}
@@ -5140,25 +5178,97 @@ export function CharacterReadySheetView({
                   />
                 </div>
 
-                {isGM ? (
-                  <>
+                {canManageLevelUp ? (
+                  <div className="mt-3 space-y-2">
+                    <div
+                      className={[
+                        "rounded-xl border p-3",
+                        isLevelUpAvailable
+                          ? "border-emerald-400/35 bg-emerald-500/10"
+                          : "border-white/10 bg-black/25",
+                      ].join(" ")}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p
+                            className={[
+                              "text-[9px] font-black uppercase tracking-[0.14em]",
+                              isLevelUpAvailable
+                                ? "text-emerald-200"
+                                : "text-white/40",
+                            ].join(" ")}
+                          >
+                            {isLevelUpAvailable
+                              ? "Level Up liberado"
+                              : "Level Up bloqueado"}
+                          </p>
+
+                          <p className="mt-1 text-[10px] font-semibold leading-relaxed text-white/40">
+                            {isLevelUpAvailable
+                              ? "O personagem está autorizado a usar o próximo Level Up."
+                              : "O próximo Level Up ainda não foi liberado pelo Mestre."}
+                          </p>
+                        </div>
+                      </div>
+
+                      {levelUpAvailabilityError ? (
+                        <p className="mt-2 rounded-lg border border-red-400/30 bg-red-500/10 px-2.5 py-2 text-[10px] font-bold text-red-200">
+                          {levelUpAvailabilityError}
+                        </p>
+                      ) : null}
+
+                      <button
+                        type="button"
+                        onClick={handleToggleLevelUpAvailability}
+                        disabled={
+                          isUpdatingLevelUpAvailability ||
+                          !characterSheet ||
+                          !onUpdateLevelUpAvailability
+                        }
+                        className={[
+                          "mt-3 w-full rounded-xl border px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-50",
+                          isLevelUpAvailable
+                            ? "border-red-400/35 bg-red-500/10 text-red-200 hover:border-red-400/60 hover:bg-red-500/15"
+                            : "border-emerald-400/35 bg-emerald-500/10 text-emerald-200 hover:border-emerald-400/60 hover:bg-emerald-500/15",
+                        ].join(" ")}
+                      >
+                        {isUpdatingLevelUpAvailability
+                          ? "Atualizando..."
+                          : isLevelUpAvailable
+                            ? "Bloquear Level Up"
+                            : "Liberar Level Up"}
+                      </button>
+                    </div>
+
                     <button
                       type="button"
                       onClick={handleOpenLevelUpPreview}
-                      className="mt-3 w-full rounded-xl border border-forge-gold/30 bg-forge-gold/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
+                      className="w-full rounded-xl border border-forge-gold/30 bg-forge-gold/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
                     >
-                      Level Up
+                      Abrir prévia do Level Up
                     </button>
-
-                    <p className="mt-2 text-[10px] font-semibold leading-relaxed text-white/35">
-                      Primeira versão visual. A confirmação real entra depois,
-                      já respeitando nível de personagem diferente de nível de
-                      classe.
+                  </div>
+                ) : isLevelUpAvailable ? (
+                  <div className="mt-3 rounded-xl border border-emerald-400/35 bg-emerald-500/10 p-3">
+                    <p className="text-[9px] font-black uppercase tracking-[0.14em] text-emerald-200">
+                      Level Up disponível
                     </p>
-                  </>
+
+                    <p className="mt-1 text-[10px] font-semibold leading-relaxed text-emerald-100/65">
+                      O Mestre liberou o próximo avanço deste personagem.
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={handleOpenLevelUpPreview}
+                      className="mt-3 w-full rounded-xl border border-forge-gold/35 bg-forge-gold/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
+                    >
+                      Abrir Level Up
+                    </button>
+                  </div>
                 ) : (
                   <p className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-[10px] font-semibold leading-relaxed text-white/35">
-                    Level Up é liberado pelo Mestre.
+                    O próximo Level Up ainda não foi liberado pelo Mestre.
                   </p>
                 )}
               </section>

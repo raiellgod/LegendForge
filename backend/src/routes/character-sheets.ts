@@ -5517,12 +5517,6 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       const isOwner = campaign.ownerId === session.user.id;
       const isGM = currentParticipant?.role === "GM";
 
-      if (!isOwner && !isGM) {
-        return reply.status(403).send({
-          message: "Only the campaign owner or GM can confirm Level Up",
-        });
-      }
-
       const characterSheet = await prisma.characterSheet.findFirst({
         where: {
           id: sheetId,
@@ -5573,6 +5567,33 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       if (!characterSheet) {
         return reply.status(404).send({
           message: "Character sheet not found",
+        });
+      }
+
+      const isCharacterSheetOwner =
+        characterSheet.ownerId === session.user.id;
+
+      const canReleasedPlayerConfirm =
+        !isOwner &&
+        !isGM &&
+        isCharacterSheetOwner &&
+        characterSheet.levelUpAvailable;
+
+      if (!isOwner && !isGM && !canReleasedPlayerConfirm) {
+        return reply.status(403).send({
+          message:
+            "Only the campaign owner, GM, or the owner of a released character sheet can confirm Level Up",
+        });
+      }
+
+      if (
+        !isOwner &&
+        !isGM &&
+        isCharacterSheetOwner &&
+        !characterSheet.levelUpAvailable
+      ) {
+        return reply.status(403).send({
+          message: "Level Up has not been released for this character",
         });
       }
 

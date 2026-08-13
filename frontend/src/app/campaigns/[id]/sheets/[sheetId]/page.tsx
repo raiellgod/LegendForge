@@ -29,6 +29,7 @@ import {
   getCampaignCharacterSheet,
   confirmCampaignCharacterSheetLevelUp,
   updateCampaignCharacterSheetImages,
+  updateCampaignCharacterSheetLevelUpAvailability,
   getCampaignParticipants,
 } from "@/features/game-table/services/game-table-api";
 
@@ -66,6 +67,13 @@ export default function CharacterSheetPopoutPage() {
 
   const [isConfirmingLevelUp, setIsConfirmingLevelUp] = useState(false);
   const [levelUpError, setLevelUpError] = useState<string | null>(null);
+  const [
+    isUpdatingLevelUpAvailability,
+    setIsUpdatingLevelUpAvailability,
+  ] = useState(false);
+  const [levelUpAvailabilityError, setLevelUpAvailabilityError] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     async function loadPopoutSheet() {
@@ -181,6 +189,42 @@ export default function CharacterSheetPopoutPage() {
     }
   }
 
+  async function handleUpdateLevelUpAvailability(
+    characterSheetId: string,
+    levelUpAvailable: boolean,
+  ) {
+    if (!isGM) {
+      setLevelUpAvailabilityError(
+        "Apenas o Mestre ou o dono da campanha pode alterar a liberação de Level Up.",
+      );
+      return;
+    }
+
+    setIsUpdatingLevelUpAvailability(true);
+    setLevelUpAvailabilityError(null);
+
+    try {
+      const updatedCharacterSheet =
+        await updateCampaignCharacterSheetLevelUpAvailability(
+          params.id,
+          characterSheetId,
+          {
+            levelUpAvailable,
+          },
+        );
+
+      setCharacterSheet(updatedCharacterSheet);
+    } catch (error) {
+      setLevelUpAvailabilityError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível alterar a liberação de Level Up.",
+      );
+    } finally {
+      setIsUpdatingLevelUpAvailability(false);
+    }
+  }
+
   async function handleConfirmLevelUp(
     data: CharacterSheetLevelUpConfirmationPayload,
   ) {
@@ -200,6 +244,36 @@ export default function CharacterSheetPopoutPage() {
       );
 
       setCharacterSheet(updatedCharacterSheet);
+
+      const previousClassEntry =
+        characterSheet.classes?.find(
+          (classEntry) => classEntry.id === data.classEntryId,
+        ) ?? null;
+
+      const updatedClassEntry =
+        updatedCharacterSheet.classes?.find(
+          (classEntry) => classEntry.id === data.classEntryId,
+        ) ?? null;
+
+      window.opener?.postMessage(
+        {
+          source: "legendforge-sheet-popout",
+          type: "LEVEL_UP_CONFIRMED",
+          payload: {
+            characterName: updatedCharacterSheet.name,
+            className:
+              updatedClassEntry?.characterClass.name ??
+              previousClassEntry?.characterClass.name ??
+              "Classe",
+            previousClassLevel: previousClassEntry?.level ?? 0,
+            nextClassLevel:
+              updatedClassEntry?.level ?? (previousClassEntry?.level ?? 0) + 1,
+            previousCharacterLevel: characterSheet.level,
+            nextCharacterLevel: updatedCharacterSheet.level,
+          },
+        },
+        window.location.origin,
+      );
     } catch (error) {
       setLevelUpError(
         error instanceof Error
@@ -256,10 +330,14 @@ export default function CharacterSheetPopoutPage() {
             characterSheet={characterSheet}
             allSkills={characterBuilderOptions.skills}
             isGM={isGM}
+            canManageLevelUp={isGM}
             isSavingImages={isSavingCharacterSheetImages}
             isConfirmingLevelUp={isConfirmingLevelUp}
             levelUpError={levelUpError}
+            isUpdatingLevelUpAvailability={isUpdatingLevelUpAvailability}
+            levelUpAvailabilityError={levelUpAvailabilityError}
             onSaveImages={handleUpdateCharacterSheetImages}
+            onUpdateLevelUpAvailability={handleUpdateLevelUpAvailability}
             onConfirmLevelUp={handleConfirmLevelUp}
             onRollSheetAction={handlePopoutRollSheetAction}
             onClose={() => window.close()}

@@ -106,63 +106,63 @@ Micros concluídas
 Objetivo: transformar criação e progressão em fluxo real, não apenas “somar nível”.
 
 [x] 4.7.1 — Modelar draft de classes múltiplas no builder
-    [x] 4.7.1.1 — Criar CharacterBuilderClassDraftEntry
-    [x] 4.7.1.2 — Adicionar classEntries ao CharacterBuilderDraft
-    [x] 4.7.1.3 — Manter classId/className como compatibilidade
-    [x] 4.7.1.4 — Sincronizar classe única atual com classEntries
-    [x] 4.7.1.5 — Sincronizar nível inicial com nível da classe principal
-    [x] 4.7.1.6 — Corrigir atualização em lote do draft para não perder classEntries
+[x] 4.7.1.1 — Criar CharacterBuilderClassDraftEntry
+[x] 4.7.1.2 — Adicionar classEntries ao CharacterBuilderDraft
+[x] 4.7.1.3 — Manter classId/className como compatibilidade
+[x] 4.7.1.4 — Sincronizar classe única atual com classEntries
+[x] 4.7.1.5 — Sincronizar nível inicial com nível da classe principal
+[x] 4.7.1.6 — Corrigir atualização em lote do draft para não perder classEntries
 
 [x] 4.7.2 — Tela de distribuição de níveis por classe
-    [x] 4.7.2.1 — Mostrar distribuição no resumo lateral
-    [x] 4.7.2.2 — Mostrar distribuição na etapa Classe
-    [x] 4.7.2.3 — Preparar botão “Adicionar classe em breve” desabilitado
-    [x] 4.7.2.4 — Permitir editar nível da classe principal pela tela de Classe
-    [x] 4.7.2.5 — Validar visualmente soma dos níveis da distribuição
+[x] 4.7.2.1 — Mostrar distribuição no resumo lateral
+[x] 4.7.2.2 — Mostrar distribuição na etapa Classe
+[x] 4.7.2.3 — Preparar botão “Adicionar classe em breve” desabilitado
+[x] 4.7.2.4 — Permitir editar nível da classe principal pela tela de Classe
+[x] 4.7.2.5 — Validar visualmente soma dos níveis da distribuição
 
 [x] 4.7.3 — Definir classe principal
-    [x] 4.7.3.1 — Exibir badge “Classe principal” de forma mais clara
-    [x] 4.7.3.2 — Preparar função setPrimaryClassEntry
-    [x] 4.7.3.3 — Manter classId/className sincronizados com a classe principal
-    [x] 4.7.3.4 — Travar troca de principal quando houver apenas uma classe
+[x] 4.7.3.1 — Exibir badge “Classe principal” de forma mais clara
+[x] 4.7.3.2 — Preparar função setPrimaryClassEntry
+[x] 4.7.3.3 — Manter classId/className sincronizados com a classe principal
+[x] 4.7.3.4 — Travar troca de principal quando houver apenas uma classe
 
 [x] 4.7.4 — Criação inicial multiclasse
-    [x] 4.7.4.1 — Habilitar adicionar segunda classe no draft
-    [x] 4.7.4.2 — Impedir classe duplicada
-    [x] 4.7.4.3 — Permitir remover classe adicional
-    [x] 4.7.4.4 — Ajustar nível total como soma das classes
-    [x] 4.7.4.5 — Backend recebe classEntries opcional
-    [x] 4.7.4.6 — Backend cria CharacterSheetClass para cada classe
-    [x] 4.7.4.7 — Manter fallback classId/className para classe principal
+[x] 4.7.4.1 — Habilitar adicionar segunda classe no draft
+[x] 4.7.4.2 — Impedir classe duplicada
+[x] 4.7.4.3 — Permitir remover classe adicional
+[x] 4.7.4.4 — Ajustar nível total como soma das classes
+[x] 4.7.4.5 — Backend recebe classEntries opcional
+[x] 4.7.4.6 — Backend cria CharacterSheetClass para cada classe
+[x] 4.7.4.7 — Manter fallback classId/className para classe principal
 
 [x] 4.7.5 — Calcular PV inicial multiclasse
-    [x] 4.7.5.1 — Definir regra final de PV multiclasse do LegendForge
-    [x] 4.7.5.2 — Calcular PV por classe no backend
-    [x] 4.7.5.3 — Aplicar CON por nível
-    [x] 4.7.5.4 — Atualizar maxHitPoints/hitPoints inicial
-    [x] 4.7.5.5 — Mostrar resumo de PV no Review
+[x] 4.7.5.1 — Definir regra final de PV multiclasse do LegendForge
+[x] 4.7.5.2 — Calcular PV por classe no backend
+[x] 4.7.5.3 — Aplicar CON por nível
+[x] 4.7.5.4 — Atualizar maxHitPoints/hitPoints inicial
+[x] 4.7.5.5 — Mostrar resumo de PV no Review
 
 [x] 4.7.6 — Features iniciais por classe/nível
-    [x] 4.7.6.1 — Buscar features por cada CharacterSheetClass
-    [x] 4.7.6.2 — Incluir features até o nível daquela classe
-    [x] 4.7.6.3 — Incluir features de subclasse quando houver
-    [x] 4.7.6.4 — Ajustar aba Features da ficha pronta para múltiplas classes
+[x] 4.7.6.1 — Buscar features por cada CharacterSheetClass
+[x] 4.7.6.2 — Incluir features até o nível daquela classe
+[x] 4.7.6.3 — Incluir features de subclasse quando houver
+[x] 4.7.6.4 — Ajustar aba Features da ficha pronta para múltiplas classes
 
 [x] 4.7.7 — Magias iniciais por classe/nível
-    [x] 4.7.7.0 — Modelar limites de magia por nível
-    [x] 4.7.7.1 — União final das permissões de magia por classe no builder
-    [x] 4.7.7.2 — Backend valida magia contra múltiplas classes
-    [x] 4.7.7.3 — Backend salva e retorna classId/source da magia
-    [x] 4.7.7.4 — Frontend types recebem origem interna da magia
-    [x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
+[x] 4.7.7.0 — Modelar limites de magia por nível
+[x] 4.7.7.1 — União final das permissões de magia por classe no builder
+[x] 4.7.7.2 — Backend valida magia contra múltiplas classes
+[x] 4.7.7.3 — Backend salva e retorna classId/source da magia
+[x] 4.7.7.4 — Frontend types recebem origem interna da magia
+[x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
 
 [em andamento] 4.7.8 — Escolhas pendentes iniciais
-    [x] 4.7.8.1 — Mapear escolhas pendentes possíveis
-    [x] 4.7.8.2 — Subclasse pendente
-        [x] 4.7.8.2.1 — Expor subclasses dentro de cada classe
-        [x] 4.7.8.2.2 — Permitir escolher subclasse por classEntry
-        [x] 4.7.8.2.3 — Mostrar pendência no Review
-        [x] 4.7.8.2.4 — Bloquear finalização com subclasse obrigatória faltando
+[x] 4.7.8.1 — Mapear escolhas pendentes possíveis
+[x] 4.7.8.2 — Subclasse pendente
+[x] 4.7.8.2.1 — Expor subclasses dentro de cada classe
+[x] 4.7.8.2.2 — Permitir escolher subclasse por classEntry
+[x] 4.7.8.2.3 — Mostrar pendência no Review
+[x] 4.7.8.2.4 — Bloquear finalização com subclasse obrigatória faltando
 
     [x] 4.7.8.3 — Corrigir fluxo de entrada e persistência do builder
         [x] 4.7.8.3.1 — Separar “Novo personagem” de “Continuar rascunho”
@@ -271,22 +271,32 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
         [x] 4.7.11 — Tela de resumo das mudanças do Level Up
         [x] 4.7.12 — Telas de escolhas pendentes do Level Up
         [x] 4.7.13 — Aplicar mudanças reais na ficha ao confirmar
-        [ ] 4.7.14 — Mestre libera/bloqueia Level Up
-        [ ] 4.7.15 — Jogador vê Level Up apenas quando liberado
-        [ ] 4.7.16 — Jogador confirma Level Up liberado
-        [ ] 4.7.17 — Feedback no chat após Level Up
+
+[x]4.7.14 — Mestre libera/bloqueia Level Up
+
+        [x] 4.7.14.1 — Exibir controle somente para Mestre/owner
+        [x] 4.7.14.2 — Mostrar estado atual: Level Up liberado/bloqueado
+        [x] 4.7.14.3 — Botão para liberar Level Up
+        [x] 4.7.14.4 — Botão para bloquear/cancelar liberação
+        [x] 4.7.14.5 — Persistir levelUpAvailable no backend
+        [x] 4.7.14.6 — Atualizar ficha local após a alteração
+        [x] 4.7.14.7 — Impedir player de alterar a liberação
+        [x] 4.7.14.8 — Testar GM, owner e player
+[x] 4.7.15 — Jogador vê Level Up apenas quando liberado
+[x] 4.7.16 — Jogador confirma Level Up liberado
+[ ] 4.7.17 — Feedback no chat após Level Up
 
 5.5. Fase 4.8 — Sub-ancestralidades e variações de origem
 
 Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade principal.
 
 [ ] Fase 4.8 — Sub-ancestralidades e variações de origem
-    [ ] 4.8.1 — Modelar SubAncestry no Prisma
-    [ ] 4.8.2 — Seed inicial de sub-ancestralidades
-    [ ] 4.8.3 — Expor sub-ancestralidades no /character-options
-    [ ] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
-    [ ] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
-    [ ] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
+[ ] 4.8.1 — Modelar SubAncestry no Prisma
+[ ] 4.8.2 — Seed inicial de sub-ancestralidades
+[ ] 4.8.3 — Expor sub-ancestralidades no /character-options
+[ ] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
+[ ] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
+[ ] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
 
 Exemplo:
 
@@ -428,16 +438,17 @@ Sylvaris → Sylvaris Alto
 
 A próxima micro de desenvolvimento é:
 
-4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
+Fase 4.8 — Sub-ancestralidades e variações de origem
 
-Objetivo:
+Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade principal.
 
-- permitir escolher qual classe receberá o próximo nível
-- calcular a prévia usando a CharacterSheetClass selecionada
-- separar nível total do personagem do nível daquela classe
-- recalcular PV, features, magias e marcos da classe escolhida
-- preparar o plano detalhado das mudanças do Level Up
-- não aplicar ainda as mudanças reais na ficha
+[ ] Fase 4.8 — Sub-ancestralidades e variações de origem
+[ ] 4.8.1 — Modelar SubAncestry no Prisma
+[ ] 4.8.2 — Seed inicial de sub-ancestralidades
+[ ] 4.8.3 — Expor sub-ancestralidades no /character-options
+[ ] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
+[ ] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
+[ ] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
 
 19. Nota de verdade canônica
 

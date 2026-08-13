@@ -81,6 +81,7 @@ import {
   getCampaignParticipants,
   getCampaignTokens,
   confirmCampaignCharacterSheetLevelUp,
+  updateCampaignCharacterSheetLevelUpAvailability,
   updateCampaignActor,
   updateCampaignCharacterSheetImages,
   updateSceneToken,
@@ -117,11 +118,24 @@ import {
   type CharacterReadySheetRollRequest,
 } from "@/features/character-builder/components/CharacterReadySheetModal";
 
-type CharacterSheetPopoutMessage = {
-  source: "legendforge-sheet-popout";
-  type: "ROLL_SHEET_ACTION";
-  payload: CharacterReadySheetRollRequest;
-};
+type CharacterSheetPopoutMessage =
+  | {
+      source: "legendforge-sheet-popout";
+      type: "ROLL_SHEET_ACTION";
+      payload: CharacterReadySheetRollRequest;
+    }
+  | {
+      source: "legendforge-sheet-popout";
+      type: "LEVEL_UP_CONFIRMED";
+      payload: {
+        characterName: string;
+        className: string;
+        previousClassLevel: number;
+        nextClassLevel: number;
+        previousCharacterLevel: number;
+        nextCharacterLevel: number;
+      };
+    };
 
 function isCharacterSheetPopoutMessage(
   value: unknown,
@@ -134,7 +148,8 @@ function isCharacterSheetPopoutMessage(
 
   return (
     message.source === "legendforge-sheet-popout" &&
-    message.type === "ROLL_SHEET_ACTION" &&
+    (message.type === "ROLL_SHEET_ACTION" ||
+      message.type === "LEVEL_UP_CONFIRMED") &&
     Boolean(message.payload)
   );
 }
@@ -698,6 +713,13 @@ export default function CampaignPlayPage() {
 
   const [isConfirmingLevelUp, setIsConfirmingLevelUp] = useState(false);
   const [levelUpError, setLevelUpError] = useState<string | null>(null);
+  const [
+    isUpdatingLevelUpAvailability,
+    setIsUpdatingLevelUpAvailability,
+  ] = useState(false);
+  const [levelUpAvailabilityError, setLevelUpAvailabilityError] = useState<
+    string | null
+  >(null);
 
   const [chatInput, setChatInput] = useState("");
   const [chatMode, setChatMode] = useState<ChatMode>("public");
@@ -998,6 +1020,79 @@ export default function CampaignPlayPage() {
     }
   }
 
+  async function handleUpdateCharacterSheetLevelUpAvailability(
+    characterSheetId: string,
+    levelUpAvailable: boolean,
+  ) {
+    if (!isOwner && !isGM) {
+      setLevelUpAvailabilityError(
+        "Apenas o Mestre ou o dono da campanha pode alterar a liberação de Level Up.",
+      );
+      return;
+    }
+
+    setIsUpdatingLevelUpAvailability(true);
+    setLevelUpAvailabilityError(null);
+
+    try {
+      const updatedCharacterSheet =
+        await updateCampaignCharacterSheetLevelUpAvailability(
+          params.id,
+          characterSheetId,
+          {
+            levelUpAvailable,
+          },
+        );
+
+      setCharacterSheets((currentSheets) =>
+        currentSheets.map((currentSheet) =>
+          currentSheet.id === updatedCharacterSheet.id
+            ? updatedCharacterSheet
+            : currentSheet,
+        ),
+      );
+    } catch (error) {
+      setLevelUpAvailabilityError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível alterar a liberação de Level Up.",
+      );
+    } finally {
+      setIsUpdatingLevelUpAvailability(false);
+    }
+  }
+
+  function publishLevelUpFeedbackToChat({
+    characterName,
+    className,
+    previousClassLevel,
+    nextClassLevel,
+    previousCharacterLevel,
+    nextCharacterLevel,
+  }: {
+    characterName: string;
+    className: string;
+    previousClassLevel: number;
+    nextClassLevel: number;
+    previousCharacterLevel: number;
+    nextCharacterLevel: number;
+  }) {
+    setChatMessages((currentMessages) => [
+      ...currentMessages,
+      {
+        id: createId(),
+        author: "Sistema",
+        kind: "system",
+        content:
+          `${characterName} avançou de nível!\n` +
+          `${className}: ${previousClassLevel} → ${nextClassLevel}\n` +
+          `Nível total: ${previousCharacterLevel} → ${nextCharacterLevel}`,
+      },
+    ]);
+
+    setActiveRightTab("chat");
+  }
+
   async function handleConfirmCharacterSheetLevelUp(
     data: CharacterSheetLevelUpConfirmationPayload,
   ) {
@@ -1027,6 +1122,29 @@ export default function CampaignPlayPage() {
             : currentSheet,
         ),
       );
+
+      const previousClassEntry =
+        selectedSheet.classes?.find(
+          (classEntry) => classEntry.id === data.classEntryId,
+        ) ?? null;
+
+      const updatedClassEntry =
+        updatedCharacterSheet.classes?.find(
+          (classEntry) => classEntry.id === data.classEntryId,
+        ) ?? null;
+
+      publishLevelUpFeedbackToChat({
+        characterName: updatedCharacterSheet.name,
+        className:
+          updatedClassEntry?.characterClass.name ??
+          previousClassEntry?.characterClass.name ??
+          "Classe",
+        previousClassLevel: previousClassEntry?.level ?? 0,
+        nextClassLevel:
+          updatedClassEntry?.level ?? (previousClassEntry?.level ?? 0) + 1,
+        previousCharacterLevel: selectedSheet.level,
+        nextCharacterLevel: updatedCharacterSheet.level,
+      });
     } catch (error) {
       setLevelUpError(
         error instanceof Error
@@ -1727,7 +1845,20 @@ export default function CampaignPlayPage() {
         return;
       }
 
-      handleReadySheetRoll(event.data.payload);
+      if (event.data.type === "ROLL_SHEET_ACTION") {
+        handleReadySheetRoll(event.data.payload);
+        return;
+      }
+
+      publishLevelUpFeedbackToChat(event.data.payload);
+
+      void getCampaignCharacterSheets(params.id)
+        .then((updatedCharacterSheets) => {
+          setCharacterSheets(updatedCharacterSheets);
+        })
+        .catch((error) => {
+          console.error("Falha ao recarregar fichas após Level Up:", error);
+        });
     }
 
     window.addEventListener("message", handleCharacterSheetPopoutMessage);
@@ -1735,7 +1866,7 @@ export default function CampaignPlayPage() {
     return () => {
       window.removeEventListener("message", handleCharacterSheetPopoutMessage);
     };
-  }, [handleReadySheetRoll]);
+  }, [handleReadySheetRoll, params.id]);
 
   function handleRollCustomDice() {
     if (!Number.isInteger(customDiceSides) || customDiceSides < 2) {
@@ -3157,10 +3288,16 @@ export default function CampaignPlayPage() {
           characterSheet={getCharacterSheetByActor(selectedActor)}
           allSkills={characterBuilderOptions.skills}
           isGM={isGM}
+          canManageLevelUp={isOwner || isGM}
           isSavingCharacterSheetImages={isSavingCharacterSheetImages}
           isConfirmingLevelUp={isConfirmingLevelUp}
           levelUpError={levelUpError}
+          isUpdatingLevelUpAvailability={isUpdatingLevelUpAvailability}
+          levelUpAvailabilityError={levelUpAvailabilityError}
           onUpdateCharacterSheetImages={handleUpdateCharacterSheetImages}
+          onUpdateLevelUpAvailability={
+            handleUpdateCharacterSheetLevelUpAvailability
+          }
           onConfirmLevelUp={handleConfirmCharacterSheetLevelUp}
           onRollSheetAction={handleReadySheetRoll}
           onClose={() => setSelectedActor(null)}
@@ -3223,10 +3360,14 @@ function ActorSheetModal({
   characterSheet,
   allSkills,
   isGM,
+  canManageLevelUp,
   isSavingCharacterSheetImages,
   isConfirmingLevelUp,
   levelUpError,
+  isUpdatingLevelUpAvailability,
+  levelUpAvailabilityError,
   onUpdateCharacterSheetImages,
+  onUpdateLevelUpAvailability,
   onConfirmLevelUp,
   onRollSheetAction,
   onClose,
@@ -3235,9 +3376,12 @@ function ActorSheetModal({
   characterSheet: CharacterReadySheet | null;
   allSkills: CharacterBuilderOptions["skills"];
   isGM: boolean;
+  canManageLevelUp: boolean;
   isSavingCharacterSheetImages: boolean;
   isConfirmingLevelUp: boolean;
   levelUpError: string | null;
+  isUpdatingLevelUpAvailability: boolean;
+  levelUpAvailabilityError: string | null;
   onUpdateCharacterSheetImages: (
     characterSheetId: string,
     data: {
@@ -3245,6 +3389,10 @@ function ActorSheetModal({
       tokenImageUrl: string | null;
       tokenImageFit: CharacterReadySheet["tokenImageFit"];
     },
+  ) => Promise<void>;
+  onUpdateLevelUpAvailability: (
+    characterSheetId: string,
+    levelUpAvailable: boolean,
   ) => Promise<void>;
   onConfirmLevelUp: (
     data: CharacterSheetLevelUpConfirmationPayload,
@@ -3267,11 +3415,15 @@ function ActorSheetModal({
         characterSheet={characterSheet}
         allSkills={allSkills}
         isGM={isGM}
+        canManageLevelUp={canManageLevelUp}
         isSavingImages={isSavingCharacterSheetImages}
         isConfirmingLevelUp={isConfirmingLevelUp}
         levelUpError={levelUpError}
+        isUpdatingLevelUpAvailability={isUpdatingLevelUpAvailability}
+        levelUpAvailabilityError={levelUpAvailabilityError}
         popoutUrl={popoutUrl}
         onSaveImages={onUpdateCharacterSheetImages}
+        onUpdateLevelUpAvailability={onUpdateLevelUpAvailability}
         onConfirmLevelUp={onConfirmLevelUp}
         onRollSheetAction={onRollSheetAction}
         onClose={onClose}
