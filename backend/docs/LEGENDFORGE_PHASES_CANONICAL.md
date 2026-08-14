@@ -37,9 +37,9 @@ pnpm lint
 [x] Fase 3 — Sistema base/Seeds
 
 [em finalização] Fase 4 — Criação/Ficha de personagem
-[em finalização] Fase 4.5 — Polimentos finais e fundação de progressão
-[concluída funcionalmente] Fase 4.6 — Regras avançadas da criação de ficha
-[em andamento] Fase 4.7 — Multiclasse e Level Up real
+[x] Fase 4.5 — Polimentos finais e fundação de progressão
+[x] Fase 4.6 — Regras avançadas da criação de ficha
+[x] Fase 4.7 — Multiclasse e Level Up real
 [planejada] Fase 4.8 — Sub-ancestralidades e variações de origem
 
 [ ] Fase 5 — Biblioteca completa
@@ -73,9 +73,9 @@ pnpm lint
 [x] Fase 4.29 — Ataques, magias, equipamentos e ficha pronta avançada
 [x] Fase 4.30 — Documentação/checkpoint anterior
 [x] Fase 4.31 — Modularização/seed-content e imagens de equipamento
-[em finalização] Fase 4.5 — Polimentos finais e fundação de progressão
-[concluída funcionalmente] Fase 4.6 — Regras avançadas da criação de ficha
-[em andamento] Fase 4.7 — Multiclasse e Level Up real
+[x] Fase 4.5 — Polimentos finais e fundação de progressão
+[x] Fase 4.6 — Regras avançadas da criação de ficha
+[x] Fase 4.7 — Multiclasse e Level Up real
 [planejada] Fase 4.8 — Sub-ancestralidades e variações de origem
 
 3. Fase 4.5 — Polimentos finais e fundação de progressão
@@ -156,7 +156,7 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
 [x] 4.7.7.4 — Frontend types recebem origem interna da magia
 [x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
 
-[em andamento] 4.7.8 — Escolhas pendentes iniciais
+[x] 4.7.8 — Escolhas pendentes iniciais
 [x] 4.7.8.1 — Mapear escolhas pendentes possíveis
 [x] 4.7.8.2 — Subclasse pendente
 [x] 4.7.8.2.1 — Expor subclasses dentro de cada classe
@@ -284,18 +284,18 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
         [x] 4.7.14.8 — Testar GM, owner e player
 [x] 4.7.15 — Jogador vê Level Up apenas quando liberado
 [x] 4.7.16 — Jogador confirma Level Up liberado
-[ ] 4.7.17 — Feedback no chat após Level Up
+[x] 4.7.17 — Feedback no chat após Level Up
 
 5.5. Fase 4.8 — Sub-ancestralidades e variações de origem
 
 Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade principal.
 
 [ ] Fase 4.8 — Sub-ancestralidades e variações de origem
-[ ] 4.8.1 — Modelar SubAncestry no Prisma
-[ ] 4.8.2 — Seed inicial de sub-ancestralidades
-[ ] 4.8.3 — Expor sub-ancestralidades no /character-options
-[ ] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
-[ ] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
+[x] 4.8.1 — Modelar SubAncestry no Prisma
+[x] 4.8.2 — Seed inicial de sub-ancestralidades
+[x] 4.8.3 — Expor sub-ancestralidades no /character-options
+[x] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
+[x] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
 [ ] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
 
 Exemplo:
@@ -438,17 +438,18 @@ Sylvaris → Sylvaris Alto
 
 A próxima micro de desenvolvimento é:
 
-Fase 4.8 — Sub-ancestralidades e variações de origem
+Fase 5 — Biblioteca completa
 
-Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade principal.
-
-[ ] Fase 4.8 — Sub-ancestralidades e variações de origem
-[ ] 4.8.1 — Modelar SubAncestry no Prisma
-[ ] 4.8.2 — Seed inicial de sub-ancestralidades
-[ ] 4.8.3 — Expor sub-ancestralidades no /character-options
-[ ] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
-[ ] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
-[ ] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
+[ ] 5.1 — Biblioteca real da campanha
+[ ] 5.2 — Biblioteca real do sistema
+[ ] 5.3 — Organização por categorias
+[ ] 5.4 — Itens na biblioteca
+[ ] 5.5 — Magias na biblioteca
+[ ] 5.6 — Templates de personagem/NPC/criatura
+[ ] 5.7 — Biblioteca de NPCs
+[ ] 5.8 — Biblioteca de criaturas
+[ ] 5.9 — Enviar NPC/criatura da biblioteca para mesa
+[ ] 5.10 — Editar instância da campanha sem alterar template original
 
 19. Nota de verdade canônica
 

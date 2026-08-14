@@ -198,6 +198,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     | "class"
     | "background"
     | "ancestry"
+    | "subancestry"
     | "feature"
     | "manual";
 
@@ -220,6 +221,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     background: 60,
     class: 50,
     ancestry: 40,
+    subancestry: 35,
     feature: 30,
     builder: 20,
     manual: 10,
@@ -245,6 +247,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
   type CharacterSheetUpdateBody = {
     classId?: string | null;
     ancestryId?: string | null;
+    subAncestryId?: string | null;
     backgroundId?: string | null;
     subclassId?: string | null;
     classEntries?: z.infer<typeof characterClassEntriesSchema>;
@@ -1922,6 +1925,46 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     };
   }
 
+  function mergeCharacterLanguageEntries(
+    ...entryGroups: Array<
+      Array<{
+        languageId: string;
+        source: CharacterProficiencySource;
+      }>
+    >
+  ) {
+    const entriesByLanguageId = new Map<
+      string,
+      {
+        languageId: string;
+        source: CharacterProficiencySource;
+      }
+    >();
+
+    for (const entries of entryGroups) {
+      for (const entry of entries) {
+        const currentEntry = entriesByLanguageId.get(entry.languageId);
+
+        if (!currentEntry) {
+          entriesByLanguageId.set(entry.languageId, entry);
+          continue;
+        }
+
+        const currentPriority =
+          characterProficiencySourcePriority[currentEntry.source];
+
+        const nextPriority =
+          characterProficiencySourcePriority[entry.source];
+
+        if (nextPriority > currentPriority) {
+          entriesByLanguageId.set(entry.languageId, entry);
+        }
+      }
+    }
+
+    return Array.from(entriesByLanguageId.values());
+  }
+
   async function replaceCharacterSheetLanguages(
     characterSheetId: string,
     entries: Array<{
@@ -2179,6 +2222,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
   type CharacterSheetFeatureSource = {
     systemId: string;
     ancestryId: string | null;
+    subAncestryId: string | null;
     classId: string | null;
     subclassId: string | null;
     level: number;
@@ -2223,6 +2267,12 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       });
     }
 
+    if (characterSheet.subAncestryId) {
+      featureConditions.push({
+        subAncestryId: characterSheet.subAncestryId,
+      });
+    }
+
     const classFeatureSources =
       getCharacterSheetClassFeatureSources(characterSheet);
 
@@ -2263,6 +2313,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         level: true,
         order: true,
         ancestryId: true,
+        subAncestryId: true,
         classId: true,
         subclassId: true,
         levelProgressionId: true,
@@ -2324,6 +2375,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         level: true,
         order: true,
         ancestryId: true,
+        subAncestryId: true,
         classId: true,
         subclassId: true,
         levelProgressionId: true,
@@ -3134,6 +3186,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     fallbackSubclassId,
     fallbackLevel,
     ancestryId,
+    subAncestryId,
     backgroundId,
   }: {
     systemId: string;
@@ -3145,6 +3198,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     fallbackSubclassId: string | null | undefined;
     fallbackLevel: number | null | undefined;
     ancestryId: string | null | undefined;
+    subAncestryId: string | null | undefined;
     backgroundId: string | null | undefined;
   }) {
     if (featureChoiceSelections === undefined) {
@@ -3249,6 +3303,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       const matchesAncestry =
         !choiceGroup.ancestryId || choiceGroup.ancestryId === ancestryId;
 
+      const matchesSubAncestry =
+        !choiceGroup.subAncestryId ||
+        choiceGroup.subAncestryId === subAncestryId;
+
       const matchesBackground =
         !choiceGroup.backgroundId || choiceGroup.backgroundId === backgroundId;
 
@@ -3274,6 +3332,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
       const isChoiceGroupApplicable =
         matchesAncestry &&
+        matchesSubAncestry &&
         matchesBackground &&
         matchesClass &&
         matchesSubclass &&
@@ -3424,6 +3483,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     campaignActor: true,
     system: true,
     ancestry: true,
+    subAncestry: true,
     background: true,
     characterClass: {
       include: {
@@ -3713,6 +3773,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             .uuid("Invalid ancestry id")
             .nullable()
             .optional(),
+          subAncestryId: z
+            .string()
+            .uuid("Invalid sub-ancestry id")
+            .nullable()
+            .optional(),
           backgroundId: z
             .string()
             .uuid("Invalid background id")
@@ -3781,6 +3846,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         classId,
         classEntries,
         ancestryId,
+        subAncestryId,
         backgroundId,
         name,
         pronouns,
@@ -4055,6 +4121,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             select: {
               id: true,
               attributeBonuses: true,
+              languageKeys: true,
             },
           })
         : null;
@@ -4062,6 +4129,35 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       if (ancestryId && !selectedAncestry) {
         return reply.status(404).send({
           message: "Ancestry not found for this system",
+        });
+      }
+
+      if (subAncestryId && !selectedAncestry) {
+        return reply.status(400).send({
+          message: "Choose an ancestry before choosing a sub-ancestry",
+        });
+      }
+
+      const selectedSubAncestry = subAncestryId
+        ? await prisma.subAncestry.findFirst({
+            where: {
+              id: subAncestryId,
+              systemId,
+              ancestryId: selectedAncestry?.id,
+            },
+            select: {
+              id: true,
+              ancestryId: true,
+              attributeBonuses: true,
+              languageKeys: true,
+            },
+          })
+        : null;
+
+      if (subAncestryId && !selectedSubAncestry) {
+        return reply.status(400).send({
+          message:
+            "Sub-ancestry not found for the selected ancestry and system",
         });
       }
 
@@ -4075,6 +4171,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
               id: true,
               attributeBonuses: true,
               skillKeys: true,
+              languageKeys: true,
             },
           })
         : null;
@@ -4087,6 +4184,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
       const sourceAttributeBonuses = mergeAttributeBonusMaps(
         normalizeAttributeBonusMap(selectedAncestry?.attributeBonuses),
+        normalizeAttributeBonusMap(selectedSubAncestry?.attributeBonuses),
         normalizeAttributeBonusMap(selectedBackground?.attributeBonuses),
       );
 
@@ -4171,17 +4269,62 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const languageEntriesResult = await getCharacterLanguageEntries({
+      const builderLanguageEntriesResult = await getCharacterLanguageEntries({
         systemId,
         languageKeys,
         source: "builder",
       });
 
-      if (languageEntriesResult.error) {
+      if (builderLanguageEntriesResult.error) {
         return reply.status(400).send({
-          message: languageEntriesResult.error,
+          message: builderLanguageEntriesResult.error,
         });
       }
+
+      const ancestryLanguageEntriesResult = await getCharacterLanguageEntries({
+        systemId,
+        languageKeys: selectedAncestry?.languageKeys ?? [],
+        source: "ancestry",
+      });
+
+      if (ancestryLanguageEntriesResult.error) {
+        return reply.status(400).send({
+          message: ancestryLanguageEntriesResult.error,
+        });
+      }
+
+      const subAncestryLanguageEntriesResult =
+        await getCharacterLanguageEntries({
+          systemId,
+          languageKeys: selectedSubAncestry?.languageKeys ?? [],
+          source: "subancestry",
+        });
+
+      if (subAncestryLanguageEntriesResult.error) {
+        return reply.status(400).send({
+          message: subAncestryLanguageEntriesResult.error,
+        });
+      }
+
+      const backgroundLanguageEntriesResult =
+        await getCharacterLanguageEntries({
+          systemId,
+          languageKeys: selectedBackground?.languageKeys ?? [],
+          source: "background",
+        });
+
+      if (backgroundLanguageEntriesResult.error) {
+        return reply.status(400).send({
+          message: backgroundLanguageEntriesResult.error,
+        });
+      }
+
+      const mergedLanguageEntries = mergeCharacterLanguageEntries(
+        ancestryLanguageEntriesResult.entries,
+        subAncestryLanguageEntriesResult.entries,
+        backgroundLanguageEntriesResult.entries,
+        builderLanguageEntriesResult.entries,
+      );
 
       const equipmentEntriesResult = await getCharacterEquipmentEntries(
         systemId,
@@ -4203,6 +4346,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           fallbackSubclassId: effectiveSubclassId,
           fallbackLevel: effectiveLevel,
           ancestryId: ancestryId ?? null,
+          subAncestryId: subAncestryId ?? null,
           backgroundId: backgroundId ?? null,
         },
       );
@@ -4237,6 +4381,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           classId: effectiveClassId,
           subclassId: effectiveSubclassId,
           ancestryId: ancestryId ?? null,
+          subAncestryId: selectedSubAncestry?.id ?? null,
           backgroundId: backgroundId ?? null,
 
           name,
@@ -4297,12 +4442,10 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         );
       }
 
-      if (languageKeys !== undefined) {
-        await replaceCharacterSheetLanguages(
-          characterSheet.id,
-          languageEntriesResult.entries,
-        );
-      }
+      await replaceCharacterSheetLanguages(
+        characterSheet.id,
+        mergedLanguageEntries,
+      );
 
       if (equipmentItems !== undefined) {
         await replaceCharacterSheetEquipment(
@@ -4368,6 +4511,11 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             ancestryId: z
               .string()
               .uuid("Invalid ancestry id")
+              .nullable()
+              .optional(),
+            subAncestryId: z
+              .string()
+              .uuid("Invalid sub-ancestry id")
               .nullable()
               .optional(),
             backgroundId: z
@@ -4545,6 +4693,15 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
             select: {
               id: true,
               attributeBonuses: true,
+              languageKeys: true,
+            },
+          },
+          subAncestry: {
+            select: {
+              id: true,
+              ancestryId: true,
+              attributeBonuses: true,
+              languageKeys: true,
             },
           },
           background: {
@@ -4552,6 +4709,17 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
               id: true,
               attributeBonuses: true,
               skillKeys: true,
+              languageKeys: true,
+            },
+          },
+          languages: {
+            select: {
+              source: true,
+              language: {
+                select: {
+                  key: true,
+                },
+              },
             },
           },
           stats: {
@@ -4776,6 +4944,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
                 select: {
                   id: true,
                   attributeBonuses: true,
+                  languageKeys: true,
                 },
               })
             : null;
@@ -4783,6 +4952,42 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
       if (sheetData.ancestryId && !selectedAncestry) {
         return reply.status(404).send({
           message: "Ancestry not found for this system",
+        });
+      }
+
+      const selectedSubAncestry =
+        sheetData.subAncestryId !== undefined
+          ? sheetData.subAncestryId
+            ? await prisma.subAncestry.findFirst({
+                where: {
+                  id: sheetData.subAncestryId,
+                  systemId: characterSheet.systemId,
+                  ancestryId: selectedAncestry?.id,
+                },
+                select: {
+                  id: true,
+                  ancestryId: true,
+                  attributeBonuses: true,
+                  languageKeys: true,
+                },
+              })
+            : null
+          : sheetData.ancestryId !== undefined
+            ? characterSheet.subAncestry?.ancestryId === selectedAncestry?.id
+              ? characterSheet.subAncestry
+              : null
+            : characterSheet.subAncestry;
+
+      if (sheetData.subAncestryId && !selectedAncestry) {
+        return reply.status(400).send({
+          message: "Choose an ancestry before choosing a sub-ancestry",
+        });
+      }
+
+      if (sheetData.subAncestryId && !selectedSubAncestry) {
+        return reply.status(400).send({
+          message:
+            "Sub-ancestry not found for the selected ancestry and system",
         });
       }
 
@@ -4799,6 +5004,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
                   id: true,
                   attributeBonuses: true,
                   skillKeys: true,
+                  languageKeys: true,
                 },
               })
             : null;
@@ -4858,6 +5064,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
       const sourceAttributeBonuses = mergeAttributeBonusMaps(
         normalizeAttributeBonusMap(selectedAncestry?.attributeBonuses),
+        normalizeAttributeBonusMap(selectedSubAncestry?.attributeBonuses),
         normalizeAttributeBonusMap(selectedBackground?.attributeBonuses),
       );
 
@@ -4909,6 +5116,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         progressionChoices !== undefined ||
         attributes !== undefined ||
         sheetData.ancestryId !== undefined ||
+        sheetData.subAncestryId !== undefined ||
         sheetData.backgroundId !== undefined
           ? await validateCharacterProgressionAttributeMaximum({
               systemId: characterSheet.systemId,
@@ -4982,17 +5190,68 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         });
       }
 
-      const languageEntriesResult = await getCharacterLanguageEntries({
+      const effectiveBuilderLanguageKeys =
+        languageKeys ??
+        characterSheet.languages
+          .filter((entry) => entry.source === "builder")
+          .map((entry) => entry.language.key);
+
+      const builderLanguageEntriesResult = await getCharacterLanguageEntries({
         systemId: characterSheet.systemId,
-        languageKeys,
+        languageKeys: effectiveBuilderLanguageKeys,
         source: "builder",
       });
 
-      if (languageEntriesResult.error) {
+      if (builderLanguageEntriesResult.error) {
         return reply.status(400).send({
-          message: languageEntriesResult.error,
+          message: builderLanguageEntriesResult.error,
         });
       }
+
+      const ancestryLanguageEntriesResult = await getCharacterLanguageEntries({
+        systemId: characterSheet.systemId,
+        languageKeys: selectedAncestry?.languageKeys ?? [],
+        source: "ancestry",
+      });
+
+      if (ancestryLanguageEntriesResult.error) {
+        return reply.status(400).send({
+          message: ancestryLanguageEntriesResult.error,
+        });
+      }
+
+      const subAncestryLanguageEntriesResult =
+        await getCharacterLanguageEntries({
+          systemId: characterSheet.systemId,
+          languageKeys: selectedSubAncestry?.languageKeys ?? [],
+          source: "subancestry",
+        });
+
+      if (subAncestryLanguageEntriesResult.error) {
+        return reply.status(400).send({
+          message: subAncestryLanguageEntriesResult.error,
+        });
+      }
+
+      const backgroundLanguageEntriesResult =
+        await getCharacterLanguageEntries({
+          systemId: characterSheet.systemId,
+          languageKeys: selectedBackground?.languageKeys ?? [],
+          source: "background",
+        });
+
+      if (backgroundLanguageEntriesResult.error) {
+        return reply.status(400).send({
+          message: backgroundLanguageEntriesResult.error,
+        });
+      }
+
+      const mergedLanguageEntries = mergeCharacterLanguageEntries(
+        ancestryLanguageEntriesResult.entries,
+        subAncestryLanguageEntriesResult.entries,
+        backgroundLanguageEntriesResult.entries,
+        builderLanguageEntriesResult.entries,
+      );
 
       const equipmentEntriesResult = await getCharacterEquipmentEntries(
         characterSheet.systemId,
@@ -5014,6 +5273,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
           fallbackSubclassId: sheetData.subclassId ?? characterSheet.subclassId,
           fallbackLevel: sheetData.level ?? characterSheet.level,
           ancestryId: selectedAncestry?.id ?? null,
+          subAncestryId: selectedSubAncestry?.id ?? null,
           backgroundId: selectedBackground?.id ?? null,
         },
       );
@@ -5227,10 +5487,15 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
         await replaceCharacterSheetSpells(sheetId, spellEntriesResult.entries);
       }
 
-      if (languageKeys !== undefined) {
+      if (
+        languageKeys !== undefined ||
+        sheetData.ancestryId !== undefined ||
+        sheetData.subAncestryId !== undefined ||
+        sheetData.backgroundId !== undefined
+      ) {
         await replaceCharacterSheetLanguages(
           sheetId,
-          languageEntriesResult.entries,
+          mergedLanguageEntries,
         );
       }
 
@@ -6327,6 +6592,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
     classId: string | null;
     subclassId: string | null;
     ancestryId: string | null;
+    subAncestryId: string | null;
     backgroundId: string | null;
     ancestry: {
       languageKeys: string[];
@@ -6400,6 +6666,17 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
     if (!characterSheet.ancestryId) {
       errors.push("Escolha uma ancestralidade.");
+    } else if (!characterSheet.subAncestryId) {
+      const availableSubAncestryCount = await prisma.subAncestry.count({
+        where: {
+          systemId: characterSheet.systemId,
+          ancestryId: characterSheet.ancestryId,
+        },
+      });
+
+      if (availableSubAncestryCount > 0) {
+        errors.push("Escolha uma sub-ancestralidade.");
+      }
     }
 
     if (!characterSheet.backgroundId) {
@@ -6919,6 +7196,7 @@ export async function characterSheetsRoutes(app: FastifyInstance) {
 
       const sourceAttributeBonuses = mergeAttributeBonusMaps(
         normalizeAttributeBonusMap(characterSheet.ancestry?.attributeBonuses),
+        normalizeAttributeBonusMap(characterSheet.subAncestry?.attributeBonuses),
         normalizeAttributeBonusMap(characterSheet.background?.attributeBonuses),
       );
 

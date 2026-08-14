@@ -24,6 +24,9 @@ type CharacterBuilderClassOption = CharacterBuilderOptions["classes"][number];
 type CharacterBuilderAncestryOption =
   CharacterBuilderOptions["ancestries"][number];
 
+type CharacterBuilderSubAncestryOption =
+  NonNullable<CharacterBuilderOptions["subAncestries"]>[number];
+
 type CharacterBuilderBackgroundOption =
   CharacterBuilderOptions["backgrounds"][number];
 
@@ -32,6 +35,7 @@ type GetCharacterBuilderValidationStateParams = {
   options: CharacterBuilderOptions;
   selectedClass: CharacterBuilderClassOption | undefined;
   selectedAncestry: CharacterBuilderAncestryOption | undefined;
+  selectedSubAncestry?: CharacterBuilderSubAncestryOption;
   selectedBackground: CharacterBuilderBackgroundOption | undefined;
   selectedClassDisplayName: string;
 };
@@ -41,12 +45,26 @@ export function getCharacterBuilderValidationState({
   options,
   selectedClass,
   selectedAncestry,
+  selectedSubAncestry,
   selectedBackground,
   selectedClassDisplayName,
 }: GetCharacterBuilderValidationStateParams) {
   const orderedClassEntries = [...draft.classEntries].sort(
     (firstEntry, secondEntry) => firstEntry.order - secondEntry.order,
   );
+
+  const selectedAncestrySubAncestries = (options.subAncestries ?? []).filter(
+    (subAncestry) => subAncestry.ancestryId === draft.ancestryId,
+  );
+
+  const requiresSubAncestry =
+    Boolean(draft.ancestryId) && selectedAncestrySubAncestries.length > 0;
+
+  const hasValidSelectedSubAncestry =
+    !requiresSubAncestry ||
+    selectedAncestrySubAncestries.some(
+      (subAncestry) => subAncestry.id === draft.subAncestryId,
+    );
 
   const pendingSubclassEntries = orderedClassEntries.filter((classEntry) => {
     const characterClass = options.classes.find(
@@ -201,6 +219,13 @@ export function getCharacterBuilderValidationState({
       }
 
       if (
+        choiceGroup.subAncestryId &&
+        choiceGroup.subAncestryId !== selectedSubAncestry?.id
+      ) {
+        return false;
+      }
+
+      if (
         choiceGroup.backgroundId &&
         choiceGroup.backgroundId !== selectedBackground?.id
       ) {
@@ -337,6 +362,7 @@ export function getCharacterBuilderValidationState({
   const automaticLanguageKeys = Array.from(
     new Set([
       ...(selectedAncestry?.languageKeys ?? []),
+      ...(selectedSubAncestry?.languageKeys ?? []),
       ...(selectedBackground?.languageKeys ?? []),
     ]),
   );
@@ -361,6 +387,7 @@ export function getCharacterBuilderValidationState({
     draft,
     talents: options.talents,
     selectedAncestry,
+    selectedSubAncestry,
     selectedBackground,
   });
 
@@ -423,7 +450,7 @@ export function getCharacterBuilderValidationState({
     }
 
     if (stepId === "ancestry") {
-      return Boolean(draft.ancestryId);
+      return Boolean(draft.ancestryId) && hasValidSelectedSubAncestry;
     }
 
     if (stepId === "background") {
@@ -501,6 +528,14 @@ export function getCharacterBuilderValidationState({
       return "Escolha uma ancestralidade antes de avançar.";
     }
 
+    if (
+      stepId === "ancestry" &&
+      requiresSubAncestry &&
+      !hasValidSelectedSubAncestry
+    ) {
+      return "Escolha uma sub-ancestralidade antes de avançar.";
+    }
+
     if (stepId === "background" && !draft.backgroundId) {
       return "Escolha um antecedente antes de avançar.";
     }
@@ -572,6 +607,12 @@ export function getCharacterBuilderValidationState({
   }
 
   const finalizationValidationMessages: string[] = [];
+
+  if (requiresSubAncestry && !hasValidSelectedSubAncestry) {
+    finalizationValidationMessages.push(
+      "Escolha uma sub-ancestralidade antes de finalizar a ficha.",
+    );
+  }
 
   if (hasPendingSubclassChoices) {
     finalizationValidationMessages.push(

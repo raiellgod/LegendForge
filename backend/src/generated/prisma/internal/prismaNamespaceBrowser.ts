@@ -57,6 +57,7 @@ export const ModelName = {
   Verification: 'Verification',
   GameSystem: 'GameSystem',
   Ancestry: 'Ancestry',
+  SubAncestry: 'SubAncestry',
   Background: 'Background',
   CharacterSheet: 'CharacterSheet',
   Language: 'Language',
@@ -194,6 +195,24 @@ export const AncestryScalarFieldEnum = {
 export type AncestryScalarFieldEnum = (typeof AncestryScalarFieldEnum)[keyof typeof AncestryScalarFieldEnum]
 
 
+export const SubAncestryScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  ancestryId: 'ancestryId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  sizeCategoryOverride: 'sizeCategoryOverride',
+  attributeBonuses: 'attributeBonuses',
+  languageKeys: 'languageKeys',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubAncestryScalarFieldEnum = (typeof SubAncestryScalarFieldEnum)[keyof typeof SubAncestryScalarFieldEnum]
+
+
 export const BackgroundScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -221,6 +240,7 @@ export const CharacterSheetScalarFieldEnum = {
   campaignActorId: 'campaignActorId',
   ownerId: 'ownerId',
   ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
   backgroundId: 'backgroundId',
   classId: 'classId',
   subclassId: 'subclassId',
@@ -490,6 +510,7 @@ export const FeatureScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
   ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
   backgroundId: 'backgroundId',
   classId: 'classId',
   subclassId: 'subclassId',
@@ -528,6 +549,7 @@ export const FeatureChoiceGroupScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
   ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
   backgroundId: 'backgroundId',
   classId: 'classId',
   subclassId: 'subclassId',

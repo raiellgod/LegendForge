@@ -11,6 +11,7 @@ import type {
   CharacterBuilderLanguageOption,
   CharacterBuilderSkillOption,
   CharacterBuilderSpellOption,
+  CharacterBuilderSubAncestryOption,
 } from "../types/character-builder-types";
 
 import { CHARACTER_ATTRIBUTE_DEFINITIONS } from "../constants/character-builder-constants";
@@ -132,16 +133,25 @@ function getApplicableReviewFeatureChoiceGroups({
   options,
   classEntries,
   ancestryId,
+  subAncestryId,
   backgroundId,
 }: {
   options: CharacterBuilderOptions;
   classEntries: CharacterBuilderDraft["classEntries"];
   ancestryId: string | null;
+  subAncestryId: string | null;
   backgroundId: string | null;
 }) {
   return options.featureChoiceGroups
     .filter((choiceGroup) => {
       if (choiceGroup.ancestryId && choiceGroup.ancestryId !== ancestryId) {
+        return false;
+      }
+
+      if (
+        choiceGroup.subAncestryId &&
+        choiceGroup.subAncestryId !== subAncestryId
+      ) {
         return false;
       }
 
@@ -309,6 +319,7 @@ type CharacterReviewStepProps = {
   options: CharacterBuilderOptions;
   selectedClass: CharacterBuilderClassOption | undefined;
   selectedAncestry: CharacterBuilderAncestryOption | undefined;
+  selectedSubAncestry: CharacterBuilderSubAncestryOption | undefined;
   selectedBackground: CharacterBuilderBackgroundOption | undefined;
 };
 
@@ -317,6 +328,7 @@ export function CharacterReviewStep({
   options,
   selectedClass,
   selectedAncestry,
+  selectedSubAncestry,
   selectedBackground,
 }: CharacterReviewStepProps) {
   const safeCharacterLevel = Number.isFinite(draft.level)
@@ -351,6 +363,7 @@ export function CharacterReviewStep({
     draft,
     talents: options.talents,
     selectedAncestry,
+    selectedSubAncestry,
     selectedBackground,
   });
 
@@ -370,6 +383,7 @@ export function CharacterReviewStep({
   const automaticLanguageKeys = Array.from(
     new Set([
       ...(selectedAncestry?.languageKeys ?? []),
+      ...(selectedSubAncestry?.languageKeys ?? []),
       ...(selectedBackground?.languageKeys ?? []),
     ]),
   );
@@ -464,6 +478,7 @@ export function CharacterReviewStep({
     options,
     classEntries: reviewClassEntries,
     ancestryId: selectedAncestry?.id ?? null,
+    subAncestryId: selectedSubAncestry?.id ?? null,
     backgroundId: selectedBackground?.id ?? null,
   });
 
@@ -799,7 +814,7 @@ export function CharacterReviewStep({
 
       <CharacterReviewSection
         title="Origem e caminho"
-        description="Classe, ancestralidade, antecedente e nível atual do personagem."
+        description="Classe, ancestralidade, sub-ancestralidade quando houver, antecedente e nível atual do personagem."
       >
         <div className="grid gap-3 md:grid-cols-2">
           <CharacterReviewFact label="Classes" value={classSummaryLabel} />
@@ -810,6 +825,16 @@ export function CharacterReviewStep({
               (selectedAncestry?.name ?? draft.ancestryName) || "Não definida"
             }
           />
+
+          {selectedSubAncestry || draft.subAncestryName ? (
+            <CharacterReviewFact
+              label="Sub-ancestralidade"
+              value={
+                (selectedSubAncestry?.name ?? draft.subAncestryName) ||
+                "Não definida"
+              }
+            />
+          ) : null}
 
           <CharacterReviewFact
             label="Antecedente"
@@ -937,6 +962,7 @@ export function CharacterReviewStep({
               draft,
               talents: options.talents,
               selectedAncestry,
+              selectedSubAncestry,
               selectedBackground,
             });
 

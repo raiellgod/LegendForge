@@ -48,6 +48,11 @@ export type GameSystem = Prisma.GameSystemModel
  */
 export type Ancestry = Prisma.AncestryModel
 /**
+ * Model SubAncestry
+ * 
+ */
+export type SubAncestry = Prisma.SubAncestryModel
+/**
  * Model Background
  * 
  */

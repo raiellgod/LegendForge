@@ -266,6 +266,8 @@ function createEmptyCharacterBuilderDraft(): CharacterBuilderDraft {
 
     ancestryId: "",
     ancestryName: "",
+    subAncestryId: "",
+    subAncestryName: "",
 
     backgroundId: "",
     backgroundName: "",
@@ -468,6 +470,8 @@ function createCharacterBuilderDraftFromSheet(
 
     ancestryId: sheet.ancestry?.id ?? "",
     ancestryName: sheet.ancestry?.name ?? "",
+    subAncestryId: sheet.subAncestry?.id ?? "",
+    subAncestryName: sheet.subAncestry?.name ?? "",
 
     backgroundId: sheet.background?.id ?? "",
     backgroundName: sheet.background?.name ?? "",
@@ -582,6 +586,7 @@ export default function CampaignPlayPage() {
     useState<CharacterBuilderOptions>({
       classes: [],
       ancestries: [],
+      subAncestries: [],
       backgrounds: [],
       skills: [],
       spells: [],
@@ -2477,6 +2482,7 @@ export default function CampaignPlayPage() {
       const nextCharacterBuilderOptions: CharacterBuilderOptions = {
         classes: data.classes ?? [],
         ancestries: data.ancestries ?? [],
+        subAncestries: data.subAncestries ?? [],
         backgrounds: data.backgrounds ?? [],
         skills: data.skills ?? [],
         spells: data.spells ?? [],
@@ -2575,10 +2581,18 @@ export default function CampaignPlayPage() {
       }
 
       if (type === "ancestry") {
+        const isChangingAncestry = currentDraft.ancestryId !== option.id;
+
         return {
           ...currentDraft,
           ancestryId: option.id,
           ancestryName: option.name,
+          subAncestryId: isChangingAncestry
+            ? ""
+            : currentDraft.subAncestryId,
+          subAncestryName: isChangingAncestry
+            ? ""
+            : currentDraft.subAncestryName,
         };
       }
 
@@ -2661,6 +2675,7 @@ export default function CampaignPlayPage() {
           }),
         ),
         ancestryId: characterBuilderDraft.ancestryId || null,
+        subAncestryId: characterBuilderDraft.subAncestryId || null,
         backgroundId: characterBuilderDraft.backgroundId || null,
         attributes: getPersistableCharacterAttributes(
           characterBuilderDraft.attributes,

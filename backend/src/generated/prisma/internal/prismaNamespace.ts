@@ -390,6 +390,7 @@ export const ModelName = {
   Verification: 'Verification',
   GameSystem: 'GameSystem',
   Ancestry: 'Ancestry',
+  SubAncestry: 'SubAncestry',
   Background: 'Background',
   CharacterSheet: 'CharacterSheet',
   Language: 'Language',
@@ -436,7 +437,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterSheetProgressionChoice" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "talent" | "featureChoiceGroup" | "featureChoiceOption" | "characterSheetFeatureChoice" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "ancestry" | "subAncestry" | "background" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterSheetProgressionChoice" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "talent" | "featureChoiceGroup" | "featureChoiceOption" | "characterSheetFeatureChoice" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -881,6 +882,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AncestryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AncestryCountAggregateOutputType> | number
+        }
+      }
+    }
+    SubAncestry: {
+      payload: Prisma.$SubAncestryPayload<ExtArgs>
+      fields: Prisma.SubAncestryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SubAncestryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SubAncestryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>
+        }
+        findFirst: {
+          args: Prisma.SubAncestryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SubAncestryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>
+        }
+        findMany: {
+          args: Prisma.SubAncestryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>[]
+        }
+        create: {
+          args: Prisma.SubAncestryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>
+        }
+        createMany: {
+          args: Prisma.SubAncestryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SubAncestryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>[]
+        }
+        delete: {
+          args: Prisma.SubAncestryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>
+        }
+        update: {
+          args: Prisma.SubAncestryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>
+        }
+        deleteMany: {
+          args: Prisma.SubAncestryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SubAncestryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SubAncestryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>[]
+        }
+        upsert: {
+          args: Prisma.SubAncestryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubAncestryPayload>
+        }
+        aggregate: {
+          args: Prisma.SubAncestryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSubAncestry>
+        }
+        groupBy: {
+          args: Prisma.SubAncestryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubAncestryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SubAncestryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubAncestryCountAggregateOutputType> | number
         }
       }
     }
@@ -3305,6 +3380,24 @@ export const AncestryScalarFieldEnum = {
 export type AncestryScalarFieldEnum = (typeof AncestryScalarFieldEnum)[keyof typeof AncestryScalarFieldEnum]
 
 
+export const SubAncestryScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  ancestryId: 'ancestryId',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  sizeCategoryOverride: 'sizeCategoryOverride',
+  attributeBonuses: 'attributeBonuses',
+  languageKeys: 'languageKeys',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubAncestryScalarFieldEnum = (typeof SubAncestryScalarFieldEnum)[keyof typeof SubAncestryScalarFieldEnum]
+
+
 export const BackgroundScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -3332,6 +3425,7 @@ export const CharacterSheetScalarFieldEnum = {
   campaignActorId: 'campaignActorId',
   ownerId: 'ownerId',
   ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
   backgroundId: 'backgroundId',
   classId: 'classId',
   subclassId: 'subclassId',
@@ -3601,6 +3695,7 @@ export const FeatureScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
   ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
   backgroundId: 'backgroundId',
   classId: 'classId',
   subclassId: 'subclassId',
@@ -3639,6 +3734,7 @@ export const FeatureChoiceGroupScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
   ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
   backgroundId: 'backgroundId',
   classId: 'classId',
   subclassId: 'subclassId',
@@ -4338,6 +4434,7 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   gameSystem?: Prisma.GameSystemOmit
   ancestry?: Prisma.AncestryOmit
+  subAncestry?: Prisma.SubAncestryOmit
   background?: Prisma.BackgroundOmit
   characterSheet?: Prisma.CharacterSheetOmit
   language?: Prisma.LanguageOmit

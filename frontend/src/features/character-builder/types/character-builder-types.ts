@@ -109,6 +109,8 @@ export type CharacterBuilderDraft = {
 
   ancestryId: string;
   ancestryName: string;
+  subAncestryId: string;
+  subAncestryName: string;
 
   backgroundId: string;
   backgroundName: string;
@@ -213,6 +215,14 @@ export type CharacterBuilderAncestryOption = CharacterBuilderOption & {
   attributeBonuses: CharacterAttributeBonusMap;
 };
 
+export type CharacterBuilderSubAncestryOption = CharacterBuilderOption & {
+  ancestryId: string;
+  sizeCategoryOverride: string | null;
+  languageKeys: string[];
+  attributeBonuses: CharacterAttributeBonusMap;
+  order: number;
+};
+
 export type CharacterBuilderBackgroundOption = CharacterBuilderOption & {
   skillKeys: string[];
   toolNames: string[];
@@ -290,6 +300,7 @@ export type CharacterBuilderEquipmentOption = CharacterBuilderOption & {
 export type CharacterBuilderOptions = {
   classes: CharacterBuilderClassOption[];
   ancestries: CharacterBuilderAncestryOption[];
+  subAncestries?: CharacterBuilderSubAncestryOption[];
   backgrounds: CharacterBuilderBackgroundOption[];
   skills: CharacterBuilderSkillOption[];
   spells: CharacterBuilderSpellOption[];
@@ -321,6 +332,7 @@ export type CharacterBuilderFeatureOption = {
   level: number | null;
   order: number;
   ancestryId: string | null;
+  subAncestryId: string | null;
   classId: string | null;
   subclassId: string | null;
   levelProgressionId: string | null;
@@ -340,6 +352,7 @@ export type CharacterBuilderFeatureChoiceGroup = {
   choiceCount: number;
   order: number;
   ancestryId: string | null;
+  subAncestryId: string | null;
   backgroundId: string | null;
   classId: string | null;
   subclassId: string | null;
@@ -361,6 +374,7 @@ export type CharacterReadySheetFeature = {
   level: number | null;
   order: number;
   ancestryId: string | null;
+  subAncestryId: string | null;
   classId: string | null;
   subclassId: string | null;
   levelProgressionId: string | null;
@@ -778,6 +792,16 @@ export type CharacterReadySheet = CharacterSheetCombatState & {
     name: string;
     description: string | null;
     defaultSizeCategory: string;
+    languageKeys: string[];
+  } | null;
+
+  subAncestry: {
+    id: string;
+    ancestryId: string;
+    key: string;
+    name: string;
+    description: string | null;
+    sizeCategoryOverride: string | null;
     languageKeys: string[];
   } | null;
 

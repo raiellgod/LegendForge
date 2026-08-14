@@ -12,6 +12,7 @@ import { languages } from "./seed-data/languages.js";
 import { skills } from "./seed-data/skills.js";
 import { spells } from "./seed-data/spells.js";
 import { stats } from "./seed-data/stats.js";
+import { subAncestries } from "./seed-data/sub-ancestries.js";
 import { subclasses } from "./seed-data/subclasses.js";
 import { talents } from "./seed-data/talents.js";
 
@@ -497,6 +498,7 @@ async function main() {
 
   const createdStats = new Map<string, string>();
   const createdAncestries = new Map<string, string>();
+  const createdSubAncestries = new Map<string, string>();
   const createdClasses = new Map<string, string>();
   const createdSubclasses = new Map<string, string>();
   const createdLevelProgressions = new Map<string, string>();
@@ -658,6 +660,51 @@ async function main() {
     createdAncestries.set(ancestryData.key, ancestry.id);
 
     console.log(`Ancestralidade criada/validada: ${ancestry.name}`);
+  }
+
+  for (const [index, subAncestryData] of subAncestries.entries()) {
+    const ancestryId = createdAncestries.get(subAncestryData.ancestryKey);
+
+    if (!ancestryId) {
+      throw new Error(
+        `Ancestralidade "${subAncestryData.ancestryKey}" não encontrada para a sub-ancestralidade "${subAncestryData.name}".`,
+      );
+    }
+
+    const subAncestry = await prisma.subAncestry.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: subAncestryData.key,
+        },
+      },
+      update: {
+        ancestryId,
+        name: subAncestryData.name,
+        description: subAncestryData.description,
+        sizeCategoryOverride: subAncestryData.sizeCategoryOverride,
+        attributeBonuses: subAncestryData.attributeBonuses,
+        languageKeys: [...subAncestryData.languageKeys],
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        ancestryId,
+        name: subAncestryData.name,
+        key: subAncestryData.key,
+        description: subAncestryData.description,
+        sizeCategoryOverride: subAncestryData.sizeCategoryOverride,
+        attributeBonuses: subAncestryData.attributeBonuses,
+        languageKeys: [...subAncestryData.languageKeys],
+        order: index + 1,
+      },
+    });
+
+    createdSubAncestries.set(subAncestryData.key, subAncestry.id);
+
+    console.log(
+      `Sub-ancestralidade criada/validada: ${subAncestry.name} → ${subAncestryData.ancestryKey}`,
+    );
   }
 
   for (const [index, classData] of classes.entries()) {
@@ -1258,7 +1305,7 @@ async function main() {
     console.log(`Antecedente criado/validado: ${background.name}`);
   }
 
-    for (const [index, talentData] of talents.entries()) {
+  for (const [index, talentData] of talents.entries()) {
     const talent = await prisma.talent.upsert({
       where: {
         systemId_key: {

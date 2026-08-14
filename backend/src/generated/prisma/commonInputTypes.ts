@@ -260,6 +260,23 @@ export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonFilter<$PrismaModel>
 }
 
+export type EnumCreatureSizeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.CreatureSize | Prisma.EnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CreatureSize[] | Prisma.ListEnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CreatureSize[] | Prisma.ListEnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCreatureSizeNullableFilter<$PrismaModel> | $Enums.CreatureSize | null
+}
+
+export type EnumCreatureSizeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CreatureSize | Prisma.EnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CreatureSize[] | Prisma.ListEnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CreatureSize[] | Prisma.ListEnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCreatureSizeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CreatureSize | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCreatureSizeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCreatureSizeNullableFilter<$PrismaModel>
+}
+
 export type EnumCharacterSheetStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
   in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
@@ -799,6 +816,23 @@ export type NestedJsonFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumCreatureSizeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.CreatureSize | Prisma.EnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CreatureSize[] | Prisma.ListEnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CreatureSize[] | Prisma.ListEnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCreatureSizeNullableFilter<$PrismaModel> | $Enums.CreatureSize | null
+}
+
+export type NestedEnumCreatureSizeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CreatureSize | Prisma.EnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.CreatureSize[] | Prisma.ListEnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.CreatureSize[] | Prisma.ListEnumCreatureSizeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCreatureSizeNullableWithAggregatesFilter<$PrismaModel> | $Enums.CreatureSize | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCreatureSizeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCreatureSizeNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumCharacterSheetStatusFilter<$PrismaModel = never> = {

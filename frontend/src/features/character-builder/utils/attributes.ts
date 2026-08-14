@@ -6,6 +6,7 @@ import type {
   CharacterBuilderAttributes,
   CharacterBuilderBackgroundOption,
   CharacterBuilderDraft,
+  CharacterBuilderSubAncestryOption,
   CharacterBuilderProgressionChoice,
   CharacterBuilderTalentOption,
   CharacterSheetStatResponse,
@@ -16,6 +17,7 @@ export const MAX_STANDARD_CHARACTER_ATTRIBUTE = 20;
 export type CharacterAttributeBreakdown = {
   baseValue: number | null;
   ancestryBonus: number;
+  subAncestryBonus: number;
   backgroundBonus: number;
   progressionBonus: number;
   talentBonus: number;
@@ -27,6 +29,7 @@ type CharacterAttributeCalculationOptions = {
   draft: CharacterBuilderDraft;
   talents: CharacterBuilderTalentOption[];
   selectedAncestry?: CharacterBuilderAncestryOption;
+  selectedSubAncestry?: CharacterBuilderSubAncestryOption;
   selectedBackground?: CharacterBuilderBackgroundOption;
   excludedProgressionChoice?: CharacterBuilderProgressionChoice;
 };
@@ -88,6 +91,7 @@ export function getCharacterAttributeBreakdown({
   draft,
   talents,
   selectedAncestry,
+  selectedSubAncestry,
   selectedBackground,
   excludedProgressionChoice,
 }: CharacterAttributeCalculationOptions & {
@@ -95,6 +99,9 @@ export function getCharacterAttributeBreakdown({
 }): CharacterAttributeBreakdown {
   const ancestryBonus =
     selectedAncestry?.attributeBonuses[attributeKey] ?? 0;
+
+  const subAncestryBonus =
+    selectedSubAncestry?.attributeBonuses[attributeKey] ?? 0;
 
   const backgroundBonus =
     selectedBackground?.attributeBonuses[attributeKey] ?? 0;
@@ -138,6 +145,7 @@ export function getCharacterAttributeBreakdown({
 
   const totalBonus =
     ancestryBonus +
+    subAncestryBonus +
     backgroundBonus +
     progressionBonus +
     talentBonus;
@@ -150,6 +158,7 @@ export function getCharacterAttributeBreakdown({
   return {
     baseValue,
     ancestryBonus,
+    subAncestryBonus,
     backgroundBonus,
     progressionBonus,
     talentBonus,
@@ -179,6 +188,7 @@ export function doesProgressionAttributeBonusExceedMaximum({
   draft,
   talents,
   selectedAncestry,
+  selectedSubAncestry,
   selectedBackground,
   excludedProgressionChoice,
 }: CharacterAttributeCalculationOptions & {
@@ -190,6 +200,7 @@ export function doesProgressionAttributeBonusExceedMaximum({
     draft,
     talents,
     selectedAncestry,
+    selectedSubAncestry,
     selectedBackground,
     excludedProgressionChoice,
   });

@@ -69,6 +69,7 @@ enum CreatureSize {
 
 enum FeatureSourceType {
   ANCESTRY
+  SUBANCESTRY
   BACKGROUND
   CLASS
   SUBCLASS
@@ -219,6 +220,7 @@ model GameSystem {
   stats               Stat[]
   skills              Skill[]
   ancestries          Ancestry[]
+  subAncestries       SubAncestry[]
   backgrounds         Background[]
   classes             CharacterClass[]
   subclasses          CharacterSubclass[]
@@ -247,6 +249,7 @@ model Ancestry {
   updatedAt           DateTime     @updatedAt
 
   system              GameSystem           @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  subAncestries       SubAncestry[]
   features            Feature[]
   featureChoiceGroups FeatureChoiceGroup[]
   characterSheets     CharacterSheet[]
@@ -254,6 +257,33 @@ model Ancestry {
   @@unique([systemId, name])
   @@unique([systemId, key])
   @@index([systemId])
+  @@index([order])
+}
+
+model SubAncestry {
+  id                   String        @id @default(uuid())
+  systemId             String
+  ancestryId           String
+  name                 String
+  key                  String
+  description          String?
+  sizeCategoryOverride CreatureSize?
+  attributeBonuses     Json          @default("{}")
+  languageKeys         String[]      @default([])
+  order                Int           @default(0)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  system              GameSystem           @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  ancestry            Ancestry             @relation(fields: [ancestryId], references: [id], onDelete: Cascade)
+  features            Feature[]
+  featureChoiceGroups FeatureChoiceGroup[]
+  characterSheets     CharacterSheet[]
+
+  @@unique([systemId, name])
+  @@unique([systemId, key])
+  @@index([systemId])
+  @@index([ancestryId])
   @@index([order])
 }
 
@@ -291,6 +321,7 @@ model CharacterSheet {
   campaignActorId String?              @unique
   ownerId         String?
   ancestryId      String?
+  subAncestryId   String?
   backgroundId    String?
   classId         String?
   subclassId      String?
@@ -350,6 +381,7 @@ model CharacterSheet {
   system         GameSystem         @relation(fields: [systemId], references: [id], onDelete: Cascade)
   campaignActor  CampaignActor?     @relation(fields: [campaignActorId], references: [id], onDelete: SetNull)
   ancestry       Ancestry?          @relation(fields: [ancestryId], references: [id], onDelete: SetNull)
+  subAncestry    SubAncestry?       @relation(fields: [subAncestryId], references: [id], onDelete: SetNull)
   background     Background?        @relation(fields: [backgroundId], references: [id], onDelete: SetNull)
   characterClass CharacterClass?    @relation(fields: [classId], references: [id], onDelete: SetNull)
   subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
@@ -369,6 +401,7 @@ model CharacterSheet {
   @@index([campaignActorId])
   @@index([ownerId])
   @@index([ancestryId])
+  @@index([subAncestryId])
   @@index([backgroundId])
   @@index([classId])
   @@index([subclassId])
@@ -683,6 +716,7 @@ model Feature {
   id                 String            @id @default(uuid())
   systemId           String
   ancestryId         String?
+  subAncestryId      String?
   backgroundId       String?
   classId            String?
   subclassId         String?
@@ -698,6 +732,7 @@ model Feature {
 
   system           GameSystem         @relation(fields: [systemId], references: [id], onDelete: Cascade)
   ancestry         Ancestry?          @relation(fields: [ancestryId], references: [id], onDelete: Cascade)
+  subAncestry      SubAncestry?       @relation(fields: [subAncestryId], references: [id], onDelete: Cascade)
   background       Background?        @relation(fields: [backgroundId], references: [id], onDelete: Cascade)
   characterClass   CharacterClass?    @relation(fields: [classId], references: [id], onDelete: Cascade)
   subclass         CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: Cascade)
@@ -709,6 +744,7 @@ model Feature {
   @@unique([systemId, key])
   @@index([systemId])
   @@index([ancestryId])
+  @@index([subAncestryId])
   @@index([backgroundId])
   @@index([classId])
   @@index([subclassId])
@@ -744,6 +780,7 @@ model FeatureChoiceGroup {
   id                 String   @id @default(uuid())
   systemId           String
   ancestryId         String?
+  subAncestryId      String?
   backgroundId       String?
   classId            String?
   subclassId         String?
@@ -758,6 +795,7 @@ model FeatureChoiceGroup {
 
   system           GameSystem         @relation(fields: [systemId], references: [id], onDelete: Cascade)
   ancestry         Ancestry?          @relation(fields: [ancestryId], references: [id], onDelete: Cascade)
+  subAncestry      SubAncestry?       @relation(fields: [subAncestryId], references: [id], onDelete: Cascade)
   background       Background?        @relation(fields: [backgroundId], references: [id], onDelete: Cascade)
   characterClass   CharacterClass?    @relation(fields: [classId], references: [id], onDelete: Cascade)
   subclass         CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: Cascade)
@@ -769,6 +807,7 @@ model FeatureChoiceGroup {
   @@unique([systemId, key])
   @@index([systemId])
   @@index([ancestryId])
+  @@index([subAncestryId])
   @@index([backgroundId])
   @@index([classId])
   @@index([subclassId])

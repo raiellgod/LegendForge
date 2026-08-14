@@ -189,6 +189,19 @@ export async function systemRoutes(app: FastifyInstance) {
               languageKeys: z.array(z.string()),
             }),
           ),
+          subAncestries: z.array(
+            z.object({
+              id: z.string(),
+              ancestryId: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              sizeCategoryOverride: z.string().nullable(),
+              attributeBonuses: z.record(z.string(), z.number()),
+              languageKeys: z.array(z.string()),
+              order: z.number(),
+            }),
+          ),
           backgrounds: z.array(
             z.object({
               id: z.string(),
@@ -252,6 +265,7 @@ export async function systemRoutes(app: FastifyInstance) {
               level: z.number().nullable(),
               order: z.number(),
               ancestryId: z.string().nullable(),
+              subAncestryId: z.string().nullable(),
               classId: z.string().nullable(),
               subclassId: z.string().nullable(),
               levelProgressionId: z.string().nullable(),
@@ -278,6 +292,7 @@ export async function systemRoutes(app: FastifyInstance) {
               choiceCount: z.number(),
               order: z.number(),
               ancestryId: z.string().nullable(),
+              subAncestryId: z.string().nullable(),
               backgroundId: z.string().nullable(),
               classId: z.string().nullable(),
               subclassId: z.string().nullable(),
@@ -295,6 +310,7 @@ export async function systemRoutes(app: FastifyInstance) {
                     level: z.number().nullable(),
                     order: z.number(),
                     ancestryId: z.string().nullable(),
+                    subAncestryId: z.string().nullable(),
                     classId: z.string().nullable(),
                     subclassId: z.string().nullable(),
                     levelProgressionId: z.string().nullable(),
@@ -373,6 +389,7 @@ export async function systemRoutes(app: FastifyInstance) {
       const [
         classes,
         ancestries,
+        subAncestries,
         backgrounds,
         languages,
         skills,
@@ -491,6 +508,31 @@ export async function systemRoutes(app: FastifyInstance) {
             defaultSizeCategory: true,
             attributeBonuses: true,
             languageKeys: true,
+          },
+        }),
+
+        prisma.subAncestry.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            ancestryId: true,
+            key: true,
+            name: true,
+            description: true,
+            sizeCategoryOverride: true,
+            attributeBonuses: true,
+            languageKeys: true,
+            order: true,
           },
         }),
 
@@ -613,6 +655,7 @@ export async function systemRoutes(app: FastifyInstance) {
             level: true,
             order: true,
             ancestryId: true,
+            subAncestryId: true,
             classId: true,
             subclassId: true,
             levelProgressionId: true,
@@ -663,6 +706,7 @@ export async function systemRoutes(app: FastifyInstance) {
             choiceCount: true,
             order: true,
             ancestryId: true,
+            subAncestryId: true,
             backgroundId: true,
             classId: true,
             subclassId: true,
@@ -691,6 +735,7 @@ export async function systemRoutes(app: FastifyInstance) {
                     level: true,
                     order: true,
                     ancestryId: true,
+                    subAncestryId: true,
                     classId: true,
                     subclassId: true,
                     levelProgressionId: true,
@@ -887,6 +932,16 @@ export async function systemRoutes(app: FastifyInstance) {
         attributeBonuses: normalizeAttributeBonuses(ancestry.attributeBonuses),
       }));
 
+      const normalizedSubAncestries = subAncestries.map((subAncestry) => ({
+        ...subAncestry,
+        sizeCategoryOverride: subAncestry.sizeCategoryOverride
+          ? String(subAncestry.sizeCategoryOverride)
+          : null,
+        attributeBonuses: normalizeAttributeBonuses(
+          subAncestry.attributeBonuses,
+        ),
+      }));
+
       const normalizedBackgrounds = backgrounds.map((background) => ({
         ...background,
         attributeBonuses: normalizeAttributeBonuses(
@@ -904,6 +959,7 @@ export async function systemRoutes(app: FastifyInstance) {
         system,
         classes: normalizedClasses,
         ancestries: normalizedAncestries,
+        subAncestries: normalizedSubAncestries,
         backgrounds: normalizedBackgrounds,
         languages,
         skills,

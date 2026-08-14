@@ -104,6 +104,14 @@ export function CharacterBuilderModal({
     (option) => option.id === draft.ancestryId,
   );
 
+  const availableSubAncestries = (options.subAncestries ?? []).filter(
+    (option) => option.ancestryId === draft.ancestryId,
+  );
+
+  const selectedSubAncestry = availableSubAncestries.find(
+    (option) => option.id === draft.subAncestryId,
+  );
+
   const selectedBackground = options.backgrounds.find(
     (option) => option.id === draft.backgroundId,
   );
@@ -202,6 +210,7 @@ export function CharacterBuilderModal({
     options,
     selectedClass,
     selectedAncestry,
+    selectedSubAncestry,
     selectedBackground,
     selectedClassDisplayName,
   });
@@ -960,42 +969,115 @@ export function CharacterBuilderModal({
                       />
                     </div>
                   ) : activeStep.id === "ancestry" ? (
-                    <CharacterBuilderOptionCards
-                      title="Ancestralidades disponíveis"
-                      description="Escolha a origem biológica, cultural ou mutada do personagem."
-                      options={options.ancestries}
-                      isLoading={isLoadingOptions}
-                      error={optionsError}
-                      emptyMessage="Nenhuma ancestralidade encontrada para este sistema."
-                      selectedId={draft.ancestryId}
-                      selectedLabel={selectedOptionLabel}
-                      getOptionName={(option) =>
-                        getGenderedCharacterOptionName({
-                          key: option.key,
-                          name: option.name,
-                          pronouns: draft.pronouns,
-                        })
-                      }
-                      getOptionTitle={(option) => {
-                        const sizeText = option.defaultSizeCategory
-                          ? `Tamanho padrão: ${option.defaultSizeCategory}.`
-                          : "Tamanho padrão: em breve.";
-                        const optionName = getGenderedCharacterOptionName({
-                          key: option.key,
-                          name: option.name,
-                          pronouns: draft.pronouns,
-                        });
+                    <div className="space-y-5">
+                      <CharacterBuilderOptionCards
+                        title="Ancestralidades disponíveis"
+                        description="Escolha a origem biológica, cultural ou mutada do personagem."
+                        options={options.ancestries}
+                        isLoading={isLoadingOptions}
+                        error={optionsError}
+                        emptyMessage="Nenhuma ancestralidade encontrada para este sistema."
+                        selectedId={draft.ancestryId}
+                        selectedLabel={selectedOptionLabel}
+                        getOptionName={(option) =>
+                          getGenderedCharacterOptionName({
+                            key: option.key,
+                            name: option.name,
+                            pronouns: draft.pronouns,
+                          })
+                        }
+                        getOptionTitle={(option) => {
+                          const sizeText = option.defaultSizeCategory
+                            ? `Tamanho padrão: ${option.defaultSizeCategory}.`
+                            : "Tamanho padrão: em breve.";
+                          const optionName = getGenderedCharacterOptionName({
+                            key: option.key,
+                            name: option.name,
+                            pronouns: draft.pronouns,
+                          });
 
-                        return `${optionName}: ${
-                          option.description ?? "Sem descrição cadastrada."
-                        } ${sizeText} Features da ancestralidade: em breve.`;
-                      }}
-                      onSelect={(option) => {
-                        updateDraft("ancestryId", option.id);
-                        updateDraft("ancestryName", option.name);
-                        onSelectOption("ancestry", option);
-                      }}
-                    />
+                          return `${optionName}: ${
+                            option.description ?? "Sem descrição cadastrada."
+                          } ${sizeText} Features da ancestralidade: em breve.`;
+                        }}
+                        onSelect={(option) => {
+                          const isChangingAncestry =
+                            draft.ancestryId !== option.id;
+
+                          onChangeDraft({
+                            ...draft,
+                            ancestryId: option.id,
+                            ancestryName: option.name,
+                            subAncestryId: isChangingAncestry
+                              ? ""
+                              : draft.subAncestryId,
+                            subAncestryName: isChangingAncestry
+                              ? ""
+                              : draft.subAncestryName,
+                          });
+
+                          onSelectOption("ancestry", option);
+                        }}
+                      />
+
+                      {draft.ancestryId && availableSubAncestries.length > 0 ? (
+                        <section className="rounded-2xl border border-forge-gold/25 bg-forge-gold/5 p-4">
+                          <div>
+                            <p className="text-xs font-black uppercase tracking-[0.2em] text-forge-gold">
+                              Sub-ancestralidade
+                            </p>
+
+                            <p className="mt-1 text-xs font-semibold leading-relaxed text-zinc-500">
+                              Esta ancestralidade possui variações próprias.
+                              Escolha qual linhagem representa o personagem.
+                            </p>
+                          </div>
+
+                          <div className="mt-4">
+                            <CharacterBuilderOptionCards
+                              title="Variações disponíveis"
+                              description={`Variações de ${
+                                selectedAncestry?.name ?? "ancestralidade"
+                              }.`}
+                              options={availableSubAncestries}
+                              isLoading={isLoadingOptions}
+                              error={optionsError}
+                              emptyMessage="Nenhuma sub-ancestralidade encontrada."
+                              selectedId={draft.subAncestryId}
+                              selectedLabel={selectedOptionLabel}
+                              getOptionTitle={(option) => {
+                                const sizeText = option.sizeCategoryOverride
+                                  ? `Tamanho próprio: ${option.sizeCategoryOverride}.`
+                                  : "Mantém o tamanho da ancestralidade principal.";
+
+                                return `${option.name}: ${
+                                  option.description ??
+                                  "Sem descrição cadastrada."
+                                } ${sizeText}`;
+                              }}
+                              onSelect={(option) => {
+                                onChangeDraft({
+                                  ...draft,
+                                  subAncestryId: option.id,
+                                  subAncestryName: option.name,
+                                });
+                              }}
+                            />
+                          </div>
+
+                          {selectedSubAncestry ? (
+                            <p className="mt-3 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-100">
+                              Sub-ancestralidade escolhida:{" "}
+                              {selectedSubAncestry.name}
+                            </p>
+                          ) : (
+                            <p className="mt-3 rounded-xl border border-amber-400/25 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-100">
+                              Escolha uma sub-ancestralidade para continuar.
+                            </p>
+                          )}
+                        </section>
+                      ) : null}
+                    </div>
                   ) : activeStep.id === "background" ? (
                     <CharacterBuilderOptionCards
                       title="Antecedentes disponíveis"
@@ -1195,6 +1277,7 @@ export function CharacterBuilderModal({
                       options={options}
                       selectedClass={genderedSelectedClass}
                       selectedAncestry={genderedSelectedAncestry}
+                      selectedSubAncestry={selectedSubAncestry}
                       selectedBackground={genderedSelectedBackground}
                     />
                   ) : (
