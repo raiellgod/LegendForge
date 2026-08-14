@@ -290,13 +290,13 @@ Objetivo: transformar criação e progressão em fluxo real, não apenas “soma
 
 Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade principal.
 
-[ ] Fase 4.8 — Sub-ancestralidades e variações de origem
+[x] Fase 4.8 — Sub-ancestralidades e variações de origem
 [x] 4.8.1 — Modelar SubAncestry no Prisma
 [x] 4.8.2 — Seed inicial de sub-ancestralidades
 [x] 4.8.3 — Expor sub-ancestralidades no /character-options
 [x] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
 [x] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
-[ ] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
+[x] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
 
 Exemplo:
 
@@ -305,6 +305,16 @@ Sylvaris → Sylvaris Alto
 6. Fase 5 — Biblioteca completa
 
 [ ] 5.1 — Biblioteca real da campanha
+    [x] 5.1.1 — Auditar a biblioteca atual da mesa
+    [PRÓXIMO] 5.1.2 — Consolidar CampaignActor como entrada da Biblioteca da Campanha
+    [ ] 5.1.3 — Auditar e refatorar ActorLibraryModal
+    [ ] 5.1.4 — Separar claramente TABLE / LIBRARY / ARCHIVED na interface
+    [ ] 5.1.5 — Melhorar listagem e detalhes de NPCs/criaturas da biblioteca
+    [ ] 5.1.6 — Criar fluxo de arquivar/restaurar ator
+    [ ] 5.1.7 — Consolidar permissões GM/player da biblioteca
+    [ ] 5.1.8 — Preservar vínculo CharacterSheet quando aplicável
+    [ ] 5.1.9 — Preservar ciclo LIBRARY → TABLE → LIBRARY
+    [ ] 5.1.10 — Teste regressivo completo
 [ ] 5.2 — Biblioteca real do sistema
 [ ] 5.3 — Organização por categorias
 [ ] 5.4 — Itens na biblioteca
@@ -441,6 +451,16 @@ A próxima micro de desenvolvimento é:
 Fase 5 — Biblioteca completa
 
 [ ] 5.1 — Biblioteca real da campanha
+    [x] 5.1.1 — Auditar a biblioteca atual da mesa
+    [PRÓXIMO] 5.1.2 — Consolidar CampaignActor como entrada da Biblioteca da Campanha
+    [ ] 5.1.3 — Auditar e refatorar ActorLibraryModal
+    [ ] 5.1.4 — Separar claramente TABLE / LIBRARY / ARCHIVED na interface
+    [ ] 5.1.5 — Melhorar listagem e detalhes de NPCs/criaturas da biblioteca
+    [ ] 5.1.6 — Criar fluxo de arquivar/restaurar ator
+    [ ] 5.1.7 — Consolidar permissões GM/player da biblioteca
+    [ ] 5.1.8 — Preservar vínculo CharacterSheet quando aplicável
+    [ ] 5.1.9 — Preservar ciclo LIBRARY → TABLE → LIBRARY
+    [ ] 5.1.10 — Teste regressivo completo
 [ ] 5.2 — Biblioteca real do sistema
 [ ] 5.3 — Organização por categorias
 [ ] 5.4 — Itens na biblioteca

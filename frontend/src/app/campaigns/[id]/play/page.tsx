@@ -933,6 +933,10 @@ export default function CampaignPlayPage() {
     (actor) => actor.location === "LIBRARY" && isLibraryCompatibleActor(actor),
   );
 
+  const archivedActors = campaignActors.filter(
+    (actor) => actor.location === "ARCHIVED" && isLibraryCompatibleActor(actor),
+  );
+
   function getCharacterSheetByActor(actor: CampaignActor) {
     return (
       characterSheets.find(
@@ -2350,6 +2354,66 @@ export default function CampaignPlayPage() {
     }
   }
 
+  async function handleArchiveActor(actor: CampaignActor) {
+    if (!campaign || !isGM || !isLibraryCompatibleActor(actor)) {
+      return;
+    }
+
+    setActionError("");
+    setActionMessage("");
+
+    try {
+      const updatedActor = await updateCampaignActor(campaign.id, actor.id, {
+        location: "ARCHIVED",
+      });
+
+      setCampaignActors((currentActors) =>
+        currentActors.map((currentActor) =>
+          currentActor.id === updatedActor.id ? updatedActor : currentActor,
+        ),
+      );
+
+      setActionMessage(`${updatedActor.name} foi arquivado.`);
+    } catch (error) {
+      console.error(error);
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível arquivar o ator.",
+      );
+    }
+  }
+
+  async function handleRestoreArchivedActor(actor: CampaignActor) {
+    if (!campaign || !isGM || !isLibraryCompatibleActor(actor)) {
+      return;
+    }
+
+    setActionError("");
+    setActionMessage("");
+
+    try {
+      const updatedActor = await updateCampaignActor(campaign.id, actor.id, {
+        location: "LIBRARY",
+      });
+
+      setCampaignActors((currentActors) =>
+        currentActors.map((currentActor) =>
+          currentActor.id === updatedActor.id ? updatedActor : currentActor,
+        ),
+      );
+
+      setActionMessage(`${updatedActor.name} voltou para a biblioteca.`);
+    } catch (error) {
+      console.error(error);
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível restaurar o ator arquivado.",
+      );
+    }
+  }
+
   async function handleReturnActorToLibrary(actor: CampaignActor) {
     if (!campaign || !isGM || !isLibraryCompatibleActor(actor)) {
       return;
@@ -3236,7 +3300,10 @@ export default function CampaignPlayPage() {
       {isLibraryModalOpen ? (
         <ActorLibraryModal
           actors={libraryActors}
+          archivedActors={archivedActors}
           onBringToTable={handleBringActorToTable}
+          onArchive={handleArchiveActor}
+          onRestore={handleRestoreArchivedActor}
           onClose={() => setIsLibraryModalOpen(false)}
         />
       ) : null}
