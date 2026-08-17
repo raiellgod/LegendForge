@@ -3,6 +3,7 @@ import type {
   CampaignActor,
   CampaignParticipant,
   SceneToken,
+  SystemLibrary,
 } from "../types/game-table-types";
 
 import type {
@@ -384,4 +385,25 @@ export async function updateCampaignActor(
   const responseData = await response.json();
 
   return responseData.actor;
+}
+
+
+export async function getSystemLibrary(systemId: string): Promise<SystemLibrary> {
+  const response = await fetch(
+    `http://localhost:8081/systems/${systemId}/library`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ?? "Erro ao carregar biblioteca do sistema",
+    );
+  }
+
+  return response.json();
 }

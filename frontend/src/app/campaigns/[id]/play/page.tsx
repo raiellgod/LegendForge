@@ -44,6 +44,7 @@ import type {
   RollResult,
   RollVisibility,
   SceneToken,
+  SystemLibrary,
   ToolMode,
   User,
 } from "@/features/game-table/types/game-table-types";
@@ -80,6 +81,7 @@ import {
   getCampaignCharacterSheets,
   getCampaignParticipants,
   getCampaignTokens,
+  getSystemLibrary,
   confirmCampaignCharacterSheetLevelUp,
   updateCampaignCharacterSheetLevelUpAvailability,
   updateCampaignActor,
@@ -110,6 +112,7 @@ import {
 import { CreatureCreationModal } from "@/features/game-table/components/CreatureCreationModal";
 import { CharacterCreationMenuModal } from "@/features/game-table/components/CharacterCreationMenuModal";
 import { ActorLibraryModal } from "@/features/game-table/components/ActorLibraryModal";
+import { SystemLibraryModal } from "@/features/game-table/components/SystemLibraryModal";
 import { ActorActionModal } from "@/features/game-table/components/ActorActionModal";
 import { CharacterBuilderModal } from "@/features/character-builder/components/CharacterBuilderModal";
 
@@ -707,6 +710,16 @@ export default function CampaignPlayPage() {
   const [actionActor, setActionActor] = useState<CampaignActor | null>(null);
   const [isLibraryModalOpen, setIsLibraryModalOpen] = useState(false);
 
+  const [isSystemLibraryModalOpen, setIsSystemLibraryModalOpen] = useState(false);
+  const [systemLibrary, setSystemLibrary] = useState<SystemLibrary | null>(null);
+  const [isLoadingSystemLibrary, setIsLoadingSystemLibrary] = useState(false);
+  const [systemLibraryError, setSystemLibraryError] = useState<string | null>(
+    null,
+  );
+  const [loadedSystemLibraryId, setLoadedSystemLibraryId] = useState<
+    string | null
+  >(null);
+
   const [campaignActors, setCampaignActors] = useState<CampaignActor[]>([]);
 
   const [characterSheets, setCharacterSheets] = useState<CharacterReadySheet[]>(
@@ -856,6 +869,45 @@ export default function CampaignPlayPage() {
 
     const participants = await getCampaignParticipants(campaign.id);
     setParticipants(participants);
+  }
+
+  async function handleOpenSystemLibrary() {
+    setIsSystemLibraryModalOpen(true);
+    setSystemLibraryError(null);
+
+    const systemId = campaign?.systemId;
+
+    if (!systemId) {
+      setSystemLibrary(null);
+      setLoadedSystemLibraryId(null);
+      setSystemLibraryError(
+        "Esta campanha ainda não possui um sistema vinculado.",
+      );
+      return;
+    }
+
+    if (systemLibrary && loadedSystemLibraryId === systemId) {
+      return;
+    }
+
+    setIsLoadingSystemLibrary(true);
+
+    try {
+      const library = await getSystemLibrary(systemId);
+
+      setSystemLibrary(library);
+      setLoadedSystemLibraryId(systemId);
+    } catch (error) {
+      setSystemLibrary(null);
+      setLoadedSystemLibraryId(null);
+      setSystemLibraryError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível carregar a biblioteca do sistema.",
+      );
+    } finally {
+      setIsLoadingSystemLibrary(false);
+    }
   }
 
   const currentUserParticipant = participants.find(
@@ -3195,6 +3247,9 @@ export default function CampaignPlayPage() {
                   canOpenSheet={canOpenActorSheet}
                   onOpenActions={setActionActor}
                   onOpenLibrary={() => setIsLibraryModalOpen(true)}
+                  onOpenSystemLibrary={() => {
+                    void handleOpenSystemLibrary();
+                  }}
                   onOpenCharacterCreationMenu={
                     handleOpenCharacterCreationEntryPoint
                   }
@@ -3305,6 +3360,15 @@ export default function CampaignPlayPage() {
           onArchive={handleArchiveActor}
           onRestore={handleRestoreArchivedActor}
           onClose={() => setIsLibraryModalOpen(false)}
+        />
+      ) : null}
+
+      {isSystemLibraryModalOpen ? (
+        <SystemLibraryModal
+          library={systemLibrary}
+          isLoading={isLoadingSystemLibrary}
+          error={systemLibraryError}
+          onClose={() => setIsSystemLibraryModalOpen(false)}
         />
       ) : null}
 

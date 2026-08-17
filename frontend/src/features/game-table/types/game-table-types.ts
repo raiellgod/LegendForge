@@ -159,3 +159,65 @@ export type SceneToken = {
     portraitUrl: string | null;
   };
 };
+
+
+export type SystemLibraryEquipment = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+  imageUrl: string | null;
+  category: string;
+  damage: string | null;
+  damageFormula: string | null;
+  damageType: string | null;
+  defense: number | null;
+  cost: string | null;
+  weight: number | null;
+  properties: string | null;
+  attackType: string;
+  attackAbilityKey: string | null;
+  alternativeAbilityKey: string | null;
+  weaponGroup: string | null;
+  normalRange: number | null;
+  longRange: number | null;
+  isFinesse: boolean;
+  isThrown: boolean;
+  isTwoHanded: boolean;
+  isVersatile: boolean;
+  versatileDamageFormula: string | null;
+  attackBonus: number;
+  damageBonus: number;
+  order: number;
+};
+
+export type SystemLibrarySpell = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+  level: number;
+  school: string;
+  castingTime: string | null;
+  range: string | null;
+  duration: string | null;
+  components: string[];
+  isRitual: boolean;
+  requiresConcentration: boolean;
+  order: number;
+};
+
+export type SystemLibrary = {
+  system: {
+    id: string;
+    name: string;
+    slug: string | null;
+    version: number;
+  };
+  summary: {
+    equipmentCount: number;
+    spellCount: number;
+  };
+  equipment: SystemLibraryEquipment[];
+  spells: SystemLibrarySpell[];
+};

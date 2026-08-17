@@ -304,18 +304,28 @@ Sylvaris → Sylvaris Alto
 
 6. Fase 5 — Biblioteca completa
 
-[ ] 5.1 — Biblioteca real da campanha
+[x] 5.1 — Biblioteca real da campanha
     [x] 5.1.1 — Auditar a biblioteca atual da mesa
-    [PRÓXIMO] 5.1.2 — Consolidar CampaignActor como entrada da Biblioteca da Campanha
-    [ ] 5.1.3 — Auditar e refatorar ActorLibraryModal
-    [ ] 5.1.4 — Separar claramente TABLE / LIBRARY / ARCHIVED na interface
-    [ ] 5.1.5 — Melhorar listagem e detalhes de NPCs/criaturas da biblioteca
-    [ ] 5.1.6 — Criar fluxo de arquivar/restaurar ator
-    [ ] 5.1.7 — Consolidar permissões GM/player da biblioteca
-    [ ] 5.1.8 — Preservar vínculo CharacterSheet quando aplicável
-    [ ] 5.1.9 — Preservar ciclo LIBRARY → TABLE → LIBRARY
-    [ ] 5.1.10 — Teste regressivo completo
-[ ] 5.2 — Biblioteca real do sistema
+    [x] 5.1.2 — Consolidar CampaignActor como entrada da Biblioteca da Campanha
+    [x] 5.1.3 — Auditar e refatorar ActorLibraryModal
+    [x] 5.1.4 — Separar claramente TABLE / LIBRARY / ARCHIVED na interface
+    [x] 5.1.5 — Melhorar listagem e detalhes de NPCs/criaturas da biblioteca
+    [x] 5.1.6 — Criar fluxo de arquivar/restaurar ator
+    [x] 5.1.7 — Consolidar permissões GM/player da biblioteca
+    [x] 5.1.8 — Preservar vínculo CharacterSheet quando aplicável
+    [x] 5.1.9 — Preservar ciclo LIBRARY → TABLE → LIBRARY
+    [x] 5.1.10 — Teste regressivo completo
+[x] 5.2 — Biblioteca real do sistema
+    [x] 5.2.1 — Auditar conteúdo atual pertencente ao GameSystem
+    [x] 5.2.2 — Definir responsabilidade da Biblioteca do Sistema
+    [x] 5.2.3 — Definir diferença entre conteúdo do sistema e template instanciável
+    [x] 5.2.4 — Auditar APIs atuais de conteúdo do sistema
+    [x] 5.2.5 — Criar endpoint de biblioteca do sistema, se realmente necessário
+    [x] 5.2.6 — Criar estrutura frontend da Biblioteca do Sistema
+    [x] 5.2.7 — Listar conteúdo real do sistema
+    [x] 5.2.8 — Garantir isolamento por systemId
+    [x] 5.2.9 — Integrar com campanha usando campaign.systemId
+    [x] 5.2.10 — Teste regressivo da Biblioteca do Sistema
 [ ] 5.3 — Organização por categorias
 [ ] 5.4 — Itens na biblioteca
 [ ] 5.5 — Magias na biblioteca
@@ -450,18 +460,28 @@ A próxima micro de desenvolvimento é:
 
 Fase 5 — Biblioteca completa
 
-[ ] 5.1 — Biblioteca real da campanha
+[x] 5.1 — Biblioteca real da campanha
     [x] 5.1.1 — Auditar a biblioteca atual da mesa
-    [PRÓXIMO] 5.1.2 — Consolidar CampaignActor como entrada da Biblioteca da Campanha
-    [ ] 5.1.3 — Auditar e refatorar ActorLibraryModal
-    [ ] 5.1.4 — Separar claramente TABLE / LIBRARY / ARCHIVED na interface
-    [ ] 5.1.5 — Melhorar listagem e detalhes de NPCs/criaturas da biblioteca
-    [ ] 5.1.6 — Criar fluxo de arquivar/restaurar ator
-    [ ] 5.1.7 — Consolidar permissões GM/player da biblioteca
-    [ ] 5.1.8 — Preservar vínculo CharacterSheet quando aplicável
-    [ ] 5.1.9 — Preservar ciclo LIBRARY → TABLE → LIBRARY
-    [ ] 5.1.10 — Teste regressivo completo
+    [x] 5.1.2 — Consolidar CampaignActor como entrada da Biblioteca da Campanha
+    [x] 5.1.3 — Auditar e refatorar ActorLibraryModal
+    [x] 5.1.4 — Separar claramente TABLE / LIBRARY / ARCHIVED na interface
+    [x] 5.1.5 — Melhorar listagem e detalhes de NPCs/criaturas da biblioteca
+    [x] 5.1.6 — Criar fluxo de arquivar/restaurar ator
+    [x] 5.1.7 — Consolidar permissões GM/player da biblioteca
+    [x] 5.1.8 — Preservar vínculo CharacterSheet quando aplicável
+    [x] 5.1.9 — Preservar ciclo LIBRARY → TABLE → LIBRARY
+    [x] 5.1.10 — Teste regressivo completo
 [ ] 5.2 — Biblioteca real do sistema
+    [PRÓXIMO] 5.2.1 — Auditar conteúdo atual pertencente ao GameSystem
+    [ ] 5.2.2 — Definir responsabilidade da Biblioteca do Sistema
+    [ ] 5.2.3 — Definir diferença entre conteúdo do sistema e template instanciável
+    [ ] 5.2.4 — Auditar APIs atuais de conteúdo do sistema
+    [ ] 5.2.5 — Criar endpoint de biblioteca do sistema, se realmente necessário
+    [ ] 5.2.6 — Criar estrutura frontend da Biblioteca do Sistema
+    [ ] 5.2.7 — Listar conteúdo real do sistema
+    [ ] 5.2.8 — Garantir isolamento por systemId
+    [ ] 5.2.9 — Integrar com campanha usando campaign.systemId
+    [ ] 5.2.10 — Teste regressivo da Biblioteca do Sistema
 [ ] 5.3 — Organização por categorias
 [ ] 5.4 — Itens na biblioteca
 [ ] 5.5 — Magias na biblioteca

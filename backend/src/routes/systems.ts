@@ -971,4 +971,225 @@ export async function systemRoutes(app: FastifyInstance) {
       });
     },
   });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/systems/:systemId/library",
+    schema: {
+      tags: ["Systems"],
+      description: "List reusable library content for a RPG system",
+      params: z.object({
+        systemId: z.string().uuid("Invalid system id"),
+      }),
+      response: {
+        200: z.object({
+          system: z.object({
+            id: z.string(),
+            name: z.string(),
+            slug: z.string().nullable(),
+            version: z.number(),
+          }),
+          summary: z.object({
+            equipmentCount: z.number(),
+            spellCount: z.number(),
+          }),
+          equipment: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              imageUrl: z.string().nullable(),
+              category: z.string(),
+              damage: z.string().nullable(),
+              damageFormula: z.string().nullable(),
+              damageType: z.string().nullable(),
+              defense: z.number().nullable(),
+              cost: z.string().nullable(),
+              weight: z.number().nullable(),
+              properties: z.string().nullable(),
+              attackType: z.string(),
+              attackAbilityKey: z.string().nullable(),
+              alternativeAbilityKey: z.string().nullable(),
+              weaponGroup: z.string().nullable(),
+              normalRange: z.number().nullable(),
+              longRange: z.number().nullable(),
+              isFinesse: z.boolean(),
+              isThrown: z.boolean(),
+              isTwoHanded: z.boolean(),
+              isVersatile: z.boolean(),
+              versatileDamageFormula: z.string().nullable(),
+              attackBonus: z.number(),
+              damageBonus: z.number(),
+              order: z.number(),
+            }),
+          ),
+          spells: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              level: z.number(),
+              school: z.string(),
+              castingTime: z.string().nullable(),
+              range: z.string().nullable(),
+              duration: z.string().nullable(),
+              components: z.array(z.string()),
+              isRitual: z.boolean(),
+              requiresConcentration: z.boolean(),
+              order: z.number(),
+            }),
+          ),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const { systemId } = request.params;
+
+      const system = await prisma.gameSystem.findUnique({
+        where: {
+          id: systemId,
+        },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          version: true,
+        },
+      });
+
+      if (!system) {
+        return reply.status(404).send({
+          message: "System not found",
+        });
+      }
+
+      const [equipment, spells] = await Promise.all([
+        prisma.equipment.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              category: "asc",
+            },
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            imageUrl: true,
+            category: true,
+            damage: true,
+            damageFormula: true,
+            damageType: true,
+            defense: true,
+            cost: true,
+            weight: true,
+            properties: true,
+            attackType: true,
+            attackAbilityKey: true,
+            alternativeAbilityKey: true,
+            weaponGroup: true,
+            normalRange: true,
+            longRange: true,
+            isFinesse: true,
+            isThrown: true,
+            isTwoHanded: true,
+            isVersatile: true,
+            versatileDamageFormula: true,
+            attackBonus: true,
+            damageBonus: true,
+            order: true,
+          },
+        }),
+        prisma.spell.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              level: "asc",
+            },
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            description: true,
+            level: true,
+            school: true,
+            castingTime: true,
+            range: true,
+            duration: true,
+            components: true,
+            isRitual: true,
+            requiresConcentration: true,
+            order: true,
+          },
+        }),
+      ]);
+
+      const normalizedEquipment = equipment.map((item) => ({
+        ...item,
+        category: String(item.category),
+        attackType: String(item.attackType),
+        weaponGroup: item.weaponGroup ? String(item.weaponGroup) : null,
+      }));
+
+      const normalizedSpells = spells.map((spell) => {
+        const components = spell.components
+          ? spell.components
+              .split(",")
+              .map((component) => component.trim())
+              .filter(Boolean)
+          : [];
+
+        return {
+          ...spell,
+          school: String(spell.school),
+          components,
+        };
+      });
+
+      return reply.status(200).send({
+        system,
+        summary: {
+          equipmentCount: normalizedEquipment.length,
+          spellCount: normalizedSpells.length,
+        },
+        equipment: normalizedEquipment,
+        spells: normalizedSpells,
+      });
+    },
+  });
+
 }

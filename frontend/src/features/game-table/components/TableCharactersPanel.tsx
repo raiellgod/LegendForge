@@ -10,6 +10,7 @@ type TableCharactersPanelProps = {
   canOpenSheet: (actor: CampaignActor) => boolean;
   onOpenActions: (actor: CampaignActor) => void;
   onOpenLibrary: () => void;
+  onOpenSystemLibrary: () => void;
   onOpenCharacterCreationMenu: () => void;
 };
 
@@ -157,6 +158,7 @@ export function TableCharactersPanel({
   canOpenSheet,
   onOpenActions,
   onOpenLibrary,
+  onOpenSystemLibrary,
   onOpenCharacterCreationMenu,
 }: TableCharactersPanelProps) {
   const hasAnyActor =
@@ -174,13 +176,25 @@ export function TableCharactersPanel({
 
         <div className="flex shrink-0 gap-2">
           {isGM ? (
-            <button
-              type="button"
-              onClick={onOpenLibrary}
-              className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
-            >
-              Biblioteca
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={onOpenLibrary}
+                className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
+                title="Abrir a biblioteca de NPCs e criaturas desta campanha."
+              >
+                Biblioteca
+              </button>
+
+              <button
+                type="button"
+                onClick={onOpenSystemLibrary}
+                className="rounded-lg border border-forge-gold/50 px-3 py-2 text-[10px] font-black text-forge-gold transition hover:bg-forge-purple"
+                title="Abrir o conteúdo reutilizável do sistema vinculado à campanha."
+              >
+                Sistema
+              </button>
+            </>
           ) : null}
 
           <button
