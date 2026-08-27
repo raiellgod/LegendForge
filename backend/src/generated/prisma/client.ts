@@ -65,6 +65,16 @@ export type Verification = Prisma.VerificationModel
  */
 export type GameSystem = Prisma.GameSystemModel
 /**
+ * Model NpcTemplate
+ * 
+ */
+export type NpcTemplate = Prisma.NpcTemplateModel
+/**
+ * Model CreatureTemplate
+ * 
+ */
+export type CreatureTemplate = Prisma.CreatureTemplateModel
+/**
  * Model Ancestry
  * 
  */
@@ -79,6 +89,51 @@ export type SubAncestry = Prisma.SubAncestryModel
  * 
  */
 export type Background = Prisma.BackgroundModel
+/**
+ * Model CharacterTemplate
+ * 
+ */
+export type CharacterTemplate = Prisma.CharacterTemplateModel
+/**
+ * Model CharacterTemplateClass
+ * 
+ */
+export type CharacterTemplateClass = Prisma.CharacterTemplateClassModel
+/**
+ * Model CharacterTemplateStat
+ * 
+ */
+export type CharacterTemplateStat = Prisma.CharacterTemplateStatModel
+/**
+ * Model CharacterTemplateSkill
+ * 
+ */
+export type CharacterTemplateSkill = Prisma.CharacterTemplateSkillModel
+/**
+ * Model CharacterTemplateSpell
+ * 
+ */
+export type CharacterTemplateSpell = Prisma.CharacterTemplateSpellModel
+/**
+ * Model CharacterTemplateEquipment
+ * 
+ */
+export type CharacterTemplateEquipment = Prisma.CharacterTemplateEquipmentModel
+/**
+ * Model CharacterTemplateLanguage
+ * 
+ */
+export type CharacterTemplateLanguage = Prisma.CharacterTemplateLanguageModel
+/**
+ * Model CharacterTemplateFeatureChoice
+ * 
+ */
+export type CharacterTemplateFeatureChoice = Prisma.CharacterTemplateFeatureChoiceModel
+/**
+ * Model CharacterTemplateProgressionChoice
+ * 
+ */
+export type CharacterTemplateProgressionChoice = Prisma.CharacterTemplateProgressionChoiceModel
 /**
  * Model CharacterSheet
  * 

@@ -547,14 +547,6 @@ export type CharacterSheetProgressionChoiceUncheckedUpdateManyWithoutCharacterSh
   deleteMany?: Prisma.CharacterSheetProgressionChoiceScalarWhereInput | Prisma.CharacterSheetProgressionChoiceScalarWhereInput[]
 }
 
-export type NullableEnumCharacterProgressionChoiceTypeFieldUpdateOperationsInput = {
-  set?: $Enums.CharacterProgressionChoiceType | null
-}
-
-export type NullableEnumCharacterAttributeIncreaseModeFieldUpdateOperationsInput = {
-  set?: $Enums.CharacterAttributeIncreaseMode | null
-}
-
 export type CharacterSheetProgressionChoiceCreateNestedManyWithoutCharacterClassInput = {
   create?: Prisma.XOR<Prisma.CharacterSheetProgressionChoiceCreateWithoutCharacterClassInput, Prisma.CharacterSheetProgressionChoiceUncheckedCreateWithoutCharacterClassInput> | Prisma.CharacterSheetProgressionChoiceCreateWithoutCharacterClassInput[] | Prisma.CharacterSheetProgressionChoiceUncheckedCreateWithoutCharacterClassInput[]
   connectOrCreate?: Prisma.CharacterSheetProgressionChoiceCreateOrConnectWithoutCharacterClassInput | Prisma.CharacterSheetProgressionChoiceCreateOrConnectWithoutCharacterClassInput[]

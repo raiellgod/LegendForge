@@ -5,6 +5,24 @@ import { z } from "zod";
 import { getAuthenticatedSession } from "../lib/get-authenticated-session.js";
 import { prisma } from "../lib/prisma.js";
 
+function normalizeCharacterTemplateAttributeIncreases(
+  value: unknown,
+): Record<string, number> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+
+  const normalized: Record<string, number> = {};
+
+  for (const [key, entryValue] of Object.entries(value)) {
+    if (typeof entryValue === "number" && Number.isFinite(entryValue)) {
+      normalized[key] = entryValue;
+    }
+  }
+
+  return normalized;
+}
+
 export async function campaignRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().route({
     method: "POST",
@@ -594,6 +612,646 @@ export async function campaignRoutes(app: FastifyInstance) {
           createdAt: actor.createdAt.toISOString(),
           updatedAt: actor.updatedAt.toISOString(),
         })),
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/campaigns/:id/npc-templates/:templateId/import",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Import an NPC template into the campaign library",
+      params: z.object({
+        id: z.string().uuid("Invalid campaign id"),
+        templateId: z.string().uuid("Invalid NPC template id"),
+      }),
+      response: {
+        201: z.object({
+          actor: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            ownerId: z.string().nullable(),
+            type: z.string(),
+            location: z.string(),
+            name: z.string(),
+            initials: z.string(),
+            description: z.string().nullable(),
+            portraitUrl: z.string().nullable(),
+            createdAt: z.string(),
+            updatedAt: z.string(),
+          }),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+        409: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.id,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isGM = currentParticipant?.role === "GM";
+
+      if (!isGM) {
+        return reply.status(403).send({
+          message: "Only GMs can import NPC templates",
+        });
+      }
+
+      if (!campaign.systemId) {
+        return reply.status(409).send({
+          message: "Campaign has no system",
+        });
+      }
+
+      const npcTemplate = await prisma.npcTemplate.findFirst({
+        where: {
+          id: request.params.templateId,
+          systemId: campaign.systemId,
+        },
+      });
+
+      if (!npcTemplate) {
+        return reply.status(404).send({
+          message: "NPC template not found for campaign system",
+        });
+      }
+
+      const initials =
+        npcTemplate.initials ??
+        npcTemplate.name
+          .trim()
+          .split(" ")
+          .map((part) => part[0])
+          .join("")
+          .slice(0, 3)
+          .toUpperCase();
+
+      const actor = await prisma.campaignActor.create({
+        data: {
+          campaignId: campaign.id,
+          ownerId: null,
+          type: "NPC",
+          location: "LIBRARY",
+          name: npcTemplate.name,
+          initials,
+          description: npcTemplate.description,
+          portraitUrl: npcTemplate.portraitUrl,
+        },
+      });
+
+      return reply.status(201).send({
+        actor: {
+          id: actor.id,
+          campaignId: actor.campaignId,
+          ownerId: actor.ownerId,
+          type: actor.type,
+          location: actor.location,
+          name: actor.name,
+          initials: actor.initials,
+          description: actor.description,
+          portraitUrl: actor.portraitUrl,
+          createdAt: actor.createdAt.toISOString(),
+          updatedAt: actor.updatedAt.toISOString(),
+        },
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/campaigns/:id/creature-templates/:templateId/import",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Import a creature template into the campaign library",
+      params: z.object({
+        id: z.string().uuid("Invalid campaign id"),
+        templateId: z.string().uuid("Invalid creature template id"),
+      }),
+      response: {
+        201: z.object({
+          actor: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            ownerId: z.string().nullable(),
+            type: z.string(),
+            location: z.string(),
+            name: z.string(),
+            initials: z.string(),
+            description: z.string().nullable(),
+            portraitUrl: z.string().nullable(),
+            createdAt: z.string(),
+            updatedAt: z.string(),
+          }),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+        409: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.id,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isGM = currentParticipant?.role === "GM";
+
+      if (!isGM) {
+        return reply.status(403).send({
+          message: "Only GMs can import creature templates",
+        });
+      }
+
+      if (!campaign.systemId) {
+        return reply.status(409).send({
+          message: "Campaign has no system",
+        });
+      }
+
+      const creatureTemplate = await prisma.creatureTemplate.findFirst({
+        where: {
+          id: request.params.templateId,
+          systemId: campaign.systemId,
+        },
+      });
+
+      if (!creatureTemplate) {
+        return reply.status(404).send({
+          message: "Creature template not found for campaign system",
+        });
+      }
+
+      const initials =
+        creatureTemplate.initials ??
+        creatureTemplate.name
+          .trim()
+          .split(" ")
+          .map((part) => part[0])
+          .join("")
+          .slice(0, 3)
+          .toUpperCase();
+
+      const actor = await prisma.campaignActor.create({
+        data: {
+          campaignId: campaign.id,
+          ownerId: null,
+          type: "CREATURE",
+          location: "LIBRARY",
+          name: creatureTemplate.name,
+          initials,
+          description: creatureTemplate.description,
+          portraitUrl: creatureTemplate.portraitUrl,
+        },
+      });
+
+      return reply.status(201).send({
+        actor: {
+          id: actor.id,
+          campaignId: actor.campaignId,
+          ownerId: actor.ownerId,
+          type: actor.type,
+          location: actor.location,
+          name: actor.name,
+          initials: actor.initials,
+          description: actor.description,
+          portraitUrl: actor.portraitUrl,
+          createdAt: actor.createdAt.toISOString(),
+          updatedAt: actor.updatedAt.toISOString(),
+        },
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/campaigns/:id/character-templates/:templateId/import",
+    schema: {
+      tags: ["Campaigns"],
+      description:
+        "Instantiate a CharacterTemplate as an independent CampaignActor and CharacterSheet",
+      params: z.object({
+        id: z.string().uuid("Invalid campaign id"),
+        templateId: z.string().uuid("Invalid character template id"),
+      }),
+      response: {
+        201: z.object({
+          actor: z.object({
+            id: z.string(),
+            campaignId: z.string(),
+            ownerId: z.string().nullable(),
+            type: z.string(),
+            location: z.string(),
+            name: z.string(),
+            initials: z.string(),
+            description: z.string().nullable(),
+            portraitUrl: z.string().nullable(),
+            createdAt: z.string(),
+            updatedAt: z.string(),
+          }),
+          characterSheetId: z.string(),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+        409: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.id,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const currentParticipant = campaign.participants[0];
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = currentParticipant?.role === "GM";
+
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message: "Only GMs can instantiate character templates",
+        });
+      }
+
+      if (!campaign.systemId) {
+        return reply.status(409).send({
+          message: "Campaign has no system",
+        });
+      }
+
+      const characterTemplate = await prisma.characterTemplate.findFirst({
+        where: {
+          id: request.params.templateId,
+          systemId: campaign.systemId,
+        },
+        include: {
+          classes: {
+            orderBy: {
+              order: "asc",
+            },
+          },
+          stats: true,
+          skills: true,
+          spells: true,
+          equipment: true,
+          languages: true,
+          featureChoices: true,
+          progressionChoices: true,
+        },
+      });
+
+      if (!characterTemplate) {
+        return reply.status(404).send({
+          message: "Character template not found for campaign system",
+        });
+      }
+
+      if (characterTemplate.classes.length === 0) {
+        return reply.status(409).send({
+          message: "Character template has no class entries",
+        });
+      }
+
+      const primaryClassEntry =
+        characterTemplate.classes.find((classEntry) => classEntry.isPrimary) ??
+        characterTemplate.classes[0];
+
+      const initials = characterTemplate.name
+        .trim()
+        .split(" ")
+        .filter(Boolean)
+        .map((part) => part[0])
+        .join("")
+        .slice(0, 3)
+        .toUpperCase();
+
+      const result = await prisma.$transaction(async (tx) => {
+        const actor = await tx.campaignActor.create({
+          data: {
+            campaignId: campaign.id,
+            ownerId: null,
+            type: "PLAYER_CHARACTER",
+            location: "TABLE",
+            name: characterTemplate.name,
+            initials: initials || "PC",
+            description: characterTemplate.description,
+            portraitUrl: characterTemplate.portraitUrl,
+          },
+        });
+
+        const characterSheet = await tx.characterSheet.create({
+          data: {
+            campaignId: campaign.id,
+            systemId: campaign.systemId!,
+            campaignActorId: actor.id,
+            ownerId: null,
+            ancestryId: characterTemplate.ancestryId,
+            subAncestryId: characterTemplate.subAncestryId,
+            backgroundId: characterTemplate.backgroundId,
+            classId: primaryClassEntry.classId,
+            subclassId: primaryClassEntry.subclassId,
+            status: "READY",
+
+            name: characterTemplate.name,
+            pronouns: characterTemplate.pronouns,
+            concept: characterTemplate.concept,
+            portraitUrl: characterTemplate.portraitUrl,
+            tokenImageUrl: characterTemplate.tokenImageUrl,
+            tokenImageFit: characterTemplate.tokenImageFit,
+
+            level: characterTemplate.level,
+            experience: 0,
+            levelUpAvailable: false,
+            hitPoints: characterTemplate.maxHitPoints,
+            maxHitPoints: characterTemplate.maxHitPoints,
+            temporaryHp: 0,
+            hitDiceUsed: 0,
+            deathSaveSuccesses: 0,
+            deathSaveFailures: 0,
+            armorClass: characterTemplate.armorClass,
+            speed: characterTemplate.speed,
+            inspiration: false,
+            classEquipmentMode: characterTemplate.classEquipmentMode,
+            backgroundEquipmentMode: characterTemplate.backgroundEquipmentMode,
+            startingGold: characterTemplate.startingGold,
+
+            alignment: characterTemplate.alignment,
+            faith: characterTemplate.faith,
+            lifestyle: characterTemplate.lifestyle,
+
+            hair: characterTemplate.hair,
+            skin: characterTemplate.skin,
+            eyes: characterTemplate.eyes,
+            height: characterTemplate.height,
+            weight: characterTemplate.weight,
+            age: characterTemplate.age,
+            gender: characterTemplate.gender,
+
+            bonds: characterTemplate.bonds,
+            flaws: characterTemplate.flaws,
+            ideals: characterTemplate.ideals,
+            personality: characterTemplate.personality,
+            backstory: characterTemplate.backstory,
+            organizations: characterTemplate.organizations,
+            allies: characterTemplate.allies,
+            enemies: characterTemplate.enemies,
+            notes: characterTemplate.notes,
+            otherNotes: characterTemplate.otherNotes,
+            gmNotes: null,
+
+            classes: {
+              create: characterTemplate.classes.map((classEntry) => ({
+                classId: classEntry.classId,
+                subclassId: classEntry.subclassId,
+                level: classEntry.level,
+                isPrimary: classEntry.id === primaryClassEntry.id,
+                order: classEntry.order,
+              })),
+            },
+
+            stats: {
+              create: characterTemplate.stats.map((statEntry) => ({
+                statId: statEntry.statId,
+                baseValue: statEntry.baseValue,
+                bonusValue: statEntry.bonusValue,
+                overrideValue: statEntry.overrideValue,
+                isSavingThrowProficient:
+                  statEntry.isSavingThrowProficient,
+              })),
+            },
+
+            skills: {
+              create: characterTemplate.skills.map((skillEntry) => ({
+                skillId: skillEntry.skillId,
+                isProficient: skillEntry.isProficient,
+                expertiseLevel: skillEntry.expertiseLevel,
+                bonusValue: skillEntry.bonusValue,
+                overrideValue: skillEntry.overrideValue,
+                source: skillEntry.source,
+              })),
+            },
+
+            spells: {
+              create: characterTemplate.spells.map((spellEntry) => ({
+                spellId: spellEntry.spellId,
+                classId: spellEntry.classId,
+                source: spellEntry.source,
+                isPrepared: spellEntry.isPrepared,
+                isAlwaysPrepared: spellEntry.isAlwaysPrepared,
+                uses: spellEntry.uses,
+                maxUses: spellEntry.maxUses,
+                notes: spellEntry.notes,
+              })),
+            },
+
+            equipment: {
+              create: characterTemplate.equipment.map((equipmentEntry) => ({
+                equipmentId: equipmentEntry.equipmentId,
+                quantity: equipmentEntry.quantity,
+                isEquipped: equipmentEntry.isEquipped,
+                isAttuned: equipmentEntry.isAttuned,
+                source: equipmentEntry.source,
+                notes: equipmentEntry.notes,
+              })),
+            },
+
+            languages: {
+              create: characterTemplate.languages.map((languageEntry) => ({
+                languageId: languageEntry.languageId,
+                source: languageEntry.source,
+              })),
+            },
+
+            featureChoices: {
+              create: characterTemplate.featureChoices.map((choiceEntry) => ({
+                choiceGroupId: choiceEntry.choiceGroupId,
+                featureId: choiceEntry.featureId,
+                source: choiceEntry.source,
+              })),
+            },
+
+            progressionChoices: {
+              create: characterTemplate.progressionChoices.map(
+                (choiceEntry) => ({
+                  classId: choiceEntry.classId,
+                  talentId: choiceEntry.talentId,
+                  classLevel: choiceEntry.classLevel,
+                  choiceIndex: choiceEntry.choiceIndex,
+                  type: choiceEntry.type,
+                  attributeIncreaseMode: choiceEntry.attributeIncreaseMode,
+                  attributeIncreases:
+                    normalizeCharacterTemplateAttributeIncreases(
+                      choiceEntry.attributeIncreases,
+                    ),
+                }),
+              ),
+            },
+          },
+        });
+
+        return {
+          actor,
+          characterSheetId: characterSheet.id,
+        };
+      });
+
+      return reply.status(201).send({
+        actor: {
+          id: result.actor.id,
+          campaignId: result.actor.campaignId,
+          ownerId: result.actor.ownerId,
+          type: result.actor.type,
+          location: result.actor.location,
+          name: result.actor.name,
+          initials: result.actor.initials,
+          description: result.actor.description,
+          portraitUrl: result.actor.portraitUrl,
+          createdAt: result.actor.createdAt.toISOString(),
+          updatedAt: result.actor.updatedAt.toISOString(),
+        },
+        characterSheetId: result.characterSheetId,
       });
     },
   });
@@ -1585,17 +2243,38 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
-      const updatedActor = await prisma.campaignActor.update({
-        where: {
-          id: actor.id,
-        },
-        data: {
-          name: request.body.name,
-          initials: request.body.initials,
-          description: request.body.description,
-          portraitUrl: request.body.portraitUrl,
-          location: request.body.location,
-        },
+      const updatedActor = await prisma.$transaction(async (tx) => {
+        const nextActor = await tx.campaignActor.update({
+          where: {
+            id: actor.id,
+          },
+          data: {
+            name: request.body.name,
+            initials: request.body.initials,
+            description: request.body.description,
+            portraitUrl: request.body.portraitUrl,
+            location: request.body.location,
+          },
+        });
+
+        if (
+          actor.type === "PLAYER_CHARACTER" &&
+          (request.body.name !== undefined ||
+            request.body.portraitUrl !== undefined)
+        ) {
+          await tx.characterSheet.updateMany({
+            where: {
+              campaignId: campaign.id,
+              campaignActorId: actor.id,
+            },
+            data: {
+              name: request.body.name,
+              portraitUrl: request.body.portraitUrl,
+            },
+          });
+        }
+
+        return nextActor;
       });
 
       return reply.status(200).send({
@@ -1612,6 +2291,142 @@ export async function campaignRoutes(app: FastifyInstance) {
           createdAt: updatedActor.createdAt.toISOString(),
           updatedAt: updatedActor.updatedAt.toISOString(),
         },
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "DELETE",
+    url: "/campaigns/:campaignId/actors/:actorId",
+    schema: {
+      tags: ["Campaigns"],
+      description:
+        "Delete an unassigned player-character campaign instance and its sheet",
+      params: z.object({
+        campaignId: z.string().uuid("Invalid campaign id"),
+        actorId: z.string().uuid("Invalid actor id"),
+      }),
+      response: {
+        200: z.object({
+          deletedActorId: z.string(),
+          deletedCharacterSheetId: z.string().nullable(),
+        }),
+        401: z.object({
+          message: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+        }),
+        409: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.campaignId,
+          OR: [
+            {
+              ownerId: session.user.id,
+            },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  role: "GM",
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              role: "GM",
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({
+          message: "Campaign not found",
+        });
+      }
+
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = campaign.participants[0]?.role === "GM";
+
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message: "Only GMs can delete campaign character instances",
+        });
+      }
+
+      const actor = await prisma.campaignActor.findFirst({
+        where: {
+          id: request.params.actorId,
+          campaignId: campaign.id,
+        },
+        include: {
+          characterSheet: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      if (!actor) {
+        return reply.status(404).send({
+          message: "Actor not found",
+        });
+      }
+
+      if (actor.type !== "PLAYER_CHARACTER" || actor.ownerId !== null) {
+        return reply.status(409).send({
+          message:
+            "Only unassigned player-character instances can be deleted by this action",
+        });
+      }
+
+      const deletedCharacterSheetId = actor.characterSheet?.id ?? null;
+
+      await prisma.$transaction(async (tx) => {
+        if (deletedCharacterSheetId) {
+          await tx.characterSheet.delete({
+            where: {
+              id: deletedCharacterSheetId,
+            },
+          });
+        }
+
+        await tx.campaignActor.delete({
+          where: {
+            id: actor.id,
+          },
+        });
+      });
+
+      return reply.status(200).send({
+        deletedActorId: actor.id,
+        deletedCharacterSheetId,
       });
     },
   });

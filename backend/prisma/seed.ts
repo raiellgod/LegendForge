@@ -5,10 +5,12 @@ import { ancestries } from "./seed-data/ancestries.js";
 import { backgrounds } from "./seed-data/backgrounds.js";
 import { classSpellAccess } from "./seed-data/class-spells.js";
 import { classes } from "./seed-data/classes.js";
+import { creatureTemplates } from "./seed-data/creature-templates.js";
 import { equipment } from "./seed-data/equipment.js";
 import { featureChoiceGroups } from "./seed-data/feature-choice-groups.js";
 import { features } from "./seed-data/features.js";
 import { languages } from "./seed-data/languages.js";
+import { npcTemplates } from "./seed-data/npc-templates.js";
 import { skills } from "./seed-data/skills.js";
 import { spells } from "./seed-data/spells.js";
 import { stats } from "./seed-data/stats.js";
@@ -504,6 +506,66 @@ async function main() {
   const createdLevelProgressions = new Map<string, string>();
   const createdFeatures = new Map<string, string>();
   const createdSpells = new Map<string, string>();
+
+  for (const [index, npcTemplateData] of npcTemplates.entries()) {
+    const npcTemplate = await prisma.npcTemplate.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: npcTemplateData.key,
+        },
+      },
+      update: {
+        name: npcTemplateData.name,
+        initials: npcTemplateData.initials,
+        description: npcTemplateData.description,
+        portraitUrl: npcTemplateData.portraitUrl,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        key: npcTemplateData.key,
+        name: npcTemplateData.name,
+        initials: npcTemplateData.initials,
+        description: npcTemplateData.description,
+        portraitUrl: npcTemplateData.portraitUrl,
+        order: index + 1,
+      },
+    });
+
+    console.log(`Template de NPC criado/validado: ${npcTemplate.name}`);
+  }
+
+  for (const [index, creatureTemplateData] of creatureTemplates.entries()) {
+    const creatureTemplate = await prisma.creatureTemplate.upsert({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: creatureTemplateData.key,
+        },
+      },
+      update: {
+        name: creatureTemplateData.name,
+        initials: creatureTemplateData.initials,
+        description: creatureTemplateData.description,
+        portraitUrl: creatureTemplateData.portraitUrl,
+        order: index + 1,
+      },
+      create: {
+        systemId: system.id,
+        key: creatureTemplateData.key,
+        name: creatureTemplateData.name,
+        initials: creatureTemplateData.initials,
+        description: creatureTemplateData.description,
+        portraitUrl: creatureTemplateData.portraitUrl,
+        order: index + 1,
+      },
+    });
+
+    console.log(
+      `Template de criatura criado/validado: ${creatureTemplate.name}`,
+    );
+  }
 
   for (const [index, statData] of stats.entries()) {
     const stat = await prisma.stat.upsert({
@@ -1335,6 +1397,362 @@ async function main() {
 
     console.log(`Talento criado/validado: ${talent.name}`);
   }
+
+
+  /*
+   * 5.11.15 — CharacterTemplate mínimo.
+   *
+   * Este template é conteúdo somente leitura do GameSystem.
+   * Ele representa uma configuração resolvida e reutilizável de personagem,
+   * sem campaignId, ownerId, CampaignActor ou estado vivo de campanha.
+   */
+  const templateAncestry = await prisma.ancestry.findUnique({
+    where: {
+      systemId_key: {
+        systemId: system.id,
+        key: "humanis",
+      },
+    },
+  });
+
+  const templateBackground = await prisma.background.findUnique({
+    where: {
+      systemId_key: {
+        systemId: system.id,
+        key: "village-champion",
+      },
+    },
+  });
+
+  const templateClass = await prisma.characterClass.findUnique({
+    where: {
+      systemId_key: {
+        systemId: system.id,
+        key: "fighter",
+      },
+    },
+  });
+
+  if (!templateAncestry || !templateBackground || !templateClass) {
+    throw new Error(
+      "Não foi possível criar o CharacterTemplate mínimo: Humanis, Campeão da Aldeia ou Guerreiro não foi encontrado.",
+    );
+  }
+
+  const templateStatBaseValues = {
+    strength: 15,
+    dexterity: 13,
+    constitution: 14,
+    intelligence: 10,
+    wisdom: 12,
+    charisma: 8,
+  } as const;
+
+  const templateStats = await prisma.stat.findMany({
+    where: {
+      systemId: system.id,
+      key: {
+        in: Object.keys(templateStatBaseValues),
+      },
+    },
+    select: {
+      id: true,
+      key: true,
+    },
+  });
+
+  if (templateStats.length !== Object.keys(templateStatBaseValues).length) {
+    throw new Error(
+      "Não foi possível criar o CharacterTemplate mínimo: nem todos os seis atributos foram encontrados.",
+    );
+  }
+
+  const templateSkillSources = new Map<string, string>([
+    ["forca-bruta", "background"],
+    ["sobrevivencia", "background"],
+    ["atletismo", "class"],
+    ["intimidacao", "class"],
+    ["percepcao", "class"],
+  ]);
+
+  const templateSkills = await prisma.skill.findMany({
+    where: {
+      systemId: system.id,
+      key: {
+        in: Array.from(templateSkillSources.keys()),
+      },
+    },
+    select: {
+      id: true,
+      key: true,
+    },
+  });
+
+  if (templateSkills.length !== templateSkillSources.size) {
+    throw new Error(
+      "Não foi possível criar o CharacterTemplate mínimo: uma ou mais perícias esperadas não foram encontradas.",
+    );
+  }
+
+  const commonLanguage = await prisma.language.findUnique({
+    where: {
+      systemId_key: {
+        systemId: system.id,
+        key: "common",
+      },
+    },
+  });
+
+  if (!commonLanguage) {
+    throw new Error(
+      'Não foi possível criar o CharacterTemplate mínimo: idioma "common" não encontrado.',
+    );
+  }
+
+  const templateEquipmentKeys = [
+    "longsword",
+    "leather-armor",
+    "simple-shield",
+    "adventurer-pouch",
+  ];
+
+  const templateEquipment = await prisma.equipment.findMany({
+    where: {
+      systemId: system.id,
+      key: {
+        in: templateEquipmentKeys,
+      },
+    },
+    select: {
+      id: true,
+      key: true,
+    },
+  });
+
+  if (templateEquipment.length !== templateEquipmentKeys.length) {
+    throw new Error(
+      "Não foi possível criar o CharacterTemplate mínimo: um ou mais equipamentos esperados não foram encontrados.",
+    );
+  }
+
+  const characterTemplate = await prisma.characterTemplate.upsert({
+    where: {
+      systemId_key: {
+        systemId: system.id,
+        key: "humanis-village-champion",
+      },
+    },
+    update: {
+      ancestryId: templateAncestry.id,
+      subAncestryId: null,
+      backgroundId: templateBackground.id,
+      name: "Campeão Humanis",
+      description:
+        "Personagem-template inicial do sistema: guerreiro Humanis preparado para servir como exemplo completo de ficha reutilizável.",
+      pronouns: null,
+      concept: "Veterano comunitário e defensor das regiões habitadas.",
+      portraitUrl: null,
+      tokenImageUrl: null,
+      tokenImageFit: "COVER",
+      level: 1,
+      maxHitPoints: 12,
+      armorClass: 12,
+      speed: 30,
+      classEquipmentMode: "PACKAGE",
+      backgroundEquipmentMode: "PACKAGE",
+      startingGold: templateBackground.startingGold,
+      alignment: null,
+      faith: null,
+      lifestyle: null,
+      hair: null,
+      skin: null,
+      eyes: null,
+      height: null,
+      weight: null,
+      age: null,
+      gender: null,
+      bonds:
+        "Protege comunidades que não possuem força suficiente para enfrentar os perigos das ruínas sozinhas.",
+      flaws:
+        "Tem dificuldade em abandonar uma posição quando acredita que alguém ainda depende de sua proteção.",
+      ideals:
+        "Sobrevivência coletiva exige disciplina, coragem e responsabilidade.",
+      personality:
+        "Prático, vigilante e acostumado a agir antes que uma ameaça alcance pessoas vulneráveis.",
+      backstory:
+        "Antes de se tornar aventureiro, ganhou respeito defendendo uma comunidade contra perigos das regiões devastadas.",
+      organizations: null,
+      allies: null,
+      enemies: null,
+      notes: "Template mínimo criado na Fase 5.11.",
+      otherNotes: null,
+      order: 1,
+    },
+    create: {
+      systemId: system.id,
+      ancestryId: templateAncestry.id,
+      subAncestryId: null,
+      backgroundId: templateBackground.id,
+      key: "humanis-village-champion",
+      name: "Campeão Humanis",
+      description:
+        "Personagem-template inicial do sistema: guerreiro Humanis preparado para servir como exemplo completo de ficha reutilizável.",
+      pronouns: null,
+      concept: "Veterano comunitário e defensor das regiões habitadas.",
+      portraitUrl: null,
+      tokenImageUrl: null,
+      tokenImageFit: "COVER",
+      level: 1,
+      maxHitPoints: 12,
+      armorClass: 12,
+      speed: 30,
+      classEquipmentMode: "PACKAGE",
+      backgroundEquipmentMode: "PACKAGE",
+      startingGold: templateBackground.startingGold,
+      alignment: null,
+      faith: null,
+      lifestyle: null,
+      hair: null,
+      skin: null,
+      eyes: null,
+      height: null,
+      weight: null,
+      age: null,
+      gender: null,
+      bonds:
+        "Protege comunidades que não possuem força suficiente para enfrentar os perigos das ruínas sozinhas.",
+      flaws:
+        "Tem dificuldade em abandonar uma posição quando acredita que alguém ainda depende de sua proteção.",
+      ideals:
+        "Sobrevivência coletiva exige disciplina, coragem e responsabilidade.",
+      personality:
+        "Prático, vigilante e acostumado a agir antes que uma ameaça alcance pessoas vulneráveis.",
+      backstory:
+        "Antes de se tornar aventureiro, ganhou respeito defendendo uma comunidade contra perigos das regiões devastadas.",
+      organizations: null,
+      allies: null,
+      enemies: null,
+      notes: "Template mínimo criado na Fase 5.11.",
+      otherNotes: null,
+      order: 1,
+    },
+  });
+
+  await prisma.$transaction([
+    prisma.characterTemplateClass.deleteMany({
+      where: {
+        templateId: characterTemplate.id,
+      },
+    }),
+    prisma.characterTemplateStat.deleteMany({
+      where: {
+        templateId: characterTemplate.id,
+      },
+    }),
+    prisma.characterTemplateSkill.deleteMany({
+      where: {
+        templateId: characterTemplate.id,
+      },
+    }),
+    prisma.characterTemplateSpell.deleteMany({
+      where: {
+        templateId: characterTemplate.id,
+      },
+    }),
+    prisma.characterTemplateEquipment.deleteMany({
+      where: {
+        templateId: characterTemplate.id,
+      },
+    }),
+    prisma.characterTemplateLanguage.deleteMany({
+      where: {
+        templateId: characterTemplate.id,
+      },
+    }),
+    prisma.characterTemplateFeatureChoice.deleteMany({
+      where: {
+        templateId: characterTemplate.id,
+      },
+    }),
+    prisma.characterTemplateProgressionChoice.deleteMany({
+      where: {
+        templateId: characterTemplate.id,
+      },
+    }),
+  ]);
+
+  await prisma.characterTemplateClass.create({
+    data: {
+      templateId: characterTemplate.id,
+      classId: templateClass.id,
+      subclassId: null,
+      level: 1,
+      isPrimary: true,
+      order: 0,
+    },
+  });
+
+  await prisma.characterTemplateStat.createMany({
+    data: templateStats.map((stat) => {
+      const statKey = stat.key as keyof typeof templateStatBaseValues;
+
+      return {
+        templateId: characterTemplate.id,
+        statId: stat.id,
+        baseValue: templateStatBaseValues[statKey],
+        bonusValue: 1,
+        overrideValue: null,
+        isSavingThrowProficient: false,
+      };
+    }),
+  });
+
+  await prisma.characterTemplateSkill.createMany({
+    data: templateSkills.map((skill) => ({
+      templateId: characterTemplate.id,
+      skillId: skill.id,
+      isProficient: true,
+      expertiseLevel: 0,
+      bonusValue: 0,
+      overrideValue: null,
+      source: templateSkillSources.get(skill.key) ?? "builder",
+    })),
+  });
+
+  await prisma.characterTemplateLanguage.create({
+    data: {
+      templateId: characterTemplate.id,
+      languageId: commonLanguage.id,
+      source: "ancestry",
+    },
+  });
+
+  await prisma.characterTemplateEquipment.createMany({
+    data: templateEquipment.map((item) => {
+      const isEquipped = [
+        "longsword",
+        "leather-armor",
+        "simple-shield",
+      ].includes(item.key);
+
+      return {
+        templateId: characterTemplate.id,
+        equipmentId: item.id,
+        quantity: 1,
+        isEquipped,
+        isAttuned: false,
+        source: "class",
+        notes:
+          item.key === "adventurer-pouch"
+            ? "Bolsa de viagem do personagem-template."
+            : null,
+      };
+    }),
+  });
+
+  console.log(
+    `CharacterTemplate criado/validado: ${characterTemplate.name}`,
+  );
 
   console.log("Seed concluído com sucesso.");
 }

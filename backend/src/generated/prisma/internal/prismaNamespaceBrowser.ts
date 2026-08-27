@@ -56,9 +56,20 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   GameSystem: 'GameSystem',
+  NpcTemplate: 'NpcTemplate',
+  CreatureTemplate: 'CreatureTemplate',
   Ancestry: 'Ancestry',
   SubAncestry: 'SubAncestry',
   Background: 'Background',
+  CharacterTemplate: 'CharacterTemplate',
+  CharacterTemplateClass: 'CharacterTemplateClass',
+  CharacterTemplateStat: 'CharacterTemplateStat',
+  CharacterTemplateSkill: 'CharacterTemplateSkill',
+  CharacterTemplateSpell: 'CharacterTemplateSpell',
+  CharacterTemplateEquipment: 'CharacterTemplateEquipment',
+  CharacterTemplateLanguage: 'CharacterTemplateLanguage',
+  CharacterTemplateFeatureChoice: 'CharacterTemplateFeatureChoice',
+  CharacterTemplateProgressionChoice: 'CharacterTemplateProgressionChoice',
   CharacterSheet: 'CharacterSheet',
   Language: 'Language',
   CharacterSheetLanguage: 'CharacterSheetLanguage',
@@ -178,6 +189,38 @@ export const GameSystemScalarFieldEnum = {
 export type GameSystemScalarFieldEnum = (typeof GameSystemScalarFieldEnum)[keyof typeof GameSystemScalarFieldEnum]
 
 
+export const NpcTemplateScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  key: 'key',
+  name: 'name',
+  initials: 'initials',
+  description: 'description',
+  portraitUrl: 'portraitUrl',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateScalarFieldEnum = (typeof NpcTemplateScalarFieldEnum)[keyof typeof NpcTemplateScalarFieldEnum]
+
+
+export const CreatureTemplateScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  key: 'key',
+  name: 'name',
+  initials: 'initials',
+  description: 'description',
+  portraitUrl: 'portraitUrl',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateScalarFieldEnum = (typeof CreatureTemplateScalarFieldEnum)[keyof typeof CreatureTemplateScalarFieldEnum]
+
+
 export const AncestryScalarFieldEnum = {
   id: 'id',
   systemId: 'systemId',
@@ -231,6 +274,177 @@ export const BackgroundScalarFieldEnum = {
 } as const
 
 export type BackgroundScalarFieldEnum = (typeof BackgroundScalarFieldEnum)[keyof typeof BackgroundScalarFieldEnum]
+
+
+export const CharacterTemplateScalarFieldEnum = {
+  id: 'id',
+  systemId: 'systemId',
+  ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
+  backgroundId: 'backgroundId',
+  key: 'key',
+  name: 'name',
+  description: 'description',
+  pronouns: 'pronouns',
+  concept: 'concept',
+  portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  level: 'level',
+  maxHitPoints: 'maxHitPoints',
+  armorClass: 'armorClass',
+  speed: 'speed',
+  classEquipmentMode: 'classEquipmentMode',
+  backgroundEquipmentMode: 'backgroundEquipmentMode',
+  startingGold: 'startingGold',
+  alignment: 'alignment',
+  faith: 'faith',
+  lifestyle: 'lifestyle',
+  hair: 'hair',
+  skin: 'skin',
+  eyes: 'eyes',
+  height: 'height',
+  weight: 'weight',
+  age: 'age',
+  gender: 'gender',
+  bonds: 'bonds',
+  flaws: 'flaws',
+  ideals: 'ideals',
+  personality: 'personality',
+  backstory: 'backstory',
+  organizations: 'organizations',
+  allies: 'allies',
+  enemies: 'enemies',
+  notes: 'notes',
+  otherNotes: 'otherNotes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateScalarFieldEnum = (typeof CharacterTemplateScalarFieldEnum)[keyof typeof CharacterTemplateScalarFieldEnum]
+
+
+export const CharacterTemplateClassScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  level: 'level',
+  isPrimary: 'isPrimary',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateClassScalarFieldEnum = (typeof CharacterTemplateClassScalarFieldEnum)[keyof typeof CharacterTemplateClassScalarFieldEnum]
+
+
+export const CharacterTemplateStatScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateStatScalarFieldEnum = (typeof CharacterTemplateStatScalarFieldEnum)[keyof typeof CharacterTemplateStatScalarFieldEnum]
+
+
+export const CharacterTemplateSkillScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateSkillScalarFieldEnum = (typeof CharacterTemplateSkillScalarFieldEnum)[keyof typeof CharacterTemplateSkillScalarFieldEnum]
+
+
+export const CharacterTemplateSpellScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  spellId: 'spellId',
+  classId: 'classId',
+  source: 'source',
+  isPrepared: 'isPrepared',
+  isAlwaysPrepared: 'isAlwaysPrepared',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateSpellScalarFieldEnum = (typeof CharacterTemplateSpellScalarFieldEnum)[keyof typeof CharacterTemplateSpellScalarFieldEnum]
+
+
+export const CharacterTemplateEquipmentScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  equipmentId: 'equipmentId',
+  quantity: 'quantity',
+  isEquipped: 'isEquipped',
+  isAttuned: 'isAttuned',
+  source: 'source',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateEquipmentScalarFieldEnum = (typeof CharacterTemplateEquipmentScalarFieldEnum)[keyof typeof CharacterTemplateEquipmentScalarFieldEnum]
+
+
+export const CharacterTemplateLanguageScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  languageId: 'languageId',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateLanguageScalarFieldEnum = (typeof CharacterTemplateLanguageScalarFieldEnum)[keyof typeof CharacterTemplateLanguageScalarFieldEnum]
+
+
+export const CharacterTemplateFeatureChoiceScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  choiceGroupId: 'choiceGroupId',
+  featureId: 'featureId',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateFeatureChoiceScalarFieldEnum = (typeof CharacterTemplateFeatureChoiceScalarFieldEnum)[keyof typeof CharacterTemplateFeatureChoiceScalarFieldEnum]
+
+
+export const CharacterTemplateProgressionChoiceScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  classId: 'classId',
+  talentId: 'talentId',
+  classLevel: 'classLevel',
+  choiceIndex: 'choiceIndex',
+  type: 'type',
+  attributeIncreaseMode: 'attributeIncreaseMode',
+  attributeIncreases: 'attributeIncreases',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CharacterTemplateProgressionChoiceScalarFieldEnum = (typeof CharacterTemplateProgressionChoiceScalarFieldEnum)[keyof typeof CharacterTemplateProgressionChoiceScalarFieldEnum]
 
 
 export const CharacterSheetScalarFieldEnum = {

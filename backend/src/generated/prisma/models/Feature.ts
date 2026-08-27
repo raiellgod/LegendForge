@@ -317,6 +317,7 @@ export type FeatureWhereInput = {
   levelProgression?: Prisma.XOR<Prisma.LevelProgressionNullableScalarRelationFilter, Prisma.LevelProgressionWhereInput> | null
   choiceOptions?: Prisma.FeatureChoiceOptionListRelationFilter
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceListRelationFilter
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceListRelationFilter
 }
 
 export type FeatureOrderByWithRelationInput = {
@@ -345,6 +346,7 @@ export type FeatureOrderByWithRelationInput = {
   levelProgression?: Prisma.LevelProgressionOrderByWithRelationInput
   choiceOptions?: Prisma.FeatureChoiceOptionOrderByRelationAggregateInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceOrderByRelationAggregateInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceOrderByRelationAggregateInput
 }
 
 export type FeatureWhereUniqueInput = Prisma.AtLeast<{
@@ -377,6 +379,7 @@ export type FeatureWhereUniqueInput = Prisma.AtLeast<{
   levelProgression?: Prisma.XOR<Prisma.LevelProgressionNullableScalarRelationFilter, Prisma.LevelProgressionWhereInput> | null
   choiceOptions?: Prisma.FeatureChoiceOptionListRelationFilter
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceListRelationFilter
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceListRelationFilter
 }, "id" | "systemId_key">
 
 export type FeatureOrderByWithAggregationInput = {
@@ -444,6 +447,7 @@ export type FeatureCreateInput = {
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateInput = {
@@ -465,6 +469,7 @@ export type FeatureUncheckedCreateInput = {
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUpdateInput = {
@@ -486,6 +491,7 @@ export type FeatureUpdateInput = {
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateInput = {
@@ -507,6 +513,7 @@ export type FeatureUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureCreateManyInput = {
@@ -567,6 +574,11 @@ export type FeatureListRelationFilter = {
 
 export type FeatureOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type FeatureScalarRelationFilter = {
+  is?: Prisma.FeatureWhereInput
+  isNot?: Prisma.FeatureWhereInput
 }
 
 export type FeatureSystemIdKeyCompoundUniqueInput = {
@@ -639,11 +651,6 @@ export type FeatureMinOrderByAggregateInput = {
 export type FeatureSumOrderByAggregateInput = {
   level?: Prisma.SortOrder
   order?: Prisma.SortOrder
-}
-
-export type FeatureScalarRelationFilter = {
-  is?: Prisma.FeatureWhereInput
-  isNot?: Prisma.FeatureWhereInput
 }
 
 export type FeatureCreateNestedManyWithoutSystemInput = {
@@ -812,6 +819,20 @@ export type FeatureUncheckedUpdateManyWithoutBackgroundNestedInput = {
   update?: Prisma.FeatureUpdateWithWhereUniqueWithoutBackgroundInput | Prisma.FeatureUpdateWithWhereUniqueWithoutBackgroundInput[]
   updateMany?: Prisma.FeatureUpdateManyWithWhereWithoutBackgroundInput | Prisma.FeatureUpdateManyWithWhereWithoutBackgroundInput[]
   deleteMany?: Prisma.FeatureScalarWhereInput | Prisma.FeatureScalarWhereInput[]
+}
+
+export type FeatureCreateNestedOneWithoutTemplateSelectionsInput = {
+  create?: Prisma.XOR<Prisma.FeatureCreateWithoutTemplateSelectionsInput, Prisma.FeatureUncheckedCreateWithoutTemplateSelectionsInput>
+  connectOrCreate?: Prisma.FeatureCreateOrConnectWithoutTemplateSelectionsInput
+  connect?: Prisma.FeatureWhereUniqueInput
+}
+
+export type FeatureUpdateOneRequiredWithoutTemplateSelectionsNestedInput = {
+  create?: Prisma.XOR<Prisma.FeatureCreateWithoutTemplateSelectionsInput, Prisma.FeatureUncheckedCreateWithoutTemplateSelectionsInput>
+  connectOrCreate?: Prisma.FeatureCreateOrConnectWithoutTemplateSelectionsInput
+  upsert?: Prisma.FeatureUpsertWithoutTemplateSelectionsInput
+  connect?: Prisma.FeatureWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FeatureUpdateToOneWithWhereWithoutTemplateSelectionsInput, Prisma.FeatureUpdateWithoutTemplateSelectionsInput>, Prisma.FeatureUncheckedUpdateWithoutTemplateSelectionsInput>
 }
 
 export type FeatureCreateNestedManyWithoutCharacterClassInput = {
@@ -990,6 +1011,7 @@ export type FeatureCreateWithoutSystemInput = {
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutSystemInput = {
@@ -1010,6 +1032,7 @@ export type FeatureUncheckedCreateWithoutSystemInput = {
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutSystemInput = {
@@ -1078,6 +1101,7 @@ export type FeatureCreateWithoutAncestryInput = {
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutAncestryInput = {
@@ -1098,6 +1122,7 @@ export type FeatureUncheckedCreateWithoutAncestryInput = {
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutAncestryInput = {
@@ -1144,6 +1169,7 @@ export type FeatureCreateWithoutSubAncestryInput = {
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutSubAncestryInput = {
@@ -1164,6 +1190,7 @@ export type FeatureUncheckedCreateWithoutSubAncestryInput = {
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutSubAncestryInput = {
@@ -1210,6 +1237,7 @@ export type FeatureCreateWithoutBackgroundInput = {
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutBackgroundInput = {
@@ -1230,6 +1258,7 @@ export type FeatureUncheckedCreateWithoutBackgroundInput = {
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutBackgroundInput = {
@@ -1258,6 +1287,106 @@ export type FeatureUpdateManyWithWhereWithoutBackgroundInput = {
   data: Prisma.XOR<Prisma.FeatureUpdateManyMutationInput, Prisma.FeatureUncheckedUpdateManyWithoutBackgroundInput>
 }
 
+export type FeatureCreateWithoutTemplateSelectionsInput = {
+  id?: string
+  sourceType: $Enums.FeatureSourceType
+  name: string
+  key: string
+  description?: string | null
+  level?: number | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutFeaturesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutFeaturesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutFeaturesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutFeaturesInput
+  characterClass?: Prisma.CharacterClassCreateNestedOneWithoutFeaturesInput
+  subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
+  levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
+  choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
+  sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+}
+
+export type FeatureUncheckedCreateWithoutTemplateSelectionsInput = {
+  id?: string
+  systemId: string
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  classId?: string | null
+  subclassId?: string | null
+  levelProgressionId?: string | null
+  sourceType: $Enums.FeatureSourceType
+  name: string
+  key: string
+  description?: string | null
+  level?: number | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
+  sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+}
+
+export type FeatureCreateOrConnectWithoutTemplateSelectionsInput = {
+  where: Prisma.FeatureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FeatureCreateWithoutTemplateSelectionsInput, Prisma.FeatureUncheckedCreateWithoutTemplateSelectionsInput>
+}
+
+export type FeatureUpsertWithoutTemplateSelectionsInput = {
+  update: Prisma.XOR<Prisma.FeatureUpdateWithoutTemplateSelectionsInput, Prisma.FeatureUncheckedUpdateWithoutTemplateSelectionsInput>
+  create: Prisma.XOR<Prisma.FeatureCreateWithoutTemplateSelectionsInput, Prisma.FeatureUncheckedCreateWithoutTemplateSelectionsInput>
+  where?: Prisma.FeatureWhereInput
+}
+
+export type FeatureUpdateToOneWithWhereWithoutTemplateSelectionsInput = {
+  where?: Prisma.FeatureWhereInput
+  data: Prisma.XOR<Prisma.FeatureUpdateWithoutTemplateSelectionsInput, Prisma.FeatureUncheckedUpdateWithoutTemplateSelectionsInput>
+}
+
+export type FeatureUpdateWithoutTemplateSelectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutFeaturesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutFeaturesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutFeaturesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutFeaturesNestedInput
+  characterClass?: Prisma.CharacterClassUpdateOneWithoutFeaturesNestedInput
+  subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
+  levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
+  choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
+  sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+}
+
+export type FeatureUncheckedUpdateWithoutTemplateSelectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subclassId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  levelProgressionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.EnumFeatureSourceTypeFieldUpdateOperationsInput | $Enums.FeatureSourceType
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
+  sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+}
+
 export type FeatureCreateWithoutCharacterClassInput = {
   id?: string
   sourceType: $Enums.FeatureSourceType
@@ -1276,6 +1405,7 @@ export type FeatureCreateWithoutCharacterClassInput = {
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutCharacterClassInput = {
@@ -1296,6 +1426,7 @@ export type FeatureUncheckedCreateWithoutCharacterClassInput = {
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutCharacterClassInput = {
@@ -1342,6 +1473,7 @@ export type FeatureCreateWithoutSubclassInput = {
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutSubclassInput = {
@@ -1362,6 +1494,7 @@ export type FeatureUncheckedCreateWithoutSubclassInput = {
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutSubclassInput = {
@@ -1408,6 +1541,7 @@ export type FeatureCreateWithoutLevelProgressionInput = {
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutLevelProgressionInput = {
@@ -1428,6 +1562,7 @@ export type FeatureUncheckedCreateWithoutLevelProgressionInput = {
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutLevelProgressionInput = {
@@ -1474,6 +1609,7 @@ export type FeatureCreateWithoutChoiceOptionsInput = {
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutChoiceOptionsInput = {
@@ -1494,6 +1630,7 @@ export type FeatureUncheckedCreateWithoutChoiceOptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutChoiceOptionsInput = {
@@ -1530,6 +1667,7 @@ export type FeatureUpdateWithoutChoiceOptionsInput = {
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutChoiceOptionsInput = {
@@ -1550,6 +1688,7 @@ export type FeatureUncheckedUpdateWithoutChoiceOptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureCreateWithoutSheetSelectionsInput = {
@@ -1570,6 +1709,7 @@ export type FeatureCreateWithoutSheetSelectionsInput = {
   subclass?: Prisma.CharacterSubclassCreateNestedOneWithoutFeaturesInput
   levelProgression?: Prisma.LevelProgressionCreateNestedOneWithoutFeaturesInput
   choiceOptions?: Prisma.FeatureChoiceOptionCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureUncheckedCreateWithoutSheetSelectionsInput = {
@@ -1590,6 +1730,7 @@ export type FeatureUncheckedCreateWithoutSheetSelectionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedCreateNestedManyWithoutFeatureInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedCreateNestedManyWithoutFeatureInput
 }
 
 export type FeatureCreateOrConnectWithoutSheetSelectionsInput = {
@@ -1626,6 +1767,7 @@ export type FeatureUpdateWithoutSheetSelectionsInput = {
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutSheetSelectionsInput = {
@@ -1646,6 +1788,7 @@ export type FeatureUncheckedUpdateWithoutSheetSelectionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureCreateManySystemInput = {
@@ -1684,6 +1827,7 @@ export type FeatureUpdateWithoutSystemInput = {
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutSystemInput = {
@@ -1704,6 +1848,7 @@ export type FeatureUncheckedUpdateWithoutSystemInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateManyWithoutSystemInput = {
@@ -1760,6 +1905,7 @@ export type FeatureUpdateWithoutAncestryInput = {
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutAncestryInput = {
@@ -1780,6 +1926,7 @@ export type FeatureUncheckedUpdateWithoutAncestryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateManyWithoutAncestryInput = {
@@ -1836,6 +1983,7 @@ export type FeatureUpdateWithoutSubAncestryInput = {
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutSubAncestryInput = {
@@ -1856,6 +2004,7 @@ export type FeatureUncheckedUpdateWithoutSubAncestryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateManyWithoutSubAncestryInput = {
@@ -1912,6 +2061,7 @@ export type FeatureUpdateWithoutBackgroundInput = {
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutBackgroundInput = {
@@ -1932,6 +2082,7 @@ export type FeatureUncheckedUpdateWithoutBackgroundInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateManyWithoutBackgroundInput = {
@@ -1988,6 +2139,7 @@ export type FeatureUpdateWithoutCharacterClassInput = {
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutCharacterClassInput = {
@@ -2008,6 +2160,7 @@ export type FeatureUncheckedUpdateWithoutCharacterClassInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateManyWithoutCharacterClassInput = {
@@ -2064,6 +2217,7 @@ export type FeatureUpdateWithoutSubclassInput = {
   levelProgression?: Prisma.LevelProgressionUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutSubclassInput = {
@@ -2084,6 +2238,7 @@ export type FeatureUncheckedUpdateWithoutSubclassInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateManyWithoutSubclassInput = {
@@ -2140,6 +2295,7 @@ export type FeatureUpdateWithoutLevelProgressionInput = {
   subclass?: Prisma.CharacterSubclassUpdateOneWithoutFeaturesNestedInput
   choiceOptions?: Prisma.FeatureChoiceOptionUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateWithoutLevelProgressionInput = {
@@ -2160,6 +2316,7 @@ export type FeatureUncheckedUpdateWithoutLevelProgressionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   choiceOptions?: Prisma.FeatureChoiceOptionUncheckedUpdateManyWithoutFeatureNestedInput
   sheetSelections?: Prisma.CharacterSheetFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
+  templateSelections?: Prisma.CharacterTemplateFeatureChoiceUncheckedUpdateManyWithoutFeatureNestedInput
 }
 
 export type FeatureUncheckedUpdateManyWithoutLevelProgressionInput = {
@@ -2188,11 +2345,13 @@ export type FeatureUncheckedUpdateManyWithoutLevelProgressionInput = {
 export type FeatureCountOutputType = {
   choiceOptions: number
   sheetSelections: number
+  templateSelections: number
 }
 
 export type FeatureCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   choiceOptions?: boolean | FeatureCountOutputTypeCountChoiceOptionsArgs
   sheetSelections?: boolean | FeatureCountOutputTypeCountSheetSelectionsArgs
+  templateSelections?: boolean | FeatureCountOutputTypeCountTemplateSelectionsArgs
 }
 
 /**
@@ -2217,6 +2376,13 @@ export type FeatureCountOutputTypeCountChoiceOptionsArgs<ExtArgs extends runtime
  */
 export type FeatureCountOutputTypeCountSheetSelectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CharacterSheetFeatureChoiceWhereInput
+}
+
+/**
+ * FeatureCountOutputType without action
+ */
+export type FeatureCountOutputTypeCountTemplateSelectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterTemplateFeatureChoiceWhereInput
 }
 
 
@@ -2246,6 +2412,7 @@ export type FeatureSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   levelProgression?: boolean | Prisma.Feature$levelProgressionArgs<ExtArgs>
   choiceOptions?: boolean | Prisma.Feature$choiceOptionsArgs<ExtArgs>
   sheetSelections?: boolean | Prisma.Feature$sheetSelectionsArgs<ExtArgs>
+  templateSelections?: boolean | Prisma.Feature$templateSelectionsArgs<ExtArgs>
   _count?: boolean | Prisma.FeatureCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feature"]>
 
@@ -2331,6 +2498,7 @@ export type FeatureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   levelProgression?: boolean | Prisma.Feature$levelProgressionArgs<ExtArgs>
   choiceOptions?: boolean | Prisma.Feature$choiceOptionsArgs<ExtArgs>
   sheetSelections?: boolean | Prisma.Feature$sheetSelectionsArgs<ExtArgs>
+  templateSelections?: boolean | Prisma.Feature$templateSelectionsArgs<ExtArgs>
   _count?: boolean | Prisma.FeatureCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FeatureIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2364,6 +2532,7 @@ export type $FeaturePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     levelProgression: Prisma.$LevelProgressionPayload<ExtArgs> | null
     choiceOptions: Prisma.$FeatureChoiceOptionPayload<ExtArgs>[]
     sheetSelections: Prisma.$CharacterSheetFeatureChoicePayload<ExtArgs>[]
+    templateSelections: Prisma.$CharacterTemplateFeatureChoicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2785,6 +2954,7 @@ export interface Prisma__FeatureClient<T, Null = never, ExtArgs extends runtime.
   levelProgression<T extends Prisma.Feature$levelProgressionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$levelProgressionArgs<ExtArgs>>): Prisma.Prisma__LevelProgressionClient<runtime.Types.Result.GetResult<Prisma.$LevelProgressionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   choiceOptions<T extends Prisma.Feature$choiceOptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$choiceOptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeatureChoiceOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sheetSelections<T extends Prisma.Feature$sheetSelectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$sheetSelectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetFeatureChoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  templateSelections<T extends Prisma.Feature$templateSelectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Feature$templateSelectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplateFeatureChoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3385,6 +3555,30 @@ export type Feature$sheetSelectionsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.CharacterSheetFeatureChoiceScalarFieldEnum | Prisma.CharacterSheetFeatureChoiceScalarFieldEnum[]
+}
+
+/**
+ * Feature.templateSelections
+ */
+export type Feature$templateSelectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterTemplateFeatureChoice
+   */
+  select?: Prisma.CharacterTemplateFeatureChoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterTemplateFeatureChoice
+   */
+  omit?: Prisma.CharacterTemplateFeatureChoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterTemplateFeatureChoiceInclude<ExtArgs> | null
+  where?: Prisma.CharacterTemplateFeatureChoiceWhereInput
+  orderBy?: Prisma.CharacterTemplateFeatureChoiceOrderByWithRelationInput | Prisma.CharacterTemplateFeatureChoiceOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterTemplateFeatureChoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterTemplateFeatureChoiceScalarFieldEnum | Prisma.CharacterTemplateFeatureChoiceScalarFieldEnum[]
 }
 
 /**

@@ -992,6 +992,9 @@ export async function systemRoutes(app: FastifyInstance) {
           summary: z.object({
             equipmentCount: z.number(),
             spellCount: z.number(),
+            npcTemplateCount: z.number(),
+            creatureTemplateCount: z.number(),
+            characterTemplateCount: z.number(),
           }),
           equipment: z.array(
             z.object({
@@ -1041,6 +1044,238 @@ export async function systemRoutes(app: FastifyInstance) {
               order: z.number(),
             }),
           ),
+          npcTemplates: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              initials: z.string().nullable(),
+              description: z.string().nullable(),
+              portraitUrl: z.string().nullable(),
+              order: z.number(),
+            }),
+          ),
+          creatureTemplates: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              initials: z.string().nullable(),
+              description: z.string().nullable(),
+              portraitUrl: z.string().nullable(),
+              order: z.number(),
+            }),
+          ),
+          characterTemplates: z.array(
+            z.object({
+              id: z.string(),
+              key: z.string(),
+              name: z.string(),
+              description: z.string().nullable(),
+              pronouns: z.string().nullable(),
+              concept: z.string().nullable(),
+              portraitUrl: z.string().nullable(),
+              tokenImageUrl: z.string().nullable(),
+              tokenImageFit: z.string(),
+              level: z.number(),
+              maxHitPoints: z.number(),
+              armorClass: z.number(),
+              speed: z.number(),
+              classEquipmentMode: z.string(),
+              backgroundEquipmentMode: z.string(),
+              startingGold: z.number(),
+              alignment: z.string().nullable(),
+              faith: z.string().nullable(),
+              lifestyle: z.string().nullable(),
+              hair: z.string().nullable(),
+              skin: z.string().nullable(),
+              eyes: z.string().nullable(),
+              height: z.string().nullable(),
+              weight: z.string().nullable(),
+              age: z.string().nullable(),
+              gender: z.string().nullable(),
+              bonds: z.string().nullable(),
+              flaws: z.string().nullable(),
+              ideals: z.string().nullable(),
+              personality: z.string().nullable(),
+              backstory: z.string().nullable(),
+              organizations: z.string().nullable(),
+              allies: z.string().nullable(),
+              enemies: z.string().nullable(),
+              notes: z.string().nullable(),
+              otherNotes: z.string().nullable(),
+              order: z.number(),
+              ancestry: z
+                .object({
+                  id: z.string(),
+                  key: z.string(),
+                  name: z.string(),
+                })
+                .nullable(),
+              subAncestry: z
+                .object({
+                  id: z.string(),
+                  key: z.string(),
+                  name: z.string(),
+                })
+                .nullable(),
+              background: z
+                .object({
+                  id: z.string(),
+                  key: z.string(),
+                  name: z.string(),
+                })
+                .nullable(),
+              classes: z.array(
+                z.object({
+                  id: z.string(),
+                  classId: z.string(),
+                  subclassId: z.string().nullable(),
+                  level: z.number(),
+                  isPrimary: z.boolean(),
+                  order: z.number(),
+                  characterClass: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                    hitDie: z.number().nullable(),
+                    spellcastingAbilityKey: z.string().nullable(),
+                  }),
+                  subclass: z
+                    .object({
+                      id: z.string(),
+                      key: z.string(),
+                      name: z.string(),
+                    })
+                    .nullable(),
+                }),
+              ),
+              stats: z.array(
+                z.object({
+                  id: z.string(),
+                  baseValue: z.number(),
+                  bonusValue: z.number(),
+                  overrideValue: z.number().nullable(),
+                  isSavingThrowProficient: z.boolean(),
+                  stat: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                    shortName: z.string(),
+                  }),
+                }),
+              ),
+              skills: z.array(
+                z.object({
+                  id: z.string(),
+                  isProficient: z.boolean(),
+                  expertiseLevel: z.number(),
+                  bonusValue: z.number(),
+                  overrideValue: z.number().nullable(),
+                  source: z.string().nullable(),
+                  skill: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                  }),
+                }),
+              ),
+              spells: z.array(
+                z.object({
+                  id: z.string(),
+                  classId: z.string().nullable(),
+                  source: z.string().nullable(),
+                  isPrepared: z.boolean(),
+                  isAlwaysPrepared: z.boolean(),
+                  uses: z.number().nullable(),
+                  maxUses: z.number().nullable(),
+                  notes: z.string().nullable(),
+                  spell: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                    level: z.number(),
+                    school: z.string(),
+                  }),
+                  characterClass: z
+                    .object({
+                      id: z.string(),
+                      key: z.string(),
+                      name: z.string(),
+                    })
+                    .nullable(),
+                }),
+              ),
+              equipment: z.array(
+                z.object({
+                  id: z.string(),
+                  quantity: z.number(),
+                  isEquipped: z.boolean(),
+                  isAttuned: z.boolean(),
+                  source: z.string().nullable(),
+                  notes: z.string().nullable(),
+                  equipment: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                    category: z.string(),
+                    imageUrl: z.string().nullable(),
+                  }),
+                }),
+              ),
+              languages: z.array(
+                z.object({
+                  id: z.string(),
+                  source: z.string().nullable(),
+                  language: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                  }),
+                }),
+              ),
+              featureChoices: z.array(
+                z.object({
+                  id: z.string(),
+                  source: z.string(),
+                  choiceGroup: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                  }),
+                  feature: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                  }),
+                }),
+              ),
+              progressionChoices: z.array(
+                z.object({
+                  id: z.string(),
+                  classId: z.string(),
+                  talentId: z.string().nullable(),
+                  classLevel: z.number(),
+                  choiceIndex: z.number(),
+                  type: z.string().nullable(),
+                  attributeIncreaseMode: z.string().nullable(),
+                  attributeIncreases: z.record(z.string(), z.number()),
+                  characterClass: z.object({
+                    id: z.string(),
+                    key: z.string(),
+                    name: z.string(),
+                  }),
+                  talent: z
+                    .object({
+                      id: z.string(),
+                      key: z.string(),
+                      name: z.string(),
+                    })
+                    .nullable(),
+                }),
+              ),
+            }),
+          ),
         }),
         401: z.object({
           message: z.string(),
@@ -1079,7 +1314,13 @@ export async function systemRoutes(app: FastifyInstance) {
         });
       }
 
-      const [equipment, spells] = await Promise.all([
+      const [
+        equipment,
+        spells,
+        npcTemplates,
+        creatureTemplates,
+        characterTemplates,
+      ] = await Promise.all([
         prisma.equipment.findMany({
           where: {
             systemId,
@@ -1156,6 +1397,212 @@ export async function systemRoutes(app: FastifyInstance) {
             order: true,
           },
         }),
+        prisma.npcTemplate.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            initials: true,
+            description: true,
+            portraitUrl: true,
+            order: true,
+          },
+        }),
+        prisma.creatureTemplate.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          select: {
+            id: true,
+            key: true,
+            name: true,
+            initials: true,
+            description: true,
+            portraitUrl: true,
+            order: true,
+          },
+        }),
+        prisma.characterTemplate.findMany({
+          where: {
+            systemId,
+          },
+          orderBy: [
+            {
+              order: "asc",
+            },
+            {
+              name: "asc",
+            },
+          ],
+          include: {
+            ancestry: {
+              select: {
+                id: true,
+                key: true,
+                name: true,
+              },
+            },
+            subAncestry: {
+              select: {
+                id: true,
+                key: true,
+                name: true,
+              },
+            },
+            background: {
+              select: {
+                id: true,
+                key: true,
+                name: true,
+              },
+            },
+            classes: {
+              orderBy: {
+                order: "asc",
+              },
+              include: {
+                characterClass: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                    hitDie: true,
+                    spellcastingAbilityKey: true,
+                  },
+                },
+                subclass: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+            stats: {
+              include: {
+                stat: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                    shortName: true,
+                  },
+                },
+              },
+            },
+            skills: {
+              include: {
+                skill: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+            spells: {
+              include: {
+                spell: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                    level: true,
+                    school: true,
+                  },
+                },
+                characterClass: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+            equipment: {
+              include: {
+                equipment: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                    category: true,
+                    imageUrl: true,
+                  },
+                },
+              },
+            },
+            languages: {
+              include: {
+                language: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+            featureChoices: {
+              include: {
+                choiceGroup: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                  },
+                },
+                feature: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+            progressionChoices: {
+              include: {
+                characterClass: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                  },
+                },
+                talent: {
+                  select: {
+                    id: true,
+                    key: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        }),
       ]);
 
       const normalizedEquipment = equipment.map((item) => ({
@@ -1180,14 +1627,69 @@ export async function systemRoutes(app: FastifyInstance) {
         };
       });
 
+      function normalizeNumberRecord(value: unknown): Record<string, number> {
+        if (!value || typeof value !== "object" || Array.isArray(value)) {
+          return {};
+        }
+
+        const normalized: Record<string, number> = {};
+
+        for (const [key, entryValue] of Object.entries(value)) {
+          if (
+            typeof entryValue === "number" &&
+            Number.isFinite(entryValue)
+          ) {
+            normalized[key] = entryValue;
+          }
+        }
+
+        return normalized;
+      }
+
+      const normalizedCharacterTemplates = characterTemplates.map(
+        (template) => ({
+          ...template,
+          spells: template.spells.map((spellEntry) => ({
+            ...spellEntry,
+            spell: {
+              ...spellEntry.spell,
+              school: String(spellEntry.spell.school),
+            },
+          })),
+          equipment: template.equipment.map((equipmentEntry) => ({
+            ...equipmentEntry,
+            equipment: {
+              ...equipmentEntry.equipment,
+              category: String(equipmentEntry.equipment.category),
+            },
+          })),
+          progressionChoices: template.progressionChoices.map((choice) => ({
+            ...choice,
+            type: choice.type ? String(choice.type) : null,
+            attributeIncreaseMode: choice.attributeIncreaseMode
+              ? String(choice.attributeIncreaseMode)
+              : null,
+            attributeIncreases: normalizeNumberRecord(
+              choice.attributeIncreases,
+            ),
+          })),
+        }),
+      );
+
       return reply.status(200).send({
         system,
         summary: {
           equipmentCount: normalizedEquipment.length,
           spellCount: normalizedSpells.length,
+          npcTemplateCount: npcTemplates.length,
+          creatureTemplateCount: creatureTemplates.length,
+          characterTemplateCount: normalizedCharacterTemplates.length,
         },
         equipment: normalizedEquipment,
         spells: normalizedSpells,
+        npcTemplates,
+        creatureTemplates,
+        characterTemplates: normalizedCharacterTemplates,
       });
     },
   });

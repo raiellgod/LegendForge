@@ -75,6 +75,7 @@ import {
 import {
   createCampaignActor,
   createSceneToken,
+  deleteCampaignCharacterInstance,
   deleteSceneToken,
   getCampaign,
   getCampaignActors,
@@ -82,6 +83,9 @@ import {
   getCampaignParticipants,
   getCampaignTokens,
   getSystemLibrary,
+  importCharacterTemplateToCampaign,
+  importNpcTemplateToCampaign,
+  importCreatureTemplateToCampaign,
   confirmCampaignCharacterSheetLevelUp,
   updateCampaignCharacterSheetLevelUpAvailability,
   updateCampaignActor,
@@ -719,6 +723,18 @@ export default function CampaignPlayPage() {
   const [loadedSystemLibraryId, setLoadedSystemLibraryId] = useState<
     string | null
   >(null);
+  const [
+    importingCharacterTemplateId,
+    setImportingCharacterTemplateId,
+  ] = useState<string | null>(null);
+  const [importingNpcTemplateId, setImportingNpcTemplateId] = useState<
+    string | null
+  >(null);
+  const [systemLibraryImportMessage, setSystemLibraryImportMessage] = useState("");
+  const [systemLibraryImportError, setSystemLibraryImportError] = useState("");
+  const [importingCreatureTemplateId, setImportingCreatureTemplateId] = useState<
+    string | null
+  >(null);
 
   const [campaignActors, setCampaignActors] = useState<CampaignActor[]>([]);
 
@@ -823,7 +839,7 @@ export default function CampaignPlayPage() {
             getCampaignCharacterSheets(params.id),
           ]);
 
-        const currentUserParticipant = participants.find(
+  const currentUserParticipant = participants.find(
           (participant) => participant.userId === loggedUser.id,
         );
 
@@ -907,6 +923,104 @@ export default function CampaignPlayPage() {
       );
     } finally {
       setIsLoadingSystemLibrary(false);
+    }
+  }
+
+  async function handleImportCharacterTemplate(templateId: string) {
+    if (!campaign || !isGM) {
+      return;
+    }
+
+    setImportingCharacterTemplateId(templateId);
+    setSystemLibraryImportMessage("");
+    setSystemLibraryImportError("");
+
+    try {
+      const { actor } = await importCharacterTemplateToCampaign(
+        campaign.id,
+        templateId,
+      );
+
+      const refreshedCharacterSheets = await getCampaignCharacterSheets(
+        campaign.id,
+      );
+
+      setCampaignActors((currentActors) => [...currentActors, actor]);
+      setCharacterSheets(refreshedCharacterSheets);
+      setSystemLibraryImportMessage(
+        `${actor.name} foi instanciado como uma ficha independente na campanha.`,
+      );
+    } catch (error) {
+      console.error(error);
+      setSystemLibraryImportError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível adicionar o personagem-template à campanha.",
+      );
+    } finally {
+      setImportingCharacterTemplateId(null);
+    }
+  }
+
+  async function handleImportNpcTemplate(templateId: string) {
+    if (!campaign || !isGM) {
+      return;
+    }
+
+    setImportingNpcTemplateId(templateId);
+    setSystemLibraryImportMessage("");
+    setSystemLibraryImportError("");
+
+    try {
+      const createdActor = await importNpcTemplateToCampaign(
+        campaign.id,
+        templateId,
+      );
+
+      setCampaignActors((currentActors) => [...currentActors, createdActor]);
+      setSystemLibraryImportMessage(
+        `${createdActor.name} foi adicionado à Biblioteca da Campanha.`,
+      );
+    } catch (error) {
+      console.error(error);
+      setSystemLibraryImportError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível adicionar o NPC à campanha.",
+      );
+    } finally {
+      setImportingNpcTemplateId(null);
+    }
+  }
+
+  async function handleImportCreatureTemplate(templateId: string) {
+    if (!campaign || !isGM) {
+      return;
+    }
+
+    setImportingCreatureTemplateId(templateId);
+    setSystemLibraryImportMessage("");
+    setSystemLibraryImportError("");
+
+    try {
+      const createdActor = await importCreatureTemplateToCampaign(
+        campaign.id,
+        templateId,
+      );
+
+      setCampaignActors((currentActors) => [...currentActors, createdActor]);
+      setSystemLibraryImportMessage(
+        `${createdActor.name} foi adicionado à Biblioteca da Campanha.`,
+      );
+    } catch (error) {
+      console.error(error);
+      setSystemLibraryImportError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível adicionar a criatura à campanha.",
+      );
+    } finally {
+      setImportingCreatureTemplateId(null);
     }
   }
 
@@ -2466,6 +2580,100 @@ export default function CampaignPlayPage() {
     }
   }
 
+  async function handleUpdateCampaignActorInstance(
+    actor: CampaignActor,
+    data: Partial<
+      Pick<CampaignActor, "name" | "initials" | "description" | "portraitUrl">
+    >,
+  ) {
+    const canEditCampaignInstance =
+      isLibraryCompatibleActor(actor) ||
+      (actor.type === "PLAYER_CHARACTER" && actor.ownerId === null);
+
+    if (!campaign || !isGM || !canEditCampaignInstance) {
+      throw new Error(
+        "Apenas o Mestre pode editar NPCs, criaturas e personagens pré-prontos sem jogador.",
+      );
+    }
+
+    setActionError("");
+    setActionMessage("");
+
+    const updatedActor = await updateCampaignActor(campaign.id, actor.id, data);
+
+    setCampaignActors((currentActors) =>
+      currentActors.map((currentActor) =>
+        currentActor.id === updatedActor.id ? updatedActor : currentActor,
+      ),
+    );
+
+    setActionActor((currentActor) =>
+      currentActor?.id === updatedActor.id ? updatedActor : currentActor,
+    );
+
+    setSelectedActor((currentActor) =>
+      currentActor?.id === updatedActor.id ? updatedActor : currentActor,
+    );
+
+    if (updatedActor.type === "PLAYER_CHARACTER") {
+      const refreshedCharacterSheets = await getCampaignCharacterSheets(
+        campaign.id,
+      );
+      setCharacterSheets(refreshedCharacterSheets);
+    }
+
+    setActionMessage(`${updatedActor.name} foi atualizado.`);
+
+    return updatedActor;
+  }
+
+  async function handleDeleteCampaignCharacterInstance(
+    actor: CampaignActor,
+  ) {
+    if (
+      !campaign ||
+      !isGM ||
+      actor.type !== "PLAYER_CHARACTER" ||
+      actor.ownerId !== null
+    ) {
+      throw new Error(
+        "Apenas personagens pré-prontos sem jogador podem ser excluídos por esta ação.",
+      );
+    }
+
+    setActionError("");
+    setActionMessage("");
+
+    const result = await deleteCampaignCharacterInstance(
+      campaign.id,
+      actor.id,
+    );
+
+    setCampaignActors((currentActors) =>
+      currentActors.filter(
+        (currentActor) => currentActor.id !== result.deletedActorId,
+      ),
+    );
+
+    setCharacterSheets((currentSheets) =>
+      currentSheets.filter(
+        (currentSheet) =>
+          currentSheet.id !== result.deletedCharacterSheetId,
+      ),
+    );
+
+    setSceneTokens((currentTokens) =>
+      currentTokens.filter((token) => token.actorId !== result.deletedActorId),
+    );
+
+    setSelectedActor((currentActor) =>
+      currentActor?.id === result.deletedActorId ? null : currentActor,
+    );
+
+    setActionActor(null);
+    setActionMessage(`${actor.name} foi excluído da campanha.`);
+  }
+
   async function handleReturnActorToLibrary(actor: CampaignActor) {
     if (!campaign || !isGM || !isLibraryCompatibleActor(actor)) {
       return;
@@ -3368,6 +3576,15 @@ export default function CampaignPlayPage() {
           library={systemLibrary}
           isLoading={isLoadingSystemLibrary}
           error={systemLibraryError}
+          isGM={isGM}
+          importingCharacterTemplateId={importingCharacterTemplateId}
+          importingNpcTemplateId={importingNpcTemplateId}
+          importingCreatureTemplateId={importingCreatureTemplateId}
+          importMessage={systemLibraryImportMessage}
+          importError={systemLibraryImportError}
+          onImportCharacterTemplate={handleImportCharacterTemplate}
+          onImportNpcTemplate={handleImportNpcTemplate}
+          onImportCreatureTemplate={handleImportCreatureTemplate}
           onClose={() => setIsSystemLibraryModalOpen(false)}
         />
       ) : null}
@@ -3424,6 +3641,12 @@ export default function CampaignPlayPage() {
           onReturnToLibrary={async () => {
             await handleReturnActorToLibrary(actionActor);
           }}
+          onDeleteActor={async () => {
+            await handleDeleteCampaignCharacterInstance(actionActor);
+          }}
+          onUpdateActor={(data) =>
+            handleUpdateCampaignActorInstance(actionActor, data)
+          }
           onClose={() => setActionActor(null)}
         />
       ) : null}

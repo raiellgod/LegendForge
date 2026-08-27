@@ -232,7 +232,50 @@ model GameSystem {
   characterSheets     CharacterSheet[]
   levelProgressions   LevelProgression[]
   featureChoiceGroups FeatureChoiceGroup[]
+  npcTemplates        NpcTemplate[]
+  creatureTemplates   CreatureTemplate[]
+  characterTemplates  CharacterTemplate[]
   campaigns           Campaign[]
+}
+
+model NpcTemplate {
+  id          String   @id @default(uuid())
+  systemId    String
+  key         String
+  name        String
+  initials    String?
+  description String?
+  portraitUrl String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+
+  @@unique([systemId, key])
+  @@unique([systemId, name])
+  @@index([systemId])
+  @@index([order])
+}
+
+model CreatureTemplate {
+  id          String   @id @default(uuid())
+  systemId    String
+  key         String
+  name        String
+  initials    String?
+  description String?
+  portraitUrl String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+
+  @@unique([systemId, key])
+  @@unique([systemId, name])
+  @@index([systemId])
+  @@index([order])
 }
 
 model Ancestry {
@@ -253,6 +296,7 @@ model Ancestry {
   features            Feature[]
   featureChoiceGroups FeatureChoiceGroup[]
   characterSheets     CharacterSheet[]
+  characterTemplates  CharacterTemplate[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -279,6 +323,7 @@ model SubAncestry {
   features            Feature[]
   featureChoiceGroups FeatureChoiceGroup[]
   characterSheets     CharacterSheet[]
+  characterTemplates  CharacterTemplate[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -307,11 +352,267 @@ model Background {
   features            Feature[]
   featureChoiceGroups FeatureChoiceGroup[]
   characterSheets     CharacterSheet[]
+  characterTemplates  CharacterTemplate[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
   @@index([systemId])
   @@index([order])
+}
+
+model CharacterTemplate {
+  id            String  @id @default(uuid())
+  systemId      String
+  ancestryId    String?
+  subAncestryId String?
+  backgroundId  String?
+
+  key         String
+  name        String
+  description String?
+  pronouns    String?
+  concept     String?
+
+  portraitUrl   String?
+  tokenImageUrl String?
+  tokenImageFit String  @default("COVER")
+
+  level                   Int    @default(1)
+  maxHitPoints            Int    @default(0)
+  armorClass              Int    @default(10)
+  speed                   Int    @default(30)
+  classEquipmentMode      String @default("PACKAGE")
+  backgroundEquipmentMode String @default("PACKAGE")
+  startingGold            Int    @default(0)
+
+  alignment String?
+  faith     String?
+  lifestyle String?
+
+  hair   String?
+  skin   String?
+  eyes   String?
+  height String?
+  weight String?
+  age    String?
+  gender String?
+
+  bonds         String?
+  flaws         String?
+  ideals        String?
+  personality   String?
+  backstory     String?
+  organizations String?
+  allies        String?
+  enemies       String?
+  notes         String?
+  otherNotes    String?
+
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  system      GameSystem   @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  ancestry    Ancestry?    @relation(fields: [ancestryId], references: [id], onDelete: SetNull)
+  subAncestry SubAncestry? @relation(fields: [subAncestryId], references: [id], onDelete: SetNull)
+  background  Background?  @relation(fields: [backgroundId], references: [id], onDelete: SetNull)
+
+  classes            CharacterTemplateClass[]
+  stats              CharacterTemplateStat[]
+  skills             CharacterTemplateSkill[]
+  spells             CharacterTemplateSpell[]
+  equipment          CharacterTemplateEquipment[]
+  languages          CharacterTemplateLanguage[]
+  featureChoices     CharacterTemplateFeatureChoice[]
+  progressionChoices CharacterTemplateProgressionChoice[]
+
+  @@unique([systemId, key])
+  @@unique([systemId, name])
+  @@index([systemId])
+  @@index([ancestryId])
+  @@index([subAncestryId])
+  @@index([backgroundId])
+  @@index([order])
+}
+
+model CharacterTemplateClass {
+  id         String  @id @default(uuid())
+  templateId String
+  classId    String
+  subclassId String?
+  level      Int     @default(1)
+  isPrimary  Boolean @default(false)
+  order      Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  template       CharacterTemplate  @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
+
+  @@unique([templateId, classId])
+  @@index([templateId])
+  @@index([classId])
+  @@index([subclassId])
+  @@index([isPrimary])
+  @@index([order])
+}
+
+model CharacterTemplateStat {
+  id                      String  @id @default(uuid())
+  templateId              String
+  statId                  String
+  baseValue               Int     @default(10)
+  bonusValue              Int     @default(0)
+  overrideValue           Int?
+  isSavingThrowProficient Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  template CharacterTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  stat     Stat              @relation(fields: [statId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, statId])
+  @@index([templateId])
+  @@index([statId])
+}
+
+model CharacterTemplateSkill {
+  id             String  @id @default(uuid())
+  templateId     String
+  skillId        String
+  isProficient   Boolean @default(false)
+  expertiseLevel Int     @default(0)
+  bonusValue     Int     @default(0)
+  overrideValue  Int?
+  source         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  template CharacterTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  skill    Skill             @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, skillId])
+  @@index([templateId])
+  @@index([skillId])
+  @@index([isProficient])
+}
+
+model CharacterTemplateSpell {
+  id               String  @id @default(uuid())
+  templateId       String
+  spellId          String
+  classId          String?
+  source           String?
+  isPrepared       Boolean @default(false)
+  isAlwaysPrepared Boolean @default(false)
+  uses             Int?
+  maxUses          Int?
+  notes            String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  template       CharacterTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  spell          Spell             @relation(fields: [spellId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass?   @relation(fields: [classId], references: [id], onDelete: SetNull)
+
+  @@unique([templateId, spellId])
+  @@index([templateId])
+  @@index([spellId])
+  @@index([classId])
+  @@index([isPrepared])
+}
+
+model CharacterTemplateEquipment {
+  id          String  @id @default(uuid())
+  templateId  String
+  equipmentId String
+  quantity    Int     @default(1)
+  isEquipped  Boolean @default(false)
+  isAttuned   Boolean @default(false)
+  source      String?
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  template  CharacterTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  equipment Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, equipmentId])
+  @@index([templateId])
+  @@index([equipmentId])
+  @@index([isEquipped])
+}
+
+model CharacterTemplateLanguage {
+  id         String  @id @default(uuid())
+  templateId String
+  languageId String
+  source     String? @default("builder")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  template CharacterTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  language Language          @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, languageId])
+  @@index([templateId])
+  @@index([languageId])
+  @@index([source])
+}
+
+model CharacterTemplateFeatureChoice {
+  id            String @id @default(uuid())
+  templateId    String
+  choiceGroupId String
+  featureId     String
+  source        String @default("builder")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  template    CharacterTemplate  @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  choiceGroup FeatureChoiceGroup @relation(fields: [choiceGroupId], references: [id], onDelete: Cascade)
+  feature     Feature            @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, choiceGroupId, featureId])
+  @@index([templateId])
+  @@index([choiceGroupId])
+  @@index([featureId])
+  @@index([source])
+}
+
+model CharacterTemplateProgressionChoice {
+  id          String  @id @default(uuid())
+  templateId  String
+  classId     String
+  talentId    String?
+  classLevel  Int
+  choiceIndex Int
+
+  type                  CharacterProgressionChoiceType?
+  attributeIncreaseMode CharacterAttributeIncreaseMode?
+  attributeIncreases    Json                            @default("{}")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  template       CharacterTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  talent         Talent?           @relation(fields: [talentId], references: [id], onDelete: SetNull)
+
+  @@unique([templateId, classId, classLevel, choiceIndex])
+  @@index([templateId])
+  @@index([classId])
+  @@index([talentId])
+  @@index([type])
+  @@index([classLevel])
 }
 
 model CharacterSheet {
@@ -418,8 +719,9 @@ model Language {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  system          GameSystem               @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterSheets CharacterSheetLanguage[]
+  system             GameSystem                  @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterSheets    CharacterSheetLanguage[]
+  characterTemplates CharacterTemplateLanguage[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -598,16 +900,19 @@ model CharacterClass {
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @default(now()) @updatedAt
 
-  system                           GameSystem                        @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  subclasses                       CharacterSubclass[]
-  levelProgressions                LevelProgression[]
-  classSpells                      ClassSpell[]
-  features                         Feature[]
-  featureChoiceGroups              FeatureChoiceGroup[]
-  characterSheets                  CharacterSheet[]
-  characterSheetClasses            CharacterSheetClass[]
-  characterSheetSpells             CharacterSheetSpell[]
-  characterSheetProgressionChoices CharacterSheetProgressionChoice[]
+  system                              GameSystem                           @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  subclasses                          CharacterSubclass[]
+  levelProgressions                   LevelProgression[]
+  classSpells                         ClassSpell[]
+  features                            Feature[]
+  featureChoiceGroups                 FeatureChoiceGroup[]
+  characterSheets                     CharacterSheet[]
+  characterSheetClasses               CharacterSheetClass[]
+  characterSheetSpells                CharacterSheetSpell[]
+  characterSheetProgressionChoices    CharacterSheetProgressionChoice[]
+  characterTemplateClasses            CharacterTemplateClass[]
+  characterTemplateSpells             CharacterTemplateSpell[]
+  characterTemplateProgressionChoices CharacterTemplateProgressionChoice[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -626,12 +931,13 @@ model CharacterSubclass {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  system                GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterClass        CharacterClass        @relation(fields: [classId], references: [id], onDelete: Cascade)
-  features              Feature[]
-  featureChoiceGroups   FeatureChoiceGroup[]
-  characterSheets       CharacterSheet[]
-  characterSheetClasses CharacterSheetClass[]
+  system                   GameSystem               @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterClass           CharacterClass           @relation(fields: [classId], references: [id], onDelete: Cascade)
+  features                 Feature[]
+  featureChoiceGroups      FeatureChoiceGroup[]
+  characterSheets          CharacterSheet[]
+  characterSheetClasses    CharacterSheetClass[]
+  characterTemplateClasses CharacterTemplateClass[]
 
   @@unique([classId, name])
   @@unique([classId, key])
@@ -738,8 +1044,9 @@ model Feature {
   subclass         CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: Cascade)
   levelProgression LevelProgression?  @relation(fields: [levelProgressionId], references: [id], onDelete: SetNull)
 
-  choiceOptions   FeatureChoiceOption[]
-  sheetSelections CharacterSheetFeatureChoice[]
+  choiceOptions      FeatureChoiceOption[]
+  sheetSelections    CharacterSheetFeatureChoice[]
+  templateSelections CharacterTemplateFeatureChoice[]
 
   @@unique([systemId, key])
   @@index([systemId])
@@ -767,8 +1074,9 @@ model Talent {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  system                      GameSystem                        @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterProgressionChoices CharacterSheetProgressionChoice[]
+  system                              GameSystem                           @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterProgressionChoices         CharacterSheetProgressionChoice[]
+  characterTemplateProgressionChoices CharacterTemplateProgressionChoice[]
 
   @@unique([systemId, key])
   @@unique([systemId, name])
@@ -801,8 +1109,9 @@ model FeatureChoiceGroup {
   subclass         CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: Cascade)
   levelProgression LevelProgression?  @relation(fields: [levelProgressionId], references: [id], onDelete: SetNull)
 
-  options    FeatureChoiceOption[]
-  selections CharacterSheetFeatureChoice[]
+  options            FeatureChoiceOption[]
+  selections         CharacterSheetFeatureChoice[]
+  templateSelections CharacterTemplateFeatureChoice[]
 
   @@unique([systemId, key])
   @@index([systemId])
@@ -870,9 +1179,10 @@ model Spell {
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
 
-  system          GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterSpells CharacterSheetSpell[]
-  classSpells     ClassSpell[]
+  system                  GameSystem               @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterSpells         CharacterSheetSpell[]
+  characterTemplateSpells CharacterTemplateSpell[]
+  classSpells             ClassSpell[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -916,8 +1226,9 @@ model Equipment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  system             GameSystem                @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterEquipment CharacterSheetEquipment[]
+  system                     GameSystem                   @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterEquipment         CharacterSheetEquipment[]
+  characterTemplateEquipment CharacterTemplateEquipment[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -938,9 +1249,10 @@ model Stat {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
 
-  system         GameSystem           @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  skills         Skill[]
-  characterStats CharacterSheetStat[]
+  system                 GameSystem              @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  skills                 Skill[]
+  characterStats         CharacterSheetStat[]
+  characterTemplateStats CharacterTemplateStat[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -958,9 +1270,10 @@ model Skill {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
 
-  system          GameSystem            @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  stat            Stat                  @relation(fields: [statId], references: [id], onDelete: Cascade)
-  characterSkills CharacterSheetSkill[]
+  system                  GameSystem               @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  stat                    Stat                     @relation(fields: [statId], references: [id], onDelete: Cascade)
+  characterSkills         CharacterSheetSkill[]
+  characterTemplateSkills CharacterTemplateSkill[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])

@@ -277,23 +277,6 @@ export type EnumCreatureSizeNullableWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumCreatureSizeNullableFilter<$PrismaModel>
 }
 
-export type EnumCharacterSheetStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel> | $Enums.CharacterSheetStatus
-}
-
-export type EnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel> | $Enums.CharacterSheetStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
-}
-
 export type IntNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -353,6 +336,23 @@ export type EnumCharacterAttributeIncreaseModeNullableWithAggregatesFilter<$Pris
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel>
+}
+
+export type EnumCharacterSheetStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel> | $Enums.CharacterSheetStatus
+}
+
+export type EnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel> | $Enums.CharacterSheetStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
 }
 
 export type EnumFeatureSourceTypeFilter<$PrismaModel = never> = {
@@ -835,23 +835,6 @@ export type NestedEnumCreatureSizeNullableWithAggregatesFilter<$PrismaModel = ne
   _max?: Prisma.NestedEnumCreatureSizeNullableFilter<$PrismaModel>
 }
 
-export type NestedEnumCharacterSheetStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel> | $Enums.CharacterSheetStatus
-}
-
-export type NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel> | $Enums.CharacterSheetStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
-}
-
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -911,6 +894,23 @@ export type NestedEnumCharacterAttributeIncreaseModeNullableWithAggregatesFilter
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCharacterAttributeIncreaseModeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumCharacterSheetStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel> | $Enums.CharacterSheetStatus
+}
+
+export type NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CharacterSheetStatus | Prisma.EnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CharacterSheetStatus[] | Prisma.ListEnumCharacterSheetStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCharacterSheetStatusWithAggregatesFilter<$PrismaModel> | $Enums.CharacterSheetStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCharacterSheetStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumFeatureSourceTypeFilter<$PrismaModel = never> = {

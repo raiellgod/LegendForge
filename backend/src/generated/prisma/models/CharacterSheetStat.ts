@@ -511,14 +511,6 @@ export type CharacterSheetStatUncheckedUpdateManyWithoutCharacterSheetNestedInpu
   deleteMany?: Prisma.CharacterSheetStatScalarWhereInput | Prisma.CharacterSheetStatScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type CharacterSheetStatCreateNestedManyWithoutStatInput = {
   create?: Prisma.XOR<Prisma.CharacterSheetStatCreateWithoutStatInput, Prisma.CharacterSheetStatUncheckedCreateWithoutStatInput> | Prisma.CharacterSheetStatCreateWithoutStatInput[] | Prisma.CharacterSheetStatUncheckedCreateWithoutStatInput[]
   connectOrCreate?: Prisma.CharacterSheetStatCreateOrConnectWithoutStatInput | Prisma.CharacterSheetStatCreateOrConnectWithoutStatInput[]

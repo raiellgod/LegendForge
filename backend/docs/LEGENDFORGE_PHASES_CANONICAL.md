@@ -326,14 +326,169 @@ Sylvaris → Sylvaris Alto
     [x] 5.2.8 — Garantir isolamento por systemId
     [x] 5.2.9 — Integrar com campanha usando campaign.systemId
     [x] 5.2.10 — Teste regressivo da Biblioteca do Sistema
-[ ] 5.3 — Organização por categorias
-[ ] 5.4 — Itens na biblioteca
-[ ] 5.5 — Magias na biblioteca
-[ ] 5.6 — Templates de personagem/NPC/criatura
-[ ] 5.7 — Biblioteca de NPCs
-[ ] 5.8 — Biblioteca de criaturas
-[ ] 5.9 — Enviar NPC/criatura da biblioteca para mesa
-[ ] 5.10 — Editar instância da campanha sem alterar template original
+[x] 5.3 — Organização por categorias
+    [x] 5.3.1 — Auditar categorias existentes no conteúdo atual
+    [x] 5.3.2 — Criar navegação principal Tudo / Itens / Magias
+    [x] 5.3.3 — Criar categorias automáticas de Equipment
+    [x] 5.3.4 — Criar categorias por nível de Spell
+    [x] 5.3.5 — Exibir contadores por categoria
+    [x] 5.3.6 — Filtrar conteúdo sem alterar dados originais
+[x] 5.4 — Itens na biblioteca
+    [x] 5.4.1 — Auditar apresentação atual dos itens
+    [x] 5.4.2 — Corrigir exibição de imageUrl
+    [x] 5.4.3 — Criar card definitivo de item
+    [x] 5.4.4 — Exibir categoria traduzida
+    [x] 5.4.5 — Exibir dano / defesa / custo / peso
+    [x] 5.4.6 — Exibir propriedades e alcance
+    [x] 5.4.7 — Criar detalhes completos do item
+    [x] 5.4.8 — Criar busca por nome/key
+    [x] 5.4.9 — Preservar filtros por categoria
+    [x] 5.4.10 — Estado sem resultados
+    [x] 5.4.11 — Teste regressivo
+[x] 5.5 — Magias na biblioteca
+    [x] 5.5.1 — Auditar apresentação atual das magias
+    [x] 5.5.2 — Busca por nome/key/descrição
+    [x] 5.5.3 — Preservar filtro por nível
+    [x] 5.5.4 — Card definitivo de magia
+    [x] 5.5.5 — Exibir nível e escola
+    [x] 5.5.6 — Exibir conjuração / alcance / duração
+    [x] 5.5.7 — Exibir componentes
+    [x] 5.5.8 — Exibir Ritual / Concentração
+    [x] 5.5.9 — Detalhes completos
+    [x] 5.5.10 — Estado sem resultados
+    [x] 5.5.11 — Teste regressivo
+[x] 5.6 — Templates de personagem/NPC/criatura
+    [x] 5.6.1 — Auditar CampaignActor / CharacterSheet
+    [x] 5.6.2 — Auditar criação atual de NPC e criatura
+    [x] 5.6.3 — Definir Template no LegendForge
+    [x] 5.6.4 — Definir Template × CampaignActor
+    [x] 5.6.5 — Definir estratégia inicial de NpcTemplate / CreatureTemplate
+    [x] 5.6.6 — Definir dados compartilhados e específicos
+    [x] 5.6.7 — Modelar NpcTemplate e CreatureTemplate no Prisma
+    [x] 5.6.8 — Criar migration
+    [x] 5.6.9 — Seed mínimo de templates
+    [x] 5.6.10 — Expor templates na Biblioteca do Sistema
+    [x] 5.6.11 — Tipar templates no frontend
+    [x] 5.6.12 — Exibir categorias NPCs / Criaturas
+    [x] 5.6.13 — Abrir detalhes do template
+    [x] 5.6.14 — Garantir templates somente leitura
+    [x] 5.6.15 — Teste regressivo
+[x] 5.7 — Biblioteca de NPCs
+    [x] 5.7.1 — Auditar fluxo atual de criação de CampaignActor NPC
+    [x] 5.7.2 — Definir contrato de instanciação de NpcTemplate
+    [x] 5.7.3 — Criar endpoint template → CampaignActor
+    [x] 5.7.4 — Validar template pertence ao mesmo GameSystem da campanha
+    [x] 5.7.5 — Restringir importação ao GM
+    [x] 5.7.6 — Criar CampaignActor como NPC
+    [x] 5.7.7 — Criar inicialmente em LIBRARY
+    [x] 5.7.8 — Copiar nome / iniciais / descrição / portraitUrl
+    [x] 5.7.9 — Impedir alteração do NpcTemplate
+    [x] 5.7.10 — Criar chamada frontend
+    [x] 5.7.11 — Adicionar ação "Adicionar à campanha"
+    [x] 5.7.12 — Feedback após importação
+    [x] 5.7.13 — Atualizar Biblioteca da Campanha
+    [x] 5.7.14 — Permitir importar o mesmo template novamente
+    [x] 5.7.15 — Validar isolamento entre campanhas
+    [x] 5.7.16 — Teste regressivo
+[x] 5.8 — Biblioteca de criaturas
+    [x] 5.8.1 — Auditar fluxo de CreatureTemplate
+    [x] 5.8.2 — Definir contrato de instanciação
+    [x] 5.8.3 — Criar endpoint CreatureTemplate → CampaignActor
+    [x] 5.8.4 — Validar mesmo GameSystem
+    [x] 5.8.5 — Restringir importação ao GM
+    [x] 5.8.6 — Criar CampaignActor como CREATURE
+    [x] 5.8.7 — Criar inicialmente em LIBRARY
+    [x] 5.8.8 — Copiar identidade
+    [x] 5.8.9 — Preservar CreatureTemplate
+    [x] 5.8.10 — Criar chamada frontend
+    [x] 5.8.11 — "Adicionar à campanha"
+    [x] 5.8.12 — Feedback após importação
+    [x] 5.8.13 — Atualizar Biblioteca da Campanha
+    [x] 5.8.14 — Importação repetida
+    [x] 5.8.15 — Isolamento entre campanhas/sistemas
+    [x] 5.8.16 — Regressão final
+[x] 5.9 — Enviar NPC/criatura da biblioteca para mesa
+    [x] 5.9.1 — Auditar fluxo LIBRARY → TABLE existente
+    [x] 5.9.2 — Confirmar suporte a NPC
+    [x] 5.9.3 — Confirmar suporte a CREATURE
+    [x] 5.9.4 — Preservar identidade ao mover
+    [x] 5.9.5 — Atualizar painel lateral
+    [x] 5.9.6 — Remover da Biblioteca ativa enquanto estiver TABLE
+    [x] 5.9.7 — Permitir TABLE → LIBRARY
+    [x] 5.9.8 — Não alterar template de origem
+    [x] 5.9.9 — Validar NPC vindo de NpcTemplate
+    [x] 5.9.10 — Validar criatura vinda de CreatureTemplate
+    [x] 5.9.11 — Regressão final NPC + criatura
+[x] 5.10 — Editar instância da campanha sem alterar template original
+    [x] 5.10.1 — Auditar edição atual de CampaignActor
+    [x] 5.10.2 — Definir campos editáveis para NPC/CREATURE
+    [x] 5.10.3 — Reutilizar/ajustar PATCH de CampaignActor
+    [x] 5.10.4 — Restringir edição de NPC/CREATURE ao GM
+    [x] 5.10.5 — Criar ação "Editar" no ator da campanha
+    [x] 5.10.6 — Criar modal de edição
+    [x] 5.10.7 — Editar nome
+    [x] 5.10.8 — Editar iniciais
+    [x] 5.10.9 — Editar descrição
+    [x] 5.10.10 — Editar portraitUrl
+    [x] 5.10.11 — Persistir alterações no CampaignActor
+    [x] 5.10.12 — Atualizar painel sem refresh
+    [x] 5.10.13 — Atualizar Biblioteca da Campanha
+    [x] 5.10.14 — Preservar NpcTemplate original
+    [x] 5.10.15 — Preservar CreatureTemplate original
+    [x] 5.10.16 — Permitir instâncias divergentes do mesmo template
+    [x] 5.10.17 — Teste regressivo
+[ ] 5.11 — CharacterTemplate completo
+    [ ] 5.11.1 — Auditar CharacterSheet completa e suas relações
+    [ ] 5.11.2 — Definir o que um CharacterTemplate deve preservar
+    [ ] 5.11.3 — Definir Template × CharacterSheet × CampaignActor
+    [ ] 5.11.4 — Definir comportamento com multiclasse
+    [ ] 5.11.5 — Definir ancestralidade e sub-ancestralidade no template
+    [ ] 5.11.6 — Definir antecedentes, idiomas e proficiências
+    [ ] 5.11.7 — Definir atributos e perícias
+    [ ] 5.11.8 — Definir magias conhecidas do template
+    [ ] 5.11.9 — Definir equipamentos do template
+    [ ] 5.11.10 — Definir features e escolhas já resolvidas
+    [ ] 5.11.11 — Definir progressão e escolhas de nível
+    [ ] 5.11.12 — Modelar CharacterTemplate no Prisma
+    [ ] 5.11.13 — Modelar relações auxiliares necessárias
+    [ ] 5.11.14 — Criar migration
+    [ ] 5.11.15 — Criar seed mínimo de personagens-template
+    [ ] 5.11.16 — Expor CharacterTemplate na Biblioteca do Sistema
+    [ ] 5.11.17 — Exibir personagens-template no frontend
+    [ ] 5.11.18 — Abrir detalhes completos do template
+    [ ] 5.11.19 — Instanciar template como CampaignActor + CharacterSheet
+    [ ] 5.11.20 — Garantir cópia independente do template
+    [ ] 5.11.21 — Permitir edição da instância sem alterar a origem
+    [ ] 5.11.22 — Teste regressivo completo
+5.12 — NpcSheet / CreatureSheet completos
+    [ ] 5.12.1 — Auditar requisitos mecânicos de NPC
+    [ ] 5.12.2 — Auditar requisitos mecânicos de criatura
+    [ ] 5.12.3 — Definir diferenças NPC × Creature
+    [ ] 5.12.4 — Modelar NpcSheet
+    [ ] 5.12.5 — Modelar CreatureSheet
+    [ ] 5.12.6 — Atributos STR / DEX / CON / INT / WIS / CHA
+    [ ] 5.12.7 — CA / PV / deslocamentos
+    [ ] 5.12.8 — Salvaguardas e perícias
+    [ ] 5.12.9 — Resistências / imunidades / vulnerabilidades
+    [ ] 5.12.10 — Sentidos e idiomas
+    [ ] 5.12.11 — CR / desafio / XP para criaturas
+    [ ] 5.12.12 — Traits / características passivas
+    [ ] 5.12.13 — Ações
+    [ ] 5.12.14 — Ataques
+    [ ] 5.12.15 — Ações bônus
+    [ ] 5.12.16 — Reações
+    [ ] 5.12.17 — Multiataque
+    [ ] 5.12.18 — Magias/habilidades mágicas
+    [ ] 5.12.19 — Lore e comportamento
+    [ ] 5.12.20 — Retrato + imagem/token
+    [ ] 5.12.21 — Builder completo de NPC
+    [ ] 5.12.22 — Builder completo de criatura
+    [ ] 5.12.23 — Ficha pronta de NPC
+    [ ] 5.12.24 — Ficha pronta de criatura
+    [ ] 5.12.25 — Template → instância independente
+    [ ] 5.12.26 — Rolagens reais na mesa
+    [ ] 5.12.27 — Integração com iniciativa/combate
+    [ ] 5.12.28 — Teste regressivo
 
 7. Fase 6 — Diário real
 
@@ -460,36 +615,58 @@ A próxima micro de desenvolvimento é:
 
 Fase 5 — Biblioteca completa
 
-[x] 5.1 — Biblioteca real da campanha
-    [x] 5.1.1 — Auditar a biblioteca atual da mesa
-    [x] 5.1.2 — Consolidar CampaignActor como entrada da Biblioteca da Campanha
-    [x] 5.1.3 — Auditar e refatorar ActorLibraryModal
-    [x] 5.1.4 — Separar claramente TABLE / LIBRARY / ARCHIVED na interface
-    [x] 5.1.5 — Melhorar listagem e detalhes de NPCs/criaturas da biblioteca
-    [x] 5.1.6 — Criar fluxo de arquivar/restaurar ator
-    [x] 5.1.7 — Consolidar permissões GM/player da biblioteca
-    [x] 5.1.8 — Preservar vínculo CharacterSheet quando aplicável
-    [x] 5.1.9 — Preservar ciclo LIBRARY → TABLE → LIBRARY
-    [x] 5.1.10 — Teste regressivo completo
-[ ] 5.2 — Biblioteca real do sistema
-    [PRÓXIMO] 5.2.1 — Auditar conteúdo atual pertencente ao GameSystem
-    [ ] 5.2.2 — Definir responsabilidade da Biblioteca do Sistema
-    [ ] 5.2.3 — Definir diferença entre conteúdo do sistema e template instanciável
-    [ ] 5.2.4 — Auditar APIs atuais de conteúdo do sistema
-    [ ] 5.2.5 — Criar endpoint de biblioteca do sistema, se realmente necessário
-    [ ] 5.2.6 — Criar estrutura frontend da Biblioteca do Sistema
-    [ ] 5.2.7 — Listar conteúdo real do sistema
-    [ ] 5.2.8 — Garantir isolamento por systemId
-    [ ] 5.2.9 — Integrar com campanha usando campaign.systemId
-    [ ] 5.2.10 — Teste regressivo da Biblioteca do Sistema
-[ ] 5.3 — Organização por categorias
-[ ] 5.4 — Itens na biblioteca
-[ ] 5.5 — Magias na biblioteca
-[ ] 5.6 — Templates de personagem/NPC/criatura
-[ ] 5.7 — Biblioteca de NPCs
-[ ] 5.8 — Biblioteca de criaturas
-[ ] 5.9 — Enviar NPC/criatura da biblioteca para mesa
-[ ] 5.10 — Editar instância da campanha sem alterar template original
+[ ] 5.11 — CharacterTemplate completo
+    [ ] 5.11.1 — Auditar CharacterSheet completa e suas relações
+    [ ] 5.11.2 — Definir o que um CharacterTemplate deve preservar
+    [ ] 5.11.3 — Definir Template × CharacterSheet × CampaignActor
+    [ ] 5.11.4 — Definir comportamento com multiclasse
+    [ ] 5.11.5 — Definir ancestralidade e sub-ancestralidade no template
+    [ ] 5.11.6 — Definir antecedentes, idiomas e proficiências
+    [ ] 5.11.7 — Definir atributos e perícias
+    [ ] 5.11.8 — Definir magias conhecidas do template
+    [ ] 5.11.9 — Definir equipamentos do template
+    [ ] 5.11.10 — Definir features e escolhas já resolvidas
+    [ ] 5.11.11 — Definir progressão e escolhas de nível
+    [ ] 5.11.12 — Modelar CharacterTemplate no Prisma
+    [ ] 5.11.13 — Modelar relações auxiliares necessárias
+    [ ] 5.11.14 — Criar migration
+    [ ] 5.11.15 — Criar seed mínimo de personagens-template
+    [ ] 5.11.16 — Expor CharacterTemplate na Biblioteca do Sistema
+    [ ] 5.11.17 — Exibir personagens-template no frontend
+    [ ] 5.11.18 — Abrir detalhes completos do template
+    [ ] 5.11.19 — Instanciar template como CampaignActor + CharacterSheet
+    [ ] 5.11.20 — Garantir cópia independente do template
+    [ ] 5.11.21 — Permitir edição da instância sem alterar a origem
+    [ ] 5.11.22 — Teste regressivo completo
+5.12 — NpcSheet / CreatureSheet completos
+    [ ] 5.12.1 — Auditar requisitos mecânicos de NPC
+    [ ] 5.12.2 — Auditar requisitos mecânicos de criatura
+    [ ] 5.12.3 — Definir diferenças NPC × Creature
+    [ ] 5.12.4 — Modelar NpcSheet
+    [ ] 5.12.5 — Modelar CreatureSheet
+    [ ] 5.12.6 — Atributos STR / DEX / CON / INT / WIS / CHA
+    [ ] 5.12.7 — CA / PV / deslocamentos
+    [ ] 5.12.8 — Salvaguardas e perícias
+    [ ] 5.12.9 — Resistências / imunidades / vulnerabilidades
+    [ ] 5.12.10 — Sentidos e idiomas
+    [ ] 5.12.11 — CR / desafio / XP para criaturas
+    [ ] 5.12.12 — Traits / características passivas
+    [ ] 5.12.13 — Ações
+    [ ] 5.12.14 — Ataques
+    [ ] 5.12.15 — Ações bônus
+    [ ] 5.12.16 — Reações
+    [ ] 5.12.17 — Multiataque
+    [ ] 5.12.18 — Magias/habilidades mágicas
+    [ ] 5.12.19 — Lore e comportamento
+    [ ] 5.12.20 — Retrato + imagem/token
+    [ ] 5.12.21 — Builder completo de NPC
+    [ ] 5.12.22 — Builder completo de criatura
+    [ ] 5.12.23 — Ficha pronta de NPC
+    [ ] 5.12.24 — Ficha pronta de criatura
+    [ ] 5.12.25 — Template → instância independente
+    [ ] 5.12.26 — Rolagens reais na mesa
+    [ ] 5.12.27 — Integração com iniciativa/combate
+    [ ] 5.12.28 — Teste regressivo
 
 19. Nota de verdade canônica
 

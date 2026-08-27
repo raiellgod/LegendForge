@@ -207,6 +207,208 @@ export type SystemLibrarySpell = {
   order: number;
 };
 
+
+export type SystemLibraryCharacterTemplate = {
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+  pronouns: string | null;
+  concept: string | null;
+  portraitUrl: string | null;
+  tokenImageUrl: string | null;
+  tokenImageFit: string;
+  level: number;
+  maxHitPoints: number;
+  armorClass: number;
+  speed: number;
+  classEquipmentMode: string;
+  backgroundEquipmentMode: string;
+  startingGold: number;
+  alignment: string | null;
+  faith: string | null;
+  lifestyle: string | null;
+  hair: string | null;
+  skin: string | null;
+  eyes: string | null;
+  height: string | null;
+  weight: string | null;
+  age: string | null;
+  gender: string | null;
+  bonds: string | null;
+  flaws: string | null;
+  ideals: string | null;
+  personality: string | null;
+  backstory: string | null;
+  organizations: string | null;
+  allies: string | null;
+  enemies: string | null;
+  notes: string | null;
+  otherNotes: string | null;
+  order: number;
+  ancestry: {
+    id: string;
+    key: string;
+    name: string;
+  } | null;
+  subAncestry: {
+    id: string;
+    key: string;
+    name: string;
+  } | null;
+  background: {
+    id: string;
+    key: string;
+    name: string;
+  } | null;
+  classes: Array<{
+    id: string;
+    classId: string;
+    subclassId: string | null;
+    level: number;
+    isPrimary: boolean;
+    order: number;
+    characterClass: {
+      id: string;
+      key: string;
+      name: string;
+      hitDie: number | null;
+      spellcastingAbilityKey: string | null;
+    };
+    subclass: {
+      id: string;
+      key: string;
+      name: string;
+    } | null;
+  }>;
+  stats: Array<{
+    id: string;
+    baseValue: number;
+    bonusValue: number;
+    overrideValue: number | null;
+    isSavingThrowProficient: boolean;
+    stat: {
+      id: string;
+      key: string;
+      name: string;
+      shortName: string;
+    };
+  }>;
+  skills: Array<{
+    id: string;
+    isProficient: boolean;
+    expertiseLevel: number;
+    bonusValue: number;
+    overrideValue: number | null;
+    source: string | null;
+    skill: {
+      id: string;
+      key: string;
+      name: string;
+    };
+  }>;
+  spells: Array<{
+    id: string;
+    classId: string | null;
+    source: string | null;
+    isPrepared: boolean;
+    isAlwaysPrepared: boolean;
+    uses: number | null;
+    maxUses: number | null;
+    notes: string | null;
+    spell: {
+      id: string;
+      key: string;
+      name: string;
+      level: number;
+      school: string;
+    };
+    characterClass: {
+      id: string;
+      key: string;
+      name: string;
+    } | null;
+  }>;
+  equipment: Array<{
+    id: string;
+    quantity: number;
+    isEquipped: boolean;
+    isAttuned: boolean;
+    source: string | null;
+    notes: string | null;
+    equipment: {
+      id: string;
+      key: string;
+      name: string;
+      category: string;
+      imageUrl: string | null;
+    };
+  }>;
+  languages: Array<{
+    id: string;
+    source: string | null;
+    language: {
+      id: string;
+      key: string;
+      name: string;
+    };
+  }>;
+  featureChoices: Array<{
+    id: string;
+    source: string;
+    choiceGroup: {
+      id: string;
+      key: string;
+      name: string;
+    };
+    feature: {
+      id: string;
+      key: string;
+      name: string;
+    };
+  }>;
+  progressionChoices: Array<{
+    id: string;
+    classId: string;
+    talentId: string | null;
+    classLevel: number;
+    choiceIndex: number;
+    type: string | null;
+    attributeIncreaseMode: string | null;
+    attributeIncreases: Record<string, number>;
+    characterClass: {
+      id: string;
+      key: string;
+      name: string;
+    };
+    talent: {
+      id: string;
+      key: string;
+      name: string;
+    } | null;
+  }>;
+};
+
+export type SystemLibraryNpcTemplate = {
+  id: string;
+  key: string;
+  name: string;
+  initials: string | null;
+  description: string | null;
+  portraitUrl: string | null;
+  order: number;
+};
+
+export type SystemLibraryCreatureTemplate = {
+  id: string;
+  key: string;
+  name: string;
+  initials: string | null;
+  description: string | null;
+  portraitUrl: string | null;
+  order: number;
+};
+
 export type SystemLibrary = {
   system: {
     id: string;
@@ -217,7 +419,13 @@ export type SystemLibrary = {
   summary: {
     equipmentCount: number;
     spellCount: number;
+    npcTemplateCount: number;
+    creatureTemplateCount: number;
+    characterTemplateCount: number;
   };
   equipment: SystemLibraryEquipment[];
   spells: SystemLibrarySpell[];
+  npcTemplates: SystemLibraryNpcTemplate[];
+  creatureTemplates: SystemLibraryCreatureTemplate[];
+  characterTemplates: SystemLibraryCharacterTemplate[];
 };

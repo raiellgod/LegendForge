@@ -442,6 +442,7 @@ export type EquipmentWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterEquipment?: Prisma.CharacterSheetEquipmentListRelationFilter
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentListRelationFilter
 }
 
 export type EquipmentOrderByWithRelationInput = {
@@ -477,6 +478,7 @@ export type EquipmentOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   characterEquipment?: Prisma.CharacterSheetEquipmentOrderByRelationAggregateInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentOrderByRelationAggregateInput
 }
 
 export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
@@ -517,6 +519,7 @@ export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterEquipment?: Prisma.CharacterSheetEquipmentListRelationFilter
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentListRelationFilter
 }, "id" | "systemId_name" | "systemId_key">
 
 export type EquipmentOrderByWithAggregationInput = {
@@ -625,6 +628,7 @@ export type EquipmentCreateInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutEquipmentInput
   characterEquipment?: Prisma.CharacterSheetEquipmentCreateNestedManyWithoutEquipmentInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUncheckedCreateInput = {
@@ -659,6 +663,7 @@ export type EquipmentUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterEquipment?: Prisma.CharacterSheetEquipmentUncheckedCreateNestedManyWithoutEquipmentInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUpdateInput = {
@@ -693,6 +698,7 @@ export type EquipmentUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutEquipmentNestedInput
   characterEquipment?: Prisma.CharacterSheetEquipmentUpdateManyWithoutEquipmentNestedInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateInput = {
@@ -727,6 +733,7 @@ export type EquipmentUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterEquipment?: Prisma.CharacterSheetEquipmentUncheckedUpdateManyWithoutEquipmentNestedInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentCreateManyInput = {
@@ -1013,6 +1020,20 @@ export type EquipmentUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.EquipmentScalarWhereInput | Prisma.EquipmentScalarWhereInput[]
 }
 
+export type EquipmentCreateNestedOneWithoutCharacterTemplateEquipmentInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutCharacterTemplateEquipmentInput, Prisma.EquipmentUncheckedCreateWithoutCharacterTemplateEquipmentInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutCharacterTemplateEquipmentInput
+  connect?: Prisma.EquipmentWhereUniqueInput
+}
+
+export type EquipmentUpdateOneRequiredWithoutCharacterTemplateEquipmentNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutCharacterTemplateEquipmentInput, Prisma.EquipmentUncheckedCreateWithoutCharacterTemplateEquipmentInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutCharacterTemplateEquipmentInput
+  upsert?: Prisma.EquipmentUpsertWithoutCharacterTemplateEquipmentInput
+  connect?: Prisma.EquipmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutCharacterTemplateEquipmentInput, Prisma.EquipmentUpdateWithoutCharacterTemplateEquipmentInput>, Prisma.EquipmentUncheckedUpdateWithoutCharacterTemplateEquipmentInput>
+}
+
 export type EquipmentCreateNestedOneWithoutCharacterEquipmentInput = {
   create?: Prisma.XOR<Prisma.EquipmentCreateWithoutCharacterEquipmentInput, Prisma.EquipmentUncheckedCreateWithoutCharacterEquipmentInput>
   connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutCharacterEquipmentInput
@@ -1078,6 +1099,7 @@ export type EquipmentCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterEquipment?: Prisma.CharacterSheetEquipmentCreateNestedManyWithoutEquipmentInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUncheckedCreateWithoutSystemInput = {
@@ -1111,6 +1133,7 @@ export type EquipmentUncheckedCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterEquipment?: Prisma.CharacterSheetEquipmentUncheckedCreateNestedManyWithoutEquipmentInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentCreateOrConnectWithoutSystemInput = {
@@ -1175,6 +1198,158 @@ export type EquipmentScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
 }
 
+export type EquipmentCreateWithoutCharacterTemplateEquipmentInput = {
+  id?: string
+  name: string
+  key: string
+  category: $Enums.EquipmentCategory
+  description?: string | null
+  imageUrl?: string | null
+  cost?: string | null
+  weight?: number | null
+  damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
+  defense?: number | null
+  properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutEquipmentInput
+  characterEquipment?: Prisma.CharacterSheetEquipmentCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentUncheckedCreateWithoutCharacterTemplateEquipmentInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  category: $Enums.EquipmentCategory
+  description?: string | null
+  imageUrl?: string | null
+  cost?: string | null
+  weight?: number | null
+  damage?: string | null
+  damageFormula?: string | null
+  damageType?: string | null
+  defense?: number | null
+  properties?: string | null
+  attackType?: $Enums.EquipmentAttackType
+  attackAbilityKey?: string | null
+  alternativeAbilityKey?: string | null
+  weaponGroup?: $Enums.EquipmentWeaponGroup | null
+  normalRange?: number | null
+  longRange?: number | null
+  isFinesse?: boolean
+  isThrown?: boolean
+  isTwoHanded?: boolean
+  isVersatile?: boolean
+  versatileDamageFormula?: string | null
+  attackBonus?: number
+  damageBonus?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterEquipment?: Prisma.CharacterSheetEquipmentUncheckedCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentCreateOrConnectWithoutCharacterTemplateEquipmentInput = {
+  where: Prisma.EquipmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutCharacterTemplateEquipmentInput, Prisma.EquipmentUncheckedCreateWithoutCharacterTemplateEquipmentInput>
+}
+
+export type EquipmentUpsertWithoutCharacterTemplateEquipmentInput = {
+  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutCharacterTemplateEquipmentInput, Prisma.EquipmentUncheckedUpdateWithoutCharacterTemplateEquipmentInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutCharacterTemplateEquipmentInput, Prisma.EquipmentUncheckedCreateWithoutCharacterTemplateEquipmentInput>
+  where?: Prisma.EquipmentWhereInput
+}
+
+export type EquipmentUpdateToOneWithWhereWithoutCharacterTemplateEquipmentInput = {
+  where?: Prisma.EquipmentWhereInput
+  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutCharacterTemplateEquipmentInput, Prisma.EquipmentUncheckedUpdateWithoutCharacterTemplateEquipmentInput>
+}
+
+export type EquipmentUpdateWithoutCharacterTemplateEquipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutEquipmentNestedInput
+  characterEquipment?: Prisma.CharacterSheetEquipmentUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentUncheckedUpdateWithoutCharacterTemplateEquipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumEquipmentCategoryFieldUpdateOperationsInput | $Enums.EquipmentCategory
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  damage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defense?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  properties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackType?: Prisma.EnumEquipmentAttackTypeFieldUpdateOperationsInput | $Enums.EquipmentAttackType
+  attackAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  alternativeAbilityKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weaponGroup?: Prisma.NullableEnumEquipmentWeaponGroupFieldUpdateOperationsInput | $Enums.EquipmentWeaponGroup | null
+  normalRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  longRange?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isFinesse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isThrown?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoHanded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVersatile?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versatileDamageFormula?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attackBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  damageBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterEquipment?: Prisma.CharacterSheetEquipmentUncheckedUpdateManyWithoutEquipmentNestedInput
+}
+
 export type EquipmentCreateWithoutCharacterEquipmentInput = {
   id?: string
   name: string
@@ -1206,6 +1381,7 @@ export type EquipmentCreateWithoutCharacterEquipmentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutEquipmentInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUncheckedCreateWithoutCharacterEquipmentInput = {
@@ -1239,6 +1415,7 @@ export type EquipmentUncheckedCreateWithoutCharacterEquipmentInput = {
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentCreateOrConnectWithoutCharacterEquipmentInput = {
@@ -1288,6 +1465,7 @@ export type EquipmentUpdateWithoutCharacterEquipmentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutEquipmentNestedInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateWithoutCharacterEquipmentInput = {
@@ -1321,6 +1499,7 @@ export type EquipmentUncheckedUpdateWithoutCharacterEquipmentInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentCreateManySystemInput = {
@@ -1386,6 +1565,7 @@ export type EquipmentUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterEquipment?: Prisma.CharacterSheetEquipmentUpdateManyWithoutEquipmentNestedInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateWithoutSystemInput = {
@@ -1419,6 +1599,7 @@ export type EquipmentUncheckedUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterEquipment?: Prisma.CharacterSheetEquipmentUncheckedUpdateManyWithoutEquipmentNestedInput
+  characterTemplateEquipment?: Prisma.CharacterTemplateEquipmentUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateManyWithoutSystemInput = {
@@ -1460,10 +1641,12 @@ export type EquipmentUncheckedUpdateManyWithoutSystemInput = {
 
 export type EquipmentCountOutputType = {
   characterEquipment: number
+  characterTemplateEquipment: number
 }
 
 export type EquipmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   characterEquipment?: boolean | EquipmentCountOutputTypeCountCharacterEquipmentArgs
+  characterTemplateEquipment?: boolean | EquipmentCountOutputTypeCountCharacterTemplateEquipmentArgs
 }
 
 /**
@@ -1481,6 +1664,13 @@ export type EquipmentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
  */
 export type EquipmentCountOutputTypeCountCharacterEquipmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CharacterSheetEquipmentWhereInput
+}
+
+/**
+ * EquipmentCountOutputType without action
+ */
+export type EquipmentCountOutputTypeCountCharacterTemplateEquipmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterTemplateEquipmentWhereInput
 }
 
 
@@ -1517,6 +1707,7 @@ export type EquipmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterEquipment?: boolean | Prisma.Equipment$characterEquipmentArgs<ExtArgs>
+  characterTemplateEquipment?: boolean | Prisma.Equipment$characterTemplateEquipmentArgs<ExtArgs>
   _count?: boolean | Prisma.EquipmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipment"]>
 
@@ -1625,6 +1816,7 @@ export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type EquipmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterEquipment?: boolean | Prisma.Equipment$characterEquipmentArgs<ExtArgs>
+  characterTemplateEquipment?: boolean | Prisma.Equipment$characterTemplateEquipmentArgs<ExtArgs>
   _count?: boolean | Prisma.EquipmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EquipmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1639,6 +1831,7 @@ export type $EquipmentPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
     characterEquipment: Prisma.$CharacterSheetEquipmentPayload<ExtArgs>[]
+    characterTemplateEquipment: Prisma.$CharacterTemplateEquipmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2067,6 +2260,7 @@ export interface Prisma__EquipmentClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   characterEquipment<T extends Prisma.Equipment$characterEquipmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$characterEquipmentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetEquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterTemplateEquipment<T extends Prisma.Equipment$characterTemplateEquipmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$characterTemplateEquipmentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplateEquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2543,6 +2737,30 @@ export type Equipment$characterEquipmentArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.CharacterSheetEquipmentScalarFieldEnum | Prisma.CharacterSheetEquipmentScalarFieldEnum[]
+}
+
+/**
+ * Equipment.characterTemplateEquipment
+ */
+export type Equipment$characterTemplateEquipmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterTemplateEquipment
+   */
+  select?: Prisma.CharacterTemplateEquipmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterTemplateEquipment
+   */
+  omit?: Prisma.CharacterTemplateEquipmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterTemplateEquipmentInclude<ExtArgs> | null
+  where?: Prisma.CharacterTemplateEquipmentWhereInput
+  orderBy?: Prisma.CharacterTemplateEquipmentOrderByWithRelationInput | Prisma.CharacterTemplateEquipmentOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterTemplateEquipmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterTemplateEquipmentScalarFieldEnum | Prisma.CharacterTemplateEquipmentScalarFieldEnum[]
 }
 
 /**

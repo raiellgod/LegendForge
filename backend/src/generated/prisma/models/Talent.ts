@@ -258,6 +258,7 @@ export type TalentWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Talent"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceListRelationFilter
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceListRelationFilter
 }
 
 export type TalentOrderByWithRelationInput = {
@@ -274,6 +275,7 @@ export type TalentOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceOrderByRelationAggregateInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceOrderByRelationAggregateInput
 }
 
 export type TalentWhereUniqueInput = Prisma.AtLeast<{
@@ -295,6 +297,7 @@ export type TalentWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Talent"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceListRelationFilter
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceListRelationFilter
 }, "id" | "systemId_key" | "systemId_name">
 
 export type TalentOrderByWithAggregationInput = {
@@ -346,6 +349,7 @@ export type TalentCreateInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutTalentsInput
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceCreateNestedManyWithoutTalentInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceCreateNestedManyWithoutTalentInput
 }
 
 export type TalentUncheckedCreateInput = {
@@ -361,6 +365,7 @@ export type TalentUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUncheckedCreateNestedManyWithoutTalentInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUncheckedCreateNestedManyWithoutTalentInput
 }
 
 export type TalentUpdateInput = {
@@ -376,6 +381,7 @@ export type TalentUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutTalentsNestedInput
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUpdateManyWithoutTalentNestedInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUpdateManyWithoutTalentNestedInput
 }
 
 export type TalentUncheckedUpdateInput = {
@@ -391,6 +397,7 @@ export type TalentUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUncheckedUpdateManyWithoutTalentNestedInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUncheckedUpdateManyWithoutTalentNestedInput
 }
 
 export type TalentCreateManyInput = {
@@ -547,6 +554,22 @@ export type TalentUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.TalentScalarWhereInput | Prisma.TalentScalarWhereInput[]
 }
 
+export type TalentCreateNestedOneWithoutCharacterTemplateProgressionChoicesInput = {
+  create?: Prisma.XOR<Prisma.TalentCreateWithoutCharacterTemplateProgressionChoicesInput, Prisma.TalentUncheckedCreateWithoutCharacterTemplateProgressionChoicesInput>
+  connectOrCreate?: Prisma.TalentCreateOrConnectWithoutCharacterTemplateProgressionChoicesInput
+  connect?: Prisma.TalentWhereUniqueInput
+}
+
+export type TalentUpdateOneWithoutCharacterTemplateProgressionChoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.TalentCreateWithoutCharacterTemplateProgressionChoicesInput, Prisma.TalentUncheckedCreateWithoutCharacterTemplateProgressionChoicesInput>
+  connectOrCreate?: Prisma.TalentCreateOrConnectWithoutCharacterTemplateProgressionChoicesInput
+  upsert?: Prisma.TalentUpsertWithoutCharacterTemplateProgressionChoicesInput
+  disconnect?: Prisma.TalentWhereInput | boolean
+  delete?: Prisma.TalentWhereInput | boolean
+  connect?: Prisma.TalentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TalentUpdateToOneWithWhereWithoutCharacterTemplateProgressionChoicesInput, Prisma.TalentUpdateWithoutCharacterTemplateProgressionChoicesInput>, Prisma.TalentUncheckedUpdateWithoutCharacterTemplateProgressionChoicesInput>
+}
+
 export type TalentCreateNestedOneWithoutCharacterProgressionChoicesInput = {
   create?: Prisma.XOR<Prisma.TalentCreateWithoutCharacterProgressionChoicesInput, Prisma.TalentUncheckedCreateWithoutCharacterProgressionChoicesInput>
   connectOrCreate?: Prisma.TalentCreateOrConnectWithoutCharacterProgressionChoicesInput
@@ -575,6 +598,7 @@ export type TalentCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceCreateNestedManyWithoutTalentInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceCreateNestedManyWithoutTalentInput
 }
 
 export type TalentUncheckedCreateWithoutSystemInput = {
@@ -589,6 +613,7 @@ export type TalentUncheckedCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUncheckedCreateNestedManyWithoutTalentInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUncheckedCreateNestedManyWithoutTalentInput
 }
 
 export type TalentCreateOrConnectWithoutSystemInput = {
@@ -634,6 +659,82 @@ export type TalentScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Talent"> | Date | string
 }
 
+export type TalentCreateWithoutCharacterTemplateProgressionChoicesInput = {
+  id?: string
+  key: string
+  name: string
+  description?: string | null
+  isRepeatable?: boolean
+  prerequisites?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutTalentsInput
+  characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceCreateNestedManyWithoutTalentInput
+}
+
+export type TalentUncheckedCreateWithoutCharacterTemplateProgressionChoicesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  description?: string | null
+  isRepeatable?: boolean
+  prerequisites?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUncheckedCreateNestedManyWithoutTalentInput
+}
+
+export type TalentCreateOrConnectWithoutCharacterTemplateProgressionChoicesInput = {
+  where: Prisma.TalentWhereUniqueInput
+  create: Prisma.XOR<Prisma.TalentCreateWithoutCharacterTemplateProgressionChoicesInput, Prisma.TalentUncheckedCreateWithoutCharacterTemplateProgressionChoicesInput>
+}
+
+export type TalentUpsertWithoutCharacterTemplateProgressionChoicesInput = {
+  update: Prisma.XOR<Prisma.TalentUpdateWithoutCharacterTemplateProgressionChoicesInput, Prisma.TalentUncheckedUpdateWithoutCharacterTemplateProgressionChoicesInput>
+  create: Prisma.XOR<Prisma.TalentCreateWithoutCharacterTemplateProgressionChoicesInput, Prisma.TalentUncheckedCreateWithoutCharacterTemplateProgressionChoicesInput>
+  where?: Prisma.TalentWhereInput
+}
+
+export type TalentUpdateToOneWithWhereWithoutCharacterTemplateProgressionChoicesInput = {
+  where?: Prisma.TalentWhereInput
+  data: Prisma.XOR<Prisma.TalentUpdateWithoutCharacterTemplateProgressionChoicesInput, Prisma.TalentUncheckedUpdateWithoutCharacterTemplateProgressionChoicesInput>
+}
+
+export type TalentUpdateWithoutCharacterTemplateProgressionChoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRepeatable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prerequisites?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutTalentsNestedInput
+  characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUpdateManyWithoutTalentNestedInput
+}
+
+export type TalentUncheckedUpdateWithoutCharacterTemplateProgressionChoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRepeatable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prerequisites?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUncheckedUpdateManyWithoutTalentNestedInput
+}
+
 export type TalentCreateWithoutCharacterProgressionChoicesInput = {
   id?: string
   key: string
@@ -646,6 +747,7 @@ export type TalentCreateWithoutCharacterProgressionChoicesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutTalentsInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceCreateNestedManyWithoutTalentInput
 }
 
 export type TalentUncheckedCreateWithoutCharacterProgressionChoicesInput = {
@@ -660,6 +762,7 @@ export type TalentUncheckedCreateWithoutCharacterProgressionChoicesInput = {
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUncheckedCreateNestedManyWithoutTalentInput
 }
 
 export type TalentCreateOrConnectWithoutCharacterProgressionChoicesInput = {
@@ -690,6 +793,7 @@ export type TalentUpdateWithoutCharacterProgressionChoicesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutTalentsNestedInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUpdateManyWithoutTalentNestedInput
 }
 
 export type TalentUncheckedUpdateWithoutCharacterProgressionChoicesInput = {
@@ -704,6 +808,7 @@ export type TalentUncheckedUpdateWithoutCharacterProgressionChoicesInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUncheckedUpdateManyWithoutTalentNestedInput
 }
 
 export type TalentCreateManySystemInput = {
@@ -731,6 +836,7 @@ export type TalentUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUpdateManyWithoutTalentNestedInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUpdateManyWithoutTalentNestedInput
 }
 
 export type TalentUncheckedUpdateWithoutSystemInput = {
@@ -745,6 +851,7 @@ export type TalentUncheckedUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterProgressionChoices?: Prisma.CharacterSheetProgressionChoiceUncheckedUpdateManyWithoutTalentNestedInput
+  characterTemplateProgressionChoices?: Prisma.CharacterTemplateProgressionChoiceUncheckedUpdateManyWithoutTalentNestedInput
 }
 
 export type TalentUncheckedUpdateManyWithoutSystemInput = {
@@ -767,10 +874,12 @@ export type TalentUncheckedUpdateManyWithoutSystemInput = {
 
 export type TalentCountOutputType = {
   characterProgressionChoices: number
+  characterTemplateProgressionChoices: number
 }
 
 export type TalentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   characterProgressionChoices?: boolean | TalentCountOutputTypeCountCharacterProgressionChoicesArgs
+  characterTemplateProgressionChoices?: boolean | TalentCountOutputTypeCountCharacterTemplateProgressionChoicesArgs
 }
 
 /**
@@ -790,6 +899,13 @@ export type TalentCountOutputTypeCountCharacterProgressionChoicesArgs<ExtArgs ex
   where?: Prisma.CharacterSheetProgressionChoiceWhereInput
 }
 
+/**
+ * TalentCountOutputType without action
+ */
+export type TalentCountOutputTypeCountCharacterTemplateProgressionChoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterTemplateProgressionChoiceWhereInput
+}
+
 
 export type TalentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -805,6 +921,7 @@ export type TalentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterProgressionChoices?: boolean | Prisma.Talent$characterProgressionChoicesArgs<ExtArgs>
+  characterTemplateProgressionChoices?: boolean | Prisma.Talent$characterTemplateProgressionChoicesArgs<ExtArgs>
   _count?: boolean | Prisma.TalentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["talent"]>
 
@@ -856,6 +973,7 @@ export type TalentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type TalentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterProgressionChoices?: boolean | Prisma.Talent$characterProgressionChoicesArgs<ExtArgs>
+  characterTemplateProgressionChoices?: boolean | Prisma.Talent$characterTemplateProgressionChoicesArgs<ExtArgs>
   _count?: boolean | Prisma.TalentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TalentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -870,6 +988,7 @@ export type $TalentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
     characterProgressionChoices: Prisma.$CharacterSheetProgressionChoicePayload<ExtArgs>[]
+    characterTemplateProgressionChoices: Prisma.$CharacterTemplateProgressionChoicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1279,6 +1398,7 @@ export interface Prisma__TalentClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   characterProgressionChoices<T extends Prisma.Talent$characterProgressionChoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Talent$characterProgressionChoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetProgressionChoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterTemplateProgressionChoices<T extends Prisma.Talent$characterTemplateProgressionChoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Talent$characterTemplateProgressionChoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplateProgressionChoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1736,6 +1856,30 @@ export type Talent$characterProgressionChoicesArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.CharacterSheetProgressionChoiceScalarFieldEnum | Prisma.CharacterSheetProgressionChoiceScalarFieldEnum[]
+}
+
+/**
+ * Talent.characterTemplateProgressionChoices
+ */
+export type Talent$characterTemplateProgressionChoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterTemplateProgressionChoice
+   */
+  select?: Prisma.CharacterTemplateProgressionChoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterTemplateProgressionChoice
+   */
+  omit?: Prisma.CharacterTemplateProgressionChoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterTemplateProgressionChoiceInclude<ExtArgs> | null
+  where?: Prisma.CharacterTemplateProgressionChoiceWhereInput
+  orderBy?: Prisma.CharacterTemplateProgressionChoiceOrderByWithRelationInput | Prisma.CharacterTemplateProgressionChoiceOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterTemplateProgressionChoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterTemplateProgressionChoiceScalarFieldEnum | Prisma.CharacterTemplateProgressionChoiceScalarFieldEnum[]
 }
 
 /**

@@ -242,6 +242,7 @@ export type LanguageWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Language"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterSheets?: Prisma.CharacterSheetLanguageListRelationFilter
+  characterTemplates?: Prisma.CharacterTemplateLanguageListRelationFilter
 }
 
 export type LanguageOrderByWithRelationInput = {
@@ -255,6 +256,7 @@ export type LanguageOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   characterSheets?: Prisma.CharacterSheetLanguageOrderByRelationAggregateInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageOrderByRelationAggregateInput
 }
 
 export type LanguageWhereUniqueInput = Prisma.AtLeast<{
@@ -273,6 +275,7 @@ export type LanguageWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Language"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterSheets?: Prisma.CharacterSheetLanguageListRelationFilter
+  characterTemplates?: Prisma.CharacterTemplateLanguageListRelationFilter
 }, "id" | "systemId_name" | "systemId_key">
 
 export type LanguageOrderByWithAggregationInput = {
@@ -315,6 +318,7 @@ export type LanguageCreateInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
   characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUncheckedCreateInput = {
@@ -327,6 +331,7 @@ export type LanguageUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUpdateInput = {
@@ -339,6 +344,7 @@ export type LanguageUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
   characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateInput = {
@@ -351,6 +357,7 @@ export type LanguageUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageCreateManyInput = {
@@ -393,6 +400,11 @@ export type LanguageListRelationFilter = {
 
 export type LanguageOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type LanguageScalarRelationFilter = {
+  is?: Prisma.LanguageWhereInput
+  isNot?: Prisma.LanguageWhereInput
 }
 
 export type LanguageSystemIdNameCompoundUniqueInput = {
@@ -446,11 +458,6 @@ export type LanguageSumOrderByAggregateInput = {
   order?: Prisma.SortOrder
 }
 
-export type LanguageScalarRelationFilter = {
-  is?: Prisma.LanguageWhereInput
-  isNot?: Prisma.LanguageWhereInput
-}
-
 export type LanguageCreateNestedManyWithoutSystemInput = {
   create?: Prisma.XOR<Prisma.LanguageCreateWithoutSystemInput, Prisma.LanguageUncheckedCreateWithoutSystemInput> | Prisma.LanguageCreateWithoutSystemInput[] | Prisma.LanguageUncheckedCreateWithoutSystemInput[]
   connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutSystemInput | Prisma.LanguageCreateOrConnectWithoutSystemInput[]
@@ -493,6 +500,20 @@ export type LanguageUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.LanguageScalarWhereInput | Prisma.LanguageScalarWhereInput[]
 }
 
+export type LanguageCreateNestedOneWithoutCharacterTemplatesInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutCharacterTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCharacterTemplatesInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutCharacterTemplatesInput
+  connect?: Prisma.LanguageWhereUniqueInput
+}
+
+export type LanguageUpdateOneRequiredWithoutCharacterTemplatesNestedInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutCharacterTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCharacterTemplatesInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutCharacterTemplatesInput
+  upsert?: Prisma.LanguageUpsertWithoutCharacterTemplatesInput
+  connect?: Prisma.LanguageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LanguageUpdateToOneWithWhereWithoutCharacterTemplatesInput, Prisma.LanguageUpdateWithoutCharacterTemplatesInput>, Prisma.LanguageUncheckedUpdateWithoutCharacterTemplatesInput>
+}
+
 export type LanguageCreateNestedOneWithoutCharacterSheetsInput = {
   create?: Prisma.XOR<Prisma.LanguageCreateWithoutCharacterSheetsInput, Prisma.LanguageUncheckedCreateWithoutCharacterSheetsInput>
   connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutCharacterSheetsInput
@@ -516,6 +537,7 @@ export type LanguageCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUncheckedCreateWithoutSystemInput = {
@@ -527,6 +549,7 @@ export type LanguageUncheckedCreateWithoutSystemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageCreateOrConnectWithoutSystemInput = {
@@ -569,6 +592,70 @@ export type LanguageScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Language"> | Date | string
 }
 
+export type LanguageCreateWithoutCharacterTemplatesInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
+  characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageUncheckedCreateWithoutCharacterTemplatesInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageCreateOrConnectWithoutCharacterTemplatesInput = {
+  where: Prisma.LanguageWhereUniqueInput
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutCharacterTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCharacterTemplatesInput>
+}
+
+export type LanguageUpsertWithoutCharacterTemplatesInput = {
+  update: Prisma.XOR<Prisma.LanguageUpdateWithoutCharacterTemplatesInput, Prisma.LanguageUncheckedUpdateWithoutCharacterTemplatesInput>
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutCharacterTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCharacterTemplatesInput>
+  where?: Prisma.LanguageWhereInput
+}
+
+export type LanguageUpdateToOneWithWhereWithoutCharacterTemplatesInput = {
+  where?: Prisma.LanguageWhereInput
+  data: Prisma.XOR<Prisma.LanguageUpdateWithoutCharacterTemplatesInput, Prisma.LanguageUncheckedUpdateWithoutCharacterTemplatesInput>
+}
+
+export type LanguageUpdateWithoutCharacterTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
+  characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
+}
+
+export type LanguageUncheckedUpdateWithoutCharacterTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+}
+
 export type LanguageCreateWithoutCharacterSheetsInput = {
   id?: string
   name: string
@@ -578,6 +665,7 @@ export type LanguageCreateWithoutCharacterSheetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUncheckedCreateWithoutCharacterSheetsInput = {
@@ -589,6 +677,7 @@ export type LanguageUncheckedCreateWithoutCharacterSheetsInput = {
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageCreateOrConnectWithoutCharacterSheetsInput = {
@@ -616,6 +705,7 @@ export type LanguageUpdateWithoutCharacterSheetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateWithoutCharacterSheetsInput = {
@@ -627,6 +717,7 @@ export type LanguageUncheckedUpdateWithoutCharacterSheetsInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageCreateManySystemInput = {
@@ -648,6 +739,7 @@ export type LanguageUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateWithoutSystemInput = {
@@ -659,6 +751,7 @@ export type LanguageUncheckedUpdateWithoutSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateManyWithoutSystemInput = {
@@ -678,10 +771,12 @@ export type LanguageUncheckedUpdateManyWithoutSystemInput = {
 
 export type LanguageCountOutputType = {
   characterSheets: number
+  characterTemplates: number
 }
 
 export type LanguageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   characterSheets?: boolean | LanguageCountOutputTypeCountCharacterSheetsArgs
+  characterTemplates?: boolean | LanguageCountOutputTypeCountCharacterTemplatesArgs
 }
 
 /**
@@ -701,6 +796,13 @@ export type LanguageCountOutputTypeCountCharacterSheetsArgs<ExtArgs extends runt
   where?: Prisma.CharacterSheetLanguageWhereInput
 }
 
+/**
+ * LanguageCountOutputType without action
+ */
+export type LanguageCountOutputTypeCountCharacterTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterTemplateLanguageWhereInput
+}
+
 
 export type LanguageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -713,6 +815,7 @@ export type LanguageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterSheets?: boolean | Prisma.Language$characterSheetsArgs<ExtArgs>
+  characterTemplates?: boolean | Prisma.Language$characterTemplatesArgs<ExtArgs>
   _count?: boolean | Prisma.LanguageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["language"]>
 
@@ -755,6 +858,7 @@ export type LanguageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type LanguageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterSheets?: boolean | Prisma.Language$characterSheetsArgs<ExtArgs>
+  characterTemplates?: boolean | Prisma.Language$characterTemplatesArgs<ExtArgs>
   _count?: boolean | Prisma.LanguageCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LanguageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -769,6 +873,7 @@ export type $LanguagePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
     characterSheets: Prisma.$CharacterSheetLanguagePayload<ExtArgs>[]
+    characterTemplates: Prisma.$CharacterTemplateLanguagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1175,6 +1280,7 @@ export interface Prisma__LanguageClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   characterSheets<T extends Prisma.Language$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Language$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterTemplates<T extends Prisma.Language$characterTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Language$characterTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplateLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1629,6 +1735,30 @@ export type Language$characterSheetsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.CharacterSheetLanguageScalarFieldEnum | Prisma.CharacterSheetLanguageScalarFieldEnum[]
+}
+
+/**
+ * Language.characterTemplates
+ */
+export type Language$characterTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterTemplateLanguage
+   */
+  select?: Prisma.CharacterTemplateLanguageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterTemplateLanguage
+   */
+  omit?: Prisma.CharacterTemplateLanguageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterTemplateLanguageInclude<ExtArgs> | null
+  where?: Prisma.CharacterTemplateLanguageWhereInput
+  orderBy?: Prisma.CharacterTemplateLanguageOrderByWithRelationInput | Prisma.CharacterTemplateLanguageOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterTemplateLanguageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterTemplateLanguageScalarFieldEnum | Prisma.CharacterTemplateLanguageScalarFieldEnum[]
 }
 
 /**

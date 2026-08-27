@@ -79,6 +79,84 @@ export async function createCampaignActor(
   return responseData.actor;
 }
 
+export async function importCharacterTemplateToCampaign(
+  campaignId: string,
+  templateId: string,
+): Promise<{
+  actor: CampaignActor;
+  characterSheetId: string;
+}> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/character-templates/${templateId}/import`,
+    {
+      method: "POST",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ??
+        "Erro ao adicionar personagem-template à campanha",
+    );
+  }
+
+  return response.json();
+}
+
+export async function importNpcTemplateToCampaign(
+  campaignId: string,
+  templateId: string,
+): Promise<CampaignActor> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/npc-templates/${templateId}/import`,
+    {
+      method: "POST",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ?? "Erro ao adicionar template de NPC à campanha",
+    );
+  }
+
+  const responseData = await response.json();
+
+  return responseData.actor;
+}
+
+export async function importCreatureTemplateToCampaign(
+  campaignId: string,
+  templateId: string,
+): Promise<CampaignActor> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/creature-templates/${templateId}/import`,
+    {
+      method: "POST",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ??
+        "Erro ao adicionar template de criatura à campanha",
+    );
+  }
+
+  const responseData = await response.json();
+
+  return responseData.actor;
+}
+
 export async function getCampaignCharacterSheets(
   campaignId: string,
 ): Promise<CharacterReadySheet[]> {
@@ -387,6 +465,33 @@ export async function updateCampaignActor(
   return responseData.actor;
 }
 
+
+export async function deleteCampaignCharacterInstance(
+  campaignId: string,
+  actorId: string,
+): Promise<{
+  deletedActorId: string;
+  deletedCharacterSheetId: string | null;
+}> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/actors/${actorId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ??
+        "Erro ao excluir a instância de personagem da campanha",
+    );
+  }
+
+  return response.json();
+}
 
 export async function getSystemLibrary(systemId: string): Promise<SystemLibrary> {
   const response = await fetch(
