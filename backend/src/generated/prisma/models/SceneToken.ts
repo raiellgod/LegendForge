@@ -663,10 +663,6 @@ export type SceneTokenUncheckedUpdateManyWithoutActorNestedInput = {
   deleteMany?: Prisma.SceneTokenScalarWhereInput | Prisma.SceneTokenScalarWhereInput[]
 }
 
-export type EnumSceneTokenImageFitFieldUpdateOperationsInput = {
-  set?: $Enums.SceneTokenImageFit
-}
-
 export type SceneTokenCreateWithoutCampaignInput = {
   id?: string
   name: string

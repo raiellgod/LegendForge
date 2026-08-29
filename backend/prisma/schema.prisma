@@ -136,6 +136,26 @@ enum CampaignActorLocation {
   ARCHIVED
 }
 
+enum SheetDefenseKind {
+  RESISTANCE
+  IMMUNITY
+  VULNERABILITY
+}
+
+enum SheetActionKind {
+  ACTION
+  BONUS_ACTION
+  REACTION
+}
+
+enum SheetAttackType {
+  MELEE
+  RANGED
+  THROWN
+  MAGIC
+  OTHER
+}
+
 model User {
   id            String     @id
   name          String
@@ -230,6 +250,8 @@ model GameSystem {
   equipment           Equipment[]
   languages           Language[]
   characterSheets     CharacterSheet[]
+  npcSheets           NpcSheet[]
+  creatureSheets      CreatureSheet[]
   levelProgressions   LevelProgression[]
   featureChoiceGroups FeatureChoiceGroup[]
   npcTemplates        NpcTemplate[]
@@ -239,42 +261,649 @@ model GameSystem {
 }
 
 model NpcTemplate {
-  id          String   @id @default(uuid())
-  systemId    String
-  key         String
-  name        String
-  initials    String?
-  description String?
-  portraitUrl String?
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String  @id @default(uuid())
+  systemId      String
+  key           String
+  name          String
+  initials      String?
+  description   String?
+  ancestryId    String?
+  subAncestryId String?
+  backgroundId  String?
 
-  system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  size CreatureSize @default(MEDIUM)
+  role String?
+
+  faction     String?
+  personality String?
+  motivation  String?
+  behavior    String?
+  tactics     String?
+  lore        String?
+  notes       String?
+
+  portraitUrl   String?
+  tokenImageUrl String?
+  tokenImageFit SceneTokenImageFit @default(COVER)
+
+  armorClass   Int @default(10)
+  hitPoints    Int @default(1)
+  maxHitPoints Int @default(1)
+  temporaryHp  Int @default(0)
+
+  speed       Int @default(30)
+  climbSpeed  Int @default(0)
+  swimSpeed   Int @default(0)
+  flySpeed    Int @default(0)
+  burrowSpeed Int @default(0)
+
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  system      GameSystem   @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  ancestry    Ancestry?    @relation(fields: [ancestryId], references: [id], onDelete: SetNull)
+  subAncestry SubAncestry? @relation(fields: [subAncestryId], references: [id], onDelete: SetNull)
+  background  Background?  @relation(fields: [backgroundId], references: [id], onDelete: SetNull)
+
+  classes          NpcTemplateClass[]
+  stats            NpcTemplateStat[]
+  skills           NpcTemplateSkill[]
+  defenses         NpcTemplateDefense[]
+  senses           NpcTemplateSense[]
+  languages        NpcTemplateLanguage[]
+  traits           NpcTemplateTrait[]
+  actions          NpcTemplateAction[]
+  attacks          NpcTemplateAttack[]
+  multiattacks     NpcTemplateMultiattack[]
+  magicalAbilities NpcTemplateMagicalAbility[]
 
   @@unique([systemId, key])
   @@unique([systemId, name])
   @@index([systemId])
+  @@index([ancestryId])
+  @@index([subAncestryId])
+  @@index([backgroundId])
   @@index([order])
 }
 
 model CreatureTemplate {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   systemId    String
   key         String
   name        String
   initials    String?
   description String?
-  portraitUrl String?
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  size         CreatureSize @default(MEDIUM)
+  creatureType String?
+
+  habitat  String?
+  behavior String?
+  tactics  String?
+  lore     String?
+  notes    String?
+
+  portraitUrl   String?
+  tokenImageUrl String?
+  tokenImageFit SceneTokenImageFit @default(COVER)
+
+  armorClass   Int @default(10)
+  hitPoints    Int @default(1)
+  maxHitPoints Int @default(1)
+  temporaryHp  Int @default(0)
+
+  speed       Int @default(30)
+  climbSpeed  Int @default(0)
+  swimSpeed   Int @default(0)
+  flySpeed    Int @default(0)
+  burrowSpeed Int @default(0)
+
+  challengeRating  String?
+  experienceReward Int     @default(0)
+
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   system GameSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+
+  stats            CreatureTemplateStat[]
+  skills           CreatureTemplateSkill[]
+  defenses         CreatureTemplateDefense[]
+  senses           CreatureTemplateSense[]
+  languages        CreatureTemplateLanguage[]
+  traits           CreatureTemplateTrait[]
+  actions          CreatureTemplateAction[]
+  attacks          CreatureTemplateAttack[]
+  multiattacks     CreatureTemplateMultiattack[]
+  magicalAbilities CreatureTemplateMagicalAbility[]
 
   @@unique([systemId, key])
   @@unique([systemId, name])
   @@index([systemId])
+  @@index([size])
+  @@index([challengeRating])
+  @@index([order])
+}
+
+model NpcTemplateClass {
+  id            String  @id @default(uuid())
+  npcTemplateId String
+  classId       String
+  subclassId    String?
+  level         Int     @default(1)
+  isPrimary     Boolean @default(false)
+  order         Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate    NpcTemplate        @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
+
+  @@unique([npcTemplateId, classId])
+  @@index([npcTemplateId])
+  @@index([classId])
+  @@index([subclassId])
+  @@index([isPrimary])
+  @@index([order])
+}
+
+model NpcTemplateStat {
+  id                      String  @id @default(uuid())
+  npcTemplateId           String
+  statId                  String
+  baseValue               Int     @default(10)
+  bonusValue              Int     @default(0)
+  overrideValue           Int?
+  isSavingThrowProficient Boolean @default(false)
+  savingThrowBonus        Int     @default(0)
+  savingThrowOverride     Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate NpcTemplate @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+  stat        Stat        @relation(fields: [statId], references: [id], onDelete: Cascade)
+
+  @@unique([npcTemplateId, statId])
+  @@index([npcTemplateId])
+  @@index([statId])
+  @@index([isSavingThrowProficient])
+}
+
+model NpcTemplateSkill {
+  id             String  @id @default(uuid())
+  npcTemplateId  String
+  skillId        String
+  isProficient   Boolean @default(false)
+  expertiseLevel Int     @default(0)
+  bonusValue     Int     @default(0)
+  overrideValue  Int?
+  source         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate NpcTemplate @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+  skill       Skill       @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([npcTemplateId, skillId])
+  @@index([npcTemplateId])
+  @@index([skillId])
+  @@index([isProficient])
+}
+
+model NpcTemplateDefense {
+  id            String           @id @default(uuid())
+  npcTemplateId String
+  kind          SheetDefenseKind
+  damageType    String
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate NpcTemplate @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([npcTemplateId, kind, damageType])
+  @@index([npcTemplateId])
+  @@index([kind])
+  @@index([damageType])
+}
+
+model NpcTemplateSense {
+  id            String  @id @default(uuid())
+  npcTemplateId String
+  name          String
+  range         Int?
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate NpcTemplate @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([npcTemplateId, name])
+  @@index([npcTemplateId])
+  @@index([name])
+}
+
+model NpcTemplateLanguage {
+  id            String  @id @default(uuid())
+  npcTemplateId String
+  languageId    String
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate NpcTemplate @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+  language    Language    @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([npcTemplateId, languageId])
+  @@index([npcTemplateId])
+  @@index([languageId])
+}
+
+model NpcTemplateTrait {
+  id            String @id @default(uuid())
+  npcTemplateId String
+  name          String
+  description   String
+  order         Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate NpcTemplate @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([npcTemplateId, name])
+  @@index([npcTemplateId])
+  @@index([order])
+}
+
+model NpcTemplateAction {
+  id            String          @id @default(uuid())
+  npcTemplateId String
+  kind          SheetActionKind @default(ACTION)
+  name          String
+  description   String
+  uses          Int?
+  maxUses       Int?
+  recharge      String?
+  order         Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate        NpcTemplate                   @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+  multiattackEntries NpcTemplateMultiattackEntry[]
+
+  @@unique([npcTemplateId, kind, name])
+  @@index([npcTemplateId])
+  @@index([kind])
+  @@index([order])
+}
+
+model NpcTemplateAttack {
+  id                     String          @id @default(uuid())
+  npcTemplateId          String
+  name                   String
+  description            String?
+  attackType             SheetAttackType @default(MELEE)
+  attackAbilityKey       String?
+  attackBonus            Int             @default(0)
+  damageFormula          String?
+  damageBonus            Int             @default(0)
+  damageType             String?
+  secondaryDamageFormula String?
+  secondaryDamageType    String?
+  normalRange            Int?
+  longRange              Int?
+  reach                  Int?
+  target                 String?
+  saveAbilityKey         String?
+  saveDc                 Int?
+  onHit                  String?
+  notes                  String?
+  order                  Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate        NpcTemplate                   @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+  multiattackEntries NpcTemplateMultiattackEntry[]
+
+  @@unique([npcTemplateId, name])
+  @@index([npcTemplateId])
+  @@index([attackType])
+  @@index([attackAbilityKey])
+  @@index([damageType])
+  @@index([order])
+}
+
+model NpcTemplateMultiattack {
+  id            String  @id @default(uuid())
+  npcTemplateId String
+  name          String  @default("Multiataque")
+  description   String?
+  order         Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate NpcTemplate                   @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+  entries     NpcTemplateMultiattackEntry[]
+
+  @@unique([npcTemplateId, name])
+  @@index([npcTemplateId])
+  @@index([order])
+}
+
+model NpcTemplateMultiattackEntry {
+  id            String  @id @default(uuid())
+  multiattackId String
+  attackId      String?
+  actionId      String?
+  quantity      Int     @default(1)
+  order         Int     @default(0)
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  multiattack NpcTemplateMultiattack @relation(fields: [multiattackId], references: [id], onDelete: Cascade)
+  attack      NpcTemplateAttack?     @relation(fields: [attackId], references: [id], onDelete: Cascade)
+  action      NpcTemplateAction?     @relation(fields: [actionId], references: [id], onDelete: Cascade)
+
+  @@index([multiattackId])
+  @@index([attackId])
+  @@index([actionId])
+  @@index([order])
+}
+
+model NpcTemplateMagicalAbility {
+  id            String  @id @default(uuid())
+  npcTemplateId String
+  spellId       String?
+  name          String
+  description   String?
+  abilityKey    String?
+  attackBonus   Int?
+  saveDc        Int?
+  damageFormula String?
+  damageBonus   Int     @default(0)
+  damageType    String?
+  range         String?
+  target        String?
+  uses          Int?
+  maxUses       Int?
+  recharge      String?
+  isPassive     Boolean @default(false)
+  notes         String?
+  order         Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcTemplate NpcTemplate @relation(fields: [npcTemplateId], references: [id], onDelete: Cascade)
+  spell       Spell?      @relation(fields: [spellId], references: [id], onDelete: SetNull)
+
+  @@unique([npcTemplateId, name])
+  @@index([npcTemplateId])
+  @@index([spellId])
+  @@index([abilityKey])
+  @@index([order])
+}
+
+model CreatureTemplateStat {
+  id                      String  @id @default(uuid())
+  creatureTemplateId      String
+  statId                  String
+  baseValue               Int     @default(10)
+  bonusValue              Int     @default(0)
+  overrideValue           Int?
+  isSavingThrowProficient Boolean @default(false)
+  savingThrowBonus        Int     @default(0)
+  savingThrowOverride     Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate CreatureTemplate @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+  stat             Stat             @relation(fields: [statId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureTemplateId, statId])
+  @@index([creatureTemplateId])
+  @@index([statId])
+  @@index([isSavingThrowProficient])
+}
+
+model CreatureTemplateSkill {
+  id                 String  @id @default(uuid())
+  creatureTemplateId String
+  skillId            String
+  isProficient       Boolean @default(false)
+  expertiseLevel     Int     @default(0)
+  bonusValue         Int     @default(0)
+  overrideValue      Int?
+  source             String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate CreatureTemplate @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+  skill            Skill            @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureTemplateId, skillId])
+  @@index([creatureTemplateId])
+  @@index([skillId])
+  @@index([isProficient])
+}
+
+model CreatureTemplateDefense {
+  id                 String           @id @default(uuid())
+  creatureTemplateId String
+  kind               SheetDefenseKind
+  damageType         String
+  notes              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate CreatureTemplate @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureTemplateId, kind, damageType])
+  @@index([creatureTemplateId])
+  @@index([kind])
+  @@index([damageType])
+}
+
+model CreatureTemplateSense {
+  id                 String  @id @default(uuid())
+  creatureTemplateId String
+  name               String
+  range              Int?
+  notes              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate CreatureTemplate @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureTemplateId, name])
+  @@index([creatureTemplateId])
+  @@index([name])
+}
+
+model CreatureTemplateLanguage {
+  id                 String  @id @default(uuid())
+  creatureTemplateId String
+  languageId         String
+  notes              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate CreatureTemplate @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+  language         Language         @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureTemplateId, languageId])
+  @@index([creatureTemplateId])
+  @@index([languageId])
+}
+
+model CreatureTemplateTrait {
+  id                 String @id @default(uuid())
+  creatureTemplateId String
+  name               String
+  description        String
+  order              Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate CreatureTemplate @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureTemplateId, name])
+  @@index([creatureTemplateId])
+  @@index([order])
+}
+
+model CreatureTemplateAction {
+  id                 String          @id @default(uuid())
+  creatureTemplateId String
+  kind               SheetActionKind @default(ACTION)
+  name               String
+  description        String
+  uses               Int?
+  maxUses            Int?
+  recharge           String?
+  order              Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate   CreatureTemplate                   @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+  multiattackEntries CreatureTemplateMultiattackEntry[]
+
+  @@unique([creatureTemplateId, kind, name])
+  @@index([creatureTemplateId])
+  @@index([kind])
+  @@index([order])
+}
+
+model CreatureTemplateAttack {
+  id                     String          @id @default(uuid())
+  creatureTemplateId     String
+  name                   String
+  description            String?
+  attackType             SheetAttackType @default(MELEE)
+  attackAbilityKey       String?
+  attackBonus            Int             @default(0)
+  damageFormula          String?
+  damageBonus            Int             @default(0)
+  damageType             String?
+  secondaryDamageFormula String?
+  secondaryDamageType    String?
+  normalRange            Int?
+  longRange              Int?
+  reach                  Int?
+  target                 String?
+  saveAbilityKey         String?
+  saveDc                 Int?
+  onHit                  String?
+  notes                  String?
+  order                  Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate   CreatureTemplate                   @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+  multiattackEntries CreatureTemplateMultiattackEntry[]
+
+  @@unique([creatureTemplateId, name])
+  @@index([creatureTemplateId])
+  @@index([attackType])
+  @@index([attackAbilityKey])
+  @@index([damageType])
+  @@index([order])
+}
+
+model CreatureTemplateMultiattack {
+  id                 String  @id @default(uuid())
+  creatureTemplateId String
+  name               String  @default("Multiataque")
+  description        String?
+  order              Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate CreatureTemplate                   @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+  entries          CreatureTemplateMultiattackEntry[]
+
+  @@unique([creatureTemplateId, name])
+  @@index([creatureTemplateId])
+  @@index([order])
+}
+
+model CreatureTemplateMultiattackEntry {
+  id            String  @id @default(uuid())
+  multiattackId String
+  attackId      String?
+  actionId      String?
+  quantity      Int     @default(1)
+  order         Int     @default(0)
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  multiattack CreatureTemplateMultiattack @relation(fields: [multiattackId], references: [id], onDelete: Cascade)
+  attack      CreatureTemplateAttack?     @relation(fields: [attackId], references: [id], onDelete: Cascade)
+  action      CreatureTemplateAction?     @relation(fields: [actionId], references: [id], onDelete: Cascade)
+
+  @@index([multiattackId])
+  @@index([attackId])
+  @@index([actionId])
+  @@index([order])
+}
+
+model CreatureTemplateMagicalAbility {
+  id                 String  @id @default(uuid())
+  creatureTemplateId String
+  spellId            String?
+  name               String
+  description        String?
+  abilityKey         String?
+  attackBonus        Int?
+  saveDc             Int?
+  damageFormula      String?
+  damageBonus        Int     @default(0)
+  damageType         String?
+  range              String?
+  target             String?
+  uses               Int?
+  maxUses            Int?
+  recharge           String?
+  isPassive          Boolean @default(false)
+  notes              String?
+  order              Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureTemplate CreatureTemplate @relation(fields: [creatureTemplateId], references: [id], onDelete: Cascade)
+  spell            Spell?           @relation(fields: [spellId], references: [id], onDelete: SetNull)
+
+  @@unique([creatureTemplateId, name])
+  @@index([creatureTemplateId])
+  @@index([spellId])
+  @@index([abilityKey])
   @@index([order])
 }
 
@@ -297,6 +926,8 @@ model Ancestry {
   featureChoiceGroups FeatureChoiceGroup[]
   characterSheets     CharacterSheet[]
   characterTemplates  CharacterTemplate[]
+  npcTemplates        NpcTemplate[]
+  npcSheets           NpcSheet[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -324,6 +955,8 @@ model SubAncestry {
   featureChoiceGroups FeatureChoiceGroup[]
   characterSheets     CharacterSheet[]
   characterTemplates  CharacterTemplate[]
+  npcTemplates        NpcTemplate[]
+  npcSheets           NpcSheet[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -353,6 +986,8 @@ model Background {
   featureChoiceGroups FeatureChoiceGroup[]
   characterSheets     CharacterSheet[]
   characterTemplates  CharacterTemplate[]
+  npcTemplates        NpcTemplate[]
+  npcSheets           NpcSheet[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -615,6 +1250,650 @@ model CharacterTemplateProgressionChoice {
   @@index([classLevel])
 }
 
+model NpcSheet {
+  id              String  @id @default(uuid())
+  campaignId      String
+  systemId        String
+  campaignActorId String  @unique
+  ancestryId      String?
+  subAncestryId   String?
+  backgroundId    String?
+
+  size CreatureSize @default(MEDIUM)
+  role String?
+
+  faction     String?
+  personality String?
+  motivation  String?
+  behavior    String?
+  tactics     String?
+  lore        String?
+  notes       String?
+
+  portraitUrl   String?
+  tokenImageUrl String?
+  tokenImageFit SceneTokenImageFit @default(COVER)
+
+  armorClass   Int @default(10)
+  hitPoints    Int @default(1)
+  maxHitPoints Int @default(1)
+  temporaryHp  Int @default(0)
+
+  speed       Int @default(30)
+  climbSpeed  Int @default(0)
+  swimSpeed   Int @default(0)
+  flySpeed    Int @default(0)
+  burrowSpeed Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaign      Campaign      @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  system        GameSystem    @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  campaignActor CampaignActor @relation(fields: [campaignActorId], references: [id], onDelete: Cascade)
+  ancestry      Ancestry?     @relation(fields: [ancestryId], references: [id], onDelete: SetNull)
+  subAncestry   SubAncestry?  @relation(fields: [subAncestryId], references: [id], onDelete: SetNull)
+  background    Background?   @relation(fields: [backgroundId], references: [id], onDelete: SetNull)
+
+  classes          NpcSheetClass[]
+  stats            NpcSheetStat[]
+  skills           NpcSheetSkill[]
+  defenses         NpcSheetDefense[]
+  senses           NpcSheetSense[]
+  languages        NpcSheetLanguage[]
+  traits           NpcSheetTrait[]
+  actions          NpcSheetAction[]
+  attacks          NpcSheetAttack[]
+  multiattacks     NpcSheetMultiattack[]
+  magicalAbilities NpcSheetMagicalAbility[]
+
+  @@index([campaignId])
+  @@index([systemId])
+  @@index([campaignActorId])
+  @@index([ancestryId])
+  @@index([subAncestryId])
+  @@index([backgroundId])
+  @@index([size])
+}
+
+model NpcSheetClass {
+  id         String  @id @default(uuid())
+  npcSheetId String
+  classId    String
+  subclassId String?
+  level      Int     @default(1)
+  isPrimary  Boolean @default(false)
+  order      Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet       NpcSheet           @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+  characterClass CharacterClass     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subclass       CharacterSubclass? @relation(fields: [subclassId], references: [id], onDelete: SetNull)
+
+  @@unique([npcSheetId, classId])
+  @@index([npcSheetId])
+  @@index([classId])
+  @@index([subclassId])
+  @@index([isPrimary])
+  @@index([order])
+}
+
+model NpcSheetStat {
+  id                      String  @id @default(uuid())
+  npcSheetId              String
+  statId                  String
+  baseValue               Int     @default(10)
+  bonusValue              Int     @default(0)
+  overrideValue           Int?
+  isSavingThrowProficient Boolean @default(false)
+  savingThrowBonus        Int     @default(0)
+  savingThrowOverride     Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet NpcSheet @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+  stat     Stat     @relation(fields: [statId], references: [id], onDelete: Cascade)
+
+  @@unique([npcSheetId, statId])
+  @@index([npcSheetId])
+  @@index([statId])
+  @@index([isSavingThrowProficient])
+}
+
+model NpcSheetSkill {
+  id             String  @id @default(uuid())
+  npcSheetId     String
+  skillId        String
+  isProficient   Boolean @default(false)
+  expertiseLevel Int     @default(0)
+  bonusValue     Int     @default(0)
+  overrideValue  Int?
+  source         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet NpcSheet @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+  skill    Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([npcSheetId, skillId])
+  @@index([npcSheetId])
+  @@index([skillId])
+  @@index([isProficient])
+}
+
+model NpcSheetDefense {
+  id         String           @id @default(uuid())
+  npcSheetId String
+  kind       SheetDefenseKind
+  damageType String
+  notes      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet NpcSheet @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+
+  @@unique([npcSheetId, kind, damageType])
+  @@index([npcSheetId])
+  @@index([kind])
+  @@index([damageType])
+}
+
+model NpcSheetSense {
+  id         String  @id @default(uuid())
+  npcSheetId String
+  name       String
+  range      Int?
+  notes      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet NpcSheet @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+
+  @@unique([npcSheetId, name])
+  @@index([npcSheetId])
+  @@index([name])
+}
+
+model NpcSheetLanguage {
+  id         String  @id @default(uuid())
+  npcSheetId String
+  languageId String
+  notes      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet NpcSheet @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([npcSheetId, languageId])
+  @@index([npcSheetId])
+  @@index([languageId])
+}
+
+model CreatureSheet {
+  id              String @id @default(uuid())
+  campaignId      String
+  systemId        String
+  campaignActorId String @unique
+
+  size         CreatureSize @default(MEDIUM)
+  creatureType String?
+
+  habitat  String?
+  behavior String?
+  tactics  String?
+  lore     String?
+  notes    String?
+
+  portraitUrl   String?
+  tokenImageUrl String?
+  tokenImageFit SceneTokenImageFit @default(COVER)
+
+  armorClass   Int @default(10)
+  hitPoints    Int @default(1)
+  maxHitPoints Int @default(1)
+  temporaryHp  Int @default(0)
+
+  speed       Int @default(30)
+  climbSpeed  Int @default(0)
+  swimSpeed   Int @default(0)
+  flySpeed    Int @default(0)
+  burrowSpeed Int @default(0)
+
+  challengeRating  String?
+  experienceReward Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaign      Campaign      @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  system        GameSystem    @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  campaignActor CampaignActor @relation(fields: [campaignActorId], references: [id], onDelete: Cascade)
+
+  stats            CreatureSheetStat[]
+  skills           CreatureSheetSkill[]
+  defenses         CreatureSheetDefense[]
+  senses           CreatureSheetSense[]
+  languages        CreatureSheetLanguage[]
+  traits           CreatureSheetTrait[]
+  actions          CreatureSheetAction[]
+  attacks          CreatureSheetAttack[]
+  multiattacks     CreatureSheetMultiattack[]
+  magicalAbilities CreatureSheetMagicalAbility[]
+
+  @@index([campaignId])
+  @@index([systemId])
+  @@index([campaignActorId])
+  @@index([size])
+  @@index([challengeRating])
+}
+
+model CreatureSheetStat {
+  id                      String  @id @default(uuid())
+  creatureSheetId         String
+  statId                  String
+  baseValue               Int     @default(10)
+  bonusValue              Int     @default(0)
+  overrideValue           Int?
+  isSavingThrowProficient Boolean @default(false)
+  savingThrowBonus        Int     @default(0)
+  savingThrowOverride     Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet CreatureSheet @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+  stat          Stat          @relation(fields: [statId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureSheetId, statId])
+  @@index([creatureSheetId])
+  @@index([statId])
+  @@index([isSavingThrowProficient])
+}
+
+model CreatureSheetSkill {
+  id              String  @id @default(uuid())
+  creatureSheetId String
+  skillId         String
+  isProficient    Boolean @default(false)
+  expertiseLevel  Int     @default(0)
+  bonusValue      Int     @default(0)
+  overrideValue   Int?
+  source          String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet CreatureSheet @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+  skill         Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureSheetId, skillId])
+  @@index([creatureSheetId])
+  @@index([skillId])
+  @@index([isProficient])
+}
+
+model CreatureSheetDefense {
+  id              String           @id @default(uuid())
+  creatureSheetId String
+  kind            SheetDefenseKind
+  damageType      String
+  notes           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet CreatureSheet @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureSheetId, kind, damageType])
+  @@index([creatureSheetId])
+  @@index([kind])
+  @@index([damageType])
+}
+
+model CreatureSheetSense {
+  id              String  @id @default(uuid())
+  creatureSheetId String
+  name            String
+  range           Int?
+  notes           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet CreatureSheet @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureSheetId, name])
+  @@index([creatureSheetId])
+  @@index([name])
+}
+
+model CreatureSheetLanguage {
+  id              String  @id @default(uuid())
+  creatureSheetId String
+  languageId      String
+  notes           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet CreatureSheet @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+  language      Language      @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureSheetId, languageId])
+  @@index([creatureSheetId])
+  @@index([languageId])
+}
+
+model NpcSheetTrait {
+  id          String @id @default(uuid())
+  npcSheetId  String
+  name        String
+  description String
+  order       Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet NpcSheet @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+
+  @@unique([npcSheetId, name])
+  @@index([npcSheetId])
+  @@index([order])
+}
+
+model NpcSheetAction {
+  id          String          @id @default(uuid())
+  npcSheetId  String
+  kind        SheetActionKind @default(ACTION)
+  name        String
+  description String
+  uses        Int?
+  maxUses     Int?
+  recharge    String?
+  order       Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet           NpcSheet                   @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+  multiattackEntries NpcSheetMultiattackEntry[]
+
+  @@unique([npcSheetId, kind, name])
+  @@index([npcSheetId])
+  @@index([kind])
+  @@index([order])
+}
+
+model NpcSheetAttack {
+  id                     String          @id @default(uuid())
+  npcSheetId             String
+  name                   String
+  description            String?
+  attackType             SheetAttackType @default(MELEE)
+  attackAbilityKey       String?
+  attackBonus            Int             @default(0)
+  damageFormula          String?
+  damageBonus            Int             @default(0)
+  damageType             String?
+  secondaryDamageFormula String?
+  secondaryDamageType    String?
+  normalRange            Int?
+  longRange              Int?
+  reach                  Int?
+  target                 String?
+  saveAbilityKey         String?
+  saveDc                 Int?
+  onHit                  String?
+  notes                  String?
+  order                  Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet           NpcSheet                   @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+  multiattackEntries NpcSheetMultiattackEntry[]
+
+  @@unique([npcSheetId, name])
+  @@index([npcSheetId])
+  @@index([attackType])
+  @@index([attackAbilityKey])
+  @@index([damageType])
+  @@index([order])
+}
+
+model NpcSheetMultiattack {
+  id          String  @id @default(uuid())
+  npcSheetId  String
+  name        String  @default("Multiataque")
+  description String?
+  order       Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet NpcSheet                   @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+  entries  NpcSheetMultiattackEntry[]
+
+  @@unique([npcSheetId, name])
+  @@index([npcSheetId])
+  @@index([order])
+}
+
+model NpcSheetMultiattackEntry {
+  id            String  @id @default(uuid())
+  multiattackId String
+  attackId      String?
+  actionId      String?
+  quantity      Int     @default(1)
+  order         Int     @default(0)
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  multiattack NpcSheetMultiattack @relation(fields: [multiattackId], references: [id], onDelete: Cascade)
+  attack      NpcSheetAttack?     @relation(fields: [attackId], references: [id], onDelete: Cascade)
+  action      NpcSheetAction?     @relation(fields: [actionId], references: [id], onDelete: Cascade)
+
+  @@index([multiattackId])
+  @@index([attackId])
+  @@index([actionId])
+  @@index([order])
+}
+
+model NpcSheetMagicalAbility {
+  id            String  @id @default(uuid())
+  npcSheetId    String
+  spellId       String?
+  name          String
+  description   String?
+  abilityKey    String?
+  attackBonus   Int?
+  saveDc        Int?
+  damageFormula String?
+  damageBonus   Int     @default(0)
+  damageType    String?
+  range         String?
+  target        String?
+  uses          Int?
+  maxUses       Int?
+  recharge      String?
+  isPassive     Boolean @default(false)
+  notes         String?
+  order         Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  npcSheet NpcSheet @relation(fields: [npcSheetId], references: [id], onDelete: Cascade)
+  spell    Spell?   @relation(fields: [spellId], references: [id], onDelete: SetNull)
+
+  @@unique([npcSheetId, name])
+  @@index([npcSheetId])
+  @@index([spellId])
+  @@index([abilityKey])
+  @@index([order])
+}
+
+model CreatureSheetTrait {
+  id              String @id @default(uuid())
+  creatureSheetId String
+  name            String
+  description     String
+  order           Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet CreatureSheet @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+
+  @@unique([creatureSheetId, name])
+  @@index([creatureSheetId])
+  @@index([order])
+}
+
+model CreatureSheetAction {
+  id              String          @id @default(uuid())
+  creatureSheetId String
+  kind            SheetActionKind @default(ACTION)
+  name            String
+  description     String
+  uses            Int?
+  maxUses         Int?
+  recharge        String?
+  order           Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet      CreatureSheet                   @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+  multiattackEntries CreatureSheetMultiattackEntry[]
+
+  @@unique([creatureSheetId, kind, name])
+  @@index([creatureSheetId])
+  @@index([kind])
+  @@index([order])
+}
+
+model CreatureSheetAttack {
+  id                     String          @id @default(uuid())
+  creatureSheetId        String
+  name                   String
+  description            String?
+  attackType             SheetAttackType @default(MELEE)
+  attackAbilityKey       String?
+  attackBonus            Int             @default(0)
+  damageFormula          String?
+  damageBonus            Int             @default(0)
+  damageType             String?
+  secondaryDamageFormula String?
+  secondaryDamageType    String?
+  normalRange            Int?
+  longRange              Int?
+  reach                  Int?
+  target                 String?
+  saveAbilityKey         String?
+  saveDc                 Int?
+  onHit                  String?
+  notes                  String?
+  order                  Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet      CreatureSheet                   @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+  multiattackEntries CreatureSheetMultiattackEntry[]
+
+  @@unique([creatureSheetId, name])
+  @@index([creatureSheetId])
+  @@index([attackType])
+  @@index([attackAbilityKey])
+  @@index([damageType])
+  @@index([order])
+}
+
+model CreatureSheetMultiattack {
+  id              String  @id @default(uuid())
+  creatureSheetId String
+  name            String  @default("Multiataque")
+  description     String?
+  order           Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet CreatureSheet                   @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+  entries       CreatureSheetMultiattackEntry[]
+
+  @@unique([creatureSheetId, name])
+  @@index([creatureSheetId])
+  @@index([order])
+}
+
+model CreatureSheetMultiattackEntry {
+  id            String  @id @default(uuid())
+  multiattackId String
+  attackId      String?
+  actionId      String?
+  quantity      Int     @default(1)
+  order         Int     @default(0)
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  multiattack CreatureSheetMultiattack @relation(fields: [multiattackId], references: [id], onDelete: Cascade)
+  attack      CreatureSheetAttack?     @relation(fields: [attackId], references: [id], onDelete: Cascade)
+  action      CreatureSheetAction?     @relation(fields: [actionId], references: [id], onDelete: Cascade)
+
+  @@index([multiattackId])
+  @@index([attackId])
+  @@index([actionId])
+  @@index([order])
+}
+
+model CreatureSheetMagicalAbility {
+  id              String  @id @default(uuid())
+  creatureSheetId String
+  spellId         String?
+  name            String
+  description     String?
+  abilityKey      String?
+  attackBonus     Int?
+  saveDc          Int?
+  damageFormula   String?
+  damageBonus     Int     @default(0)
+  damageType      String?
+  range           String?
+  target          String?
+  uses            Int?
+  maxUses         Int?
+  recharge        String?
+  isPassive       Boolean @default(false)
+  notes           String?
+  order           Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatureSheet CreatureSheet @relation(fields: [creatureSheetId], references: [id], onDelete: Cascade)
+  spell         Spell?        @relation(fields: [spellId], references: [id], onDelete: SetNull)
+
+  @@unique([creatureSheetId, name])
+  @@index([creatureSheetId])
+  @@index([spellId])
+  @@index([abilityKey])
+  @@index([order])
+}
+
 model CharacterSheet {
   id              String               @id @default(uuid())
   campaignId      String
@@ -722,6 +2001,10 @@ model Language {
   system             GameSystem                  @relation(fields: [systemId], references: [id], onDelete: Cascade)
   characterSheets    CharacterSheetLanguage[]
   characterTemplates CharacterTemplateLanguage[]
+  npcTemplates       NpcTemplateLanguage[]
+  creatureTemplates  CreatureTemplateLanguage[]
+  npcSheets          NpcSheetLanguage[]
+  creatureSheets     CreatureSheetLanguage[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -913,6 +2196,8 @@ model CharacterClass {
   characterTemplateClasses            CharacterTemplateClass[]
   characterTemplateSpells             CharacterTemplateSpell[]
   characterTemplateProgressionChoices CharacterTemplateProgressionChoice[]
+  npcTemplateClasses                  NpcTemplateClass[]
+  npcSheetClasses                     NpcSheetClass[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -938,6 +2223,8 @@ model CharacterSubclass {
   characterSheets          CharacterSheet[]
   characterSheetClasses    CharacterSheetClass[]
   characterTemplateClasses CharacterTemplateClass[]
+  npcTemplateClasses       NpcTemplateClass[]
+  npcSheetClasses          NpcSheetClass[]
 
   @@unique([classId, name])
   @@unique([classId, key])
@@ -1179,10 +2466,14 @@ model Spell {
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
 
-  system                  GameSystem               @relation(fields: [systemId], references: [id], onDelete: Cascade)
-  characterSpells         CharacterSheetSpell[]
-  characterTemplateSpells CharacterTemplateSpell[]
-  classSpells             ClassSpell[]
+  system                           GameSystem                       @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  characterSpells                  CharacterSheetSpell[]
+  characterTemplateSpells          CharacterTemplateSpell[]
+  npcTemplateMagicalAbilities      NpcTemplateMagicalAbility[]
+  creatureTemplateMagicalAbilities CreatureTemplateMagicalAbility[]
+  npcSheetMagicalAbilities         NpcSheetMagicalAbility[]
+  creatureMagicalAbilities         CreatureSheetMagicalAbility[]
+  classSpells                      ClassSpell[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -1253,6 +2544,10 @@ model Stat {
   skills                 Skill[]
   characterStats         CharacterSheetStat[]
   characterTemplateStats CharacterTemplateStat[]
+  npcTemplateStats       NpcTemplateStat[]
+  creatureTemplateStats  CreatureTemplateStat[]
+  npcSheetStats          NpcSheetStat[]
+  creatureSheetStats     CreatureSheetStat[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -1274,6 +2569,10 @@ model Skill {
   stat                    Stat                     @relation(fields: [statId], references: [id], onDelete: Cascade)
   characterSkills         CharacterSheetSkill[]
   characterTemplateSkills CharacterTemplateSkill[]
+  npcTemplateSkills       NpcTemplateSkill[]
+  creatureTemplateSkills  CreatureTemplateSkill[]
+  npcSheetSkills          NpcSheetSkill[]
+  creatureSheetSkills     CreatureSheetSkill[]
 
   @@unique([systemId, name])
   @@unique([systemId, key])
@@ -1305,6 +2604,8 @@ model Campaign {
   logs            CampaignLog[]
   actors          CampaignActor[]
   characterSheets CharacterSheet[]
+  npcSheets       NpcSheet[]
+  creatureSheets  CreatureSheet[]
   sceneTokens     SceneToken[]
 
   @@index([ownerId])
@@ -1366,6 +2667,8 @@ model CampaignActor {
   owner          User?           @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   sceneTokens    SceneToken[]
   characterSheet CharacterSheet?
+  npcSheet       NpcSheet?
+  creatureSheet  CreatureSheet?
 
   @@index([campaignId])
   @@index([ownerId])

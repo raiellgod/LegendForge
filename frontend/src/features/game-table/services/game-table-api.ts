@@ -79,6 +79,98 @@ export async function createCampaignActor(
   return responseData.actor;
 }
 
+export async function getCampaignNpcSheets(
+  campaignId: string,
+): Promise<import("../types/game-table-types").NpcSheetReady[]> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/npc-sheets`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.message ?? "Erro ao carregar fichas de NPC");
+  }
+
+  const data = await response.json();
+  return data.npcSheets;
+}
+
+export async function getCampaignCreatureSheets(
+  campaignId: string,
+): Promise<import("../types/game-table-types").CreatureSheetReady[]> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/creature-sheets`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.message ?? "Erro ao carregar fichas de criatura");
+  }
+
+  const data = await response.json();
+  return data.creatureSheets;
+}
+
+export async function createCampaignNpcSheet(
+  campaignId: string,
+  data: import("../types/game-table-types").NpcSheetDraft,
+): Promise<{
+  actor: CampaignActor;
+  npcSheet: import("../types/game-table-types").NpcSheetReady;
+}> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/npc-sheets`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.message ?? "Erro ao criar ficha de NPC");
+  }
+
+  return response.json();
+}
+
+export async function createCampaignCreatureSheet(
+  campaignId: string,
+  data: import("../types/game-table-types").CreatureSheetDraft,
+): Promise<{
+  actor: CampaignActor;
+  creatureSheet: import("../types/game-table-types").CreatureSheetReady;
+}> {
+  const response = await fetch(
+    `http://localhost:8081/campaigns/${campaignId}/creature-sheets`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.message ?? "Erro ao criar ficha de criatura");
+  }
+
+  return response.json();
+}
+
 export async function importCharacterTemplateToCampaign(
   campaignId: string,
   templateId: string,
@@ -109,7 +201,10 @@ export async function importCharacterTemplateToCampaign(
 export async function importNpcTemplateToCampaign(
   campaignId: string,
   templateId: string,
-): Promise<CampaignActor> {
+): Promise<{
+  actor: CampaignActor;
+  npcSheet: import("../types/game-table-types").NpcSheetReady;
+}> {
   const response = await fetch(
     `http://localhost:8081/campaigns/${campaignId}/npc-templates/${templateId}/import`,
     {
@@ -126,15 +221,16 @@ export async function importNpcTemplateToCampaign(
     );
   }
 
-  const responseData = await response.json();
-
-  return responseData.actor;
+  return response.json();
 }
 
 export async function importCreatureTemplateToCampaign(
   campaignId: string,
   templateId: string,
-): Promise<CampaignActor> {
+): Promise<{
+  actor: CampaignActor;
+  creatureSheet: import("../types/game-table-types").CreatureSheetReady;
+}> {
   const response = await fetch(
     `http://localhost:8081/campaigns/${campaignId}/creature-templates/${templateId}/import`,
     {
@@ -152,9 +248,7 @@ export async function importCreatureTemplateToCampaign(
     );
   }
 
-  const responseData = await response.json();
-
-  return responseData.actor;
+  return response.json();
 }
 
 export async function getCampaignCharacterSheets(

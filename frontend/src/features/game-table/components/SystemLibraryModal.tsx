@@ -473,6 +473,10 @@ function SystemLibraryNpcTemplatePreview({
           >
             {template.description || "Sem descrição cadastrada."}
           </p>
+
+          <p className="mt-2 text-[10px] font-bold text-forge-gold/70">
+            CA {template.armorClass} · PV {template.maxHitPoints} · {template.speed} m
+          </p>
         </div>
       </div>
 
@@ -528,9 +532,55 @@ function SystemLibraryNpcTemplatePreview({
           </p>
         </div>
 
+        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+          <div className="rounded-lg border border-white/10 bg-black/20 p-2.5">
+            <p className="text-[9px] font-black uppercase text-white/30">CA</p>
+            <p className="mt-1 text-xs font-bold text-white/65">{template.armorClass}</p>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-black/20 p-2.5">
+            <p className="text-[9px] font-black uppercase text-white/30">PV</p>
+            <p className="mt-1 text-xs font-bold text-white/65">{template.maxHitPoints}</p>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-black/20 p-2.5">
+            <p className="text-[9px] font-black uppercase text-white/30">Tamanho</p>
+            <p className="mt-1 text-xs font-bold text-white/65">{template.size}</p>
+          </div>
+        </div>
+
+        {template.ancestry || template.background || template.classes.length > 0 ? (
+          <div className="mt-3">
+            <p className="text-[9px] font-black uppercase tracking-[0.1em] text-white/30">
+              Origem e treinamento
+            </p>
+            <p className="mt-1 text-xs font-semibold text-white/60">
+              {[template.ancestry?.name, template.subAncestry?.name, template.background?.name]
+                .filter(Boolean)
+                .join(" · ") || "Sem origem vinculada"}
+            </p>
+            {template.classes.length > 0 ? (
+              <p className="mt-1 text-xs font-semibold text-white/50">
+                {template.classes
+                  .map((entry) =>
+                    `${entry.characterClass.name} ${entry.level}${entry.subclass ? ` · ${entry.subclass.name}` : ""}`,
+                  )
+                  .join(" / ")}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
+        <div className="mt-3">
+          <p className="text-[9px] font-black uppercase tracking-[0.1em] text-white/30">
+            Traits e ataques
+          </p>
+          <p className="mt-1 text-xs font-semibold text-white/60">
+            {template.traits.length} traits · {template.attacks.length} ataques · {template.actions.length} ações
+          </p>
+        </div>
+
         <p className="mt-3 text-[9px] font-semibold leading-relaxed text-white/25">
           Este template pertence ao sistema. A instância criada na campanha é
-          independente e não altera este conteúdo-base.
+          uma NpcSheet independente e não altera este conteúdo-base.
         </p>
       </details>
 
@@ -598,6 +648,10 @@ function SystemLibraryCreatureTemplatePreview({
           >
             {template.description || "Sem descrição cadastrada."}
           </p>
+
+          <p className="mt-2 text-[10px] font-bold text-forge-gold/70">
+            CA {template.armorClass} · PV {template.maxHitPoints} · {template.speed} m
+          </p>
         </div>
       </div>
 
@@ -653,9 +707,35 @@ function SystemLibraryCreatureTemplatePreview({
           </p>
         </div>
 
+        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+          <div className="rounded-lg border border-white/10 bg-black/20 p-2.5">
+            <p className="text-[9px] font-black uppercase text-white/30">CA</p>
+            <p className="mt-1 text-xs font-bold text-white/65">{template.armorClass}</p>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-black/20 p-2.5">
+            <p className="text-[9px] font-black uppercase text-white/30">PV</p>
+            <p className="mt-1 text-xs font-bold text-white/65">{template.maxHitPoints}</p>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-black/20 p-2.5">
+            <p className="text-[9px] font-black uppercase text-white/30">CR / XP</p>
+            <p className="mt-1 text-xs font-bold text-white/65">
+              {template.challengeRating ?? "—"} · {template.experienceReward} XP
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-3">
+          <p className="text-[9px] font-black uppercase tracking-[0.1em] text-white/30">
+            Statblock
+          </p>
+          <p className="mt-1 text-xs font-semibold text-white/60">
+            {template.creatureType ?? "Criatura"} · {template.traits.length} traits · {template.attacks.length} ataques · {template.actions.length} ações
+          </p>
+        </div>
+
         <p className="mt-3 text-[9px] font-semibold leading-relaxed text-white/25">
           Este template pertence ao sistema. A instância criada na campanha é
-          independente e não altera este conteúdo-base.
+          uma CreatureSheet independente e não altera este conteúdo-base.
         </p>
       </details>
 

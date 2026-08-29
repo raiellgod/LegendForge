@@ -237,6 +237,8 @@ export type GameSystemWhereInput = {
   equipment?: Prisma.EquipmentListRelationFilter
   languages?: Prisma.LanguageListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
+  npcSheets?: Prisma.NpcSheetListRelationFilter
+  creatureSheets?: Prisma.CreatureSheetListRelationFilter
   levelProgressions?: Prisma.LevelProgressionListRelationFilter
   featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   npcTemplates?: Prisma.NpcTemplateListRelationFilter
@@ -265,6 +267,8 @@ export type GameSystemOrderByWithRelationInput = {
   equipment?: Prisma.EquipmentOrderByRelationAggregateInput
   languages?: Prisma.LanguageOrderByRelationAggregateInput
   characterSheets?: Prisma.CharacterSheetOrderByRelationAggregateInput
+  npcSheets?: Prisma.NpcSheetOrderByRelationAggregateInput
+  creatureSheets?: Prisma.CreatureSheetOrderByRelationAggregateInput
   levelProgressions?: Prisma.LevelProgressionOrderByRelationAggregateInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupOrderByRelationAggregateInput
   npcTemplates?: Prisma.NpcTemplateOrderByRelationAggregateInput
@@ -296,6 +300,8 @@ export type GameSystemWhereUniqueInput = Prisma.AtLeast<{
   equipment?: Prisma.EquipmentListRelationFilter
   languages?: Prisma.LanguageListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
+  npcSheets?: Prisma.NpcSheetListRelationFilter
+  creatureSheets?: Prisma.CreatureSheetListRelationFilter
   levelProgressions?: Prisma.LevelProgressionListRelationFilter
   featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   npcTemplates?: Prisma.NpcTemplateListRelationFilter
@@ -350,6 +356,8 @@ export type GameSystemCreateInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -378,6 +386,8 @@ export type GameSystemUncheckedCreateInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -406,6 +416,8 @@ export type GameSystemUpdateInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -434,6 +446,8 @@ export type GameSystemUncheckedUpdateInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -604,6 +618,34 @@ export type GameSystemUpdateOneRequiredWithoutCharacterTemplatesNestedInput = {
   upsert?: Prisma.GameSystemUpsertWithoutCharacterTemplatesInput
   connect?: Prisma.GameSystemWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutCharacterTemplatesInput, Prisma.GameSystemUpdateWithoutCharacterTemplatesInput>, Prisma.GameSystemUncheckedUpdateWithoutCharacterTemplatesInput>
+}
+
+export type GameSystemCreateNestedOneWithoutNpcSheetsInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutNpcSheetsInput, Prisma.GameSystemUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutNpcSheetsInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+}
+
+export type GameSystemUpdateOneRequiredWithoutNpcSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutNpcSheetsInput, Prisma.GameSystemUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutNpcSheetsInput
+  upsert?: Prisma.GameSystemUpsertWithoutNpcSheetsInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutNpcSheetsInput, Prisma.GameSystemUpdateWithoutNpcSheetsInput>, Prisma.GameSystemUncheckedUpdateWithoutNpcSheetsInput>
+}
+
+export type GameSystemCreateNestedOneWithoutCreatureSheetsInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutCreatureSheetsInput, Prisma.GameSystemUncheckedCreateWithoutCreatureSheetsInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutCreatureSheetsInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+}
+
+export type GameSystemUpdateOneRequiredWithoutCreatureSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSystemCreateWithoutCreatureSheetsInput, Prisma.GameSystemUncheckedCreateWithoutCreatureSheetsInput>
+  connectOrCreate?: Prisma.GameSystemCreateOrConnectWithoutCreatureSheetsInput
+  upsert?: Prisma.GameSystemUpsertWithoutCreatureSheetsInput
+  connect?: Prisma.GameSystemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameSystemUpdateToOneWithWhereWithoutCreatureSheetsInput, Prisma.GameSystemUpdateWithoutCreatureSheetsInput>, Prisma.GameSystemUncheckedUpdateWithoutCreatureSheetsInput>
 }
 
 export type GameSystemCreateNestedOneWithoutCharacterSheetsInput = {
@@ -810,6 +852,8 @@ export type GameSystemCreateWithoutNpcTemplatesInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   creatureTemplates?: Prisma.CreatureTemplateCreateNestedManyWithoutSystemInput
@@ -837,6 +881,8 @@ export type GameSystemUncheckedCreateWithoutNpcTemplatesInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   creatureTemplates?: Prisma.CreatureTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -880,6 +926,8 @@ export type GameSystemUpdateWithoutNpcTemplatesInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   creatureTemplates?: Prisma.CreatureTemplateUpdateManyWithoutSystemNestedInput
@@ -907,6 +955,8 @@ export type GameSystemUncheckedUpdateWithoutNpcTemplatesInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   creatureTemplates?: Prisma.CreatureTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -934,6 +984,8 @@ export type GameSystemCreateWithoutCreatureTemplatesInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -961,6 +1013,8 @@ export type GameSystemUncheckedCreateWithoutCreatureTemplatesInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1004,6 +1058,8 @@ export type GameSystemUpdateWithoutCreatureTemplatesInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -1031,6 +1087,8 @@ export type GameSystemUncheckedUpdateWithoutCreatureTemplatesInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -1057,6 +1115,8 @@ export type GameSystemCreateWithoutAncestriesInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -1084,6 +1144,8 @@ export type GameSystemUncheckedCreateWithoutAncestriesInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1127,6 +1189,8 @@ export type GameSystemUpdateWithoutAncestriesInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -1154,6 +1218,8 @@ export type GameSystemUncheckedUpdateWithoutAncestriesInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -1181,6 +1247,8 @@ export type GameSystemCreateWithoutSubAncestriesInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -1208,6 +1276,8 @@ export type GameSystemUncheckedCreateWithoutSubAncestriesInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1251,6 +1321,8 @@ export type GameSystemUpdateWithoutSubAncestriesInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -1278,6 +1350,8 @@ export type GameSystemUncheckedUpdateWithoutSubAncestriesInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -1305,6 +1379,8 @@ export type GameSystemCreateWithoutBackgroundsInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -1332,6 +1408,8 @@ export type GameSystemUncheckedCreateWithoutBackgroundsInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1375,6 +1453,8 @@ export type GameSystemUpdateWithoutBackgroundsInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -1402,6 +1482,8 @@ export type GameSystemUncheckedUpdateWithoutBackgroundsInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -1430,6 +1512,8 @@ export type GameSystemCreateWithoutCharacterTemplatesInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -1457,6 +1541,8 @@ export type GameSystemUncheckedCreateWithoutCharacterTemplatesInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1500,6 +1586,8 @@ export type GameSystemUpdateWithoutCharacterTemplatesInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -1527,10 +1615,276 @@ export type GameSystemUncheckedUpdateWithoutCharacterTemplatesInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
   creatureTemplates?: Prisma.CreatureTemplateUncheckedUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemCreateWithoutNpcSheetsInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  subAncestries?: Prisma.SubAncestryCreateNestedManyWithoutSystemInput
+  backgrounds?: Prisma.BackgroundCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
+  talents?: Prisma.TalentCreateNestedManyWithoutSystemInput
+  spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
+  creatureTemplates?: Prisma.CreatureTemplateCreateNestedManyWithoutSystemInput
+  characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemUncheckedCreateWithoutNpcSheetsInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  subAncestries?: Prisma.SubAncestryUncheckedCreateNestedManyWithoutSystemInput
+  backgrounds?: Prisma.BackgroundUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
+  talents?: Prisma.TalentUncheckedCreateNestedManyWithoutSystemInput
+  spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
+  creatureTemplates?: Prisma.CreatureTemplateUncheckedCreateNestedManyWithoutSystemInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemCreateOrConnectWithoutNpcSheetsInput = {
+  where: Prisma.GameSystemWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutNpcSheetsInput, Prisma.GameSystemUncheckedCreateWithoutNpcSheetsInput>
+}
+
+export type GameSystemUpsertWithoutNpcSheetsInput = {
+  update: Prisma.XOR<Prisma.GameSystemUpdateWithoutNpcSheetsInput, Prisma.GameSystemUncheckedUpdateWithoutNpcSheetsInput>
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutNpcSheetsInput, Prisma.GameSystemUncheckedCreateWithoutNpcSheetsInput>
+  where?: Prisma.GameSystemWhereInput
+}
+
+export type GameSystemUpdateToOneWithWhereWithoutNpcSheetsInput = {
+  where?: Prisma.GameSystemWhereInput
+  data: Prisma.XOR<Prisma.GameSystemUpdateWithoutNpcSheetsInput, Prisma.GameSystemUncheckedUpdateWithoutNpcSheetsInput>
+}
+
+export type GameSystemUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  subAncestries?: Prisma.SubAncestryUpdateManyWithoutSystemNestedInput
+  backgrounds?: Prisma.BackgroundUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
+  talents?: Prisma.TalentUpdateManyWithoutSystemNestedInput
+  spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateUpdateManyWithoutSystemNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemUncheckedUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  subAncestries?: Prisma.SubAncestryUncheckedUpdateManyWithoutSystemNestedInput
+  backgrounds?: Prisma.BackgroundUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
+  talents?: Prisma.TalentUncheckedUpdateManyWithoutSystemNestedInput
+  spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateUncheckedUpdateManyWithoutSystemNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemCreateWithoutCreatureSheetsInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.StatCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryCreateNestedManyWithoutSystemInput
+  subAncestries?: Prisma.SubAncestryCreateNestedManyWithoutSystemInput
+  backgrounds?: Prisma.BackgroundCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSystemInput
+  talents?: Prisma.TalentCreateNestedManyWithoutSystemInput
+  spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
+  languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
+  creatureTemplates?: Prisma.CreatureTemplateCreateNestedManyWithoutSystemInput
+  characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemUncheckedCreateWithoutCreatureSheetsInput = {
+  id?: string
+  name: string
+  slug?: string | null
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.StatUncheckedCreateNestedManyWithoutSystemInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutSystemInput
+  ancestries?: Prisma.AncestryUncheckedCreateNestedManyWithoutSystemInput
+  subAncestries?: Prisma.SubAncestryUncheckedCreateNestedManyWithoutSystemInput
+  backgrounds?: Prisma.BackgroundUncheckedCreateNestedManyWithoutSystemInput
+  classes?: Prisma.CharacterClassUncheckedCreateNestedManyWithoutSystemInput
+  subclasses?: Prisma.CharacterSubclassUncheckedCreateNestedManyWithoutSystemInput
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSystemInput
+  talents?: Prisma.TalentUncheckedCreateNestedManyWithoutSystemInput
+  spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
+  languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
+  creatureTemplates?: Prisma.CreatureTemplateUncheckedCreateNestedManyWithoutSystemInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSystemInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutSystemInput
+}
+
+export type GameSystemCreateOrConnectWithoutCreatureSheetsInput = {
+  where: Prisma.GameSystemWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutCreatureSheetsInput, Prisma.GameSystemUncheckedCreateWithoutCreatureSheetsInput>
+}
+
+export type GameSystemUpsertWithoutCreatureSheetsInput = {
+  update: Prisma.XOR<Prisma.GameSystemUpdateWithoutCreatureSheetsInput, Prisma.GameSystemUncheckedUpdateWithoutCreatureSheetsInput>
+  create: Prisma.XOR<Prisma.GameSystemCreateWithoutCreatureSheetsInput, Prisma.GameSystemUncheckedCreateWithoutCreatureSheetsInput>
+  where?: Prisma.GameSystemWhereInput
+}
+
+export type GameSystemUpdateToOneWithWhereWithoutCreatureSheetsInput = {
+  where?: Prisma.GameSystemWhereInput
+  data: Prisma.XOR<Prisma.GameSystemUpdateWithoutCreatureSheetsInput, Prisma.GameSystemUncheckedUpdateWithoutCreatureSheetsInput>
+}
+
+export type GameSystemUpdateWithoutCreatureSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUpdateManyWithoutSystemNestedInput
+  subAncestries?: Prisma.SubAncestryUpdateManyWithoutSystemNestedInput
+  backgrounds?: Prisma.BackgroundUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSystemNestedInput
+  talents?: Prisma.TalentUpdateManyWithoutSystemNestedInput
+  spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
+  languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateUpdateManyWithoutSystemNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSystemNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutSystemNestedInput
+}
+
+export type GameSystemUncheckedUpdateWithoutCreatureSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.StatUncheckedUpdateManyWithoutSystemNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutSystemNestedInput
+  ancestries?: Prisma.AncestryUncheckedUpdateManyWithoutSystemNestedInput
+  subAncestries?: Prisma.SubAncestryUncheckedUpdateManyWithoutSystemNestedInput
+  backgrounds?: Prisma.BackgroundUncheckedUpdateManyWithoutSystemNestedInput
+  classes?: Prisma.CharacterClassUncheckedUpdateManyWithoutSystemNestedInput
+  subclasses?: Prisma.CharacterSubclassUncheckedUpdateManyWithoutSystemNestedInput
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSystemNestedInput
+  talents?: Prisma.TalentUncheckedUpdateManyWithoutSystemNestedInput
+  spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
+  languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateUncheckedUpdateManyWithoutSystemNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSystemNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutSystemNestedInput
 }
 
@@ -1553,6 +1907,8 @@ export type GameSystemCreateWithoutCharacterSheetsInput = {
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -1580,6 +1936,8 @@ export type GameSystemUncheckedCreateWithoutCharacterSheetsInput = {
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1623,6 +1981,8 @@ export type GameSystemUpdateWithoutCharacterSheetsInput = {
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -1650,6 +2010,8 @@ export type GameSystemUncheckedUpdateWithoutCharacterSheetsInput = {
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -1677,6 +2039,8 @@ export type GameSystemCreateWithoutLanguagesInput = {
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -1704,6 +2068,8 @@ export type GameSystemUncheckedCreateWithoutLanguagesInput = {
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1747,6 +2113,8 @@ export type GameSystemUpdateWithoutLanguagesInput = {
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -1774,6 +2142,8 @@ export type GameSystemUncheckedUpdateWithoutLanguagesInput = {
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -1801,6 +2171,8 @@ export type GameSystemCreateWithoutClassesInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -1828,6 +2200,8 @@ export type GameSystemUncheckedCreateWithoutClassesInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1871,6 +2245,8 @@ export type GameSystemUpdateWithoutClassesInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -1898,6 +2274,8 @@ export type GameSystemUncheckedUpdateWithoutClassesInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -1925,6 +2303,8 @@ export type GameSystemCreateWithoutSubclassesInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -1952,6 +2332,8 @@ export type GameSystemUncheckedCreateWithoutSubclassesInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -1995,6 +2377,8 @@ export type GameSystemUpdateWithoutSubclassesInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -2022,6 +2406,8 @@ export type GameSystemUncheckedUpdateWithoutSubclassesInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -2050,6 +2436,8 @@ export type GameSystemCreateWithoutLevelProgressionsInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
   creatureTemplates?: Prisma.CreatureTemplateCreateNestedManyWithoutSystemInput
@@ -2077,6 +2465,8 @@ export type GameSystemUncheckedCreateWithoutLevelProgressionsInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
   creatureTemplates?: Prisma.CreatureTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -2120,6 +2510,8 @@ export type GameSystemUpdateWithoutLevelProgressionsInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
   creatureTemplates?: Prisma.CreatureTemplateUpdateManyWithoutSystemNestedInput
@@ -2147,6 +2539,8 @@ export type GameSystemUncheckedUpdateWithoutLevelProgressionsInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
   creatureTemplates?: Prisma.CreatureTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -2173,6 +2567,8 @@ export type GameSystemCreateWithoutFeaturesInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -2200,6 +2596,8 @@ export type GameSystemUncheckedCreateWithoutFeaturesInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -2243,6 +2641,8 @@ export type GameSystemUpdateWithoutFeaturesInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -2270,6 +2670,8 @@ export type GameSystemUncheckedUpdateWithoutFeaturesInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -2297,6 +2699,8 @@ export type GameSystemCreateWithoutTalentsInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -2324,6 +2728,8 @@ export type GameSystemUncheckedCreateWithoutTalentsInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -2367,6 +2773,8 @@ export type GameSystemUpdateWithoutTalentsInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -2394,6 +2802,8 @@ export type GameSystemUncheckedUpdateWithoutTalentsInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -2422,6 +2832,8 @@ export type GameSystemCreateWithoutFeatureChoiceGroupsInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
   creatureTemplates?: Prisma.CreatureTemplateCreateNestedManyWithoutSystemInput
@@ -2449,6 +2861,8 @@ export type GameSystemUncheckedCreateWithoutFeatureChoiceGroupsInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
   creatureTemplates?: Prisma.CreatureTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -2492,6 +2906,8 @@ export type GameSystemUpdateWithoutFeatureChoiceGroupsInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
   creatureTemplates?: Prisma.CreatureTemplateUpdateManyWithoutSystemNestedInput
@@ -2519,6 +2935,8 @@ export type GameSystemUncheckedUpdateWithoutFeatureChoiceGroupsInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
   creatureTemplates?: Prisma.CreatureTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -2545,6 +2963,8 @@ export type GameSystemCreateWithoutSpellsInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -2572,6 +2992,8 @@ export type GameSystemUncheckedCreateWithoutSpellsInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -2615,6 +3037,8 @@ export type GameSystemUpdateWithoutSpellsInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -2642,6 +3066,8 @@ export type GameSystemUncheckedUpdateWithoutSpellsInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -2669,6 +3095,8 @@ export type GameSystemCreateWithoutEquipmentInput = {
   spells?: Prisma.SpellCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -2696,6 +3124,8 @@ export type GameSystemUncheckedCreateWithoutEquipmentInput = {
   spells?: Prisma.SpellUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -2739,6 +3169,8 @@ export type GameSystemUpdateWithoutEquipmentInput = {
   spells?: Prisma.SpellUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -2766,6 +3198,8 @@ export type GameSystemUncheckedUpdateWithoutEquipmentInput = {
   spells?: Prisma.SpellUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -2793,6 +3227,8 @@ export type GameSystemCreateWithoutStatsInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -2820,6 +3256,8 @@ export type GameSystemUncheckedCreateWithoutStatsInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -2863,6 +3301,8 @@ export type GameSystemUpdateWithoutStatsInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -2890,6 +3330,8 @@ export type GameSystemUncheckedUpdateWithoutStatsInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -2917,6 +3359,8 @@ export type GameSystemCreateWithoutSkillsInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -2944,6 +3388,8 @@ export type GameSystemUncheckedCreateWithoutSkillsInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -2987,6 +3433,8 @@ export type GameSystemUpdateWithoutSkillsInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -3014,6 +3462,8 @@ export type GameSystemUncheckedUpdateWithoutSkillsInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -3042,6 +3492,8 @@ export type GameSystemCreateWithoutCampaignsInput = {
   equipment?: Prisma.EquipmentCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSystemInput
@@ -3069,6 +3521,8 @@ export type GameSystemUncheckedCreateWithoutCampaignsInput = {
   equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutSystemInput
   languages?: Prisma.LanguageUncheckedCreateNestedManyWithoutSystemInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSystemInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSystemInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutSystemInput
   levelProgressions?: Prisma.LevelProgressionUncheckedCreateNestedManyWithoutSystemInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSystemInput
   npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSystemInput
@@ -3112,6 +3566,8 @@ export type GameSystemUpdateWithoutCampaignsInput = {
   equipment?: Prisma.EquipmentUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSystemNestedInput
@@ -3139,6 +3595,8 @@ export type GameSystemUncheckedUpdateWithoutCampaignsInput = {
   equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutSystemNestedInput
   languages?: Prisma.LanguageUncheckedUpdateManyWithoutSystemNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSystemNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSystemNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutSystemNestedInput
   levelProgressions?: Prisma.LevelProgressionUncheckedUpdateManyWithoutSystemNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSystemNestedInput
   npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput
@@ -3165,6 +3623,8 @@ export type GameSystemCountOutputType = {
   equipment: number
   languages: number
   characterSheets: number
+  npcSheets: number
+  creatureSheets: number
   levelProgressions: number
   featureChoiceGroups: number
   npcTemplates: number
@@ -3187,6 +3647,8 @@ export type GameSystemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   equipment?: boolean | GameSystemCountOutputTypeCountEquipmentArgs
   languages?: boolean | GameSystemCountOutputTypeCountLanguagesArgs
   characterSheets?: boolean | GameSystemCountOutputTypeCountCharacterSheetsArgs
+  npcSheets?: boolean | GameSystemCountOutputTypeCountNpcSheetsArgs
+  creatureSheets?: boolean | GameSystemCountOutputTypeCountCreatureSheetsArgs
   levelProgressions?: boolean | GameSystemCountOutputTypeCountLevelProgressionsArgs
   featureChoiceGroups?: boolean | GameSystemCountOutputTypeCountFeatureChoiceGroupsArgs
   npcTemplates?: boolean | GameSystemCountOutputTypeCountNpcTemplatesArgs
@@ -3299,6 +3761,20 @@ export type GameSystemCountOutputTypeCountCharacterSheetsArgs<ExtArgs extends ru
 /**
  * GameSystemCountOutputType without action
  */
+export type GameSystemCountOutputTypeCountNpcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcSheetWhereInput
+}
+
+/**
+ * GameSystemCountOutputType without action
+ */
+export type GameSystemCountOutputTypeCountCreatureSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureSheetWhereInput
+}
+
+/**
+ * GameSystemCountOutputType without action
+ */
 export type GameSystemCountOutputTypeCountLevelProgressionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LevelProgressionWhereInput
 }
@@ -3359,6 +3835,8 @@ export type GameSystemSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   equipment?: boolean | Prisma.GameSystem$equipmentArgs<ExtArgs>
   languages?: boolean | Prisma.GameSystem$languagesArgs<ExtArgs>
   characterSheets?: boolean | Prisma.GameSystem$characterSheetsArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.GameSystem$npcSheetsArgs<ExtArgs>
+  creatureSheets?: boolean | Prisma.GameSystem$creatureSheetsArgs<ExtArgs>
   levelProgressions?: boolean | Prisma.GameSystem$levelProgressionsArgs<ExtArgs>
   featureChoiceGroups?: boolean | Prisma.GameSystem$featureChoiceGroupsArgs<ExtArgs>
   npcTemplates?: boolean | Prisma.GameSystem$npcTemplatesArgs<ExtArgs>
@@ -3410,6 +3888,8 @@ export type GameSystemInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   equipment?: boolean | Prisma.GameSystem$equipmentArgs<ExtArgs>
   languages?: boolean | Prisma.GameSystem$languagesArgs<ExtArgs>
   characterSheets?: boolean | Prisma.GameSystem$characterSheetsArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.GameSystem$npcSheetsArgs<ExtArgs>
+  creatureSheets?: boolean | Prisma.GameSystem$creatureSheetsArgs<ExtArgs>
   levelProgressions?: boolean | Prisma.GameSystem$levelProgressionsArgs<ExtArgs>
   featureChoiceGroups?: boolean | Prisma.GameSystem$featureChoiceGroupsArgs<ExtArgs>
   npcTemplates?: boolean | Prisma.GameSystem$npcTemplatesArgs<ExtArgs>
@@ -3437,6 +3917,8 @@ export type $GameSystemPayload<ExtArgs extends runtime.Types.Extensions.Internal
     equipment: Prisma.$EquipmentPayload<ExtArgs>[]
     languages: Prisma.$LanguagePayload<ExtArgs>[]
     characterSheets: Prisma.$CharacterSheetPayload<ExtArgs>[]
+    npcSheets: Prisma.$NpcSheetPayload<ExtArgs>[]
+    creatureSheets: Prisma.$CreatureSheetPayload<ExtArgs>[]
     levelProgressions: Prisma.$LevelProgressionPayload<ExtArgs>[]
     featureChoiceGroups: Prisma.$FeatureChoiceGroupPayload<ExtArgs>[]
     npcTemplates: Prisma.$NpcTemplatePayload<ExtArgs>[]
@@ -3858,6 +4340,8 @@ export interface Prisma__GameSystemClient<T, Null = never, ExtArgs extends runti
   equipment<T extends Prisma.GameSystem$equipmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$equipmentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   languages<T extends Prisma.GameSystem$languagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$languagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterSheets<T extends Prisma.GameSystem$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcSheets<T extends Prisma.GameSystem$npcSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$npcSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatureSheets<T extends Prisma.GameSystem$creatureSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$creatureSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   levelProgressions<T extends Prisma.GameSystem$levelProgressionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$levelProgressionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LevelProgressionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   featureChoiceGroups<T extends Prisma.GameSystem$featureChoiceGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$featureChoiceGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeatureChoiceGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   npcTemplates<T extends Prisma.GameSystem$npcTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystem$npcTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4596,6 +5080,54 @@ export type GameSystem$characterSheetsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.CharacterSheetScalarFieldEnum | Prisma.CharacterSheetScalarFieldEnum[]
+}
+
+/**
+ * GameSystem.npcSheets
+ */
+export type GameSystem$npcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcSheet
+   */
+  select?: Prisma.NpcSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcSheet
+   */
+  omit?: Prisma.NpcSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcSheetInclude<ExtArgs> | null
+  where?: Prisma.NpcSheetWhereInput
+  orderBy?: Prisma.NpcSheetOrderByWithRelationInput | Prisma.NpcSheetOrderByWithRelationInput[]
+  cursor?: Prisma.NpcSheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcSheetScalarFieldEnum | Prisma.NpcSheetScalarFieldEnum[]
+}
+
+/**
+ * GameSystem.creatureSheets
+ */
+export type GameSystem$creatureSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureSheet
+   */
+  select?: Prisma.CreatureSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureSheet
+   */
+  omit?: Prisma.CreatureSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureSheetInclude<ExtArgs> | null
+  where?: Prisma.CreatureSheetWhereInput
+  orderBy?: Prisma.CreatureSheetOrderByWithRelationInput | Prisma.CreatureSheetOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureSheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureSheetScalarFieldEnum | Prisma.CreatureSheetScalarFieldEnum[]
 }
 
 /**

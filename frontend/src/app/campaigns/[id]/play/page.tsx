@@ -36,6 +36,8 @@ import type {
   Campaign,
   CampaignActor,
   CampaignParticipant,
+  CreatureSheetDraft,
+  CreatureSheetReady,
   ChatMessage,
   ChatMode,
   DiceTerm,
@@ -43,6 +45,8 @@ import type {
   RollAdvantageState,
   RollResult,
   RollVisibility,
+  NpcSheetDraft,
+  NpcSheetReady,
   SceneToken,
   SystemLibrary,
   ToolMode,
@@ -55,11 +59,7 @@ import {
   getParticipantDisplayName,
 } from "@/features/game-table/utils/user-utils";
 
-import {
-  getCharacterTypeLabel,
-  getCharacterTypeStyles,
-  getVisibleActorsForUser,
-} from "@/features/game-table/utils/actor-utils";
+import { getVisibleActorsForUser } from "@/features/game-table/utils/actor-utils";
 
 import {
   DICE_OPTIONS,
@@ -73,13 +73,16 @@ import {
 } from "@/features/game-table/utils/dice-utils";
 
 import {
-  createCampaignActor,
+  createCampaignCreatureSheet,
+  createCampaignNpcSheet,
   createSceneToken,
   deleteCampaignCharacterInstance,
   deleteSceneToken,
   getCampaign,
   getCampaignActors,
   getCampaignCharacterSheets,
+  getCampaignCreatureSheets,
+  getCampaignNpcSheets,
   getCampaignParticipants,
   getCampaignTokens,
   getSystemLibrary,
@@ -108,12 +111,17 @@ import { TableSettingsPanel } from "@/features/game-table/components/TableSettin
 import { TableSceneCanvas } from "@/features/game-table/components/TableSceneCanvas";
 
 import {
-  createEmptySimpleActorCreationDraft,
+  createEmptyNpcSheetDraft,
   NpcCreationModal,
-  type SimpleActorCreationDraft,
 } from "@/features/game-table/components/NpcCreationModal";
 
-import { CreatureCreationModal } from "@/features/game-table/components/CreatureCreationModal";
+import {
+  createEmptyCreatureSheetDraft,
+  CreatureCreationModal,
+} from "@/features/game-table/components/CreatureCreationModal";
+import { NpcReadySheetModal } from "@/features/game-table/components/NpcReadySheetModal";
+import { CreatureReadySheetModal } from "@/features/game-table/components/CreatureReadySheetModal";
+import type { NpcCreatureReadySheetRollRequest } from "@/features/game-table/components/NpcCreatureReadySheetView";
 import { CharacterCreationMenuModal } from "@/features/game-table/components/CharacterCreationMenuModal";
 import { ActorLibraryModal } from "@/features/game-table/components/ActorLibraryModal";
 import { SystemLibraryModal } from "@/features/game-table/components/SystemLibraryModal";
@@ -553,18 +561,15 @@ export default function CampaignPlayPage() {
   const [isCharacterCreationMenuOpen, setIsCharacterCreationMenuOpen] =
     useState(false);
   const [isNpcCreationModalOpen, setIsNpcCreationModalOpen] = useState(false);
-  const [npcCreationDraft, setNpcCreationDraft] =
-    useState<SimpleActorCreationDraft>(() =>
-      createEmptySimpleActorCreationDraft(),
-    );
+  const [npcCreationDraft, setNpcCreationDraft] = useState<NpcSheetDraft>(
+    () => createEmptyNpcSheetDraft(),
+  );
   const [isSavingNpcCreation, setIsSavingNpcCreation] = useState(false);
   const [npcCreationError, setNpcCreationError] = useState<string | null>(null);
   const [isCreatureCreationModalOpen, setIsCreatureCreationModalOpen] =
     useState(false);
   const [creatureCreationDraft, setCreatureCreationDraft] =
-    useState<SimpleActorCreationDraft>(() =>
-      createEmptySimpleActorCreationDraft(),
-    );
+    useState<CreatureSheetDraft>(() => createEmptyCreatureSheetDraft());
   const [isSavingCreatureCreation, setIsSavingCreatureCreation] =
     useState(false);
   const [creatureCreationError, setCreatureCreationError] = useState<
@@ -741,6 +746,8 @@ export default function CampaignPlayPage() {
   const [characterSheets, setCharacterSheets] = useState<CharacterReadySheet[]>(
     [],
   );
+  const [npcSheets, setNpcSheets] = useState<NpcSheetReady[]>([]);
+  const [creatureSheets, setCreatureSheets] = useState<CreatureSheetReady[]>([]);
 
   const [isSavingCharacterSheetImages, setIsSavingCharacterSheetImages] =
     useState(false);
@@ -830,14 +837,23 @@ export default function CampaignPlayPage() {
 
         setUser(loggedUser);
 
-        const [campaign, participants, actors, tokens, characterSheets] =
-          await Promise.all([
-            getCampaign(params.id),
-            getCampaignParticipants(params.id),
-            getCampaignActors(params.id),
-            getCampaignTokens(params.id),
-            getCampaignCharacterSheets(params.id),
-          ]);
+        const [
+          campaign,
+          participants,
+          actors,
+          tokens,
+          characterSheets,
+          npcSheets,
+          creatureSheets,
+        ] = await Promise.all([
+          getCampaign(params.id),
+          getCampaignParticipants(params.id),
+          getCampaignActors(params.id),
+          getCampaignTokens(params.id),
+          getCampaignCharacterSheets(params.id),
+          getCampaignNpcSheets(params.id),
+          getCampaignCreatureSheets(params.id),
+        ]);
 
   const currentUserParticipant = participants.find(
           (participant) => participant.userId === loggedUser.id,
@@ -857,6 +873,8 @@ export default function CampaignPlayPage() {
         setCampaignActors(actors);
         setSceneTokens(tokens);
         setCharacterSheets(characterSheets);
+        setNpcSheets(npcSheets);
+        setCreatureSheets(creatureSheets);
       } catch (error) {
         console.error(error);
         setAccessDenied(true);
@@ -972,14 +990,15 @@ export default function CampaignPlayPage() {
     setSystemLibraryImportError("");
 
     try {
-      const createdActor = await importNpcTemplateToCampaign(
+      const { actor, npcSheet } = await importNpcTemplateToCampaign(
         campaign.id,
         templateId,
       );
 
-      setCampaignActors((currentActors) => [...currentActors, createdActor]);
+      setCampaignActors((currentActors) => [...currentActors, actor]);
+      setNpcSheets((currentSheets) => [...currentSheets, npcSheet]);
       setSystemLibraryImportMessage(
-        `${createdActor.name} foi adicionado à Biblioteca da Campanha.`,
+        `${actor.name} foi adicionado à Biblioteca da Campanha com uma NpcSheet independente.`,
       );
     } catch (error) {
       console.error(error);
@@ -1003,14 +1022,15 @@ export default function CampaignPlayPage() {
     setSystemLibraryImportError("");
 
     try {
-      const createdActor = await importCreatureTemplateToCampaign(
+      const { actor, creatureSheet } = await importCreatureTemplateToCampaign(
         campaign.id,
         templateId,
       );
 
-      setCampaignActors((currentActors) => [...currentActors, createdActor]);
+      setCampaignActors((currentActors) => [...currentActors, actor]);
+      setCreatureSheets((currentSheets) => [...currentSheets, creatureSheet]);
       setSystemLibraryImportMessage(
-        `${createdActor.name} foi adicionado à Biblioteca da Campanha.`,
+        `${actor.name} foi adicionado à Biblioteca da Campanha com uma CreatureSheet independente.`,
       );
     } catch (error) {
       console.error(error);
@@ -1111,18 +1131,65 @@ export default function CampaignPlayPage() {
     );
   }
 
+  function getNpcSheetByActor(actor: CampaignActor) {
+    return (
+      npcSheets.find((npcSheet) => npcSheet.campaignActorId === actor.id) ??
+      null
+    );
+  }
+
+  function getCreatureSheetByActor(actor: CampaignActor) {
+    return (
+      creatureSheets.find(
+        (creatureSheet) => creatureSheet.campaignActorId === actor.id,
+      ) ?? null
+    );
+  }
+
   function getInitiativeBonusForActor(actor: CampaignActor) {
-    if (actor.type !== "PLAYER_CHARACTER") {
-      return 0;
+    if (actor.type === "PLAYER_CHARACTER") {
+      const characterSheet = getCharacterSheetByActor(actor);
+
+      if (!characterSheet) {
+        return 0;
+      }
+
+      return getInitiativeBonus(characterSheet.stats);
     }
 
-    const characterSheet = getCharacterSheetByActor(actor);
+    if (actor.type === "NPC") {
+      const npcSheet = getNpcSheetByActor(actor);
 
-    if (!characterSheet) {
-      return 0;
+      if (!npcSheet) {
+        return 0;
+      }
+
+      return getInitiativeBonus(npcSheet.stats);
     }
 
-    return getInitiativeBonus(characterSheet.stats);
+    if (actor.type === "CREATURE") {
+      const creatureSheet = getCreatureSheetByActor(actor);
+
+      if (!creatureSheet) {
+        return 0;
+      }
+
+      return getInitiativeBonus(creatureSheet.stats);
+    }
+
+    return 0;
+  }
+
+  function getInitiativeActorTypeLabel(actor: CampaignActor) {
+    if (actor.type === "NPC") {
+      return "NPC";
+    }
+
+    if (actor.type === "CREATURE") {
+      return "CRIATURA";
+    }
+
+    return "PERSONAGEM";
   }
 
   async function handleUpdateCharacterSheetImages(
@@ -1711,6 +1778,7 @@ export default function CampaignPlayPage() {
       visibility: RollVisibility,
       rollLabel?: string,
       advantageState?: RollAdvantageState,
+      authorOverride?: string,
     ) => {
       if (!user) {
         return;
@@ -1719,7 +1787,7 @@ export default function CampaignPlayPage() {
       setRollError("");
 
       try {
-        const author = getDisplayName(user);
+        const author = authorOverride ?? getDisplayName(user);
         const roll = rollDiceExpression(rollExpression, author, advantageState);
 
         if (visibility === "private" && isGM) {
@@ -1881,7 +1949,7 @@ export default function CampaignPlayPage() {
     }
   }
 
-  function handleRollMassNpcInitiative() {
+  function handleRollMassInitiative() {
     if (!user || !isGM) {
       return;
     }
@@ -1921,6 +1989,10 @@ export default function CampaignPlayPage() {
           return secondResult.roll.total - firstResult.roll.total;
         }
 
+        if (secondResult.initiativeBonus !== firstResult.initiativeBonus) {
+          return secondResult.initiativeBonus - firstResult.initiativeBonus;
+        }
+
         return firstResult.actor.name.localeCompare(
           secondResult.actor.name,
           "pt-BR",
@@ -1934,7 +2006,9 @@ export default function CampaignPlayPage() {
             ? `+${result.initiativeBonus}`
             : String(result.initiativeBonus);
 
-        return `${index + 1}. ${result.actor.name} — ${result.roll.total} (${bonusText})`;
+        return `${index + 1}. [${getInitiativeActorTypeLabel(
+          result.actor,
+        )}] ${result.actor.name} — ${result.roll.total} (${bonusText})`;
       })
       .join("\n");
 
@@ -1962,7 +2036,13 @@ export default function CampaignPlayPage() {
   }
 
   const handleReadySheetRoll = useCallback(
-    (request: CharacterReadySheetRollRequest) => {
+    (
+      request:
+        | CharacterReadySheetRollRequest
+        | NpcCreatureReadySheetRollRequest,
+    ) => {
+      const requestAuthor =
+        "author" in request ? request.author : undefined;
       if (request.kind === "effect") {
         if (!user) {
           return;
@@ -1972,7 +2052,7 @@ export default function CampaignPlayPage() {
           ...currentMessages,
           {
             id: createId(),
-            author: getDisplayName(user),
+            author: requestAuthor ?? getDisplayName(user),
             kind: "roll",
             content: `${request.label}\n${request.description}`,
             dice: "Efeito",
@@ -1987,7 +2067,13 @@ export default function CampaignPlayPage() {
       }
 
       if (request.kind === "damage") {
-        handleRoll(request.expression, "public", request.label);
+        handleRoll(
+          request.expression,
+          "public",
+          request.label,
+          undefined,
+          requestAuthor,
+        );
         setActiveRightTab("chat");
         return;
       }
@@ -1999,10 +2085,16 @@ export default function CampaignPlayPage() {
             ? `+${request.modifier}`
             : `${request.modifier}`;
 
-      handleRoll(`1d20${modifierExpression}`, "public", request.label, {
-        advantages: rollAdvantages,
-        disadvantages: rollDisadvantages,
-      });
+      handleRoll(
+        `1d20${modifierExpression}`,
+        "public",
+        request.label,
+        {
+          advantages: rollAdvantages,
+          disadvantages: rollDisadvantages,
+        },
+        requestAuthor,
+      );
 
       resetRollAdvantageState();
       setActiveRightTab("chat");
@@ -2393,9 +2485,7 @@ export default function CampaignPlayPage() {
       return;
     }
 
-    const name = npcCreationDraft.name.trim();
-
-    if (!name) {
+    if (!npcCreationDraft.name.trim()) {
       setNpcCreationError("Informe o nome do NPC.");
       return;
     }
@@ -2404,21 +2494,17 @@ export default function CampaignPlayPage() {
     setNpcCreationError(null);
 
     try {
-      const createdActor = await createCampaignActor(campaign.id, {
-        name,
-        type: "NPC",
-        location: npcCreationDraft.location,
-        initials: npcCreationDraft.initials.trim() || undefined,
-        description: npcCreationDraft.description.trim() || null,
-        portraitUrl: npcCreationDraft.portraitUrl.trim() || null,
-        ownerId: null,
-      });
+      const { actor, npcSheet } = await createCampaignNpcSheet(
+        campaign.id,
+        npcCreationDraft,
+      );
 
-      setCampaignActors((currentActors) => [...currentActors, createdActor]);
-      setNpcCreationDraft(createEmptySimpleActorCreationDraft());
+      setCampaignActors((currentActors) => [...currentActors, actor]);
+      setNpcSheets((currentSheets) => [...currentSheets, npcSheet]);
+      setNpcCreationDraft(createEmptyNpcSheetDraft());
       setIsNpcCreationModalOpen(false);
 
-      if (createdActor.location === "TABLE") {
+      if (actor.location === "TABLE") {
         setActiveRightTab("characters");
       } else {
         setIsLibraryModalOpen(true);
@@ -2429,7 +2515,7 @@ export default function CampaignPlayPage() {
       setNpcCreationError(
         error instanceof Error
           ? error.message
-          : "Não foi possível criar o NPC.",
+          : "Não foi possível criar o NPC completo.",
       );
     } finally {
       setIsSavingNpcCreation(false);
@@ -2441,9 +2527,7 @@ export default function CampaignPlayPage() {
       return;
     }
 
-    const name = creatureCreationDraft.name.trim();
-
-    if (!name) {
+    if (!creatureCreationDraft.name.trim()) {
       setCreatureCreationError("Informe o nome da criatura.");
       return;
     }
@@ -2452,21 +2536,20 @@ export default function CampaignPlayPage() {
     setCreatureCreationError(null);
 
     try {
-      const createdActor = await createCampaignActor(campaign.id, {
-        name,
-        type: "CREATURE",
-        location: creatureCreationDraft.location,
-        initials: creatureCreationDraft.initials.trim() || undefined,
-        description: creatureCreationDraft.description.trim() || null,
-        portraitUrl: creatureCreationDraft.portraitUrl.trim() || null,
-        ownerId: null,
-      });
+      const { actor, creatureSheet } = await createCampaignCreatureSheet(
+        campaign.id,
+        creatureCreationDraft,
+      );
 
-      setCampaignActors((currentActors) => [...currentActors, createdActor]);
-      setCreatureCreationDraft(createEmptySimpleActorCreationDraft());
+      setCampaignActors((currentActors) => [...currentActors, actor]);
+      setCreatureSheets((currentSheets) => [
+        ...currentSheets,
+        creatureSheet,
+      ]);
+      setCreatureCreationDraft(createEmptyCreatureSheetDraft());
       setIsCreatureCreationModalOpen(false);
 
-      if (createdActor.location === "TABLE") {
+      if (actor.location === "TABLE") {
         setActiveRightTab("characters");
       } else {
         setIsLibraryModalOpen(true);
@@ -2477,7 +2560,7 @@ export default function CampaignPlayPage() {
       setCreatureCreationError(
         error instanceof Error
           ? error.message
-          : "Não foi possível criar a criatura.",
+          : "Não foi possível criar a criatura completa.",
       );
     } finally {
       setIsSavingCreatureCreation(false);
@@ -3437,7 +3520,7 @@ export default function CampaignPlayPage() {
                   onChangeDiceTerm={handleChangeDiceTerm}
                   onRollCustomBuilder={handleRollCustomBuilder}
                   onRevealPrivateRoll={handleRevealPrivateRoll}
-                  onRollMassNpcInitiative={handleRollMassNpcInitiative}
+                  onRollMassInitiative={handleRollMassInitiative}
                   onRollDeathSave={handleRollDeathSave}
                   diceOptions={DICE_OPTIONS}
                   quickRolls={QUICK_ROLLS}
@@ -3500,15 +3583,25 @@ export default function CampaignPlayPage() {
         onStartNewCharacter={startCharacterBuilderCreation}
         onContinueCharacterDraft={continueCharacterBuilderDraft}
         onStartNpcCreation={() => {
-          setNpcCreationDraft(createEmptySimpleActorCreationDraft());
+          setNpcCreationDraft(createEmptyNpcSheetDraft());
           setNpcCreationError(null);
           setIsCharacterCreationMenuOpen(false);
+
+          if (characterBuilderOptions.skills.length === 0) {
+            void handleLoadCharacterBuilderOptions();
+          }
+
           setIsNpcCreationModalOpen(true);
         }}
         onStartCreatureCreation={() => {
-          setCreatureCreationDraft(createEmptySimpleActorCreationDraft());
+          setCreatureCreationDraft(createEmptyCreatureSheetDraft());
           setCreatureCreationError(null);
           setIsCharacterCreationMenuOpen(false);
+
+          if (characterBuilderOptions.skills.length === 0) {
+            void handleLoadCharacterBuilderOptions();
+          }
+
           setIsCreatureCreationModalOpen(true);
         }}
       />
@@ -3516,6 +3609,7 @@ export default function CampaignPlayPage() {
       <CreatureCreationModal
         isOpen={isCreatureCreationModalOpen}
         draft={creatureCreationDraft}
+        options={characterBuilderOptions}
         isSaving={isSavingCreatureCreation}
         error={creatureCreationError}
         onChangeDraft={setCreatureCreationDraft}
@@ -3529,6 +3623,7 @@ export default function CampaignPlayPage() {
       <NpcCreationModal
         isOpen={isNpcCreationModalOpen}
         draft={npcCreationDraft}
+        options={characterBuilderOptions}
         isSaving={isSavingNpcCreation}
         error={npcCreationError}
         onChangeDraft={setNpcCreationDraft}
@@ -3655,6 +3750,8 @@ export default function CampaignPlayPage() {
         <ActorSheetModal
           actor={selectedActor}
           characterSheet={getCharacterSheetByActor(selectedActor)}
+          npcSheet={getNpcSheetByActor(selectedActor)}
+          creatureSheet={getCreatureSheetByActor(selectedActor)}
           allSkills={characterBuilderOptions.skills}
           isGM={isGM}
           canManageLevelUp={isOwner || isGM}
@@ -3727,6 +3824,8 @@ export default function CampaignPlayPage() {
 function ActorSheetModal({
   actor,
   characterSheet,
+  npcSheet,
+  creatureSheet,
   allSkills,
   isGM,
   canManageLevelUp,
@@ -3743,6 +3842,8 @@ function ActorSheetModal({
 }: {
   actor: CampaignActor;
   characterSheet: CharacterReadySheet | null;
+  npcSheet: NpcSheetReady | null;
+  creatureSheet: CreatureSheetReady | null;
   allSkills: CharacterBuilderOptions["skills"];
   isGM: boolean;
   canManageLevelUp: boolean;
@@ -3766,7 +3867,11 @@ function ActorSheetModal({
   onConfirmLevelUp: (
     data: CharacterSheetLevelUpConfirmationPayload,
   ) => Promise<void>;
-  onRollSheetAction: (request: CharacterReadySheetRollRequest) => void;
+  onRollSheetAction: (
+    request:
+      | CharacterReadySheetRollRequest
+      | NpcCreatureReadySheetRollRequest,
+  ) => void;
   onClose: () => void;
 }) {
   const isPlayerCharacter = actor.type === "PLAYER_CHARACTER";
@@ -3800,154 +3905,54 @@ function ActorSheetModal({
     );
   }
 
+  if (isNpc && npcSheet) {
+    return (
+      <NpcReadySheetModal
+        actor={actor}
+        sheet={npcSheet}
+        onRoll={onRollSheetAction}
+        onClose={onClose}
+      />
+    );
+  }
+
+  if (isCreature && creatureSheet) {
+    return (
+      <CreatureReadySheetModal
+        actor={actor}
+        sheet={creatureSheet}
+        onRoll={onRollSheetAction}
+        onClose={onClose}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6 backdrop-blur-sm">
-      <div className="w-full max-w-3xl overflow-hidden rounded-2xl border border-forge-gold/50 bg-[#120816] shadow-[-18px_18px_0_rgba(0,0,0,0.5)]">
-        <div className="flex items-start justify-between gap-4 border-b border-forge-gold/25 bg-[#1a0d20] p-5">
-          <div className="flex min-w-0 items-center gap-4">
-            {actor.portraitUrl ? (
-              <div
-                className="h-16 w-16 shrink-0 rounded-xl border border-forge-gold/40 bg-cover bg-center shadow-[-5px_5px_0_rgba(0,0,0,0.35)]"
-                style={{
-                  backgroundImage: `url(${actor.portraitUrl})`,
-                }}
-                aria-hidden="true"
-              />
-            ) : (
-              <div
-                className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border text-2xl font-black shadow-[-5px_5px_0_rgba(0,0,0,0.35)] ${getCharacterTypeStyles(
-                  actor.type,
-                )}`}
-              >
-                {actor.initials}
-              </div>
-            )}
-
-            <div className="min-w-0">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
-                Ficha
-              </p>
-
-              <h2 className="mt-1 truncate text-2xl font-black text-forge-gold">
-                {actor.name}
-              </h2>
-
-              <p className="mt-1 text-xs font-semibold text-white/55">
-                {actor.description}
-              </p>
-            </div>
+      <div className="w-full max-w-lg rounded-2xl border border-forge-gold/40 bg-[#120816] p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/35">
+              Ficha não encontrada
+            </p>
+            <h2 className="mt-2 text-xl font-black text-forge-gold">
+              {actor.name}
+            </h2>
           </div>
-
           <button
             type="button"
             onClick={onClose}
-            className="shrink-0 text-2xl font-black text-white/45 transition hover:text-forge-gold"
-            aria-label="Fechar ficha"
+            className="text-xl font-black text-white/45 hover:text-forge-gold"
           >
             ×
           </button>
         </div>
-
-        <div className="grid gap-4 p-5 md:grid-cols-[1fr_280px]">
-          <section className="rounded-xl border border-white/10 bg-black/25 p-4">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-              Resumo
-            </p>
-
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              <SheetStat
-                label="Tipo"
-                value={getCharacterTypeLabel(actor.type)}
-              />
-
-              <SheetStat
-                label="Dono"
-                value={actor.ownerId ? "Vinculado a jogador" : "Sem dono"}
-              />
-
-              <SheetStat
-                label="Nível"
-                value={isPlayerCharacter ? "1" : isCreature ? "?" : "—"}
-              />
-
-              <SheetStat
-                label="Estado"
-                value={isPlayerCharacter ? "Ativo" : "Disponível"}
-              />
-            </div>
-
-            <div className="mt-5 rounded-xl border border-forge-gold/20 bg-forge-purple/10 p-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-forge-gold/80">
-                Observação
-              </p>
-
-              <p className="mt-2 text-xs font-semibold leading-relaxed text-white/65">
-                Esta é uma ficha temporária de layout. Depois ela será ligada ao
-                banco, atributos, perícias, magias, inventário e histórico do
-                personagem.
-              </p>
-            </div>
-          </section>
-
-          <aside className="space-y-3">
-            <div className="rounded-xl border border-white/10 bg-black/25 p-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-                Ações
-              </p>
-
-              <div className="mt-4 space-y-2">
-                <button
-                  type="button"
-                  className="w-full rounded-lg border border-forge-gold/50 px-4 py-3 text-xs font-black text-forge-gold transition hover:bg-forge-purple"
-                >
-                  Abrir ficha completa
-                </button>
-
-                {isGM && (
-                  <button
-                    type="button"
-                    className="w-full rounded-lg border border-white/10 px-4 py-3 text-xs font-black text-white/55 transition hover:border-forge-gold hover:text-forge-gold"
-                  >
-                    Editar ficha
-                  </button>
-                )}
-
-                {isGM && (isNpc || isCreature) && (
-                  <button
-                    type="button"
-                    className="w-full rounded-lg border border-red-500/40 px-4 py-3 text-xs font-black text-red-300 transition hover:bg-red-950/40"
-                  >
-                    Excluir registro
-                  </button>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-white/10 bg-black/25 p-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">
-                IA sugestiva
-              </p>
-
-              <p className="mt-2 text-xs font-semibold leading-relaxed text-white/55">
-                Depois: ajuda opcional para magias, truques e sugestões de
-                montagem quando o usuário pedir.
-              </p>
-            </div>
-          </aside>
-        </div>
+        <p className="mt-4 text-sm font-semibold leading-relaxed text-white/55">
+          Este ator ainda não possui uma NpcSheet/CreatureSheet. Atores antigos
+          criados antes da Fase 5.12 continuarão visíveis, mas precisam ser
+          recriados ou migrados para a ficha completa.
+        </p>
       </div>
-    </div>
-  );
-}
-
-function SheetStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-white/10 bg-black/35 px-3 py-3">
-      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
-        {label}
-      </p>
-
-      <p className="mt-1 text-sm font-black text-white">{value}</p>
     </div>
   );
 }

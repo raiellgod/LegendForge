@@ -1,11 +1,67 @@
-import type { SimpleActorCreationDraft } from "./NpcCreationModal";
+"use client";
+
+import type { CharacterBuilderOptions } from "@/features/character-builder/types/character-builder-types";
+import type { CreatureSheetDraft } from "@/features/game-table/types/game-table-types";
+
+import { NpcCreatureSheetBuilderFields } from "./NpcCreatureSheetBuilderFields";
+
+export function createEmptyCreatureSheetDraft(): CreatureSheetDraft {
+  return {
+    name: "",
+    initials: "",
+    description: "",
+    location: "TABLE",
+    size: "MEDIUM",
+    creatureType: "",
+    habitat: "",
+    behavior: "",
+    tactics: "",
+    lore: "",
+    notes: "",
+    portraitUrl: "",
+    tokenImageUrl: "",
+    tokenImageFit: "COVER",
+    armorClass: 10,
+    hitPoints: 10,
+    maxHitPoints: 10,
+    temporaryHp: 0,
+    speed: 30,
+    climbSpeed: 0,
+    swimSpeed: 0,
+    flySpeed: 0,
+    burrowSpeed: 0,
+    challengeRating: "",
+    experienceReward: 0,
+    attributes: {
+      strength: 10,
+      dexterity: 10,
+      constitution: 10,
+      intelligence: 10,
+      wisdom: 10,
+      charisma: 10,
+    },
+    savingThrowKeys: [],
+    skillKeys: [],
+    expertiseSkillKeys: [],
+    skillOverrides: {},
+    defenses: [],
+    senses: [],
+    languageKeys: [],
+    traits: [],
+    actions: [],
+    attacks: [],
+    multiattacks: [],
+    magicalAbilities: [],
+  };
+}
 
 type CreatureCreationModalProps = {
   isOpen: boolean;
-  draft: SimpleActorCreationDraft;
+  draft: CreatureSheetDraft;
+  options: CharacterBuilderOptions;
   isSaving: boolean;
   error: string | null;
-  onChangeDraft: (draft: SimpleActorCreationDraft) => void;
+  onChangeDraft: (draft: CreatureSheetDraft) => void;
   onSubmit: () => void | Promise<void>;
   onClose: () => void;
 };
@@ -13,6 +69,7 @@ type CreatureCreationModalProps = {
 export function CreatureCreationModal({
   isOpen,
   draft,
+  options,
   isSaving,
   error,
   onChangeDraft,
@@ -23,41 +80,28 @@ export function CreatureCreationModal({
     return null;
   }
 
-  function updateDraft<K extends keyof SimpleActorCreationDraft>(
-    key: K,
-    value: SimpleActorCreationDraft[K],
-  ) {
-    onChangeDraft({
-      ...draft,
-      [key]: value,
-    });
-  }
-
   const canSubmit = Boolean(draft.name.trim()) && !isSaving;
 
   return (
-    <div className="fixed inset-0 z-[85] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
-      <div className="flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-red-400/35 bg-[#18091f] shadow-[-10px_10px_0_rgba(0,0,0,0.45)]">
+    <div className="fixed inset-0 z-[85] flex items-center justify-center bg-black/75 px-4 py-4 backdrop-blur-sm">
+      <div className="flex max-h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-red-400/35 bg-[#18091f] shadow-[-12px_12px_0_rgba(0,0,0,0.45)]">
         <header className="flex items-start justify-between gap-4 border-b border-red-400/20 px-6 py-5">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-red-200/80">
-              Criação de criatura
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-red-200/70">
+              5.12.22 · Builder completo
             </p>
-
             <h2 className="mt-2 text-2xl font-black text-zinc-100">
               Criar criatura/inimigo
             </h2>
-
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-300">
-              Crie uma criatura simples como ator da campanha. Depois ela poderá
-              ter token, ficar na mesa ou ser guardada na biblioteca.
+            <p className="mt-2 max-w-3xl text-sm font-semibold leading-relaxed text-white/45">
+              Crie o CampaignActor e a CreatureSheet completa na mesma operação.
             </p>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-zinc-700 bg-zinc-950/70 px-3 py-2 text-sm font-bold text-zinc-300 transition hover:border-red-400/70 hover:text-red-200"
+            className="rounded-xl border border-white/10 px-3 py-2 text-sm font-black text-white/50 hover:border-red-400/50 hover:text-red-200"
           >
             Fechar
           </button>
@@ -65,134 +109,137 @@ export function CreatureCreationModal({
 
         <div className="min-h-0 flex-1 overflow-y-auto p-6">
           {error ? (
-            <p className="mb-4 rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm font-bold text-red-200">
+            <p className="mb-4 rounded-xl border border-red-500/30 bg-red-950/25 px-4 py-3 text-sm font-bold text-red-200">
               {error}
             </p>
           ) : null}
 
-          <div className="grid gap-4">
-            <label className="block">
-              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-red-200/80">
-                Nome da criatura/inimigo
-              </span>
+          <NpcCreatureSheetBuilderFields
+            kind="CREATURE"
+            draft={draft}
+            skills={options.skills}
+            languages={options.languages}
+            equipment={options.equipment}
+            spells={options.spells}
+            onChangeDraft={(nextDraft) =>
+              onChangeDraft(nextDraft as CreatureSheetDraft)
+            }
+          />
 
-              <input
-                value={draft.name}
-                onChange={(event) => updateDraft("name", event.target.value)}
-                placeholder="Ex.: Lobo mutado"
-                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-4 py-3 text-sm font-bold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-300"
-              />
-            </label>
+          <section className="mt-5 rounded-xl border border-white/10 bg-black/20 p-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-red-200/80">
+              Classificação e comportamento
+            </p>
 
-            <label className="block">
-              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-red-200/80">
-                Iniciais
-              </span>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <label className="block">
+                <span className="text-[10px] font-black uppercase tracking-[0.12em] text-white/35">
+                  Tipo da criatura
+                </span>
+                <input
+                  value={draft.creatureType}
+                  onChange={(event) =>
+                    onChangeDraft({
+                      ...draft,
+                      creatureType: event.target.value,
+                    })
+                  }
+                  className="mt-2 w-full rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-sm font-semibold text-white outline-none focus:border-red-400/60"
+                />
+              </label>
 
-              <input
-                value={draft.initials}
-                onChange={(event) =>
-                  updateDraft("initials", event.target.value.slice(0, 3))
-                }
-                placeholder="Ex.: LM"
-                maxLength={3}
-                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-4 py-3 text-sm font-bold uppercase text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-300"
-              />
+              <label className="block">
+                <span className="text-[10px] font-black uppercase tracking-[0.12em] text-white/35">
+                  Habitat
+                </span>
+                <input
+                  value={draft.habitat}
+                  onChange={(event) =>
+                    onChangeDraft({
+                      ...draft,
+                      habitat: event.target.value,
+                    })
+                  }
+                  className="mt-2 w-full rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-sm font-semibold text-white outline-none focus:border-red-400/60"
+                />
+              </label>
 
-              <p className="mt-2 text-xs font-semibold leading-relaxed text-zinc-500">
-                Se deixar vazio, o sistema usa as iniciais do nome.
-              </p>
-            </label>
+              <label className="block">
+                <span className="text-[10px] font-black uppercase tracking-[0.12em] text-white/35">
+                  CR / desafio
+                </span>
+                <input
+                  value={draft.challengeRating}
+                  onChange={(event) =>
+                    onChangeDraft({
+                      ...draft,
+                      challengeRating: event.target.value,
+                    })
+                  }
+                  placeholder="Ex.: 1/4, 2, 10"
+                  className="mt-2 w-full rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-sm font-semibold text-white outline-none focus:border-red-400/60"
+                />
+              </label>
 
-            <label className="block">
-              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-red-200/80">
-                Descrição
-              </span>
+              <label className="block">
+                <span className="text-[10px] font-black uppercase tracking-[0.12em] text-white/35">
+                  XP
+                </span>
+                <input
+                  type="number"
+                  min={0}
+                  value={draft.experienceReward}
+                  onChange={(event) =>
+                    onChangeDraft({
+                      ...draft,
+                      experienceReward: Math.max(
+                        0,
+                        Number.parseInt(event.target.value, 10) || 0,
+                      ),
+                    })
+                  }
+                  className="mt-2 w-full rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-sm font-semibold text-white outline-none focus:border-red-400/60"
+                />
+              </label>
 
-              <textarea
-                value={draft.description}
-                onChange={(event) =>
-                  updateDraft("description", event.target.value)
-                }
-                placeholder="Resumo da ameaça, comportamento ou papel na cena."
-                rows={4}
-                className="mt-2 w-full resize-none rounded-xl border border-zinc-700 bg-zinc-950/70 px-4 py-3 text-sm font-semibold leading-relaxed text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-300"
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-red-200/80">
-                URL do retrato
-              </span>
-
-              <input
-                value={draft.portraitUrl}
-                onChange={(event) =>
-                  updateDraft("portraitUrl", event.target.value)
-                }
-                placeholder="Opcional por enquanto"
-                className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-950/70 px-4 py-3 text-sm font-bold text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-red-300"
-              />
-
-              <p className="mt-2 text-xs font-semibold leading-relaxed text-zinc-500">
-                Upload direto do computador entra na 4.25. O bestiário do
-                sistema será preparado em etapa futura.
-              </p>
-            </label>
-
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-red-200/80">
-                Destino inicial
-              </p>
-
-              <div className="mt-2 grid gap-3 md:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => updateDraft("location", "TABLE")}
-                  className={`rounded-xl border p-4 text-left transition ${
-                    draft.location === "TABLE"
-                      ? "border-red-300 bg-red-500/10 text-red-100"
-                      : "border-zinc-700 bg-zinc-950/60 text-zinc-300 hover:border-red-300/60"
-                  }`}
-                >
-                  <span className="block text-sm font-black">Mesa</span>
-                  <span className="mt-2 block text-xs font-semibold leading-relaxed text-zinc-500">
-                    A criatura aparece na aba Personagens e pode receber token.
+              {[
+                ["behavior", "Comportamento"],
+                ["tactics", "Táticas"],
+                ["lore", "Lore"],
+                ["notes", "Notas"],
+              ].map(([key, label]) => (
+                <label key={key} className="block">
+                  <span className="text-[10px] font-black uppercase tracking-[0.12em] text-white/35">
+                    {label}
                   </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => updateDraft("location", "LIBRARY")}
-                  className={`rounded-xl border p-4 text-left transition ${
-                    draft.location === "LIBRARY"
-                      ? "border-red-300 bg-red-500/10 text-red-100"
-                      : "border-zinc-700 bg-zinc-950/60 text-zinc-300 hover:border-red-300/60"
-                  }`}
-                >
-                  <span className="block text-sm font-black">Biblioteca</span>
-                  <span className="mt-2 block text-xs font-semibold leading-relaxed text-zinc-500">
-                    A criatura fica guardada para ser trazida à mesa depois.
-                  </span>
-                </button>
-              </div>
+                  <textarea
+                    value={draft[key as keyof CreatureSheetDraft] as string}
+                    onChange={(event) =>
+                      onChangeDraft({
+                        ...draft,
+                        [key]: event.target.value,
+                      })
+                    }
+                    className="mt-2 min-h-20 w-full resize-y rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-sm font-semibold text-white outline-none focus:border-red-400/60"
+                  />
+                </label>
+              ))}
             </div>
-          </div>
+          </section>
         </div>
 
-        <footer className="flex items-center justify-between gap-4 border-t border-red-400/20 bg-black/30 px-6 py-4">
-          <p className="text-xs font-semibold leading-relaxed text-zinc-500">
-            Criaturas são atores da campanha. O bloco de estatísticas virá com o
-            bestiário/regras avançadas.
+        <footer className="flex items-center justify-between gap-3 border-t border-white/10 bg-black/20 px-6 py-4">
+          <p className="text-[10px] font-semibold text-white/30">
+            A CreatureSheet permanece ligada ao ator ao mover entre Biblioteca e Mesa.
           </p>
 
           <button
             type="button"
             disabled={!canSubmit}
-            onClick={onSubmit}
-            className="rounded-xl border border-red-400/50 bg-red-950/60 px-4 py-2 text-sm font-black text-red-100 transition hover:bg-red-900/70 disabled:cursor-not-allowed disabled:border-zinc-700 disabled:bg-zinc-900 disabled:text-zinc-600"
+            onClick={() => void onSubmit()}
+            className="rounded-xl border border-red-400/60 bg-red-950/30 px-5 py-3 text-sm font-black text-red-200 transition hover:bg-red-950/50 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {isSaving ? "Criando..." : "Criar criatura"}
+            {isSaving ? "Criando ficha..." : "Criar criatura completa"}
           </button>
         </footer>
       </div>

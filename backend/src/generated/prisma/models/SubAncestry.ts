@@ -270,6 +270,8 @@ export type SubAncestryWhereInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
   characterTemplates?: Prisma.CharacterTemplateListRelationFilter
+  npcTemplates?: Prisma.NpcTemplateListRelationFilter
+  npcSheets?: Prisma.NpcSheetListRelationFilter
 }
 
 export type SubAncestryOrderByWithRelationInput = {
@@ -291,6 +293,8 @@ export type SubAncestryOrderByWithRelationInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupOrderByRelationAggregateInput
   characterSheets?: Prisma.CharacterSheetOrderByRelationAggregateInput
   characterTemplates?: Prisma.CharacterTemplateOrderByRelationAggregateInput
+  npcTemplates?: Prisma.NpcTemplateOrderByRelationAggregateInput
+  npcSheets?: Prisma.NpcSheetOrderByRelationAggregateInput
 }
 
 export type SubAncestryWhereUniqueInput = Prisma.AtLeast<{
@@ -317,6 +321,8 @@ export type SubAncestryWhereUniqueInput = Prisma.AtLeast<{
   featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
   characterTemplates?: Prisma.CharacterTemplateListRelationFilter
+  npcTemplates?: Prisma.NpcTemplateListRelationFilter
+  npcSheets?: Prisma.NpcSheetListRelationFilter
 }, "id" | "systemId_name" | "systemId_key">
 
 export type SubAncestryOrderByWithAggregationInput = {
@@ -374,6 +380,8 @@ export type SubAncestryCreateInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryUncheckedCreateInput = {
@@ -393,6 +401,8 @@ export type SubAncestryUncheckedCreateInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryUpdateInput = {
@@ -412,6 +422,8 @@ export type SubAncestryUpdateInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateInput = {
@@ -431,6 +443,8 @@ export type SubAncestryUncheckedUpdateInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryCreateManyInput = {
@@ -484,6 +498,11 @@ export type SubAncestryListRelationFilter = {
 
 export type SubAncestryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type SubAncestryNullableScalarRelationFilter = {
+  is?: Prisma.SubAncestryWhereInput | null
+  isNot?: Prisma.SubAncestryWhereInput | null
 }
 
 export type SubAncestrySystemIdNameCompoundUniqueInput = {
@@ -545,11 +564,6 @@ export type SubAncestrySumOrderByAggregateInput = {
   order?: Prisma.SortOrder
 }
 
-export type SubAncestryNullableScalarRelationFilter = {
-  is?: Prisma.SubAncestryWhereInput | null
-  isNot?: Prisma.SubAncestryWhereInput | null
-}
-
 export type SubAncestryCreateNestedManyWithoutSystemInput = {
   create?: Prisma.XOR<Prisma.SubAncestryCreateWithoutSystemInput, Prisma.SubAncestryUncheckedCreateWithoutSystemInput> | Prisma.SubAncestryCreateWithoutSystemInput[] | Prisma.SubAncestryUncheckedCreateWithoutSystemInput[]
   connectOrCreate?: Prisma.SubAncestryCreateOrConnectWithoutSystemInput | Prisma.SubAncestryCreateOrConnectWithoutSystemInput[]
@@ -590,6 +604,22 @@ export type SubAncestryUncheckedUpdateManyWithoutSystemNestedInput = {
   update?: Prisma.SubAncestryUpdateWithWhereUniqueWithoutSystemInput | Prisma.SubAncestryUpdateWithWhereUniqueWithoutSystemInput[]
   updateMany?: Prisma.SubAncestryUpdateManyWithWhereWithoutSystemInput | Prisma.SubAncestryUpdateManyWithWhereWithoutSystemInput[]
   deleteMany?: Prisma.SubAncestryScalarWhereInput | Prisma.SubAncestryScalarWhereInput[]
+}
+
+export type SubAncestryCreateNestedOneWithoutNpcTemplatesInput = {
+  create?: Prisma.XOR<Prisma.SubAncestryCreateWithoutNpcTemplatesInput, Prisma.SubAncestryUncheckedCreateWithoutNpcTemplatesInput>
+  connectOrCreate?: Prisma.SubAncestryCreateOrConnectWithoutNpcTemplatesInput
+  connect?: Prisma.SubAncestryWhereUniqueInput
+}
+
+export type SubAncestryUpdateOneWithoutNpcTemplatesNestedInput = {
+  create?: Prisma.XOR<Prisma.SubAncestryCreateWithoutNpcTemplatesInput, Prisma.SubAncestryUncheckedCreateWithoutNpcTemplatesInput>
+  connectOrCreate?: Prisma.SubAncestryCreateOrConnectWithoutNpcTemplatesInput
+  upsert?: Prisma.SubAncestryUpsertWithoutNpcTemplatesInput
+  disconnect?: Prisma.SubAncestryWhereInput | boolean
+  delete?: Prisma.SubAncestryWhereInput | boolean
+  connect?: Prisma.SubAncestryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SubAncestryUpdateToOneWithWhereWithoutNpcTemplatesInput, Prisma.SubAncestryUpdateWithoutNpcTemplatesInput>, Prisma.SubAncestryUncheckedUpdateWithoutNpcTemplatesInput>
 }
 
 export type SubAncestryCreateNestedManyWithoutAncestryInput = {
@@ -663,6 +693,22 @@ export type SubAncestryUpdateOneWithoutCharacterTemplatesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SubAncestryUpdateToOneWithWhereWithoutCharacterTemplatesInput, Prisma.SubAncestryUpdateWithoutCharacterTemplatesInput>, Prisma.SubAncestryUncheckedUpdateWithoutCharacterTemplatesInput>
 }
 
+export type SubAncestryCreateNestedOneWithoutNpcSheetsInput = {
+  create?: Prisma.XOR<Prisma.SubAncestryCreateWithoutNpcSheetsInput, Prisma.SubAncestryUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.SubAncestryCreateOrConnectWithoutNpcSheetsInput
+  connect?: Prisma.SubAncestryWhereUniqueInput
+}
+
+export type SubAncestryUpdateOneWithoutNpcSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.SubAncestryCreateWithoutNpcSheetsInput, Prisma.SubAncestryUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.SubAncestryCreateOrConnectWithoutNpcSheetsInput
+  upsert?: Prisma.SubAncestryUpsertWithoutNpcSheetsInput
+  disconnect?: Prisma.SubAncestryWhereInput | boolean
+  delete?: Prisma.SubAncestryWhereInput | boolean
+  connect?: Prisma.SubAncestryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SubAncestryUpdateToOneWithWhereWithoutNpcSheetsInput, Prisma.SubAncestryUpdateWithoutNpcSheetsInput>, Prisma.SubAncestryUncheckedUpdateWithoutNpcSheetsInput>
+}
+
 export type SubAncestryCreateNestedOneWithoutCharacterSheetsInput = {
   create?: Prisma.XOR<Prisma.SubAncestryCreateWithoutCharacterSheetsInput, Prisma.SubAncestryUncheckedCreateWithoutCharacterSheetsInput>
   connectOrCreate?: Prisma.SubAncestryCreateOrConnectWithoutCharacterSheetsInput
@@ -727,6 +773,8 @@ export type SubAncestryCreateWithoutSystemInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryUncheckedCreateWithoutSystemInput = {
@@ -745,6 +793,8 @@ export type SubAncestryUncheckedCreateWithoutSystemInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryCreateOrConnectWithoutSystemInput = {
@@ -791,6 +841,102 @@ export type SubAncestryScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"SubAncestry"> | Date | string
 }
 
+export type SubAncestryCreateWithoutNpcTemplatesInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  sizeCategoryOverride?: $Enums.CreatureSize | null
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.SubAncestryCreatelanguageKeysInput | string[]
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSubAncestriesInput
+  ancestry: Prisma.AncestryCreateNestedOneWithoutSubAncestriesInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSubAncestryInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSubAncestryInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubAncestryInput
+  characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSubAncestryInput
+}
+
+export type SubAncestryUncheckedCreateWithoutNpcTemplatesInput = {
+  id?: string
+  systemId: string
+  ancestryId: string
+  name: string
+  key: string
+  description?: string | null
+  sizeCategoryOverride?: $Enums.CreatureSize | null
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.SubAncestryCreatelanguageKeysInput | string[]
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubAncestryInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSubAncestryInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubAncestryInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSubAncestryInput
+}
+
+export type SubAncestryCreateOrConnectWithoutNpcTemplatesInput = {
+  where: Prisma.SubAncestryWhereUniqueInput
+  create: Prisma.XOR<Prisma.SubAncestryCreateWithoutNpcTemplatesInput, Prisma.SubAncestryUncheckedCreateWithoutNpcTemplatesInput>
+}
+
+export type SubAncestryUpsertWithoutNpcTemplatesInput = {
+  update: Prisma.XOR<Prisma.SubAncestryUpdateWithoutNpcTemplatesInput, Prisma.SubAncestryUncheckedUpdateWithoutNpcTemplatesInput>
+  create: Prisma.XOR<Prisma.SubAncestryCreateWithoutNpcTemplatesInput, Prisma.SubAncestryUncheckedCreateWithoutNpcTemplatesInput>
+  where?: Prisma.SubAncestryWhereInput
+}
+
+export type SubAncestryUpdateToOneWithWhereWithoutNpcTemplatesInput = {
+  where?: Prisma.SubAncestryWhereInput
+  data: Prisma.XOR<Prisma.SubAncestryUpdateWithoutNpcTemplatesInput, Prisma.SubAncestryUncheckedUpdateWithoutNpcTemplatesInput>
+}
+
+export type SubAncestryUpdateWithoutNpcTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeCategoryOverride?: Prisma.NullableEnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize | null
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.SubAncestryUpdatelanguageKeysInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSubAncestriesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneRequiredWithoutSubAncestriesNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSubAncestryNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSubAncestryNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubAncestryNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSubAncestryNestedInput
+}
+
+export type SubAncestryUncheckedUpdateWithoutNpcTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  ancestryId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeCategoryOverride?: Prisma.NullableEnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize | null
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.SubAncestryUpdatelanguageKeysInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSubAncestryNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSubAncestryNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
+}
+
 export type SubAncestryCreateWithoutAncestryInput = {
   id?: string
   name: string
@@ -807,6 +953,8 @@ export type SubAncestryCreateWithoutAncestryInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryUncheckedCreateWithoutAncestryInput = {
@@ -825,6 +973,8 @@ export type SubAncestryUncheckedCreateWithoutAncestryInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryCreateOrConnectWithoutAncestryInput = {
@@ -869,6 +1019,8 @@ export type SubAncestryCreateWithoutCharacterTemplatesInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSubAncestryInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryUncheckedCreateWithoutCharacterTemplatesInput = {
@@ -887,6 +1039,8 @@ export type SubAncestryUncheckedCreateWithoutCharacterTemplatesInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubAncestryInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryCreateOrConnectWithoutCharacterTemplatesInput = {
@@ -921,6 +1075,8 @@ export type SubAncestryUpdateWithoutCharacterTemplatesInput = {
   features?: Prisma.FeatureUpdateManyWithoutSubAncestryNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateWithoutCharacterTemplatesInput = {
@@ -939,6 +1095,104 @@ export type SubAncestryUncheckedUpdateWithoutCharacterTemplatesInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSubAncestryNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
+}
+
+export type SubAncestryCreateWithoutNpcSheetsInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  sizeCategoryOverride?: $Enums.CreatureSize | null
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.SubAncestryCreatelanguageKeysInput | string[]
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSubAncestriesInput
+  ancestry: Prisma.AncestryCreateNestedOneWithoutSubAncestriesInput
+  features?: Prisma.FeatureCreateNestedManyWithoutSubAncestryInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSubAncestryInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubAncestryInput
+  characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSubAncestryInput
+}
+
+export type SubAncestryUncheckedCreateWithoutNpcSheetsInput = {
+  id?: string
+  systemId: string
+  ancestryId: string
+  name: string
+  key: string
+  description?: string | null
+  sizeCategoryOverride?: $Enums.CreatureSize | null
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.SubAncestryCreatelanguageKeysInput | string[]
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubAncestryInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSubAncestryInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubAncestryInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+}
+
+export type SubAncestryCreateOrConnectWithoutNpcSheetsInput = {
+  where: Prisma.SubAncestryWhereUniqueInput
+  create: Prisma.XOR<Prisma.SubAncestryCreateWithoutNpcSheetsInput, Prisma.SubAncestryUncheckedCreateWithoutNpcSheetsInput>
+}
+
+export type SubAncestryUpsertWithoutNpcSheetsInput = {
+  update: Prisma.XOR<Prisma.SubAncestryUpdateWithoutNpcSheetsInput, Prisma.SubAncestryUncheckedUpdateWithoutNpcSheetsInput>
+  create: Prisma.XOR<Prisma.SubAncestryCreateWithoutNpcSheetsInput, Prisma.SubAncestryUncheckedCreateWithoutNpcSheetsInput>
+  where?: Prisma.SubAncestryWhereInput
+}
+
+export type SubAncestryUpdateToOneWithWhereWithoutNpcSheetsInput = {
+  where?: Prisma.SubAncestryWhereInput
+  data: Prisma.XOR<Prisma.SubAncestryUpdateWithoutNpcSheetsInput, Prisma.SubAncestryUncheckedUpdateWithoutNpcSheetsInput>
+}
+
+export type SubAncestryUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeCategoryOverride?: Prisma.NullableEnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize | null
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.SubAncestryUpdatelanguageKeysInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSubAncestriesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneRequiredWithoutSubAncestriesNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutSubAncestryNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSubAncestryNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubAncestryNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSubAncestryNestedInput
+}
+
+export type SubAncestryUncheckedUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  ancestryId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeCategoryOverride?: Prisma.NullableEnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize | null
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  languageKeys?: Prisma.SubAncestryUpdatelanguageKeysInput | string[]
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutSubAncestryNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSubAncestryNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryCreateWithoutCharacterSheetsInput = {
@@ -957,6 +1211,8 @@ export type SubAncestryCreateWithoutCharacterSheetsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSubAncestryInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryUncheckedCreateWithoutCharacterSheetsInput = {
@@ -975,6 +1231,8 @@ export type SubAncestryUncheckedCreateWithoutCharacterSheetsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubAncestryInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryCreateOrConnectWithoutCharacterSheetsInput = {
@@ -1009,6 +1267,8 @@ export type SubAncestryUpdateWithoutCharacterSheetsInput = {
   features?: Prisma.FeatureUpdateManyWithoutSubAncestryNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateWithoutCharacterSheetsInput = {
@@ -1027,6 +1287,8 @@ export type SubAncestryUncheckedUpdateWithoutCharacterSheetsInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSubAncestryNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryCreateWithoutFeaturesInput = {
@@ -1045,6 +1307,8 @@ export type SubAncestryCreateWithoutFeaturesInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryUncheckedCreateWithoutFeaturesInput = {
@@ -1063,6 +1327,8 @@ export type SubAncestryUncheckedCreateWithoutFeaturesInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryCreateOrConnectWithoutFeaturesInput = {
@@ -1097,6 +1363,8 @@ export type SubAncestryUpdateWithoutFeaturesInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateWithoutFeaturesInput = {
@@ -1115,6 +1383,8 @@ export type SubAncestryUncheckedUpdateWithoutFeaturesInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryCreateWithoutFeatureChoiceGroupsInput = {
@@ -1133,6 +1403,8 @@ export type SubAncestryCreateWithoutFeatureChoiceGroupsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryUncheckedCreateWithoutFeatureChoiceGroupsInput = {
@@ -1151,6 +1423,8 @@ export type SubAncestryUncheckedCreateWithoutFeatureChoiceGroupsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutSubAncestryInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutSubAncestryInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutSubAncestryInput
 }
 
 export type SubAncestryCreateOrConnectWithoutFeatureChoiceGroupsInput = {
@@ -1185,6 +1459,8 @@ export type SubAncestryUpdateWithoutFeatureChoiceGroupsInput = {
   features?: Prisma.FeatureUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateWithoutFeatureChoiceGroupsInput = {
@@ -1203,6 +1479,8 @@ export type SubAncestryUncheckedUpdateWithoutFeatureChoiceGroupsInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryCreateManySystemInput = {
@@ -1235,6 +1513,8 @@ export type SubAncestryUpdateWithoutSystemInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateWithoutSystemInput = {
@@ -1253,6 +1533,8 @@ export type SubAncestryUncheckedUpdateWithoutSystemInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateManyWithoutSystemInput = {
@@ -1299,6 +1581,8 @@ export type SubAncestryUpdateWithoutAncestryInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateWithoutAncestryInput = {
@@ -1317,6 +1601,8 @@ export type SubAncestryUncheckedUpdateWithoutAncestryInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutSubAncestryNestedInput
 }
 
 export type SubAncestryUncheckedUpdateManyWithoutAncestryInput = {
@@ -1343,6 +1629,8 @@ export type SubAncestryCountOutputType = {
   featureChoiceGroups: number
   characterSheets: number
   characterTemplates: number
+  npcTemplates: number
+  npcSheets: number
 }
 
 export type SubAncestryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1350,6 +1638,8 @@ export type SubAncestryCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   featureChoiceGroups?: boolean | SubAncestryCountOutputTypeCountFeatureChoiceGroupsArgs
   characterSheets?: boolean | SubAncestryCountOutputTypeCountCharacterSheetsArgs
   characterTemplates?: boolean | SubAncestryCountOutputTypeCountCharacterTemplatesArgs
+  npcTemplates?: boolean | SubAncestryCountOutputTypeCountNpcTemplatesArgs
+  npcSheets?: boolean | SubAncestryCountOutputTypeCountNpcSheetsArgs
 }
 
 /**
@@ -1390,6 +1680,20 @@ export type SubAncestryCountOutputTypeCountCharacterTemplatesArgs<ExtArgs extend
   where?: Prisma.CharacterTemplateWhereInput
 }
 
+/**
+ * SubAncestryCountOutputType without action
+ */
+export type SubAncestryCountOutputTypeCountNpcTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+/**
+ * SubAncestryCountOutputType without action
+ */
+export type SubAncestryCountOutputTypeCountNpcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcSheetWhereInput
+}
+
 
 export type SubAncestrySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1410,6 +1714,8 @@ export type SubAncestrySelect<ExtArgs extends runtime.Types.Extensions.InternalA
   featureChoiceGroups?: boolean | Prisma.SubAncestry$featureChoiceGroupsArgs<ExtArgs>
   characterSheets?: boolean | Prisma.SubAncestry$characterSheetsArgs<ExtArgs>
   characterTemplates?: boolean | Prisma.SubAncestry$characterTemplatesArgs<ExtArgs>
+  npcTemplates?: boolean | Prisma.SubAncestry$npcTemplatesArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.SubAncestry$npcSheetsArgs<ExtArgs>
   _count?: boolean | Prisma.SubAncestryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subAncestry"]>
 
@@ -1470,6 +1776,8 @@ export type SubAncestryInclude<ExtArgs extends runtime.Types.Extensions.Internal
   featureChoiceGroups?: boolean | Prisma.SubAncestry$featureChoiceGroupsArgs<ExtArgs>
   characterSheets?: boolean | Prisma.SubAncestry$characterSheetsArgs<ExtArgs>
   characterTemplates?: boolean | Prisma.SubAncestry$characterTemplatesArgs<ExtArgs>
+  npcTemplates?: boolean | Prisma.SubAncestry$npcTemplatesArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.SubAncestry$npcSheetsArgs<ExtArgs>
   _count?: boolean | Prisma.SubAncestryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubAncestryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1490,6 +1798,8 @@ export type $SubAncestryPayload<ExtArgs extends runtime.Types.Extensions.Interna
     featureChoiceGroups: Prisma.$FeatureChoiceGroupPayload<ExtArgs>[]
     characterSheets: Prisma.$CharacterSheetPayload<ExtArgs>[]
     characterTemplates: Prisma.$CharacterTemplatePayload<ExtArgs>[]
+    npcTemplates: Prisma.$NpcTemplatePayload<ExtArgs>[]
+    npcSheets: Prisma.$NpcSheetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1904,6 +2214,8 @@ export interface Prisma__SubAncestryClient<T, Null = never, ExtArgs extends runt
   featureChoiceGroups<T extends Prisma.SubAncestry$featureChoiceGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubAncestry$featureChoiceGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeatureChoiceGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterSheets<T extends Prisma.SubAncestry$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubAncestry$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterTemplates<T extends Prisma.SubAncestry$characterTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubAncestry$characterTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcTemplates<T extends Prisma.SubAncestry$npcTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubAncestry$npcTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcSheets<T extends Prisma.SubAncestry$npcSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubAncestry$npcSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2434,6 +2746,54 @@ export type SubAncestry$characterTemplatesArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.CharacterTemplateScalarFieldEnum | Prisma.CharacterTemplateScalarFieldEnum[]
+}
+
+/**
+ * SubAncestry.npcTemplates
+ */
+export type SubAncestry$npcTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplate
+   */
+  select?: Prisma.NpcTemplateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplate
+   */
+  omit?: Prisma.NpcTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateWhereInput
+  orderBy?: Prisma.NpcTemplateOrderByWithRelationInput | Prisma.NpcTemplateOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateScalarFieldEnum | Prisma.NpcTemplateScalarFieldEnum[]
+}
+
+/**
+ * SubAncestry.npcSheets
+ */
+export type SubAncestry$npcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcSheet
+   */
+  select?: Prisma.NpcSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcSheet
+   */
+  omit?: Prisma.NpcSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcSheetInclude<ExtArgs> | null
+  where?: Prisma.NpcSheetWhereInput
+  orderBy?: Prisma.NpcSheetOrderByWithRelationInput | Prisma.NpcSheetOrderByWithRelationInput[]
+  cursor?: Prisma.NpcSheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcSheetScalarFieldEnum | Prisma.NpcSheetScalarFieldEnum[]
 }
 
 /**

@@ -27,10 +27,28 @@ export type AggregateNpcTemplate = {
 }
 
 export type NpcTemplateAvgAggregateOutputType = {
+  armorClass: number | null
+  hitPoints: number | null
+  maxHitPoints: number | null
+  temporaryHp: number | null
+  speed: number | null
+  climbSpeed: number | null
+  swimSpeed: number | null
+  flySpeed: number | null
+  burrowSpeed: number | null
   order: number | null
 }
 
 export type NpcTemplateSumAggregateOutputType = {
+  armorClass: number | null
+  hitPoints: number | null
+  maxHitPoints: number | null
+  temporaryHp: number | null
+  speed: number | null
+  climbSpeed: number | null
+  swimSpeed: number | null
+  flySpeed: number | null
+  burrowSpeed: number | null
   order: number | null
 }
 
@@ -41,7 +59,30 @@ export type NpcTemplateMinAggregateOutputType = {
   name: string | null
   initials: string | null
   description: string | null
+  ancestryId: string | null
+  subAncestryId: string | null
+  backgroundId: string | null
+  size: $Enums.CreatureSize | null
+  role: string | null
+  faction: string | null
+  personality: string | null
+  motivation: string | null
+  behavior: string | null
+  tactics: string | null
+  lore: string | null
+  notes: string | null
   portraitUrl: string | null
+  tokenImageUrl: string | null
+  tokenImageFit: $Enums.SceneTokenImageFit | null
+  armorClass: number | null
+  hitPoints: number | null
+  maxHitPoints: number | null
+  temporaryHp: number | null
+  speed: number | null
+  climbSpeed: number | null
+  swimSpeed: number | null
+  flySpeed: number | null
+  burrowSpeed: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -54,7 +95,30 @@ export type NpcTemplateMaxAggregateOutputType = {
   name: string | null
   initials: string | null
   description: string | null
+  ancestryId: string | null
+  subAncestryId: string | null
+  backgroundId: string | null
+  size: $Enums.CreatureSize | null
+  role: string | null
+  faction: string | null
+  personality: string | null
+  motivation: string | null
+  behavior: string | null
+  tactics: string | null
+  lore: string | null
+  notes: string | null
   portraitUrl: string | null
+  tokenImageUrl: string | null
+  tokenImageFit: $Enums.SceneTokenImageFit | null
+  armorClass: number | null
+  hitPoints: number | null
+  maxHitPoints: number | null
+  temporaryHp: number | null
+  speed: number | null
+  climbSpeed: number | null
+  swimSpeed: number | null
+  flySpeed: number | null
+  burrowSpeed: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,7 +131,30 @@ export type NpcTemplateCountAggregateOutputType = {
   name: number
   initials: number
   description: number
+  ancestryId: number
+  subAncestryId: number
+  backgroundId: number
+  size: number
+  role: number
+  faction: number
+  personality: number
+  motivation: number
+  behavior: number
+  tactics: number
+  lore: number
+  notes: number
   portraitUrl: number
+  tokenImageUrl: number
+  tokenImageFit: number
+  armorClass: number
+  hitPoints: number
+  maxHitPoints: number
+  temporaryHp: number
+  speed: number
+  climbSpeed: number
+  swimSpeed: number
+  flySpeed: number
+  burrowSpeed: number
   order: number
   createdAt: number
   updatedAt: number
@@ -76,10 +163,28 @@ export type NpcTemplateCountAggregateOutputType = {
 
 
 export type NpcTemplateAvgAggregateInputType = {
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
   order?: true
 }
 
 export type NpcTemplateSumAggregateInputType = {
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
   order?: true
 }
 
@@ -90,7 +195,30 @@ export type NpcTemplateMinAggregateInputType = {
   name?: true
   initials?: true
   description?: true
+  ancestryId?: true
+  subAncestryId?: true
+  backgroundId?: true
+  size?: true
+  role?: true
+  faction?: true
+  personality?: true
+  motivation?: true
+  behavior?: true
+  tactics?: true
+  lore?: true
+  notes?: true
   portraitUrl?: true
+  tokenImageUrl?: true
+  tokenImageFit?: true
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -103,7 +231,30 @@ export type NpcTemplateMaxAggregateInputType = {
   name?: true
   initials?: true
   description?: true
+  ancestryId?: true
+  subAncestryId?: true
+  backgroundId?: true
+  size?: true
+  role?: true
+  faction?: true
+  personality?: true
+  motivation?: true
+  behavior?: true
+  tactics?: true
+  lore?: true
+  notes?: true
   portraitUrl?: true
+  tokenImageUrl?: true
+  tokenImageFit?: true
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -116,7 +267,30 @@ export type NpcTemplateCountAggregateInputType = {
   name?: true
   initials?: true
   description?: true
+  ancestryId?: true
+  subAncestryId?: true
+  backgroundId?: true
+  size?: true
+  role?: true
+  faction?: true
+  personality?: true
+  motivation?: true
+  behavior?: true
+  tactics?: true
+  lore?: true
+  notes?: true
   portraitUrl?: true
+  tokenImageUrl?: true
+  tokenImageFit?: true
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -216,7 +390,30 @@ export type NpcTemplateGroupByOutputType = {
   name: string
   initials: string | null
   description: string | null
+  ancestryId: string | null
+  subAncestryId: string | null
+  backgroundId: string | null
+  size: $Enums.CreatureSize
+  role: string | null
+  faction: string | null
+  personality: string | null
+  motivation: string | null
+  behavior: string | null
+  tactics: string | null
+  lore: string | null
+  notes: string | null
   portraitUrl: string | null
+  tokenImageUrl: string | null
+  tokenImageFit: $Enums.SceneTokenImageFit
+  armorClass: number
+  hitPoints: number
+  maxHitPoints: number
+  temporaryHp: number
+  speed: number
+  climbSpeed: number
+  swimSpeed: number
+  flySpeed: number
+  burrowSpeed: number
   order: number
   createdAt: Date
   updatedAt: Date
@@ -252,11 +449,48 @@ export type NpcTemplateWhereInput = {
   name?: Prisma.StringFilter<"NpcTemplate"> | string
   initials?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
   description?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  ancestryId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  subAncestryId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  backgroundId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  size?: Prisma.EnumCreatureSizeFilter<"NpcTemplate"> | $Enums.CreatureSize
+  role?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  faction?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  personality?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  motivation?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  behavior?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tactics?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  lore?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  notes?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
   portraitUrl?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tokenImageUrl?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFilter<"NpcTemplate"> | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFilter<"NpcTemplate"> | number
+  hitPoints?: Prisma.IntFilter<"NpcTemplate"> | number
+  maxHitPoints?: Prisma.IntFilter<"NpcTemplate"> | number
+  temporaryHp?: Prisma.IntFilter<"NpcTemplate"> | number
+  speed?: Prisma.IntFilter<"NpcTemplate"> | number
+  climbSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  swimSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  flySpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  burrowSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
   order?: Prisma.IntFilter<"NpcTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"NpcTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NpcTemplate"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
+  ancestry?: Prisma.XOR<Prisma.AncestryNullableScalarRelationFilter, Prisma.AncestryWhereInput> | null
+  subAncestry?: Prisma.XOR<Prisma.SubAncestryNullableScalarRelationFilter, Prisma.SubAncestryWhereInput> | null
+  background?: Prisma.XOR<Prisma.BackgroundNullableScalarRelationFilter, Prisma.BackgroundWhereInput> | null
+  classes?: Prisma.NpcTemplateClassListRelationFilter
+  stats?: Prisma.NpcTemplateStatListRelationFilter
+  skills?: Prisma.NpcTemplateSkillListRelationFilter
+  defenses?: Prisma.NpcTemplateDefenseListRelationFilter
+  senses?: Prisma.NpcTemplateSenseListRelationFilter
+  languages?: Prisma.NpcTemplateLanguageListRelationFilter
+  traits?: Prisma.NpcTemplateTraitListRelationFilter
+  actions?: Prisma.NpcTemplateActionListRelationFilter
+  attacks?: Prisma.NpcTemplateAttackListRelationFilter
+  multiattacks?: Prisma.NpcTemplateMultiattackListRelationFilter
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityListRelationFilter
 }
 
 export type NpcTemplateOrderByWithRelationInput = {
@@ -266,11 +500,48 @@ export type NpcTemplateOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  ancestryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  subAncestryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  backgroundId?: Prisma.SortOrderInput | Prisma.SortOrder
+  size?: Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  faction?: Prisma.SortOrderInput | Prisma.SortOrder
+  personality?: Prisma.SortOrderInput | Prisma.SortOrder
+  motivation?: Prisma.SortOrderInput | Prisma.SortOrder
+  behavior?: Prisma.SortOrderInput | Prisma.SortOrder
+  tactics?: Prisma.SortOrderInput | Prisma.SortOrder
+  lore?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   portraitUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
+  ancestry?: Prisma.AncestryOrderByWithRelationInput
+  subAncestry?: Prisma.SubAncestryOrderByWithRelationInput
+  background?: Prisma.BackgroundOrderByWithRelationInput
+  classes?: Prisma.NpcTemplateClassOrderByRelationAggregateInput
+  stats?: Prisma.NpcTemplateStatOrderByRelationAggregateInput
+  skills?: Prisma.NpcTemplateSkillOrderByRelationAggregateInput
+  defenses?: Prisma.NpcTemplateDefenseOrderByRelationAggregateInput
+  senses?: Prisma.NpcTemplateSenseOrderByRelationAggregateInput
+  languages?: Prisma.NpcTemplateLanguageOrderByRelationAggregateInput
+  traits?: Prisma.NpcTemplateTraitOrderByRelationAggregateInput
+  actions?: Prisma.NpcTemplateActionOrderByRelationAggregateInput
+  attacks?: Prisma.NpcTemplateAttackOrderByRelationAggregateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackOrderByRelationAggregateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityOrderByRelationAggregateInput
 }
 
 export type NpcTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -285,11 +556,48 @@ export type NpcTemplateWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"NpcTemplate"> | string
   initials?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
   description?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  ancestryId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  subAncestryId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  backgroundId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  size?: Prisma.EnumCreatureSizeFilter<"NpcTemplate"> | $Enums.CreatureSize
+  role?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  faction?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  personality?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  motivation?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  behavior?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tactics?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  lore?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  notes?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
   portraitUrl?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tokenImageUrl?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFilter<"NpcTemplate"> | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFilter<"NpcTemplate"> | number
+  hitPoints?: Prisma.IntFilter<"NpcTemplate"> | number
+  maxHitPoints?: Prisma.IntFilter<"NpcTemplate"> | number
+  temporaryHp?: Prisma.IntFilter<"NpcTemplate"> | number
+  speed?: Prisma.IntFilter<"NpcTemplate"> | number
+  climbSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  swimSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  flySpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  burrowSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
   order?: Prisma.IntFilter<"NpcTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"NpcTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NpcTemplate"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
+  ancestry?: Prisma.XOR<Prisma.AncestryNullableScalarRelationFilter, Prisma.AncestryWhereInput> | null
+  subAncestry?: Prisma.XOR<Prisma.SubAncestryNullableScalarRelationFilter, Prisma.SubAncestryWhereInput> | null
+  background?: Prisma.XOR<Prisma.BackgroundNullableScalarRelationFilter, Prisma.BackgroundWhereInput> | null
+  classes?: Prisma.NpcTemplateClassListRelationFilter
+  stats?: Prisma.NpcTemplateStatListRelationFilter
+  skills?: Prisma.NpcTemplateSkillListRelationFilter
+  defenses?: Prisma.NpcTemplateDefenseListRelationFilter
+  senses?: Prisma.NpcTemplateSenseListRelationFilter
+  languages?: Prisma.NpcTemplateLanguageListRelationFilter
+  traits?: Prisma.NpcTemplateTraitListRelationFilter
+  actions?: Prisma.NpcTemplateActionListRelationFilter
+  attacks?: Prisma.NpcTemplateAttackListRelationFilter
+  multiattacks?: Prisma.NpcTemplateMultiattackListRelationFilter
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityListRelationFilter
 }, "id" | "systemId_key" | "systemId_name">
 
 export type NpcTemplateOrderByWithAggregationInput = {
@@ -299,7 +607,30 @@ export type NpcTemplateOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  ancestryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  subAncestryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  backgroundId?: Prisma.SortOrderInput | Prisma.SortOrder
+  size?: Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  faction?: Prisma.SortOrderInput | Prisma.SortOrder
+  personality?: Prisma.SortOrderInput | Prisma.SortOrder
+  motivation?: Prisma.SortOrderInput | Prisma.SortOrder
+  behavior?: Prisma.SortOrderInput | Prisma.SortOrder
+  tactics?: Prisma.SortOrderInput | Prisma.SortOrder
+  lore?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   portraitUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -320,7 +651,30 @@ export type NpcTemplateScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"NpcTemplate"> | string
   initials?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  ancestryId?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  subAncestryId?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  backgroundId?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  size?: Prisma.EnumCreatureSizeWithAggregatesFilter<"NpcTemplate"> | $Enums.CreatureSize
+  role?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  faction?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  personality?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  motivation?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  behavior?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  tactics?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  lore?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  notes?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
   portraitUrl?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  tokenImageUrl?: Prisma.StringNullableWithAggregatesFilter<"NpcTemplate"> | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitWithAggregatesFilter<"NpcTemplate"> | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
+  hitPoints?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
+  maxHitPoints?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
+  temporaryHp?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
+  speed?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
+  climbSpeed?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
+  swimSpeed?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
+  flySpeed?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
+  burrowSpeed?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
   order?: Prisma.IntWithAggregatesFilter<"NpcTemplate"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NpcTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NpcTemplate"> | Date | string
@@ -332,11 +686,45 @@ export type NpcTemplateCreateInput = {
   name: string
   initials?: string | null
   description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
 }
 
 export type NpcTemplateUncheckedCreateInput = {
@@ -346,10 +734,44 @@ export type NpcTemplateUncheckedCreateInput = {
   name: string
   initials?: string | null
   description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
 }
 
 export type NpcTemplateUpdateInput = {
@@ -358,11 +780,45 @@ export type NpcTemplateUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
 }
 
 export type NpcTemplateUncheckedUpdateInput = {
@@ -372,10 +828,44 @@ export type NpcTemplateUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
 }
 
 export type NpcTemplateCreateManyInput = {
@@ -385,7 +875,30 @@ export type NpcTemplateCreateManyInput = {
   name: string
   initials?: string | null
   description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -397,7 +910,27 @@ export type NpcTemplateUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -410,7 +943,30 @@ export type NpcTemplateUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -443,13 +999,45 @@ export type NpcTemplateCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  ancestryId?: Prisma.SortOrder
+  subAncestryId?: Prisma.SortOrder
+  backgroundId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  faction?: Prisma.SortOrder
+  personality?: Prisma.SortOrder
+  motivation?: Prisma.SortOrder
+  behavior?: Prisma.SortOrder
+  tactics?: Prisma.SortOrder
+  lore?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   portraitUrl?: Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type NpcTemplateAvgOrderByAggregateInput = {
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -460,7 +1048,30 @@ export type NpcTemplateMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  ancestryId?: Prisma.SortOrder
+  subAncestryId?: Prisma.SortOrder
+  backgroundId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  faction?: Prisma.SortOrder
+  personality?: Prisma.SortOrder
+  motivation?: Prisma.SortOrder
+  behavior?: Prisma.SortOrder
+  tactics?: Prisma.SortOrder
+  lore?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   portraitUrl?: Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -473,14 +1084,51 @@ export type NpcTemplateMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  ancestryId?: Prisma.SortOrder
+  subAncestryId?: Prisma.SortOrder
+  backgroundId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  faction?: Prisma.SortOrder
+  personality?: Prisma.SortOrder
+  motivation?: Prisma.SortOrder
+  behavior?: Prisma.SortOrder
+  tactics?: Prisma.SortOrder
+  lore?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   portraitUrl?: Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type NpcTemplateSumOrderByAggregateInput = {
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
   order?: Prisma.SortOrder
+}
+
+export type NpcTemplateScalarRelationFilter = {
+  is?: Prisma.NpcTemplateWhereInput
+  isNot?: Prisma.NpcTemplateWhereInput
 }
 
 export type NpcTemplateCreateNestedManyWithoutSystemInput = {
@@ -525,16 +1173,338 @@ export type NpcTemplateUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.NpcTemplateScalarWhereInput | Prisma.NpcTemplateScalarWhereInput[]
 }
 
+export type EnumCreatureSizeFieldUpdateOperationsInput = {
+  set?: $Enums.CreatureSize
+}
+
+export type EnumSceneTokenImageFitFieldUpdateOperationsInput = {
+  set?: $Enums.SceneTokenImageFit
+}
+
+export type NpcTemplateCreateNestedOneWithoutClassesInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutClassesInput, Prisma.NpcTemplateUncheckedCreateWithoutClassesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutClassesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutClassesNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutClassesInput, Prisma.NpcTemplateUncheckedCreateWithoutClassesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutClassesInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutClassesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutClassesInput, Prisma.NpcTemplateUpdateWithoutClassesInput>, Prisma.NpcTemplateUncheckedUpdateWithoutClassesInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutStatsInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutStatsInput, Prisma.NpcTemplateUncheckedCreateWithoutStatsInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutStatsInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutStatsInput, Prisma.NpcTemplateUncheckedCreateWithoutStatsInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutStatsInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutStatsInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutStatsInput, Prisma.NpcTemplateUpdateWithoutStatsInput>, Prisma.NpcTemplateUncheckedUpdateWithoutStatsInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutSkillsInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSkillsInput, Prisma.NpcTemplateUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutSkillsInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSkillsInput, Prisma.NpcTemplateUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutSkillsInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutSkillsInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutSkillsInput, Prisma.NpcTemplateUpdateWithoutSkillsInput>, Prisma.NpcTemplateUncheckedUpdateWithoutSkillsInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutDefensesInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutDefensesInput, Prisma.NpcTemplateUncheckedCreateWithoutDefensesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutDefensesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutDefensesNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutDefensesInput, Prisma.NpcTemplateUncheckedCreateWithoutDefensesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutDefensesInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutDefensesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutDefensesInput, Prisma.NpcTemplateUpdateWithoutDefensesInput>, Prisma.NpcTemplateUncheckedUpdateWithoutDefensesInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutSensesInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSensesInput, Prisma.NpcTemplateUncheckedCreateWithoutSensesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutSensesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutSensesNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSensesInput, Prisma.NpcTemplateUncheckedCreateWithoutSensesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutSensesInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutSensesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutSensesInput, Prisma.NpcTemplateUpdateWithoutSensesInput>, Prisma.NpcTemplateUncheckedUpdateWithoutSensesInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutLanguagesInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutLanguagesInput, Prisma.NpcTemplateUncheckedCreateWithoutLanguagesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutLanguagesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutLanguagesNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutLanguagesInput, Prisma.NpcTemplateUncheckedCreateWithoutLanguagesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutLanguagesInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutLanguagesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutLanguagesInput, Prisma.NpcTemplateUpdateWithoutLanguagesInput>, Prisma.NpcTemplateUncheckedUpdateWithoutLanguagesInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutTraitsInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutTraitsInput, Prisma.NpcTemplateUncheckedCreateWithoutTraitsInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutTraitsInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutTraitsNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutTraitsInput, Prisma.NpcTemplateUncheckedCreateWithoutTraitsInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutTraitsInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutTraitsInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutTraitsInput, Prisma.NpcTemplateUpdateWithoutTraitsInput>, Prisma.NpcTemplateUncheckedUpdateWithoutTraitsInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutActionsInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutActionsInput, Prisma.NpcTemplateUncheckedCreateWithoutActionsInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutActionsInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutActionsInput, Prisma.NpcTemplateUncheckedCreateWithoutActionsInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutActionsInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutActionsInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutActionsInput, Prisma.NpcTemplateUpdateWithoutActionsInput>, Prisma.NpcTemplateUncheckedUpdateWithoutActionsInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutAttacksInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAttacksInput, Prisma.NpcTemplateUncheckedCreateWithoutAttacksInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutAttacksInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutAttacksNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAttacksInput, Prisma.NpcTemplateUncheckedCreateWithoutAttacksInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutAttacksInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutAttacksInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutAttacksInput, Prisma.NpcTemplateUpdateWithoutAttacksInput>, Prisma.NpcTemplateUncheckedUpdateWithoutAttacksInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutMultiattacksInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutMultiattacksInput, Prisma.NpcTemplateUncheckedCreateWithoutMultiattacksInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutMultiattacksInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutMultiattacksNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutMultiattacksInput, Prisma.NpcTemplateUncheckedCreateWithoutMultiattacksInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutMultiattacksInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutMultiattacksInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutMultiattacksInput, Prisma.NpcTemplateUpdateWithoutMultiattacksInput>, Prisma.NpcTemplateUncheckedUpdateWithoutMultiattacksInput>
+}
+
+export type NpcTemplateCreateNestedOneWithoutMagicalAbilitiesInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutMagicalAbilitiesInput, Prisma.NpcTemplateUncheckedCreateWithoutMagicalAbilitiesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutMagicalAbilitiesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+}
+
+export type NpcTemplateUpdateOneRequiredWithoutMagicalAbilitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutMagicalAbilitiesInput, Prisma.NpcTemplateUncheckedCreateWithoutMagicalAbilitiesInput>
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutMagicalAbilitiesInput
+  upsert?: Prisma.NpcTemplateUpsertWithoutMagicalAbilitiesInput
+  connect?: Prisma.NpcTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpcTemplateUpdateToOneWithWhereWithoutMagicalAbilitiesInput, Prisma.NpcTemplateUpdateWithoutMagicalAbilitiesInput>, Prisma.NpcTemplateUncheckedUpdateWithoutMagicalAbilitiesInput>
+}
+
+export type NpcTemplateCreateNestedManyWithoutAncestryInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput> | Prisma.NpcTemplateCreateWithoutAncestryInput[] | Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutAncestryInput | Prisma.NpcTemplateCreateOrConnectWithoutAncestryInput[]
+  createMany?: Prisma.NpcTemplateCreateManyAncestryInputEnvelope
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+}
+
+export type NpcTemplateUncheckedCreateNestedManyWithoutAncestryInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput> | Prisma.NpcTemplateCreateWithoutAncestryInput[] | Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutAncestryInput | Prisma.NpcTemplateCreateOrConnectWithoutAncestryInput[]
+  createMany?: Prisma.NpcTemplateCreateManyAncestryInputEnvelope
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+}
+
+export type NpcTemplateUpdateManyWithoutAncestryNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput> | Prisma.NpcTemplateCreateWithoutAncestryInput[] | Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutAncestryInput | Prisma.NpcTemplateCreateOrConnectWithoutAncestryInput[]
+  upsert?: Prisma.NpcTemplateUpsertWithWhereUniqueWithoutAncestryInput | Prisma.NpcTemplateUpsertWithWhereUniqueWithoutAncestryInput[]
+  createMany?: Prisma.NpcTemplateCreateManyAncestryInputEnvelope
+  set?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  disconnect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  delete?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  update?: Prisma.NpcTemplateUpdateWithWhereUniqueWithoutAncestryInput | Prisma.NpcTemplateUpdateWithWhereUniqueWithoutAncestryInput[]
+  updateMany?: Prisma.NpcTemplateUpdateManyWithWhereWithoutAncestryInput | Prisma.NpcTemplateUpdateManyWithWhereWithoutAncestryInput[]
+  deleteMany?: Prisma.NpcTemplateScalarWhereInput | Prisma.NpcTemplateScalarWhereInput[]
+}
+
+export type NpcTemplateUncheckedUpdateManyWithoutAncestryNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput> | Prisma.NpcTemplateCreateWithoutAncestryInput[] | Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutAncestryInput | Prisma.NpcTemplateCreateOrConnectWithoutAncestryInput[]
+  upsert?: Prisma.NpcTemplateUpsertWithWhereUniqueWithoutAncestryInput | Prisma.NpcTemplateUpsertWithWhereUniqueWithoutAncestryInput[]
+  createMany?: Prisma.NpcTemplateCreateManyAncestryInputEnvelope
+  set?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  disconnect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  delete?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  update?: Prisma.NpcTemplateUpdateWithWhereUniqueWithoutAncestryInput | Prisma.NpcTemplateUpdateWithWhereUniqueWithoutAncestryInput[]
+  updateMany?: Prisma.NpcTemplateUpdateManyWithWhereWithoutAncestryInput | Prisma.NpcTemplateUpdateManyWithWhereWithoutAncestryInput[]
+  deleteMany?: Prisma.NpcTemplateScalarWhereInput | Prisma.NpcTemplateScalarWhereInput[]
+}
+
+export type NpcTemplateCreateNestedManyWithoutSubAncestryInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSubAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput> | Prisma.NpcTemplateCreateWithoutSubAncestryInput[] | Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutSubAncestryInput | Prisma.NpcTemplateCreateOrConnectWithoutSubAncestryInput[]
+  createMany?: Prisma.NpcTemplateCreateManySubAncestryInputEnvelope
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+}
+
+export type NpcTemplateUncheckedCreateNestedManyWithoutSubAncestryInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSubAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput> | Prisma.NpcTemplateCreateWithoutSubAncestryInput[] | Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutSubAncestryInput | Prisma.NpcTemplateCreateOrConnectWithoutSubAncestryInput[]
+  createMany?: Prisma.NpcTemplateCreateManySubAncestryInputEnvelope
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+}
+
+export type NpcTemplateUpdateManyWithoutSubAncestryNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSubAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput> | Prisma.NpcTemplateCreateWithoutSubAncestryInput[] | Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutSubAncestryInput | Prisma.NpcTemplateCreateOrConnectWithoutSubAncestryInput[]
+  upsert?: Prisma.NpcTemplateUpsertWithWhereUniqueWithoutSubAncestryInput | Prisma.NpcTemplateUpsertWithWhereUniqueWithoutSubAncestryInput[]
+  createMany?: Prisma.NpcTemplateCreateManySubAncestryInputEnvelope
+  set?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  disconnect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  delete?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  update?: Prisma.NpcTemplateUpdateWithWhereUniqueWithoutSubAncestryInput | Prisma.NpcTemplateUpdateWithWhereUniqueWithoutSubAncestryInput[]
+  updateMany?: Prisma.NpcTemplateUpdateManyWithWhereWithoutSubAncestryInput | Prisma.NpcTemplateUpdateManyWithWhereWithoutSubAncestryInput[]
+  deleteMany?: Prisma.NpcTemplateScalarWhereInput | Prisma.NpcTemplateScalarWhereInput[]
+}
+
+export type NpcTemplateUncheckedUpdateManyWithoutSubAncestryNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSubAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput> | Prisma.NpcTemplateCreateWithoutSubAncestryInput[] | Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutSubAncestryInput | Prisma.NpcTemplateCreateOrConnectWithoutSubAncestryInput[]
+  upsert?: Prisma.NpcTemplateUpsertWithWhereUniqueWithoutSubAncestryInput | Prisma.NpcTemplateUpsertWithWhereUniqueWithoutSubAncestryInput[]
+  createMany?: Prisma.NpcTemplateCreateManySubAncestryInputEnvelope
+  set?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  disconnect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  delete?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  update?: Prisma.NpcTemplateUpdateWithWhereUniqueWithoutSubAncestryInput | Prisma.NpcTemplateUpdateWithWhereUniqueWithoutSubAncestryInput[]
+  updateMany?: Prisma.NpcTemplateUpdateManyWithWhereWithoutSubAncestryInput | Prisma.NpcTemplateUpdateManyWithWhereWithoutSubAncestryInput[]
+  deleteMany?: Prisma.NpcTemplateScalarWhereInput | Prisma.NpcTemplateScalarWhereInput[]
+}
+
+export type NpcTemplateCreateNestedManyWithoutBackgroundInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutBackgroundInput, Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput> | Prisma.NpcTemplateCreateWithoutBackgroundInput[] | Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutBackgroundInput | Prisma.NpcTemplateCreateOrConnectWithoutBackgroundInput[]
+  createMany?: Prisma.NpcTemplateCreateManyBackgroundInputEnvelope
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+}
+
+export type NpcTemplateUncheckedCreateNestedManyWithoutBackgroundInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutBackgroundInput, Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput> | Prisma.NpcTemplateCreateWithoutBackgroundInput[] | Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutBackgroundInput | Prisma.NpcTemplateCreateOrConnectWithoutBackgroundInput[]
+  createMany?: Prisma.NpcTemplateCreateManyBackgroundInputEnvelope
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+}
+
+export type NpcTemplateUpdateManyWithoutBackgroundNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutBackgroundInput, Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput> | Prisma.NpcTemplateCreateWithoutBackgroundInput[] | Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutBackgroundInput | Prisma.NpcTemplateCreateOrConnectWithoutBackgroundInput[]
+  upsert?: Prisma.NpcTemplateUpsertWithWhereUniqueWithoutBackgroundInput | Prisma.NpcTemplateUpsertWithWhereUniqueWithoutBackgroundInput[]
+  createMany?: Prisma.NpcTemplateCreateManyBackgroundInputEnvelope
+  set?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  disconnect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  delete?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  update?: Prisma.NpcTemplateUpdateWithWhereUniqueWithoutBackgroundInput | Prisma.NpcTemplateUpdateWithWhereUniqueWithoutBackgroundInput[]
+  updateMany?: Prisma.NpcTemplateUpdateManyWithWhereWithoutBackgroundInput | Prisma.NpcTemplateUpdateManyWithWhereWithoutBackgroundInput[]
+  deleteMany?: Prisma.NpcTemplateScalarWhereInput | Prisma.NpcTemplateScalarWhereInput[]
+}
+
+export type NpcTemplateUncheckedUpdateManyWithoutBackgroundNestedInput = {
+  create?: Prisma.XOR<Prisma.NpcTemplateCreateWithoutBackgroundInput, Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput> | Prisma.NpcTemplateCreateWithoutBackgroundInput[] | Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput[]
+  connectOrCreate?: Prisma.NpcTemplateCreateOrConnectWithoutBackgroundInput | Prisma.NpcTemplateCreateOrConnectWithoutBackgroundInput[]
+  upsert?: Prisma.NpcTemplateUpsertWithWhereUniqueWithoutBackgroundInput | Prisma.NpcTemplateUpsertWithWhereUniqueWithoutBackgroundInput[]
+  createMany?: Prisma.NpcTemplateCreateManyBackgroundInputEnvelope
+  set?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  disconnect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  delete?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  connect?: Prisma.NpcTemplateWhereUniqueInput | Prisma.NpcTemplateWhereUniqueInput[]
+  update?: Prisma.NpcTemplateUpdateWithWhereUniqueWithoutBackgroundInput | Prisma.NpcTemplateUpdateWithWhereUniqueWithoutBackgroundInput[]
+  updateMany?: Prisma.NpcTemplateUpdateManyWithWhereWithoutBackgroundInput | Prisma.NpcTemplateUpdateManyWithWhereWithoutBackgroundInput[]
+  deleteMany?: Prisma.NpcTemplateScalarWhereInput | Prisma.NpcTemplateScalarWhereInput[]
+}
+
 export type NpcTemplateCreateWithoutSystemInput = {
   id?: string
   key: string
   name: string
   initials?: string | null
   description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
 }
 
 export type NpcTemplateUncheckedCreateWithoutSystemInput = {
@@ -543,10 +1513,44 @@ export type NpcTemplateUncheckedCreateWithoutSystemInput = {
   name: string
   initials?: string | null
   description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
 }
 
 export type NpcTemplateCreateOrConnectWithoutSystemInput = {
@@ -585,10 +1589,2587 @@ export type NpcTemplateScalarWhereInput = {
   name?: Prisma.StringFilter<"NpcTemplate"> | string
   initials?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
   description?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  ancestryId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  subAncestryId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  backgroundId?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  size?: Prisma.EnumCreatureSizeFilter<"NpcTemplate"> | $Enums.CreatureSize
+  role?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  faction?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  personality?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  motivation?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  behavior?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tactics?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  lore?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  notes?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
   portraitUrl?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tokenImageUrl?: Prisma.StringNullableFilter<"NpcTemplate"> | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFilter<"NpcTemplate"> | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFilter<"NpcTemplate"> | number
+  hitPoints?: Prisma.IntFilter<"NpcTemplate"> | number
+  maxHitPoints?: Prisma.IntFilter<"NpcTemplate"> | number
+  temporaryHp?: Prisma.IntFilter<"NpcTemplate"> | number
+  speed?: Prisma.IntFilter<"NpcTemplate"> | number
+  climbSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  swimSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  flySpeed?: Prisma.IntFilter<"NpcTemplate"> | number
+  burrowSpeed?: Prisma.IntFilter<"NpcTemplate"> | number
   order?: Prisma.IntFilter<"NpcTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"NpcTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NpcTemplate"> | Date | string
+}
+
+export type NpcTemplateCreateWithoutClassesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutClassesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutClassesInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutClassesInput, Prisma.NpcTemplateUncheckedCreateWithoutClassesInput>
+}
+
+export type NpcTemplateUpsertWithoutClassesInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutClassesInput, Prisma.NpcTemplateUncheckedUpdateWithoutClassesInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutClassesInput, Prisma.NpcTemplateUncheckedCreateWithoutClassesInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutClassesInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutClassesInput, Prisma.NpcTemplateUncheckedUpdateWithoutClassesInput>
+}
+
+export type NpcTemplateUpdateWithoutClassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutClassesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutStatsInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutStatsInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutStatsInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutStatsInput, Prisma.NpcTemplateUncheckedCreateWithoutStatsInput>
+}
+
+export type NpcTemplateUpsertWithoutStatsInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutStatsInput, Prisma.NpcTemplateUncheckedUpdateWithoutStatsInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutStatsInput, Prisma.NpcTemplateUncheckedCreateWithoutStatsInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutStatsInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutStatsInput, Prisma.NpcTemplateUncheckedUpdateWithoutStatsInput>
+}
+
+export type NpcTemplateUpdateWithoutStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutSkillsInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutSkillsInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutSkillsInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSkillsInput, Prisma.NpcTemplateUncheckedCreateWithoutSkillsInput>
+}
+
+export type NpcTemplateUpsertWithoutSkillsInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutSkillsInput, Prisma.NpcTemplateUncheckedUpdateWithoutSkillsInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSkillsInput, Prisma.NpcTemplateUncheckedCreateWithoutSkillsInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutSkillsInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutSkillsInput, Prisma.NpcTemplateUncheckedUpdateWithoutSkillsInput>
+}
+
+export type NpcTemplateUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutDefensesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutDefensesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutDefensesInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutDefensesInput, Prisma.NpcTemplateUncheckedCreateWithoutDefensesInput>
+}
+
+export type NpcTemplateUpsertWithoutDefensesInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutDefensesInput, Prisma.NpcTemplateUncheckedUpdateWithoutDefensesInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutDefensesInput, Prisma.NpcTemplateUncheckedCreateWithoutDefensesInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutDefensesInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutDefensesInput, Prisma.NpcTemplateUncheckedUpdateWithoutDefensesInput>
+}
+
+export type NpcTemplateUpdateWithoutDefensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutDefensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutSensesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutSensesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutSensesInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSensesInput, Prisma.NpcTemplateUncheckedCreateWithoutSensesInput>
+}
+
+export type NpcTemplateUpsertWithoutSensesInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutSensesInput, Prisma.NpcTemplateUncheckedUpdateWithoutSensesInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSensesInput, Prisma.NpcTemplateUncheckedCreateWithoutSensesInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutSensesInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutSensesInput, Prisma.NpcTemplateUncheckedUpdateWithoutSensesInput>
+}
+
+export type NpcTemplateUpdateWithoutSensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutSensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutLanguagesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutLanguagesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutLanguagesInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutLanguagesInput, Prisma.NpcTemplateUncheckedCreateWithoutLanguagesInput>
+}
+
+export type NpcTemplateUpsertWithoutLanguagesInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutLanguagesInput, Prisma.NpcTemplateUncheckedUpdateWithoutLanguagesInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutLanguagesInput, Prisma.NpcTemplateUncheckedCreateWithoutLanguagesInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutLanguagesInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutLanguagesInput, Prisma.NpcTemplateUncheckedUpdateWithoutLanguagesInput>
+}
+
+export type NpcTemplateUpdateWithoutLanguagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutLanguagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutTraitsInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutTraitsInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutTraitsInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutTraitsInput, Prisma.NpcTemplateUncheckedCreateWithoutTraitsInput>
+}
+
+export type NpcTemplateUpsertWithoutTraitsInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutTraitsInput, Prisma.NpcTemplateUncheckedUpdateWithoutTraitsInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutTraitsInput, Prisma.NpcTemplateUncheckedCreateWithoutTraitsInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutTraitsInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutTraitsInput, Prisma.NpcTemplateUncheckedUpdateWithoutTraitsInput>
+}
+
+export type NpcTemplateUpdateWithoutTraitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutTraitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutActionsInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutActionsInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutActionsInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutActionsInput, Prisma.NpcTemplateUncheckedCreateWithoutActionsInput>
+}
+
+export type NpcTemplateUpsertWithoutActionsInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutActionsInput, Prisma.NpcTemplateUncheckedUpdateWithoutActionsInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutActionsInput, Prisma.NpcTemplateUncheckedCreateWithoutActionsInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutActionsInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutActionsInput, Prisma.NpcTemplateUncheckedUpdateWithoutActionsInput>
+}
+
+export type NpcTemplateUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutAttacksInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutAttacksInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutAttacksInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAttacksInput, Prisma.NpcTemplateUncheckedCreateWithoutAttacksInput>
+}
+
+export type NpcTemplateUpsertWithoutAttacksInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutAttacksInput, Prisma.NpcTemplateUncheckedUpdateWithoutAttacksInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAttacksInput, Prisma.NpcTemplateUncheckedCreateWithoutAttacksInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutAttacksInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutAttacksInput, Prisma.NpcTemplateUncheckedUpdateWithoutAttacksInput>
+}
+
+export type NpcTemplateUpdateWithoutAttacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutAttacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutMultiattacksInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutMultiattacksInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutMultiattacksInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutMultiattacksInput, Prisma.NpcTemplateUncheckedCreateWithoutMultiattacksInput>
+}
+
+export type NpcTemplateUpsertWithoutMultiattacksInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutMultiattacksInput, Prisma.NpcTemplateUncheckedUpdateWithoutMultiattacksInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutMultiattacksInput, Prisma.NpcTemplateUncheckedCreateWithoutMultiattacksInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutMultiattacksInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutMultiattacksInput, Prisma.NpcTemplateUncheckedUpdateWithoutMultiattacksInput>
+}
+
+export type NpcTemplateUpdateWithoutMultiattacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutMultiattacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutMagicalAbilitiesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutMagicalAbilitiesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutMagicalAbilitiesInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutMagicalAbilitiesInput, Prisma.NpcTemplateUncheckedCreateWithoutMagicalAbilitiesInput>
+}
+
+export type NpcTemplateUpsertWithoutMagicalAbilitiesInput = {
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutMagicalAbilitiesInput, Prisma.NpcTemplateUncheckedUpdateWithoutMagicalAbilitiesInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutMagicalAbilitiesInput, Prisma.NpcTemplateUncheckedCreateWithoutMagicalAbilitiesInput>
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+export type NpcTemplateUpdateToOneWithWhereWithoutMagicalAbilitiesInput = {
+  where?: Prisma.NpcTemplateWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutMagicalAbilitiesInput, Prisma.NpcTemplateUncheckedUpdateWithoutMagicalAbilitiesInput>
+}
+
+export type NpcTemplateUpdateWithoutMagicalAbilitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutMagicalAbilitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateCreateWithoutAncestryInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutAncestryInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutAncestryInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput>
+}
+
+export type NpcTemplateCreateManyAncestryInputEnvelope = {
+  data: Prisma.NpcTemplateCreateManyAncestryInput | Prisma.NpcTemplateCreateManyAncestryInput[]
+  skipDuplicates?: boolean
+}
+
+export type NpcTemplateUpsertWithWhereUniqueWithoutAncestryInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutAncestryInput, Prisma.NpcTemplateUncheckedUpdateWithoutAncestryInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutAncestryInput>
+}
+
+export type NpcTemplateUpdateWithWhereUniqueWithoutAncestryInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutAncestryInput, Prisma.NpcTemplateUncheckedUpdateWithoutAncestryInput>
+}
+
+export type NpcTemplateUpdateManyWithWhereWithoutAncestryInput = {
+  where: Prisma.NpcTemplateScalarWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateManyMutationInput, Prisma.NpcTemplateUncheckedUpdateManyWithoutAncestryInput>
+}
+
+export type NpcTemplateCreateWithoutSubAncestryInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  background?: Prisma.BackgroundCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutSubAncestryInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutSubAncestryInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSubAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput>
+}
+
+export type NpcTemplateCreateManySubAncestryInputEnvelope = {
+  data: Prisma.NpcTemplateCreateManySubAncestryInput | Prisma.NpcTemplateCreateManySubAncestryInput[]
+  skipDuplicates?: boolean
+}
+
+export type NpcTemplateUpsertWithWhereUniqueWithoutSubAncestryInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutSubAncestryInput, Prisma.NpcTemplateUncheckedUpdateWithoutSubAncestryInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutSubAncestryInput, Prisma.NpcTemplateUncheckedCreateWithoutSubAncestryInput>
+}
+
+export type NpcTemplateUpdateWithWhereUniqueWithoutSubAncestryInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutSubAncestryInput, Prisma.NpcTemplateUncheckedUpdateWithoutSubAncestryInput>
+}
+
+export type NpcTemplateUpdateManyWithWhereWithoutSubAncestryInput = {
+  where: Prisma.NpcTemplateScalarWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateManyMutationInput, Prisma.NpcTemplateUncheckedUpdateManyWithoutSubAncestryInput>
+}
+
+export type NpcTemplateCreateWithoutBackgroundInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutNpcTemplatesInput
+  ancestry?: Prisma.AncestryCreateNestedOneWithoutNpcTemplatesInput
+  subAncestry?: Prisma.SubAncestryCreateNestedOneWithoutNpcTemplatesInput
+  classes?: Prisma.NpcTemplateClassCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateUncheckedCreateWithoutBackgroundInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedCreateNestedManyWithoutNpcTemplateInput
+  stats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutNpcTemplateInput
+  skills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutNpcTemplateInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  senses?: Prisma.NpcTemplateSenseUncheckedCreateNestedManyWithoutNpcTemplateInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutNpcTemplateInput
+  traits?: Prisma.NpcTemplateTraitUncheckedCreateNestedManyWithoutNpcTemplateInput
+  actions?: Prisma.NpcTemplateActionUncheckedCreateNestedManyWithoutNpcTemplateInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedCreateNestedManyWithoutNpcTemplateInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedCreateNestedManyWithoutNpcTemplateInput
+}
+
+export type NpcTemplateCreateOrConnectWithoutBackgroundInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutBackgroundInput, Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput>
+}
+
+export type NpcTemplateCreateManyBackgroundInputEnvelope = {
+  data: Prisma.NpcTemplateCreateManyBackgroundInput | Prisma.NpcTemplateCreateManyBackgroundInput[]
+  skipDuplicates?: boolean
+}
+
+export type NpcTemplateUpsertWithWhereUniqueWithoutBackgroundInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  update: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutBackgroundInput, Prisma.NpcTemplateUncheckedUpdateWithoutBackgroundInput>
+  create: Prisma.XOR<Prisma.NpcTemplateCreateWithoutBackgroundInput, Prisma.NpcTemplateUncheckedCreateWithoutBackgroundInput>
+}
+
+export type NpcTemplateUpdateWithWhereUniqueWithoutBackgroundInput = {
+  where: Prisma.NpcTemplateWhereUniqueInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateWithoutBackgroundInput, Prisma.NpcTemplateUncheckedUpdateWithoutBackgroundInput>
+}
+
+export type NpcTemplateUpdateManyWithWhereWithoutBackgroundInput = {
+  where: Prisma.NpcTemplateScalarWhereInput
+  data: Prisma.XOR<Prisma.NpcTemplateUpdateManyMutationInput, Prisma.NpcTemplateUncheckedUpdateManyWithoutBackgroundInput>
 }
 
 export type NpcTemplateCreateManySystemInput = {
@@ -597,7 +4178,30 @@ export type NpcTemplateCreateManySystemInput = {
   name: string
   initials?: string | null
   description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -609,10 +4213,44 @@ export type NpcTemplateUpdateWithoutSystemInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
 }
 
 export type NpcTemplateUncheckedUpdateWithoutSystemInput = {
@@ -621,10 +4259,44 @@ export type NpcTemplateUncheckedUpdateWithoutSystemInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
 }
 
 export type NpcTemplateUncheckedUpdateManyWithoutSystemInput = {
@@ -633,12 +4305,640 @@ export type NpcTemplateUncheckedUpdateManyWithoutSystemInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type NpcTemplateCreateManyAncestryInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  subAncestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type NpcTemplateUpdateWithoutAncestryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutAncestryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateManyWithoutAncestryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type NpcTemplateCreateManySubAncestryInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  backgroundId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type NpcTemplateUpdateWithoutSubAncestryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  background?: Prisma.BackgroundUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutSubAncestryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateManyWithoutSubAncestryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type NpcTemplateCreateManyBackgroundInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  ancestryId?: string | null
+  subAncestryId?: string | null
+  size?: $Enums.CreatureSize
+  role?: string | null
+  faction?: string | null
+  personality?: string | null
+  motivation?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type NpcTemplateUpdateWithoutBackgroundInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutNpcTemplatesNestedInput
+  ancestry?: Prisma.AncestryUpdateOneWithoutNpcTemplatesNestedInput
+  subAncestry?: Prisma.SubAncestryUpdateOneWithoutNpcTemplatesNestedInput
+  classes?: Prisma.NpcTemplateClassUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateWithoutBackgroundInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  classes?: Prisma.NpcTemplateClassUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  stats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  skills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  defenses?: Prisma.NpcTemplateDefenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  senses?: Prisma.NpcTemplateSenseUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  languages?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  traits?: Prisma.NpcTemplateTraitUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  actions?: Prisma.NpcTemplateActionUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  attacks?: Prisma.NpcTemplateAttackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  multiattacks?: Prisma.NpcTemplateMultiattackUncheckedUpdateManyWithoutNpcTemplateNestedInput
+  magicalAbilities?: Prisma.NpcTemplateMagicalAbilityUncheckedUpdateManyWithoutNpcTemplateNestedInput
+}
+
+export type NpcTemplateUncheckedUpdateManyWithoutBackgroundInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ancestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subAncestryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motivation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type NpcTemplateCountOutputType
+ */
+
+export type NpcTemplateCountOutputType = {
+  classes: number
+  stats: number
+  skills: number
+  defenses: number
+  senses: number
+  languages: number
+  traits: number
+  actions: number
+  attacks: number
+  multiattacks: number
+  magicalAbilities: number
+}
+
+export type NpcTemplateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  classes?: boolean | NpcTemplateCountOutputTypeCountClassesArgs
+  stats?: boolean | NpcTemplateCountOutputTypeCountStatsArgs
+  skills?: boolean | NpcTemplateCountOutputTypeCountSkillsArgs
+  defenses?: boolean | NpcTemplateCountOutputTypeCountDefensesArgs
+  senses?: boolean | NpcTemplateCountOutputTypeCountSensesArgs
+  languages?: boolean | NpcTemplateCountOutputTypeCountLanguagesArgs
+  traits?: boolean | NpcTemplateCountOutputTypeCountTraitsArgs
+  actions?: boolean | NpcTemplateCountOutputTypeCountActionsArgs
+  attacks?: boolean | NpcTemplateCountOutputTypeCountAttacksArgs
+  multiattacks?: boolean | NpcTemplateCountOutputTypeCountMultiattacksArgs
+  magicalAbilities?: boolean | NpcTemplateCountOutputTypeCountMagicalAbilitiesArgs
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateCountOutputType
+   */
+  select?: Prisma.NpcTemplateCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateClassWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateStatWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateSkillWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountDefensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateDefenseWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountSensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateSenseWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountLanguagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateLanguageWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountTraitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateTraitWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateActionWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountAttacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateAttackWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountMultiattacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateMultiattackWhereInput
+}
+
+/**
+ * NpcTemplateCountOutputType without action
+ */
+export type NpcTemplateCountOutputTypeCountMagicalAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateMagicalAbilityWhereInput
+}
 
 
 export type NpcTemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -648,11 +4948,49 @@ export type NpcTemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   name?: boolean
   initials?: boolean
   description?: boolean
+  ancestryId?: boolean
+  subAncestryId?: boolean
+  backgroundId?: boolean
+  size?: boolean
+  role?: boolean
+  faction?: boolean
+  personality?: boolean
+  motivation?: boolean
+  behavior?: boolean
+  tactics?: boolean
+  lore?: boolean
+  notes?: boolean
   portraitUrl?: boolean
+  tokenImageUrl?: boolean
+  tokenImageFit?: boolean
+  armorClass?: boolean
+  hitPoints?: boolean
+  maxHitPoints?: boolean
+  temporaryHp?: boolean
+  speed?: boolean
+  climbSpeed?: boolean
+  swimSpeed?: boolean
+  flySpeed?: boolean
+  burrowSpeed?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
+  ancestry?: boolean | Prisma.NpcTemplate$ancestryArgs<ExtArgs>
+  subAncestry?: boolean | Prisma.NpcTemplate$subAncestryArgs<ExtArgs>
+  background?: boolean | Prisma.NpcTemplate$backgroundArgs<ExtArgs>
+  classes?: boolean | Prisma.NpcTemplate$classesArgs<ExtArgs>
+  stats?: boolean | Prisma.NpcTemplate$statsArgs<ExtArgs>
+  skills?: boolean | Prisma.NpcTemplate$skillsArgs<ExtArgs>
+  defenses?: boolean | Prisma.NpcTemplate$defensesArgs<ExtArgs>
+  senses?: boolean | Prisma.NpcTemplate$sensesArgs<ExtArgs>
+  languages?: boolean | Prisma.NpcTemplate$languagesArgs<ExtArgs>
+  traits?: boolean | Prisma.NpcTemplate$traitsArgs<ExtArgs>
+  actions?: boolean | Prisma.NpcTemplate$actionsArgs<ExtArgs>
+  attacks?: boolean | Prisma.NpcTemplate$attacksArgs<ExtArgs>
+  multiattacks?: boolean | Prisma.NpcTemplate$multiattacksArgs<ExtArgs>
+  magicalAbilities?: boolean | Prisma.NpcTemplate$magicalAbilitiesArgs<ExtArgs>
+  _count?: boolean | Prisma.NpcTemplateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["npcTemplate"]>
 
 export type NpcTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -662,11 +5000,37 @@ export type NpcTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   initials?: boolean
   description?: boolean
+  ancestryId?: boolean
+  subAncestryId?: boolean
+  backgroundId?: boolean
+  size?: boolean
+  role?: boolean
+  faction?: boolean
+  personality?: boolean
+  motivation?: boolean
+  behavior?: boolean
+  tactics?: boolean
+  lore?: boolean
+  notes?: boolean
   portraitUrl?: boolean
+  tokenImageUrl?: boolean
+  tokenImageFit?: boolean
+  armorClass?: boolean
+  hitPoints?: boolean
+  maxHitPoints?: boolean
+  temporaryHp?: boolean
+  speed?: boolean
+  climbSpeed?: boolean
+  swimSpeed?: boolean
+  flySpeed?: boolean
+  burrowSpeed?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
+  ancestry?: boolean | Prisma.NpcTemplate$ancestryArgs<ExtArgs>
+  subAncestry?: boolean | Prisma.NpcTemplate$subAncestryArgs<ExtArgs>
+  background?: boolean | Prisma.NpcTemplate$backgroundArgs<ExtArgs>
 }, ExtArgs["result"]["npcTemplate"]>
 
 export type NpcTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -676,11 +5040,37 @@ export type NpcTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   initials?: boolean
   description?: boolean
+  ancestryId?: boolean
+  subAncestryId?: boolean
+  backgroundId?: boolean
+  size?: boolean
+  role?: boolean
+  faction?: boolean
+  personality?: boolean
+  motivation?: boolean
+  behavior?: boolean
+  tactics?: boolean
+  lore?: boolean
+  notes?: boolean
   portraitUrl?: boolean
+  tokenImageUrl?: boolean
+  tokenImageFit?: boolean
+  armorClass?: boolean
+  hitPoints?: boolean
+  maxHitPoints?: boolean
+  temporaryHp?: boolean
+  speed?: boolean
+  climbSpeed?: boolean
+  swimSpeed?: boolean
+  flySpeed?: boolean
+  burrowSpeed?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
+  ancestry?: boolean | Prisma.NpcTemplate$ancestryArgs<ExtArgs>
+  subAncestry?: boolean | Prisma.NpcTemplate$subAncestryArgs<ExtArgs>
+  background?: boolean | Prisma.NpcTemplate$backgroundArgs<ExtArgs>
 }, ExtArgs["result"]["npcTemplate"]>
 
 export type NpcTemplateSelectScalar = {
@@ -690,27 +5080,85 @@ export type NpcTemplateSelectScalar = {
   name?: boolean
   initials?: boolean
   description?: boolean
+  ancestryId?: boolean
+  subAncestryId?: boolean
+  backgroundId?: boolean
+  size?: boolean
+  role?: boolean
+  faction?: boolean
+  personality?: boolean
+  motivation?: boolean
+  behavior?: boolean
+  tactics?: boolean
+  lore?: boolean
+  notes?: boolean
   portraitUrl?: boolean
+  tokenImageUrl?: boolean
+  tokenImageFit?: boolean
+  armorClass?: boolean
+  hitPoints?: boolean
+  maxHitPoints?: boolean
+  temporaryHp?: boolean
+  speed?: boolean
+  climbSpeed?: boolean
+  swimSpeed?: boolean
+  flySpeed?: boolean
+  burrowSpeed?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type NpcTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "key" | "name" | "initials" | "description" | "portraitUrl" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["npcTemplate"]>
+export type NpcTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "key" | "name" | "initials" | "description" | "ancestryId" | "subAncestryId" | "backgroundId" | "size" | "role" | "faction" | "personality" | "motivation" | "behavior" | "tactics" | "lore" | "notes" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "armorClass" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "speed" | "climbSpeed" | "swimSpeed" | "flySpeed" | "burrowSpeed" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["npcTemplate"]>
 export type NpcTemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
+  ancestry?: boolean | Prisma.NpcTemplate$ancestryArgs<ExtArgs>
+  subAncestry?: boolean | Prisma.NpcTemplate$subAncestryArgs<ExtArgs>
+  background?: boolean | Prisma.NpcTemplate$backgroundArgs<ExtArgs>
+  classes?: boolean | Prisma.NpcTemplate$classesArgs<ExtArgs>
+  stats?: boolean | Prisma.NpcTemplate$statsArgs<ExtArgs>
+  skills?: boolean | Prisma.NpcTemplate$skillsArgs<ExtArgs>
+  defenses?: boolean | Prisma.NpcTemplate$defensesArgs<ExtArgs>
+  senses?: boolean | Prisma.NpcTemplate$sensesArgs<ExtArgs>
+  languages?: boolean | Prisma.NpcTemplate$languagesArgs<ExtArgs>
+  traits?: boolean | Prisma.NpcTemplate$traitsArgs<ExtArgs>
+  actions?: boolean | Prisma.NpcTemplate$actionsArgs<ExtArgs>
+  attacks?: boolean | Prisma.NpcTemplate$attacksArgs<ExtArgs>
+  multiattacks?: boolean | Prisma.NpcTemplate$multiattacksArgs<ExtArgs>
+  magicalAbilities?: boolean | Prisma.NpcTemplate$magicalAbilitiesArgs<ExtArgs>
+  _count?: boolean | Prisma.NpcTemplateCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type NpcTemplateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
+  ancestry?: boolean | Prisma.NpcTemplate$ancestryArgs<ExtArgs>
+  subAncestry?: boolean | Prisma.NpcTemplate$subAncestryArgs<ExtArgs>
+  background?: boolean | Prisma.NpcTemplate$backgroundArgs<ExtArgs>
 }
 export type NpcTemplateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
+  ancestry?: boolean | Prisma.NpcTemplate$ancestryArgs<ExtArgs>
+  subAncestry?: boolean | Prisma.NpcTemplate$subAncestryArgs<ExtArgs>
+  background?: boolean | Prisma.NpcTemplate$backgroundArgs<ExtArgs>
 }
 
 export type $NpcTemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NpcTemplate"
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
+    ancestry: Prisma.$AncestryPayload<ExtArgs> | null
+    subAncestry: Prisma.$SubAncestryPayload<ExtArgs> | null
+    background: Prisma.$BackgroundPayload<ExtArgs> | null
+    classes: Prisma.$NpcTemplateClassPayload<ExtArgs>[]
+    stats: Prisma.$NpcTemplateStatPayload<ExtArgs>[]
+    skills: Prisma.$NpcTemplateSkillPayload<ExtArgs>[]
+    defenses: Prisma.$NpcTemplateDefensePayload<ExtArgs>[]
+    senses: Prisma.$NpcTemplateSensePayload<ExtArgs>[]
+    languages: Prisma.$NpcTemplateLanguagePayload<ExtArgs>[]
+    traits: Prisma.$NpcTemplateTraitPayload<ExtArgs>[]
+    actions: Prisma.$NpcTemplateActionPayload<ExtArgs>[]
+    attacks: Prisma.$NpcTemplateAttackPayload<ExtArgs>[]
+    multiattacks: Prisma.$NpcTemplateMultiattackPayload<ExtArgs>[]
+    magicalAbilities: Prisma.$NpcTemplateMagicalAbilityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -719,7 +5167,30 @@ export type $NpcTemplatePayload<ExtArgs extends runtime.Types.Extensions.Interna
     name: string
     initials: string | null
     description: string | null
+    ancestryId: string | null
+    subAncestryId: string | null
+    backgroundId: string | null
+    size: $Enums.CreatureSize
+    role: string | null
+    faction: string | null
+    personality: string | null
+    motivation: string | null
+    behavior: string | null
+    tactics: string | null
+    lore: string | null
+    notes: string | null
     portraitUrl: string | null
+    tokenImageUrl: string | null
+    tokenImageFit: $Enums.SceneTokenImageFit
+    armorClass: number
+    hitPoints: number
+    maxHitPoints: number
+    temporaryHp: number
+    speed: number
+    climbSpeed: number
+    swimSpeed: number
+    flySpeed: number
+    burrowSpeed: number
     order: number
     createdAt: Date
     updatedAt: Date
@@ -1118,6 +5589,20 @@ readonly fields: NpcTemplateFieldRefs;
 export interface Prisma__NpcTemplateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ancestry<T extends Prisma.NpcTemplate$ancestryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$ancestryArgs<ExtArgs>>): Prisma.Prisma__AncestryClient<runtime.Types.Result.GetResult<Prisma.$AncestryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  subAncestry<T extends Prisma.NpcTemplate$subAncestryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$subAncestryArgs<ExtArgs>>): Prisma.Prisma__SubAncestryClient<runtime.Types.Result.GetResult<Prisma.$SubAncestryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  background<T extends Prisma.NpcTemplate$backgroundArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$backgroundArgs<ExtArgs>>): Prisma.Prisma__BackgroundClient<runtime.Types.Result.GetResult<Prisma.$BackgroundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  classes<T extends Prisma.NpcTemplate$classesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$classesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stats<T extends Prisma.NpcTemplate$statsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$statsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  skills<T extends Prisma.NpcTemplate$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  defenses<T extends Prisma.NpcTemplate$defensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$defensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateDefensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  senses<T extends Prisma.NpcTemplate$sensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$sensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateSensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  languages<T extends Prisma.NpcTemplate$languagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$languagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  traits<T extends Prisma.NpcTemplate$traitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$traitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateTraitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  actions<T extends Prisma.NpcTemplate$actionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attacks<T extends Prisma.NpcTemplate$attacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$attacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateAttackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  multiattacks<T extends Prisma.NpcTemplate$multiattacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$multiattacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateMultiattackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  magicalAbilities<T extends Prisma.NpcTemplate$magicalAbilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpcTemplate$magicalAbilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateMagicalAbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1153,7 +5638,30 @@ export interface NpcTemplateFieldRefs {
   readonly name: Prisma.FieldRef<"NpcTemplate", 'String'>
   readonly initials: Prisma.FieldRef<"NpcTemplate", 'String'>
   readonly description: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly ancestryId: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly subAncestryId: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly backgroundId: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly size: Prisma.FieldRef<"NpcTemplate", 'CreatureSize'>
+  readonly role: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly faction: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly personality: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly motivation: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly behavior: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly tactics: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly lore: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly notes: Prisma.FieldRef<"NpcTemplate", 'String'>
   readonly portraitUrl: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly tokenImageUrl: Prisma.FieldRef<"NpcTemplate", 'String'>
+  readonly tokenImageFit: Prisma.FieldRef<"NpcTemplate", 'SceneTokenImageFit'>
+  readonly armorClass: Prisma.FieldRef<"NpcTemplate", 'Int'>
+  readonly hitPoints: Prisma.FieldRef<"NpcTemplate", 'Int'>
+  readonly maxHitPoints: Prisma.FieldRef<"NpcTemplate", 'Int'>
+  readonly temporaryHp: Prisma.FieldRef<"NpcTemplate", 'Int'>
+  readonly speed: Prisma.FieldRef<"NpcTemplate", 'Int'>
+  readonly climbSpeed: Prisma.FieldRef<"NpcTemplate", 'Int'>
+  readonly swimSpeed: Prisma.FieldRef<"NpcTemplate", 'Int'>
+  readonly flySpeed: Prisma.FieldRef<"NpcTemplate", 'Int'>
+  readonly burrowSpeed: Prisma.FieldRef<"NpcTemplate", 'Int'>
   readonly order: Prisma.FieldRef<"NpcTemplate", 'Int'>
   readonly createdAt: Prisma.FieldRef<"NpcTemplate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"NpcTemplate", 'DateTime'>
@@ -1550,6 +6058,327 @@ export type NpcTemplateDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many NpcTemplates to delete.
    */
   limit?: number
+}
+
+/**
+ * NpcTemplate.ancestry
+ */
+export type NpcTemplate$ancestryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Ancestry
+   */
+  select?: Prisma.AncestrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Ancestry
+   */
+  omit?: Prisma.AncestryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AncestryInclude<ExtArgs> | null
+  where?: Prisma.AncestryWhereInput
+}
+
+/**
+ * NpcTemplate.subAncestry
+ */
+export type NpcTemplate$subAncestryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubAncestry
+   */
+  select?: Prisma.SubAncestrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubAncestry
+   */
+  omit?: Prisma.SubAncestryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubAncestryInclude<ExtArgs> | null
+  where?: Prisma.SubAncestryWhereInput
+}
+
+/**
+ * NpcTemplate.background
+ */
+export type NpcTemplate$backgroundArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Background
+   */
+  select?: Prisma.BackgroundSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Background
+   */
+  omit?: Prisma.BackgroundOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BackgroundInclude<ExtArgs> | null
+  where?: Prisma.BackgroundWhereInput
+}
+
+/**
+ * NpcTemplate.classes
+ */
+export type NpcTemplate$classesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateClass
+   */
+  select?: Prisma.NpcTemplateClassSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateClass
+   */
+  omit?: Prisma.NpcTemplateClassOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateClassInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateClassWhereInput
+  orderBy?: Prisma.NpcTemplateClassOrderByWithRelationInput | Prisma.NpcTemplateClassOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateClassWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateClassScalarFieldEnum | Prisma.NpcTemplateClassScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.stats
+ */
+export type NpcTemplate$statsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateStat
+   */
+  select?: Prisma.NpcTemplateStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateStat
+   */
+  omit?: Prisma.NpcTemplateStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateStatInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateStatWhereInput
+  orderBy?: Prisma.NpcTemplateStatOrderByWithRelationInput | Prisma.NpcTemplateStatOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateStatScalarFieldEnum | Prisma.NpcTemplateStatScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.skills
+ */
+export type NpcTemplate$skillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateSkill
+   */
+  select?: Prisma.NpcTemplateSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateSkill
+   */
+  omit?: Prisma.NpcTemplateSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateSkillInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateSkillWhereInput
+  orderBy?: Prisma.NpcTemplateSkillOrderByWithRelationInput | Prisma.NpcTemplateSkillOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateSkillScalarFieldEnum | Prisma.NpcTemplateSkillScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.defenses
+ */
+export type NpcTemplate$defensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateDefense
+   */
+  select?: Prisma.NpcTemplateDefenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateDefense
+   */
+  omit?: Prisma.NpcTemplateDefenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateDefenseInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateDefenseWhereInput
+  orderBy?: Prisma.NpcTemplateDefenseOrderByWithRelationInput | Prisma.NpcTemplateDefenseOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateDefenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateDefenseScalarFieldEnum | Prisma.NpcTemplateDefenseScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.senses
+ */
+export type NpcTemplate$sensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateSense
+   */
+  select?: Prisma.NpcTemplateSenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateSense
+   */
+  omit?: Prisma.NpcTemplateSenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateSenseInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateSenseWhereInput
+  orderBy?: Prisma.NpcTemplateSenseOrderByWithRelationInput | Prisma.NpcTemplateSenseOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateSenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateSenseScalarFieldEnum | Prisma.NpcTemplateSenseScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.languages
+ */
+export type NpcTemplate$languagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateLanguage
+   */
+  select?: Prisma.NpcTemplateLanguageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateLanguage
+   */
+  omit?: Prisma.NpcTemplateLanguageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateLanguageInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateLanguageWhereInput
+  orderBy?: Prisma.NpcTemplateLanguageOrderByWithRelationInput | Prisma.NpcTemplateLanguageOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateLanguageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateLanguageScalarFieldEnum | Prisma.NpcTemplateLanguageScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.traits
+ */
+export type NpcTemplate$traitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateTrait
+   */
+  select?: Prisma.NpcTemplateTraitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateTrait
+   */
+  omit?: Prisma.NpcTemplateTraitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateTraitInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateTraitWhereInput
+  orderBy?: Prisma.NpcTemplateTraitOrderByWithRelationInput | Prisma.NpcTemplateTraitOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateTraitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateTraitScalarFieldEnum | Prisma.NpcTemplateTraitScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.actions
+ */
+export type NpcTemplate$actionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateAction
+   */
+  select?: Prisma.NpcTemplateActionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateAction
+   */
+  omit?: Prisma.NpcTemplateActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateActionInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateActionWhereInput
+  orderBy?: Prisma.NpcTemplateActionOrderByWithRelationInput | Prisma.NpcTemplateActionOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateActionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateActionScalarFieldEnum | Prisma.NpcTemplateActionScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.attacks
+ */
+export type NpcTemplate$attacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateAttack
+   */
+  select?: Prisma.NpcTemplateAttackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateAttack
+   */
+  omit?: Prisma.NpcTemplateAttackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateAttackInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateAttackWhereInput
+  orderBy?: Prisma.NpcTemplateAttackOrderByWithRelationInput | Prisma.NpcTemplateAttackOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateAttackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateAttackScalarFieldEnum | Prisma.NpcTemplateAttackScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.multiattacks
+ */
+export type NpcTemplate$multiattacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateMultiattack
+   */
+  select?: Prisma.NpcTemplateMultiattackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateMultiattack
+   */
+  omit?: Prisma.NpcTemplateMultiattackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateMultiattackInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateMultiattackWhereInput
+  orderBy?: Prisma.NpcTemplateMultiattackOrderByWithRelationInput | Prisma.NpcTemplateMultiattackOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateMultiattackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateMultiattackScalarFieldEnum | Prisma.NpcTemplateMultiattackScalarFieldEnum[]
+}
+
+/**
+ * NpcTemplate.magicalAbilities
+ */
+export type NpcTemplate$magicalAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateMagicalAbility
+   */
+  select?: Prisma.NpcTemplateMagicalAbilitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateMagicalAbility
+   */
+  omit?: Prisma.NpcTemplateMagicalAbilityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateMagicalAbilityInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateMagicalAbilityWhereInput
+  orderBy?: Prisma.NpcTemplateMagicalAbilityOrderByWithRelationInput | Prisma.NpcTemplateMagicalAbilityOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateMagicalAbilityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateMagicalAbilityScalarFieldEnum | Prisma.NpcTemplateMagicalAbilityScalarFieldEnum[]
 }
 
 /**

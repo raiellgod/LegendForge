@@ -1044,28 +1044,8 @@ export async function systemRoutes(app: FastifyInstance) {
               order: z.number(),
             }),
           ),
-          npcTemplates: z.array(
-            z.object({
-              id: z.string(),
-              key: z.string(),
-              name: z.string(),
-              initials: z.string().nullable(),
-              description: z.string().nullable(),
-              portraitUrl: z.string().nullable(),
-              order: z.number(),
-            }),
-          ),
-          creatureTemplates: z.array(
-            z.object({
-              id: z.string(),
-              key: z.string(),
-              name: z.string(),
-              initials: z.string().nullable(),
-              description: z.string().nullable(),
-              portraitUrl: z.string().nullable(),
-              order: z.number(),
-            }),
-          ),
+          npcTemplates: z.array(z.any()),
+          creatureTemplates: z.array(z.any()),
           characterTemplates: z.array(
             z.object({
               id: z.string(),
@@ -1402,44 +1382,110 @@ export async function systemRoutes(app: FastifyInstance) {
             systemId,
           },
           orderBy: [
-            {
-              order: "asc",
-            },
-            {
-              name: "asc",
-            },
+            { order: "asc" },
+            { name: "asc" },
           ],
-          select: {
-            id: true,
-            key: true,
-            name: true,
-            initials: true,
-            description: true,
-            portraitUrl: true,
-            order: true,
+          include: {
+          ancestry: {
+            select: { id: true, key: true, name: true },
           },
+          subAncestry: {
+            select: { id: true, key: true, name: true },
+          },
+          background: {
+            select: { id: true, key: true, name: true },
+          },
+          classes: {
+            orderBy: { order: "asc" },
+            include: {
+              characterClass: {
+                select: { id: true, key: true, name: true },
+              },
+              subclass: {
+                select: { id: true, key: true, name: true },
+              },
+            },
+          },
+          stats: {
+            include: { stat: true },
+          },
+          skills: {
+            include: { skill: { include: { stat: true } } },
+          },
+          defenses: true,
+          senses: true,
+          languages: {
+            include: { language: true },
+          },
+          traits: { orderBy: { order: "asc" } },
+          actions: { orderBy: { order: "asc" } },
+          attacks: { orderBy: { order: "asc" } },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: { select: { id: true, name: true } },
+                  action: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: { id: true, key: true, name: true, level: true },
+              },
+            },
+          },
+        },
         }),
         prisma.creatureTemplate.findMany({
           where: {
             systemId,
           },
           orderBy: [
-            {
-              order: "asc",
-            },
-            {
-              name: "asc",
-            },
+            { order: "asc" },
+            { name: "asc" },
           ],
-          select: {
-            id: true,
-            key: true,
-            name: true,
-            initials: true,
-            description: true,
-            portraitUrl: true,
-            order: true,
+          include: {
+          stats: {
+            include: { stat: true },
           },
+          skills: {
+            include: { skill: { include: { stat: true } } },
+          },
+          defenses: true,
+          senses: true,
+          languages: {
+            include: { language: true },
+          },
+          traits: { orderBy: { order: "asc" } },
+          actions: { orderBy: { order: "asc" } },
+          attacks: { orderBy: { order: "asc" } },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: { select: { id: true, name: true } },
+                  action: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: { id: true, key: true, name: true, level: true },
+              },
+            },
+          },
+        },
         }),
         prisma.characterTemplate.findMany({
           where: {

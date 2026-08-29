@@ -234,6 +234,8 @@ export type CampaignActorWhereInput = {
   owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sceneTokens?: Prisma.SceneTokenListRelationFilter
   characterSheet?: Prisma.XOR<Prisma.CharacterSheetNullableScalarRelationFilter, Prisma.CharacterSheetWhereInput> | null
+  npcSheet?: Prisma.XOR<Prisma.NpcSheetNullableScalarRelationFilter, Prisma.NpcSheetWhereInput> | null
+  creatureSheet?: Prisma.XOR<Prisma.CreatureSheetNullableScalarRelationFilter, Prisma.CreatureSheetWhereInput> | null
 }
 
 export type CampaignActorOrderByWithRelationInput = {
@@ -252,6 +254,8 @@ export type CampaignActorOrderByWithRelationInput = {
   owner?: Prisma.UserOrderByWithRelationInput
   sceneTokens?: Prisma.SceneTokenOrderByRelationAggregateInput
   characterSheet?: Prisma.CharacterSheetOrderByWithRelationInput
+  npcSheet?: Prisma.NpcSheetOrderByWithRelationInput
+  creatureSheet?: Prisma.CreatureSheetOrderByWithRelationInput
 }
 
 export type CampaignActorWhereUniqueInput = Prisma.AtLeast<{
@@ -273,6 +277,8 @@ export type CampaignActorWhereUniqueInput = Prisma.AtLeast<{
   owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sceneTokens?: Prisma.SceneTokenListRelationFilter
   characterSheet?: Prisma.XOR<Prisma.CharacterSheetNullableScalarRelationFilter, Prisma.CharacterSheetWhereInput> | null
+  npcSheet?: Prisma.XOR<Prisma.NpcSheetNullableScalarRelationFilter, Prisma.NpcSheetWhereInput> | null
+  creatureSheet?: Prisma.XOR<Prisma.CreatureSheetNullableScalarRelationFilter, Prisma.CreatureSheetWhereInput> | null
 }, "id">
 
 export type CampaignActorOrderByWithAggregationInput = {
@@ -323,6 +329,8 @@ export type CampaignActorCreateInput = {
   owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
   sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
   characterSheet?: Prisma.CharacterSheetCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorUncheckedCreateInput = {
@@ -339,6 +347,8 @@ export type CampaignActorUncheckedCreateInput = {
   updatedAt?: Date | string
   sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
   characterSheet?: Prisma.CharacterSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorUpdateInput = {
@@ -355,6 +365,8 @@ export type CampaignActorUpdateInput = {
   owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
   sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
   characterSheet?: Prisma.CharacterSheetUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateInput = {
@@ -371,6 +383,8 @@ export type CampaignActorUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
   characterSheet?: Prisma.CharacterSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorCreateManyInput = {
@@ -423,6 +437,11 @@ export type CampaignActorOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type CampaignActorScalarRelationFilter = {
+  is?: Prisma.CampaignActorWhereInput
+  isNot?: Prisma.CampaignActorWhereInput
+}
+
 export type CampaignActorNullableScalarRelationFilter = {
   is?: Prisma.CampaignActorWhereInput | null
   isNot?: Prisma.CampaignActorWhereInput | null
@@ -470,11 +489,6 @@ export type CampaignActorMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type CampaignActorScalarRelationFilter = {
-  is?: Prisma.CampaignActorWhereInput
-  isNot?: Prisma.CampaignActorWhereInput
-}
-
 export type CampaignActorCreateNestedManyWithoutOwnerInput = {
   create?: Prisma.XOR<Prisma.CampaignActorCreateWithoutOwnerInput, Prisma.CampaignActorUncheckedCreateWithoutOwnerInput> | Prisma.CampaignActorCreateWithoutOwnerInput[] | Prisma.CampaignActorUncheckedCreateWithoutOwnerInput[]
   connectOrCreate?: Prisma.CampaignActorCreateOrConnectWithoutOwnerInput | Prisma.CampaignActorCreateOrConnectWithoutOwnerInput[]
@@ -515,6 +529,34 @@ export type CampaignActorUncheckedUpdateManyWithoutOwnerNestedInput = {
   update?: Prisma.CampaignActorUpdateWithWhereUniqueWithoutOwnerInput | Prisma.CampaignActorUpdateWithWhereUniqueWithoutOwnerInput[]
   updateMany?: Prisma.CampaignActorUpdateManyWithWhereWithoutOwnerInput | Prisma.CampaignActorUpdateManyWithWhereWithoutOwnerInput[]
   deleteMany?: Prisma.CampaignActorScalarWhereInput | Prisma.CampaignActorScalarWhereInput[]
+}
+
+export type CampaignActorCreateNestedOneWithoutNpcSheetInput = {
+  create?: Prisma.XOR<Prisma.CampaignActorCreateWithoutNpcSheetInput, Prisma.CampaignActorUncheckedCreateWithoutNpcSheetInput>
+  connectOrCreate?: Prisma.CampaignActorCreateOrConnectWithoutNpcSheetInput
+  connect?: Prisma.CampaignActorWhereUniqueInput
+}
+
+export type CampaignActorUpdateOneRequiredWithoutNpcSheetNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignActorCreateWithoutNpcSheetInput, Prisma.CampaignActorUncheckedCreateWithoutNpcSheetInput>
+  connectOrCreate?: Prisma.CampaignActorCreateOrConnectWithoutNpcSheetInput
+  upsert?: Prisma.CampaignActorUpsertWithoutNpcSheetInput
+  connect?: Prisma.CampaignActorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignActorUpdateToOneWithWhereWithoutNpcSheetInput, Prisma.CampaignActorUpdateWithoutNpcSheetInput>, Prisma.CampaignActorUncheckedUpdateWithoutNpcSheetInput>
+}
+
+export type CampaignActorCreateNestedOneWithoutCreatureSheetInput = {
+  create?: Prisma.XOR<Prisma.CampaignActorCreateWithoutCreatureSheetInput, Prisma.CampaignActorUncheckedCreateWithoutCreatureSheetInput>
+  connectOrCreate?: Prisma.CampaignActorCreateOrConnectWithoutCreatureSheetInput
+  connect?: Prisma.CampaignActorWhereUniqueInput
+}
+
+export type CampaignActorUpdateOneRequiredWithoutCreatureSheetNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignActorCreateWithoutCreatureSheetInput, Prisma.CampaignActorUncheckedCreateWithoutCreatureSheetInput>
+  connectOrCreate?: Prisma.CampaignActorCreateOrConnectWithoutCreatureSheetInput
+  upsert?: Prisma.CampaignActorUpsertWithoutCreatureSheetInput
+  connect?: Prisma.CampaignActorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignActorUpdateToOneWithWhereWithoutCreatureSheetInput, Prisma.CampaignActorUpdateWithoutCreatureSheetInput>, Prisma.CampaignActorUncheckedUpdateWithoutCreatureSheetInput>
 }
 
 export type CampaignActorCreateNestedOneWithoutCharacterSheetInput = {
@@ -610,6 +652,8 @@ export type CampaignActorCreateWithoutOwnerInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutActorsInput
   sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
   characterSheet?: Prisma.CharacterSheetCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorUncheckedCreateWithoutOwnerInput = {
@@ -625,6 +669,8 @@ export type CampaignActorUncheckedCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
   characterSheet?: Prisma.CharacterSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorCreateOrConnectWithoutOwnerInput = {
@@ -670,6 +716,174 @@ export type CampaignActorScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"CampaignActor"> | Date | string
 }
 
+export type CampaignActorCreateWithoutNpcSheetInput = {
+  id?: string
+  type: $Enums.CampaignActorType
+  location?: $Enums.CampaignActorLocation
+  name: string
+  initials: string
+  description?: string | null
+  portraitUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  campaign: Prisma.CampaignCreateNestedOneWithoutActorsInput
+  owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
+  characterSheet?: Prisma.CharacterSheetCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetCreateNestedOneWithoutCampaignActorInput
+}
+
+export type CampaignActorUncheckedCreateWithoutNpcSheetInput = {
+  id?: string
+  campaignId: string
+  ownerId?: string | null
+  type: $Enums.CampaignActorType
+  location?: $Enums.CampaignActorLocation
+  name: string
+  initials: string
+  description?: string | null
+  portraitUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
+  characterSheet?: Prisma.CharacterSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+}
+
+export type CampaignActorCreateOrConnectWithoutNpcSheetInput = {
+  where: Prisma.CampaignActorWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignActorCreateWithoutNpcSheetInput, Prisma.CampaignActorUncheckedCreateWithoutNpcSheetInput>
+}
+
+export type CampaignActorUpsertWithoutNpcSheetInput = {
+  update: Prisma.XOR<Prisma.CampaignActorUpdateWithoutNpcSheetInput, Prisma.CampaignActorUncheckedUpdateWithoutNpcSheetInput>
+  create: Prisma.XOR<Prisma.CampaignActorCreateWithoutNpcSheetInput, Prisma.CampaignActorUncheckedCreateWithoutNpcSheetInput>
+  where?: Prisma.CampaignActorWhereInput
+}
+
+export type CampaignActorUpdateToOneWithWhereWithoutNpcSheetInput = {
+  where?: Prisma.CampaignActorWhereInput
+  data: Prisma.XOR<Prisma.CampaignActorUpdateWithoutNpcSheetInput, Prisma.CampaignActorUncheckedUpdateWithoutNpcSheetInput>
+}
+
+export type CampaignActorUpdateWithoutNpcSheetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCampaignActorTypeFieldUpdateOperationsInput | $Enums.CampaignActorType
+  location?: Prisma.EnumCampaignActorLocationFieldUpdateOperationsInput | $Enums.CampaignActorLocation
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaign?: Prisma.CampaignUpdateOneRequiredWithoutActorsNestedInput
+  owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
+  characterSheet?: Prisma.CharacterSheetUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUpdateOneWithoutCampaignActorNestedInput
+}
+
+export type CampaignActorUncheckedUpdateWithoutNpcSheetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumCampaignActorTypeFieldUpdateOperationsInput | $Enums.CampaignActorType
+  location?: Prisma.EnumCampaignActorLocationFieldUpdateOperationsInput | $Enums.CampaignActorLocation
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
+  characterSheet?: Prisma.CharacterSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+}
+
+export type CampaignActorCreateWithoutCreatureSheetInput = {
+  id?: string
+  type: $Enums.CampaignActorType
+  location?: $Enums.CampaignActorLocation
+  name: string
+  initials: string
+  description?: string | null
+  portraitUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  campaign: Prisma.CampaignCreateNestedOneWithoutActorsInput
+  owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
+  characterSheet?: Prisma.CharacterSheetCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetCreateNestedOneWithoutCampaignActorInput
+}
+
+export type CampaignActorUncheckedCreateWithoutCreatureSheetInput = {
+  id?: string
+  campaignId: string
+  ownerId?: string | null
+  type: $Enums.CampaignActorType
+  location?: $Enums.CampaignActorLocation
+  name: string
+  initials: string
+  description?: string | null
+  portraitUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
+  characterSheet?: Prisma.CharacterSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+}
+
+export type CampaignActorCreateOrConnectWithoutCreatureSheetInput = {
+  where: Prisma.CampaignActorWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignActorCreateWithoutCreatureSheetInput, Prisma.CampaignActorUncheckedCreateWithoutCreatureSheetInput>
+}
+
+export type CampaignActorUpsertWithoutCreatureSheetInput = {
+  update: Prisma.XOR<Prisma.CampaignActorUpdateWithoutCreatureSheetInput, Prisma.CampaignActorUncheckedUpdateWithoutCreatureSheetInput>
+  create: Prisma.XOR<Prisma.CampaignActorCreateWithoutCreatureSheetInput, Prisma.CampaignActorUncheckedCreateWithoutCreatureSheetInput>
+  where?: Prisma.CampaignActorWhereInput
+}
+
+export type CampaignActorUpdateToOneWithWhereWithoutCreatureSheetInput = {
+  where?: Prisma.CampaignActorWhereInput
+  data: Prisma.XOR<Prisma.CampaignActorUpdateWithoutCreatureSheetInput, Prisma.CampaignActorUncheckedUpdateWithoutCreatureSheetInput>
+}
+
+export type CampaignActorUpdateWithoutCreatureSheetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCampaignActorTypeFieldUpdateOperationsInput | $Enums.CampaignActorType
+  location?: Prisma.EnumCampaignActorLocationFieldUpdateOperationsInput | $Enums.CampaignActorLocation
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaign?: Prisma.CampaignUpdateOneRequiredWithoutActorsNestedInput
+  owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
+  characterSheet?: Prisma.CharacterSheetUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUpdateOneWithoutCampaignActorNestedInput
+}
+
+export type CampaignActorUncheckedUpdateWithoutCreatureSheetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumCampaignActorTypeFieldUpdateOperationsInput | $Enums.CampaignActorType
+  location?: Prisma.EnumCampaignActorLocationFieldUpdateOperationsInput | $Enums.CampaignActorLocation
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
+  characterSheet?: Prisma.CharacterSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+}
+
 export type CampaignActorCreateWithoutCharacterSheetInput = {
   id?: string
   type: $Enums.CampaignActorType
@@ -683,6 +897,8 @@ export type CampaignActorCreateWithoutCharacterSheetInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutActorsInput
   owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
   sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
+  npcSheet?: Prisma.NpcSheetCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorUncheckedCreateWithoutCharacterSheetInput = {
@@ -698,6 +914,8 @@ export type CampaignActorUncheckedCreateWithoutCharacterSheetInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
+  npcSheet?: Prisma.NpcSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorCreateOrConnectWithoutCharacterSheetInput = {
@@ -729,6 +947,8 @@ export type CampaignActorUpdateWithoutCharacterSheetInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutActorsNestedInput
   owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
   sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
+  npcSheet?: Prisma.NpcSheetUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateWithoutCharacterSheetInput = {
@@ -744,6 +964,8 @@ export type CampaignActorUncheckedUpdateWithoutCharacterSheetInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
+  npcSheet?: Prisma.NpcSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorCreateWithoutCampaignInput = {
@@ -759,6 +981,8 @@ export type CampaignActorCreateWithoutCampaignInput = {
   owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
   sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutActorInput
   characterSheet?: Prisma.CharacterSheetCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorUncheckedCreateWithoutCampaignInput = {
@@ -774,6 +998,8 @@ export type CampaignActorUncheckedCreateWithoutCampaignInput = {
   updatedAt?: Date | string
   sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutActorInput
   characterSheet?: Prisma.CharacterSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorCreateOrConnectWithoutCampaignInput = {
@@ -815,6 +1041,8 @@ export type CampaignActorCreateWithoutSceneTokensInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutActorsInput
   owner?: Prisma.UserCreateNestedOneWithoutCampaignActorsInput
   characterSheet?: Prisma.CharacterSheetCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorUncheckedCreateWithoutSceneTokensInput = {
@@ -830,6 +1058,8 @@ export type CampaignActorUncheckedCreateWithoutSceneTokensInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSheet?: Prisma.CharacterSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  npcSheet?: Prisma.NpcSheetUncheckedCreateNestedOneWithoutCampaignActorInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedCreateNestedOneWithoutCampaignActorInput
 }
 
 export type CampaignActorCreateOrConnectWithoutSceneTokensInput = {
@@ -861,6 +1091,8 @@ export type CampaignActorUpdateWithoutSceneTokensInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutActorsNestedInput
   owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
   characterSheet?: Prisma.CharacterSheetUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateWithoutSceneTokensInput = {
@@ -876,6 +1108,8 @@ export type CampaignActorUncheckedUpdateWithoutSceneTokensInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheet?: Prisma.CharacterSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorCreateManyOwnerInput = {
@@ -904,6 +1138,8 @@ export type CampaignActorUpdateWithoutOwnerInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutActorsNestedInput
   sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
   characterSheet?: Prisma.CharacterSheetUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateWithoutOwnerInput = {
@@ -919,6 +1155,8 @@ export type CampaignActorUncheckedUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
   characterSheet?: Prisma.CharacterSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateManyWithoutOwnerInput = {
@@ -960,6 +1198,8 @@ export type CampaignActorUpdateWithoutCampaignInput = {
   owner?: Prisma.UserUpdateOneWithoutCampaignActorsNestedInput
   sceneTokens?: Prisma.SceneTokenUpdateManyWithoutActorNestedInput
   characterSheet?: Prisma.CharacterSheetUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateWithoutCampaignInput = {
@@ -975,6 +1215,8 @@ export type CampaignActorUncheckedUpdateWithoutCampaignInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutActorNestedInput
   characterSheet?: Prisma.CharacterSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  npcSheet?: Prisma.NpcSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
+  creatureSheet?: Prisma.CreatureSheetUncheckedUpdateOneWithoutCampaignActorNestedInput
 }
 
 export type CampaignActorUncheckedUpdateManyWithoutCampaignInput = {
@@ -1037,6 +1279,8 @@ export type CampaignActorSelect<ExtArgs extends runtime.Types.Extensions.Interna
   owner?: boolean | Prisma.CampaignActor$ownerArgs<ExtArgs>
   sceneTokens?: boolean | Prisma.CampaignActor$sceneTokensArgs<ExtArgs>
   characterSheet?: boolean | Prisma.CampaignActor$characterSheetArgs<ExtArgs>
+  npcSheet?: boolean | Prisma.CampaignActor$npcSheetArgs<ExtArgs>
+  creatureSheet?: boolean | Prisma.CampaignActor$creatureSheetArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignActorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaignActor"]>
 
@@ -1092,6 +1336,8 @@ export type CampaignActorInclude<ExtArgs extends runtime.Types.Extensions.Intern
   owner?: boolean | Prisma.CampaignActor$ownerArgs<ExtArgs>
   sceneTokens?: boolean | Prisma.CampaignActor$sceneTokensArgs<ExtArgs>
   characterSheet?: boolean | Prisma.CampaignActor$characterSheetArgs<ExtArgs>
+  npcSheet?: boolean | Prisma.CampaignActor$npcSheetArgs<ExtArgs>
+  creatureSheet?: boolean | Prisma.CampaignActor$creatureSheetArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignActorCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CampaignActorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1110,6 +1356,8 @@ export type $CampaignActorPayload<ExtArgs extends runtime.Types.Extensions.Inter
     owner: Prisma.$UserPayload<ExtArgs> | null
     sceneTokens: Prisma.$SceneTokenPayload<ExtArgs>[]
     characterSheet: Prisma.$CharacterSheetPayload<ExtArgs> | null
+    npcSheet: Prisma.$NpcSheetPayload<ExtArgs> | null
+    creatureSheet: Prisma.$CreatureSheetPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1521,6 +1769,8 @@ export interface Prisma__CampaignActorClient<T, Null = never, ExtArgs extends ru
   owner<T extends Prisma.CampaignActor$ownerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignActor$ownerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sceneTokens<T extends Prisma.CampaignActor$sceneTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignActor$sceneTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SceneTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterSheet<T extends Prisma.CampaignActor$characterSheetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignActor$characterSheetArgs<ExtArgs>>): Prisma.Prisma__CharacterSheetClient<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  npcSheet<T extends Prisma.CampaignActor$npcSheetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignActor$npcSheetArgs<ExtArgs>>): Prisma.Prisma__NpcSheetClient<runtime.Types.Result.GetResult<Prisma.$NpcSheetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  creatureSheet<T extends Prisma.CampaignActor$creatureSheetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignActor$creatureSheetArgs<ExtArgs>>): Prisma.Prisma__CreatureSheetClient<runtime.Types.Result.GetResult<Prisma.$CreatureSheetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2016,6 +2266,44 @@ export type CampaignActor$characterSheetArgs<ExtArgs extends runtime.Types.Exten
    */
   include?: Prisma.CharacterSheetInclude<ExtArgs> | null
   where?: Prisma.CharacterSheetWhereInput
+}
+
+/**
+ * CampaignActor.npcSheet
+ */
+export type CampaignActor$npcSheetArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcSheet
+   */
+  select?: Prisma.NpcSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcSheet
+   */
+  omit?: Prisma.NpcSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcSheetInclude<ExtArgs> | null
+  where?: Prisma.NpcSheetWhereInput
+}
+
+/**
+ * CampaignActor.creatureSheet
+ */
+export type CampaignActor$creatureSheetArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureSheet
+   */
+  select?: Prisma.CreatureSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureSheet
+   */
+  omit?: Prisma.CreatureSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureSheetInclude<ExtArgs> | null
+  where?: Prisma.CreatureSheetWhereInput
 }
 
 /**

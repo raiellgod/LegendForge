@@ -520,6 +520,26 @@ async function main() {
         initials: npcTemplateData.initials,
         description: npcTemplateData.description,
         portraitUrl: npcTemplateData.portraitUrl,
+        tokenImageUrl: npcTemplateData.tokenImageUrl,
+        tokenImageFit: npcTemplateData.tokenImageFit,
+        size: npcTemplateData.size,
+        role: npcTemplateData.role,
+        faction: npcTemplateData.faction,
+        personality: npcTemplateData.personality,
+        motivation: npcTemplateData.motivation,
+        behavior: npcTemplateData.behavior,
+        tactics: npcTemplateData.tactics,
+        lore: npcTemplateData.lore,
+        notes: npcTemplateData.notes,
+        armorClass: npcTemplateData.armorClass,
+        hitPoints: npcTemplateData.hitPoints,
+        maxHitPoints: npcTemplateData.maxHitPoints,
+        temporaryHp: npcTemplateData.temporaryHp,
+        speed: npcTemplateData.speed,
+        climbSpeed: npcTemplateData.climbSpeed,
+        swimSpeed: npcTemplateData.swimSpeed,
+        flySpeed: npcTemplateData.flySpeed,
+        burrowSpeed: npcTemplateData.burrowSpeed,
         order: index + 1,
       },
       create: {
@@ -529,6 +549,26 @@ async function main() {
         initials: npcTemplateData.initials,
         description: npcTemplateData.description,
         portraitUrl: npcTemplateData.portraitUrl,
+        tokenImageUrl: npcTemplateData.tokenImageUrl,
+        tokenImageFit: npcTemplateData.tokenImageFit,
+        size: npcTemplateData.size,
+        role: npcTemplateData.role,
+        faction: npcTemplateData.faction,
+        personality: npcTemplateData.personality,
+        motivation: npcTemplateData.motivation,
+        behavior: npcTemplateData.behavior,
+        tactics: npcTemplateData.tactics,
+        lore: npcTemplateData.lore,
+        notes: npcTemplateData.notes,
+        armorClass: npcTemplateData.armorClass,
+        hitPoints: npcTemplateData.hitPoints,
+        maxHitPoints: npcTemplateData.maxHitPoints,
+        temporaryHp: npcTemplateData.temporaryHp,
+        speed: npcTemplateData.speed,
+        climbSpeed: npcTemplateData.climbSpeed,
+        swimSpeed: npcTemplateData.swimSpeed,
+        flySpeed: npcTemplateData.flySpeed,
+        burrowSpeed: npcTemplateData.burrowSpeed,
         order: index + 1,
       },
     });
@@ -549,6 +589,26 @@ async function main() {
         initials: creatureTemplateData.initials,
         description: creatureTemplateData.description,
         portraitUrl: creatureTemplateData.portraitUrl,
+        tokenImageUrl: creatureTemplateData.tokenImageUrl,
+        tokenImageFit: creatureTemplateData.tokenImageFit,
+        size: creatureTemplateData.size,
+        creatureType: creatureTemplateData.creatureType,
+        habitat: creatureTemplateData.habitat,
+        behavior: creatureTemplateData.behavior,
+        tactics: creatureTemplateData.tactics,
+        lore: creatureTemplateData.lore,
+        notes: creatureTemplateData.notes,
+        armorClass: creatureTemplateData.armorClass,
+        hitPoints: creatureTemplateData.hitPoints,
+        maxHitPoints: creatureTemplateData.maxHitPoints,
+        temporaryHp: creatureTemplateData.temporaryHp,
+        speed: creatureTemplateData.speed,
+        climbSpeed: creatureTemplateData.climbSpeed,
+        swimSpeed: creatureTemplateData.swimSpeed,
+        flySpeed: creatureTemplateData.flySpeed,
+        burrowSpeed: creatureTemplateData.burrowSpeed,
+        challengeRating: creatureTemplateData.challengeRating,
+        experienceReward: creatureTemplateData.experienceReward,
         order: index + 1,
       },
       create: {
@@ -558,6 +618,26 @@ async function main() {
         initials: creatureTemplateData.initials,
         description: creatureTemplateData.description,
         portraitUrl: creatureTemplateData.portraitUrl,
+        tokenImageUrl: creatureTemplateData.tokenImageUrl,
+        tokenImageFit: creatureTemplateData.tokenImageFit,
+        size: creatureTemplateData.size,
+        creatureType: creatureTemplateData.creatureType,
+        habitat: creatureTemplateData.habitat,
+        behavior: creatureTemplateData.behavior,
+        tactics: creatureTemplateData.tactics,
+        lore: creatureTemplateData.lore,
+        notes: creatureTemplateData.notes,
+        armorClass: creatureTemplateData.armorClass,
+        hitPoints: creatureTemplateData.hitPoints,
+        maxHitPoints: creatureTemplateData.maxHitPoints,
+        temporaryHp: creatureTemplateData.temporaryHp,
+        speed: creatureTemplateData.speed,
+        climbSpeed: creatureTemplateData.climbSpeed,
+        swimSpeed: creatureTemplateData.swimSpeed,
+        flySpeed: creatureTemplateData.flySpeed,
+        burrowSpeed: creatureTemplateData.burrowSpeed,
+        challengeRating: creatureTemplateData.challengeRating,
+        experienceReward: creatureTemplateData.experienceReward,
         order: index + 1,
       },
     });
@@ -1753,6 +1833,403 @@ async function main() {
   console.log(
     `CharacterTemplate criado/validado: ${characterTemplate.name}`,
   );
+
+  const allTemplateStats = await prisma.stat.findMany({
+    where: { systemId: system.id },
+  });
+  const templateStatByKey = new Map(
+    allTemplateStats.map((stat) => [stat.key, stat]),
+  );
+
+  for (const npcTemplateData of npcTemplates) {
+    const npcTemplate = await prisma.npcTemplate.findUniqueOrThrow({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: npcTemplateData.key,
+        },
+      },
+    });
+
+    await prisma.$transaction([
+      prisma.npcTemplateMultiattackEntry.deleteMany({
+        where: { multiattack: { npcTemplateId: npcTemplate.id } },
+      }),
+      prisma.npcTemplateMultiattack.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateMagicalAbility.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateAttack.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateAction.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateTrait.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateLanguage.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateSense.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateDefense.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateSkill.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateStat.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+      prisma.npcTemplateClass.deleteMany({
+        where: { npcTemplateId: npcTemplate.id },
+      }),
+    ]);
+
+    await prisma.npcTemplateStat.createMany({
+      data: Object.entries(npcTemplateData.stats).map(
+        ([statKey, baseValue]) => {
+          const stat = templateStatByKey.get(statKey);
+
+          if (!stat) {
+            throw new Error(
+              `Stat ${statKey} não encontrado para NpcTemplate ${npcTemplateData.key}`,
+            );
+          }
+
+          return {
+            npcTemplateId: npcTemplate.id,
+            statId: stat.id,
+            baseValue,
+            bonusValue: 0,
+            overrideValue: null,
+            isSavingThrowProficient: false,
+            savingThrowBonus: 0,
+            savingThrowOverride: null,
+          };
+        },
+      ),
+    });
+
+    if (npcTemplateData.defenses.length > 0) {
+      await prisma.npcTemplateDefense.createMany({
+        data: npcTemplateData.defenses.map((defense) => ({
+          npcTemplateId: npcTemplate.id,
+          kind: defense.kind,
+          damageType: defense.damageType,
+          notes: defense.notes,
+        })),
+      });
+    }
+
+    if (npcTemplateData.senses.length > 0) {
+      await prisma.npcTemplateSense.createMany({
+        data: npcTemplateData.senses.map((sense) => ({
+          npcTemplateId: npcTemplate.id,
+          name: sense.name,
+          range: sense.range,
+          notes: sense.notes,
+        })),
+      });
+    }
+
+    if (npcTemplateData.traits.length > 0) {
+      await prisma.npcTemplateTrait.createMany({
+        data: npcTemplateData.traits.map((trait, order) => ({
+          npcTemplateId: npcTemplate.id,
+          name: trait.name,
+          description: trait.description,
+          order,
+        })),
+      });
+    }
+
+    const createdActions = [];
+    for (const [order, action] of npcTemplateData.actions.entries()) {
+      createdActions.push(
+        await prisma.npcTemplateAction.create({
+          data: {
+            npcTemplateId: npcTemplate.id,
+            kind: action.kind,
+            name: action.name,
+            description: action.description,
+            uses: action.uses,
+            maxUses: action.maxUses,
+            recharge: action.recharge,
+            order,
+          },
+        }),
+      );
+    }
+
+    const createdAttacks = [];
+    for (const [order, attack] of npcTemplateData.attacks.entries()) {
+      createdAttacks.push(
+        await prisma.npcTemplateAttack.create({
+          data: {
+            npcTemplateId: npcTemplate.id,
+            name: attack.name,
+            description: attack.description,
+            attackType: attack.attackType,
+            attackAbilityKey: attack.attackAbilityKey,
+            attackBonus: attack.attackBonus,
+            damageFormula: attack.damageFormula,
+            damageBonus: attack.damageBonus,
+            damageType: attack.damageType,
+            secondaryDamageFormula: null,
+            secondaryDamageType: null,
+            normalRange: null,
+            longRange: null,
+            reach: attack.reach,
+            target: attack.target,
+            saveAbilityKey: null,
+            saveDc: null,
+            onHit: attack.onHit,
+            notes: attack.notes,
+            order,
+          },
+        }),
+      );
+    }
+
+    const actionByName = new Map(
+      createdActions.map((action) => [action.name, action.id]),
+    );
+    const attackByName = new Map(
+      createdAttacks.map((attack) => [attack.name, attack.id]),
+    );
+
+    for (const [order, multiattack] of npcTemplateData.multiattacks.entries()) {
+      const createdMultiattack = await prisma.npcTemplateMultiattack.create({
+        data: {
+          npcTemplateId: npcTemplate.id,
+          name: multiattack.name,
+          description: multiattack.description,
+          order,
+        },
+      });
+
+      for (const [entryOrder, entry] of multiattack.entries.entries()) {
+        await prisma.npcTemplateMultiattackEntry.create({
+          data: {
+            multiattackId: createdMultiattack.id,
+            attackId:
+              entry.targetType === "ATTACK"
+                ? attackByName.get(entry.targetName) ?? null
+                : null,
+            actionId:
+              entry.targetType === "ACTION"
+                ? actionByName.get(entry.targetName) ?? null
+                : null,
+            quantity: entry.quantity,
+            order: entryOrder,
+            notes: entry.notes,
+          },
+        });
+      }
+    }
+
+    console.log(`NpcTemplate completo validado: ${npcTemplate.name}`);
+  }
+
+  for (const creatureTemplateData of creatureTemplates) {
+    const creatureTemplate = await prisma.creatureTemplate.findUniqueOrThrow({
+      where: {
+        systemId_key: {
+          systemId: system.id,
+          key: creatureTemplateData.key,
+        },
+      },
+    });
+
+    await prisma.$transaction([
+      prisma.creatureTemplateMultiattackEntry.deleteMany({
+        where: { multiattack: { creatureTemplateId: creatureTemplate.id } },
+      }),
+      prisma.creatureTemplateMultiattack.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateMagicalAbility.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateAttack.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateAction.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateTrait.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateLanguage.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateSense.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateDefense.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateSkill.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+      prisma.creatureTemplateStat.deleteMany({
+        where: { creatureTemplateId: creatureTemplate.id },
+      }),
+    ]);
+
+    await prisma.creatureTemplateStat.createMany({
+      data: Object.entries(creatureTemplateData.stats).map(
+        ([statKey, baseValue]) => {
+          const stat = templateStatByKey.get(statKey);
+
+          if (!stat) {
+            throw new Error(
+              `Stat ${statKey} não encontrado para CreatureTemplate ${creatureTemplateData.key}`,
+            );
+          }
+
+          return {
+            creatureTemplateId: creatureTemplate.id,
+            statId: stat.id,
+            baseValue,
+            bonusValue: 0,
+            overrideValue: null,
+            isSavingThrowProficient: false,
+            savingThrowBonus: 0,
+            savingThrowOverride: null,
+          };
+        },
+      ),
+    });
+
+    if (creatureTemplateData.defenses.length > 0) {
+      await prisma.creatureTemplateDefense.createMany({
+        data: creatureTemplateData.defenses.map((defense) => ({
+          creatureTemplateId: creatureTemplate.id,
+          kind: defense.kind,
+          damageType: defense.damageType,
+          notes: defense.notes,
+        })),
+      });
+    }
+
+    if (creatureTemplateData.senses.length > 0) {
+      await prisma.creatureTemplateSense.createMany({
+        data: creatureTemplateData.senses.map((sense) => ({
+          creatureTemplateId: creatureTemplate.id,
+          name: sense.name,
+          range: sense.range,
+          notes: sense.notes,
+        })),
+      });
+    }
+
+    if (creatureTemplateData.traits.length > 0) {
+      await prisma.creatureTemplateTrait.createMany({
+        data: creatureTemplateData.traits.map((trait, order) => ({
+          creatureTemplateId: creatureTemplate.id,
+          name: trait.name,
+          description: trait.description,
+          order,
+        })),
+      });
+    }
+
+    const createdActions = [];
+    for (const [order, action] of creatureTemplateData.actions.entries()) {
+      createdActions.push(
+        await prisma.creatureTemplateAction.create({
+          data: {
+            creatureTemplateId: creatureTemplate.id,
+            kind: action.kind,
+            name: action.name,
+            description: action.description,
+            uses: action.uses,
+            maxUses: action.maxUses,
+            recharge: action.recharge,
+            order,
+          },
+        }),
+      );
+    }
+
+    const createdAttacks = [];
+    for (const [order, attack] of creatureTemplateData.attacks.entries()) {
+      createdAttacks.push(
+        await prisma.creatureTemplateAttack.create({
+          data: {
+            creatureTemplateId: creatureTemplate.id,
+            name: attack.name,
+            description: attack.description,
+            attackType: attack.attackType,
+            attackAbilityKey: attack.attackAbilityKey,
+            attackBonus: attack.attackBonus,
+            damageFormula: attack.damageFormula,
+            damageBonus: attack.damageBonus,
+            damageType: attack.damageType,
+            secondaryDamageFormula: null,
+            secondaryDamageType: null,
+            normalRange: null,
+            longRange: null,
+            reach: attack.reach,
+            target: attack.target,
+            saveAbilityKey: null,
+            saveDc: null,
+            onHit: attack.onHit,
+            notes: attack.notes,
+            order,
+          },
+        }),
+      );
+    }
+
+    const actionByName = new Map(
+      createdActions.map((action) => [action.name, action.id]),
+    );
+    const attackByName = new Map(
+      createdAttacks.map((attack) => [attack.name, attack.id]),
+    );
+
+    for (const [order, multiattack] of creatureTemplateData.multiattacks.entries()) {
+      const createdMultiattack =
+        await prisma.creatureTemplateMultiattack.create({
+          data: {
+            creatureTemplateId: creatureTemplate.id,
+            name: multiattack.name,
+            description: multiattack.description,
+            order,
+          },
+        });
+
+      for (const [entryOrder, entry] of multiattack.entries.entries()) {
+        await prisma.creatureTemplateMultiattackEntry.create({
+          data: {
+            multiattackId: createdMultiattack.id,
+            attackId:
+              entry.targetType === "ATTACK"
+                ? attackByName.get(entry.targetName) ?? null
+                : null,
+            actionId:
+              entry.targetType === "ACTION"
+                ? actionByName.get(entry.targetName) ?? null
+                : null,
+            quantity: entry.quantity,
+            order: entryOrder,
+            notes: entry.notes,
+          },
+        });
+      }
+    }
+
+    console.log(
+      `CreatureTemplate completo validado: ${creatureTemplate.name}`,
+    );
+  }
 
   console.log("Seed concluído com sucesso.");
 }

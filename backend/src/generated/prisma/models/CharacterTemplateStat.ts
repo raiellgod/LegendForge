@@ -511,14 +511,6 @@ export type CharacterTemplateStatUncheckedUpdateManyWithoutTemplateNestedInput =
   deleteMany?: Prisma.CharacterTemplateStatScalarWhereInput | Prisma.CharacterTemplateStatScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type CharacterTemplateStatCreateNestedManyWithoutStatInput = {
   create?: Prisma.XOR<Prisma.CharacterTemplateStatCreateWithoutStatInput, Prisma.CharacterTemplateStatUncheckedCreateWithoutStatInput> | Prisma.CharacterTemplateStatCreateWithoutStatInput[] | Prisma.CharacterTemplateStatUncheckedCreateWithoutStatInput[]
   connectOrCreate?: Prisma.CharacterTemplateStatCreateOrConnectWithoutStatInput | Prisma.CharacterTemplateStatCreateOrConnectWithoutStatInput[]

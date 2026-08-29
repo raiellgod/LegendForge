@@ -437,56 +437,56 @@ Sylvaris → Sylvaris Alto
     [x] 5.10.15 — Preservar CreatureTemplate original
     [x] 5.10.16 — Permitir instâncias divergentes do mesmo template
     [x] 5.10.17 — Teste regressivo
-[ ] 5.11 — CharacterTemplate completo
-    [ ] 5.11.1 — Auditar CharacterSheet completa e suas relações
-    [ ] 5.11.2 — Definir o que um CharacterTemplate deve preservar
-    [ ] 5.11.3 — Definir Template × CharacterSheet × CampaignActor
-    [ ] 5.11.4 — Definir comportamento com multiclasse
-    [ ] 5.11.5 — Definir ancestralidade e sub-ancestralidade no template
-    [ ] 5.11.6 — Definir antecedentes, idiomas e proficiências
-    [ ] 5.11.7 — Definir atributos e perícias
-    [ ] 5.11.8 — Definir magias conhecidas do template
-    [ ] 5.11.9 — Definir equipamentos do template
-    [ ] 5.11.10 — Definir features e escolhas já resolvidas
-    [ ] 5.11.11 — Definir progressão e escolhas de nível
-    [ ] 5.11.12 — Modelar CharacterTemplate no Prisma
-    [ ] 5.11.13 — Modelar relações auxiliares necessárias
-    [ ] 5.11.14 — Criar migration
-    [ ] 5.11.15 — Criar seed mínimo de personagens-template
-    [ ] 5.11.16 — Expor CharacterTemplate na Biblioteca do Sistema
-    [ ] 5.11.17 — Exibir personagens-template no frontend
-    [ ] 5.11.18 — Abrir detalhes completos do template
-    [ ] 5.11.19 — Instanciar template como CampaignActor + CharacterSheet
-    [ ] 5.11.20 — Garantir cópia independente do template
-    [ ] 5.11.21 — Permitir edição da instância sem alterar a origem
-    [ ] 5.11.22 — Teste regressivo completo
-5.12 — NpcSheet / CreatureSheet completos
-    [ ] 5.12.1 — Auditar requisitos mecânicos de NPC
-    [ ] 5.12.2 — Auditar requisitos mecânicos de criatura
-    [ ] 5.12.3 — Definir diferenças NPC × Creature
-    [ ] 5.12.4 — Modelar NpcSheet
-    [ ] 5.12.5 — Modelar CreatureSheet
-    [ ] 5.12.6 — Atributos STR / DEX / CON / INT / WIS / CHA
-    [ ] 5.12.7 — CA / PV / deslocamentos
-    [ ] 5.12.8 — Salvaguardas e perícias
-    [ ] 5.12.9 — Resistências / imunidades / vulnerabilidades
-    [ ] 5.12.10 — Sentidos e idiomas
-    [ ] 5.12.11 — CR / desafio / XP para criaturas
-    [ ] 5.12.12 — Traits / características passivas
-    [ ] 5.12.13 — Ações
-    [ ] 5.12.14 — Ataques
-    [ ] 5.12.15 — Ações bônus
-    [ ] 5.12.16 — Reações
-    [ ] 5.12.17 — Multiataque
-    [ ] 5.12.18 — Magias/habilidades mágicas
-    [ ] 5.12.19 — Lore e comportamento
-    [ ] 5.12.20 — Retrato + imagem/token
-    [ ] 5.12.21 — Builder completo de NPC
-    [ ] 5.12.22 — Builder completo de criatura
-    [ ] 5.12.23 — Ficha pronta de NPC
-    [ ] 5.12.24 — Ficha pronta de criatura
-    [ ] 5.12.25 — Template → instância independente
-    [ ] 5.12.26 — Rolagens reais na mesa
+[x] 5.11 — CharacterTemplate completo
+    [x] 5.11.1 — Auditar CharacterSheet completa e suas relações
+    [x] 5.11.2 — Definir o que um CharacterTemplate deve preservar
+    [x] 5.11.3 — Definir Template × CharacterSheet × CampaignActor
+    [x] 5.11.4 — Definir comportamento com multiclasse
+    [x] 5.11.5 — Definir ancestralidade e sub-ancestralidade no template
+    [x] 5.11.6 — Definir antecedentes, idiomas e proficiências
+    [x] 5.11.7 — Definir atributos e perícias
+    [x] 5.11.8 — Definir magias conhecidas do template
+    [x] 5.11.9 — Definir equipamentos do template
+    [x] 5.11.10 — Definir features e escolhas já resolvidas
+    [x] 5.11.11 — Definir progressão e escolhas de nível
+    [x] 5.11.12 — Modelar CharacterTemplate no Prisma
+    [x] 5.11.13 — Modelar relações auxiliares necessárias
+    [x] 5.11.14 — Criar migration
+    [x] 5.11.15 — Criar seed mínimo de personagens-template
+    [x] 5.11.16 — Expor CharacterTemplate na Biblioteca do Sistema
+    [x] 5.11.17 — Exibir personagens-template no frontend
+    [x] 5.11.18 — Abrir detalhes completos do template
+    [x] 5.11.19 — Instanciar template como CampaignActor + CharacterSheet
+    [x] 5.11.20 — Garantir cópia independente do template
+    [x] 5.11.21 — Permitir edição da instância sem alterar a origem
+    [x] 5.11.22 — Teste regressivo completo
+[ ] 5.12 — NpcSheet / CreatureSheet completos
+    [x] 5.12.1 — Auditar requisitos mecânicos de NPC
+    [x] 5.12.2 — Auditar requisitos mecânicos de criatura
+    [x] 5.12.3 — Definir diferenças NPC × Creature
+    [x] 5.12.4 — Modelar NpcSheet
+    [x] 5.12.5 — Modelar CreatureSheet
+    [x] 5.12.6 — Atributos STR / DEX / CON / INT / WIS / CHA
+    [x] 5.12.7 — CA / PV / deslocamentos
+    [x] 5.12.8 — Salvaguardas e perícias
+    [x] 5.12.9 — Resistências / imunidades / vulnerabilidades
+    [x] 5.12.10 — Sentidos e idiomas
+    [x] 5.12.11 — CR / desafio / XP para criaturas
+    [x] 5.12.12 — Traits / características passivas
+    [x] 5.12.13 — Ações
+    [x] 5.12.14 — Ataques
+    [x] 5.12.15 — Ações bônus
+    [x] 5.12.16 — Reações
+    [x] 5.12.17 — Multiataque
+    [x] 5.12.18 — Magias/habilidades mágicas
+    [x] 5.12.19 — Lore e comportamento
+    [x] 5.12.20 — Retrato + imagem/token
+    [x] 5.12.21 — Builder completo de NPC
+    [x] 5.12.22 — Builder completo de criatura
+    [x] 5.12.23 — Ficha pronta de NPC
+    [x] 5.12.24 — Ficha pronta de criatura
+    [x] 5.12.25 — Template → instância independente
+    [ ] 5.12.26 — Rolagens reais na mesa5
     [ ] 5.12.27 — Integração com iniciativa/combate
     [ ] 5.12.28 — Teste regressivo
 
@@ -615,29 +615,6 @@ A próxima micro de desenvolvimento é:
 
 Fase 5 — Biblioteca completa
 
-[ ] 5.11 — CharacterTemplate completo
-    [ ] 5.11.1 — Auditar CharacterSheet completa e suas relações
-    [ ] 5.11.2 — Definir o que um CharacterTemplate deve preservar
-    [ ] 5.11.3 — Definir Template × CharacterSheet × CampaignActor
-    [ ] 5.11.4 — Definir comportamento com multiclasse
-    [ ] 5.11.5 — Definir ancestralidade e sub-ancestralidade no template
-    [ ] 5.11.6 — Definir antecedentes, idiomas e proficiências
-    [ ] 5.11.7 — Definir atributos e perícias
-    [ ] 5.11.8 — Definir magias conhecidas do template
-    [ ] 5.11.9 — Definir equipamentos do template
-    [ ] 5.11.10 — Definir features e escolhas já resolvidas
-    [ ] 5.11.11 — Definir progressão e escolhas de nível
-    [ ] 5.11.12 — Modelar CharacterTemplate no Prisma
-    [ ] 5.11.13 — Modelar relações auxiliares necessárias
-    [ ] 5.11.14 — Criar migration
-    [ ] 5.11.15 — Criar seed mínimo de personagens-template
-    [ ] 5.11.16 — Expor CharacterTemplate na Biblioteca do Sistema
-    [ ] 5.11.17 — Exibir personagens-template no frontend
-    [ ] 5.11.18 — Abrir detalhes completos do template
-    [ ] 5.11.19 — Instanciar template como CampaignActor + CharacterSheet
-    [ ] 5.11.20 — Garantir cópia independente do template
-    [ ] 5.11.21 — Permitir edição da instância sem alterar a origem
-    [ ] 5.11.22 — Teste regressivo completo
 5.12 — NpcSheet / CreatureSheet completos
     [ ] 5.12.1 — Auditar requisitos mecânicos de NPC
     [ ] 5.12.2 — Auditar requisitos mecânicos de criatura

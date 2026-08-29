@@ -391,6 +391,29 @@ export const ModelName = {
   GameSystem: 'GameSystem',
   NpcTemplate: 'NpcTemplate',
   CreatureTemplate: 'CreatureTemplate',
+  NpcTemplateClass: 'NpcTemplateClass',
+  NpcTemplateStat: 'NpcTemplateStat',
+  NpcTemplateSkill: 'NpcTemplateSkill',
+  NpcTemplateDefense: 'NpcTemplateDefense',
+  NpcTemplateSense: 'NpcTemplateSense',
+  NpcTemplateLanguage: 'NpcTemplateLanguage',
+  NpcTemplateTrait: 'NpcTemplateTrait',
+  NpcTemplateAction: 'NpcTemplateAction',
+  NpcTemplateAttack: 'NpcTemplateAttack',
+  NpcTemplateMultiattack: 'NpcTemplateMultiattack',
+  NpcTemplateMultiattackEntry: 'NpcTemplateMultiattackEntry',
+  NpcTemplateMagicalAbility: 'NpcTemplateMagicalAbility',
+  CreatureTemplateStat: 'CreatureTemplateStat',
+  CreatureTemplateSkill: 'CreatureTemplateSkill',
+  CreatureTemplateDefense: 'CreatureTemplateDefense',
+  CreatureTemplateSense: 'CreatureTemplateSense',
+  CreatureTemplateLanguage: 'CreatureTemplateLanguage',
+  CreatureTemplateTrait: 'CreatureTemplateTrait',
+  CreatureTemplateAction: 'CreatureTemplateAction',
+  CreatureTemplateAttack: 'CreatureTemplateAttack',
+  CreatureTemplateMultiattack: 'CreatureTemplateMultiattack',
+  CreatureTemplateMultiattackEntry: 'CreatureTemplateMultiattackEntry',
+  CreatureTemplateMagicalAbility: 'CreatureTemplateMagicalAbility',
   Ancestry: 'Ancestry',
   SubAncestry: 'SubAncestry',
   Background: 'Background',
@@ -403,6 +426,31 @@ export const ModelName = {
   CharacterTemplateLanguage: 'CharacterTemplateLanguage',
   CharacterTemplateFeatureChoice: 'CharacterTemplateFeatureChoice',
   CharacterTemplateProgressionChoice: 'CharacterTemplateProgressionChoice',
+  NpcSheet: 'NpcSheet',
+  NpcSheetClass: 'NpcSheetClass',
+  NpcSheetStat: 'NpcSheetStat',
+  NpcSheetSkill: 'NpcSheetSkill',
+  NpcSheetDefense: 'NpcSheetDefense',
+  NpcSheetSense: 'NpcSheetSense',
+  NpcSheetLanguage: 'NpcSheetLanguage',
+  CreatureSheet: 'CreatureSheet',
+  CreatureSheetStat: 'CreatureSheetStat',
+  CreatureSheetSkill: 'CreatureSheetSkill',
+  CreatureSheetDefense: 'CreatureSheetDefense',
+  CreatureSheetSense: 'CreatureSheetSense',
+  CreatureSheetLanguage: 'CreatureSheetLanguage',
+  NpcSheetTrait: 'NpcSheetTrait',
+  NpcSheetAction: 'NpcSheetAction',
+  NpcSheetAttack: 'NpcSheetAttack',
+  NpcSheetMultiattack: 'NpcSheetMultiattack',
+  NpcSheetMultiattackEntry: 'NpcSheetMultiattackEntry',
+  NpcSheetMagicalAbility: 'NpcSheetMagicalAbility',
+  CreatureSheetTrait: 'CreatureSheetTrait',
+  CreatureSheetAction: 'CreatureSheetAction',
+  CreatureSheetAttack: 'CreatureSheetAttack',
+  CreatureSheetMultiattack: 'CreatureSheetMultiattack',
+  CreatureSheetMultiattackEntry: 'CreatureSheetMultiattackEntry',
+  CreatureSheetMagicalAbility: 'CreatureSheetMagicalAbility',
   CharacterSheet: 'CharacterSheet',
   Language: 'Language',
   CharacterSheetLanguage: 'CharacterSheetLanguage',
@@ -448,7 +496,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "npcTemplate" | "creatureTemplate" | "ancestry" | "subAncestry" | "background" | "characterTemplate" | "characterTemplateClass" | "characterTemplateStat" | "characterTemplateSkill" | "characterTemplateSpell" | "characterTemplateEquipment" | "characterTemplateLanguage" | "characterTemplateFeatureChoice" | "characterTemplateProgressionChoice" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterSheetProgressionChoice" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "talent" | "featureChoiceGroup" | "featureChoiceOption" | "characterSheetFeatureChoice" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
+    modelProps: "user" | "session" | "account" | "verification" | "gameSystem" | "npcTemplate" | "creatureTemplate" | "npcTemplateClass" | "npcTemplateStat" | "npcTemplateSkill" | "npcTemplateDefense" | "npcTemplateSense" | "npcTemplateLanguage" | "npcTemplateTrait" | "npcTemplateAction" | "npcTemplateAttack" | "npcTemplateMultiattack" | "npcTemplateMultiattackEntry" | "npcTemplateMagicalAbility" | "creatureTemplateStat" | "creatureTemplateSkill" | "creatureTemplateDefense" | "creatureTemplateSense" | "creatureTemplateLanguage" | "creatureTemplateTrait" | "creatureTemplateAction" | "creatureTemplateAttack" | "creatureTemplateMultiattack" | "creatureTemplateMultiattackEntry" | "creatureTemplateMagicalAbility" | "ancestry" | "subAncestry" | "background" | "characterTemplate" | "characterTemplateClass" | "characterTemplateStat" | "characterTemplateSkill" | "characterTemplateSpell" | "characterTemplateEquipment" | "characterTemplateLanguage" | "characterTemplateFeatureChoice" | "characterTemplateProgressionChoice" | "npcSheet" | "npcSheetClass" | "npcSheetStat" | "npcSheetSkill" | "npcSheetDefense" | "npcSheetSense" | "npcSheetLanguage" | "creatureSheet" | "creatureSheetStat" | "creatureSheetSkill" | "creatureSheetDefense" | "creatureSheetSense" | "creatureSheetLanguage" | "npcSheetTrait" | "npcSheetAction" | "npcSheetAttack" | "npcSheetMultiattack" | "npcSheetMultiattackEntry" | "npcSheetMagicalAbility" | "creatureSheetTrait" | "creatureSheetAction" | "creatureSheetAttack" | "creatureSheetMultiattack" | "creatureSheetMultiattackEntry" | "creatureSheetMagicalAbility" | "characterSheet" | "language" | "characterSheetLanguage" | "characterSheetStat" | "characterSheetSkill" | "characterSheetSpell" | "characterSheetEquipment" | "characterSheetClass" | "characterSheetProgressionChoice" | "characterClass" | "characterSubclass" | "levelProgression" | "levelProgressionSpellLimit" | "classSpell" | "feature" | "talent" | "featureChoiceGroup" | "featureChoiceOption" | "characterSheetFeatureChoice" | "spell" | "equipment" | "stat" | "skill" | "campaign" | "gameSession" | "participant" | "campaignActor" | "sceneToken" | "campaignInvite" | "campaignLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -967,6 +1015,1708 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CreatureTemplateCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateClass: {
+      payload: Prisma.$NpcTemplateClassPayload<ExtArgs>
+      fields: Prisma.NpcTemplateClassFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateClassFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateClassFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateClassFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateClassFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateClassFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateClassCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateClassCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateClassCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateClassDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateClassUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateClassDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateClassUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateClassUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateClassUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateClassPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateClassAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateClass>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateClassGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateClassGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateClassCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateClassCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateStat: {
+      payload: Prisma.$NpcTemplateStatPayload<ExtArgs>
+      fields: Prisma.NpcTemplateStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateStatPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateStat>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateStatCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateSkill: {
+      payload: Prisma.$NpcTemplateSkillPayload<ExtArgs>
+      fields: Prisma.NpcTemplateSkillFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateSkillFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateSkillFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateSkillFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateSkillFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateSkillFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateSkillCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateSkillCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateSkillCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateSkillDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateSkillUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateSkillDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateSkillUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateSkillUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateSkillUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSkillPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateSkillAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateSkill>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateSkillGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateSkillGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateSkillCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateSkillCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateDefense: {
+      payload: Prisma.$NpcTemplateDefensePayload<ExtArgs>
+      fields: Prisma.NpcTemplateDefenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateDefenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateDefenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateDefenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateDefenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateDefenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateDefenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateDefenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateDefenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateDefenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateDefenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateDefenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateDefenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateDefenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateDefenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateDefensePayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateDefenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateDefense>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateDefenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateDefenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateDefenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateDefenseCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateSense: {
+      payload: Prisma.$NpcTemplateSensePayload<ExtArgs>
+      fields: Prisma.NpcTemplateSenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateSenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateSenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateSenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateSenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateSenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateSenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateSenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateSenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateSenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateSenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateSenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateSenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateSenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateSenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateSensePayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateSenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateSense>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateSenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateSenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateSenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateSenseCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateLanguage: {
+      payload: Prisma.$NpcTemplateLanguagePayload<ExtArgs>
+      fields: Prisma.NpcTemplateLanguageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateLanguageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateLanguageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateLanguageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateLanguageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateLanguageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateLanguageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateLanguageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateLanguageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateLanguageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateLanguageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateLanguageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateLanguageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateLanguageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateLanguageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateLanguagePayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateLanguageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateLanguage>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateLanguageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateLanguageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateLanguageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateLanguageCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateTrait: {
+      payload: Prisma.$NpcTemplateTraitPayload<ExtArgs>
+      fields: Prisma.NpcTemplateTraitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateTraitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateTraitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateTraitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateTraitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateTraitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateTraitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateTraitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateTraitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateTraitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateTraitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateTraitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateTraitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateTraitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateTraitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateTraitPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateTraitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateTrait>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateTraitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateTraitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateTraitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateTraitCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateAction: {
+      payload: Prisma.$NpcTemplateActionPayload<ExtArgs>
+      fields: Prisma.NpcTemplateActionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateActionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateActionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateActionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateActionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateActionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateActionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateActionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateActionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateActionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateActionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateActionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateActionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateActionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateActionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateActionPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateActionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateAction>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateActionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateActionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateActionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateActionCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateAttack: {
+      payload: Prisma.$NpcTemplateAttackPayload<ExtArgs>
+      fields: Prisma.NpcTemplateAttackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateAttackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateAttackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateAttackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateAttackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateAttackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateAttackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateAttackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateAttackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateAttackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateAttackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateAttackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateAttackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateAttackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateAttackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateAttackPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateAttackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateAttack>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateAttackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateAttackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateAttackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateAttackCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateMultiattack: {
+      payload: Prisma.$NpcTemplateMultiattackPayload<ExtArgs>
+      fields: Prisma.NpcTemplateMultiattackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateMultiattackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateMultiattackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateMultiattackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateMultiattackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateMultiattackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateMultiattackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateMultiattackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateMultiattackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateMultiattackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateMultiattackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateMultiattackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateMultiattackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateMultiattackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateMultiattackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateMultiattackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateMultiattack>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateMultiattackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateMultiattackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateMultiattackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateMultiattackCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateMultiattackEntry: {
+      payload: Prisma.$NpcTemplateMultiattackEntryPayload<ExtArgs>
+      fields: Prisma.NpcTemplateMultiattackEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateMultiattackEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateMultiattackEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateMultiattackEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateMultiattackEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateMultiattackEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateMultiattackEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateMultiattackEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateMultiattackEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateMultiattackEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateMultiattackEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateMultiattackEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateMultiattackEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateMultiattackEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateMultiattackEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMultiattackEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateMultiattackEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateMultiattackEntry>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateMultiattackEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateMultiattackEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateMultiattackEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateMultiattackEntryCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcTemplateMagicalAbility: {
+      payload: Prisma.$NpcTemplateMagicalAbilityPayload<ExtArgs>
+      fields: Prisma.NpcTemplateMagicalAbilityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcTemplateMagicalAbilityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcTemplateMagicalAbilityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcTemplateMagicalAbilityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcTemplateMagicalAbilityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>
+        }
+        findMany: {
+          args: Prisma.NpcTemplateMagicalAbilityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>[]
+        }
+        create: {
+          args: Prisma.NpcTemplateMagicalAbilityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>
+        }
+        createMany: {
+          args: Prisma.NpcTemplateMagicalAbilityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcTemplateMagicalAbilityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcTemplateMagicalAbilityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>
+        }
+        update: {
+          args: Prisma.NpcTemplateMagicalAbilityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcTemplateMagicalAbilityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcTemplateMagicalAbilityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcTemplateMagicalAbilityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcTemplateMagicalAbilityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcTemplateMagicalAbilityPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcTemplateMagicalAbilityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcTemplateMagicalAbility>
+        }
+        groupBy: {
+          args: Prisma.NpcTemplateMagicalAbilityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateMagicalAbilityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcTemplateMagicalAbilityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcTemplateMagicalAbilityCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateStat: {
+      payload: Prisma.$CreatureTemplateStatPayload<ExtArgs>
+      fields: Prisma.CreatureTemplateStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateStatPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateStat>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateStatCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateSkill: {
+      payload: Prisma.$CreatureTemplateSkillPayload<ExtArgs>
+      fields: Prisma.CreatureTemplateSkillFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateSkillFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateSkillFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateSkillFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateSkillFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateSkillFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateSkillCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateSkillCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateSkillCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateSkillDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateSkillUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateSkillDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateSkillUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateSkillUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateSkillUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSkillPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateSkillAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateSkill>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateSkillGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateSkillGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateSkillCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateSkillCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateDefense: {
+      payload: Prisma.$CreatureTemplateDefensePayload<ExtArgs>
+      fields: Prisma.CreatureTemplateDefenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateDefenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateDefenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateDefenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateDefenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateDefenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateDefenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateDefenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateDefenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateDefenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateDefenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateDefenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateDefenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateDefenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateDefenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateDefensePayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateDefenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateDefense>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateDefenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateDefenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateDefenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateDefenseCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateSense: {
+      payload: Prisma.$CreatureTemplateSensePayload<ExtArgs>
+      fields: Prisma.CreatureTemplateSenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateSenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateSenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateSenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateSenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateSenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateSenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateSenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateSenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateSenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateSenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateSenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateSenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateSenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateSenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateSensePayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateSenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateSense>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateSenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateSenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateSenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateSenseCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateLanguage: {
+      payload: Prisma.$CreatureTemplateLanguagePayload<ExtArgs>
+      fields: Prisma.CreatureTemplateLanguageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateLanguageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateLanguageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateLanguageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateLanguageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateLanguageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateLanguageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateLanguageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateLanguageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateLanguageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateLanguageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateLanguageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateLanguageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateLanguageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateLanguageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateLanguagePayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateLanguageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateLanguage>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateLanguageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateLanguageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateLanguageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateLanguageCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateTrait: {
+      payload: Prisma.$CreatureTemplateTraitPayload<ExtArgs>
+      fields: Prisma.CreatureTemplateTraitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateTraitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateTraitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateTraitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateTraitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateTraitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateTraitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateTraitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateTraitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateTraitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateTraitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateTraitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateTraitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateTraitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateTraitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateTraitPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateTraitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateTrait>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateTraitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateTraitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateTraitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateTraitCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateAction: {
+      payload: Prisma.$CreatureTemplateActionPayload<ExtArgs>
+      fields: Prisma.CreatureTemplateActionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateActionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateActionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateActionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateActionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateActionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateActionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateActionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateActionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateActionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateActionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateActionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateActionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateActionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateActionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateActionPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateActionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateAction>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateActionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateActionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateActionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateActionCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateAttack: {
+      payload: Prisma.$CreatureTemplateAttackPayload<ExtArgs>
+      fields: Prisma.CreatureTemplateAttackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateAttackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateAttackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateAttackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateAttackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateAttackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateAttackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateAttackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateAttackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateAttackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateAttackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateAttackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateAttackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateAttackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateAttackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateAttackPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateAttackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateAttack>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateAttackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateAttackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateAttackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateAttackCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateMultiattack: {
+      payload: Prisma.$CreatureTemplateMultiattackPayload<ExtArgs>
+      fields: Prisma.CreatureTemplateMultiattackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateMultiattackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateMultiattackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateMultiattackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateMultiattackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateMultiattackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateMultiattackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateMultiattackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateMultiattackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateMultiattackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateMultiattackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateMultiattackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateMultiattackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateMultiattackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateMultiattackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateMultiattackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateMultiattack>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateMultiattackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateMultiattackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateMultiattackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateMultiattackCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateMultiattackEntry: {
+      payload: Prisma.$CreatureTemplateMultiattackEntryPayload<ExtArgs>
+      fields: Prisma.CreatureTemplateMultiattackEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateMultiattackEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateMultiattackEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateMultiattackEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateMultiattackEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateMultiattackEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateMultiattackEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateMultiattackEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateMultiattackEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateMultiattackEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateMultiattackEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateMultiattackEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateMultiattackEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateMultiattackEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateMultiattackEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMultiattackEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateMultiattackEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateMultiattackEntry>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateMultiattackEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateMultiattackEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateMultiattackEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateMultiattackEntryCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureTemplateMagicalAbility: {
+      payload: Prisma.$CreatureTemplateMagicalAbilityPayload<ExtArgs>
+      fields: Prisma.CreatureTemplateMagicalAbilityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureTemplateMagicalAbilityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureTemplateMagicalAbilityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureTemplateMagicalAbilityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureTemplateMagicalAbilityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureTemplateMagicalAbilityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureTemplateMagicalAbilityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureTemplateMagicalAbilityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureTemplateMagicalAbilityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureTemplateMagicalAbilityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>
+        }
+        update: {
+          args: Prisma.CreatureTemplateMagicalAbilityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureTemplateMagicalAbilityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureTemplateMagicalAbilityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureTemplateMagicalAbilityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureTemplateMagicalAbilityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureTemplateMagicalAbilityPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureTemplateMagicalAbilityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureTemplateMagicalAbility>
+        }
+        groupBy: {
+          args: Prisma.CreatureTemplateMagicalAbilityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateMagicalAbilityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureTemplateMagicalAbilityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureTemplateMagicalAbilityCountAggregateOutputType> | number
         }
       }
     }
@@ -1855,6 +3605,1856 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CharacterTemplateProgressionChoiceCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CharacterTemplateProgressionChoiceCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheet: {
+      payload: Prisma.$NpcSheetPayload<ExtArgs>
+      fields: Prisma.NpcSheetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheet>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetClass: {
+      payload: Prisma.$NpcSheetClassPayload<ExtArgs>
+      fields: Prisma.NpcSheetClassFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetClassFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetClassFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetClassFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetClassFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetClassFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetClassCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetClassCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetClassCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetClassDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetClassUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetClassDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetClassUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetClassUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetClassUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetClassPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetClassAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetClass>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetClassGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetClassGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetClassCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetClassCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetStat: {
+      payload: Prisma.$NpcSheetStatPayload<ExtArgs>
+      fields: Prisma.NpcSheetStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetStatPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetStat>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetStatCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetSkill: {
+      payload: Prisma.$NpcSheetSkillPayload<ExtArgs>
+      fields: Prisma.NpcSheetSkillFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetSkillFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetSkillFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetSkillFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetSkillFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetSkillFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetSkillCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetSkillCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetSkillCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetSkillDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetSkillUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetSkillDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetSkillUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetSkillUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetSkillUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSkillPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetSkillAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetSkill>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetSkillGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetSkillGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetSkillCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetSkillCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetDefense: {
+      payload: Prisma.$NpcSheetDefensePayload<ExtArgs>
+      fields: Prisma.NpcSheetDefenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetDefenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetDefenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetDefenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetDefenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetDefenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetDefenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetDefenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetDefenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetDefenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>
+        }
+        update: {
+          args: Prisma.NpcSheetDefenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetDefenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetDefenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetDefenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetDefenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetDefensePayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetDefenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetDefense>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetDefenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetDefenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetDefenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetDefenseCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetSense: {
+      payload: Prisma.$NpcSheetSensePayload<ExtArgs>
+      fields: Prisma.NpcSheetSenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetSenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetSenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetSenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetSenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetSenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetSenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetSenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetSenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetSenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>
+        }
+        update: {
+          args: Prisma.NpcSheetSenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetSenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetSenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetSenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetSenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetSensePayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetSenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetSense>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetSenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetSenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetSenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetSenseCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetLanguage: {
+      payload: Prisma.$NpcSheetLanguagePayload<ExtArgs>
+      fields: Prisma.NpcSheetLanguageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetLanguageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetLanguageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetLanguageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetLanguageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetLanguageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetLanguageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetLanguageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetLanguageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetLanguageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>
+        }
+        update: {
+          args: Prisma.NpcSheetLanguageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetLanguageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetLanguageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetLanguageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetLanguageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetLanguagePayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetLanguageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetLanguage>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetLanguageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetLanguageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetLanguageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetLanguageCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheet: {
+      payload: Prisma.$CreatureSheetPayload<ExtArgs>
+      fields: Prisma.CreatureSheetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheet>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetStat: {
+      payload: Prisma.$CreatureSheetStatPayload<ExtArgs>
+      fields: Prisma.CreatureSheetStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetStatPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetStat>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetStatCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetSkill: {
+      payload: Prisma.$CreatureSheetSkillPayload<ExtArgs>
+      fields: Prisma.CreatureSheetSkillFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetSkillFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetSkillFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetSkillFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetSkillFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetSkillFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetSkillCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetSkillCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetSkillCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetSkillDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetSkillUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetSkillDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetSkillUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetSkillUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetSkillUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSkillPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetSkillAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetSkill>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetSkillGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetSkillGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetSkillCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetSkillCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetDefense: {
+      payload: Prisma.$CreatureSheetDefensePayload<ExtArgs>
+      fields: Prisma.CreatureSheetDefenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetDefenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetDefenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetDefenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetDefenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetDefenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetDefenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetDefenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetDefenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetDefenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetDefenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetDefenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetDefenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetDefenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetDefenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetDefensePayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetDefenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetDefense>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetDefenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetDefenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetDefenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetDefenseCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetSense: {
+      payload: Prisma.$CreatureSheetSensePayload<ExtArgs>
+      fields: Prisma.CreatureSheetSenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetSenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetSenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetSenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetSenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetSenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetSenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetSenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetSenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetSenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetSenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetSenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetSenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetSenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetSenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetSensePayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetSenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetSense>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetSenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetSenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetSenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetSenseCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetLanguage: {
+      payload: Prisma.$CreatureSheetLanguagePayload<ExtArgs>
+      fields: Prisma.CreatureSheetLanguageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetLanguageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetLanguageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetLanguageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetLanguageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetLanguageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetLanguageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetLanguageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetLanguageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetLanguageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetLanguageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetLanguageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetLanguageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetLanguageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetLanguageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetLanguagePayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetLanguageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetLanguage>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetLanguageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetLanguageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetLanguageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetLanguageCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetTrait: {
+      payload: Prisma.$NpcSheetTraitPayload<ExtArgs>
+      fields: Prisma.NpcSheetTraitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetTraitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetTraitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetTraitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetTraitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetTraitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetTraitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetTraitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetTraitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetTraitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetTraitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetTraitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetTraitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetTraitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetTraitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetTraitPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetTraitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetTrait>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetTraitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetTraitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetTraitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetTraitCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetAction: {
+      payload: Prisma.$NpcSheetActionPayload<ExtArgs>
+      fields: Prisma.NpcSheetActionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetActionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetActionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetActionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetActionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetActionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetActionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetActionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetActionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetActionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetActionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetActionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetActionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetActionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetActionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetActionPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetActionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetAction>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetActionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetActionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetActionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetActionCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetAttack: {
+      payload: Prisma.$NpcSheetAttackPayload<ExtArgs>
+      fields: Prisma.NpcSheetAttackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetAttackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetAttackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetAttackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetAttackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetAttackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetAttackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetAttackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetAttackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetAttackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetAttackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetAttackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetAttackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetAttackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetAttackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetAttackPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetAttackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetAttack>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetAttackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetAttackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetAttackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetAttackCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetMultiattack: {
+      payload: Prisma.$NpcSheetMultiattackPayload<ExtArgs>
+      fields: Prisma.NpcSheetMultiattackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetMultiattackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetMultiattackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetMultiattackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetMultiattackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetMultiattackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetMultiattackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetMultiattackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetMultiattackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetMultiattackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetMultiattackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetMultiattackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetMultiattackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetMultiattackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetMultiattackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetMultiattackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetMultiattack>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetMultiattackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetMultiattackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetMultiattackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetMultiattackCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetMultiattackEntry: {
+      payload: Prisma.$NpcSheetMultiattackEntryPayload<ExtArgs>
+      fields: Prisma.NpcSheetMultiattackEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetMultiattackEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetMultiattackEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetMultiattackEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetMultiattackEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetMultiattackEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetMultiattackEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetMultiattackEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetMultiattackEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetMultiattackEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetMultiattackEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetMultiattackEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetMultiattackEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetMultiattackEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetMultiattackEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMultiattackEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetMultiattackEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetMultiattackEntry>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetMultiattackEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetMultiattackEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetMultiattackEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetMultiattackEntryCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpcSheetMagicalAbility: {
+      payload: Prisma.$NpcSheetMagicalAbilityPayload<ExtArgs>
+      fields: Prisma.NpcSheetMagicalAbilityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpcSheetMagicalAbilityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpcSheetMagicalAbilityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>
+        }
+        findFirst: {
+          args: Prisma.NpcSheetMagicalAbilityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpcSheetMagicalAbilityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>
+        }
+        findMany: {
+          args: Prisma.NpcSheetMagicalAbilityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>[]
+        }
+        create: {
+          args: Prisma.NpcSheetMagicalAbilityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>
+        }
+        createMany: {
+          args: Prisma.NpcSheetMagicalAbilityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpcSheetMagicalAbilityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>[]
+        }
+        delete: {
+          args: Prisma.NpcSheetMagicalAbilityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>
+        }
+        update: {
+          args: Prisma.NpcSheetMagicalAbilityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpcSheetMagicalAbilityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpcSheetMagicalAbilityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpcSheetMagicalAbilityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpcSheetMagicalAbilityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpcSheetMagicalAbilityPayload>
+        }
+        aggregate: {
+          args: Prisma.NpcSheetMagicalAbilityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpcSheetMagicalAbility>
+        }
+        groupBy: {
+          args: Prisma.NpcSheetMagicalAbilityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetMagicalAbilityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpcSheetMagicalAbilityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpcSheetMagicalAbilityCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetTrait: {
+      payload: Prisma.$CreatureSheetTraitPayload<ExtArgs>
+      fields: Prisma.CreatureSheetTraitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetTraitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetTraitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetTraitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetTraitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetTraitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetTraitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetTraitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetTraitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetTraitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetTraitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetTraitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetTraitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetTraitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetTraitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetTraitPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetTraitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetTrait>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetTraitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetTraitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetTraitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetTraitCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetAction: {
+      payload: Prisma.$CreatureSheetActionPayload<ExtArgs>
+      fields: Prisma.CreatureSheetActionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetActionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetActionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetActionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetActionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetActionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetActionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetActionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetActionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetActionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetActionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetActionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetActionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetActionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetActionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetActionPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetActionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetAction>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetActionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetActionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetActionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetActionCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetAttack: {
+      payload: Prisma.$CreatureSheetAttackPayload<ExtArgs>
+      fields: Prisma.CreatureSheetAttackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetAttackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetAttackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetAttackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetAttackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetAttackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetAttackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetAttackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetAttackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetAttackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetAttackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetAttackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetAttackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetAttackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetAttackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetAttackPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetAttackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetAttack>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetAttackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetAttackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetAttackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetAttackCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetMultiattack: {
+      payload: Prisma.$CreatureSheetMultiattackPayload<ExtArgs>
+      fields: Prisma.CreatureSheetMultiattackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetMultiattackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetMultiattackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetMultiattackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetMultiattackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetMultiattackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetMultiattackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetMultiattackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetMultiattackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetMultiattackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetMultiattackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetMultiattackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetMultiattackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetMultiattackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetMultiattackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetMultiattackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetMultiattack>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetMultiattackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetMultiattackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetMultiattackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetMultiattackCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetMultiattackEntry: {
+      payload: Prisma.$CreatureSheetMultiattackEntryPayload<ExtArgs>
+      fields: Prisma.CreatureSheetMultiattackEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetMultiattackEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetMultiattackEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetMultiattackEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetMultiattackEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetMultiattackEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetMultiattackEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetMultiattackEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetMultiattackEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetMultiattackEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetMultiattackEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetMultiattackEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetMultiattackEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetMultiattackEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetMultiattackEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMultiattackEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetMultiattackEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetMultiattackEntry>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetMultiattackEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetMultiattackEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetMultiattackEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetMultiattackEntryCountAggregateOutputType> | number
+        }
+      }
+    }
+    CreatureSheetMagicalAbility: {
+      payload: Prisma.$CreatureSheetMagicalAbilityPayload<ExtArgs>
+      fields: Prisma.CreatureSheetMagicalAbilityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreatureSheetMagicalAbilityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreatureSheetMagicalAbilityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>
+        }
+        findFirst: {
+          args: Prisma.CreatureSheetMagicalAbilityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreatureSheetMagicalAbilityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>
+        }
+        findMany: {
+          args: Prisma.CreatureSheetMagicalAbilityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>[]
+        }
+        create: {
+          args: Prisma.CreatureSheetMagicalAbilityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>
+        }
+        createMany: {
+          args: Prisma.CreatureSheetMagicalAbilityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreatureSheetMagicalAbilityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>[]
+        }
+        delete: {
+          args: Prisma.CreatureSheetMagicalAbilityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>
+        }
+        update: {
+          args: Prisma.CreatureSheetMagicalAbilityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreatureSheetMagicalAbilityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreatureSheetMagicalAbilityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreatureSheetMagicalAbilityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreatureSheetMagicalAbilityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreatureSheetMagicalAbilityPayload>
+        }
+        aggregate: {
+          args: Prisma.CreatureSheetMagicalAbilityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreatureSheetMagicalAbility>
+        }
+        groupBy: {
+          args: Prisma.CreatureSheetMagicalAbilityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetMagicalAbilityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreatureSheetMagicalAbilityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreatureSheetMagicalAbilityCountAggregateOutputType> | number
         }
       }
     }
@@ -4195,7 +7795,30 @@ export const NpcTemplateScalarFieldEnum = {
   name: 'name',
   initials: 'initials',
   description: 'description',
+  ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
+  backgroundId: 'backgroundId',
+  size: 'size',
+  role: 'role',
+  faction: 'faction',
+  personality: 'personality',
+  motivation: 'motivation',
+  behavior: 'behavior',
+  tactics: 'tactics',
+  lore: 'lore',
+  notes: 'notes',
   portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  armorClass: 'armorClass',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  speed: 'speed',
+  climbSpeed: 'climbSpeed',
+  swimSpeed: 'swimSpeed',
+  flySpeed: 'flySpeed',
+  burrowSpeed: 'burrowSpeed',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -4211,13 +7834,418 @@ export const CreatureTemplateScalarFieldEnum = {
   name: 'name',
   initials: 'initials',
   description: 'description',
+  size: 'size',
+  creatureType: 'creatureType',
+  habitat: 'habitat',
+  behavior: 'behavior',
+  tactics: 'tactics',
+  lore: 'lore',
+  notes: 'notes',
   portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  armorClass: 'armorClass',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  speed: 'speed',
+  climbSpeed: 'climbSpeed',
+  swimSpeed: 'swimSpeed',
+  flySpeed: 'flySpeed',
+  burrowSpeed: 'burrowSpeed',
+  challengeRating: 'challengeRating',
+  experienceReward: 'experienceReward',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CreatureTemplateScalarFieldEnum = (typeof CreatureTemplateScalarFieldEnum)[keyof typeof CreatureTemplateScalarFieldEnum]
+
+
+export const NpcTemplateClassScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  level: 'level',
+  isPrimary: 'isPrimary',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateClassScalarFieldEnum = (typeof NpcTemplateClassScalarFieldEnum)[keyof typeof NpcTemplateClassScalarFieldEnum]
+
+
+export const NpcTemplateStatScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  savingThrowBonus: 'savingThrowBonus',
+  savingThrowOverride: 'savingThrowOverride',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateStatScalarFieldEnum = (typeof NpcTemplateStatScalarFieldEnum)[keyof typeof NpcTemplateStatScalarFieldEnum]
+
+
+export const NpcTemplateSkillScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateSkillScalarFieldEnum = (typeof NpcTemplateSkillScalarFieldEnum)[keyof typeof NpcTemplateSkillScalarFieldEnum]
+
+
+export const NpcTemplateDefenseScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  kind: 'kind',
+  damageType: 'damageType',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateDefenseScalarFieldEnum = (typeof NpcTemplateDefenseScalarFieldEnum)[keyof typeof NpcTemplateDefenseScalarFieldEnum]
+
+
+export const NpcTemplateSenseScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  name: 'name',
+  range: 'range',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateSenseScalarFieldEnum = (typeof NpcTemplateSenseScalarFieldEnum)[keyof typeof NpcTemplateSenseScalarFieldEnum]
+
+
+export const NpcTemplateLanguageScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  languageId: 'languageId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateLanguageScalarFieldEnum = (typeof NpcTemplateLanguageScalarFieldEnum)[keyof typeof NpcTemplateLanguageScalarFieldEnum]
+
+
+export const NpcTemplateTraitScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateTraitScalarFieldEnum = (typeof NpcTemplateTraitScalarFieldEnum)[keyof typeof NpcTemplateTraitScalarFieldEnum]
+
+
+export const NpcTemplateActionScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  kind: 'kind',
+  name: 'name',
+  description: 'description',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateActionScalarFieldEnum = (typeof NpcTemplateActionScalarFieldEnum)[keyof typeof NpcTemplateActionScalarFieldEnum]
+
+
+export const NpcTemplateAttackScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  name: 'name',
+  description: 'description',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  attackBonus: 'attackBonus',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  secondaryDamageFormula: 'secondaryDamageFormula',
+  secondaryDamageType: 'secondaryDamageType',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  reach: 'reach',
+  target: 'target',
+  saveAbilityKey: 'saveAbilityKey',
+  saveDc: 'saveDc',
+  onHit: 'onHit',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateAttackScalarFieldEnum = (typeof NpcTemplateAttackScalarFieldEnum)[keyof typeof NpcTemplateAttackScalarFieldEnum]
+
+
+export const NpcTemplateMultiattackScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateMultiattackScalarFieldEnum = (typeof NpcTemplateMultiattackScalarFieldEnum)[keyof typeof NpcTemplateMultiattackScalarFieldEnum]
+
+
+export const NpcTemplateMultiattackEntryScalarFieldEnum = {
+  id: 'id',
+  multiattackId: 'multiattackId',
+  attackId: 'attackId',
+  actionId: 'actionId',
+  quantity: 'quantity',
+  order: 'order',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateMultiattackEntryScalarFieldEnum = (typeof NpcTemplateMultiattackEntryScalarFieldEnum)[keyof typeof NpcTemplateMultiattackEntryScalarFieldEnum]
+
+
+export const NpcTemplateMagicalAbilityScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  spellId: 'spellId',
+  name: 'name',
+  description: 'description',
+  abilityKey: 'abilityKey',
+  attackBonus: 'attackBonus',
+  saveDc: 'saveDc',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  range: 'range',
+  target: 'target',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  isPassive: 'isPassive',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateMagicalAbilityScalarFieldEnum = (typeof NpcTemplateMagicalAbilityScalarFieldEnum)[keyof typeof NpcTemplateMagicalAbilityScalarFieldEnum]
+
+
+export const CreatureTemplateStatScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  savingThrowBonus: 'savingThrowBonus',
+  savingThrowOverride: 'savingThrowOverride',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateStatScalarFieldEnum = (typeof CreatureTemplateStatScalarFieldEnum)[keyof typeof CreatureTemplateStatScalarFieldEnum]
+
+
+export const CreatureTemplateSkillScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateSkillScalarFieldEnum = (typeof CreatureTemplateSkillScalarFieldEnum)[keyof typeof CreatureTemplateSkillScalarFieldEnum]
+
+
+export const CreatureTemplateDefenseScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  kind: 'kind',
+  damageType: 'damageType',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateDefenseScalarFieldEnum = (typeof CreatureTemplateDefenseScalarFieldEnum)[keyof typeof CreatureTemplateDefenseScalarFieldEnum]
+
+
+export const CreatureTemplateSenseScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  name: 'name',
+  range: 'range',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateSenseScalarFieldEnum = (typeof CreatureTemplateSenseScalarFieldEnum)[keyof typeof CreatureTemplateSenseScalarFieldEnum]
+
+
+export const CreatureTemplateLanguageScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  languageId: 'languageId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateLanguageScalarFieldEnum = (typeof CreatureTemplateLanguageScalarFieldEnum)[keyof typeof CreatureTemplateLanguageScalarFieldEnum]
+
+
+export const CreatureTemplateTraitScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateTraitScalarFieldEnum = (typeof CreatureTemplateTraitScalarFieldEnum)[keyof typeof CreatureTemplateTraitScalarFieldEnum]
+
+
+export const CreatureTemplateActionScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  kind: 'kind',
+  name: 'name',
+  description: 'description',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateActionScalarFieldEnum = (typeof CreatureTemplateActionScalarFieldEnum)[keyof typeof CreatureTemplateActionScalarFieldEnum]
+
+
+export const CreatureTemplateAttackScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  name: 'name',
+  description: 'description',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  attackBonus: 'attackBonus',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  secondaryDamageFormula: 'secondaryDamageFormula',
+  secondaryDamageType: 'secondaryDamageType',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  reach: 'reach',
+  target: 'target',
+  saveAbilityKey: 'saveAbilityKey',
+  saveDc: 'saveDc',
+  onHit: 'onHit',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateAttackScalarFieldEnum = (typeof CreatureTemplateAttackScalarFieldEnum)[keyof typeof CreatureTemplateAttackScalarFieldEnum]
+
+
+export const CreatureTemplateMultiattackScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateMultiattackScalarFieldEnum = (typeof CreatureTemplateMultiattackScalarFieldEnum)[keyof typeof CreatureTemplateMultiattackScalarFieldEnum]
+
+
+export const CreatureTemplateMultiattackEntryScalarFieldEnum = {
+  id: 'id',
+  multiattackId: 'multiattackId',
+  attackId: 'attackId',
+  actionId: 'actionId',
+  quantity: 'quantity',
+  order: 'order',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateMultiattackEntryScalarFieldEnum = (typeof CreatureTemplateMultiattackEntryScalarFieldEnum)[keyof typeof CreatureTemplateMultiattackEntryScalarFieldEnum]
+
+
+export const CreatureTemplateMagicalAbilityScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  spellId: 'spellId',
+  name: 'name',
+  description: 'description',
+  abilityKey: 'abilityKey',
+  attackBonus: 'attackBonus',
+  saveDc: 'saveDc',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  range: 'range',
+  target: 'target',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  isPassive: 'isPassive',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateMagicalAbilityScalarFieldEnum = (typeof CreatureTemplateMagicalAbilityScalarFieldEnum)[keyof typeof CreatureTemplateMagicalAbilityScalarFieldEnum]
 
 
 export const AncestryScalarFieldEnum = {
@@ -4444,6 +8472,460 @@ export const CharacterTemplateProgressionChoiceScalarFieldEnum = {
 } as const
 
 export type CharacterTemplateProgressionChoiceScalarFieldEnum = (typeof CharacterTemplateProgressionChoiceScalarFieldEnum)[keyof typeof CharacterTemplateProgressionChoiceScalarFieldEnum]
+
+
+export const NpcSheetScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  systemId: 'systemId',
+  campaignActorId: 'campaignActorId',
+  ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
+  backgroundId: 'backgroundId',
+  size: 'size',
+  role: 'role',
+  faction: 'faction',
+  personality: 'personality',
+  motivation: 'motivation',
+  behavior: 'behavior',
+  tactics: 'tactics',
+  lore: 'lore',
+  notes: 'notes',
+  portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  armorClass: 'armorClass',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  speed: 'speed',
+  climbSpeed: 'climbSpeed',
+  swimSpeed: 'swimSpeed',
+  flySpeed: 'flySpeed',
+  burrowSpeed: 'burrowSpeed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetScalarFieldEnum = (typeof NpcSheetScalarFieldEnum)[keyof typeof NpcSheetScalarFieldEnum]
+
+
+export const NpcSheetClassScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  level: 'level',
+  isPrimary: 'isPrimary',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetClassScalarFieldEnum = (typeof NpcSheetClassScalarFieldEnum)[keyof typeof NpcSheetClassScalarFieldEnum]
+
+
+export const NpcSheetStatScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  savingThrowBonus: 'savingThrowBonus',
+  savingThrowOverride: 'savingThrowOverride',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetStatScalarFieldEnum = (typeof NpcSheetStatScalarFieldEnum)[keyof typeof NpcSheetStatScalarFieldEnum]
+
+
+export const NpcSheetSkillScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetSkillScalarFieldEnum = (typeof NpcSheetSkillScalarFieldEnum)[keyof typeof NpcSheetSkillScalarFieldEnum]
+
+
+export const NpcSheetDefenseScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  kind: 'kind',
+  damageType: 'damageType',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetDefenseScalarFieldEnum = (typeof NpcSheetDefenseScalarFieldEnum)[keyof typeof NpcSheetDefenseScalarFieldEnum]
+
+
+export const NpcSheetSenseScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  name: 'name',
+  range: 'range',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetSenseScalarFieldEnum = (typeof NpcSheetSenseScalarFieldEnum)[keyof typeof NpcSheetSenseScalarFieldEnum]
+
+
+export const NpcSheetLanguageScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  languageId: 'languageId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetLanguageScalarFieldEnum = (typeof NpcSheetLanguageScalarFieldEnum)[keyof typeof NpcSheetLanguageScalarFieldEnum]
+
+
+export const CreatureSheetScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  systemId: 'systemId',
+  campaignActorId: 'campaignActorId',
+  size: 'size',
+  creatureType: 'creatureType',
+  habitat: 'habitat',
+  behavior: 'behavior',
+  tactics: 'tactics',
+  lore: 'lore',
+  notes: 'notes',
+  portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  armorClass: 'armorClass',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  speed: 'speed',
+  climbSpeed: 'climbSpeed',
+  swimSpeed: 'swimSpeed',
+  flySpeed: 'flySpeed',
+  burrowSpeed: 'burrowSpeed',
+  challengeRating: 'challengeRating',
+  experienceReward: 'experienceReward',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetScalarFieldEnum = (typeof CreatureSheetScalarFieldEnum)[keyof typeof CreatureSheetScalarFieldEnum]
+
+
+export const CreatureSheetStatScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  savingThrowBonus: 'savingThrowBonus',
+  savingThrowOverride: 'savingThrowOverride',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetStatScalarFieldEnum = (typeof CreatureSheetStatScalarFieldEnum)[keyof typeof CreatureSheetStatScalarFieldEnum]
+
+
+export const CreatureSheetSkillScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetSkillScalarFieldEnum = (typeof CreatureSheetSkillScalarFieldEnum)[keyof typeof CreatureSheetSkillScalarFieldEnum]
+
+
+export const CreatureSheetDefenseScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  kind: 'kind',
+  damageType: 'damageType',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetDefenseScalarFieldEnum = (typeof CreatureSheetDefenseScalarFieldEnum)[keyof typeof CreatureSheetDefenseScalarFieldEnum]
+
+
+export const CreatureSheetSenseScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  name: 'name',
+  range: 'range',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetSenseScalarFieldEnum = (typeof CreatureSheetSenseScalarFieldEnum)[keyof typeof CreatureSheetSenseScalarFieldEnum]
+
+
+export const CreatureSheetLanguageScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  languageId: 'languageId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetLanguageScalarFieldEnum = (typeof CreatureSheetLanguageScalarFieldEnum)[keyof typeof CreatureSheetLanguageScalarFieldEnum]
+
+
+export const NpcSheetTraitScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetTraitScalarFieldEnum = (typeof NpcSheetTraitScalarFieldEnum)[keyof typeof NpcSheetTraitScalarFieldEnum]
+
+
+export const NpcSheetActionScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  kind: 'kind',
+  name: 'name',
+  description: 'description',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetActionScalarFieldEnum = (typeof NpcSheetActionScalarFieldEnum)[keyof typeof NpcSheetActionScalarFieldEnum]
+
+
+export const NpcSheetAttackScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  name: 'name',
+  description: 'description',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  attackBonus: 'attackBonus',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  secondaryDamageFormula: 'secondaryDamageFormula',
+  secondaryDamageType: 'secondaryDamageType',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  reach: 'reach',
+  target: 'target',
+  saveAbilityKey: 'saveAbilityKey',
+  saveDc: 'saveDc',
+  onHit: 'onHit',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetAttackScalarFieldEnum = (typeof NpcSheetAttackScalarFieldEnum)[keyof typeof NpcSheetAttackScalarFieldEnum]
+
+
+export const NpcSheetMultiattackScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetMultiattackScalarFieldEnum = (typeof NpcSheetMultiattackScalarFieldEnum)[keyof typeof NpcSheetMultiattackScalarFieldEnum]
+
+
+export const NpcSheetMultiattackEntryScalarFieldEnum = {
+  id: 'id',
+  multiattackId: 'multiattackId',
+  attackId: 'attackId',
+  actionId: 'actionId',
+  quantity: 'quantity',
+  order: 'order',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetMultiattackEntryScalarFieldEnum = (typeof NpcSheetMultiattackEntryScalarFieldEnum)[keyof typeof NpcSheetMultiattackEntryScalarFieldEnum]
+
+
+export const NpcSheetMagicalAbilityScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  spellId: 'spellId',
+  name: 'name',
+  description: 'description',
+  abilityKey: 'abilityKey',
+  attackBonus: 'attackBonus',
+  saveDc: 'saveDc',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  range: 'range',
+  target: 'target',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  isPassive: 'isPassive',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetMagicalAbilityScalarFieldEnum = (typeof NpcSheetMagicalAbilityScalarFieldEnum)[keyof typeof NpcSheetMagicalAbilityScalarFieldEnum]
+
+
+export const CreatureSheetTraitScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetTraitScalarFieldEnum = (typeof CreatureSheetTraitScalarFieldEnum)[keyof typeof CreatureSheetTraitScalarFieldEnum]
+
+
+export const CreatureSheetActionScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  kind: 'kind',
+  name: 'name',
+  description: 'description',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetActionScalarFieldEnum = (typeof CreatureSheetActionScalarFieldEnum)[keyof typeof CreatureSheetActionScalarFieldEnum]
+
+
+export const CreatureSheetAttackScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  name: 'name',
+  description: 'description',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  attackBonus: 'attackBonus',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  secondaryDamageFormula: 'secondaryDamageFormula',
+  secondaryDamageType: 'secondaryDamageType',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  reach: 'reach',
+  target: 'target',
+  saveAbilityKey: 'saveAbilityKey',
+  saveDc: 'saveDc',
+  onHit: 'onHit',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetAttackScalarFieldEnum = (typeof CreatureSheetAttackScalarFieldEnum)[keyof typeof CreatureSheetAttackScalarFieldEnum]
+
+
+export const CreatureSheetMultiattackScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetMultiattackScalarFieldEnum = (typeof CreatureSheetMultiattackScalarFieldEnum)[keyof typeof CreatureSheetMultiattackScalarFieldEnum]
+
+
+export const CreatureSheetMultiattackEntryScalarFieldEnum = {
+  id: 'id',
+  multiattackId: 'multiattackId',
+  attackId: 'attackId',
+  actionId: 'actionId',
+  quantity: 'quantity',
+  order: 'order',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetMultiattackEntryScalarFieldEnum = (typeof CreatureSheetMultiattackEntryScalarFieldEnum)[keyof typeof CreatureSheetMultiattackEntryScalarFieldEnum]
+
+
+export const CreatureSheetMagicalAbilityScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  spellId: 'spellId',
+  name: 'name',
+  description: 'description',
+  abilityKey: 'abilityKey',
+  attackBonus: 'attackBonus',
+  saveDc: 'saveDc',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  range: 'range',
+  target: 'target',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  isPassive: 'isPassive',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetMagicalAbilityScalarFieldEnum = (typeof CreatureSheetMagicalAbilityScalarFieldEnum)[keyof typeof CreatureSheetMagicalAbilityScalarFieldEnum]
 
 
 export const CharacterSheetScalarFieldEnum = {
@@ -5125,6 +9607,62 @@ export type ListEnumCreatureSizeFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'SceneTokenImageFit'
+ */
+export type EnumSceneTokenImageFitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SceneTokenImageFit'>
+    
+
+
+/**
+ * Reference to a field of type 'SceneTokenImageFit[]'
+ */
+export type ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SceneTokenImageFit[]'>
+    
+
+
+/**
+ * Reference to a field of type 'SheetDefenseKind'
+ */
+export type EnumSheetDefenseKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SheetDefenseKind'>
+    
+
+
+/**
+ * Reference to a field of type 'SheetDefenseKind[]'
+ */
+export type ListEnumSheetDefenseKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SheetDefenseKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'SheetActionKind'
+ */
+export type EnumSheetActionKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SheetActionKind'>
+    
+
+
+/**
+ * Reference to a field of type 'SheetActionKind[]'
+ */
+export type ListEnumSheetActionKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SheetActionKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'SheetAttackType'
+ */
+export type EnumSheetAttackTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SheetAttackType'>
+    
+
+
+/**
+ * Reference to a field of type 'SheetAttackType[]'
+ */
+export type ListEnumSheetAttackTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SheetAttackType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -5321,20 +9859,6 @@ export type ListEnumCampaignActorLocationFieldRefInput<$PrismaModel> = FieldRefI
 
 
 /**
- * Reference to a field of type 'SceneTokenImageFit'
- */
-export type EnumSceneTokenImageFitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SceneTokenImageFit'>
-    
-
-
-/**
- * Reference to a field of type 'SceneTokenImageFit[]'
- */
-export type ListEnumSceneTokenImageFitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SceneTokenImageFit[]'>
-    
-
-
-/**
  * Reference to a field of type 'InviteStatus'
  */
 export type EnumInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InviteStatus'>
@@ -5463,6 +9987,29 @@ export type GlobalOmitConfig = {
   gameSystem?: Prisma.GameSystemOmit
   npcTemplate?: Prisma.NpcTemplateOmit
   creatureTemplate?: Prisma.CreatureTemplateOmit
+  npcTemplateClass?: Prisma.NpcTemplateClassOmit
+  npcTemplateStat?: Prisma.NpcTemplateStatOmit
+  npcTemplateSkill?: Prisma.NpcTemplateSkillOmit
+  npcTemplateDefense?: Prisma.NpcTemplateDefenseOmit
+  npcTemplateSense?: Prisma.NpcTemplateSenseOmit
+  npcTemplateLanguage?: Prisma.NpcTemplateLanguageOmit
+  npcTemplateTrait?: Prisma.NpcTemplateTraitOmit
+  npcTemplateAction?: Prisma.NpcTemplateActionOmit
+  npcTemplateAttack?: Prisma.NpcTemplateAttackOmit
+  npcTemplateMultiattack?: Prisma.NpcTemplateMultiattackOmit
+  npcTemplateMultiattackEntry?: Prisma.NpcTemplateMultiattackEntryOmit
+  npcTemplateMagicalAbility?: Prisma.NpcTemplateMagicalAbilityOmit
+  creatureTemplateStat?: Prisma.CreatureTemplateStatOmit
+  creatureTemplateSkill?: Prisma.CreatureTemplateSkillOmit
+  creatureTemplateDefense?: Prisma.CreatureTemplateDefenseOmit
+  creatureTemplateSense?: Prisma.CreatureTemplateSenseOmit
+  creatureTemplateLanguage?: Prisma.CreatureTemplateLanguageOmit
+  creatureTemplateTrait?: Prisma.CreatureTemplateTraitOmit
+  creatureTemplateAction?: Prisma.CreatureTemplateActionOmit
+  creatureTemplateAttack?: Prisma.CreatureTemplateAttackOmit
+  creatureTemplateMultiattack?: Prisma.CreatureTemplateMultiattackOmit
+  creatureTemplateMultiattackEntry?: Prisma.CreatureTemplateMultiattackEntryOmit
+  creatureTemplateMagicalAbility?: Prisma.CreatureTemplateMagicalAbilityOmit
   ancestry?: Prisma.AncestryOmit
   subAncestry?: Prisma.SubAncestryOmit
   background?: Prisma.BackgroundOmit
@@ -5475,6 +10022,31 @@ export type GlobalOmitConfig = {
   characterTemplateLanguage?: Prisma.CharacterTemplateLanguageOmit
   characterTemplateFeatureChoice?: Prisma.CharacterTemplateFeatureChoiceOmit
   characterTemplateProgressionChoice?: Prisma.CharacterTemplateProgressionChoiceOmit
+  npcSheet?: Prisma.NpcSheetOmit
+  npcSheetClass?: Prisma.NpcSheetClassOmit
+  npcSheetStat?: Prisma.NpcSheetStatOmit
+  npcSheetSkill?: Prisma.NpcSheetSkillOmit
+  npcSheetDefense?: Prisma.NpcSheetDefenseOmit
+  npcSheetSense?: Prisma.NpcSheetSenseOmit
+  npcSheetLanguage?: Prisma.NpcSheetLanguageOmit
+  creatureSheet?: Prisma.CreatureSheetOmit
+  creatureSheetStat?: Prisma.CreatureSheetStatOmit
+  creatureSheetSkill?: Prisma.CreatureSheetSkillOmit
+  creatureSheetDefense?: Prisma.CreatureSheetDefenseOmit
+  creatureSheetSense?: Prisma.CreatureSheetSenseOmit
+  creatureSheetLanguage?: Prisma.CreatureSheetLanguageOmit
+  npcSheetTrait?: Prisma.NpcSheetTraitOmit
+  npcSheetAction?: Prisma.NpcSheetActionOmit
+  npcSheetAttack?: Prisma.NpcSheetAttackOmit
+  npcSheetMultiattack?: Prisma.NpcSheetMultiattackOmit
+  npcSheetMultiattackEntry?: Prisma.NpcSheetMultiattackEntryOmit
+  npcSheetMagicalAbility?: Prisma.NpcSheetMagicalAbilityOmit
+  creatureSheetTrait?: Prisma.CreatureSheetTraitOmit
+  creatureSheetAction?: Prisma.CreatureSheetActionOmit
+  creatureSheetAttack?: Prisma.CreatureSheetAttackOmit
+  creatureSheetMultiattack?: Prisma.CreatureSheetMultiattackOmit
+  creatureSheetMultiattackEntry?: Prisma.CreatureSheetMultiattackEntryOmit
+  creatureSheetMagicalAbility?: Prisma.CreatureSheetMagicalAbilityOmit
   characterSheet?: Prisma.CharacterSheetOmit
   language?: Prisma.LanguageOmit
   characterSheetLanguage?: Prisma.CharacterSheetLanguageOmit

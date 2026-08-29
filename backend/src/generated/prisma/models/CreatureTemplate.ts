@@ -27,10 +27,30 @@ export type AggregateCreatureTemplate = {
 }
 
 export type CreatureTemplateAvgAggregateOutputType = {
+  armorClass: number | null
+  hitPoints: number | null
+  maxHitPoints: number | null
+  temporaryHp: number | null
+  speed: number | null
+  climbSpeed: number | null
+  swimSpeed: number | null
+  flySpeed: number | null
+  burrowSpeed: number | null
+  experienceReward: number | null
   order: number | null
 }
 
 export type CreatureTemplateSumAggregateOutputType = {
+  armorClass: number | null
+  hitPoints: number | null
+  maxHitPoints: number | null
+  temporaryHp: number | null
+  speed: number | null
+  climbSpeed: number | null
+  swimSpeed: number | null
+  flySpeed: number | null
+  burrowSpeed: number | null
+  experienceReward: number | null
   order: number | null
 }
 
@@ -41,7 +61,27 @@ export type CreatureTemplateMinAggregateOutputType = {
   name: string | null
   initials: string | null
   description: string | null
+  size: $Enums.CreatureSize | null
+  creatureType: string | null
+  habitat: string | null
+  behavior: string | null
+  tactics: string | null
+  lore: string | null
+  notes: string | null
   portraitUrl: string | null
+  tokenImageUrl: string | null
+  tokenImageFit: $Enums.SceneTokenImageFit | null
+  armorClass: number | null
+  hitPoints: number | null
+  maxHitPoints: number | null
+  temporaryHp: number | null
+  speed: number | null
+  climbSpeed: number | null
+  swimSpeed: number | null
+  flySpeed: number | null
+  burrowSpeed: number | null
+  challengeRating: string | null
+  experienceReward: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -54,7 +94,27 @@ export type CreatureTemplateMaxAggregateOutputType = {
   name: string | null
   initials: string | null
   description: string | null
+  size: $Enums.CreatureSize | null
+  creatureType: string | null
+  habitat: string | null
+  behavior: string | null
+  tactics: string | null
+  lore: string | null
+  notes: string | null
   portraitUrl: string | null
+  tokenImageUrl: string | null
+  tokenImageFit: $Enums.SceneTokenImageFit | null
+  armorClass: number | null
+  hitPoints: number | null
+  maxHitPoints: number | null
+  temporaryHp: number | null
+  speed: number | null
+  climbSpeed: number | null
+  swimSpeed: number | null
+  flySpeed: number | null
+  burrowSpeed: number | null
+  challengeRating: string | null
+  experienceReward: number | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,7 +127,27 @@ export type CreatureTemplateCountAggregateOutputType = {
   name: number
   initials: number
   description: number
+  size: number
+  creatureType: number
+  habitat: number
+  behavior: number
+  tactics: number
+  lore: number
+  notes: number
   portraitUrl: number
+  tokenImageUrl: number
+  tokenImageFit: number
+  armorClass: number
+  hitPoints: number
+  maxHitPoints: number
+  temporaryHp: number
+  speed: number
+  climbSpeed: number
+  swimSpeed: number
+  flySpeed: number
+  burrowSpeed: number
+  challengeRating: number
+  experienceReward: number
   order: number
   createdAt: number
   updatedAt: number
@@ -76,10 +156,30 @@ export type CreatureTemplateCountAggregateOutputType = {
 
 
 export type CreatureTemplateAvgAggregateInputType = {
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
+  experienceReward?: true
   order?: true
 }
 
 export type CreatureTemplateSumAggregateInputType = {
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
+  experienceReward?: true
   order?: true
 }
 
@@ -90,7 +190,27 @@ export type CreatureTemplateMinAggregateInputType = {
   name?: true
   initials?: true
   description?: true
+  size?: true
+  creatureType?: true
+  habitat?: true
+  behavior?: true
+  tactics?: true
+  lore?: true
+  notes?: true
   portraitUrl?: true
+  tokenImageUrl?: true
+  tokenImageFit?: true
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
+  challengeRating?: true
+  experienceReward?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -103,7 +223,27 @@ export type CreatureTemplateMaxAggregateInputType = {
   name?: true
   initials?: true
   description?: true
+  size?: true
+  creatureType?: true
+  habitat?: true
+  behavior?: true
+  tactics?: true
+  lore?: true
+  notes?: true
   portraitUrl?: true
+  tokenImageUrl?: true
+  tokenImageFit?: true
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
+  challengeRating?: true
+  experienceReward?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -116,7 +256,27 @@ export type CreatureTemplateCountAggregateInputType = {
   name?: true
   initials?: true
   description?: true
+  size?: true
+  creatureType?: true
+  habitat?: true
+  behavior?: true
+  tactics?: true
+  lore?: true
+  notes?: true
   portraitUrl?: true
+  tokenImageUrl?: true
+  tokenImageFit?: true
+  armorClass?: true
+  hitPoints?: true
+  maxHitPoints?: true
+  temporaryHp?: true
+  speed?: true
+  climbSpeed?: true
+  swimSpeed?: true
+  flySpeed?: true
+  burrowSpeed?: true
+  challengeRating?: true
+  experienceReward?: true
   order?: true
   createdAt?: true
   updatedAt?: true
@@ -216,7 +376,27 @@ export type CreatureTemplateGroupByOutputType = {
   name: string
   initials: string | null
   description: string | null
+  size: $Enums.CreatureSize
+  creatureType: string | null
+  habitat: string | null
+  behavior: string | null
+  tactics: string | null
+  lore: string | null
+  notes: string | null
   portraitUrl: string | null
+  tokenImageUrl: string | null
+  tokenImageFit: $Enums.SceneTokenImageFit
+  armorClass: number
+  hitPoints: number
+  maxHitPoints: number
+  temporaryHp: number
+  speed: number
+  climbSpeed: number
+  swimSpeed: number
+  flySpeed: number
+  burrowSpeed: number
+  challengeRating: string | null
+  experienceReward: number
   order: number
   createdAt: Date
   updatedAt: Date
@@ -252,11 +432,41 @@ export type CreatureTemplateWhereInput = {
   name?: Prisma.StringFilter<"CreatureTemplate"> | string
   initials?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
   description?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  size?: Prisma.EnumCreatureSizeFilter<"CreatureTemplate"> | $Enums.CreatureSize
+  creatureType?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  habitat?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  behavior?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tactics?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  lore?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  notes?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
   portraitUrl?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tokenImageUrl?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFilter<"CreatureTemplate"> | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFilter<"CreatureTemplate"> | number
+  hitPoints?: Prisma.IntFilter<"CreatureTemplate"> | number
+  maxHitPoints?: Prisma.IntFilter<"CreatureTemplate"> | number
+  temporaryHp?: Prisma.IntFilter<"CreatureTemplate"> | number
+  speed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  climbSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  swimSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  flySpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  burrowSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  challengeRating?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  experienceReward?: Prisma.IntFilter<"CreatureTemplate"> | number
   order?: Prisma.IntFilter<"CreatureTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"CreatureTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CreatureTemplate"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
+  stats?: Prisma.CreatureTemplateStatListRelationFilter
+  skills?: Prisma.CreatureTemplateSkillListRelationFilter
+  defenses?: Prisma.CreatureTemplateDefenseListRelationFilter
+  senses?: Prisma.CreatureTemplateSenseListRelationFilter
+  languages?: Prisma.CreatureTemplateLanguageListRelationFilter
+  traits?: Prisma.CreatureTemplateTraitListRelationFilter
+  actions?: Prisma.CreatureTemplateActionListRelationFilter
+  attacks?: Prisma.CreatureTemplateAttackListRelationFilter
+  multiattacks?: Prisma.CreatureTemplateMultiattackListRelationFilter
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityListRelationFilter
 }
 
 export type CreatureTemplateOrderByWithRelationInput = {
@@ -266,11 +476,41 @@ export type CreatureTemplateOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  size?: Prisma.SortOrder
+  creatureType?: Prisma.SortOrderInput | Prisma.SortOrder
+  habitat?: Prisma.SortOrderInput | Prisma.SortOrder
+  behavior?: Prisma.SortOrderInput | Prisma.SortOrder
+  tactics?: Prisma.SortOrderInput | Prisma.SortOrder
+  lore?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   portraitUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
+  challengeRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  experienceReward?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
+  stats?: Prisma.CreatureTemplateStatOrderByRelationAggregateInput
+  skills?: Prisma.CreatureTemplateSkillOrderByRelationAggregateInput
+  defenses?: Prisma.CreatureTemplateDefenseOrderByRelationAggregateInput
+  senses?: Prisma.CreatureTemplateSenseOrderByRelationAggregateInput
+  languages?: Prisma.CreatureTemplateLanguageOrderByRelationAggregateInput
+  traits?: Prisma.CreatureTemplateTraitOrderByRelationAggregateInput
+  actions?: Prisma.CreatureTemplateActionOrderByRelationAggregateInput
+  attacks?: Prisma.CreatureTemplateAttackOrderByRelationAggregateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackOrderByRelationAggregateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityOrderByRelationAggregateInput
 }
 
 export type CreatureTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -285,11 +525,41 @@ export type CreatureTemplateWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"CreatureTemplate"> | string
   initials?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
   description?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  size?: Prisma.EnumCreatureSizeFilter<"CreatureTemplate"> | $Enums.CreatureSize
+  creatureType?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  habitat?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  behavior?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tactics?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  lore?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  notes?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
   portraitUrl?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tokenImageUrl?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFilter<"CreatureTemplate"> | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFilter<"CreatureTemplate"> | number
+  hitPoints?: Prisma.IntFilter<"CreatureTemplate"> | number
+  maxHitPoints?: Prisma.IntFilter<"CreatureTemplate"> | number
+  temporaryHp?: Prisma.IntFilter<"CreatureTemplate"> | number
+  speed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  climbSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  swimSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  flySpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  burrowSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  challengeRating?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  experienceReward?: Prisma.IntFilter<"CreatureTemplate"> | number
   order?: Prisma.IntFilter<"CreatureTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"CreatureTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CreatureTemplate"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
+  stats?: Prisma.CreatureTemplateStatListRelationFilter
+  skills?: Prisma.CreatureTemplateSkillListRelationFilter
+  defenses?: Prisma.CreatureTemplateDefenseListRelationFilter
+  senses?: Prisma.CreatureTemplateSenseListRelationFilter
+  languages?: Prisma.CreatureTemplateLanguageListRelationFilter
+  traits?: Prisma.CreatureTemplateTraitListRelationFilter
+  actions?: Prisma.CreatureTemplateActionListRelationFilter
+  attacks?: Prisma.CreatureTemplateAttackListRelationFilter
+  multiattacks?: Prisma.CreatureTemplateMultiattackListRelationFilter
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityListRelationFilter
 }, "id" | "systemId_key" | "systemId_name">
 
 export type CreatureTemplateOrderByWithAggregationInput = {
@@ -299,7 +569,27 @@ export type CreatureTemplateOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  size?: Prisma.SortOrder
+  creatureType?: Prisma.SortOrderInput | Prisma.SortOrder
+  habitat?: Prisma.SortOrderInput | Prisma.SortOrder
+  behavior?: Prisma.SortOrderInput | Prisma.SortOrder
+  tactics?: Prisma.SortOrderInput | Prisma.SortOrder
+  lore?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   portraitUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
+  challengeRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  experienceReward?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -320,7 +610,27 @@ export type CreatureTemplateScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"CreatureTemplate"> | string
   initials?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  size?: Prisma.EnumCreatureSizeWithAggregatesFilter<"CreatureTemplate"> | $Enums.CreatureSize
+  creatureType?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  habitat?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  behavior?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  tactics?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  lore?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  notes?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
   portraitUrl?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  tokenImageUrl?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitWithAggregatesFilter<"CreatureTemplate"> | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  hitPoints?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  maxHitPoints?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  temporaryHp?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  speed?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  climbSpeed?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  swimSpeed?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  flySpeed?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  burrowSpeed?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
+  challengeRating?: Prisma.StringNullableWithAggregatesFilter<"CreatureTemplate"> | string | null
+  experienceReward?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
   order?: Prisma.IntWithAggregatesFilter<"CreatureTemplate"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CreatureTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CreatureTemplate"> | Date | string
@@ -332,11 +642,41 @@ export type CreatureTemplateCreateInput = {
   name: string
   initials?: string | null
   description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
 }
 
 export type CreatureTemplateUncheckedCreateInput = {
@@ -346,10 +686,40 @@ export type CreatureTemplateUncheckedCreateInput = {
   name: string
   initials?: string | null
   description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
 }
 
 export type CreatureTemplateUpdateInput = {
@@ -358,11 +728,41 @@ export type CreatureTemplateUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
 }
 
 export type CreatureTemplateUncheckedUpdateInput = {
@@ -372,10 +772,40 @@ export type CreatureTemplateUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
 }
 
 export type CreatureTemplateCreateManyInput = {
@@ -385,7 +815,27 @@ export type CreatureTemplateCreateManyInput = {
   name: string
   initials?: string | null
   description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -397,7 +847,27 @@ export type CreatureTemplateUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -410,7 +880,27 @@ export type CreatureTemplateUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -443,13 +933,43 @@ export type CreatureTemplateCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  creatureType?: Prisma.SortOrder
+  habitat?: Prisma.SortOrder
+  behavior?: Prisma.SortOrder
+  tactics?: Prisma.SortOrder
+  lore?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   portraitUrl?: Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
+  challengeRating?: Prisma.SortOrder
+  experienceReward?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type CreatureTemplateAvgOrderByAggregateInput = {
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
+  experienceReward?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -460,7 +980,27 @@ export type CreatureTemplateMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  creatureType?: Prisma.SortOrder
+  habitat?: Prisma.SortOrder
+  behavior?: Prisma.SortOrder
+  tactics?: Prisma.SortOrder
+  lore?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   portraitUrl?: Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
+  challengeRating?: Prisma.SortOrder
+  experienceReward?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -473,14 +1013,49 @@ export type CreatureTemplateMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   initials?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  creatureType?: Prisma.SortOrder
+  habitat?: Prisma.SortOrder
+  behavior?: Prisma.SortOrder
+  tactics?: Prisma.SortOrder
+  lore?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
   portraitUrl?: Prisma.SortOrder
+  tokenImageUrl?: Prisma.SortOrder
+  tokenImageFit?: Prisma.SortOrder
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
+  challengeRating?: Prisma.SortOrder
+  experienceReward?: Prisma.SortOrder
   order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type CreatureTemplateSumOrderByAggregateInput = {
+  armorClass?: Prisma.SortOrder
+  hitPoints?: Prisma.SortOrder
+  maxHitPoints?: Prisma.SortOrder
+  temporaryHp?: Prisma.SortOrder
+  speed?: Prisma.SortOrder
+  climbSpeed?: Prisma.SortOrder
+  swimSpeed?: Prisma.SortOrder
+  flySpeed?: Prisma.SortOrder
+  burrowSpeed?: Prisma.SortOrder
+  experienceReward?: Prisma.SortOrder
   order?: Prisma.SortOrder
+}
+
+export type CreatureTemplateScalarRelationFilter = {
+  is?: Prisma.CreatureTemplateWhereInput
+  isNot?: Prisma.CreatureTemplateWhereInput
 }
 
 export type CreatureTemplateCreateNestedManyWithoutSystemInput = {
@@ -525,16 +1100,186 @@ export type CreatureTemplateUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.CreatureTemplateScalarWhereInput | Prisma.CreatureTemplateScalarWhereInput[]
 }
 
+export type CreatureTemplateCreateNestedOneWithoutStatsInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutStatsInput, Prisma.CreatureTemplateUncheckedCreateWithoutStatsInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutStatsInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutStatsInput, Prisma.CreatureTemplateUncheckedCreateWithoutStatsInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutStatsInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutStatsInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutStatsInput, Prisma.CreatureTemplateUpdateWithoutStatsInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutStatsInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutSkillsInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutSkillsInput, Prisma.CreatureTemplateUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutSkillsInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutSkillsInput, Prisma.CreatureTemplateUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutSkillsInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutSkillsInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutSkillsInput, Prisma.CreatureTemplateUpdateWithoutSkillsInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutSkillsInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutDefensesInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutDefensesInput, Prisma.CreatureTemplateUncheckedCreateWithoutDefensesInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutDefensesInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutDefensesNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutDefensesInput, Prisma.CreatureTemplateUncheckedCreateWithoutDefensesInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutDefensesInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutDefensesInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutDefensesInput, Prisma.CreatureTemplateUpdateWithoutDefensesInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutDefensesInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutSensesInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutSensesInput, Prisma.CreatureTemplateUncheckedCreateWithoutSensesInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutSensesInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutSensesNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutSensesInput, Prisma.CreatureTemplateUncheckedCreateWithoutSensesInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutSensesInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutSensesInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutSensesInput, Prisma.CreatureTemplateUpdateWithoutSensesInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutSensesInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutLanguagesInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutLanguagesInput, Prisma.CreatureTemplateUncheckedCreateWithoutLanguagesInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutLanguagesInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutLanguagesNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutLanguagesInput, Prisma.CreatureTemplateUncheckedCreateWithoutLanguagesInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutLanguagesInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutLanguagesInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutLanguagesInput, Prisma.CreatureTemplateUpdateWithoutLanguagesInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutLanguagesInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutTraitsInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutTraitsInput, Prisma.CreatureTemplateUncheckedCreateWithoutTraitsInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutTraitsInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutTraitsNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutTraitsInput, Prisma.CreatureTemplateUncheckedCreateWithoutTraitsInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutTraitsInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutTraitsInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutTraitsInput, Prisma.CreatureTemplateUpdateWithoutTraitsInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutTraitsInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutActionsInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutActionsInput, Prisma.CreatureTemplateUncheckedCreateWithoutActionsInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutActionsInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutActionsInput, Prisma.CreatureTemplateUncheckedCreateWithoutActionsInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutActionsInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutActionsInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutActionsInput, Prisma.CreatureTemplateUpdateWithoutActionsInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutActionsInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutAttacksInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutAttacksInput, Prisma.CreatureTemplateUncheckedCreateWithoutAttacksInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutAttacksInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutAttacksNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutAttacksInput, Prisma.CreatureTemplateUncheckedCreateWithoutAttacksInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutAttacksInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutAttacksInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutAttacksInput, Prisma.CreatureTemplateUpdateWithoutAttacksInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutAttacksInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutMultiattacksInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutMultiattacksInput, Prisma.CreatureTemplateUncheckedCreateWithoutMultiattacksInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutMultiattacksInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutMultiattacksNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutMultiattacksInput, Prisma.CreatureTemplateUncheckedCreateWithoutMultiattacksInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutMultiattacksInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutMultiattacksInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutMultiattacksInput, Prisma.CreatureTemplateUpdateWithoutMultiattacksInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutMultiattacksInput>
+}
+
+export type CreatureTemplateCreateNestedOneWithoutMagicalAbilitiesInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutMagicalAbilitiesInput, Prisma.CreatureTemplateUncheckedCreateWithoutMagicalAbilitiesInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutMagicalAbilitiesInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+}
+
+export type CreatureTemplateUpdateOneRequiredWithoutMagicalAbilitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutMagicalAbilitiesInput, Prisma.CreatureTemplateUncheckedCreateWithoutMagicalAbilitiesInput>
+  connectOrCreate?: Prisma.CreatureTemplateCreateOrConnectWithoutMagicalAbilitiesInput
+  upsert?: Prisma.CreatureTemplateUpsertWithoutMagicalAbilitiesInput
+  connect?: Prisma.CreatureTemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CreatureTemplateUpdateToOneWithWhereWithoutMagicalAbilitiesInput, Prisma.CreatureTemplateUpdateWithoutMagicalAbilitiesInput>, Prisma.CreatureTemplateUncheckedUpdateWithoutMagicalAbilitiesInput>
+}
+
 export type CreatureTemplateCreateWithoutSystemInput = {
   id?: string
   key: string
   name: string
   initials?: string | null
   description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
 }
 
 export type CreatureTemplateUncheckedCreateWithoutSystemInput = {
@@ -543,10 +1288,40 @@ export type CreatureTemplateUncheckedCreateWithoutSystemInput = {
   name: string
   initials?: string | null
   description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
 }
 
 export type CreatureTemplateCreateOrConnectWithoutSystemInput = {
@@ -585,10 +1360,1870 @@ export type CreatureTemplateScalarWhereInput = {
   name?: Prisma.StringFilter<"CreatureTemplate"> | string
   initials?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
   description?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  size?: Prisma.EnumCreatureSizeFilter<"CreatureTemplate"> | $Enums.CreatureSize
+  creatureType?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  habitat?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  behavior?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tactics?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  lore?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  notes?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
   portraitUrl?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tokenImageUrl?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFilter<"CreatureTemplate"> | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFilter<"CreatureTemplate"> | number
+  hitPoints?: Prisma.IntFilter<"CreatureTemplate"> | number
+  maxHitPoints?: Prisma.IntFilter<"CreatureTemplate"> | number
+  temporaryHp?: Prisma.IntFilter<"CreatureTemplate"> | number
+  speed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  climbSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  swimSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  flySpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  burrowSpeed?: Prisma.IntFilter<"CreatureTemplate"> | number
+  challengeRating?: Prisma.StringNullableFilter<"CreatureTemplate"> | string | null
+  experienceReward?: Prisma.IntFilter<"CreatureTemplate"> | number
   order?: Prisma.IntFilter<"CreatureTemplate"> | number
   createdAt?: Prisma.DateTimeFilter<"CreatureTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CreatureTemplate"> | Date | string
+}
+
+export type CreatureTemplateCreateWithoutStatsInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutStatsInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutStatsInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutStatsInput, Prisma.CreatureTemplateUncheckedCreateWithoutStatsInput>
+}
+
+export type CreatureTemplateUpsertWithoutStatsInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutStatsInput, Prisma.CreatureTemplateUncheckedUpdateWithoutStatsInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutStatsInput, Prisma.CreatureTemplateUncheckedCreateWithoutStatsInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutStatsInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutStatsInput, Prisma.CreatureTemplateUncheckedUpdateWithoutStatsInput>
+}
+
+export type CreatureTemplateUpdateWithoutStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutSkillsInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutSkillsInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutSkillsInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutSkillsInput, Prisma.CreatureTemplateUncheckedCreateWithoutSkillsInput>
+}
+
+export type CreatureTemplateUpsertWithoutSkillsInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutSkillsInput, Prisma.CreatureTemplateUncheckedUpdateWithoutSkillsInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutSkillsInput, Prisma.CreatureTemplateUncheckedCreateWithoutSkillsInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutSkillsInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutSkillsInput, Prisma.CreatureTemplateUncheckedUpdateWithoutSkillsInput>
+}
+
+export type CreatureTemplateUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutDefensesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutDefensesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutDefensesInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutDefensesInput, Prisma.CreatureTemplateUncheckedCreateWithoutDefensesInput>
+}
+
+export type CreatureTemplateUpsertWithoutDefensesInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutDefensesInput, Prisma.CreatureTemplateUncheckedUpdateWithoutDefensesInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutDefensesInput, Prisma.CreatureTemplateUncheckedCreateWithoutDefensesInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutDefensesInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutDefensesInput, Prisma.CreatureTemplateUncheckedUpdateWithoutDefensesInput>
+}
+
+export type CreatureTemplateUpdateWithoutDefensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutDefensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutSensesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutSensesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutSensesInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutSensesInput, Prisma.CreatureTemplateUncheckedCreateWithoutSensesInput>
+}
+
+export type CreatureTemplateUpsertWithoutSensesInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutSensesInput, Prisma.CreatureTemplateUncheckedUpdateWithoutSensesInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutSensesInput, Prisma.CreatureTemplateUncheckedCreateWithoutSensesInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutSensesInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutSensesInput, Prisma.CreatureTemplateUncheckedUpdateWithoutSensesInput>
+}
+
+export type CreatureTemplateUpdateWithoutSensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutSensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutLanguagesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutLanguagesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutLanguagesInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutLanguagesInput, Prisma.CreatureTemplateUncheckedCreateWithoutLanguagesInput>
+}
+
+export type CreatureTemplateUpsertWithoutLanguagesInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutLanguagesInput, Prisma.CreatureTemplateUncheckedUpdateWithoutLanguagesInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutLanguagesInput, Prisma.CreatureTemplateUncheckedCreateWithoutLanguagesInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutLanguagesInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutLanguagesInput, Prisma.CreatureTemplateUncheckedUpdateWithoutLanguagesInput>
+}
+
+export type CreatureTemplateUpdateWithoutLanguagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutLanguagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutTraitsInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutTraitsInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutTraitsInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutTraitsInput, Prisma.CreatureTemplateUncheckedCreateWithoutTraitsInput>
+}
+
+export type CreatureTemplateUpsertWithoutTraitsInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutTraitsInput, Prisma.CreatureTemplateUncheckedUpdateWithoutTraitsInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutTraitsInput, Prisma.CreatureTemplateUncheckedCreateWithoutTraitsInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutTraitsInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutTraitsInput, Prisma.CreatureTemplateUncheckedUpdateWithoutTraitsInput>
+}
+
+export type CreatureTemplateUpdateWithoutTraitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutTraitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutActionsInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutActionsInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutActionsInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutActionsInput, Prisma.CreatureTemplateUncheckedCreateWithoutActionsInput>
+}
+
+export type CreatureTemplateUpsertWithoutActionsInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutActionsInput, Prisma.CreatureTemplateUncheckedUpdateWithoutActionsInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutActionsInput, Prisma.CreatureTemplateUncheckedCreateWithoutActionsInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutActionsInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutActionsInput, Prisma.CreatureTemplateUncheckedUpdateWithoutActionsInput>
+}
+
+export type CreatureTemplateUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutAttacksInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutAttacksInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutAttacksInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutAttacksInput, Prisma.CreatureTemplateUncheckedCreateWithoutAttacksInput>
+}
+
+export type CreatureTemplateUpsertWithoutAttacksInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutAttacksInput, Prisma.CreatureTemplateUncheckedUpdateWithoutAttacksInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutAttacksInput, Prisma.CreatureTemplateUncheckedCreateWithoutAttacksInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutAttacksInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutAttacksInput, Prisma.CreatureTemplateUncheckedUpdateWithoutAttacksInput>
+}
+
+export type CreatureTemplateUpdateWithoutAttacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutAttacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutMultiattacksInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutMultiattacksInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutMultiattacksInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutMultiattacksInput, Prisma.CreatureTemplateUncheckedCreateWithoutMultiattacksInput>
+}
+
+export type CreatureTemplateUpsertWithoutMultiattacksInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutMultiattacksInput, Prisma.CreatureTemplateUncheckedUpdateWithoutMultiattacksInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutMultiattacksInput, Prisma.CreatureTemplateUncheckedCreateWithoutMultiattacksInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutMultiattacksInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutMultiattacksInput, Prisma.CreatureTemplateUncheckedUpdateWithoutMultiattacksInput>
+}
+
+export type CreatureTemplateUpdateWithoutMultiattacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutMultiattacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateCreateWithoutMagicalAbilitiesInput = {
+  id?: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutCreatureTemplatesInput
+  stats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateUncheckedCreateWithoutMagicalAbilitiesInput = {
+  id?: string
+  systemId: string
+  key: string
+  name: string
+  initials?: string | null
+  description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
+  portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  actions?: Prisma.CreatureTemplateActionUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedCreateNestedManyWithoutCreatureTemplateInput
+}
+
+export type CreatureTemplateCreateOrConnectWithoutMagicalAbilitiesInput = {
+  where: Prisma.CreatureTemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutMagicalAbilitiesInput, Prisma.CreatureTemplateUncheckedCreateWithoutMagicalAbilitiesInput>
+}
+
+export type CreatureTemplateUpsertWithoutMagicalAbilitiesInput = {
+  update: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutMagicalAbilitiesInput, Prisma.CreatureTemplateUncheckedUpdateWithoutMagicalAbilitiesInput>
+  create: Prisma.XOR<Prisma.CreatureTemplateCreateWithoutMagicalAbilitiesInput, Prisma.CreatureTemplateUncheckedCreateWithoutMagicalAbilitiesInput>
+  where?: Prisma.CreatureTemplateWhereInput
+}
+
+export type CreatureTemplateUpdateToOneWithWhereWithoutMagicalAbilitiesInput = {
+  where?: Prisma.CreatureTemplateWhereInput
+  data: Prisma.XOR<Prisma.CreatureTemplateUpdateWithoutMagicalAbilitiesInput, Prisma.CreatureTemplateUncheckedUpdateWithoutMagicalAbilitiesInput>
+}
+
+export type CreatureTemplateUpdateWithoutMagicalAbilitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutCreatureTemplatesNestedInput
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+}
+
+export type CreatureTemplateUncheckedUpdateWithoutMagicalAbilitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
 }
 
 export type CreatureTemplateCreateManySystemInput = {
@@ -597,7 +3232,27 @@ export type CreatureTemplateCreateManySystemInput = {
   name: string
   initials?: string | null
   description?: string | null
+  size?: $Enums.CreatureSize
+  creatureType?: string | null
+  habitat?: string | null
+  behavior?: string | null
+  tactics?: string | null
+  lore?: string | null
+  notes?: string | null
   portraitUrl?: string | null
+  tokenImageUrl?: string | null
+  tokenImageFit?: $Enums.SceneTokenImageFit
+  armorClass?: number
+  hitPoints?: number
+  maxHitPoints?: number
+  temporaryHp?: number
+  speed?: number
+  climbSpeed?: number
+  swimSpeed?: number
+  flySpeed?: number
+  burrowSpeed?: number
+  challengeRating?: string | null
+  experienceReward?: number
   order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -609,10 +3264,40 @@ export type CreatureTemplateUpdateWithoutSystemInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUpdateManyWithoutCreatureTemplateNestedInput
 }
 
 export type CreatureTemplateUncheckedUpdateWithoutSystemInput = {
@@ -621,10 +3306,40 @@ export type CreatureTemplateUncheckedUpdateWithoutSystemInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  skills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  defenses?: Prisma.CreatureTemplateDefenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  senses?: Prisma.CreatureTemplateSenseUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  languages?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  traits?: Prisma.CreatureTemplateTraitUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  actions?: Prisma.CreatureTemplateActionUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  attacks?: Prisma.CreatureTemplateAttackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  multiattacks?: Prisma.CreatureTemplateMultiattackUncheckedUpdateManyWithoutCreatureTemplateNestedInput
+  magicalAbilities?: Prisma.CreatureTemplateMagicalAbilityUncheckedUpdateManyWithoutCreatureTemplateNestedInput
 }
 
 export type CreatureTemplateUncheckedUpdateManyWithoutSystemInput = {
@@ -633,12 +3348,142 @@ export type CreatureTemplateUncheckedUpdateManyWithoutSystemInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   initials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumCreatureSizeFieldUpdateOperationsInput | $Enums.CreatureSize
+  creatureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  habitat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  behavior?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tactics?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lore?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   portraitUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenImageFit?: Prisma.EnumSceneTokenImageFitFieldUpdateOperationsInput | $Enums.SceneTokenImageFit
+  armorClass?: Prisma.IntFieldUpdateOperationsInput | number
+  hitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  maxHitPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  temporaryHp?: Prisma.IntFieldUpdateOperationsInput | number
+  speed?: Prisma.IntFieldUpdateOperationsInput | number
+  climbSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  swimSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  flySpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  burrowSpeed?: Prisma.IntFieldUpdateOperationsInput | number
+  challengeRating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceReward?: Prisma.IntFieldUpdateOperationsInput | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type CreatureTemplateCountOutputType
+ */
+
+export type CreatureTemplateCountOutputType = {
+  stats: number
+  skills: number
+  defenses: number
+  senses: number
+  languages: number
+  traits: number
+  actions: number
+  attacks: number
+  multiattacks: number
+  magicalAbilities: number
+}
+
+export type CreatureTemplateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  stats?: boolean | CreatureTemplateCountOutputTypeCountStatsArgs
+  skills?: boolean | CreatureTemplateCountOutputTypeCountSkillsArgs
+  defenses?: boolean | CreatureTemplateCountOutputTypeCountDefensesArgs
+  senses?: boolean | CreatureTemplateCountOutputTypeCountSensesArgs
+  languages?: boolean | CreatureTemplateCountOutputTypeCountLanguagesArgs
+  traits?: boolean | CreatureTemplateCountOutputTypeCountTraitsArgs
+  actions?: boolean | CreatureTemplateCountOutputTypeCountActionsArgs
+  attacks?: boolean | CreatureTemplateCountOutputTypeCountAttacksArgs
+  multiattacks?: boolean | CreatureTemplateCountOutputTypeCountMultiattacksArgs
+  magicalAbilities?: boolean | CreatureTemplateCountOutputTypeCountMagicalAbilitiesArgs
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateCountOutputType
+   */
+  select?: Prisma.CreatureTemplateCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateStatWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateSkillWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountDefensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateDefenseWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountSensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateSenseWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountLanguagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateLanguageWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountTraitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateTraitWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateActionWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountAttacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateAttackWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountMultiattacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateMultiattackWhereInput
+}
+
+/**
+ * CreatureTemplateCountOutputType without action
+ */
+export type CreatureTemplateCountOutputTypeCountMagicalAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateMagicalAbilityWhereInput
+}
 
 
 export type CreatureTemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -648,11 +3493,42 @@ export type CreatureTemplateSelect<ExtArgs extends runtime.Types.Extensions.Inte
   name?: boolean
   initials?: boolean
   description?: boolean
+  size?: boolean
+  creatureType?: boolean
+  habitat?: boolean
+  behavior?: boolean
+  tactics?: boolean
+  lore?: boolean
+  notes?: boolean
   portraitUrl?: boolean
+  tokenImageUrl?: boolean
+  tokenImageFit?: boolean
+  armorClass?: boolean
+  hitPoints?: boolean
+  maxHitPoints?: boolean
+  temporaryHp?: boolean
+  speed?: boolean
+  climbSpeed?: boolean
+  swimSpeed?: boolean
+  flySpeed?: boolean
+  burrowSpeed?: boolean
+  challengeRating?: boolean
+  experienceReward?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
+  stats?: boolean | Prisma.CreatureTemplate$statsArgs<ExtArgs>
+  skills?: boolean | Prisma.CreatureTemplate$skillsArgs<ExtArgs>
+  defenses?: boolean | Prisma.CreatureTemplate$defensesArgs<ExtArgs>
+  senses?: boolean | Prisma.CreatureTemplate$sensesArgs<ExtArgs>
+  languages?: boolean | Prisma.CreatureTemplate$languagesArgs<ExtArgs>
+  traits?: boolean | Prisma.CreatureTemplate$traitsArgs<ExtArgs>
+  actions?: boolean | Prisma.CreatureTemplate$actionsArgs<ExtArgs>
+  attacks?: boolean | Prisma.CreatureTemplate$attacksArgs<ExtArgs>
+  multiattacks?: boolean | Prisma.CreatureTemplate$multiattacksArgs<ExtArgs>
+  magicalAbilities?: boolean | Prisma.CreatureTemplate$magicalAbilitiesArgs<ExtArgs>
+  _count?: boolean | Prisma.CreatureTemplateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["creatureTemplate"]>
 
 export type CreatureTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -662,7 +3538,27 @@ export type CreatureTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   name?: boolean
   initials?: boolean
   description?: boolean
+  size?: boolean
+  creatureType?: boolean
+  habitat?: boolean
+  behavior?: boolean
+  tactics?: boolean
+  lore?: boolean
+  notes?: boolean
   portraitUrl?: boolean
+  tokenImageUrl?: boolean
+  tokenImageFit?: boolean
+  armorClass?: boolean
+  hitPoints?: boolean
+  maxHitPoints?: boolean
+  temporaryHp?: boolean
+  speed?: boolean
+  climbSpeed?: boolean
+  swimSpeed?: boolean
+  flySpeed?: boolean
+  burrowSpeed?: boolean
+  challengeRating?: boolean
+  experienceReward?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -676,7 +3572,27 @@ export type CreatureTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   name?: boolean
   initials?: boolean
   description?: boolean
+  size?: boolean
+  creatureType?: boolean
+  habitat?: boolean
+  behavior?: boolean
+  tactics?: boolean
+  lore?: boolean
+  notes?: boolean
   portraitUrl?: boolean
+  tokenImageUrl?: boolean
+  tokenImageFit?: boolean
+  armorClass?: boolean
+  hitPoints?: boolean
+  maxHitPoints?: boolean
+  temporaryHp?: boolean
+  speed?: boolean
+  climbSpeed?: boolean
+  swimSpeed?: boolean
+  flySpeed?: boolean
+  burrowSpeed?: boolean
+  challengeRating?: boolean
+  experienceReward?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -690,15 +3606,46 @@ export type CreatureTemplateSelectScalar = {
   name?: boolean
   initials?: boolean
   description?: boolean
+  size?: boolean
+  creatureType?: boolean
+  habitat?: boolean
+  behavior?: boolean
+  tactics?: boolean
+  lore?: boolean
+  notes?: boolean
   portraitUrl?: boolean
+  tokenImageUrl?: boolean
+  tokenImageFit?: boolean
+  armorClass?: boolean
+  hitPoints?: boolean
+  maxHitPoints?: boolean
+  temporaryHp?: boolean
+  speed?: boolean
+  climbSpeed?: boolean
+  swimSpeed?: boolean
+  flySpeed?: boolean
+  burrowSpeed?: boolean
+  challengeRating?: boolean
+  experienceReward?: boolean
   order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CreatureTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "key" | "name" | "initials" | "description" | "portraitUrl" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["creatureTemplate"]>
+export type CreatureTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "key" | "name" | "initials" | "description" | "size" | "creatureType" | "habitat" | "behavior" | "tactics" | "lore" | "notes" | "portraitUrl" | "tokenImageUrl" | "tokenImageFit" | "armorClass" | "hitPoints" | "maxHitPoints" | "temporaryHp" | "speed" | "climbSpeed" | "swimSpeed" | "flySpeed" | "burrowSpeed" | "challengeRating" | "experienceReward" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["creatureTemplate"]>
 export type CreatureTemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
+  stats?: boolean | Prisma.CreatureTemplate$statsArgs<ExtArgs>
+  skills?: boolean | Prisma.CreatureTemplate$skillsArgs<ExtArgs>
+  defenses?: boolean | Prisma.CreatureTemplate$defensesArgs<ExtArgs>
+  senses?: boolean | Prisma.CreatureTemplate$sensesArgs<ExtArgs>
+  languages?: boolean | Prisma.CreatureTemplate$languagesArgs<ExtArgs>
+  traits?: boolean | Prisma.CreatureTemplate$traitsArgs<ExtArgs>
+  actions?: boolean | Prisma.CreatureTemplate$actionsArgs<ExtArgs>
+  attacks?: boolean | Prisma.CreatureTemplate$attacksArgs<ExtArgs>
+  multiattacks?: boolean | Prisma.CreatureTemplate$multiattacksArgs<ExtArgs>
+  magicalAbilities?: boolean | Prisma.CreatureTemplate$magicalAbilitiesArgs<ExtArgs>
+  _count?: boolean | Prisma.CreatureTemplateCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CreatureTemplateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -711,6 +3658,16 @@ export type $CreatureTemplatePayload<ExtArgs extends runtime.Types.Extensions.In
   name: "CreatureTemplate"
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
+    stats: Prisma.$CreatureTemplateStatPayload<ExtArgs>[]
+    skills: Prisma.$CreatureTemplateSkillPayload<ExtArgs>[]
+    defenses: Prisma.$CreatureTemplateDefensePayload<ExtArgs>[]
+    senses: Prisma.$CreatureTemplateSensePayload<ExtArgs>[]
+    languages: Prisma.$CreatureTemplateLanguagePayload<ExtArgs>[]
+    traits: Prisma.$CreatureTemplateTraitPayload<ExtArgs>[]
+    actions: Prisma.$CreatureTemplateActionPayload<ExtArgs>[]
+    attacks: Prisma.$CreatureTemplateAttackPayload<ExtArgs>[]
+    multiattacks: Prisma.$CreatureTemplateMultiattackPayload<ExtArgs>[]
+    magicalAbilities: Prisma.$CreatureTemplateMagicalAbilityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -719,7 +3676,27 @@ export type $CreatureTemplatePayload<ExtArgs extends runtime.Types.Extensions.In
     name: string
     initials: string | null
     description: string | null
+    size: $Enums.CreatureSize
+    creatureType: string | null
+    habitat: string | null
+    behavior: string | null
+    tactics: string | null
+    lore: string | null
+    notes: string | null
     portraitUrl: string | null
+    tokenImageUrl: string | null
+    tokenImageFit: $Enums.SceneTokenImageFit
+    armorClass: number
+    hitPoints: number
+    maxHitPoints: number
+    temporaryHp: number
+    speed: number
+    climbSpeed: number
+    swimSpeed: number
+    flySpeed: number
+    burrowSpeed: number
+    challengeRating: string | null
+    experienceReward: number
     order: number
     createdAt: Date
     updatedAt: Date
@@ -1118,6 +4095,16 @@ readonly fields: CreatureTemplateFieldRefs;
 export interface Prisma__CreatureTemplateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  stats<T extends Prisma.CreatureTemplate$statsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$statsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  skills<T extends Prisma.CreatureTemplate$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  defenses<T extends Prisma.CreatureTemplate$defensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$defensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateDefensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  senses<T extends Prisma.CreatureTemplate$sensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$sensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateSensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  languages<T extends Prisma.CreatureTemplate$languagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$languagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  traits<T extends Prisma.CreatureTemplate$traitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$traitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateTraitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  actions<T extends Prisma.CreatureTemplate$actionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attacks<T extends Prisma.CreatureTemplate$attacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$attacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateAttackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  multiattacks<T extends Prisma.CreatureTemplate$multiattacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$multiattacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateMultiattackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  magicalAbilities<T extends Prisma.CreatureTemplate$magicalAbilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatureTemplate$magicalAbilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateMagicalAbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1153,7 +4140,27 @@ export interface CreatureTemplateFieldRefs {
   readonly name: Prisma.FieldRef<"CreatureTemplate", 'String'>
   readonly initials: Prisma.FieldRef<"CreatureTemplate", 'String'>
   readonly description: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly size: Prisma.FieldRef<"CreatureTemplate", 'CreatureSize'>
+  readonly creatureType: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly habitat: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly behavior: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly tactics: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly lore: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly notes: Prisma.FieldRef<"CreatureTemplate", 'String'>
   readonly portraitUrl: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly tokenImageUrl: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly tokenImageFit: Prisma.FieldRef<"CreatureTemplate", 'SceneTokenImageFit'>
+  readonly armorClass: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly hitPoints: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly maxHitPoints: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly temporaryHp: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly speed: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly climbSpeed: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly swimSpeed: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly flySpeed: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly burrowSpeed: Prisma.FieldRef<"CreatureTemplate", 'Int'>
+  readonly challengeRating: Prisma.FieldRef<"CreatureTemplate", 'String'>
+  readonly experienceReward: Prisma.FieldRef<"CreatureTemplate", 'Int'>
   readonly order: Prisma.FieldRef<"CreatureTemplate", 'Int'>
   readonly createdAt: Prisma.FieldRef<"CreatureTemplate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CreatureTemplate", 'DateTime'>
@@ -1550,6 +4557,246 @@ export type CreatureTemplateDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many CreatureTemplates to delete.
    */
   limit?: number
+}
+
+/**
+ * CreatureTemplate.stats
+ */
+export type CreatureTemplate$statsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateStat
+   */
+  select?: Prisma.CreatureTemplateStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateStat
+   */
+  omit?: Prisma.CreatureTemplateStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateStatInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateStatWhereInput
+  orderBy?: Prisma.CreatureTemplateStatOrderByWithRelationInput | Prisma.CreatureTemplateStatOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateStatScalarFieldEnum | Prisma.CreatureTemplateStatScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.skills
+ */
+export type CreatureTemplate$skillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateSkill
+   */
+  select?: Prisma.CreatureTemplateSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateSkill
+   */
+  omit?: Prisma.CreatureTemplateSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateSkillInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateSkillWhereInput
+  orderBy?: Prisma.CreatureTemplateSkillOrderByWithRelationInput | Prisma.CreatureTemplateSkillOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateSkillScalarFieldEnum | Prisma.CreatureTemplateSkillScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.defenses
+ */
+export type CreatureTemplate$defensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateDefense
+   */
+  select?: Prisma.CreatureTemplateDefenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateDefense
+   */
+  omit?: Prisma.CreatureTemplateDefenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateDefenseInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateDefenseWhereInput
+  orderBy?: Prisma.CreatureTemplateDefenseOrderByWithRelationInput | Prisma.CreatureTemplateDefenseOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateDefenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateDefenseScalarFieldEnum | Prisma.CreatureTemplateDefenseScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.senses
+ */
+export type CreatureTemplate$sensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateSense
+   */
+  select?: Prisma.CreatureTemplateSenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateSense
+   */
+  omit?: Prisma.CreatureTemplateSenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateSenseInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateSenseWhereInput
+  orderBy?: Prisma.CreatureTemplateSenseOrderByWithRelationInput | Prisma.CreatureTemplateSenseOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateSenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateSenseScalarFieldEnum | Prisma.CreatureTemplateSenseScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.languages
+ */
+export type CreatureTemplate$languagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateLanguage
+   */
+  select?: Prisma.CreatureTemplateLanguageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateLanguage
+   */
+  omit?: Prisma.CreatureTemplateLanguageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateLanguageInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateLanguageWhereInput
+  orderBy?: Prisma.CreatureTemplateLanguageOrderByWithRelationInput | Prisma.CreatureTemplateLanguageOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateLanguageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateLanguageScalarFieldEnum | Prisma.CreatureTemplateLanguageScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.traits
+ */
+export type CreatureTemplate$traitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateTrait
+   */
+  select?: Prisma.CreatureTemplateTraitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateTrait
+   */
+  omit?: Prisma.CreatureTemplateTraitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateTraitInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateTraitWhereInput
+  orderBy?: Prisma.CreatureTemplateTraitOrderByWithRelationInput | Prisma.CreatureTemplateTraitOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateTraitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateTraitScalarFieldEnum | Prisma.CreatureTemplateTraitScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.actions
+ */
+export type CreatureTemplate$actionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateAction
+   */
+  select?: Prisma.CreatureTemplateActionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateAction
+   */
+  omit?: Prisma.CreatureTemplateActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateActionInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateActionWhereInput
+  orderBy?: Prisma.CreatureTemplateActionOrderByWithRelationInput | Prisma.CreatureTemplateActionOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateActionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateActionScalarFieldEnum | Prisma.CreatureTemplateActionScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.attacks
+ */
+export type CreatureTemplate$attacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateAttack
+   */
+  select?: Prisma.CreatureTemplateAttackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateAttack
+   */
+  omit?: Prisma.CreatureTemplateAttackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateAttackInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateAttackWhereInput
+  orderBy?: Prisma.CreatureTemplateAttackOrderByWithRelationInput | Prisma.CreatureTemplateAttackOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateAttackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateAttackScalarFieldEnum | Prisma.CreatureTemplateAttackScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.multiattacks
+ */
+export type CreatureTemplate$multiattacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateMultiattack
+   */
+  select?: Prisma.CreatureTemplateMultiattackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateMultiattack
+   */
+  omit?: Prisma.CreatureTemplateMultiattackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateMultiattackInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateMultiattackWhereInput
+  orderBy?: Prisma.CreatureTemplateMultiattackOrderByWithRelationInput | Prisma.CreatureTemplateMultiattackOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateMultiattackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateMultiattackScalarFieldEnum | Prisma.CreatureTemplateMultiattackScalarFieldEnum[]
+}
+
+/**
+ * CreatureTemplate.magicalAbilities
+ */
+export type CreatureTemplate$magicalAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateMagicalAbility
+   */
+  select?: Prisma.CreatureTemplateMagicalAbilitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateMagicalAbility
+   */
+  omit?: Prisma.CreatureTemplateMagicalAbilityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateMagicalAbilityInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateMagicalAbilityWhereInput
+  orderBy?: Prisma.CreatureTemplateMagicalAbilityOrderByWithRelationInput | Prisma.CreatureTemplateMagicalAbilityOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateMagicalAbilityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateMagicalAbilityScalarFieldEnum | Prisma.CreatureTemplateMagicalAbilityScalarFieldEnum[]
 }
 
 /**

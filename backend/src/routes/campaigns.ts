@@ -23,6 +23,410 @@ function normalizeCharacterTemplateAttributeIncreases(
   return normalized;
 }
 
+
+const npcCreatureDefenseInputSchema = z.object({
+  kind: z.enum(["RESISTANCE", "IMMUNITY", "VULNERABILITY"]),
+  damageType: z.string().min(1).max(80),
+  notes: z.string().max(500).optional(),
+});
+
+const npcCreatureSenseInputSchema = z.object({
+  name: z.string().min(1).max(80),
+  range: z.number().int().min(0).nullable().optional(),
+  notes: z.string().max(500).optional(),
+});
+
+const npcCreatureTraitInputSchema = z.object({
+  name: z.string().min(1).max(120),
+  description: z.string().min(1).max(4000),
+});
+
+const npcCreatureActionInputSchema = z.object({
+  kind: z.enum(["ACTION", "BONUS_ACTION", "REACTION"]),
+  name: z.string().min(1).max(120),
+  description: z.string().min(1).max(4000),
+  uses: z.number().int().min(0).nullable().optional(),
+  maxUses: z.number().int().min(0).nullable().optional(),
+  recharge: z.string().max(120).optional(),
+});
+
+const npcCreatureAttackInputSchema = z.object({
+  name: z.string().min(1).max(120),
+  description: z.string().max(4000).optional(),
+  attackType: z.enum(["MELEE", "RANGED", "THROWN", "MAGIC", "OTHER"]),
+  attackAbilityKey: z.string().max(40).optional(),
+  attackBonus: z.number().int(),
+  damageFormula: z.string().max(80).optional(),
+  damageBonus: z.number().int(),
+  damageType: z.string().max(80).optional(),
+  secondaryDamageFormula: z.string().max(80).optional(),
+  secondaryDamageType: z.string().max(80).optional(),
+  normalRange: z.number().int().min(0).nullable().optional(),
+  longRange: z.number().int().min(0).nullable().optional(),
+  reach: z.number().int().min(0).nullable().optional(),
+  target: z.string().max(200).optional(),
+  saveAbilityKey: z.string().max(40).optional(),
+  saveDc: z.number().int().min(0).nullable().optional(),
+  onHit: z.string().max(4000).optional(),
+  notes: z.string().max(2000).optional(),
+});
+
+const npcCreatureMultiattackInputSchema = z.object({
+  name: z.string().min(1).max(120),
+  description: z.string().max(4000).optional(),
+  entries: z.array(
+    z.object({
+      targetType: z.enum(["ATTACK", "ACTION"]),
+      targetName: z.string().min(1).max(120),
+      quantity: z.number().int().min(1).max(20),
+      notes: z.string().max(500).optional(),
+    }),
+  ),
+});
+
+const npcCreatureMagicalAbilityInputSchema = z.object({
+  spellKey: z.string().max(120).optional(),
+  name: z.string().min(1).max(120),
+  description: z.string().max(4000).optional(),
+  abilityKey: z.string().max(40).optional(),
+  attackBonus: z.number().int().nullable().optional(),
+  saveDc: z.number().int().min(0).nullable().optional(),
+  damageFormula: z.string().max(80).optional(),
+  damageBonus: z.number().int(),
+  damageType: z.string().max(80).optional(),
+  range: z.string().max(120).optional(),
+  target: z.string().max(200).optional(),
+  uses: z.number().int().min(0).nullable().optional(),
+  maxUses: z.number().int().min(0).nullable().optional(),
+  recharge: z.string().max(120).optional(),
+  isPassive: z.boolean(),
+  notes: z.string().max(2000).optional(),
+});
+
+const commonNpcCreatureSheetInputSchema = z.object({
+  name: z.string().min(1).max(80),
+  initials: z.string().min(1).max(3).optional(),
+  description: z.string().max(1000).optional(),
+  location: z.enum(["TABLE", "LIBRARY"]),
+  size: z.enum(["TINY", "SMALL", "MEDIUM", "LARGE", "HUGE", "GARGANTUAN"]),
+  portraitUrl: z.string().optional(),
+  tokenImageUrl: z.string().optional(),
+  tokenImageFit: z.enum(["COVER", "CONTAIN", "FILL"]),
+  armorClass: z.number().int().min(0),
+  hitPoints: z.number().int().min(0),
+  maxHitPoints: z.number().int().min(1),
+  temporaryHp: z.number().int().min(0),
+  speed: z.number().int().min(0),
+  climbSpeed: z.number().int().min(0),
+  swimSpeed: z.number().int().min(0),
+  flySpeed: z.number().int().min(0),
+  burrowSpeed: z.number().int().min(0),
+  attributes: z.record(z.string(), z.number().int().min(1).max(30)),
+  savingThrowKeys: z.array(z.string()),
+  skillKeys: z.array(z.string()),
+  expertiseSkillKeys: z.array(z.string()),
+  skillOverrides: z.record(z.string(), z.number().int()),
+  defenses: z.array(npcCreatureDefenseInputSchema),
+  senses: z.array(npcCreatureSenseInputSchema),
+  languageKeys: z.array(z.string()),
+  traits: z.array(npcCreatureTraitInputSchema),
+  actions: z.array(npcCreatureActionInputSchema),
+  attacks: z.array(npcCreatureAttackInputSchema),
+  multiattacks: z.array(npcCreatureMultiattackInputSchema),
+  magicalAbilities: z.array(npcCreatureMagicalAbilityInputSchema),
+});
+
+const optionalUuidSchema = z.preprocess(
+  (value) => (value === "" ? undefined : value),
+  z.string().uuid().optional(),
+);
+
+const npcSheetInputSchema = commonNpcCreatureSheetInputSchema.extend({
+  ancestryId: optionalUuidSchema,
+  subAncestryId: optionalUuidSchema,
+  backgroundId: optionalUuidSchema,
+  classes: z
+    .array(
+      z.object({
+        classId: z.string().uuid(),
+        subclassId: optionalUuidSchema,
+        level: z.number().int().min(1).max(20),
+        isPrimary: z.boolean(),
+      }),
+    )
+    .max(20),
+  role: z.string().max(500).optional(),
+  faction: z.string().max(1000).optional(),
+  personality: z.string().max(3000).optional(),
+  motivation: z.string().max(3000).optional(),
+  behavior: z.string().max(3000).optional(),
+  tactics: z.string().max(3000).optional(),
+  lore: z.string().max(10000).optional(),
+  notes: z.string().max(5000).optional(),
+});
+
+const creatureSheetInputSchema = commonNpcCreatureSheetInputSchema.extend({
+  creatureType: z.string().max(300).optional(),
+  habitat: z.string().max(2000).optional(),
+  behavior: z.string().max(3000).optional(),
+  tactics: z.string().max(3000).optional(),
+  lore: z.string().max(10000).optional(),
+  notes: z.string().max(5000).optional(),
+  challengeRating: z.string().max(40).optional(),
+  experienceReward: z.number().int().min(0),
+});
+
+function getActorInitials(name: string, initials?: string) {
+  const normalizedInitials = initials?.trim().toUpperCase();
+
+  if (normalizedInitials) {
+    return normalizedInitials.slice(0, 3);
+  }
+
+  return (
+    name
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 3)
+      .toUpperCase() || "AT"
+  );
+}
+
+function nullableTrimmed(value?: string) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}
+
+async function getCampaignForGm(campaignId: string, userId: string) {
+  return prisma.campaign.findFirst({
+    where: {
+      id: campaignId,
+      OR: [
+        { ownerId: userId },
+        {
+          participants: {
+            some: {
+              userId,
+              role: "GM",
+              status: "APPROVED",
+            },
+          },
+        },
+      ],
+    },
+    include: {
+      participants: {
+        where: {
+          userId,
+          role: "GM",
+          status: "APPROVED",
+        },
+        take: 1,
+      },
+    },
+  });
+}
+
+async function resolveNpcOriginAndClasses(
+  systemId: string,
+  input: z.infer<typeof npcSheetInputSchema>,
+) {
+  const [ancestry, subAncestry, background, classes] = await Promise.all([
+    input.ancestryId
+      ? prisma.ancestry.findFirst({
+          where: {
+            id: input.ancestryId,
+            systemId,
+          },
+        })
+      : null,
+    input.subAncestryId
+      ? prisma.subAncestry.findFirst({
+          where: {
+            id: input.subAncestryId,
+            systemId,
+          },
+        })
+      : null,
+    input.backgroundId
+      ? prisma.background.findFirst({
+          where: {
+            id: input.backgroundId,
+            systemId,
+          },
+        })
+      : null,
+    input.classes.length > 0
+      ? prisma.characterClass.findMany({
+          where: {
+            systemId,
+            id: {
+              in: input.classes.map((entry) => entry.classId),
+            },
+          },
+          include: {
+            subclasses: true,
+          },
+        })
+      : [],
+  ]);
+
+  if (input.ancestryId && !ancestry) {
+    throw new Error("A ancestralidade selecionada não pertence ao sistema.");
+  }
+
+  if (input.subAncestryId && !subAncestry) {
+    throw new Error(
+      "A sub-ancestralidade selecionada não pertence ao sistema.",
+    );
+  }
+
+  if (subAncestry && !ancestry) {
+    throw new Error(
+      "Uma sub-ancestralidade exige uma ancestralidade principal.",
+    );
+  }
+
+  if (
+    subAncestry &&
+    ancestry &&
+    subAncestry.ancestryId !== ancestry.id
+  ) {
+    throw new Error(
+      "A sub-ancestralidade selecionada não pertence à ancestralidade escolhida.",
+    );
+  }
+
+  if (input.backgroundId && !background) {
+    throw new Error("O antecedente selecionado não pertence ao sistema.");
+  }
+
+  const uniqueClassIds = new Set(input.classes.map((entry) => entry.classId));
+
+  if (uniqueClassIds.size !== input.classes.length) {
+    throw new Error("Uma mesma classe não pode ser adicionada duas vezes.");
+  }
+
+  if (classes.length !== input.classes.length) {
+    throw new Error("Uma ou mais classes não pertencem ao sistema.");
+  }
+
+  const totalLevel = input.classes.reduce(
+    (sum, classEntry) => sum + classEntry.level,
+    0,
+  );
+
+  if (totalLevel > 20) {
+    throw new Error(
+      "A soma dos níveis de classe do NPC não pode ultrapassar 20.",
+    );
+  }
+
+  const primaryCount = input.classes.filter(
+    (classEntry) => classEntry.isPrimary,
+  ).length;
+
+  if (input.classes.length > 0 && primaryCount !== 1) {
+    throw new Error(
+      "NPCs com classes precisam ter exatamente uma classe principal.",
+    );
+  }
+
+  const classById = new Map(classes.map((entry) => [entry.id, entry]));
+
+  for (const classEntry of input.classes) {
+    if (!classEntry.subclassId) {
+      continue;
+    }
+
+    const characterClass = classById.get(classEntry.classId);
+    const validSubclass = characterClass?.subclasses.some(
+      (subclass) => subclass.id === classEntry.subclassId,
+    );
+
+    if (!validSubclass) {
+      throw new Error(
+        "Uma das subclasses selecionadas não pertence à classe correspondente.",
+      );
+    }
+  }
+
+  return {
+    ancestry,
+    subAncestry,
+    background,
+  };
+}
+
+async function resolveNpcCreatureSystemContent(
+  systemId: string,
+  input: z.infer<typeof commonNpcCreatureSheetInputSchema>,
+) {
+  const attributeKeys = Object.keys(input.attributes);
+  const uniqueSkillKeys = Array.from(new Set(input.skillKeys));
+  const uniqueLanguageKeys = Array.from(new Set(input.languageKeys));
+  const uniqueSpellKeys = Array.from(
+    new Set(
+      input.magicalAbilities
+        .map((ability) => ability.spellKey?.trim())
+        .filter((key): key is string => Boolean(key)),
+    ),
+  );
+
+  const [stats, skills, languages, spells] = await Promise.all([
+    prisma.stat.findMany({
+      where: {
+        systemId,
+        key: { in: attributeKeys },
+      },
+    }),
+    prisma.skill.findMany({
+      where: {
+        systemId,
+        key: { in: uniqueSkillKeys },
+      },
+    }),
+    prisma.language.findMany({
+      where: {
+        systemId,
+        key: { in: uniqueLanguageKeys },
+      },
+    }),
+    prisma.spell.findMany({
+      where: {
+        systemId,
+        key: { in: uniqueSpellKeys },
+      },
+    }),
+  ]);
+
+  if (stats.length !== attributeKeys.length) {
+    throw new Error("Um ou mais atributos não pertencem ao sistema da campanha.");
+  }
+
+  if (skills.length !== uniqueSkillKeys.length) {
+    throw new Error("Uma ou mais perícias não pertencem ao sistema da campanha.");
+  }
+
+  if (languages.length !== uniqueLanguageKeys.length) {
+    throw new Error("Um ou mais idiomas não pertencem ao sistema da campanha.");
+  }
+
+  if (spells.length !== uniqueSpellKeys.length) {
+    throw new Error("Uma ou mais magias informadas não pertencem ao sistema da campanha.");
+  }
+
+  return {
+    stats,
+    skills,
+    languages,
+    spells,
+  };
+}
+
 export async function campaignRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().route({
     method: "POST",
@@ -621,57 +1025,35 @@ export async function campaignRoutes(app: FastifyInstance) {
     url: "/campaigns/:id/npc-templates/:templateId/import",
     schema: {
       tags: ["Campaigns"],
-      description: "Import an NPC template into the campaign library",
+      description:
+        "Import a complete NPC template into the campaign as an independent actor and NpcSheet",
       params: z.object({
         id: z.string().uuid("Invalid campaign id"),
         templateId: z.string().uuid("Invalid NPC template id"),
       }),
       response: {
         201: z.object({
-          actor: z.object({
-            id: z.string(),
-            campaignId: z.string(),
-            ownerId: z.string().nullable(),
-            type: z.string(),
-            location: z.string(),
-            name: z.string(),
-            initials: z.string(),
-            description: z.string().nullable(),
-            portraitUrl: z.string().nullable(),
-            createdAt: z.string(),
-            updatedAt: z.string(),
-          }),
+          actor: z.any(),
+          npcSheet: z.any(),
         }),
-        401: z.object({
-          message: z.string(),
-        }),
-        403: z.object({
-          message: z.string(),
-        }),
-        404: z.object({
-          message: z.string(),
-        }),
-        409: z.object({
-          message: z.string(),
-        }),
+        401: z.object({ message: z.string() }),
+        403: z.object({ message: z.string() }),
+        404: z.object({ message: z.string() }),
+        409: z.object({ message: z.string() }),
       },
     },
     handler: async (request, reply) => {
       const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
-        return reply.status(401).send({
-          message: "Unauthorized",
-        });
+        return reply.status(401).send({ message: "Unauthorized" });
       }
 
       const campaign = await prisma.campaign.findFirst({
         where: {
           id: request.params.id,
           OR: [
-            {
-              ownerId: session.user.id,
-            },
+            { ownerId: session.user.id },
             {
               participants: {
                 some: {
@@ -694,30 +1076,82 @@ export async function campaignRoutes(app: FastifyInstance) {
       });
 
       if (!campaign) {
-        return reply.status(404).send({
-          message: "Campaign not found",
-        });
+        return reply.status(404).send({ message: "Campaign not found" });
       }
 
-      const currentParticipant = campaign.participants[0];
-      const isGM = currentParticipant?.role === "GM";
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = campaign.participants[0]?.role === "GM";
 
-      if (!isGM) {
+      if (!isOwner && !isGM) {
         return reply.status(403).send({
           message: "Only GMs can import NPC templates",
         });
       }
 
       if (!campaign.systemId) {
-        return reply.status(409).send({
-          message: "Campaign has no system",
-        });
+        return reply.status(409).send({ message: "Campaign has no system" });
       }
 
       const npcTemplate = await prisma.npcTemplate.findFirst({
         where: {
           id: request.params.templateId,
           systemId: campaign.systemId,
+        },
+        include: {
+          ancestry: {
+            select: { id: true, key: true, name: true },
+          },
+          subAncestry: {
+            select: { id: true, key: true, name: true },
+          },
+          background: {
+            select: { id: true, key: true, name: true },
+          },
+          classes: {
+            orderBy: { order: "asc" },
+            include: {
+              characterClass: {
+                select: { id: true, key: true, name: true },
+              },
+              subclass: {
+                select: { id: true, key: true, name: true },
+              },
+            },
+          },
+          stats: {
+            include: { stat: true },
+          },
+          skills: {
+            include: { skill: { include: { stat: true } } },
+          },
+          defenses: true,
+          senses: true,
+          languages: {
+            include: { language: true },
+          },
+          traits: { orderBy: { order: "asc" } },
+          actions: { orderBy: { order: "asc" } },
+          attacks: { orderBy: { order: "asc" } },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: { select: { id: true, name: true } },
+                  action: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: { id: true, key: true, name: true, level: true },
+              },
+            },
+          },
         },
       });
 
@@ -727,43 +1161,304 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
-      const initials =
-        npcTemplate.initials ??
-        npcTemplate.name
-          .trim()
-          .split(" ")
-          .map((part) => part[0])
-          .join("")
-          .slice(0, 3)
-          .toUpperCase();
+      const result = await prisma.$transaction(async (tx) => {
+        const actor = await tx.campaignActor.create({
+          data: {
+            campaignId: campaign.id,
+            ownerId: null,
+            type: "NPC",
+            location: "LIBRARY",
+            name: npcTemplate.name,
+            initials:
+              npcTemplate.initials ??
+              getActorInitials(npcTemplate.name),
+            description: npcTemplate.description,
+            portraitUrl: npcTemplate.portraitUrl,
+          },
+        });
 
-      const actor = await prisma.campaignActor.create({
-        data: {
-          campaignId: campaign.id,
-          ownerId: null,
-          type: "NPC",
-          location: "LIBRARY",
-          name: npcTemplate.name,
-          initials,
-          description: npcTemplate.description,
-          portraitUrl: npcTemplate.portraitUrl,
+        const npcSheet = await tx.npcSheet.create({
+          data: {
+            campaignId: campaign.id,
+            systemId: campaign.systemId!,
+            campaignActorId: actor.id,
+            ancestryId: npcTemplate.ancestryId,
+            subAncestryId: npcTemplate.subAncestryId,
+            backgroundId: npcTemplate.backgroundId,
+            size: npcTemplate.size,
+            role: npcTemplate.role,
+            faction: npcTemplate.faction,
+            personality: npcTemplate.personality,
+            motivation: npcTemplate.motivation,
+            behavior: npcTemplate.behavior,
+            tactics: npcTemplate.tactics,
+            lore: npcTemplate.lore,
+            notes: npcTemplate.notes,
+            portraitUrl: npcTemplate.portraitUrl,
+            tokenImageUrl: npcTemplate.tokenImageUrl,
+            tokenImageFit: npcTemplate.tokenImageFit,
+            armorClass: npcTemplate.armorClass,
+            hitPoints: npcTemplate.hitPoints,
+            maxHitPoints: npcTemplate.maxHitPoints,
+            temporaryHp: npcTemplate.temporaryHp,
+            speed: npcTemplate.speed,
+            climbSpeed: npcTemplate.climbSpeed,
+            swimSpeed: npcTemplate.swimSpeed,
+            flySpeed: npcTemplate.flySpeed,
+            burrowSpeed: npcTemplate.burrowSpeed,
+          },
+        });
+
+        if (npcTemplate.classes.length > 0) {
+          await tx.npcSheetClass.createMany({
+            data: npcTemplate.classes.map((entry) => ({
+              npcSheetId: npcSheet.id,
+              classId: entry.classId,
+              subclassId: entry.subclassId,
+              level: entry.level,
+              isPrimary: entry.isPrimary,
+              order: entry.order,
+            })),
+          });
+        }
+
+        if (npcTemplate.stats.length > 0) {
+          await tx.npcSheetStat.createMany({
+            data: npcTemplate.stats.map((entry) => ({
+              npcSheetId: npcSheet.id,
+              statId: entry.statId,
+              baseValue: entry.baseValue,
+              bonusValue: entry.bonusValue,
+              overrideValue: entry.overrideValue,
+              isSavingThrowProficient: entry.isSavingThrowProficient,
+              savingThrowBonus: entry.savingThrowBonus,
+              savingThrowOverride: entry.savingThrowOverride,
+            })),
+          });
+        }
+
+        if (npcTemplate.skills.length > 0) {
+          await tx.npcSheetSkill.createMany({
+            data: npcTemplate.skills.map((entry) => ({
+              npcSheetId: npcSheet.id,
+              skillId: entry.skillId,
+              isProficient: entry.isProficient,
+              expertiseLevel: entry.expertiseLevel,
+              bonusValue: entry.bonusValue,
+              overrideValue: entry.overrideValue,
+              source: entry.source,
+            })),
+          });
+        }
+
+        if (npcTemplate.defenses.length > 0) {
+          await tx.npcSheetDefense.createMany({
+            data: npcTemplate.defenses.map((entry) => ({
+              npcSheetId: npcSheet.id,
+              kind: entry.kind,
+              damageType: entry.damageType,
+              notes: entry.notes,
+            })),
+          });
+        }
+
+        if (npcTemplate.senses.length > 0) {
+          await tx.npcSheetSense.createMany({
+            data: npcTemplate.senses.map((entry) => ({
+              npcSheetId: npcSheet.id,
+              name: entry.name,
+              range: entry.range,
+              notes: entry.notes,
+            })),
+          });
+        }
+
+        if (npcTemplate.languages.length > 0) {
+          await tx.npcSheetLanguage.createMany({
+            data: npcTemplate.languages.map((entry) => ({
+              npcSheetId: npcSheet.id,
+              languageId: entry.languageId,
+              notes: entry.notes,
+            })),
+          });
+        }
+
+        if (npcTemplate.traits.length > 0) {
+          await tx.npcSheetTrait.createMany({
+            data: npcTemplate.traits.map((entry) => ({
+              npcSheetId: npcSheet.id,
+              name: entry.name,
+              description: entry.description,
+              order: entry.order,
+            })),
+          });
+        }
+
+        const actionIdMap = new Map<string, string>();
+        for (const action of npcTemplate.actions) {
+          const createdAction = await tx.npcSheetAction.create({
+            data: {
+              npcSheetId: npcSheet.id,
+              kind: action.kind,
+              name: action.name,
+              description: action.description,
+              uses: action.uses,
+              maxUses: action.maxUses,
+              recharge: action.recharge,
+              order: action.order,
+            },
+          });
+          actionIdMap.set(action.id, createdAction.id);
+        }
+
+        const attackIdMap = new Map<string, string>();
+        for (const attack of npcTemplate.attacks) {
+          const createdAttack = await tx.npcSheetAttack.create({
+            data: {
+              npcSheetId: npcSheet.id,
+              name: attack.name,
+              description: attack.description,
+              attackType: attack.attackType,
+              attackAbilityKey: attack.attackAbilityKey,
+              attackBonus: attack.attackBonus,
+              damageFormula: attack.damageFormula,
+              damageBonus: attack.damageBonus,
+              damageType: attack.damageType,
+              secondaryDamageFormula: attack.secondaryDamageFormula,
+              secondaryDamageType: attack.secondaryDamageType,
+              normalRange: attack.normalRange,
+              longRange: attack.longRange,
+              reach: attack.reach,
+              target: attack.target,
+              saveAbilityKey: attack.saveAbilityKey,
+              saveDc: attack.saveDc,
+              onHit: attack.onHit,
+              notes: attack.notes,
+              order: attack.order,
+            },
+          });
+          attackIdMap.set(attack.id, createdAttack.id);
+        }
+
+        for (const multiattack of npcTemplate.multiattacks) {
+          const createdMultiattack = await tx.npcSheetMultiattack.create({
+            data: {
+              npcSheetId: npcSheet.id,
+              name: multiattack.name,
+              description: multiattack.description,
+              order: multiattack.order,
+            },
+          });
+
+          for (const entry of multiattack.entries) {
+            await tx.npcSheetMultiattackEntry.create({
+              data: {
+                multiattackId: createdMultiattack.id,
+                attackId: entry.attackId
+                  ? attackIdMap.get(entry.attackId) ?? null
+                  : null,
+                actionId: entry.actionId
+                  ? actionIdMap.get(entry.actionId) ?? null
+                  : null,
+                quantity: entry.quantity,
+                order: entry.order,
+                notes: entry.notes,
+              },
+            });
+          }
+        }
+
+        for (const ability of npcTemplate.magicalAbilities) {
+          await tx.npcSheetMagicalAbility.create({
+            data: {
+              npcSheetId: npcSheet.id,
+              spellId: ability.spellId,
+              name: ability.name,
+              description: ability.description,
+              abilityKey: ability.abilityKey,
+              attackBonus: ability.attackBonus,
+              saveDc: ability.saveDc,
+              damageFormula: ability.damageFormula,
+              damageBonus: ability.damageBonus,
+              damageType: ability.damageType,
+              range: ability.range,
+              target: ability.target,
+              uses: ability.uses,
+              maxUses: ability.maxUses,
+              recharge: ability.recharge,
+              isPassive: ability.isPassive,
+              notes: ability.notes,
+              order: ability.order,
+            },
+          });
+        }
+
+        return { actor, npcSheetId: npcSheet.id };
+      });
+
+      const npcSheet = await prisma.npcSheet.findUniqueOrThrow({
+        where: { id: result.npcSheetId },
+        include: {
+          ancestry: {
+            select: { id: true, key: true, name: true },
+          },
+          subAncestry: {
+            select: { id: true, key: true, name: true },
+          },
+          background: {
+            select: { id: true, key: true, name: true },
+          },
+          classes: {
+            orderBy: { order: "asc" },
+            include: {
+              characterClass: {
+                select: { id: true, key: true, name: true },
+              },
+              subclass: {
+                select: { id: true, key: true, name: true },
+              },
+            },
+          },
+          stats: {
+            include: { stat: true },
+          },
+          skills: {
+            include: { skill: { include: { stat: true } } },
+          },
+          defenses: true,
+          senses: true,
+          languages: {
+            include: { language: true },
+          },
+          traits: { orderBy: { order: "asc" } },
+          actions: { orderBy: { order: "asc" } },
+          attacks: { orderBy: { order: "asc" } },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: { select: { id: true, name: true } },
+                  action: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: { id: true, key: true, name: true, level: true },
+              },
+            },
+          },
         },
       });
 
       return reply.status(201).send({
-        actor: {
-          id: actor.id,
-          campaignId: actor.campaignId,
-          ownerId: actor.ownerId,
-          type: actor.type,
-          location: actor.location,
-          name: actor.name,
-          initials: actor.initials,
-          description: actor.description,
-          portraitUrl: actor.portraitUrl,
-          createdAt: actor.createdAt.toISOString(),
-          updatedAt: actor.updatedAt.toISOString(),
-        },
+        actor: result.actor,
+        npcSheet,
       });
     },
   });
@@ -773,57 +1468,35 @@ export async function campaignRoutes(app: FastifyInstance) {
     url: "/campaigns/:id/creature-templates/:templateId/import",
     schema: {
       tags: ["Campaigns"],
-      description: "Import a creature template into the campaign library",
+      description:
+        "Import a complete creature template into the campaign as an independent actor and CreatureSheet",
       params: z.object({
         id: z.string().uuid("Invalid campaign id"),
         templateId: z.string().uuid("Invalid creature template id"),
       }),
       response: {
         201: z.object({
-          actor: z.object({
-            id: z.string(),
-            campaignId: z.string(),
-            ownerId: z.string().nullable(),
-            type: z.string(),
-            location: z.string(),
-            name: z.string(),
-            initials: z.string(),
-            description: z.string().nullable(),
-            portraitUrl: z.string().nullable(),
-            createdAt: z.string(),
-            updatedAt: z.string(),
-          }),
+          actor: z.any(),
+          creatureSheet: z.any(),
         }),
-        401: z.object({
-          message: z.string(),
-        }),
-        403: z.object({
-          message: z.string(),
-        }),
-        404: z.object({
-          message: z.string(),
-        }),
-        409: z.object({
-          message: z.string(),
-        }),
+        401: z.object({ message: z.string() }),
+        403: z.object({ message: z.string() }),
+        404: z.object({ message: z.string() }),
+        409: z.object({ message: z.string() }),
       },
     },
     handler: async (request, reply) => {
       const session = await getAuthenticatedSession(request);
 
       if (!session?.user) {
-        return reply.status(401).send({
-          message: "Unauthorized",
-        });
+        return reply.status(401).send({ message: "Unauthorized" });
       }
 
       const campaign = await prisma.campaign.findFirst({
         where: {
           id: request.params.id,
           OR: [
-            {
-              ownerId: session.user.id,
-            },
+            { ownerId: session.user.id },
             {
               participants: {
                 some: {
@@ -846,30 +1519,62 @@ export async function campaignRoutes(app: FastifyInstance) {
       });
 
       if (!campaign) {
-        return reply.status(404).send({
-          message: "Campaign not found",
-        });
+        return reply.status(404).send({ message: "Campaign not found" });
       }
 
-      const currentParticipant = campaign.participants[0];
-      const isGM = currentParticipant?.role === "GM";
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = campaign.participants[0]?.role === "GM";
 
-      if (!isGM) {
+      if (!isOwner && !isGM) {
         return reply.status(403).send({
           message: "Only GMs can import creature templates",
         });
       }
 
       if (!campaign.systemId) {
-        return reply.status(409).send({
-          message: "Campaign has no system",
-        });
+        return reply.status(409).send({ message: "Campaign has no system" });
       }
 
       const creatureTemplate = await prisma.creatureTemplate.findFirst({
         where: {
           id: request.params.templateId,
           systemId: campaign.systemId,
+        },
+        include: {
+          stats: {
+            include: { stat: true },
+          },
+          skills: {
+            include: { skill: { include: { stat: true } } },
+          },
+          defenses: true,
+          senses: true,
+          languages: {
+            include: { language: true },
+          },
+          traits: { orderBy: { order: "asc" } },
+          actions: { orderBy: { order: "asc" } },
+          attacks: { orderBy: { order: "asc" } },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: { select: { id: true, name: true } },
+                  action: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: { id: true, key: true, name: true, level: true },
+              },
+            },
+          },
         },
       });
 
@@ -879,43 +1584,269 @@ export async function campaignRoutes(app: FastifyInstance) {
         });
       }
 
-      const initials =
-        creatureTemplate.initials ??
-        creatureTemplate.name
-          .trim()
-          .split(" ")
-          .map((part) => part[0])
-          .join("")
-          .slice(0, 3)
-          .toUpperCase();
+      const result = await prisma.$transaction(async (tx) => {
+        const actor = await tx.campaignActor.create({
+          data: {
+            campaignId: campaign.id,
+            ownerId: null,
+            type: "CREATURE",
+            location: "LIBRARY",
+            name: creatureTemplate.name,
+            initials:
+              creatureTemplate.initials ??
+              getActorInitials(creatureTemplate.name),
+            description: creatureTemplate.description,
+            portraitUrl: creatureTemplate.portraitUrl,
+          },
+        });
 
-      const actor = await prisma.campaignActor.create({
-        data: {
-          campaignId: campaign.id,
-          ownerId: null,
-          type: "CREATURE",
-          location: "LIBRARY",
-          name: creatureTemplate.name,
-          initials,
-          description: creatureTemplate.description,
-          portraitUrl: creatureTemplate.portraitUrl,
+        const creatureSheet = await tx.creatureSheet.create({
+          data: {
+            campaignId: campaign.id,
+            systemId: campaign.systemId!,
+            campaignActorId: actor.id,
+            size: creatureTemplate.size,
+            creatureType: creatureTemplate.creatureType,
+            habitat: creatureTemplate.habitat,
+            behavior: creatureTemplate.behavior,
+            tactics: creatureTemplate.tactics,
+            lore: creatureTemplate.lore,
+            notes: creatureTemplate.notes,
+            portraitUrl: creatureTemplate.portraitUrl,
+            tokenImageUrl: creatureTemplate.tokenImageUrl,
+            tokenImageFit: creatureTemplate.tokenImageFit,
+            armorClass: creatureTemplate.armorClass,
+            hitPoints: creatureTemplate.hitPoints,
+            maxHitPoints: creatureTemplate.maxHitPoints,
+            temporaryHp: creatureTemplate.temporaryHp,
+            speed: creatureTemplate.speed,
+            climbSpeed: creatureTemplate.climbSpeed,
+            swimSpeed: creatureTemplate.swimSpeed,
+            flySpeed: creatureTemplate.flySpeed,
+            burrowSpeed: creatureTemplate.burrowSpeed,
+            challengeRating: creatureTemplate.challengeRating,
+            experienceReward: creatureTemplate.experienceReward,
+          },
+        });
+
+        if (creatureTemplate.stats.length > 0) {
+          await tx.creatureSheetStat.createMany({
+            data: creatureTemplate.stats.map((entry) => ({
+              creatureSheetId: creatureSheet.id,
+              statId: entry.statId,
+              baseValue: entry.baseValue,
+              bonusValue: entry.bonusValue,
+              overrideValue: entry.overrideValue,
+              isSavingThrowProficient: entry.isSavingThrowProficient,
+              savingThrowBonus: entry.savingThrowBonus,
+              savingThrowOverride: entry.savingThrowOverride,
+            })),
+          });
+        }
+
+        if (creatureTemplate.skills.length > 0) {
+          await tx.creatureSheetSkill.createMany({
+            data: creatureTemplate.skills.map((entry) => ({
+              creatureSheetId: creatureSheet.id,
+              skillId: entry.skillId,
+              isProficient: entry.isProficient,
+              expertiseLevel: entry.expertiseLevel,
+              bonusValue: entry.bonusValue,
+              overrideValue: entry.overrideValue,
+              source: entry.source,
+            })),
+          });
+        }
+
+        if (creatureTemplate.defenses.length > 0) {
+          await tx.creatureSheetDefense.createMany({
+            data: creatureTemplate.defenses.map((entry) => ({
+              creatureSheetId: creatureSheet.id,
+              kind: entry.kind,
+              damageType: entry.damageType,
+              notes: entry.notes,
+            })),
+          });
+        }
+
+        if (creatureTemplate.senses.length > 0) {
+          await tx.creatureSheetSense.createMany({
+            data: creatureTemplate.senses.map((entry) => ({
+              creatureSheetId: creatureSheet.id,
+              name: entry.name,
+              range: entry.range,
+              notes: entry.notes,
+            })),
+          });
+        }
+
+        if (creatureTemplate.languages.length > 0) {
+          await tx.creatureSheetLanguage.createMany({
+            data: creatureTemplate.languages.map((entry) => ({
+              creatureSheetId: creatureSheet.id,
+              languageId: entry.languageId,
+              notes: entry.notes,
+            })),
+          });
+        }
+
+        if (creatureTemplate.traits.length > 0) {
+          await tx.creatureSheetTrait.createMany({
+            data: creatureTemplate.traits.map((entry) => ({
+              creatureSheetId: creatureSheet.id,
+              name: entry.name,
+              description: entry.description,
+              order: entry.order,
+            })),
+          });
+        }
+
+        const actionIdMap = new Map<string, string>();
+        for (const action of creatureTemplate.actions) {
+          const createdAction = await tx.creatureSheetAction.create({
+            data: {
+              creatureSheetId: creatureSheet.id,
+              kind: action.kind,
+              name: action.name,
+              description: action.description,
+              uses: action.uses,
+              maxUses: action.maxUses,
+              recharge: action.recharge,
+              order: action.order,
+            },
+          });
+          actionIdMap.set(action.id, createdAction.id);
+        }
+
+        const attackIdMap = new Map<string, string>();
+        for (const attack of creatureTemplate.attacks) {
+          const createdAttack = await tx.creatureSheetAttack.create({
+            data: {
+              creatureSheetId: creatureSheet.id,
+              name: attack.name,
+              description: attack.description,
+              attackType: attack.attackType,
+              attackAbilityKey: attack.attackAbilityKey,
+              attackBonus: attack.attackBonus,
+              damageFormula: attack.damageFormula,
+              damageBonus: attack.damageBonus,
+              damageType: attack.damageType,
+              secondaryDamageFormula: attack.secondaryDamageFormula,
+              secondaryDamageType: attack.secondaryDamageType,
+              normalRange: attack.normalRange,
+              longRange: attack.longRange,
+              reach: attack.reach,
+              target: attack.target,
+              saveAbilityKey: attack.saveAbilityKey,
+              saveDc: attack.saveDc,
+              onHit: attack.onHit,
+              notes: attack.notes,
+              order: attack.order,
+            },
+          });
+          attackIdMap.set(attack.id, createdAttack.id);
+        }
+
+        for (const multiattack of creatureTemplate.multiattacks) {
+          const createdMultiattack =
+            await tx.creatureSheetMultiattack.create({
+              data: {
+                creatureSheetId: creatureSheet.id,
+                name: multiattack.name,
+                description: multiattack.description,
+                order: multiattack.order,
+              },
+            });
+
+          for (const entry of multiattack.entries) {
+            await tx.creatureSheetMultiattackEntry.create({
+              data: {
+                multiattackId: createdMultiattack.id,
+                attackId: entry.attackId
+                  ? attackIdMap.get(entry.attackId) ?? null
+                  : null,
+                actionId: entry.actionId
+                  ? actionIdMap.get(entry.actionId) ?? null
+                  : null,
+                quantity: entry.quantity,
+                order: entry.order,
+                notes: entry.notes,
+              },
+            });
+          }
+        }
+
+        for (const ability of creatureTemplate.magicalAbilities) {
+          await tx.creatureSheetMagicalAbility.create({
+            data: {
+              creatureSheetId: creatureSheet.id,
+              spellId: ability.spellId,
+              name: ability.name,
+              description: ability.description,
+              abilityKey: ability.abilityKey,
+              attackBonus: ability.attackBonus,
+              saveDc: ability.saveDc,
+              damageFormula: ability.damageFormula,
+              damageBonus: ability.damageBonus,
+              damageType: ability.damageType,
+              range: ability.range,
+              target: ability.target,
+              uses: ability.uses,
+              maxUses: ability.maxUses,
+              recharge: ability.recharge,
+              isPassive: ability.isPassive,
+              notes: ability.notes,
+              order: ability.order,
+            },
+          });
+        }
+
+        return { actor, creatureSheetId: creatureSheet.id };
+      });
+
+      const creatureSheet = await prisma.creatureSheet.findUniqueOrThrow({
+        where: { id: result.creatureSheetId },
+        include: {
+          stats: {
+            include: { stat: true },
+          },
+          skills: {
+            include: { skill: { include: { stat: true } } },
+          },
+          defenses: true,
+          senses: true,
+          languages: {
+            include: { language: true },
+          },
+          traits: { orderBy: { order: "asc" } },
+          actions: { orderBy: { order: "asc" } },
+          attacks: { orderBy: { order: "asc" } },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: { select: { id: true, name: true } },
+                  action: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: { id: true, key: true, name: true, level: true },
+              },
+            },
+          },
         },
       });
 
       return reply.status(201).send({
-        actor: {
-          id: actor.id,
-          campaignId: actor.campaignId,
-          ownerId: actor.ownerId,
-          type: actor.type,
-          location: actor.location,
-          name: actor.name,
-          initials: actor.initials,
-          description: actor.description,
-          portraitUrl: actor.portraitUrl,
-          createdAt: actor.createdAt.toISOString(),
-          updatedAt: actor.updatedAt.toISOString(),
-        },
+        actor: result.actor,
+        creatureSheet,
       });
     },
   });
@@ -1252,6 +2183,1205 @@ export async function campaignRoutes(app: FastifyInstance) {
           updatedAt: result.actor.updatedAt.toISOString(),
         },
         characterSheetId: result.characterSheetId,
+      });
+    },
+  });
+
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/campaigns/:id/npc-sheets",
+    schema: {
+      tags: ["Campaigns"],
+      params: z.object({
+        id: z.string().uuid(),
+      }),
+      response: {
+        200: z.object({
+          npcSheets: z.array(z.any()),
+        }),
+        401: z.object({ message: z.string() }),
+        404: z.object({ message: z.string() }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.id,
+          OR: [
+            { ownerId: session.user.id },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({ message: "Campaign not found" });
+      }
+
+      const canSeeGmSheets =
+        campaign.ownerId === session.user.id ||
+        campaign.participants[0]?.role === "GM";
+
+      if (!canSeeGmSheets) {
+        return reply.status(200).send({ npcSheets: [] });
+      }
+
+      const npcSheets = await prisma.npcSheet.findMany({
+        where: {
+          campaignId: campaign.id,
+        },
+        include: {
+          ancestry: {
+            select: {
+              id: true,
+              key: true,
+              name: true,
+            },
+          },
+          subAncestry: {
+            select: {
+              id: true,
+              key: true,
+              name: true,
+            },
+          },
+          background: {
+            select: {
+              id: true,
+              key: true,
+              name: true,
+            },
+          },
+          classes: {
+            orderBy: {
+              order: "asc",
+            },
+            include: {
+              characterClass: {
+                select: {
+                  id: true,
+                  key: true,
+                  name: true,
+                },
+              },
+              subclass: {
+                select: {
+                  id: true,
+                  key: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          stats: {
+            include: {
+              stat: true,
+            },
+          },
+          skills: {
+            include: {
+              skill: {
+                include: {
+                  stat: true,
+                },
+              },
+            },
+          },
+          defenses: true,
+          senses: true,
+          languages: {
+            include: {
+              language: true,
+            },
+          },
+          traits: {
+            orderBy: { order: "asc" },
+          },
+          actions: {
+            orderBy: { order: "asc" },
+          },
+          attacks: {
+            orderBy: { order: "asc" },
+          },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: {
+                    select: {
+                      id: true,
+                      name: true,
+                    },
+                  },
+                  action: {
+                    select: {
+                      id: true,
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: {
+                  id: true,
+                  key: true,
+                  name: true,
+                  level: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+
+      return reply.status(200).send({ npcSheets });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/campaigns/:id/creature-sheets",
+    schema: {
+      tags: ["Campaigns"],
+      params: z.object({
+        id: z.string().uuid(),
+      }),
+      response: {
+        200: z.object({
+          creatureSheets: z.array(z.any()),
+        }),
+        401: z.object({ message: z.string() }),
+        404: z.object({ message: z.string() }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
+
+      const campaign = await prisma.campaign.findFirst({
+        where: {
+          id: request.params.id,
+          OR: [
+            { ownerId: session.user.id },
+            {
+              participants: {
+                some: {
+                  userId: session.user.id,
+                  status: "APPROVED",
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          participants: {
+            where: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+            take: 1,
+          },
+        },
+      });
+
+      if (!campaign) {
+        return reply.status(404).send({ message: "Campaign not found" });
+      }
+
+      const canSeeGmSheets =
+        campaign.ownerId === session.user.id ||
+        campaign.participants[0]?.role === "GM";
+
+      if (!canSeeGmSheets) {
+        return reply.status(200).send({ creatureSheets: [] });
+      }
+
+      const creatureSheets = await prisma.creatureSheet.findMany({
+        where: {
+          campaignId: campaign.id,
+        },
+        include: {
+          stats: {
+            include: {
+              stat: true,
+            },
+          },
+          skills: {
+            include: {
+              skill: {
+                include: {
+                  stat: true,
+                },
+              },
+            },
+          },
+          defenses: true,
+          senses: true,
+          languages: {
+            include: {
+              language: true,
+            },
+          },
+          traits: {
+            orderBy: { order: "asc" },
+          },
+          actions: {
+            orderBy: { order: "asc" },
+          },
+          attacks: {
+            orderBy: { order: "asc" },
+          },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: {
+                    select: {
+                      id: true,
+                      name: true,
+                    },
+                  },
+                  action: {
+                    select: {
+                      id: true,
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: {
+                  id: true,
+                  key: true,
+                  name: true,
+                  level: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+
+      return reply.status(200).send({ creatureSheets });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/campaigns/:id/npc-sheets",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Create a complete NPC actor and NpcSheet",
+      params: z.object({
+        id: z.string().uuid(),
+      }),
+      body: npcSheetInputSchema,
+      response: {
+        201: z.object({
+          actor: z.any(),
+          npcSheet: z.any(),
+        }),
+        400: z.object({ message: z.string() }),
+        401: z.object({ message: z.string() }),
+        403: z.object({ message: z.string() }),
+        404: z.object({ message: z.string() }),
+        409: z.object({ message: z.string() }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
+
+      const campaign = await getCampaignForGm(request.params.id, session.user.id);
+
+      if (!campaign) {
+        return reply.status(404).send({ message: "Campaign not found" });
+      }
+
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = campaign.participants[0]?.role === "GM";
+
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message: "Only GMs can create NPC sheets",
+        });
+      }
+
+      if (!campaign.systemId) {
+        return reply.status(409).send({
+          message: "Campaign has no system",
+        });
+      }
+
+      let systemContent;
+      let originAndClasses;
+
+      try {
+        [systemContent, originAndClasses] = await Promise.all([
+          resolveNpcCreatureSystemContent(
+            campaign.systemId,
+            request.body,
+          ),
+          resolveNpcOriginAndClasses(
+            campaign.systemId,
+            request.body,
+          ),
+        ]);
+      } catch (error) {
+        return reply.status(400).send({
+          message:
+            error instanceof Error
+              ? error.message
+              : "Invalid system content",
+        });
+      }
+
+      const statByKey = new Map(
+        systemContent.stats.map((stat) => [stat.key, stat]),
+      );
+      const skillByKey = new Map(
+        systemContent.skills.map((skill) => [skill.key, skill]),
+      );
+      const languageByKey = new Map(
+        systemContent.languages.map((language) => [language.key, language]),
+      );
+      const spellByKey = new Map(
+        systemContent.spells.map((spell) => [spell.key, spell]),
+      );
+
+      const result = await prisma.$transaction(async (tx) => {
+        const actor = await tx.campaignActor.create({
+          data: {
+            campaignId: campaign.id,
+            ownerId: null,
+            type: "NPC",
+            location: request.body.location,
+            name: request.body.name.trim(),
+            initials: getActorInitials(
+              request.body.name,
+              request.body.initials,
+            ),
+            description: nullableTrimmed(request.body.description),
+            portraitUrl: nullableTrimmed(request.body.portraitUrl),
+          },
+        });
+
+        const npcSheet = await tx.npcSheet.create({
+          data: {
+            campaignId: campaign.id,
+            systemId: campaign.systemId!,
+            campaignActorId: actor.id,
+            ancestryId: originAndClasses.ancestry?.id ?? null,
+            subAncestryId: originAndClasses.subAncestry?.id ?? null,
+            backgroundId: originAndClasses.background?.id ?? null,
+            size: request.body.size,
+            role: nullableTrimmed(request.body.role),
+            faction: nullableTrimmed(request.body.faction),
+            personality: nullableTrimmed(request.body.personality),
+            motivation: nullableTrimmed(request.body.motivation),
+            behavior: nullableTrimmed(request.body.behavior),
+            tactics: nullableTrimmed(request.body.tactics),
+            lore: nullableTrimmed(request.body.lore),
+            notes: nullableTrimmed(request.body.notes),
+            portraitUrl: nullableTrimmed(request.body.portraitUrl),
+            tokenImageUrl: nullableTrimmed(request.body.tokenImageUrl),
+            tokenImageFit: request.body.tokenImageFit,
+            armorClass: request.body.armorClass,
+            hitPoints: Math.min(
+              request.body.hitPoints,
+              request.body.maxHitPoints,
+            ),
+            maxHitPoints: request.body.maxHitPoints,
+            temporaryHp: request.body.temporaryHp,
+            speed: request.body.speed,
+            climbSpeed: request.body.climbSpeed,
+            swimSpeed: request.body.swimSpeed,
+            flySpeed: request.body.flySpeed,
+            burrowSpeed: request.body.burrowSpeed,
+          },
+        });
+
+        if (request.body.classes.length > 0) {
+          await tx.npcSheetClass.createMany({
+            data: request.body.classes.map((classEntry, order) => ({
+              npcSheetId: npcSheet.id,
+              classId: classEntry.classId,
+              subclassId: classEntry.subclassId || null,
+              level: classEntry.level,
+              isPrimary: classEntry.isPrimary,
+              order,
+            })),
+          });
+        }
+
+        await tx.npcSheetStat.createMany({
+          data: Object.entries(request.body.attributes).map(
+            ([statKey, baseValue]) => {
+              const stat = statByKey.get(statKey);
+
+              if (!stat) {
+                throw new Error(`Stat not found: ${statKey}`);
+              }
+
+              return {
+                npcSheetId: npcSheet.id,
+                statId: stat.id,
+                baseValue,
+                bonusValue: 0,
+                overrideValue: null,
+                isSavingThrowProficient:
+                  request.body.savingThrowKeys.includes(statKey),
+                savingThrowBonus: 0,
+                savingThrowOverride: null,
+              };
+            },
+          ),
+        });
+
+        if (request.body.skillKeys.length > 0) {
+          await tx.npcSheetSkill.createMany({
+            data: request.body.skillKeys.map((skillKey) => {
+              const skill = skillByKey.get(skillKey);
+
+              if (!skill) {
+                throw new Error(`Skill not found: ${skillKey}`);
+              }
+
+              return {
+                npcSheetId: npcSheet.id,
+                skillId: skill.id,
+                isProficient: true,
+                expertiseLevel: request.body.expertiseSkillKeys.includes(
+                  skillKey,
+                )
+                  ? 1
+                  : 0,
+                bonusValue: 0,
+                overrideValue:
+                  request.body.skillOverrides[skillKey] ?? null,
+                source: "manual",
+              };
+            }),
+          });
+        }
+
+        if (request.body.defenses.length > 0) {
+          await tx.npcSheetDefense.createMany({
+            data: request.body.defenses.map((defense) => ({
+              npcSheetId: npcSheet.id,
+              kind: defense.kind,
+              damageType: defense.damageType.trim(),
+              notes: nullableTrimmed(defense.notes),
+            })),
+          });
+        }
+
+        if (request.body.senses.length > 0) {
+          await tx.npcSheetSense.createMany({
+            data: request.body.senses.map((sense) => ({
+              npcSheetId: npcSheet.id,
+              name: sense.name.trim(),
+              range: sense.range ?? null,
+              notes: nullableTrimmed(sense.notes),
+            })),
+          });
+        }
+
+        if (request.body.languageKeys.length > 0) {
+          await tx.npcSheetLanguage.createMany({
+            data: request.body.languageKeys.map((languageKey) => {
+              const language = languageByKey.get(languageKey);
+
+              if (!language) {
+                throw new Error(`Language not found: ${languageKey}`);
+              }
+
+              return {
+                npcSheetId: npcSheet.id,
+                languageId: language.id,
+                notes: null,
+              };
+            }),
+          });
+        }
+
+        if (request.body.traits.length > 0) {
+          await tx.npcSheetTrait.createMany({
+            data: request.body.traits.map((trait, order) => ({
+              npcSheetId: npcSheet.id,
+              name: trait.name.trim(),
+              description: trait.description.trim(),
+              order,
+            })),
+          });
+        }
+
+        const createdActions = [];
+        for (const [order, action] of request.body.actions.entries()) {
+          createdActions.push(
+            await tx.npcSheetAction.create({
+              data: {
+                npcSheetId: npcSheet.id,
+                kind: action.kind,
+                name: action.name.trim(),
+                description: action.description.trim(),
+                uses: action.uses ?? null,
+                maxUses: action.maxUses ?? null,
+                recharge: nullableTrimmed(action.recharge),
+                order,
+              },
+            }),
+          );
+        }
+
+        const createdAttacks = [];
+        for (const [order, attack] of request.body.attacks.entries()) {
+          createdAttacks.push(
+            await tx.npcSheetAttack.create({
+              data: {
+                npcSheetId: npcSheet.id,
+                name: attack.name.trim(),
+                description: nullableTrimmed(attack.description),
+                attackType: attack.attackType,
+                attackAbilityKey: nullableTrimmed(
+                  attack.attackAbilityKey,
+                ),
+                attackBonus: attack.attackBonus,
+                damageFormula: nullableTrimmed(attack.damageFormula),
+                damageBonus: attack.damageBonus,
+                damageType: nullableTrimmed(attack.damageType),
+                secondaryDamageFormula: nullableTrimmed(
+                  attack.secondaryDamageFormula,
+                ),
+                secondaryDamageType: nullableTrimmed(
+                  attack.secondaryDamageType,
+                ),
+                normalRange: attack.normalRange ?? null,
+                longRange: attack.longRange ?? null,
+                reach: attack.reach ?? null,
+                target: nullableTrimmed(attack.target),
+                saveAbilityKey: nullableTrimmed(
+                  attack.saveAbilityKey,
+                ),
+                saveDc: attack.saveDc ?? null,
+                onHit: nullableTrimmed(attack.onHit),
+                notes: nullableTrimmed(attack.notes),
+                order,
+              },
+            }),
+          );
+        }
+
+        const actionByName = new Map(
+          createdActions.map((action) => [action.name, action]),
+        );
+        const attackByName = new Map(
+          createdAttacks.map((attack) => [attack.name, attack]),
+        );
+
+        for (const [order, multiattack] of request.body.multiattacks.entries()) {
+          const createdMultiattack = await tx.npcSheetMultiattack.create({
+            data: {
+              npcSheetId: npcSheet.id,
+              name: multiattack.name.trim(),
+              description: nullableTrimmed(multiattack.description),
+              order,
+            },
+          });
+
+          for (const [entryOrder, entry] of multiattack.entries.entries()) {
+            const attack =
+              entry.targetType === "ATTACK"
+                ? attackByName.get(entry.targetName.trim())
+                : null;
+            const action =
+              entry.targetType === "ACTION"
+                ? actionByName.get(entry.targetName.trim())
+                : null;
+
+            if (!attack && !action) {
+              throw new Error(
+                `Entrada de multiataque não encontrada: ${entry.targetName}`,
+              );
+            }
+
+            await tx.npcSheetMultiattackEntry.create({
+              data: {
+                multiattackId: createdMultiattack.id,
+                attackId: attack?.id ?? null,
+                actionId: action?.id ?? null,
+                quantity: entry.quantity,
+                order: entryOrder,
+                notes: nullableTrimmed(entry.notes),
+              },
+            });
+          }
+        }
+
+        for (const [order, ability] of request.body.magicalAbilities.entries()) {
+          const spellKey = ability.spellKey?.trim();
+          const spell = spellKey ? spellByKey.get(spellKey) : null;
+
+          await tx.npcSheetMagicalAbility.create({
+            data: {
+              npcSheetId: npcSheet.id,
+              spellId: spell?.id ?? null,
+              name: ability.name.trim(),
+              description: nullableTrimmed(ability.description),
+              abilityKey: nullableTrimmed(ability.abilityKey),
+              attackBonus: ability.attackBonus ?? null,
+              saveDc: ability.saveDc ?? null,
+              damageFormula: nullableTrimmed(ability.damageFormula),
+              damageBonus: ability.damageBonus,
+              damageType: nullableTrimmed(ability.damageType),
+              range: nullableTrimmed(ability.range),
+              target: nullableTrimmed(ability.target),
+              uses: ability.uses ?? null,
+              maxUses: ability.maxUses ?? null,
+              recharge: nullableTrimmed(ability.recharge),
+              isPassive: ability.isPassive,
+              notes: nullableTrimmed(ability.notes),
+              order,
+            },
+          });
+        }
+
+        return {
+          actor,
+          npcSheetId: npcSheet.id,
+        };
+      });
+
+      const npcSheet = await prisma.npcSheet.findUniqueOrThrow({
+        where: {
+          id: result.npcSheetId,
+        },
+        include: {
+          ancestry: {
+            select: { id: true, key: true, name: true },
+          },
+          subAncestry: {
+            select: { id: true, key: true, name: true },
+          },
+          background: {
+            select: { id: true, key: true, name: true },
+          },
+          classes: {
+            orderBy: { order: "asc" },
+            include: {
+              characterClass: {
+                select: { id: true, key: true, name: true },
+              },
+              subclass: {
+                select: { id: true, key: true, name: true },
+              },
+            },
+          },
+          stats: { include: { stat: true } },
+          skills: {
+            include: {
+              skill: {
+                include: { stat: true },
+              },
+            },
+          },
+          defenses: true,
+          senses: true,
+          languages: { include: { language: true } },
+          traits: { orderBy: { order: "asc" } },
+          actions: { orderBy: { order: "asc" } },
+          attacks: { orderBy: { order: "asc" } },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: { select: { id: true, name: true } },
+                  action: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: { id: true, key: true, name: true, level: true },
+              },
+            },
+          },
+        },
+      });
+
+      return reply.status(201).send({
+        actor: result.actor,
+        npcSheet,
+      });
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/campaigns/:id/creature-sheets",
+    schema: {
+      tags: ["Campaigns"],
+      description: "Create a complete creature actor and CreatureSheet",
+      params: z.object({
+        id: z.string().uuid(),
+      }),
+      body: creatureSheetInputSchema,
+      response: {
+        201: z.object({
+          actor: z.any(),
+          creatureSheet: z.any(),
+        }),
+        400: z.object({ message: z.string() }),
+        401: z.object({ message: z.string() }),
+        403: z.object({ message: z.string() }),
+        404: z.object({ message: z.string() }),
+        409: z.object({ message: z.string() }),
+      },
+    },
+    handler: async (request, reply) => {
+      const session = await getAuthenticatedSession(request);
+
+      if (!session?.user) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
+
+      const campaign = await getCampaignForGm(request.params.id, session.user.id);
+
+      if (!campaign) {
+        return reply.status(404).send({ message: "Campaign not found" });
+      }
+
+      const isOwner = campaign.ownerId === session.user.id;
+      const isGM = campaign.participants[0]?.role === "GM";
+
+      if (!isOwner && !isGM) {
+        return reply.status(403).send({
+          message: "Only GMs can create creature sheets",
+        });
+      }
+
+      if (!campaign.systemId) {
+        return reply.status(409).send({
+          message: "Campaign has no system",
+        });
+      }
+
+      let systemContent;
+
+      try {
+        systemContent = await resolveNpcCreatureSystemContent(
+          campaign.systemId,
+          request.body,
+        );
+      } catch (error) {
+        return reply.status(400).send({
+          message:
+            error instanceof Error
+              ? error.message
+              : "Invalid system content",
+        });
+      }
+
+      const statByKey = new Map(
+        systemContent.stats.map((stat) => [stat.key, stat]),
+      );
+      const skillByKey = new Map(
+        systemContent.skills.map((skill) => [skill.key, skill]),
+      );
+      const languageByKey = new Map(
+        systemContent.languages.map((language) => [language.key, language]),
+      );
+      const spellByKey = new Map(
+        systemContent.spells.map((spell) => [spell.key, spell]),
+      );
+
+      const result = await prisma.$transaction(async (tx) => {
+        const actor = await tx.campaignActor.create({
+          data: {
+            campaignId: campaign.id,
+            ownerId: null,
+            type: "CREATURE",
+            location: request.body.location,
+            name: request.body.name.trim(),
+            initials: getActorInitials(
+              request.body.name,
+              request.body.initials,
+            ),
+            description: nullableTrimmed(request.body.description),
+            portraitUrl: nullableTrimmed(request.body.portraitUrl),
+          },
+        });
+
+        const creatureSheet = await tx.creatureSheet.create({
+          data: {
+            campaignId: campaign.id,
+            systemId: campaign.systemId!,
+            campaignActorId: actor.id,
+            size: request.body.size,
+            creatureType: nullableTrimmed(request.body.creatureType),
+            habitat: nullableTrimmed(request.body.habitat),
+            behavior: nullableTrimmed(request.body.behavior),
+            tactics: nullableTrimmed(request.body.tactics),
+            lore: nullableTrimmed(request.body.lore),
+            notes: nullableTrimmed(request.body.notes),
+            portraitUrl: nullableTrimmed(request.body.portraitUrl),
+            tokenImageUrl: nullableTrimmed(request.body.tokenImageUrl),
+            tokenImageFit: request.body.tokenImageFit,
+            armorClass: request.body.armorClass,
+            hitPoints: Math.min(
+              request.body.hitPoints,
+              request.body.maxHitPoints,
+            ),
+            maxHitPoints: request.body.maxHitPoints,
+            temporaryHp: request.body.temporaryHp,
+            speed: request.body.speed,
+            climbSpeed: request.body.climbSpeed,
+            swimSpeed: request.body.swimSpeed,
+            flySpeed: request.body.flySpeed,
+            burrowSpeed: request.body.burrowSpeed,
+            challengeRating: nullableTrimmed(request.body.challengeRating),
+            experienceReward: request.body.experienceReward,
+          },
+        });
+
+        await tx.creatureSheetStat.createMany({
+          data: Object.entries(request.body.attributes).map(
+            ([statKey, baseValue]) => {
+              const stat = statByKey.get(statKey);
+
+              if (!stat) {
+                throw new Error(`Stat not found: ${statKey}`);
+              }
+
+              return {
+                creatureSheetId: creatureSheet.id,
+                statId: stat.id,
+                baseValue,
+                bonusValue: 0,
+                overrideValue: null,
+                isSavingThrowProficient:
+                  request.body.savingThrowKeys.includes(statKey),
+                savingThrowBonus: 0,
+                savingThrowOverride: null,
+              };
+            },
+          ),
+        });
+
+        if (request.body.skillKeys.length > 0) {
+          await tx.creatureSheetSkill.createMany({
+            data: request.body.skillKeys.map((skillKey) => {
+              const skill = skillByKey.get(skillKey);
+
+              if (!skill) {
+                throw new Error(`Skill not found: ${skillKey}`);
+              }
+
+              return {
+                creatureSheetId: creatureSheet.id,
+                skillId: skill.id,
+                isProficient: true,
+                expertiseLevel: request.body.expertiseSkillKeys.includes(
+                  skillKey,
+                )
+                  ? 1
+                  : 0,
+                bonusValue: 0,
+                overrideValue:
+                  request.body.skillOverrides[skillKey] ?? null,
+                source: "manual",
+              };
+            }),
+          });
+        }
+
+        if (request.body.defenses.length > 0) {
+          await tx.creatureSheetDefense.createMany({
+            data: request.body.defenses.map((defense) => ({
+              creatureSheetId: creatureSheet.id,
+              kind: defense.kind,
+              damageType: defense.damageType.trim(),
+              notes: nullableTrimmed(defense.notes),
+            })),
+          });
+        }
+
+        if (request.body.senses.length > 0) {
+          await tx.creatureSheetSense.createMany({
+            data: request.body.senses.map((sense) => ({
+              creatureSheetId: creatureSheet.id,
+              name: sense.name.trim(),
+              range: sense.range ?? null,
+              notes: nullableTrimmed(sense.notes),
+            })),
+          });
+        }
+
+        if (request.body.languageKeys.length > 0) {
+          await tx.creatureSheetLanguage.createMany({
+            data: request.body.languageKeys.map((languageKey) => {
+              const language = languageByKey.get(languageKey);
+
+              if (!language) {
+                throw new Error(`Language not found: ${languageKey}`);
+              }
+
+              return {
+                creatureSheetId: creatureSheet.id,
+                languageId: language.id,
+                notes: null,
+              };
+            }),
+          });
+        }
+
+        if (request.body.traits.length > 0) {
+          await tx.creatureSheetTrait.createMany({
+            data: request.body.traits.map((trait, order) => ({
+              creatureSheetId: creatureSheet.id,
+              name: trait.name.trim(),
+              description: trait.description.trim(),
+              order,
+            })),
+          });
+        }
+
+        const createdActions = [];
+        for (const [order, action] of request.body.actions.entries()) {
+          createdActions.push(
+            await tx.creatureSheetAction.create({
+              data: {
+                creatureSheetId: creatureSheet.id,
+                kind: action.kind,
+                name: action.name.trim(),
+                description: action.description.trim(),
+                uses: action.uses ?? null,
+                maxUses: action.maxUses ?? null,
+                recharge: nullableTrimmed(action.recharge),
+                order,
+              },
+            }),
+          );
+        }
+
+        const createdAttacks = [];
+        for (const [order, attack] of request.body.attacks.entries()) {
+          createdAttacks.push(
+            await tx.creatureSheetAttack.create({
+              data: {
+                creatureSheetId: creatureSheet.id,
+                name: attack.name.trim(),
+                description: nullableTrimmed(attack.description),
+                attackType: attack.attackType,
+                attackAbilityKey: nullableTrimmed(
+                  attack.attackAbilityKey,
+                ),
+                attackBonus: attack.attackBonus,
+                damageFormula: nullableTrimmed(attack.damageFormula),
+                damageBonus: attack.damageBonus,
+                damageType: nullableTrimmed(attack.damageType),
+                secondaryDamageFormula: nullableTrimmed(
+                  attack.secondaryDamageFormula,
+                ),
+                secondaryDamageType: nullableTrimmed(
+                  attack.secondaryDamageType,
+                ),
+                normalRange: attack.normalRange ?? null,
+                longRange: attack.longRange ?? null,
+                reach: attack.reach ?? null,
+                target: nullableTrimmed(attack.target),
+                saveAbilityKey: nullableTrimmed(
+                  attack.saveAbilityKey,
+                ),
+                saveDc: attack.saveDc ?? null,
+                onHit: nullableTrimmed(attack.onHit),
+                notes: nullableTrimmed(attack.notes),
+                order,
+              },
+            }),
+          );
+        }
+
+        const actionByName = new Map(
+          createdActions.map((action) => [action.name, action]),
+        );
+        const attackByName = new Map(
+          createdAttacks.map((attack) => [attack.name, attack]),
+        );
+
+        for (const [order, multiattack] of request.body.multiattacks.entries()) {
+          const createdMultiattack =
+            await tx.creatureSheetMultiattack.create({
+              data: {
+                creatureSheetId: creatureSheet.id,
+                name: multiattack.name.trim(),
+                description: nullableTrimmed(multiattack.description),
+                order,
+              },
+            });
+
+          for (const [entryOrder, entry] of multiattack.entries.entries()) {
+            const attack =
+              entry.targetType === "ATTACK"
+                ? attackByName.get(entry.targetName.trim())
+                : null;
+            const action =
+              entry.targetType === "ACTION"
+                ? actionByName.get(entry.targetName.trim())
+                : null;
+
+            if (!attack && !action) {
+              throw new Error(
+                `Entrada de multiataque não encontrada: ${entry.targetName}`,
+              );
+            }
+
+            await tx.creatureSheetMultiattackEntry.create({
+              data: {
+                multiattackId: createdMultiattack.id,
+                attackId: attack?.id ?? null,
+                actionId: action?.id ?? null,
+                quantity: entry.quantity,
+                order: entryOrder,
+                notes: nullableTrimmed(entry.notes),
+              },
+            });
+          }
+        }
+
+        for (const [order, ability] of request.body.magicalAbilities.entries()) {
+          const spellKey = ability.spellKey?.trim();
+          const spell = spellKey ? spellByKey.get(spellKey) : null;
+
+          await tx.creatureSheetMagicalAbility.create({
+            data: {
+              creatureSheetId: creatureSheet.id,
+              spellId: spell?.id ?? null,
+              name: ability.name.trim(),
+              description: nullableTrimmed(ability.description),
+              abilityKey: nullableTrimmed(ability.abilityKey),
+              attackBonus: ability.attackBonus ?? null,
+              saveDc: ability.saveDc ?? null,
+              damageFormula: nullableTrimmed(ability.damageFormula),
+              damageBonus: ability.damageBonus,
+              damageType: nullableTrimmed(ability.damageType),
+              range: nullableTrimmed(ability.range),
+              target: nullableTrimmed(ability.target),
+              uses: ability.uses ?? null,
+              maxUses: ability.maxUses ?? null,
+              recharge: nullableTrimmed(ability.recharge),
+              isPassive: ability.isPassive,
+              notes: nullableTrimmed(ability.notes),
+              order,
+            },
+          });
+        }
+
+        return {
+          actor,
+          creatureSheetId: creatureSheet.id,
+        };
+      });
+
+      const creatureSheet = await prisma.creatureSheet.findUniqueOrThrow({
+        where: {
+          id: result.creatureSheetId,
+        },
+        include: {
+          stats: { include: { stat: true } },
+          skills: {
+            include: {
+              skill: {
+                include: { stat: true },
+              },
+            },
+          },
+          defenses: true,
+          senses: true,
+          languages: { include: { language: true } },
+          traits: { orderBy: { order: "asc" } },
+          actions: { orderBy: { order: "asc" } },
+          attacks: { orderBy: { order: "asc" } },
+          multiattacks: {
+            orderBy: { order: "asc" },
+            include: {
+              entries: {
+                orderBy: { order: "asc" },
+                include: {
+                  attack: { select: { id: true, name: true } },
+                  action: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+          magicalAbilities: {
+            orderBy: { order: "asc" },
+            include: {
+              spell: {
+                select: { id: true, key: true, name: true, level: true },
+              },
+            },
+          },
+        },
+      });
+
+      return reply.status(201).send({
+        actor: result.actor,
+        creatureSheet,
       });
     },
   });

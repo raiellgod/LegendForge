@@ -389,23 +389,30 @@ export type SystemLibraryCharacterTemplate = {
   }>;
 };
 
-export type SystemLibraryNpcTemplate = {
-  id: string;
+export type SystemLibraryNpcTemplate = Omit<
+  NpcSheetReady,
+  "campaignId" | "campaignActorId"
+> & {
+  systemId: string;
   key: string;
   name: string;
   initials: string | null;
   description: string | null;
-  portraitUrl: string | null;
+  ancestryId: string | null;
+  subAncestryId: string | null;
+  backgroundId: string | null;
   order: number;
 };
 
-export type SystemLibraryCreatureTemplate = {
-  id: string;
+export type SystemLibraryCreatureTemplate = Omit<
+  CreatureSheetReady,
+  "campaignId" | "campaignActorId"
+> & {
+  systemId: string;
   key: string;
   name: string;
   initials: string | null;
   description: string | null;
-  portraitUrl: string | null;
   order: number;
 };
 
@@ -428,4 +435,391 @@ export type SystemLibrary = {
   npcTemplates: SystemLibraryNpcTemplate[];
   creatureTemplates: SystemLibraryCreatureTemplate[];
   characterTemplates: SystemLibraryCharacterTemplate[];
+};
+
+
+export type NpcCreatureDefenseDraft = {
+  kind: "RESISTANCE" | "IMMUNITY" | "VULNERABILITY";
+  damageType: string;
+  notes: string;
+};
+
+export type NpcCreatureSenseDraft = {
+  name: string;
+  range: number | null;
+  notes: string;
+};
+
+export type NpcCreatureTraitDraft = {
+  name: string;
+  description: string;
+};
+
+export type NpcCreatureActionDraft = {
+  kind: "ACTION" | "BONUS_ACTION" | "REACTION";
+  name: string;
+  description: string;
+  uses: number | null;
+  maxUses: number | null;
+  recharge: string;
+};
+
+export type NpcCreatureAttackDraft = {
+  name: string;
+  description: string;
+  attackType: "MELEE" | "RANGED" | "THROWN" | "MAGIC" | "OTHER";
+  attackAbilityKey: string;
+  attackBonus: number;
+  damageFormula: string;
+  damageBonus: number;
+  damageType: string;
+  secondaryDamageFormula: string;
+  secondaryDamageType: string;
+  normalRange: number | null;
+  longRange: number | null;
+  reach: number | null;
+  target: string;
+  saveAbilityKey: string;
+  saveDc: number | null;
+  onHit: string;
+  notes: string;
+};
+
+export type NpcCreatureMultiattackEntryDraft = {
+  targetType: "ATTACK" | "ACTION";
+  targetName: string;
+  quantity: number;
+  notes: string;
+};
+
+export type NpcCreatureMultiattackDraft = {
+  name: string;
+  description: string;
+  entries: NpcCreatureMultiattackEntryDraft[];
+};
+
+export type NpcCreatureMagicalAbilityDraft = {
+  spellKey: string;
+  name: string;
+  description: string;
+  abilityKey: string;
+  attackBonus: number | null;
+  saveDc: number | null;
+  damageFormula: string;
+  damageBonus: number;
+  damageType: string;
+  range: string;
+  target: string;
+  uses: number | null;
+  maxUses: number | null;
+  recharge: string;
+  isPassive: boolean;
+  notes: string;
+};
+
+export type NpcSheetClassDraft = {
+  classId: string;
+  subclassId: string;
+  level: number;
+  isPrimary: boolean;
+};
+
+export type NpcSheetDraft = {
+  name: string;
+  initials: string;
+  description: string;
+  location: "TABLE" | "LIBRARY";
+  size: "TINY" | "SMALL" | "MEDIUM" | "LARGE" | "HUGE" | "GARGANTUAN";
+  ancestryId: string;
+  subAncestryId: string;
+  backgroundId: string;
+  classes: NpcSheetClassDraft[];
+  role: string;
+  faction: string;
+  personality: string;
+  motivation: string;
+  behavior: string;
+  tactics: string;
+  lore: string;
+  notes: string;
+  portraitUrl: string;
+  tokenImageUrl: string;
+  tokenImageFit: "COVER" | "CONTAIN" | "FILL";
+  armorClass: number;
+  hitPoints: number;
+  maxHitPoints: number;
+  temporaryHp: number;
+  speed: number;
+  climbSpeed: number;
+  swimSpeed: number;
+  flySpeed: number;
+  burrowSpeed: number;
+  attributes: Record<string, number>;
+  savingThrowKeys: string[];
+  skillKeys: string[];
+  expertiseSkillKeys: string[];
+  skillOverrides: Record<string, number>;
+  defenses: NpcCreatureDefenseDraft[];
+  senses: NpcCreatureSenseDraft[];
+  languageKeys: string[];
+  traits: NpcCreatureTraitDraft[];
+  actions: NpcCreatureActionDraft[];
+  attacks: NpcCreatureAttackDraft[];
+  multiattacks: NpcCreatureMultiattackDraft[];
+  magicalAbilities: NpcCreatureMagicalAbilityDraft[];
+};
+
+export type CreatureSheetDraft = Omit<
+  NpcSheetDraft,
+  | "ancestryId"
+  | "subAncestryId"
+  | "backgroundId"
+  | "classes"
+  | "role"
+  | "faction"
+  | "personality"
+  | "motivation"
+> & {
+  creatureType: string;
+  habitat: string;
+  challengeRating: string;
+  experienceReward: number;
+};
+
+export type NpcCreatureReadyStat = {
+  id: string;
+  baseValue: number;
+  bonusValue: number;
+  overrideValue: number | null;
+  isSavingThrowProficient: boolean;
+  savingThrowBonus: number;
+  savingThrowOverride: number | null;
+  stat: {
+    id: string;
+    key: string;
+    name: string;
+    shortName: string;
+  };
+};
+
+export type NpcCreatureReadySkill = {
+  id: string;
+  isProficient: boolean;
+  expertiseLevel: number;
+  bonusValue: number;
+  overrideValue: number | null;
+  source: string | null;
+  skill: {
+    id: string;
+    key: string;
+    name: string;
+    stat: {
+      id: string;
+      key: string;
+      name: string;
+      shortName: string;
+    };
+  };
+};
+
+export type NpcCreatureReadyDefense = {
+  id: string;
+  kind: "RESISTANCE" | "IMMUNITY" | "VULNERABILITY";
+  damageType: string;
+  notes: string | null;
+};
+
+export type NpcCreatureReadySense = {
+  id: string;
+  name: string;
+  range: number | null;
+  notes: string | null;
+};
+
+export type NpcCreatureReadyLanguage = {
+  id: string;
+  notes: string | null;
+  language: {
+    id: string;
+    key: string;
+    name: string;
+  };
+};
+
+export type NpcCreatureReadyTrait = {
+  id: string;
+  name: string;
+  description: string;
+  order: number;
+};
+
+export type NpcCreatureReadyAction = {
+  id: string;
+  kind: "ACTION" | "BONUS_ACTION" | "REACTION";
+  name: string;
+  description: string;
+  uses: number | null;
+  maxUses: number | null;
+  recharge: string | null;
+  order: number;
+};
+
+export type NpcCreatureReadyAttack = {
+  id: string;
+  name: string;
+  description: string | null;
+  attackType: "MELEE" | "RANGED" | "THROWN" | "MAGIC" | "OTHER";
+  attackAbilityKey: string | null;
+  attackBonus: number;
+  damageFormula: string | null;
+  damageBonus: number;
+  damageType: string | null;
+  secondaryDamageFormula: string | null;
+  secondaryDamageType: string | null;
+  normalRange: number | null;
+  longRange: number | null;
+  reach: number | null;
+  target: string | null;
+  saveAbilityKey: string | null;
+  saveDc: number | null;
+  onHit: string | null;
+  notes: string | null;
+  order: number;
+};
+
+export type NpcCreatureReadyMultiattack = {
+  id: string;
+  name: string;
+  description: string | null;
+  order: number;
+  entries: Array<{
+    id: string;
+    quantity: number;
+    order: number;
+    notes: string | null;
+    attack: {
+      id: string;
+      name: string;
+    } | null;
+    action: {
+      id: string;
+      name: string;
+    } | null;
+  }>;
+};
+
+export type NpcCreatureReadyMagicalAbility = {
+  id: string;
+  name: string;
+  description: string | null;
+  abilityKey: string | null;
+  attackBonus: number | null;
+  saveDc: number | null;
+  damageFormula: string | null;
+  damageBonus: number;
+  damageType: string | null;
+  range: string | null;
+  target: string | null;
+  uses: number | null;
+  maxUses: number | null;
+  recharge: string | null;
+  isPassive: boolean;
+  notes: string | null;
+  order: number;
+  spell: {
+    id: string;
+    key: string;
+    name: string;
+    level: number;
+  } | null;
+};
+
+export type NpcSheetReadyClass = {
+  id: string;
+  classId: string;
+  subclassId: string | null;
+  level: number;
+  isPrimary: boolean;
+  order: number;
+  characterClass: {
+    id: string;
+    key: string;
+    name: string;
+  };
+  subclass: {
+    id: string;
+    key: string;
+    name: string;
+  } | null;
+};
+
+export type NpcSheetReady = {
+  id: string;
+  campaignId: string;
+  systemId: string;
+  campaignActorId: string;
+  size: string;
+  ancestry: {
+    id: string;
+    key: string;
+    name: string;
+  } | null;
+  subAncestry: {
+    id: string;
+    key: string;
+    name: string;
+  } | null;
+  background: {
+    id: string;
+    key: string;
+    name: string;
+  } | null;
+  classes: NpcSheetReadyClass[];
+  role: string | null;
+  faction: string | null;
+  personality: string | null;
+  motivation: string | null;
+  behavior: string | null;
+  tactics: string | null;
+  lore: string | null;
+  notes: string | null;
+  portraitUrl: string | null;
+  tokenImageUrl: string | null;
+  tokenImageFit: "COVER" | "CONTAIN" | "FILL";
+  armorClass: number;
+  hitPoints: number;
+  maxHitPoints: number;
+  temporaryHp: number;
+  speed: number;
+  climbSpeed: number;
+  swimSpeed: number;
+  flySpeed: number;
+  burrowSpeed: number;
+  stats: NpcCreatureReadyStat[];
+  skills: NpcCreatureReadySkill[];
+  defenses: NpcCreatureReadyDefense[];
+  senses: NpcCreatureReadySense[];
+  languages: NpcCreatureReadyLanguage[];
+  traits: NpcCreatureReadyTrait[];
+  actions: NpcCreatureReadyAction[];
+  attacks: NpcCreatureReadyAttack[];
+  multiattacks: NpcCreatureReadyMultiattack[];
+  magicalAbilities: NpcCreatureReadyMagicalAbility[];
+};
+
+export type CreatureSheetReady = Omit<
+  NpcSheetReady,
+  | "ancestry"
+  | "subAncestry"
+  | "background"
+  | "classes"
+  | "role"
+  | "faction"
+  | "personality"
+  | "motivation"
+> & {
+  creatureType: string | null;
+  habitat: string | null;
+  challengeRating: string | null;
+  experienceReward: number;
 };

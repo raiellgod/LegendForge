@@ -243,6 +243,10 @@ export type LanguageWhereInput = {
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterSheets?: Prisma.CharacterSheetLanguageListRelationFilter
   characterTemplates?: Prisma.CharacterTemplateLanguageListRelationFilter
+  npcTemplates?: Prisma.NpcTemplateLanguageListRelationFilter
+  creatureTemplates?: Prisma.CreatureTemplateLanguageListRelationFilter
+  npcSheets?: Prisma.NpcSheetLanguageListRelationFilter
+  creatureSheets?: Prisma.CreatureSheetLanguageListRelationFilter
 }
 
 export type LanguageOrderByWithRelationInput = {
@@ -257,6 +261,10 @@ export type LanguageOrderByWithRelationInput = {
   system?: Prisma.GameSystemOrderByWithRelationInput
   characterSheets?: Prisma.CharacterSheetLanguageOrderByRelationAggregateInput
   characterTemplates?: Prisma.CharacterTemplateLanguageOrderByRelationAggregateInput
+  npcTemplates?: Prisma.NpcTemplateLanguageOrderByRelationAggregateInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageOrderByRelationAggregateInput
+  npcSheets?: Prisma.NpcSheetLanguageOrderByRelationAggregateInput
+  creatureSheets?: Prisma.CreatureSheetLanguageOrderByRelationAggregateInput
 }
 
 export type LanguageWhereUniqueInput = Prisma.AtLeast<{
@@ -276,6 +284,10 @@ export type LanguageWhereUniqueInput = Prisma.AtLeast<{
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   characterSheets?: Prisma.CharacterSheetLanguageListRelationFilter
   characterTemplates?: Prisma.CharacterTemplateLanguageListRelationFilter
+  npcTemplates?: Prisma.NpcTemplateLanguageListRelationFilter
+  creatureTemplates?: Prisma.CreatureTemplateLanguageListRelationFilter
+  npcSheets?: Prisma.NpcSheetLanguageListRelationFilter
+  creatureSheets?: Prisma.CreatureSheetLanguageListRelationFilter
 }, "id" | "systemId_name" | "systemId_key">
 
 export type LanguageOrderByWithAggregationInput = {
@@ -319,6 +331,10 @@ export type LanguageCreateInput = {
   system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
   characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
   characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUncheckedCreateInput = {
@@ -332,6 +348,10 @@ export type LanguageUncheckedCreateInput = {
   updatedAt?: Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
   characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUpdateInput = {
@@ -345,6 +365,10 @@ export type LanguageUpdateInput = {
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
   characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
   characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateInput = {
@@ -358,6 +382,10 @@ export type LanguageUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
   characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageCreateManyInput = {
@@ -500,6 +528,34 @@ export type LanguageUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.LanguageScalarWhereInput | Prisma.LanguageScalarWhereInput[]
 }
 
+export type LanguageCreateNestedOneWithoutNpcTemplatesInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutNpcTemplatesInput, Prisma.LanguageUncheckedCreateWithoutNpcTemplatesInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutNpcTemplatesInput
+  connect?: Prisma.LanguageWhereUniqueInput
+}
+
+export type LanguageUpdateOneRequiredWithoutNpcTemplatesNestedInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutNpcTemplatesInput, Prisma.LanguageUncheckedCreateWithoutNpcTemplatesInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutNpcTemplatesInput
+  upsert?: Prisma.LanguageUpsertWithoutNpcTemplatesInput
+  connect?: Prisma.LanguageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LanguageUpdateToOneWithWhereWithoutNpcTemplatesInput, Prisma.LanguageUpdateWithoutNpcTemplatesInput>, Prisma.LanguageUncheckedUpdateWithoutNpcTemplatesInput>
+}
+
+export type LanguageCreateNestedOneWithoutCreatureTemplatesInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutCreatureTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCreatureTemplatesInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutCreatureTemplatesInput
+  connect?: Prisma.LanguageWhereUniqueInput
+}
+
+export type LanguageUpdateOneRequiredWithoutCreatureTemplatesNestedInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutCreatureTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCreatureTemplatesInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutCreatureTemplatesInput
+  upsert?: Prisma.LanguageUpsertWithoutCreatureTemplatesInput
+  connect?: Prisma.LanguageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LanguageUpdateToOneWithWhereWithoutCreatureTemplatesInput, Prisma.LanguageUpdateWithoutCreatureTemplatesInput>, Prisma.LanguageUncheckedUpdateWithoutCreatureTemplatesInput>
+}
+
 export type LanguageCreateNestedOneWithoutCharacterTemplatesInput = {
   create?: Prisma.XOR<Prisma.LanguageCreateWithoutCharacterTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCharacterTemplatesInput>
   connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutCharacterTemplatesInput
@@ -512,6 +568,34 @@ export type LanguageUpdateOneRequiredWithoutCharacterTemplatesNestedInput = {
   upsert?: Prisma.LanguageUpsertWithoutCharacterTemplatesInput
   connect?: Prisma.LanguageWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.LanguageUpdateToOneWithWhereWithoutCharacterTemplatesInput, Prisma.LanguageUpdateWithoutCharacterTemplatesInput>, Prisma.LanguageUncheckedUpdateWithoutCharacterTemplatesInput>
+}
+
+export type LanguageCreateNestedOneWithoutNpcSheetsInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutNpcSheetsInput, Prisma.LanguageUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutNpcSheetsInput
+  connect?: Prisma.LanguageWhereUniqueInput
+}
+
+export type LanguageUpdateOneRequiredWithoutNpcSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutNpcSheetsInput, Prisma.LanguageUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutNpcSheetsInput
+  upsert?: Prisma.LanguageUpsertWithoutNpcSheetsInput
+  connect?: Prisma.LanguageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LanguageUpdateToOneWithWhereWithoutNpcSheetsInput, Prisma.LanguageUpdateWithoutNpcSheetsInput>, Prisma.LanguageUncheckedUpdateWithoutNpcSheetsInput>
+}
+
+export type LanguageCreateNestedOneWithoutCreatureSheetsInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutCreatureSheetsInput, Prisma.LanguageUncheckedCreateWithoutCreatureSheetsInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutCreatureSheetsInput
+  connect?: Prisma.LanguageWhereUniqueInput
+}
+
+export type LanguageUpdateOneRequiredWithoutCreatureSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.LanguageCreateWithoutCreatureSheetsInput, Prisma.LanguageUncheckedCreateWithoutCreatureSheetsInput>
+  connectOrCreate?: Prisma.LanguageCreateOrConnectWithoutCreatureSheetsInput
+  upsert?: Prisma.LanguageUpsertWithoutCreatureSheetsInput
+  connect?: Prisma.LanguageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LanguageUpdateToOneWithWhereWithoutCreatureSheetsInput, Prisma.LanguageUpdateWithoutCreatureSheetsInput>, Prisma.LanguageUncheckedUpdateWithoutCreatureSheetsInput>
 }
 
 export type LanguageCreateNestedOneWithoutCharacterSheetsInput = {
@@ -538,6 +622,10 @@ export type LanguageCreateWithoutSystemInput = {
   updatedAt?: Date | string
   characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
   characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUncheckedCreateWithoutSystemInput = {
@@ -550,6 +638,10 @@ export type LanguageUncheckedCreateWithoutSystemInput = {
   updatedAt?: Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
   characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageCreateOrConnectWithoutSystemInput = {
@@ -592,6 +684,166 @@ export type LanguageScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Language"> | Date | string
 }
 
+export type LanguageCreateWithoutNpcTemplatesInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
+  characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageUncheckedCreateWithoutNpcTemplatesInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageCreateOrConnectWithoutNpcTemplatesInput = {
+  where: Prisma.LanguageWhereUniqueInput
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutNpcTemplatesInput, Prisma.LanguageUncheckedCreateWithoutNpcTemplatesInput>
+}
+
+export type LanguageUpsertWithoutNpcTemplatesInput = {
+  update: Prisma.XOR<Prisma.LanguageUpdateWithoutNpcTemplatesInput, Prisma.LanguageUncheckedUpdateWithoutNpcTemplatesInput>
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutNpcTemplatesInput, Prisma.LanguageUncheckedCreateWithoutNpcTemplatesInput>
+  where?: Prisma.LanguageWhereInput
+}
+
+export type LanguageUpdateToOneWithWhereWithoutNpcTemplatesInput = {
+  where?: Prisma.LanguageWhereInput
+  data: Prisma.XOR<Prisma.LanguageUpdateWithoutNpcTemplatesInput, Prisma.LanguageUncheckedUpdateWithoutNpcTemplatesInput>
+}
+
+export type LanguageUpdateWithoutNpcTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
+  characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUpdateManyWithoutLanguageNestedInput
+}
+
+export type LanguageUncheckedUpdateWithoutNpcTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+}
+
+export type LanguageCreateWithoutCreatureTemplatesInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
+  characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageUncheckedCreateWithoutCreatureTemplatesInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageCreateOrConnectWithoutCreatureTemplatesInput = {
+  where: Prisma.LanguageWhereUniqueInput
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutCreatureTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCreatureTemplatesInput>
+}
+
+export type LanguageUpsertWithoutCreatureTemplatesInput = {
+  update: Prisma.XOR<Prisma.LanguageUpdateWithoutCreatureTemplatesInput, Prisma.LanguageUncheckedUpdateWithoutCreatureTemplatesInput>
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutCreatureTemplatesInput, Prisma.LanguageUncheckedCreateWithoutCreatureTemplatesInput>
+  where?: Prisma.LanguageWhereInput
+}
+
+export type LanguageUpdateToOneWithWhereWithoutCreatureTemplatesInput = {
+  where?: Prisma.LanguageWhereInput
+  data: Prisma.XOR<Prisma.LanguageUpdateWithoutCreatureTemplatesInput, Prisma.LanguageUncheckedUpdateWithoutCreatureTemplatesInput>
+}
+
+export type LanguageUpdateWithoutCreatureTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
+  characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUpdateManyWithoutLanguageNestedInput
+}
+
+export type LanguageUncheckedUpdateWithoutCreatureTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+}
+
 export type LanguageCreateWithoutCharacterTemplatesInput = {
   id?: string
   name: string
@@ -602,6 +854,10 @@ export type LanguageCreateWithoutCharacterTemplatesInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
   characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUncheckedCreateWithoutCharacterTemplatesInput = {
@@ -614,6 +870,10 @@ export type LanguageUncheckedCreateWithoutCharacterTemplatesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageCreateOrConnectWithoutCharacterTemplatesInput = {
@@ -642,6 +902,10 @@ export type LanguageUpdateWithoutCharacterTemplatesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
   characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateWithoutCharacterTemplatesInput = {
@@ -654,6 +918,170 @@ export type LanguageUncheckedUpdateWithoutCharacterTemplatesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+}
+
+export type LanguageCreateWithoutNpcSheetsInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
+  characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageUncheckedCreateWithoutNpcSheetsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageCreateOrConnectWithoutNpcSheetsInput = {
+  where: Prisma.LanguageWhereUniqueInput
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutNpcSheetsInput, Prisma.LanguageUncheckedCreateWithoutNpcSheetsInput>
+}
+
+export type LanguageUpsertWithoutNpcSheetsInput = {
+  update: Prisma.XOR<Prisma.LanguageUpdateWithoutNpcSheetsInput, Prisma.LanguageUncheckedUpdateWithoutNpcSheetsInput>
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutNpcSheetsInput, Prisma.LanguageUncheckedCreateWithoutNpcSheetsInput>
+  where?: Prisma.LanguageWhereInput
+}
+
+export type LanguageUpdateToOneWithWhereWithoutNpcSheetsInput = {
+  where?: Prisma.LanguageWhereInput
+  data: Prisma.XOR<Prisma.LanguageUpdateWithoutNpcSheetsInput, Prisma.LanguageUncheckedUpdateWithoutNpcSheetsInput>
+}
+
+export type LanguageUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
+  characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUpdateManyWithoutLanguageNestedInput
+}
+
+export type LanguageUncheckedUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+}
+
+export type LanguageCreateWithoutCreatureSheetsInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
+  characterSheets?: Prisma.CharacterSheetLanguageCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageUncheckedCreateWithoutCreatureSheetsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+}
+
+export type LanguageCreateOrConnectWithoutCreatureSheetsInput = {
+  where: Prisma.LanguageWhereUniqueInput
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutCreatureSheetsInput, Prisma.LanguageUncheckedCreateWithoutCreatureSheetsInput>
+}
+
+export type LanguageUpsertWithoutCreatureSheetsInput = {
+  update: Prisma.XOR<Prisma.LanguageUpdateWithoutCreatureSheetsInput, Prisma.LanguageUncheckedUpdateWithoutCreatureSheetsInput>
+  create: Prisma.XOR<Prisma.LanguageCreateWithoutCreatureSheetsInput, Prisma.LanguageUncheckedCreateWithoutCreatureSheetsInput>
+  where?: Prisma.LanguageWhereInput
+}
+
+export type LanguageUpdateToOneWithWhereWithoutCreatureSheetsInput = {
+  where?: Prisma.LanguageWhereInput
+  data: Prisma.XOR<Prisma.LanguageUpdateWithoutCreatureSheetsInput, Prisma.LanguageUncheckedUpdateWithoutCreatureSheetsInput>
+}
+
+export type LanguageUpdateWithoutCreatureSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
+  characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUpdateManyWithoutLanguageNestedInput
+}
+
+export type LanguageUncheckedUpdateWithoutCreatureSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageCreateWithoutCharacterSheetsInput = {
@@ -666,6 +1094,10 @@ export type LanguageCreateWithoutCharacterSheetsInput = {
   updatedAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutLanguagesInput
   characterTemplates?: Prisma.CharacterTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageUncheckedCreateWithoutCharacterSheetsInput = {
@@ -678,6 +1110,10 @@ export type LanguageUncheckedCreateWithoutCharacterSheetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedCreateNestedManyWithoutLanguageInput
 }
 
 export type LanguageCreateOrConnectWithoutCharacterSheetsInput = {
@@ -706,6 +1142,10 @@ export type LanguageUpdateWithoutCharacterSheetsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutLanguagesNestedInput
   characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateWithoutCharacterSheetsInput = {
@@ -718,6 +1158,10 @@ export type LanguageUncheckedUpdateWithoutCharacterSheetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageCreateManySystemInput = {
@@ -740,6 +1184,10 @@ export type LanguageUpdateWithoutSystemInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUpdateManyWithoutLanguageNestedInput
   characterTemplates?: Prisma.CharacterTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateWithoutSystemInput = {
@@ -752,6 +1200,10 @@ export type LanguageUncheckedUpdateWithoutSystemInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   characterSheets?: Prisma.CharacterSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
   characterTemplates?: Prisma.CharacterTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcTemplates?: Prisma.NpcTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureTemplates?: Prisma.CreatureTemplateLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  npcSheets?: Prisma.NpcSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
+  creatureSheets?: Prisma.CreatureSheetLanguageUncheckedUpdateManyWithoutLanguageNestedInput
 }
 
 export type LanguageUncheckedUpdateManyWithoutSystemInput = {
@@ -772,11 +1224,19 @@ export type LanguageUncheckedUpdateManyWithoutSystemInput = {
 export type LanguageCountOutputType = {
   characterSheets: number
   characterTemplates: number
+  npcTemplates: number
+  creatureTemplates: number
+  npcSheets: number
+  creatureSheets: number
 }
 
 export type LanguageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   characterSheets?: boolean | LanguageCountOutputTypeCountCharacterSheetsArgs
   characterTemplates?: boolean | LanguageCountOutputTypeCountCharacterTemplatesArgs
+  npcTemplates?: boolean | LanguageCountOutputTypeCountNpcTemplatesArgs
+  creatureTemplates?: boolean | LanguageCountOutputTypeCountCreatureTemplatesArgs
+  npcSheets?: boolean | LanguageCountOutputTypeCountNpcSheetsArgs
+  creatureSheets?: boolean | LanguageCountOutputTypeCountCreatureSheetsArgs
 }
 
 /**
@@ -803,6 +1263,34 @@ export type LanguageCountOutputTypeCountCharacterTemplatesArgs<ExtArgs extends r
   where?: Prisma.CharacterTemplateLanguageWhereInput
 }
 
+/**
+ * LanguageCountOutputType without action
+ */
+export type LanguageCountOutputTypeCountNpcTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateLanguageWhereInput
+}
+
+/**
+ * LanguageCountOutputType without action
+ */
+export type LanguageCountOutputTypeCountCreatureTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateLanguageWhereInput
+}
+
+/**
+ * LanguageCountOutputType without action
+ */
+export type LanguageCountOutputTypeCountNpcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcSheetLanguageWhereInput
+}
+
+/**
+ * LanguageCountOutputType without action
+ */
+export type LanguageCountOutputTypeCountCreatureSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureSheetLanguageWhereInput
+}
+
 
 export type LanguageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -816,6 +1304,10 @@ export type LanguageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterSheets?: boolean | Prisma.Language$characterSheetsArgs<ExtArgs>
   characterTemplates?: boolean | Prisma.Language$characterTemplatesArgs<ExtArgs>
+  npcTemplates?: boolean | Prisma.Language$npcTemplatesArgs<ExtArgs>
+  creatureTemplates?: boolean | Prisma.Language$creatureTemplatesArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.Language$npcSheetsArgs<ExtArgs>
+  creatureSheets?: boolean | Prisma.Language$creatureSheetsArgs<ExtArgs>
   _count?: boolean | Prisma.LanguageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["language"]>
 
@@ -859,6 +1351,10 @@ export type LanguageInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   characterSheets?: boolean | Prisma.Language$characterSheetsArgs<ExtArgs>
   characterTemplates?: boolean | Prisma.Language$characterTemplatesArgs<ExtArgs>
+  npcTemplates?: boolean | Prisma.Language$npcTemplatesArgs<ExtArgs>
+  creatureTemplates?: boolean | Prisma.Language$creatureTemplatesArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.Language$npcSheetsArgs<ExtArgs>
+  creatureSheets?: boolean | Prisma.Language$creatureSheetsArgs<ExtArgs>
   _count?: boolean | Prisma.LanguageCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LanguageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -874,6 +1370,10 @@ export type $LanguagePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     system: Prisma.$GameSystemPayload<ExtArgs>
     characterSheets: Prisma.$CharacterSheetLanguagePayload<ExtArgs>[]
     characterTemplates: Prisma.$CharacterTemplateLanguagePayload<ExtArgs>[]
+    npcTemplates: Prisma.$NpcTemplateLanguagePayload<ExtArgs>[]
+    creatureTemplates: Prisma.$CreatureTemplateLanguagePayload<ExtArgs>[]
+    npcSheets: Prisma.$NpcSheetLanguagePayload<ExtArgs>[]
+    creatureSheets: Prisma.$CreatureSheetLanguagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1281,6 +1781,10 @@ export interface Prisma__LanguageClient<T, Null = never, ExtArgs extends runtime
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   characterSheets<T extends Prisma.Language$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Language$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterTemplates<T extends Prisma.Language$characterTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Language$characterTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplateLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcTemplates<T extends Prisma.Language$npcTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Language$npcTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatureTemplates<T extends Prisma.Language$creatureTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Language$creatureTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcSheets<T extends Prisma.Language$npcSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Language$npcSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcSheetLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatureSheets<T extends Prisma.Language$creatureSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Language$creatureSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureSheetLanguagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1759,6 +2263,102 @@ export type Language$characterTemplatesArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.CharacterTemplateLanguageScalarFieldEnum | Prisma.CharacterTemplateLanguageScalarFieldEnum[]
+}
+
+/**
+ * Language.npcTemplates
+ */
+export type Language$npcTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateLanguage
+   */
+  select?: Prisma.NpcTemplateLanguageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateLanguage
+   */
+  omit?: Prisma.NpcTemplateLanguageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateLanguageInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateLanguageWhereInput
+  orderBy?: Prisma.NpcTemplateLanguageOrderByWithRelationInput | Prisma.NpcTemplateLanguageOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateLanguageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateLanguageScalarFieldEnum | Prisma.NpcTemplateLanguageScalarFieldEnum[]
+}
+
+/**
+ * Language.creatureTemplates
+ */
+export type Language$creatureTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateLanguage
+   */
+  select?: Prisma.CreatureTemplateLanguageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateLanguage
+   */
+  omit?: Prisma.CreatureTemplateLanguageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateLanguageInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateLanguageWhereInput
+  orderBy?: Prisma.CreatureTemplateLanguageOrderByWithRelationInput | Prisma.CreatureTemplateLanguageOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateLanguageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateLanguageScalarFieldEnum | Prisma.CreatureTemplateLanguageScalarFieldEnum[]
+}
+
+/**
+ * Language.npcSheets
+ */
+export type Language$npcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcSheetLanguage
+   */
+  select?: Prisma.NpcSheetLanguageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcSheetLanguage
+   */
+  omit?: Prisma.NpcSheetLanguageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcSheetLanguageInclude<ExtArgs> | null
+  where?: Prisma.NpcSheetLanguageWhereInput
+  orderBy?: Prisma.NpcSheetLanguageOrderByWithRelationInput | Prisma.NpcSheetLanguageOrderByWithRelationInput[]
+  cursor?: Prisma.NpcSheetLanguageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcSheetLanguageScalarFieldEnum | Prisma.NpcSheetLanguageScalarFieldEnum[]
+}
+
+/**
+ * Language.creatureSheets
+ */
+export type Language$creatureSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureSheetLanguage
+   */
+  select?: Prisma.CreatureSheetLanguageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureSheetLanguage
+   */
+  omit?: Prisma.CreatureSheetLanguageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureSheetLanguageInclude<ExtArgs> | null
+  where?: Prisma.CreatureSheetLanguageWhereInput
+  orderBy?: Prisma.CreatureSheetLanguageOrderByWithRelationInput | Prisma.CreatureSheetLanguageOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureSheetLanguageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureSheetLanguageScalarFieldEnum | Prisma.CreatureSheetLanguageScalarFieldEnum[]
 }
 
 /**

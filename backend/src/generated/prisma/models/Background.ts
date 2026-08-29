@@ -285,6 +285,8 @@ export type BackgroundWhereInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
   characterTemplates?: Prisma.CharacterTemplateListRelationFilter
+  npcTemplates?: Prisma.NpcTemplateListRelationFilter
+  npcSheets?: Prisma.NpcSheetListRelationFilter
 }
 
 export type BackgroundOrderByWithRelationInput = {
@@ -307,6 +309,8 @@ export type BackgroundOrderByWithRelationInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupOrderByRelationAggregateInput
   characterSheets?: Prisma.CharacterSheetOrderByRelationAggregateInput
   characterTemplates?: Prisma.CharacterTemplateOrderByRelationAggregateInput
+  npcTemplates?: Prisma.NpcTemplateOrderByRelationAggregateInput
+  npcSheets?: Prisma.NpcSheetOrderByRelationAggregateInput
 }
 
 export type BackgroundWhereUniqueInput = Prisma.AtLeast<{
@@ -334,6 +338,8 @@ export type BackgroundWhereUniqueInput = Prisma.AtLeast<{
   featureChoiceGroups?: Prisma.FeatureChoiceGroupListRelationFilter
   characterSheets?: Prisma.CharacterSheetListRelationFilter
   characterTemplates?: Prisma.CharacterTemplateListRelationFilter
+  npcTemplates?: Prisma.NpcTemplateListRelationFilter
+  npcSheets?: Prisma.NpcSheetListRelationFilter
 }, "id" | "systemId_name" | "systemId_key">
 
 export type BackgroundOrderByWithAggregationInput = {
@@ -397,6 +403,8 @@ export type BackgroundCreateInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundUncheckedCreateInput = {
@@ -418,6 +426,8 @@ export type BackgroundUncheckedCreateInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundUpdateInput = {
@@ -439,6 +449,8 @@ export type BackgroundUpdateInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundUncheckedUpdateInput = {
@@ -460,6 +472,8 @@ export type BackgroundUncheckedUpdateInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundCreateManyInput = {
@@ -520,6 +534,11 @@ export type BackgroundListRelationFilter = {
 
 export type BackgroundOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type BackgroundNullableScalarRelationFilter = {
+  is?: Prisma.BackgroundWhereInput | null
+  isNot?: Prisma.BackgroundWhereInput | null
 }
 
 export type BackgroundSystemIdNameCompoundUniqueInput = {
@@ -587,11 +606,6 @@ export type BackgroundSumOrderByAggregateInput = {
   order?: Prisma.SortOrder
 }
 
-export type BackgroundNullableScalarRelationFilter = {
-  is?: Prisma.BackgroundWhereInput | null
-  isNot?: Prisma.BackgroundWhereInput | null
-}
-
 export type BackgroundCreateNestedManyWithoutSystemInput = {
   create?: Prisma.XOR<Prisma.BackgroundCreateWithoutSystemInput, Prisma.BackgroundUncheckedCreateWithoutSystemInput> | Prisma.BackgroundCreateWithoutSystemInput[] | Prisma.BackgroundUncheckedCreateWithoutSystemInput[]
   connectOrCreate?: Prisma.BackgroundCreateOrConnectWithoutSystemInput | Prisma.BackgroundCreateOrConnectWithoutSystemInput[]
@@ -632,6 +646,22 @@ export type BackgroundUncheckedUpdateManyWithoutSystemNestedInput = {
   update?: Prisma.BackgroundUpdateWithWhereUniqueWithoutSystemInput | Prisma.BackgroundUpdateWithWhereUniqueWithoutSystemInput[]
   updateMany?: Prisma.BackgroundUpdateManyWithWhereWithoutSystemInput | Prisma.BackgroundUpdateManyWithWhereWithoutSystemInput[]
   deleteMany?: Prisma.BackgroundScalarWhereInput | Prisma.BackgroundScalarWhereInput[]
+}
+
+export type BackgroundCreateNestedOneWithoutNpcTemplatesInput = {
+  create?: Prisma.XOR<Prisma.BackgroundCreateWithoutNpcTemplatesInput, Prisma.BackgroundUncheckedCreateWithoutNpcTemplatesInput>
+  connectOrCreate?: Prisma.BackgroundCreateOrConnectWithoutNpcTemplatesInput
+  connect?: Prisma.BackgroundWhereUniqueInput
+}
+
+export type BackgroundUpdateOneWithoutNpcTemplatesNestedInput = {
+  create?: Prisma.XOR<Prisma.BackgroundCreateWithoutNpcTemplatesInput, Prisma.BackgroundUncheckedCreateWithoutNpcTemplatesInput>
+  connectOrCreate?: Prisma.BackgroundCreateOrConnectWithoutNpcTemplatesInput
+  upsert?: Prisma.BackgroundUpsertWithoutNpcTemplatesInput
+  disconnect?: Prisma.BackgroundWhereInput | boolean
+  delete?: Prisma.BackgroundWhereInput | boolean
+  connect?: Prisma.BackgroundWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BackgroundUpdateToOneWithWhereWithoutNpcTemplatesInput, Prisma.BackgroundUpdateWithoutNpcTemplatesInput>, Prisma.BackgroundUncheckedUpdateWithoutNpcTemplatesInput>
 }
 
 export type BackgroundCreateskillKeysInput = {
@@ -675,6 +705,22 @@ export type BackgroundUpdateOneWithoutCharacterTemplatesNestedInput = {
   delete?: Prisma.BackgroundWhereInput | boolean
   connect?: Prisma.BackgroundWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BackgroundUpdateToOneWithWhereWithoutCharacterTemplatesInput, Prisma.BackgroundUpdateWithoutCharacterTemplatesInput>, Prisma.BackgroundUncheckedUpdateWithoutCharacterTemplatesInput>
+}
+
+export type BackgroundCreateNestedOneWithoutNpcSheetsInput = {
+  create?: Prisma.XOR<Prisma.BackgroundCreateWithoutNpcSheetsInput, Prisma.BackgroundUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.BackgroundCreateOrConnectWithoutNpcSheetsInput
+  connect?: Prisma.BackgroundWhereUniqueInput
+}
+
+export type BackgroundUpdateOneWithoutNpcSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.BackgroundCreateWithoutNpcSheetsInput, Prisma.BackgroundUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.BackgroundCreateOrConnectWithoutNpcSheetsInput
+  upsert?: Prisma.BackgroundUpsertWithoutNpcSheetsInput
+  disconnect?: Prisma.BackgroundWhereInput | boolean
+  delete?: Prisma.BackgroundWhereInput | boolean
+  connect?: Prisma.BackgroundWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BackgroundUpdateToOneWithWhereWithoutNpcSheetsInput, Prisma.BackgroundUpdateWithoutNpcSheetsInput>, Prisma.BackgroundUncheckedUpdateWithoutNpcSheetsInput>
 }
 
 export type BackgroundCreateNestedOneWithoutCharacterSheetsInput = {
@@ -743,6 +789,8 @@ export type BackgroundCreateWithoutSystemInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundUncheckedCreateWithoutSystemInput = {
@@ -763,6 +811,8 @@ export type BackgroundUncheckedCreateWithoutSystemInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundCreateOrConnectWithoutSystemInput = {
@@ -811,6 +861,110 @@ export type BackgroundScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Background"> | Date | string
 }
 
+export type BackgroundCreateWithoutNpcTemplatesInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
+  languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
+  startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutBackgroundsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
+  characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutBackgroundInput
+}
+
+export type BackgroundUncheckedCreateWithoutNpcTemplatesInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
+  languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
+  startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutBackgroundInput
+}
+
+export type BackgroundCreateOrConnectWithoutNpcTemplatesInput = {
+  where: Prisma.BackgroundWhereUniqueInput
+  create: Prisma.XOR<Prisma.BackgroundCreateWithoutNpcTemplatesInput, Prisma.BackgroundUncheckedCreateWithoutNpcTemplatesInput>
+}
+
+export type BackgroundUpsertWithoutNpcTemplatesInput = {
+  update: Prisma.XOR<Prisma.BackgroundUpdateWithoutNpcTemplatesInput, Prisma.BackgroundUncheckedUpdateWithoutNpcTemplatesInput>
+  create: Prisma.XOR<Prisma.BackgroundCreateWithoutNpcTemplatesInput, Prisma.BackgroundUncheckedCreateWithoutNpcTemplatesInput>
+  where?: Prisma.BackgroundWhereInput
+}
+
+export type BackgroundUpdateToOneWithWhereWithoutNpcTemplatesInput = {
+  where?: Prisma.BackgroundWhereInput
+  data: Prisma.XOR<Prisma.BackgroundUpdateWithoutNpcTemplatesInput, Prisma.BackgroundUncheckedUpdateWithoutNpcTemplatesInput>
+}
+
+export type BackgroundUpdateWithoutNpcTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
+  languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutBackgroundsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutBackgroundNestedInput
+}
+
+export type BackgroundUncheckedUpdateWithoutNpcTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
+  languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutBackgroundNestedInput
+}
+
 export type BackgroundCreateWithoutCharacterTemplatesInput = {
   id?: string
   name: string
@@ -829,6 +983,8 @@ export type BackgroundCreateWithoutCharacterTemplatesInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundUncheckedCreateWithoutCharacterTemplatesInput = {
@@ -849,6 +1005,8 @@ export type BackgroundUncheckedCreateWithoutCharacterTemplatesInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundCreateOrConnectWithoutCharacterTemplatesInput = {
@@ -885,6 +1043,8 @@ export type BackgroundUpdateWithoutCharacterTemplatesInput = {
   features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundUncheckedUpdateWithoutCharacterTemplatesInput = {
@@ -905,6 +1065,112 @@ export type BackgroundUncheckedUpdateWithoutCharacterTemplatesInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutBackgroundNestedInput
+}
+
+export type BackgroundCreateWithoutNpcSheetsInput = {
+  id?: string
+  name: string
+  key: string
+  description?: string | null
+  skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
+  languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
+  startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutBackgroundsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
+  characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutBackgroundInput
+}
+
+export type BackgroundUncheckedCreateWithoutNpcSheetsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key: string
+  description?: string | null
+  skillKeys?: Prisma.BackgroundCreateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundCreatetoolNamesInput | string[]
+  languageChoiceCount?: number
+  languageKeys?: Prisma.BackgroundCreatelanguageKeysInput | string[]
+  startingGold?: number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+}
+
+export type BackgroundCreateOrConnectWithoutNpcSheetsInput = {
+  where: Prisma.BackgroundWhereUniqueInput
+  create: Prisma.XOR<Prisma.BackgroundCreateWithoutNpcSheetsInput, Prisma.BackgroundUncheckedCreateWithoutNpcSheetsInput>
+}
+
+export type BackgroundUpsertWithoutNpcSheetsInput = {
+  update: Prisma.XOR<Prisma.BackgroundUpdateWithoutNpcSheetsInput, Prisma.BackgroundUncheckedUpdateWithoutNpcSheetsInput>
+  create: Prisma.XOR<Prisma.BackgroundCreateWithoutNpcSheetsInput, Prisma.BackgroundUncheckedCreateWithoutNpcSheetsInput>
+  where?: Prisma.BackgroundWhereInput
+}
+
+export type BackgroundUpdateToOneWithWhereWithoutNpcSheetsInput = {
+  where?: Prisma.BackgroundWhereInput
+  data: Prisma.XOR<Prisma.BackgroundUpdateWithoutNpcSheetsInput, Prisma.BackgroundUncheckedUpdateWithoutNpcSheetsInput>
+}
+
+export type BackgroundUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
+  languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutBackgroundsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutBackgroundNestedInput
+}
+
+export type BackgroundUncheckedUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillKeys?: Prisma.BackgroundUpdateskillKeysInput | string[]
+  toolNames?: Prisma.BackgroundUpdatetoolNamesInput | string[]
+  languageChoiceCount?: Prisma.IntFieldUpdateOperationsInput | number
+  languageKeys?: Prisma.BackgroundUpdatelanguageKeysInput | string[]
+  startingGold?: Prisma.IntFieldUpdateOperationsInput | number
+  attributeBonuses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
+  featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
+  characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundCreateWithoutCharacterSheetsInput = {
@@ -925,6 +1191,8 @@ export type BackgroundCreateWithoutCharacterSheetsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundUncheckedCreateWithoutCharacterSheetsInput = {
@@ -945,6 +1213,8 @@ export type BackgroundUncheckedCreateWithoutCharacterSheetsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundCreateOrConnectWithoutCharacterSheetsInput = {
@@ -981,6 +1251,8 @@ export type BackgroundUpdateWithoutCharacterSheetsInput = {
   features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundUncheckedUpdateWithoutCharacterSheetsInput = {
@@ -1001,6 +1273,8 @@ export type BackgroundUncheckedUpdateWithoutCharacterSheetsInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundCreateWithoutFeaturesInput = {
@@ -1021,6 +1295,8 @@ export type BackgroundCreateWithoutFeaturesInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundUncheckedCreateWithoutFeaturesInput = {
@@ -1041,6 +1317,8 @@ export type BackgroundUncheckedCreateWithoutFeaturesInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundCreateOrConnectWithoutFeaturesInput = {
@@ -1077,6 +1355,8 @@ export type BackgroundUpdateWithoutFeaturesInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundUncheckedUpdateWithoutFeaturesInput = {
@@ -1097,6 +1377,8 @@ export type BackgroundUncheckedUpdateWithoutFeaturesInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundCreateWithoutFeatureChoiceGroupsInput = {
@@ -1117,6 +1399,8 @@ export type BackgroundCreateWithoutFeatureChoiceGroupsInput = {
   features?: Prisma.FeatureCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundUncheckedCreateWithoutFeatureChoiceGroupsInput = {
@@ -1137,6 +1421,8 @@ export type BackgroundUncheckedCreateWithoutFeatureChoiceGroupsInput = {
   features?: Prisma.FeatureUncheckedCreateNestedManyWithoutBackgroundInput
   characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutBackgroundInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedCreateNestedManyWithoutBackgroundInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutBackgroundInput
 }
 
 export type BackgroundCreateOrConnectWithoutFeatureChoiceGroupsInput = {
@@ -1173,6 +1459,8 @@ export type BackgroundUpdateWithoutFeatureChoiceGroupsInput = {
   features?: Prisma.FeatureUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundUncheckedUpdateWithoutFeatureChoiceGroupsInput = {
@@ -1193,6 +1481,8 @@ export type BackgroundUncheckedUpdateWithoutFeatureChoiceGroupsInput = {
   features?: Prisma.FeatureUncheckedUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundCreateManySystemInput = {
@@ -1229,6 +1519,8 @@ export type BackgroundUpdateWithoutSystemInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundUncheckedUpdateWithoutSystemInput = {
@@ -1249,6 +1541,8 @@ export type BackgroundUncheckedUpdateWithoutSystemInput = {
   featureChoiceGroups?: Prisma.FeatureChoiceGroupUncheckedUpdateManyWithoutBackgroundNestedInput
   characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutBackgroundNestedInput
   characterTemplates?: Prisma.CharacterTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcTemplates?: Prisma.NpcTemplateUncheckedUpdateManyWithoutBackgroundNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutBackgroundNestedInput
 }
 
 export type BackgroundUncheckedUpdateManyWithoutSystemInput = {
@@ -1277,6 +1571,8 @@ export type BackgroundCountOutputType = {
   featureChoiceGroups: number
   characterSheets: number
   characterTemplates: number
+  npcTemplates: number
+  npcSheets: number
 }
 
 export type BackgroundCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1284,6 +1580,8 @@ export type BackgroundCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   featureChoiceGroups?: boolean | BackgroundCountOutputTypeCountFeatureChoiceGroupsArgs
   characterSheets?: boolean | BackgroundCountOutputTypeCountCharacterSheetsArgs
   characterTemplates?: boolean | BackgroundCountOutputTypeCountCharacterTemplatesArgs
+  npcTemplates?: boolean | BackgroundCountOutputTypeCountNpcTemplatesArgs
+  npcSheets?: boolean | BackgroundCountOutputTypeCountNpcSheetsArgs
 }
 
 /**
@@ -1324,6 +1622,20 @@ export type BackgroundCountOutputTypeCountCharacterTemplatesArgs<ExtArgs extends
   where?: Prisma.CharacterTemplateWhereInput
 }
 
+/**
+ * BackgroundCountOutputType without action
+ */
+export type BackgroundCountOutputTypeCountNpcTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateWhereInput
+}
+
+/**
+ * BackgroundCountOutputType without action
+ */
+export type BackgroundCountOutputTypeCountNpcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcSheetWhereInput
+}
+
 
 export type BackgroundSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1345,6 +1657,8 @@ export type BackgroundSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   featureChoiceGroups?: boolean | Prisma.Background$featureChoiceGroupsArgs<ExtArgs>
   characterSheets?: boolean | Prisma.Background$characterSheetsArgs<ExtArgs>
   characterTemplates?: boolean | Prisma.Background$characterTemplatesArgs<ExtArgs>
+  npcTemplates?: boolean | Prisma.Background$npcTemplatesArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.Background$npcSheetsArgs<ExtArgs>
   _count?: boolean | Prisma.BackgroundCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["background"]>
 
@@ -1408,6 +1722,8 @@ export type BackgroundInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   featureChoiceGroups?: boolean | Prisma.Background$featureChoiceGroupsArgs<ExtArgs>
   characterSheets?: boolean | Prisma.Background$characterSheetsArgs<ExtArgs>
   characterTemplates?: boolean | Prisma.Background$characterTemplatesArgs<ExtArgs>
+  npcTemplates?: boolean | Prisma.Background$npcTemplatesArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.Background$npcSheetsArgs<ExtArgs>
   _count?: boolean | Prisma.BackgroundCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BackgroundIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1425,6 +1741,8 @@ export type $BackgroundPayload<ExtArgs extends runtime.Types.Extensions.Internal
     featureChoiceGroups: Prisma.$FeatureChoiceGroupPayload<ExtArgs>[]
     characterSheets: Prisma.$CharacterSheetPayload<ExtArgs>[]
     characterTemplates: Prisma.$CharacterTemplatePayload<ExtArgs>[]
+    npcTemplates: Prisma.$NpcTemplatePayload<ExtArgs>[]
+    npcSheets: Prisma.$NpcSheetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1840,6 +2158,8 @@ export interface Prisma__BackgroundClient<T, Null = never, ExtArgs extends runti
   featureChoiceGroups<T extends Prisma.Background$featureChoiceGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Background$featureChoiceGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeatureChoiceGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterSheets<T extends Prisma.Background$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Background$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterTemplates<T extends Prisma.Background$characterTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Background$characterTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcTemplates<T extends Prisma.Background$npcTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Background$npcTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcSheets<T extends Prisma.Background$npcSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Background$npcSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2372,6 +2692,54 @@ export type Background$characterTemplatesArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.CharacterTemplateScalarFieldEnum | Prisma.CharacterTemplateScalarFieldEnum[]
+}
+
+/**
+ * Background.npcTemplates
+ */
+export type Background$npcTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplate
+   */
+  select?: Prisma.NpcTemplateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplate
+   */
+  omit?: Prisma.NpcTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateWhereInput
+  orderBy?: Prisma.NpcTemplateOrderByWithRelationInput | Prisma.NpcTemplateOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateScalarFieldEnum | Prisma.NpcTemplateScalarFieldEnum[]
+}
+
+/**
+ * Background.npcSheets
+ */
+export type Background$npcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcSheet
+   */
+  select?: Prisma.NpcSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcSheet
+   */
+  omit?: Prisma.NpcSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcSheetInclude<ExtArgs> | null
+  where?: Prisma.NpcSheetWhereInput
+  orderBy?: Prisma.NpcSheetOrderByWithRelationInput | Prisma.NpcSheetOrderByWithRelationInput[]
+  cursor?: Prisma.NpcSheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcSheetScalarFieldEnum | Prisma.NpcSheetScalarFieldEnum[]
 }
 
 /**

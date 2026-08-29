@@ -190,3 +190,32 @@ export const CampaignActorLocation = {
 } as const
 
 export type CampaignActorLocation = (typeof CampaignActorLocation)[keyof typeof CampaignActorLocation]
+
+
+export const SheetDefenseKind = {
+  RESISTANCE: 'RESISTANCE',
+  IMMUNITY: 'IMMUNITY',
+  VULNERABILITY: 'VULNERABILITY'
+} as const
+
+export type SheetDefenseKind = (typeof SheetDefenseKind)[keyof typeof SheetDefenseKind]
+
+
+export const SheetActionKind = {
+  ACTION: 'ACTION',
+  BONUS_ACTION: 'BONUS_ACTION',
+  REACTION: 'REACTION'
+} as const
+
+export type SheetActionKind = (typeof SheetActionKind)[keyof typeof SheetActionKind]
+
+
+export const SheetAttackType = {
+  MELEE: 'MELEE',
+  RANGED: 'RANGED',
+  THROWN: 'THROWN',
+  MAGIC: 'MAGIC',
+  OTHER: 'OTHER'
+} as const
+
+export type SheetAttackType = (typeof SheetAttackType)[keyof typeof SheetAttackType]

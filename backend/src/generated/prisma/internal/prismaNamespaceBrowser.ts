@@ -58,6 +58,29 @@ export const ModelName = {
   GameSystem: 'GameSystem',
   NpcTemplate: 'NpcTemplate',
   CreatureTemplate: 'CreatureTemplate',
+  NpcTemplateClass: 'NpcTemplateClass',
+  NpcTemplateStat: 'NpcTemplateStat',
+  NpcTemplateSkill: 'NpcTemplateSkill',
+  NpcTemplateDefense: 'NpcTemplateDefense',
+  NpcTemplateSense: 'NpcTemplateSense',
+  NpcTemplateLanguage: 'NpcTemplateLanguage',
+  NpcTemplateTrait: 'NpcTemplateTrait',
+  NpcTemplateAction: 'NpcTemplateAction',
+  NpcTemplateAttack: 'NpcTemplateAttack',
+  NpcTemplateMultiattack: 'NpcTemplateMultiattack',
+  NpcTemplateMultiattackEntry: 'NpcTemplateMultiattackEntry',
+  NpcTemplateMagicalAbility: 'NpcTemplateMagicalAbility',
+  CreatureTemplateStat: 'CreatureTemplateStat',
+  CreatureTemplateSkill: 'CreatureTemplateSkill',
+  CreatureTemplateDefense: 'CreatureTemplateDefense',
+  CreatureTemplateSense: 'CreatureTemplateSense',
+  CreatureTemplateLanguage: 'CreatureTemplateLanguage',
+  CreatureTemplateTrait: 'CreatureTemplateTrait',
+  CreatureTemplateAction: 'CreatureTemplateAction',
+  CreatureTemplateAttack: 'CreatureTemplateAttack',
+  CreatureTemplateMultiattack: 'CreatureTemplateMultiattack',
+  CreatureTemplateMultiattackEntry: 'CreatureTemplateMultiattackEntry',
+  CreatureTemplateMagicalAbility: 'CreatureTemplateMagicalAbility',
   Ancestry: 'Ancestry',
   SubAncestry: 'SubAncestry',
   Background: 'Background',
@@ -70,6 +93,31 @@ export const ModelName = {
   CharacterTemplateLanguage: 'CharacterTemplateLanguage',
   CharacterTemplateFeatureChoice: 'CharacterTemplateFeatureChoice',
   CharacterTemplateProgressionChoice: 'CharacterTemplateProgressionChoice',
+  NpcSheet: 'NpcSheet',
+  NpcSheetClass: 'NpcSheetClass',
+  NpcSheetStat: 'NpcSheetStat',
+  NpcSheetSkill: 'NpcSheetSkill',
+  NpcSheetDefense: 'NpcSheetDefense',
+  NpcSheetSense: 'NpcSheetSense',
+  NpcSheetLanguage: 'NpcSheetLanguage',
+  CreatureSheet: 'CreatureSheet',
+  CreatureSheetStat: 'CreatureSheetStat',
+  CreatureSheetSkill: 'CreatureSheetSkill',
+  CreatureSheetDefense: 'CreatureSheetDefense',
+  CreatureSheetSense: 'CreatureSheetSense',
+  CreatureSheetLanguage: 'CreatureSheetLanguage',
+  NpcSheetTrait: 'NpcSheetTrait',
+  NpcSheetAction: 'NpcSheetAction',
+  NpcSheetAttack: 'NpcSheetAttack',
+  NpcSheetMultiattack: 'NpcSheetMultiattack',
+  NpcSheetMultiattackEntry: 'NpcSheetMultiattackEntry',
+  NpcSheetMagicalAbility: 'NpcSheetMagicalAbility',
+  CreatureSheetTrait: 'CreatureSheetTrait',
+  CreatureSheetAction: 'CreatureSheetAction',
+  CreatureSheetAttack: 'CreatureSheetAttack',
+  CreatureSheetMultiattack: 'CreatureSheetMultiattack',
+  CreatureSheetMultiattackEntry: 'CreatureSheetMultiattackEntry',
+  CreatureSheetMagicalAbility: 'CreatureSheetMagicalAbility',
   CharacterSheet: 'CharacterSheet',
   Language: 'Language',
   CharacterSheetLanguage: 'CharacterSheetLanguage',
@@ -196,7 +244,30 @@ export const NpcTemplateScalarFieldEnum = {
   name: 'name',
   initials: 'initials',
   description: 'description',
+  ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
+  backgroundId: 'backgroundId',
+  size: 'size',
+  role: 'role',
+  faction: 'faction',
+  personality: 'personality',
+  motivation: 'motivation',
+  behavior: 'behavior',
+  tactics: 'tactics',
+  lore: 'lore',
+  notes: 'notes',
   portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  armorClass: 'armorClass',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  speed: 'speed',
+  climbSpeed: 'climbSpeed',
+  swimSpeed: 'swimSpeed',
+  flySpeed: 'flySpeed',
+  burrowSpeed: 'burrowSpeed',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -212,13 +283,418 @@ export const CreatureTemplateScalarFieldEnum = {
   name: 'name',
   initials: 'initials',
   description: 'description',
+  size: 'size',
+  creatureType: 'creatureType',
+  habitat: 'habitat',
+  behavior: 'behavior',
+  tactics: 'tactics',
+  lore: 'lore',
+  notes: 'notes',
   portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  armorClass: 'armorClass',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  speed: 'speed',
+  climbSpeed: 'climbSpeed',
+  swimSpeed: 'swimSpeed',
+  flySpeed: 'flySpeed',
+  burrowSpeed: 'burrowSpeed',
+  challengeRating: 'challengeRating',
+  experienceReward: 'experienceReward',
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CreatureTemplateScalarFieldEnum = (typeof CreatureTemplateScalarFieldEnum)[keyof typeof CreatureTemplateScalarFieldEnum]
+
+
+export const NpcTemplateClassScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  level: 'level',
+  isPrimary: 'isPrimary',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateClassScalarFieldEnum = (typeof NpcTemplateClassScalarFieldEnum)[keyof typeof NpcTemplateClassScalarFieldEnum]
+
+
+export const NpcTemplateStatScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  savingThrowBonus: 'savingThrowBonus',
+  savingThrowOverride: 'savingThrowOverride',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateStatScalarFieldEnum = (typeof NpcTemplateStatScalarFieldEnum)[keyof typeof NpcTemplateStatScalarFieldEnum]
+
+
+export const NpcTemplateSkillScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateSkillScalarFieldEnum = (typeof NpcTemplateSkillScalarFieldEnum)[keyof typeof NpcTemplateSkillScalarFieldEnum]
+
+
+export const NpcTemplateDefenseScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  kind: 'kind',
+  damageType: 'damageType',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateDefenseScalarFieldEnum = (typeof NpcTemplateDefenseScalarFieldEnum)[keyof typeof NpcTemplateDefenseScalarFieldEnum]
+
+
+export const NpcTemplateSenseScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  name: 'name',
+  range: 'range',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateSenseScalarFieldEnum = (typeof NpcTemplateSenseScalarFieldEnum)[keyof typeof NpcTemplateSenseScalarFieldEnum]
+
+
+export const NpcTemplateLanguageScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  languageId: 'languageId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateLanguageScalarFieldEnum = (typeof NpcTemplateLanguageScalarFieldEnum)[keyof typeof NpcTemplateLanguageScalarFieldEnum]
+
+
+export const NpcTemplateTraitScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateTraitScalarFieldEnum = (typeof NpcTemplateTraitScalarFieldEnum)[keyof typeof NpcTemplateTraitScalarFieldEnum]
+
+
+export const NpcTemplateActionScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  kind: 'kind',
+  name: 'name',
+  description: 'description',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateActionScalarFieldEnum = (typeof NpcTemplateActionScalarFieldEnum)[keyof typeof NpcTemplateActionScalarFieldEnum]
+
+
+export const NpcTemplateAttackScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  name: 'name',
+  description: 'description',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  attackBonus: 'attackBonus',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  secondaryDamageFormula: 'secondaryDamageFormula',
+  secondaryDamageType: 'secondaryDamageType',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  reach: 'reach',
+  target: 'target',
+  saveAbilityKey: 'saveAbilityKey',
+  saveDc: 'saveDc',
+  onHit: 'onHit',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateAttackScalarFieldEnum = (typeof NpcTemplateAttackScalarFieldEnum)[keyof typeof NpcTemplateAttackScalarFieldEnum]
+
+
+export const NpcTemplateMultiattackScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateMultiattackScalarFieldEnum = (typeof NpcTemplateMultiattackScalarFieldEnum)[keyof typeof NpcTemplateMultiattackScalarFieldEnum]
+
+
+export const NpcTemplateMultiattackEntryScalarFieldEnum = {
+  id: 'id',
+  multiattackId: 'multiattackId',
+  attackId: 'attackId',
+  actionId: 'actionId',
+  quantity: 'quantity',
+  order: 'order',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateMultiattackEntryScalarFieldEnum = (typeof NpcTemplateMultiattackEntryScalarFieldEnum)[keyof typeof NpcTemplateMultiattackEntryScalarFieldEnum]
+
+
+export const NpcTemplateMagicalAbilityScalarFieldEnum = {
+  id: 'id',
+  npcTemplateId: 'npcTemplateId',
+  spellId: 'spellId',
+  name: 'name',
+  description: 'description',
+  abilityKey: 'abilityKey',
+  attackBonus: 'attackBonus',
+  saveDc: 'saveDc',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  range: 'range',
+  target: 'target',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  isPassive: 'isPassive',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcTemplateMagicalAbilityScalarFieldEnum = (typeof NpcTemplateMagicalAbilityScalarFieldEnum)[keyof typeof NpcTemplateMagicalAbilityScalarFieldEnum]
+
+
+export const CreatureTemplateStatScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  savingThrowBonus: 'savingThrowBonus',
+  savingThrowOverride: 'savingThrowOverride',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateStatScalarFieldEnum = (typeof CreatureTemplateStatScalarFieldEnum)[keyof typeof CreatureTemplateStatScalarFieldEnum]
+
+
+export const CreatureTemplateSkillScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateSkillScalarFieldEnum = (typeof CreatureTemplateSkillScalarFieldEnum)[keyof typeof CreatureTemplateSkillScalarFieldEnum]
+
+
+export const CreatureTemplateDefenseScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  kind: 'kind',
+  damageType: 'damageType',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateDefenseScalarFieldEnum = (typeof CreatureTemplateDefenseScalarFieldEnum)[keyof typeof CreatureTemplateDefenseScalarFieldEnum]
+
+
+export const CreatureTemplateSenseScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  name: 'name',
+  range: 'range',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateSenseScalarFieldEnum = (typeof CreatureTemplateSenseScalarFieldEnum)[keyof typeof CreatureTemplateSenseScalarFieldEnum]
+
+
+export const CreatureTemplateLanguageScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  languageId: 'languageId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateLanguageScalarFieldEnum = (typeof CreatureTemplateLanguageScalarFieldEnum)[keyof typeof CreatureTemplateLanguageScalarFieldEnum]
+
+
+export const CreatureTemplateTraitScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateTraitScalarFieldEnum = (typeof CreatureTemplateTraitScalarFieldEnum)[keyof typeof CreatureTemplateTraitScalarFieldEnum]
+
+
+export const CreatureTemplateActionScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  kind: 'kind',
+  name: 'name',
+  description: 'description',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateActionScalarFieldEnum = (typeof CreatureTemplateActionScalarFieldEnum)[keyof typeof CreatureTemplateActionScalarFieldEnum]
+
+
+export const CreatureTemplateAttackScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  name: 'name',
+  description: 'description',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  attackBonus: 'attackBonus',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  secondaryDamageFormula: 'secondaryDamageFormula',
+  secondaryDamageType: 'secondaryDamageType',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  reach: 'reach',
+  target: 'target',
+  saveAbilityKey: 'saveAbilityKey',
+  saveDc: 'saveDc',
+  onHit: 'onHit',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateAttackScalarFieldEnum = (typeof CreatureTemplateAttackScalarFieldEnum)[keyof typeof CreatureTemplateAttackScalarFieldEnum]
+
+
+export const CreatureTemplateMultiattackScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateMultiattackScalarFieldEnum = (typeof CreatureTemplateMultiattackScalarFieldEnum)[keyof typeof CreatureTemplateMultiattackScalarFieldEnum]
+
+
+export const CreatureTemplateMultiattackEntryScalarFieldEnum = {
+  id: 'id',
+  multiattackId: 'multiattackId',
+  attackId: 'attackId',
+  actionId: 'actionId',
+  quantity: 'quantity',
+  order: 'order',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateMultiattackEntryScalarFieldEnum = (typeof CreatureTemplateMultiattackEntryScalarFieldEnum)[keyof typeof CreatureTemplateMultiattackEntryScalarFieldEnum]
+
+
+export const CreatureTemplateMagicalAbilityScalarFieldEnum = {
+  id: 'id',
+  creatureTemplateId: 'creatureTemplateId',
+  spellId: 'spellId',
+  name: 'name',
+  description: 'description',
+  abilityKey: 'abilityKey',
+  attackBonus: 'attackBonus',
+  saveDc: 'saveDc',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  range: 'range',
+  target: 'target',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  isPassive: 'isPassive',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureTemplateMagicalAbilityScalarFieldEnum = (typeof CreatureTemplateMagicalAbilityScalarFieldEnum)[keyof typeof CreatureTemplateMagicalAbilityScalarFieldEnum]
 
 
 export const AncestryScalarFieldEnum = {
@@ -445,6 +921,460 @@ export const CharacterTemplateProgressionChoiceScalarFieldEnum = {
 } as const
 
 export type CharacterTemplateProgressionChoiceScalarFieldEnum = (typeof CharacterTemplateProgressionChoiceScalarFieldEnum)[keyof typeof CharacterTemplateProgressionChoiceScalarFieldEnum]
+
+
+export const NpcSheetScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  systemId: 'systemId',
+  campaignActorId: 'campaignActorId',
+  ancestryId: 'ancestryId',
+  subAncestryId: 'subAncestryId',
+  backgroundId: 'backgroundId',
+  size: 'size',
+  role: 'role',
+  faction: 'faction',
+  personality: 'personality',
+  motivation: 'motivation',
+  behavior: 'behavior',
+  tactics: 'tactics',
+  lore: 'lore',
+  notes: 'notes',
+  portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  armorClass: 'armorClass',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  speed: 'speed',
+  climbSpeed: 'climbSpeed',
+  swimSpeed: 'swimSpeed',
+  flySpeed: 'flySpeed',
+  burrowSpeed: 'burrowSpeed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetScalarFieldEnum = (typeof NpcSheetScalarFieldEnum)[keyof typeof NpcSheetScalarFieldEnum]
+
+
+export const NpcSheetClassScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  classId: 'classId',
+  subclassId: 'subclassId',
+  level: 'level',
+  isPrimary: 'isPrimary',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetClassScalarFieldEnum = (typeof NpcSheetClassScalarFieldEnum)[keyof typeof NpcSheetClassScalarFieldEnum]
+
+
+export const NpcSheetStatScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  savingThrowBonus: 'savingThrowBonus',
+  savingThrowOverride: 'savingThrowOverride',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetStatScalarFieldEnum = (typeof NpcSheetStatScalarFieldEnum)[keyof typeof NpcSheetStatScalarFieldEnum]
+
+
+export const NpcSheetSkillScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetSkillScalarFieldEnum = (typeof NpcSheetSkillScalarFieldEnum)[keyof typeof NpcSheetSkillScalarFieldEnum]
+
+
+export const NpcSheetDefenseScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  kind: 'kind',
+  damageType: 'damageType',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetDefenseScalarFieldEnum = (typeof NpcSheetDefenseScalarFieldEnum)[keyof typeof NpcSheetDefenseScalarFieldEnum]
+
+
+export const NpcSheetSenseScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  name: 'name',
+  range: 'range',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetSenseScalarFieldEnum = (typeof NpcSheetSenseScalarFieldEnum)[keyof typeof NpcSheetSenseScalarFieldEnum]
+
+
+export const NpcSheetLanguageScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  languageId: 'languageId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetLanguageScalarFieldEnum = (typeof NpcSheetLanguageScalarFieldEnum)[keyof typeof NpcSheetLanguageScalarFieldEnum]
+
+
+export const CreatureSheetScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  systemId: 'systemId',
+  campaignActorId: 'campaignActorId',
+  size: 'size',
+  creatureType: 'creatureType',
+  habitat: 'habitat',
+  behavior: 'behavior',
+  tactics: 'tactics',
+  lore: 'lore',
+  notes: 'notes',
+  portraitUrl: 'portraitUrl',
+  tokenImageUrl: 'tokenImageUrl',
+  tokenImageFit: 'tokenImageFit',
+  armorClass: 'armorClass',
+  hitPoints: 'hitPoints',
+  maxHitPoints: 'maxHitPoints',
+  temporaryHp: 'temporaryHp',
+  speed: 'speed',
+  climbSpeed: 'climbSpeed',
+  swimSpeed: 'swimSpeed',
+  flySpeed: 'flySpeed',
+  burrowSpeed: 'burrowSpeed',
+  challengeRating: 'challengeRating',
+  experienceReward: 'experienceReward',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetScalarFieldEnum = (typeof CreatureSheetScalarFieldEnum)[keyof typeof CreatureSheetScalarFieldEnum]
+
+
+export const CreatureSheetStatScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  statId: 'statId',
+  baseValue: 'baseValue',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  isSavingThrowProficient: 'isSavingThrowProficient',
+  savingThrowBonus: 'savingThrowBonus',
+  savingThrowOverride: 'savingThrowOverride',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetStatScalarFieldEnum = (typeof CreatureSheetStatScalarFieldEnum)[keyof typeof CreatureSheetStatScalarFieldEnum]
+
+
+export const CreatureSheetSkillScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  skillId: 'skillId',
+  isProficient: 'isProficient',
+  expertiseLevel: 'expertiseLevel',
+  bonusValue: 'bonusValue',
+  overrideValue: 'overrideValue',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetSkillScalarFieldEnum = (typeof CreatureSheetSkillScalarFieldEnum)[keyof typeof CreatureSheetSkillScalarFieldEnum]
+
+
+export const CreatureSheetDefenseScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  kind: 'kind',
+  damageType: 'damageType',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetDefenseScalarFieldEnum = (typeof CreatureSheetDefenseScalarFieldEnum)[keyof typeof CreatureSheetDefenseScalarFieldEnum]
+
+
+export const CreatureSheetSenseScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  name: 'name',
+  range: 'range',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetSenseScalarFieldEnum = (typeof CreatureSheetSenseScalarFieldEnum)[keyof typeof CreatureSheetSenseScalarFieldEnum]
+
+
+export const CreatureSheetLanguageScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  languageId: 'languageId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetLanguageScalarFieldEnum = (typeof CreatureSheetLanguageScalarFieldEnum)[keyof typeof CreatureSheetLanguageScalarFieldEnum]
+
+
+export const NpcSheetTraitScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetTraitScalarFieldEnum = (typeof NpcSheetTraitScalarFieldEnum)[keyof typeof NpcSheetTraitScalarFieldEnum]
+
+
+export const NpcSheetActionScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  kind: 'kind',
+  name: 'name',
+  description: 'description',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetActionScalarFieldEnum = (typeof NpcSheetActionScalarFieldEnum)[keyof typeof NpcSheetActionScalarFieldEnum]
+
+
+export const NpcSheetAttackScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  name: 'name',
+  description: 'description',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  attackBonus: 'attackBonus',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  secondaryDamageFormula: 'secondaryDamageFormula',
+  secondaryDamageType: 'secondaryDamageType',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  reach: 'reach',
+  target: 'target',
+  saveAbilityKey: 'saveAbilityKey',
+  saveDc: 'saveDc',
+  onHit: 'onHit',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetAttackScalarFieldEnum = (typeof NpcSheetAttackScalarFieldEnum)[keyof typeof NpcSheetAttackScalarFieldEnum]
+
+
+export const NpcSheetMultiattackScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetMultiattackScalarFieldEnum = (typeof NpcSheetMultiattackScalarFieldEnum)[keyof typeof NpcSheetMultiattackScalarFieldEnum]
+
+
+export const NpcSheetMultiattackEntryScalarFieldEnum = {
+  id: 'id',
+  multiattackId: 'multiattackId',
+  attackId: 'attackId',
+  actionId: 'actionId',
+  quantity: 'quantity',
+  order: 'order',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetMultiattackEntryScalarFieldEnum = (typeof NpcSheetMultiattackEntryScalarFieldEnum)[keyof typeof NpcSheetMultiattackEntryScalarFieldEnum]
+
+
+export const NpcSheetMagicalAbilityScalarFieldEnum = {
+  id: 'id',
+  npcSheetId: 'npcSheetId',
+  spellId: 'spellId',
+  name: 'name',
+  description: 'description',
+  abilityKey: 'abilityKey',
+  attackBonus: 'attackBonus',
+  saveDc: 'saveDc',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  range: 'range',
+  target: 'target',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  isPassive: 'isPassive',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpcSheetMagicalAbilityScalarFieldEnum = (typeof NpcSheetMagicalAbilityScalarFieldEnum)[keyof typeof NpcSheetMagicalAbilityScalarFieldEnum]
+
+
+export const CreatureSheetTraitScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetTraitScalarFieldEnum = (typeof CreatureSheetTraitScalarFieldEnum)[keyof typeof CreatureSheetTraitScalarFieldEnum]
+
+
+export const CreatureSheetActionScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  kind: 'kind',
+  name: 'name',
+  description: 'description',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetActionScalarFieldEnum = (typeof CreatureSheetActionScalarFieldEnum)[keyof typeof CreatureSheetActionScalarFieldEnum]
+
+
+export const CreatureSheetAttackScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  name: 'name',
+  description: 'description',
+  attackType: 'attackType',
+  attackAbilityKey: 'attackAbilityKey',
+  attackBonus: 'attackBonus',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  secondaryDamageFormula: 'secondaryDamageFormula',
+  secondaryDamageType: 'secondaryDamageType',
+  normalRange: 'normalRange',
+  longRange: 'longRange',
+  reach: 'reach',
+  target: 'target',
+  saveAbilityKey: 'saveAbilityKey',
+  saveDc: 'saveDc',
+  onHit: 'onHit',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetAttackScalarFieldEnum = (typeof CreatureSheetAttackScalarFieldEnum)[keyof typeof CreatureSheetAttackScalarFieldEnum]
+
+
+export const CreatureSheetMultiattackScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  name: 'name',
+  description: 'description',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetMultiattackScalarFieldEnum = (typeof CreatureSheetMultiattackScalarFieldEnum)[keyof typeof CreatureSheetMultiattackScalarFieldEnum]
+
+
+export const CreatureSheetMultiattackEntryScalarFieldEnum = {
+  id: 'id',
+  multiattackId: 'multiattackId',
+  attackId: 'attackId',
+  actionId: 'actionId',
+  quantity: 'quantity',
+  order: 'order',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetMultiattackEntryScalarFieldEnum = (typeof CreatureSheetMultiattackEntryScalarFieldEnum)[keyof typeof CreatureSheetMultiattackEntryScalarFieldEnum]
+
+
+export const CreatureSheetMagicalAbilityScalarFieldEnum = {
+  id: 'id',
+  creatureSheetId: 'creatureSheetId',
+  spellId: 'spellId',
+  name: 'name',
+  description: 'description',
+  abilityKey: 'abilityKey',
+  attackBonus: 'attackBonus',
+  saveDc: 'saveDc',
+  damageFormula: 'damageFormula',
+  damageBonus: 'damageBonus',
+  damageType: 'damageType',
+  range: 'range',
+  target: 'target',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  recharge: 'recharge',
+  isPassive: 'isPassive',
+  notes: 'notes',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatureSheetMagicalAbilityScalarFieldEnum = (typeof CreatureSheetMagicalAbilityScalarFieldEnum)[keyof typeof CreatureSheetMagicalAbilityScalarFieldEnum]
 
 
 export const CharacterSheetScalarFieldEnum = {

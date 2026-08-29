@@ -49,7 +49,7 @@ type TableRollsPanelProps = {
   ) => void;
   onRollCustomBuilder: () => void;
   onRevealPrivateRoll: (roll: RollResult) => void;
-  onRollMassNpcInitiative: () => void;
+  onRollMassInitiative: () => void;
   onRollDeathSave: () => void;
   diceOptions: number[];
   quickRolls: {
@@ -92,7 +92,7 @@ export function TableRollsPanel({
   onChangeDiceTerm,
   onRollCustomBuilder,
   onRevealPrivateRoll,
-  onRollMassNpcInitiative,
+  onRollMassInitiative,
   onRollDeathSave,
   diceOptions,
   quickRolls,
@@ -131,7 +131,7 @@ export function TableRollsPanel({
 
           <button
             type="button"
-            onClick={onRollMassNpcInitiative}
+            onClick={onRollMassInitiative}
             className="mt-3 w-full rounded-lg border border-forge-gold/40 bg-forge-gold/10 px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-forge-gold transition hover:border-forge-gold hover:bg-forge-gold/20"
           >
             Rolar iniciativa da mesa
