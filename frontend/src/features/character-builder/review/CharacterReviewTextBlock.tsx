@@ -1,0 +1,26 @@
+type CharacterReviewTextBlockProps = {
+  label: string;
+  value: string;
+  title?: string;
+};
+
+export function CharacterReviewTextBlock({
+  label,
+  value,
+  title,
+}: CharacterReviewTextBlockProps) {
+  return (
+    <div
+      className="rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-3"
+      title={title ?? value}
+    >
+      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-500">
+        {label}
+      </p>
+
+      <p className="mt-2 whitespace-pre-wrap text-sm font-bold leading-relaxed text-zinc-100">
+        {value}
+      </p>
+    </div>
+  );
+}

@@ -1,0 +1,652 @@
+🧭 LegendForge — Fases Canônicas
+
+Atualizado em 24/07/2026.Este documento deve ser tratado como fonte de verdade absoluta para o planejamento de fases macro e micros do LegendForge até o usuário substituir ou revisar esta lista.
+
+Regras de condução do projeto
+
+Responder em português.
+
+Atuar como pair-programmer + professor.
+
+Trabalhar em passos pequenos, funcionais e testáveis.
+
+Em mudanças pequenas, usar formato Procure / Troque.
+
+Em mudanças grandes, entregar arquivo inteiro baseado na versão atual enviada pelo usuário.
+
+Não presumir estrutura antiga de arquivos grandes.
+
+Antes de qualquer commit, sempre rodar/pedir:
+
+git diff --stat
+git status
+
+Comandos de lint atuais:
+
+cd backend
+pnpm eslint
+
+cd ../frontend
+pnpm lint
+
+1. Fases macro canônicas
+
+[x] Fase 0 — Base inicial
+[x] Fase 1 — Mesa com atores reais
+[x] Fase 2 — Tokens reais na cena
+[x] Fase 3 — Sistema base/Seeds
+
+[em finalização] Fase 4 — Criação/Ficha de personagem
+[x] Fase 4.5 — Polimentos finais e fundação de progressão
+[x] Fase 4.6 — Regras avançadas da criação de ficha
+[x] Fase 4.7 — Multiclasse e Level Up real
+[planejada] Fase 4.8 — Sub-ancestralidades e variações de origem
+
+[ ] Fase 5 — Biblioteca completa
+[ ] Fase 6 — Diário real
+[ ] Fase 7 — Configurações da campanha/mesa
+[ ] Fase 8 — Sincronização em tempo real
+[ ] Fase 9 — Combate e iniciativa
+[ ] Fase 10 — Cenas/mapas múltiplos
+[ ] Fase 11 — Bestiário completo
+[ ] Fase 12 — Inventário, lojas e economia
+[ ] Fase 13 — Sistema de efeitos/status
+[ ] Fase 14 — Permissões avançadas e moderação
+[ ] Fase 15 — Deploy/produção
+[ ] Fase 16 — Polimento de portfólio/produto
+
+2. Fase 4 — Estado macro atual
+
+[x] Fase 4.15 — Atributos
+[x] Fase 4.16 — Perícias
+[x] Fase 4.17 — Magias
+[x] Fase 4.18 — Equipamentos
+[x] Fase 4.19 — Sobre
+[x] Fase 4.21 — Refatoração do builder
+[x] Fase 4.22 — Revisões do builder
+[x] Fase 4.23 — Mesa refatorada
+[x] Fase 4.24 — Personagens ativos, biblioteca e ciclo de vida
+[x] Fase 4.25 — Ficha pronta com abas
+[x] Fase 4.26 — Rolagens automáticas pela ficha pronta
+[x] Fase 4.27 — Regras avançadas iniciais
+[x] Fase 4.28 — Preparação estrutural para ficha/pop-out
+[x] Fase 4.29 — Ataques, magias, equipamentos e ficha pronta avançada
+[x] Fase 4.30 — Documentação/checkpoint anterior
+[x] Fase 4.31 — Modularização/seed-content e imagens de equipamento
+[x] Fase 4.5 — Polimentos finais e fundação de progressão
+[x] Fase 4.6 — Regras avançadas da criação de ficha
+[x] Fase 4.7 — Multiclasse e Level Up real
+[planejada] Fase 4.8 — Sub-ancestralidades e variações de origem
+
+3. Fase 4.5 — Polimentos finais e fundação de progressão
+
+Micros concluídas
+
+[x] 4.5.1 — Polimento rápido da mesa, chat e grid
+[x] 4.5.2 — Ciclo ator/token
+[x] 4.5.3 — Tamanho automático de token e limpeza do seletor
+[x] 4.5.4 — Linguagem, unidades e identidade do sistema
+[x] 4.5.5 — Magias novas e conteúdo imediato
+[x] 4.5.6 — Rolagens avançadas
+[x] 4.5.7 — Fundação inicial de Level Up
+
+4. Fase 4.6 — Regras avançadas da criação de ficha
+
+[x] 4.6.1 — Bloquear magias acima do nível permitido na criação
+[x] 4.6.2 — Corrigir criação da ficha com PV inicial vindo da classe
+[x] 4.6.3 — Builder/review/magias respeitam nível inicial real
+[x] 4.6.4 — Atributos por fonte
+[x] 4.6.5 — Proficiências por fonte
+[x] 4.6.6 — Línguas por fonte
+[x] 4.6.7 — Magias/truques por fonte
+[x] 4.6.8 — Melhorar notas da criação de ficha
+
+5. Fase 4.7 — Multiclasse e Level Up real
+
+Objetivo: transformar criação e progressão em fluxo real, não apenas “somar nível”.
+
+[x] 4.7.1 — Modelar draft de classes múltiplas no builder
+[x] 4.7.1.1 — Criar CharacterBuilderClassDraftEntry
+[x] 4.7.1.2 — Adicionar classEntries ao CharacterBuilderDraft
+[x] 4.7.1.3 — Manter classId/className como compatibilidade
+[x] 4.7.1.4 — Sincronizar classe única atual com classEntries
+[x] 4.7.1.5 — Sincronizar nível inicial com nível da classe principal
+[x] 4.7.1.6 — Corrigir atualização em lote do draft para não perder classEntries
+
+[x] 4.7.2 — Tela de distribuição de níveis por classe
+[x] 4.7.2.1 — Mostrar distribuição no resumo lateral
+[x] 4.7.2.2 — Mostrar distribuição na etapa Classe
+[x] 4.7.2.3 — Preparar botão “Adicionar classe em breve” desabilitado
+[x] 4.7.2.4 — Permitir editar nível da classe principal pela tela de Classe
+[x] 4.7.2.5 — Validar visualmente soma dos níveis da distribuição
+
+[x] 4.7.3 — Definir classe principal
+[x] 4.7.3.1 — Exibir badge “Classe principal” de forma mais clara
+[x] 4.7.3.2 — Preparar função setPrimaryClassEntry
+[x] 4.7.3.3 — Manter classId/className sincronizados com a classe principal
+[x] 4.7.3.4 — Travar troca de principal quando houver apenas uma classe
+
+[x] 4.7.4 — Criação inicial multiclasse
+[x] 4.7.4.1 — Habilitar adicionar segunda classe no draft
+[x] 4.7.4.2 — Impedir classe duplicada
+[x] 4.7.4.3 — Permitir remover classe adicional
+[x] 4.7.4.4 — Ajustar nível total como soma das classes
+[x] 4.7.4.5 — Backend recebe classEntries opcional
+[x] 4.7.4.6 — Backend cria CharacterSheetClass para cada classe
+[x] 4.7.4.7 — Manter fallback classId/className para classe principal
+
+[x] 4.7.5 — Calcular PV inicial multiclasse
+[x] 4.7.5.1 — Definir regra final de PV multiclasse do LegendForge
+[x] 4.7.5.2 — Calcular PV por classe no backend
+[x] 4.7.5.3 — Aplicar CON por nível
+[x] 4.7.5.4 — Atualizar maxHitPoints/hitPoints inicial
+[x] 4.7.5.5 — Mostrar resumo de PV no Review
+
+[x] 4.7.6 — Features iniciais por classe/nível
+[x] 4.7.6.1 — Buscar features por cada CharacterSheetClass
+[x] 4.7.6.2 — Incluir features até o nível daquela classe
+[x] 4.7.6.3 — Incluir features de subclasse quando houver
+[x] 4.7.6.4 — Ajustar aba Features da ficha pronta para múltiplas classes
+
+[x] 4.7.7 — Magias iniciais por classe/nível
+[x] 4.7.7.0 — Modelar limites de magia por nível
+[x] 4.7.7.1 — União final das permissões de magia por classe no builder
+[x] 4.7.7.2 — Backend valida magia contra múltiplas classes
+[x] 4.7.7.3 — Backend salva e retorna classId/source da magia
+[x] 4.7.7.4 — Frontend types recebem origem interna da magia
+[x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
+
+[x] 4.7.8 — Escolhas pendentes iniciais
+[x] 4.7.8.1 — Mapear escolhas pendentes possíveis
+[x] 4.7.8.2 — Subclasse pendente
+[x] 4.7.8.2.1 — Expor subclasses dentro de cada classe
+[x] 4.7.8.2.2 — Permitir escolher subclasse por classEntry
+[x] 4.7.8.2.3 — Mostrar pendência no Review
+[x] 4.7.8.2.4 — Bloquear finalização com subclasse obrigatória faltando
+
+    [x] 4.7.8.3 — Corrigir fluxo de entrada e persistência do builder
+        [x] 4.7.8.3.1 — Separar “Novo personagem” de “Continuar rascunho”
+        [x] 4.7.8.3.2 — Novo personagem sempre inicia com draft vazio
+        [x] 4.7.8.3.3 — Continuar carrega somente ficha com status DRAFT
+        [x] 4.7.8.3.4 — Finalizar ficha sem exigir salvamento prévio
+        [x] 4.7.8.3.5 — Atualizar rascunho automaticamente antes de finalizar
+        [x] 4.7.8.3.6 — Limpar estado local do builder após finalizar
+        [x] 4.7.8.3.7 — Garantir que ficha READY nunca reabra como rascunho
+        [x] 4.7.8.3.8 — Testar criação nova, continuação e finalização ponta a ponta
+
+    [x] 4.7.8.4 — Magias/truques pendentes
+        [x] 4.7.8.4.1 — Calcular limites exigidos por nível de magia
+        [x] 4.7.8.4.2 — Comparar escolhas atuais com os limites
+        [x] 4.7.8.4.3 — Exibir pendências na etapa Magias
+        [x] 4.7.8.4.4 — Exibir pendências na Revisão
+        [x] 4.7.8.4.5 — Bloquear avanço/finalização no frontend
+        [x] 4.7.8.4.6 — Validar pendências no backend
+        [x] 4.7.8.4.7 — Testar classe única e multiclasse
+
+    [x] 4.7.8.5 — Features pendentes
+        [x] 4.7.8.5.1 — Auditar modelagem atual de Feature
+        [x] 4.7.8.5.2 — Definir features automáticas versus escolhas
+        [x] 4.7.8.5.3 — Criar modelagem Prisma dos grupos de escolha
+        [x] 4.7.8.5.4 — Criar migration e seed inicial
+        [x] 4.7.8.5.5 — Expor grupos no character-options
+        [x] 4.7.8.5.6 — Adicionar escolhas ao draft e persistência
+        [x] 4.7.8.5.7 — Criar CharacterFeaturesStep
+        [x] 4.7.8.5.8 — Exibir pendências de features na Revisão
+        [x] 4.7.8.5.9 — Bloquear avanço e finalização no frontend
+        [x] 4.7.8.5.10 — Validar escolhas obrigatórias de features no backend
+        [x] 4.7.8.5.11 — Testar classe única, classe sem grupo e multiclasse
+
+    [x] 4.7.8.6 — Refatoração estrutural do CharacterBuilderModal
+        [x] 4.7.8.6.1 — Auditar dependências do modal e definir fronteiras
+        [x] 4.7.8.6.2 — Extrair helpers puros de linguagem e gênero
+        [x] 4.7.8.6.3 — Extrair validações e cálculos do builder
+        [x] 4.7.8.6.4 — Extrair componentes auxiliares usados apenas pelo modal
+        [x] 4.7.8.6.5 — Criar CharacterBuilderModal.tsx
+        [x] 4.7.8.6.6 — Substituir implementação local pelo import
+        [x] 4.7.8.6.7 — Limpar imports e código morto do page.tsx
+        [x] 4.7.8.6.8 — Teste completo de regressão
+
+    [em andamento] 4.7.8.7 — Atributos/talentos pendentes na criação inicial
+        [x] 4.7.8.7.1 — Auditar a modelagem atual de progressão, atributos e talents
+        [x] 4.7.8.7.2 — Definir regra oficial de ASI versus talento
+        [x] 4.7.8.7.3 — Modelar opções de aumento de atributo por progressão
+        [x] 4.7.8.7.4 — Modelar talentos e seus pré-requisitos
+        [x] 4.7.8.7.5 — Expor escolhas aplicáveis em character-options
+        [x] 4.7.8.7.6 — Adicionar escolhas ao CharacterBuilderDraft
+        [x] 4.7.8.7.7 — Criar etapa ou painel de escolhas de progressão
+                [x] 4.7.8.7.7.1 — Calcular marcos exigidos pelas classEntries
+                [x] 4.7.8.7.7.2 — Sincronizar progressionChoices quando classes ou níveis mudarem
+                [x] 4.7.8.7.7.3 — Criar CharacterProgressionStep
+                [x] 4.7.8.7.7.4 — Adicionar a etapa ao fluxo do builder
+                [x] 4.7.8.7.7.5 — Implementar escolha entre atributo e talento
+                [x] 4.7.8.7.7.6 — Implementar aumento focado e dividido
+                [x] 4.7.8.7.7.7 — Exibir talentos e pré-requisitos
+                [x] 4.7.8.7.7.8 — Validar pré-requisitos dos talentos
+                [x] 4.7.8.7.7.9 — Validar limite 20 e bônus consolidados
+        [x] 4.7.8.7.8 — Exibir pendências e valores consolidados na Revisão
+        [x] 4.7.8.7.9 — Bloquear avanço e finalização no frontend
+        [x] 4.7.8.7.10 — Validar escolhas obrigatórias no backend
+                [x] 4.7.8.7.10.1 — Criar schema Zod de progressionChoices
+                [x] 4.7.8.7.10.2 — Normalizar identidade dos marcos por classe, nível e índice
+                [x] 4.7.8.7.10.3 — Validar quantidade de marcos exigidos por classEntries
+                [x] 4.7.8.7.10.4 — Validar aumento focado +2
+                [x] 4.7.8.7.10.5 — Validar aumento dividido +1/+1 em atributos diferentes
+                [x] 4.7.8.7.10.6 — Validar limite padrão 20 com bônus consolidados
+                [x] 4.7.8.7.10.7 — Validar talento existente e pertencente ao sistema
+                [x] 4.7.8.7.10.8 — Validar talento não repetível
+                [x] 4.7.8.7.10.9 — Validar pré-requisitos verificáveis no backend
+                [x] 4.7.8.7.10.10 — Bloquear criação/finalização com escolhas inválidas ou pendentes
+                [x] 4.7.8.7.10.11 — Testar classe única e multiclasse no backend
+        [x] 4.7.8.7.11 — Persistir aumentos e talentos na ficha
+                [x] 4.7.8.7.11.1 — Modelar CharacterSheetProgressionChoice no Prisma
+                [x] 4.7.8.7.11.2 — Criar migration e regenerar Prisma Client
+                [x] 4.7.8.7.11.3 — Persistir escolhas ao criar ou atualizar rascunho
+                [x] 4.7.8.7.11.4 — Remover escolhas obsoletas na atualização
+                [x] 4.7.8.7.11.5 — Retornar progressionChoices nas consultas da ficha
+                [x] 4.7.8.7.11.6 — Atualizar tipos de resposta do frontend
+                [x] 4.7.8.7.11.7 — Enviar progressionChoices no payload do builder
+                [x] 4.7.8.7.11.8 — Reconstruir o draft ao reabrir a ficha
+                [x] 4.7.8.7.11.9 — Persistir bônus de progressão em CharacterSheetStat
+                [x] 4.7.8.7.11.10 — Aplicar talentos e progressão na ficha pronta
+                [x] 4.7.8.7.11.11 — Validar PV, perícias e derivados após recarregar
+        [x] 4.7.8.7.12 — Testar classe única, multiclasse e personagem nível 1
+                [x] 4.7.8.7.12.1 — Criar personagem de classe única com ASI
+                [x] 4.7.8.7.12.2 — Criar personagem de classe única com talento
+                [x] 4.7.8.7.12.3 — Criar personagem multiclasse com marcos independentes
+                [x] 4.7.8.7.12.4 — Salvar, fechar e reabrir rascunho
+                [x] 4.7.8.7.12.5 — Finalizar e conferir ficha pronta
+                [x] 4.7.8.7.12.6 — Confirmar personagem nível 1 sem marcos
+        [x] 4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
+            [x] 4.7.9.1 — Auditar o preview atual de Level Up
+            [x] 4.7.9.2 — Mapear as CharacterSheetClass disponíveis
+            [x] 4.7.9.3 — Criar estado da classe escolhida para subir
+            [x] 4.7.9.4 — Exibir seletor de classe no modal
+            [x] 4.7.9.5 — Calcular nível atual e próximo nível da classe escolhida
+            [x] 4.7.9.6 — Recalcular PV previsto pela classe escolhida
+            [x] 4.7.9.7 — Recalcular features liberadas pela classe escolhida
+            [x] 4.7.9.8 — Recalcular progressão mágica da classe escolhida
+            [x] 4.7.9.9 — Detectar novos marcos de ASI/talento
+            [x] 4.7.9.10 — Validar classe única e multiclasse
+        [x] 4.7.10 — Criar plano de mudanças do Level Up
+        [x] 4.7.11 — Tela de resumo das mudanças do Level Up
+        [x] 4.7.12 — Telas de escolhas pendentes do Level Up
+        [x] 4.7.13 — Aplicar mudanças reais na ficha ao confirmar
+
+[x]4.7.14 — Mestre libera/bloqueia Level Up
+
+        [x] 4.7.14.1 — Exibir controle somente para Mestre/owner
+        [x] 4.7.14.2 — Mostrar estado atual: Level Up liberado/bloqueado
+        [x] 4.7.14.3 — Botão para liberar Level Up
+        [x] 4.7.14.4 — Botão para bloquear/cancelar liberação
+        [x] 4.7.14.5 — Persistir levelUpAvailable no backend
+        [x] 4.7.14.6 — Atualizar ficha local após a alteração
+        [x] 4.7.14.7 — Impedir player de alterar a liberação
+        [x] 4.7.14.8 — Testar GM, owner e player
+[x] 4.7.15 — Jogador vê Level Up apenas quando liberado
+[x] 4.7.16 — Jogador confirma Level Up liberado
+[x] 4.7.17 — Feedback no chat após Level Up
+
+5.5. Fase 4.8 — Sub-ancestralidades e variações de origem
+
+Objetivo: criar sub-ancestralidades/sub-raças vinculadas à ancestralidade principal.
+
+[x] Fase 4.8 — Sub-ancestralidades e variações de origem
+[x] 4.8.1 — Modelar SubAncestry no Prisma
+[x] 4.8.2 — Seed inicial de sub-ancestralidades
+[x] 4.8.3 — Expor sub-ancestralidades no /character-options
+[x] 4.8.4 — Builder: escolher sub-ancestralidade após ancestralidade
+[x] 4.8.5 — Aplicar traços/bônus/idiomas da sub-ancestralidade
+[x] 4.8.6 — Review e ficha pronta exibem sub-ancestralidade
+
+Exemplo:
+
+Sylvaris → Sylvaris Alto
+
+6. Fase 5 — Biblioteca completa
+
+[x] 5.1 — Biblioteca real da campanha
+    [x] 5.1.1 — Auditar a biblioteca atual da mesa
+    [x] 5.1.2 — Consolidar CampaignActor como entrada da Biblioteca da Campanha
+    [x] 5.1.3 — Auditar e refatorar ActorLibraryModal
+    [x] 5.1.4 — Separar claramente TABLE / LIBRARY / ARCHIVED na interface
+    [x] 5.1.5 — Melhorar listagem e detalhes de NPCs/criaturas da biblioteca
+    [x] 5.1.6 — Criar fluxo de arquivar/restaurar ator
+    [x] 5.1.7 — Consolidar permissões GM/player da biblioteca
+    [x] 5.1.8 — Preservar vínculo CharacterSheet quando aplicável
+    [x] 5.1.9 — Preservar ciclo LIBRARY → TABLE → LIBRARY
+    [x] 5.1.10 — Teste regressivo completo
+[x] 5.2 — Biblioteca real do sistema
+    [x] 5.2.1 — Auditar conteúdo atual pertencente ao GameSystem
+    [x] 5.2.2 — Definir responsabilidade da Biblioteca do Sistema
+    [x] 5.2.3 — Definir diferença entre conteúdo do sistema e template instanciável
+    [x] 5.2.4 — Auditar APIs atuais de conteúdo do sistema
+    [x] 5.2.5 — Criar endpoint de biblioteca do sistema, se realmente necessário
+    [x] 5.2.6 — Criar estrutura frontend da Biblioteca do Sistema
+    [x] 5.2.7 — Listar conteúdo real do sistema
+    [x] 5.2.8 — Garantir isolamento por systemId
+    [x] 5.2.9 — Integrar com campanha usando campaign.systemId
+    [x] 5.2.10 — Teste regressivo da Biblioteca do Sistema
+[x] 5.3 — Organização por categorias
+    [x] 5.3.1 — Auditar categorias existentes no conteúdo atual
+    [x] 5.3.2 — Criar navegação principal Tudo / Itens / Magias
+    [x] 5.3.3 — Criar categorias automáticas de Equipment
+    [x] 5.3.4 — Criar categorias por nível de Spell
+    [x] 5.3.5 — Exibir contadores por categoria
+    [x] 5.3.6 — Filtrar conteúdo sem alterar dados originais
+[x] 5.4 — Itens na biblioteca
+    [x] 5.4.1 — Auditar apresentação atual dos itens
+    [x] 5.4.2 — Corrigir exibição de imageUrl
+    [x] 5.4.3 — Criar card definitivo de item
+    [x] 5.4.4 — Exibir categoria traduzida
+    [x] 5.4.5 — Exibir dano / defesa / custo / peso
+    [x] 5.4.6 — Exibir propriedades e alcance
+    [x] 5.4.7 — Criar detalhes completos do item
+    [x] 5.4.8 — Criar busca por nome/key
+    [x] 5.4.9 — Preservar filtros por categoria
+    [x] 5.4.10 — Estado sem resultados
+    [x] 5.4.11 — Teste regressivo
+[x] 5.5 — Magias na biblioteca
+    [x] 5.5.1 — Auditar apresentação atual das magias
+    [x] 5.5.2 — Busca por nome/key/descrição
+    [x] 5.5.3 — Preservar filtro por nível
+    [x] 5.5.4 — Card definitivo de magia
+    [x] 5.5.5 — Exibir nível e escola
+    [x] 5.5.6 — Exibir conjuração / alcance / duração
+    [x] 5.5.7 — Exibir componentes
+    [x] 5.5.8 — Exibir Ritual / Concentração
+    [x] 5.5.9 — Detalhes completos
+    [x] 5.5.10 — Estado sem resultados
+    [x] 5.5.11 — Teste regressivo
+[x] 5.6 — Templates de personagem/NPC/criatura
+    [x] 5.6.1 — Auditar CampaignActor / CharacterSheet
+    [x] 5.6.2 — Auditar criação atual de NPC e criatura
+    [x] 5.6.3 — Definir Template no LegendForge
+    [x] 5.6.4 — Definir Template × CampaignActor
+    [x] 5.6.5 — Definir estratégia inicial de NpcTemplate / CreatureTemplate
+    [x] 5.6.6 — Definir dados compartilhados e específicos
+    [x] 5.6.7 — Modelar NpcTemplate e CreatureTemplate no Prisma
+    [x] 5.6.8 — Criar migration
+    [x] 5.6.9 — Seed mínimo de templates
+    [x] 5.6.10 — Expor templates na Biblioteca do Sistema
+    [x] 5.6.11 — Tipar templates no frontend
+    [x] 5.6.12 — Exibir categorias NPCs / Criaturas
+    [x] 5.6.13 — Abrir detalhes do template
+    [x] 5.6.14 — Garantir templates somente leitura
+    [x] 5.6.15 — Teste regressivo
+[x] 5.7 — Biblioteca de NPCs
+    [x] 5.7.1 — Auditar fluxo atual de criação de CampaignActor NPC
+    [x] 5.7.2 — Definir contrato de instanciação de NpcTemplate
+    [x] 5.7.3 — Criar endpoint template → CampaignActor
+    [x] 5.7.4 — Validar template pertence ao mesmo GameSystem da campanha
+    [x] 5.7.5 — Restringir importação ao GM
+    [x] 5.7.6 — Criar CampaignActor como NPC
+    [x] 5.7.7 — Criar inicialmente em LIBRARY
+    [x] 5.7.8 — Copiar nome / iniciais / descrição / portraitUrl
+    [x] 5.7.9 — Impedir alteração do NpcTemplate
+    [x] 5.7.10 — Criar chamada frontend
+    [x] 5.7.11 — Adicionar ação "Adicionar à campanha"
+    [x] 5.7.12 — Feedback após importação
+    [x] 5.7.13 — Atualizar Biblioteca da Campanha
+    [x] 5.7.14 — Permitir importar o mesmo template novamente
+    [x] 5.7.15 — Validar isolamento entre campanhas
+    [x] 5.7.16 — Teste regressivo
+[x] 5.8 — Biblioteca de criaturas
+    [x] 5.8.1 — Auditar fluxo de CreatureTemplate
+    [x] 5.8.2 — Definir contrato de instanciação
+    [x] 5.8.3 — Criar endpoint CreatureTemplate → CampaignActor
+    [x] 5.8.4 — Validar mesmo GameSystem
+    [x] 5.8.5 — Restringir importação ao GM
+    [x] 5.8.6 — Criar CampaignActor como CREATURE
+    [x] 5.8.7 — Criar inicialmente em LIBRARY
+    [x] 5.8.8 — Copiar identidade
+    [x] 5.8.9 — Preservar CreatureTemplate
+    [x] 5.8.10 — Criar chamada frontend
+    [x] 5.8.11 — "Adicionar à campanha"
+    [x] 5.8.12 — Feedback após importação
+    [x] 5.8.13 — Atualizar Biblioteca da Campanha
+    [x] 5.8.14 — Importação repetida
+    [x] 5.8.15 — Isolamento entre campanhas/sistemas
+    [x] 5.8.16 — Regressão final
+[x] 5.9 — Enviar NPC/criatura da biblioteca para mesa
+    [x] 5.9.1 — Auditar fluxo LIBRARY → TABLE existente
+    [x] 5.9.2 — Confirmar suporte a NPC
+    [x] 5.9.3 — Confirmar suporte a CREATURE
+    [x] 5.9.4 — Preservar identidade ao mover
+    [x] 5.9.5 — Atualizar painel lateral
+    [x] 5.9.6 — Remover da Biblioteca ativa enquanto estiver TABLE
+    [x] 5.9.7 — Permitir TABLE → LIBRARY
+    [x] 5.9.8 — Não alterar template de origem
+    [x] 5.9.9 — Validar NPC vindo de NpcTemplate
+    [x] 5.9.10 — Validar criatura vinda de CreatureTemplate
+    [x] 5.9.11 — Regressão final NPC + criatura
+[x] 5.10 — Editar instância da campanha sem alterar template original
+    [x] 5.10.1 — Auditar edição atual de CampaignActor
+    [x] 5.10.2 — Definir campos editáveis para NPC/CREATURE
+    [x] 5.10.3 — Reutilizar/ajustar PATCH de CampaignActor
+    [x] 5.10.4 — Restringir edição de NPC/CREATURE ao GM
+    [x] 5.10.5 — Criar ação "Editar" no ator da campanha
+    [x] 5.10.6 — Criar modal de edição
+    [x] 5.10.7 — Editar nome
+    [x] 5.10.8 — Editar iniciais
+    [x] 5.10.9 — Editar descrição
+    [x] 5.10.10 — Editar portraitUrl
+    [x] 5.10.11 — Persistir alterações no CampaignActor
+    [x] 5.10.12 — Atualizar painel sem refresh
+    [x] 5.10.13 — Atualizar Biblioteca da Campanha
+    [x] 5.10.14 — Preservar NpcTemplate original
+    [x] 5.10.15 — Preservar CreatureTemplate original
+    [x] 5.10.16 — Permitir instâncias divergentes do mesmo template
+    [x] 5.10.17 — Teste regressivo
+[x] 5.11 — CharacterTemplate completo
+    [x] 5.11.1 — Auditar CharacterSheet completa e suas relações
+    [x] 5.11.2 — Definir o que um CharacterTemplate deve preservar
+    [x] 5.11.3 — Definir Template × CharacterSheet × CampaignActor
+    [x] 5.11.4 — Definir comportamento com multiclasse
+    [x] 5.11.5 — Definir ancestralidade e sub-ancestralidade no template
+    [x] 5.11.6 — Definir antecedentes, idiomas e proficiências
+    [x] 5.11.7 — Definir atributos e perícias
+    [x] 5.11.8 — Definir magias conhecidas do template
+    [x] 5.11.9 — Definir equipamentos do template
+    [x] 5.11.10 — Definir features e escolhas já resolvidas
+    [x] 5.11.11 — Definir progressão e escolhas de nível
+    [x] 5.11.12 — Modelar CharacterTemplate no Prisma
+    [x] 5.11.13 — Modelar relações auxiliares necessárias
+    [x] 5.11.14 — Criar migration
+    [x] 5.11.15 — Criar seed mínimo de personagens-template
+    [x] 5.11.16 — Expor CharacterTemplate na Biblioteca do Sistema
+    [x] 5.11.17 — Exibir personagens-template no frontend
+    [x] 5.11.18 — Abrir detalhes completos do template
+    [x] 5.11.19 — Instanciar template como CampaignActor + CharacterSheet
+    [x] 5.11.20 — Garantir cópia independente do template
+    [x] 5.11.21 — Permitir edição da instância sem alterar a origem
+    [x] 5.11.22 — Teste regressivo completo
+[ ] 5.12 — NpcSheet / CreatureSheet completos
+    [x] 5.12.1 — Auditar requisitos mecânicos de NPC
+    [x] 5.12.2 — Auditar requisitos mecânicos de criatura
+    [x] 5.12.3 — Definir diferenças NPC × Creature
+    [x] 5.12.4 — Modelar NpcSheet
+    [x] 5.12.5 — Modelar CreatureSheet
+    [x] 5.12.6 — Atributos STR / DEX / CON / INT / WIS / CHA
+    [x] 5.12.7 — CA / PV / deslocamentos
+    [x] 5.12.8 — Salvaguardas e perícias
+    [x] 5.12.9 — Resistências / imunidades / vulnerabilidades
+    [x] 5.12.10 — Sentidos e idiomas
+    [x] 5.12.11 — CR / desafio / XP para criaturas
+    [x] 5.12.12 — Traits / características passivas
+    [x] 5.12.13 — Ações
+    [x] 5.12.14 — Ataques
+    [x] 5.12.15 — Ações bônus
+    [x] 5.12.16 — Reações
+    [x] 5.12.17 — Multiataque
+    [x] 5.12.18 — Magias/habilidades mágicas
+    [x] 5.12.19 — Lore e comportamento
+    [x] 5.12.20 — Retrato + imagem/token
+    [x] 5.12.21 — Builder completo de NPC
+    [x] 5.12.22 — Builder completo de criatura
+    [x] 5.12.23 — Ficha pronta de NPC
+    [x] 5.12.24 — Ficha pronta de criatura
+    [x] 5.12.25 — Template → instância independente
+    [ ] 5.12.26 — Rolagens reais na mesa5
+    [ ] 5.12.27 — Integração com iniciativa/combate
+    [ ] 5.12.28 — Teste regressivo
+
+7. Fase 6 — Diário real
+
+[ ] 6.1 — Entradas de diário da campanha
+[ ] 6.2 — Handouts
+[ ] 6.3 — Notas públicas
+[ ] 6.4 — Notas privadas do mestre
+[ ] 6.5 — Associar diário a personagem
+[ ] 6.6 — Associar diário a cena/mapa
+[ ] 6.7 — Visibilidade por player/GM
+
+8. Fase 7 — Configurações da campanha/mesa
+
+[ ] 7.1 — Configurações gerais da campanha
+[ ] 7.2 — Configurações de grid
+[ ] 7.3 — Configuração de escala/distância
+[ ] 7.4 — Configurações de permissões de mesa
+[ ] 7.5 — Configurações de regras opcionais
+[ ] 7.6 — Preferências visuais da mesa
+
+9. Fase 8 — Sincronização em tempo real
+
+[ ] 8.1 — Chat em tempo real
+[ ] 8.2 — Rolagens em tempo real
+[ ] 8.3 — Movimento de token em tempo real
+[ ] 8.4 — Atualização de cena em tempo real
+[ ] 8.5 — Presença de usuários
+[ ] 8.6 — Ferramentas compartilhadas
+[ ] 8.7 — Sincronização da ficha/pop-out
+
+10. Fase 9 — Combate e iniciativa
+
+[ ] 9.1 — Turn tracker real
+[ ] 9.2 — Ordem de iniciativa persistida
+[ ] 9.3 — Avançar turno
+[ ] 9.4 — Rodadas
+[ ] 9.5 — Ações no turno
+[ ] 9.6 — Alvos
+[ ] 9.7 — Aplicar dano/cura
+[ ] 9.8 — Condições no combate
+[ ] 9.9 — Integração com criaturas/NPCs
+
+11. Fase 10 — Cenas/mapas múltiplos
+
+[ ] 10.1 — Criar múltiplas cenas
+[ ] 10.2 — Lista de cenas da campanha
+[ ] 10.3 — Trocar cena ativa
+[ ] 10.4 — Tokens por cena
+[ ] 10.5 — Mapa/imagem por cena
+[ ] 10.6 — Configuração de grid por cena
+[ ] 10.7 — Névoa/desenhos/medidas por cena
+
+12. Fase 11 — Bestiário completo
+
+[ ] 11.1 — Modelagem de criatura do bestiário
+[ ] 11.2 — Bloco de estatísticas de criatura
+[ ] 11.3 — Ataques de criatura
+[ ] 11.4 — Ações e habilidades
+[ ] 11.5 — Magias de criatura
+[ ] 11.6 — Resistências e imunidades
+[ ] 11.7 — Sentidos, tamanho e deslocamento
+[ ] 11.8 — Recompensas/loot
+[ ] 11.9 — Criatura do bestiário para biblioteca da campanha
+[ ] 11.10 — Ficha própria de criatura
+[ ] 11.11 — Builder de criatura
+
+13. Fase 12 — Inventário, lojas e economia
+
+[ ] 12.1 — Inventário avançado
+[ ] 12.2 — Peso/carga
+[ ] 12.3 — Recipientes
+[ ] 12.4 — Moedas
+[ ] 12.5 — Lojas
+[ ] 12.6 — Comprar/vender
+[ ] 12.7 — Disponibilidade por campanha
+[ ] 12.8 — Recompensas e saque
+
+14. Fase 13 — Sistema de efeitos/status
+
+[ ] 13.1 — Condições
+[ ] 13.2 — Buffs/debuffs
+[ ] 13.3 — Efeitos temporários
+[ ] 13.4 — Duração por rodada/turno
+[ ] 13.5 — Origem do efeito
+[ ] 13.6 — Impacto mecânico em rolagens
+[ ] 13.7 — Impacto em CA/defesa/PV/magia
+
+15. Fase 14 — Permissões avançadas e moderação
+
+[ ] 14.1 — Permissões finas por campanha
+[ ] 14.2 — Permissões por cena
+[ ] 14.3 — Permissões por ator/ficha
+[ ] 14.4 — Aprovação/remoção de players
+[ ] 14.5 — Expulsar/banir da campanha
+[ ] 14.6 — Transferir ownership futuramente
+[ ] 14.7 — Logs de ações administrativas
+
+16. Fase 15 — Deploy/produção
+
+[ ] 15.1 — Revisar variáveis de ambiente
+[ ] 15.2 — Build frontend
+[ ] 15.3 — Build backend
+[ ] 15.4 — Banco em produção
+[ ] 15.5 — Auth em produção
+[ ] 15.6 — CORS/cookies/domínio
+[ ] 15.7 — Deploy frontend
+[ ] 15.8 — Deploy backend
+[ ] 15.9 — Teste ponta a ponta em produção
+
+17. Fase 16 — Polimento de portfólio/produto
+
+[ ] 16.1 — README final
+[ ] 16.2 — Prints do projeto
+[ ] 16.3 — Vídeo curto de demonstração
+[ ] 16.4 — Landing/demo
+[ ] 16.5 — Seed demo bonita
+[ ] 16.6 — Ajuste de UX final
+[ ] 16.7 — Checklist de portfólio
+[ ] 16.8 — Texto para LinkedIn/GitHub
+
+18. Próximo passo obrigatório
+
+A próxima micro de desenvolvimento é:
+
+Fase 5 — Biblioteca completa
+
+5.12 — NpcSheet / CreatureSheet completos
+    [ ] 5.12.1 — Auditar requisitos mecânicos de NPC
+    [ ] 5.12.2 — Auditar requisitos mecânicos de criatura
+    [ ] 5.12.3 — Definir diferenças NPC × Creature
+    [ ] 5.12.4 — Modelar NpcSheet
+    [ ] 5.12.5 — Modelar CreatureSheet
+    [ ] 5.12.6 — Atributos STR / DEX / CON / INT / WIS / CHA
+    [ ] 5.12.7 — CA / PV / deslocamentos
+    [ ] 5.12.8 — Salvaguardas e perícias
+    [ ] 5.12.9 — Resistências / imunidades / vulnerabilidades
+    [ ] 5.12.10 — Sentidos e idiomas
+    [ ] 5.12.11 — CR / desafio / XP para criaturas
+    [ ] 5.12.12 — Traits / características passivas
+    [ ] 5.12.13 — Ações
+    [ ] 5.12.14 — Ataques
+    [ ] 5.12.15 — Ações bônus
+    [ ] 5.12.16 — Reações
+    [ ] 5.12.17 — Multiataque
+    [ ] 5.12.18 — Magias/habilidades mágicas
+    [ ] 5.12.19 — Lore e comportamento
+    [ ] 5.12.20 — Retrato + imagem/token
+    [ ] 5.12.21 — Builder completo de NPC
+    [ ] 5.12.22 — Builder completo de criatura
+    [ ] 5.12.23 — Ficha pronta de NPC
+    [ ] 5.12.24 — Ficha pronta de criatura
+    [ ] 5.12.25 — Template → instância independente
+    [ ] 5.12.26 — Rolagens reais na mesa
+    [ ] 5.12.27 — Integração com iniciativa/combate
+    [ ] 5.12.28 — Teste regressivo
+
+19. Nota de verdade canônica
+
+Este arquivo substitui listas antigas e resumidas de fases do LegendForge.
+
+Quando houver conflito entre este documento e resumos anteriores, este documento vence.

@@ -32,6 +32,7 @@ export type GameSessionMinAggregateOutputType = {
   isFinished: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  characterSheetId: string | null
 }
 
 export type GameSessionMaxAggregateOutputType = {
@@ -42,6 +43,7 @@ export type GameSessionMaxAggregateOutputType = {
   isFinished: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  characterSheetId: string | null
 }
 
 export type GameSessionCountAggregateOutputType = {
@@ -52,6 +54,7 @@ export type GameSessionCountAggregateOutputType = {
   isFinished: number
   createdAt: number
   updatedAt: number
+  characterSheetId: number
   _all: number
 }
 
@@ -64,6 +67,7 @@ export type GameSessionMinAggregateInputType = {
   isFinished?: true
   createdAt?: true
   updatedAt?: true
+  characterSheetId?: true
 }
 
 export type GameSessionMaxAggregateInputType = {
@@ -74,6 +78,7 @@ export type GameSessionMaxAggregateInputType = {
   isFinished?: true
   createdAt?: true
   updatedAt?: true
+  characterSheetId?: true
 }
 
 export type GameSessionCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type GameSessionCountAggregateInputType = {
   isFinished?: true
   createdAt?: true
   updatedAt?: true
+  characterSheetId?: true
   _all?: true
 }
 
@@ -167,6 +173,7 @@ export type GameSessionGroupByOutputType = {
   isFinished: boolean
   createdAt: Date
   updatedAt: Date
+  characterSheetId: string | null
   _count: GameSessionCountAggregateOutputType | null
   _min: GameSessionMinAggregateOutputType | null
   _max: GameSessionMaxAggregateOutputType | null
@@ -198,7 +205,9 @@ export type GameSessionWhereInput = {
   isFinished?: Prisma.BoolFilter<"GameSession"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
+  characterSheetId?: Prisma.StringNullableFilter<"GameSession"> | string | null
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
+  characterSheet?: Prisma.XOR<Prisma.CharacterSheetNullableScalarRelationFilter, Prisma.CharacterSheetWhereInput> | null
 }
 
 export type GameSessionOrderByWithRelationInput = {
@@ -209,7 +218,9 @@ export type GameSessionOrderByWithRelationInput = {
   isFinished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  characterSheetId?: Prisma.SortOrderInput | Prisma.SortOrder
   campaign?: Prisma.CampaignOrderByWithRelationInput
+  characterSheet?: Prisma.CharacterSheetOrderByWithRelationInput
 }
 
 export type GameSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -223,7 +234,9 @@ export type GameSessionWhereUniqueInput = Prisma.AtLeast<{
   isFinished?: Prisma.BoolFilter<"GameSession"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
+  characterSheetId?: Prisma.StringNullableFilter<"GameSession"> | string | null
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
+  characterSheet?: Prisma.XOR<Prisma.CharacterSheetNullableScalarRelationFilter, Prisma.CharacterSheetWhereInput> | null
 }, "id">
 
 export type GameSessionOrderByWithAggregationInput = {
@@ -234,6 +247,7 @@ export type GameSessionOrderByWithAggregationInput = {
   isFinished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  characterSheetId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.GameSessionCountOrderByAggregateInput
   _max?: Prisma.GameSessionMaxOrderByAggregateInput
   _min?: Prisma.GameSessionMinOrderByAggregateInput
@@ -250,6 +264,7 @@ export type GameSessionScalarWhereWithAggregatesInput = {
   isFinished?: Prisma.BoolWithAggregatesFilter<"GameSession"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GameSession"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GameSession"> | Date | string
+  characterSheetId?: Prisma.StringNullableWithAggregatesFilter<"GameSession"> | string | null
 }
 
 export type GameSessionCreateInput = {
@@ -260,6 +275,7 @@ export type GameSessionCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   campaign: Prisma.CampaignCreateNestedOneWithoutSessionsInput
+  characterSheet?: Prisma.CharacterSheetCreateNestedOneWithoutGameSessionsInput
 }
 
 export type GameSessionUncheckedCreateInput = {
@@ -270,6 +286,7 @@ export type GameSessionUncheckedCreateInput = {
   isFinished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  characterSheetId?: string | null
 }
 
 export type GameSessionUpdateInput = {
@@ -280,6 +297,7 @@ export type GameSessionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutSessionsNestedInput
+  characterSheet?: Prisma.CharacterSheetUpdateOneWithoutGameSessionsNestedInput
 }
 
 export type GameSessionUncheckedUpdateInput = {
@@ -290,6 +308,7 @@ export type GameSessionUncheckedUpdateInput = {
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type GameSessionCreateManyInput = {
@@ -300,6 +319,7 @@ export type GameSessionCreateManyInput = {
   isFinished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  characterSheetId?: string | null
 }
 
 export type GameSessionUpdateManyMutationInput = {
@@ -319,6 +339,7 @@ export type GameSessionUncheckedUpdateManyInput = {
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type GameSessionListRelationFilter = {
@@ -339,6 +360,7 @@ export type GameSessionCountOrderByAggregateInput = {
   isFinished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  characterSheetId?: Prisma.SortOrder
 }
 
 export type GameSessionMaxOrderByAggregateInput = {
@@ -349,6 +371,7 @@ export type GameSessionMaxOrderByAggregateInput = {
   isFinished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  characterSheetId?: Prisma.SortOrder
 }
 
 export type GameSessionMinOrderByAggregateInput = {
@@ -359,6 +382,49 @@ export type GameSessionMinOrderByAggregateInput = {
   isFinished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  characterSheetId?: Prisma.SortOrder
+}
+
+export type GameSessionCreateNestedManyWithoutCharacterSheetInput = {
+  create?: Prisma.XOR<Prisma.GameSessionCreateWithoutCharacterSheetInput, Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput> | Prisma.GameSessionCreateWithoutCharacterSheetInput[] | Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput[]
+  connectOrCreate?: Prisma.GameSessionCreateOrConnectWithoutCharacterSheetInput | Prisma.GameSessionCreateOrConnectWithoutCharacterSheetInput[]
+  createMany?: Prisma.GameSessionCreateManyCharacterSheetInputEnvelope
+  connect?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+}
+
+export type GameSessionUncheckedCreateNestedManyWithoutCharacterSheetInput = {
+  create?: Prisma.XOR<Prisma.GameSessionCreateWithoutCharacterSheetInput, Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput> | Prisma.GameSessionCreateWithoutCharacterSheetInput[] | Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput[]
+  connectOrCreate?: Prisma.GameSessionCreateOrConnectWithoutCharacterSheetInput | Prisma.GameSessionCreateOrConnectWithoutCharacterSheetInput[]
+  createMany?: Prisma.GameSessionCreateManyCharacterSheetInputEnvelope
+  connect?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+}
+
+export type GameSessionUpdateManyWithoutCharacterSheetNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSessionCreateWithoutCharacterSheetInput, Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput> | Prisma.GameSessionCreateWithoutCharacterSheetInput[] | Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput[]
+  connectOrCreate?: Prisma.GameSessionCreateOrConnectWithoutCharacterSheetInput | Prisma.GameSessionCreateOrConnectWithoutCharacterSheetInput[]
+  upsert?: Prisma.GameSessionUpsertWithWhereUniqueWithoutCharacterSheetInput | Prisma.GameSessionUpsertWithWhereUniqueWithoutCharacterSheetInput[]
+  createMany?: Prisma.GameSessionCreateManyCharacterSheetInputEnvelope
+  set?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+  disconnect?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+  delete?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+  connect?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+  update?: Prisma.GameSessionUpdateWithWhereUniqueWithoutCharacterSheetInput | Prisma.GameSessionUpdateWithWhereUniqueWithoutCharacterSheetInput[]
+  updateMany?: Prisma.GameSessionUpdateManyWithWhereWithoutCharacterSheetInput | Prisma.GameSessionUpdateManyWithWhereWithoutCharacterSheetInput[]
+  deleteMany?: Prisma.GameSessionScalarWhereInput | Prisma.GameSessionScalarWhereInput[]
+}
+
+export type GameSessionUncheckedUpdateManyWithoutCharacterSheetNestedInput = {
+  create?: Prisma.XOR<Prisma.GameSessionCreateWithoutCharacterSheetInput, Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput> | Prisma.GameSessionCreateWithoutCharacterSheetInput[] | Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput[]
+  connectOrCreate?: Prisma.GameSessionCreateOrConnectWithoutCharacterSheetInput | Prisma.GameSessionCreateOrConnectWithoutCharacterSheetInput[]
+  upsert?: Prisma.GameSessionUpsertWithWhereUniqueWithoutCharacterSheetInput | Prisma.GameSessionUpsertWithWhereUniqueWithoutCharacterSheetInput[]
+  createMany?: Prisma.GameSessionCreateManyCharacterSheetInputEnvelope
+  set?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+  disconnect?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+  delete?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+  connect?: Prisma.GameSessionWhereUniqueInput | Prisma.GameSessionWhereUniqueInput[]
+  update?: Prisma.GameSessionUpdateWithWhereUniqueWithoutCharacterSheetInput | Prisma.GameSessionUpdateWithWhereUniqueWithoutCharacterSheetInput[]
+  updateMany?: Prisma.GameSessionUpdateManyWithWhereWithoutCharacterSheetInput | Prisma.GameSessionUpdateManyWithWhereWithoutCharacterSheetInput[]
+  deleteMany?: Prisma.GameSessionScalarWhereInput | Prisma.GameSessionScalarWhereInput[]
 }
 
 export type GameSessionCreateNestedManyWithoutCampaignInput = {
@@ -403,6 +469,66 @@ export type GameSessionUncheckedUpdateManyWithoutCampaignNestedInput = {
   deleteMany?: Prisma.GameSessionScalarWhereInput | Prisma.GameSessionScalarWhereInput[]
 }
 
+export type GameSessionCreateWithoutCharacterSheetInput = {
+  id?: string
+  title: string
+  scheduledAt?: Date | string | null
+  isFinished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  campaign: Prisma.CampaignCreateNestedOneWithoutSessionsInput
+}
+
+export type GameSessionUncheckedCreateWithoutCharacterSheetInput = {
+  id?: string
+  campaignId: string
+  title: string
+  scheduledAt?: Date | string | null
+  isFinished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type GameSessionCreateOrConnectWithoutCharacterSheetInput = {
+  where: Prisma.GameSessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameSessionCreateWithoutCharacterSheetInput, Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput>
+}
+
+export type GameSessionCreateManyCharacterSheetInputEnvelope = {
+  data: Prisma.GameSessionCreateManyCharacterSheetInput | Prisma.GameSessionCreateManyCharacterSheetInput[]
+  skipDuplicates?: boolean
+}
+
+export type GameSessionUpsertWithWhereUniqueWithoutCharacterSheetInput = {
+  where: Prisma.GameSessionWhereUniqueInput
+  update: Prisma.XOR<Prisma.GameSessionUpdateWithoutCharacterSheetInput, Prisma.GameSessionUncheckedUpdateWithoutCharacterSheetInput>
+  create: Prisma.XOR<Prisma.GameSessionCreateWithoutCharacterSheetInput, Prisma.GameSessionUncheckedCreateWithoutCharacterSheetInput>
+}
+
+export type GameSessionUpdateWithWhereUniqueWithoutCharacterSheetInput = {
+  where: Prisma.GameSessionWhereUniqueInput
+  data: Prisma.XOR<Prisma.GameSessionUpdateWithoutCharacterSheetInput, Prisma.GameSessionUncheckedUpdateWithoutCharacterSheetInput>
+}
+
+export type GameSessionUpdateManyWithWhereWithoutCharacterSheetInput = {
+  where: Prisma.GameSessionScalarWhereInput
+  data: Prisma.XOR<Prisma.GameSessionUpdateManyMutationInput, Prisma.GameSessionUncheckedUpdateManyWithoutCharacterSheetInput>
+}
+
+export type GameSessionScalarWhereInput = {
+  AND?: Prisma.GameSessionScalarWhereInput | Prisma.GameSessionScalarWhereInput[]
+  OR?: Prisma.GameSessionScalarWhereInput[]
+  NOT?: Prisma.GameSessionScalarWhereInput | Prisma.GameSessionScalarWhereInput[]
+  id?: Prisma.StringFilter<"GameSession"> | string
+  campaignId?: Prisma.StringFilter<"GameSession"> | string
+  title?: Prisma.StringFilter<"GameSession"> | string
+  scheduledAt?: Prisma.DateTimeNullableFilter<"GameSession"> | Date | string | null
+  isFinished?: Prisma.BoolFilter<"GameSession"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
+  characterSheetId?: Prisma.StringNullableFilter<"GameSession"> | string | null
+}
+
 export type GameSessionCreateWithoutCampaignInput = {
   id?: string
   title: string
@@ -410,6 +536,7 @@ export type GameSessionCreateWithoutCampaignInput = {
   isFinished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  characterSheet?: Prisma.CharacterSheetCreateNestedOneWithoutGameSessionsInput
 }
 
 export type GameSessionUncheckedCreateWithoutCampaignInput = {
@@ -419,6 +546,7 @@ export type GameSessionUncheckedCreateWithoutCampaignInput = {
   isFinished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  characterSheetId?: string | null
 }
 
 export type GameSessionCreateOrConnectWithoutCampaignInput = {
@@ -447,17 +575,44 @@ export type GameSessionUpdateManyWithWhereWithoutCampaignInput = {
   data: Prisma.XOR<Prisma.GameSessionUpdateManyMutationInput, Prisma.GameSessionUncheckedUpdateManyWithoutCampaignInput>
 }
 
-export type GameSessionScalarWhereInput = {
-  AND?: Prisma.GameSessionScalarWhereInput | Prisma.GameSessionScalarWhereInput[]
-  OR?: Prisma.GameSessionScalarWhereInput[]
-  NOT?: Prisma.GameSessionScalarWhereInput | Prisma.GameSessionScalarWhereInput[]
-  id?: Prisma.StringFilter<"GameSession"> | string
-  campaignId?: Prisma.StringFilter<"GameSession"> | string
-  title?: Prisma.StringFilter<"GameSession"> | string
-  scheduledAt?: Prisma.DateTimeNullableFilter<"GameSession"> | Date | string | null
-  isFinished?: Prisma.BoolFilter<"GameSession"> | boolean
-  createdAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
+export type GameSessionCreateManyCharacterSheetInput = {
+  id?: string
+  campaignId: string
+  title: string
+  scheduledAt?: Date | string | null
+  isFinished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type GameSessionUpdateWithoutCharacterSheetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaign?: Prisma.CampaignUpdateOneRequiredWithoutSessionsNestedInput
+}
+
+export type GameSessionUncheckedUpdateWithoutCharacterSheetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type GameSessionUncheckedUpdateManyWithoutCharacterSheetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GameSessionCreateManyCampaignInput = {
@@ -467,6 +622,7 @@ export type GameSessionCreateManyCampaignInput = {
   isFinished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  characterSheetId?: string | null
 }
 
 export type GameSessionUpdateWithoutCampaignInput = {
@@ -476,6 +632,7 @@ export type GameSessionUpdateWithoutCampaignInput = {
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheet?: Prisma.CharacterSheetUpdateOneWithoutGameSessionsNestedInput
 }
 
 export type GameSessionUncheckedUpdateWithoutCampaignInput = {
@@ -485,6 +642,7 @@ export type GameSessionUncheckedUpdateWithoutCampaignInput = {
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type GameSessionUncheckedUpdateManyWithoutCampaignInput = {
@@ -494,6 +652,7 @@ export type GameSessionUncheckedUpdateManyWithoutCampaignInput = {
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSheetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -506,7 +665,9 @@ export type GameSessionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   isFinished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  characterSheetId?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  characterSheet?: boolean | Prisma.GameSession$characterSheetArgs<ExtArgs>
 }, ExtArgs["result"]["gameSession"]>
 
 export type GameSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -517,7 +678,9 @@ export type GameSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   isFinished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  characterSheetId?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  characterSheet?: boolean | Prisma.GameSession$characterSheetArgs<ExtArgs>
 }, ExtArgs["result"]["gameSession"]>
 
 export type GameSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -528,7 +691,9 @@ export type GameSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   isFinished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  characterSheetId?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  characterSheet?: boolean | Prisma.GameSession$characterSheetArgs<ExtArgs>
 }, ExtArgs["result"]["gameSession"]>
 
 export type GameSessionSelectScalar = {
@@ -539,23 +704,28 @@ export type GameSessionSelectScalar = {
   isFinished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  characterSheetId?: boolean
 }
 
-export type GameSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "title" | "scheduledAt" | "isFinished" | "createdAt" | "updatedAt", ExtArgs["result"]["gameSession"]>
+export type GameSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "title" | "scheduledAt" | "isFinished" | "createdAt" | "updatedAt" | "characterSheetId", ExtArgs["result"]["gameSession"]>
 export type GameSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  characterSheet?: boolean | Prisma.GameSession$characterSheetArgs<ExtArgs>
 }
 export type GameSessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  characterSheet?: boolean | Prisma.GameSession$characterSheetArgs<ExtArgs>
 }
 export type GameSessionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
+  characterSheet?: boolean | Prisma.GameSession$characterSheetArgs<ExtArgs>
 }
 
 export type $GameSessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "GameSession"
   objects: {
     campaign: Prisma.$CampaignPayload<ExtArgs>
+    characterSheet: Prisma.$CharacterSheetPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -565,6 +735,7 @@ export type $GameSessionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     isFinished: boolean
     createdAt: Date
     updatedAt: Date
+    characterSheetId: string | null
   }, ExtArgs["result"]["gameSession"]>
   composites: {}
 }
@@ -960,6 +1131,7 @@ readonly fields: GameSessionFieldRefs;
 export interface Prisma__GameSessionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   campaign<T extends Prisma.CampaignDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignDefaultArgs<ExtArgs>>): Prisma.Prisma__CampaignClient<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  characterSheet<T extends Prisma.GameSession$characterSheetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSession$characterSheetArgs<ExtArgs>>): Prisma.Prisma__CharacterSheetClient<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -996,6 +1168,7 @@ export interface GameSessionFieldRefs {
   readonly isFinished: Prisma.FieldRef<"GameSession", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"GameSession", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GameSession", 'DateTime'>
+  readonly characterSheetId: Prisma.FieldRef<"GameSession", 'String'>
 }
     
 
@@ -1389,6 +1562,25 @@ export type GameSessionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many GameSessions to delete.
    */
   limit?: number
+}
+
+/**
+ * GameSession.characterSheet
+ */
+export type GameSession$characterSheetArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSheet
+   */
+  select?: Prisma.CharacterSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSheet
+   */
+  omit?: Prisma.CharacterSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSheetInclude<ExtArgs> | null
+  where?: Prisma.CharacterSheetWhereInput
 }
 
 /**

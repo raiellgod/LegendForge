@@ -1,325 +1,209 @@
 # 📊 DEV STATE — LegendForge
 
----
+> Atualizado para novo chat em 16/07/2026. Contexto consolidado após a macro **4.7.7 — Magias iniciais por classe/nível**.
 
 ## 📅 Last Update
 
-06/05/2026
+16/07/2026
 
 ---
 
-## 🧱 Project Structure
+## ✅ Estado consolidado
+
+### Geral
 
 ```txt
-LegendForge/
-├── backend/
-│   ├── src/
-│   │   ├── generated/prisma/
-│   │   ├── lib/
-│   │   │   ├── auth.ts
-│   │   │   ├── get-authenticated-session.ts
-│   │   │   └── prisma.ts
-│   │   ├── routes/
-│   │   │   └── campaigns.ts
-│   │   └── index.ts
-│   │
-│   ├── prisma/
-│   │   └── schema.prisma
-│   │
-│   ├── docker-compose.yml
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── campaigns/
-│   │   │   │   ├── page.tsx
-│   │   │   │   ├── create/page.tsx
-│   │   │   │   └── [id]/edit/page.tsx
-│   │   │   ├── login/page.tsx
-│   │   │   ├── register/page.tsx
-│   │   │   ├── layout.tsx
-│   │   │   └── page.tsx
-│   │   │
-│   │   ├── components/ui/
-│   │   │   ├── button.tsx
-│   │   │   ├── header.tsx
-│   │   │   └── parchment-background.tsx
-│   │   │
-│   │   ├── lib/
-│   │   │   └── auth-client.ts
-│   │   └── service/
-│   │
-│   ├── public/
-│   └── package.json
-│
-├── docs/
-└── README.md
+Branch usual: feat/game-page
+Stack: Next.js + React + Tailwind + TypeScript / Fastify + Prisma + PostgreSQL
+Auth: Better Auth por sessão/cookie
+Gerenciador: pnpm
+```
+
+### Última informação de qualidade
+
+```txt
+Backend eslint: limpo
+Frontend lint: limpo
+Página/ficha: sem erros aparentes
+Ficha: abre e finaliza normalmente
+```
+
+Confirmado pelo usuário após a conclusão da 4.7.7.
+
+---
+
+## ✅ Última sequência concluída
+
+```txt
+[x] 4.7.7.0 — Modelar limites de magia por nível
+[x] 4.7.7.1 — União final das permissões de magia por classe no builder
+[x] 4.7.7.2 — Backend valida magia contra múltiplas classes
+[x] 4.7.7.3 — Backend salva e retorna classId/source da magia
+[x] 4.7.7.4 — Frontend types recebem origem interna da magia
+[x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
+```
+
+Commit sugerido:
+
+```bash
+git diff --stat
+git status
+git add .
+git commit -m "feat: support multiclass spell limits"
 ```
 
 ---
 
-## ⚙️ Dependencies
+## 📁 Arquivos relevantes recentes
 
 ### Backend
 
-- Node.js
-- Fastify
-- TypeScript
-- Prisma
-- PostgreSQL
-- Better Auth
-- Zod
-- Swagger
-- Scalar API Reference
-- ESLint
-- Prettier
-- pnpm
-- Docker
+```txt
+backend/prisma/schema.prisma
+backend/prisma/seed.ts
+backend/src/routes/systems.ts
+backend/src/routes/character-sheets.ts
+```
 
 ### Frontend
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Better Auth Client
-- lucide-react
-- ESLint
-- pnpm
-
----
-
-## 🗄️ Database — Status Real
-
-### ✅ Implementado
-
-- Better Auth tables:
-  - user
-  - session
-  - account
-  - verification
-- GameSystem
-- Stat
-- Skill
-- Campaign
-- Participant
-- GameSession
-
-### ✅ Validado
-
-- registro cria usuário
-- login cria sessão
-- sessão aparece no Prisma Studio
-- campanhas são criadas com owner
-- criador entra como participante GM
-- home lista campanhas do usuário autenticado
-
-### 🚧 Em andamento
-
-- expandir schema completo do domínio RPG
-- refinar constraints
-- aplicar regras SQL avançadas
-- melhorar modelo de convite/status
-- preparar upload real de capa
-
----
-
-## 🌐 API — Status
-
-### ✅ Implementado
-
-- Fastify configurado
-- CORS funcionando para frontend local
-- Better Auth exposto em `/api/auth/*`
-- Swagger em `/swagger.json`
-- Scalar em `/docs`
-- Helper `getAuthenticatedSession` usando sessão real do Better Auth
-- Rotas de campanha:
-  - `POST /campaigns`
-  - `GET /campaigns`
-  - `GET /campaigns/:id`
-  - `PATCH /campaigns/:id`
-  - `DELETE /campaigns/:id`
-  - `POST /campaigns/join`
-  - `GET /campaigns/:id/participants`
-  - `PATCH /campaigns/:campaignId/participants/:participantId/role`
-  - `DELETE /campaigns/:campaignId/participants/:participantId`
-
-### ⚠️ Ajustes pendentes
-
-- garantir que `GET /campaigns/:id` retorna:
-  - description
-  - coverImage
-- garantir que `PATCH /campaigns/:id` atualiza:
-  - name
-  - description
-  - coverImage
-  - isPublic
-- criar endpoint para busca:
-  - `GET /campaigns/public`
-  - ou `GET /campaigns/search`
-
----
-
-## 🎨 Frontend — Status
-
-### ✅ Implementado
-
-- Home pública
-- Login
-- Registro
-- Header privado
-- Background parchment
-- Botão base com variants
-- `/campaigns`
-  - estado sem campanhas
-  - estado com campanhas
-  - cards reais
-- `/campaigns/create`
-  - cria campanha real
-  - redireciona para edição
-- `/campaigns/[id]/edit`
-  - mostra nome da campanha
-  - mostra placeholder/preview de capa
-  - modal de imagem dentro da área da capa
-  - mostra owner
-  - botões de ação
-  - select de sistema/ficha
-  - campo de descrição visual
-
-### 🚧 Próximas telas
-
-- `/campaigns/search`
-- `/campaigns/[id]/play`
-- página de conta/assinatura
-- páginas de conteúdo/configurações da campanha
-
----
-
-## 🧠 Campanhas — Fluxo Atual
-
-1. Usuário registra/loga.
-2. Frontend redireciona para `/campaigns`.
-3. `/campaigns` chama API com cookie de sessão.
-4. Se não houver campanhas, mostra:
-   - Iniciar uma nova aventura
-   - Buscar uma aventura
-   - Conheça-nos
-5. Ao criar campanha:
-   - usuário informa nome
-   - POST `/campaigns`
-   - backend cria campanha
-   - backend cria participante GM
-   - frontend redireciona para `/campaigns/:id/edit`
-6. Tela de edição mostra:
-   - capa/placeholder
-   - nome do mundo
-   - ações
-   - descrição
-   - owner
-
----
-
-## ⚠️ Pontos de Atenção
-
-### Tailwind/Next
-
-- Em dev local, usar `next dev --webpack`.
-- Cache `.next` pode precisar ser limpo em mudanças de configuração.
-- Tailwind v4 usa:
-
-```css
-@import "tailwindcss";
+```txt
+frontend/src/features/character-builder/types/character-builder-types.ts
+frontend/src/features/character-builder/steps/CharacterSpellsStep.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
 ```
 
-e `postcss.config.mjs` com:
+---
 
-```js
-"@tailwindcss/postcss": {}
+## 🧩 Estado funcional atual
+
+### Character Builder
+
+- abre draft vazio ao criar personagem;
+- salva rascunho;
+- carrega rascunho;
+- etapa Conceito;
+- etapa Classe;
+- distribuição de níveis por classe;
+- classe principal;
+- multiclasse inicial;
+- etapa Ancestralidade;
+- etapa Antecedente;
+- etapa Atributos;
+- etapa Perícias;
+- etapa Idiomas;
+- etapa Magias;
+- etapa Equipamentos;
+- etapa Sobre;
+- etapa Revisão;
+- finaliza ficha.
+
+### Multiclasse inicial
+
+- `classEntries` no draft;
+- `CharacterSheetClass` no banco;
+- `CharacterSheet.level` como nível total;
+- `CharacterSheetClass.level` como nível por classe;
+- PV inicial por classe usando dado máximo + CON por nível;
+- features iniciais por classe/nível.
+
+### Magias pós 4.7.7
+
+- `LevelProgressionSpellLimit` modelado.
+- Seed preenche `spellLimits`.
+- API de opções retorna `spellLimits`.
+- Frontend types aceitam `spellLimits`.
+- Builder usa `spellsKnown` por nível de magia.
+- Builder não usa `spellsPrepared` para limite de escolha.
+- Preparadas ficam para mecânica futura.
+- Lista de magias é união das classes escolhidas.
+- Magia duplicada entre classes aparece uma vez só.
+- Backend valida magia contra qualquer classe escolhida.
+- Backend salva `CharacterSheetSpell.classId`.
+- Backend retorna `classId` e `characterClass` em cada magia da ficha.
+- Frontend types aceitam origem interna.
+- Ficha mostra bloco Conjuração por classe.
+- Cards de magia continuam limpos, sem origem visual por card.
+
+### Ficha pronta
+
+- modal dentro da mesa;
+- pop-out;
+- rolagens pela ficha;
+- rolagens do pop-out retornam à mesa;
+- status, combate, bolsa, magia, features, perfil e notas;
+- bloco Conjuração por classe;
+- idiomas no Perfil;
+- imagens de equipamento em Bolsa/Combate.
+
+---
+
+## ⚠️ Atenções técnicas
+
+### Arquivos grandes
+
+Pedir versão atual do usuário antes de reescrever:
+
+```txt
+play/page.tsx
+CharacterReadySheetView.tsx
+CharacterSpellsStep.tsx
+character-sheets.ts
+systems.ts
+schema.prisma
+seed.ts
 ```
 
-### Imagem de capa
+### Regra de trabalho
 
-- Implementação atual usa string/base64 temporária.
-- Futuro:
-  - storage real
-  - upload controlado
-  - crop
-  - validação de tamanho
-  - remoção segura
+Antes de commit:
 
-### Backend
+```bash
+git diff --stat
+git status
+```
 
-- Ainda sem camada de services.
-- Rotas estão concentradas em `routes/campaigns.ts`.
-- Próximo passo deve consolidar regras antes de crescer frontend.
+### Quando usar arquivo inteiro
 
----
+Usar arquivo inteiro em mudanças grandes, principalmente:
 
-## ✅ Implemented Features
+```txt
+page.tsx
+CharacterReadySheetView.tsx
+CharacterSpellsStep.tsx
+character-sheets.ts
+```
 
-- Auth real
-- Sessão real com cookie
-- Backend protegido por usuário autenticado
-- Home logada de campanhas
-- Criação de campanha
-- Participante GM automático
-- Edição inicial da campanha
-- Upload visual/placeholder de capa
-- Prisma Studio validando dados
+### Quando usar Procure/Troque
+
+Usar em mudanças pequenas e com âncora clara.
 
 ---
 
-## 🎯 Current Focus
+## 🔜 Próxima micro recomendada
 
-### 🔥 FASE ATUAL
+```txt
+4.7.8 — Escolhas pendentes iniciais
+```
 
-👉 **Campaign Backend Consolidation**
+Plano provável:
 
-Agora o foco é:
+```txt
+4.7.8.1 — Mapear escolhas pendentes possíveis
+4.7.8.2 — Subclasse pendente
+4.7.8.3 — Magias/truques pendentes
+4.7.8.4 — Proficiências pendentes
+4.7.8.5 — Línguas pendentes
+4.7.8.6 — Atributos/talentos futuramente
+```
 
-- consolidar `GET /campaigns/:id`
-- consolidar `PATCH /campaigns/:id`
-- criar busca de campanhas
-- preparar entrada em campanha
-- depois criar tela `/campaigns/search`
+Ponto de partida provável:
 
----
-
-## 🚀 Next Steps
-
-### 🔴 Crítico
-
-- [ ] Finalizar resposta completa de `GET /campaigns/:id`
-- [ ] Finalizar update de campanha via `PATCH /campaigns/:id`
-- [ ] Criar endpoint de busca pública
-- [ ] Testar criação → edição → retorno à home
-- [ ] Confirmar que card aparece na home após criar campanha
-
-### 🟠 Backend
-
-- [ ] Criar service de campaigns quando regras aumentarem
-- [ ] Padronizar erros
-- [ ] Refinar permissões owner/GM/player
-- [ ] Melhorar join por inviteCode
-
-### 🟡 Frontend
-
-- [ ] Criar `/campaigns/search`
-- [ ] Criar estados de loading/empty/error melhores
-- [ ] Ajustar proporção da capa
-- [ ] Refinar responsividade
-
----
-
-## 🏁 Estado Atual
-
-👉 **AUTH + CAMPAIGN FLOW FUNCIONANDO**
-
-- Backend ativo
-- Banco ativo
-- Auth validado
-- Frontend conectado
-- Criação de campanha funcional
-- Próximo foco: busca e regras de campanha
+```txt
+backend/src/routes/character-sheets.ts
+backend/src/routes/systems.ts
+frontend/src/features/character-builder/types/character-builder-types.ts
+frontend/src/features/character-builder/steps/CharacterReviewStep.tsx
+frontend/src/features/character-builder/components/CharacterReadySheetView.tsx
+frontend/src/app/campaigns/[id]/play/page.tsx
+```

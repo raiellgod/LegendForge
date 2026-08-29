@@ -1,6 +1,6 @@
 # 🎲 LegendForge
 
-![Status](https://img.shields.io/badge/status-campaign%20flow%20working-yellow)
+![Status](https://img.shields.io/badge/status-multiclass%20spell%20foundation%20complete-green)
 ![Backend](https://img.shields.io/badge/backend-fastify-blue)
 ![Frontend](https://img.shields.io/badge/frontend-next.js-black)
 ![Database](https://img.shields.io/badge/database-postgresql-blue)
@@ -8,8 +8,7 @@
 ![Auth](https://img.shields.io/badge/auth-better--auth-green)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen)
 
-> A modern Virtual Tabletop (VTT) built with production-grade backend architecture,
-> focusing on scalability, modularity, and real-world system design.
+> A modern Virtual Tabletop (VTT) built with production-grade backend architecture, focusing on scalability, modularity, and real-world system design.
 
 ---
 
@@ -17,35 +16,37 @@
 
 **LegendForge** is a Virtual Tabletop designed to run tabletop RPG sessions online.
 
-Inspired by tools like Roll20 and Foundry VTT — but with a different philosophy:
+Inspired by tools like Roll20 and Foundry VTT, but with a different philosophy:
 
 - 🧩 System-agnostic
 - 🎲 Focused on custom campaigns
 - 👥 Built for real gameplay with friends
 - 🧠 Designed as a serious full-stack portfolio project
 - ⚙️ Built incrementally with production mindset
+- 📄 Character creation built as a real persisted flow
 
 ---
 
 ## 🎯 What Makes This Project Different
 
-LegendForge is not just a VTT.
+LegendForge demonstrates:
 
-It demonstrates:
-
-- 🏗️ Real backend architecture
-- 🗄️ Production-oriented database modeling
-- ⚙️ Business rules treated seriously
-- 🔐 Real authentication and persisted sessions
-- 🧠 System design thinking
-- 🎮 Flexible RPG engine foundation
-- 🎨 UI built from a Figma-driven product flow
+- Real backend architecture
+- Production-oriented database modeling
+- Business rules treated seriously
+- Real authentication and persisted sessions
+- System design thinking
+- Flexible RPG engine foundation
+- UI built from a Figma-driven product flow
+- Character builder connected to real domain data
+- Multiclass character progression foundation
+- Spell rules separated into known/prepared/future in-game grants
 
 ---
 
 ## ⚙️ Tech Stack
 
-### 🖥️ Backend
+### Backend
 
 - Node.js
 - Fastify
@@ -59,7 +60,7 @@ It demonstrates:
 - Docker
 - pnpm
 
-### 🎨 Frontend
+### Frontend
 
 - Next.js
 - React
@@ -79,9 +80,14 @@ LegendForge/
 │   │   ├── generated/prisma/
 │   │   ├── lib/
 │   │   ├── routes/
+│   │   │   ├── campaigns.ts
+│   │   │   ├── character-sheets.ts
+│   │   │   └── systems.ts
 │   │   └── index.ts
 │   ├── prisma/
-│   │   └── schema.prisma
+│   │   ├── schema.prisma
+│   │   ├── seed.ts
+│   │   └── seed-data/
 │   ├── docker-compose.yml
 │   └── package.json
 │
@@ -89,6 +95,9 @@ LegendForge/
 │   ├── src/
 │   │   ├── app/
 │   │   ├── components/
+│   │   ├── features/
+│   │   │   ├── character-builder/
+│   │   │   └── game-table/
 │   │   ├── lib/
 │   │   └── service/
 │   ├── public/
@@ -102,7 +111,7 @@ LegendForge/
 
 ## 📊 Current Status
 
-> 🟡 Auth + campaign creation flow working
+> 🟢 Multiclass spell foundation complete. Continuing toward pending choices and Level Up real.
 
 ### ✅ Completed
 
@@ -118,56 +127,163 @@ LegendForge/
 - User registration and login flow
 - Session persistence in database
 - Cookie-based authenticated API calls
-- Initial RPG domain models:
-  - GameSystem
-  - Stat
-  - Skill
-- Campaign domain foundation:
+- Campaign domain:
   - Campaign
   - Participant
   - GameSession
-- Campaign API routes:
-  - create campaign
-  - list user campaigns
-  - get campaign by id
-  - update campaign
-  - delete campaign
-  - join campaign
-  - manage participants
+- Campaign API routes
 - Frontend campaign flow:
   - `/campaigns`
   - `/campaigns/create`
+  - `/campaigns/search`
   - `/campaigns/[id]/edit`
+- Game page:
+  - `/campaigns/[id]/play`
+- Character sheet pop-out:
+  - `/campaigns/[id]/sheets/[sheetId]`
+- Campaign actors and token foundation
+- RPG system foundation:
+  - GameSystem
+  - Stat
+  - Skill
+  - Language
+  - Ancestry
+  - Background
+  - CharacterClass
+  - CharacterSubclass
+  - Feature
+  - Spell
+  - Equipment
+  - LevelProgression
+  - LevelProgressionSpellLimit
+  - ClassSpell
+- Character sheet foundation:
+  - CharacterSheet
+  - CharacterSheetStat
+  - CharacterSheetSkill
+  - CharacterSheetSpell
+  - CharacterSheetLanguage
+  - CharacterSheetEquipment
+  - CharacterSheetClass
+- Character builder:
+  - creation menu
+  - builder layout
+  - concept step
+  - draft save/load
+  - real class/ancestry/background options
+  - clickable cards
+  - persisted class/ancestry/background choices
+  - step validation
+  - attributes with Standard Array
+  - persisted attributes
+  - persisted skills
+  - persisted languages
+  - persisted spells
+  - persisted initial equipment
+  - about/review steps
+  - narrative fields
+  - initial multiclass
+  - class level distribution
+  - initial multiclass HP
+  - initial multiclass features
+  - initial multiclass spell limits
+
+---
+
+## 🪄 Current Spell Foundation
+
+LegendForge currently separates:
+
+```txt
+Known spells
+Prepared spells
+Always-known spells
+GM-granted spells
+```
+
+Current rule:
+
+```txt
+Builder chooses known spells.
+Prepared spells are future sheet state.
+GM-granted spells do not count against builder/level-up limits.
+```
+
+The multiclass spell flow:
+
+```txt
+- ClassSpell decides which class can access each spell.
+- LevelProgressionSpellLimit decides known/prepared limits by spell level.
+- CharacterSheetSpell stores selected spells.
+- CharacterSheetSpell.classId stores internal class origin.
+- The ready sheet shows a clean Conjuration block by class.
+- Spell cards remain clean and do not show class source.
+```
 
 ---
 
 ## 🚧 In Progress
 
-- Campaign backend consolidation
-- Public campaign search
-- Join campaign flow refinement
-- Campaign image cover workflow
-- Campaign edit persistence
-- Page/game room foundation
+Current focus:
+
+```txt
+4.7 — Multiclasse e Level Up real
+```
+
+Next micro:
+
+```txt
+4.7.8.1 — Mapear escolhas pendentes possíveis
+```
 
 ---
 
 ## 🔜 Next Steps
 
-- Implement campaign search:
-  - `GET /campaigns/public`
-  - or `GET /campaigns/search`
-- Improve `PATCH /campaigns/:id`
-- Persist description and cover image more cleanly
-- Replace temporary base64 cover flow with real storage later
-- Create `/campaigns/search`
-- Create `/campaigns/[id]/play`
-- Expand schema with:
-  - Character
-  - Classes
-  - Subclasses
-  - Inventory
-  - Logs
+```txt
+4.7.8 — Escolhas pendentes iniciais
+4.7.9 — Refatorar preview de Level Up para usar CharacterSheetClass escolhida
+4.7.10 — Criar plano de mudanças do Level Up
+4.7.11 — Tela de resumo das mudanças do Level Up
+4.7.12 — Telas de escolhas pendentes do Level Up
+4.7.13 — Aplicar mudanças reais na ficha ao confirmar
+```
+
+---
+
+## 🔮 Confirmed Future Backlog
+
+### Character rules
+
+- pending choices
+- real level up flow
+- prepared spell state
+- spell slot usage
+- sub-ancestries
+- feats/ASI
+- GM-granted spells and rewards
+
+### Game table
+
+- persistent chat
+- persistent roll log
+- real-time synchronization
+- combat and initiative
+- multiple scenes/maps
+
+### NPCs and creatures
+
+- NPC sheet
+- creature/bestiary sheet
+- bestiary templates
+- campaign library
+
+### Image upload
+
+- portrait upload from computer
+- token upload from computer
+- preview/fit/crop
+- persist URL in database
 
 ---
 
@@ -182,15 +298,13 @@ Current auth foundation includes:
 - `account`
 - `verification`
 
-Authentication is not a side feature — it is part of the system core.
-
 Current flow:
 
 1. User registers or logs in.
 2. Better Auth persists session in PostgreSQL.
 3. Browser stores the session cookie.
 4. Frontend calls the API with `credentials: "include"`.
-5. Backend reads session via `auth.api.getSession`.
+5. Backend reads session through Better Auth.
 6. Protected routes use `session.user.id`.
 
 ---
@@ -206,30 +320,16 @@ Current state:
 - Database sync is working
 - Auth tables are operational
 - Campaign tables are operational
-- RPG domain is being expanded incrementally
+- RPG domain is expanding incrementally
+- CharacterSheet domain exists and is connected to the builder
+- Multiclass spell limits and spell origins are modeled
 
-More details are documented in:
+More details:
 
 - `docs/DATABASE_SETUP.md`
 - `docs/ARCHITECTURE.md`
 - `docs/DEV_STATE.md`
-
----
-
-## 🎨 UI / UX
-
-The project UI is designed in Figma and implemented incrementally.
-
-Current UI progress:
-
-- ✅ Public home
-- ✅ Login
-- ✅ Register
-- ✅ Logged-in campaign home
-- ✅ Create campaign page
-- ✅ Initial edit/finalize campaign page
-- 🟡 Search campaign page
-- 🟡 Tabletop/session screen
+- `docs/LEGENDFORGE_PHASES_CANONICAL.md`
 
 ---
 
@@ -240,36 +340,10 @@ Current UI progress:
 - No unnecessary overengineering
 - Continuous refinement
 - Production mindset from the start
+- Backend and database protect the domain
+- UI is built around real product flow
 
-> “Build small. Scale right.”
-
----
-
-## 📦 Feature Capsules
-
-The project is documented through **Feature Capsules**, which record small validated steps.
-
-Current capsules include:
-
-- Capsule 01 — Setup
-- Capsule 02 — Backend Base
-- Capsule 03 — Data & UI Design
-- Capsule 04 — Database Design
-- Capsule 05 — Figma UI
-- Capsule 06 — RPG System
-- Capsule 07 — Database Refinement
-- Capsule 08 — Production Constraints
-- Capsule 09 — Prisma Integration
-- Capsule 10 — Better Auth
-- Capsule 11 — API Integration
-- Capsule 12 — Campaign Domain API
-- Capsule 13 — Campaign Frontend Flow
-
-See:
-
-```txt
-docs/FEATURE_CAPSULE.md
-```
+> Build small. Scale right.
 
 ---
 
@@ -315,12 +389,6 @@ pnpm prisma generate
 pnpm prisma db push
 ```
 
-When testing auth or database changes:
-
-- restart the backend
-- validate request in Scalar
-- confirm persistence in Prisma Studio
-
 For frontend cache issues:
 
 ```bash
@@ -329,19 +397,12 @@ rm -rf .next
 pnpm run dev
 ```
 
----
+Before commits:
 
-## 🤝 Contributing
-
-This is currently a personal project focused on learning, architecture, and portfolio quality.
-
-Discussions, ideas, and feedback are welcome.
-
----
-
-## 📄 License
-
-MIT License
+```bash
+git diff --stat
+git status
+```
 
 ---
 
@@ -356,13 +417,11 @@ Raiel Godinho
 
 LegendForge aims to become:
 
-- 🎲 A complete Virtual Tabletop
-- 🧠 A strong full-stack portfolio project
-- ⚙️ A modular RPG engine
-- 🔐 A well-architected product
-- 👥 A real multiplayer tabletop experience
-
----
+- A complete Virtual Tabletop
+- A strong full-stack portfolio project
+- A modular RPG engine
+- A well-architected product
+- A real multiplayer tabletop experience
 
 Built step by step.  
 Built to scale.  

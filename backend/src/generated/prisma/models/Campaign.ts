@@ -278,6 +278,11 @@ export type CampaignWhereInput = {
   sessions?: Prisma.GameSessionListRelationFilter
   invites?: Prisma.CampaignInviteListRelationFilter
   logs?: Prisma.CampaignLogListRelationFilter
+  actors?: Prisma.CampaignActorListRelationFilter
+  characterSheets?: Prisma.CharacterSheetListRelationFilter
+  npcSheets?: Prisma.NpcSheetListRelationFilter
+  creatureSheets?: Prisma.CreatureSheetListRelationFilter
+  sceneTokens?: Prisma.SceneTokenListRelationFilter
 }
 
 export type CampaignOrderByWithRelationInput = {
@@ -299,6 +304,11 @@ export type CampaignOrderByWithRelationInput = {
   sessions?: Prisma.GameSessionOrderByRelationAggregateInput
   invites?: Prisma.CampaignInviteOrderByRelationAggregateInput
   logs?: Prisma.CampaignLogOrderByRelationAggregateInput
+  actors?: Prisma.CampaignActorOrderByRelationAggregateInput
+  characterSheets?: Prisma.CharacterSheetOrderByRelationAggregateInput
+  npcSheets?: Prisma.NpcSheetOrderByRelationAggregateInput
+  creatureSheets?: Prisma.CreatureSheetOrderByRelationAggregateInput
+  sceneTokens?: Prisma.SceneTokenOrderByRelationAggregateInput
 }
 
 export type CampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -323,6 +333,11 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.GameSessionListRelationFilter
   invites?: Prisma.CampaignInviteListRelationFilter
   logs?: Prisma.CampaignLogListRelationFilter
+  actors?: Prisma.CampaignActorListRelationFilter
+  characterSheets?: Prisma.CharacterSheetListRelationFilter
+  npcSheets?: Prisma.NpcSheetListRelationFilter
+  creatureSheets?: Prisma.CreatureSheetListRelationFilter
+  sceneTokens?: Prisma.SceneTokenListRelationFilter
 }, "id" | "inviteCode">
 
 export type CampaignOrderByWithAggregationInput = {
@@ -380,6 +395,11 @@ export type CampaignCreateInput = {
   sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateInput = {
@@ -399,6 +419,11 @@ export type CampaignUncheckedCreateInput = {
   sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUpdateInput = {
@@ -418,6 +443,11 @@ export type CampaignUpdateInput = {
   sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateInput = {
@@ -437,6 +467,11 @@ export type CampaignUncheckedUpdateInput = {
   sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateManyInput = {
@@ -492,6 +527,11 @@ export type CampaignOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type CampaignScalarRelationFilter = {
+  is?: Prisma.CampaignWhereInput
+  isNot?: Prisma.CampaignWhereInput
+}
+
 export type CampaignCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -543,11 +583,6 @@ export type CampaignMinOrderByAggregateInput = {
 
 export type CampaignSumOrderByAggregateInput = {
   maxPlayers?: Prisma.SortOrder
-}
-
-export type CampaignScalarRelationFilter = {
-  is?: Prisma.CampaignWhereInput
-  isNot?: Prisma.CampaignWhereInput
 }
 
 export type CampaignCreateNestedManyWithoutOwnerInput = {
@@ -634,6 +669,48 @@ export type CampaignUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.CampaignScalarWhereInput | Prisma.CampaignScalarWhereInput[]
 }
 
+export type CampaignCreateNestedOneWithoutNpcSheetsInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutNpcSheetsInput, Prisma.CampaignUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutNpcSheetsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+}
+
+export type CampaignUpdateOneRequiredWithoutNpcSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutNpcSheetsInput, Prisma.CampaignUncheckedCreateWithoutNpcSheetsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutNpcSheetsInput
+  upsert?: Prisma.CampaignUpsertWithoutNpcSheetsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutNpcSheetsInput, Prisma.CampaignUpdateWithoutNpcSheetsInput>, Prisma.CampaignUncheckedUpdateWithoutNpcSheetsInput>
+}
+
+export type CampaignCreateNestedOneWithoutCreatureSheetsInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutCreatureSheetsInput, Prisma.CampaignUncheckedCreateWithoutCreatureSheetsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutCreatureSheetsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+}
+
+export type CampaignUpdateOneRequiredWithoutCreatureSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutCreatureSheetsInput, Prisma.CampaignUncheckedCreateWithoutCreatureSheetsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutCreatureSheetsInput
+  upsert?: Prisma.CampaignUpsertWithoutCreatureSheetsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutCreatureSheetsInput, Prisma.CampaignUpdateWithoutCreatureSheetsInput>, Prisma.CampaignUncheckedUpdateWithoutCreatureSheetsInput>
+}
+
+export type CampaignCreateNestedOneWithoutCharacterSheetsInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutCharacterSheetsInput, Prisma.CampaignUncheckedCreateWithoutCharacterSheetsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutCharacterSheetsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+}
+
+export type CampaignUpdateOneRequiredWithoutCharacterSheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutCharacterSheetsInput, Prisma.CampaignUncheckedCreateWithoutCharacterSheetsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutCharacterSheetsInput
+  upsert?: Prisma.CampaignUpsertWithoutCharacterSheetsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutCharacterSheetsInput, Prisma.CampaignUpdateWithoutCharacterSheetsInput>, Prisma.CampaignUncheckedUpdateWithoutCharacterSheetsInput>
+}
+
 export type CampaignCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.CampaignCreateWithoutSessionsInput, Prisma.CampaignUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutSessionsInput
@@ -660,6 +737,34 @@ export type CampaignUpdateOneRequiredWithoutParticipantsNestedInput = {
   upsert?: Prisma.CampaignUpsertWithoutParticipantsInput
   connect?: Prisma.CampaignWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutParticipantsInput, Prisma.CampaignUpdateWithoutParticipantsInput>, Prisma.CampaignUncheckedUpdateWithoutParticipantsInput>
+}
+
+export type CampaignCreateNestedOneWithoutActorsInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutActorsInput, Prisma.CampaignUncheckedCreateWithoutActorsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutActorsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+}
+
+export type CampaignUpdateOneRequiredWithoutActorsNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutActorsInput, Prisma.CampaignUncheckedCreateWithoutActorsInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutActorsInput
+  upsert?: Prisma.CampaignUpsertWithoutActorsInput
+  connect?: Prisma.CampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutActorsInput, Prisma.CampaignUpdateWithoutActorsInput>, Prisma.CampaignUncheckedUpdateWithoutActorsInput>
+}
+
+export type CampaignCreateNestedOneWithoutSceneTokensInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutSceneTokensInput, Prisma.CampaignUncheckedCreateWithoutSceneTokensInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutSceneTokensInput
+  connect?: Prisma.CampaignWhereUniqueInput
+}
+
+export type CampaignUpdateOneRequiredWithoutSceneTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutSceneTokensInput, Prisma.CampaignUncheckedCreateWithoutSceneTokensInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutSceneTokensInput
+  upsert?: Prisma.CampaignUpsertWithoutSceneTokensInput
+  connect?: Prisma.CampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutSceneTokensInput, Prisma.CampaignUpdateWithoutSceneTokensInput>, Prisma.CampaignUncheckedUpdateWithoutSceneTokensInput>
 }
 
 export type CampaignCreateNestedOneWithoutInvitesInput = {
@@ -706,6 +811,11 @@ export type CampaignCreateWithoutOwnerInput = {
   sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutOwnerInput = {
@@ -724,6 +834,11 @@ export type CampaignUncheckedCreateWithoutOwnerInput = {
   sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutOwnerInput = {
@@ -786,6 +901,11 @@ export type CampaignCreateWithoutSystemInput = {
   sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutSystemInput = {
@@ -804,6 +924,11 @@ export type CampaignUncheckedCreateWithoutSystemInput = {
   sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutSystemInput = {
@@ -832,6 +957,330 @@ export type CampaignUpdateManyWithWhereWithoutSystemInput = {
   data: Prisma.XOR<Prisma.CampaignUpdateManyMutationInput, Prisma.CampaignUncheckedUpdateManyWithoutSystemInput>
 }
 
+export type CampaignCreateWithoutNpcSheetsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutCampaignsOwnedInput
+  system?: Prisma.GameSystemCreateNestedOneWithoutCampaignsInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignUncheckedCreateWithoutNpcSheetsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  ownerId: string
+  systemId?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignCreateOrConnectWithoutNpcSheetsInput = {
+  where: Prisma.CampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutNpcSheetsInput, Prisma.CampaignUncheckedCreateWithoutNpcSheetsInput>
+}
+
+export type CampaignUpsertWithoutNpcSheetsInput = {
+  update: Prisma.XOR<Prisma.CampaignUpdateWithoutNpcSheetsInput, Prisma.CampaignUncheckedUpdateWithoutNpcSheetsInput>
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutNpcSheetsInput, Prisma.CampaignUncheckedCreateWithoutNpcSheetsInput>
+  where?: Prisma.CampaignWhereInput
+}
+
+export type CampaignUpdateToOneWithWhereWithoutNpcSheetsInput = {
+  where?: Prisma.CampaignWhereInput
+  data: Prisma.XOR<Prisma.CampaignUpdateWithoutNpcSheetsInput, Prisma.CampaignUncheckedUpdateWithoutNpcSheetsInput>
+}
+
+export type CampaignUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutCampaignsOwnedNestedInput
+  system?: Prisma.GameSystemUpdateOneWithoutCampaignsNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignUncheckedUpdateWithoutNpcSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignCreateWithoutCreatureSheetsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutCampaignsOwnedInput
+  system?: Prisma.GameSystemCreateNestedOneWithoutCampaignsInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignUncheckedCreateWithoutCreatureSheetsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  ownerId: string
+  systemId?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignCreateOrConnectWithoutCreatureSheetsInput = {
+  where: Prisma.CampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutCreatureSheetsInput, Prisma.CampaignUncheckedCreateWithoutCreatureSheetsInput>
+}
+
+export type CampaignUpsertWithoutCreatureSheetsInput = {
+  update: Prisma.XOR<Prisma.CampaignUpdateWithoutCreatureSheetsInput, Prisma.CampaignUncheckedUpdateWithoutCreatureSheetsInput>
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutCreatureSheetsInput, Prisma.CampaignUncheckedCreateWithoutCreatureSheetsInput>
+  where?: Prisma.CampaignWhereInput
+}
+
+export type CampaignUpdateToOneWithWhereWithoutCreatureSheetsInput = {
+  where?: Prisma.CampaignWhereInput
+  data: Prisma.XOR<Prisma.CampaignUpdateWithoutCreatureSheetsInput, Prisma.CampaignUncheckedUpdateWithoutCreatureSheetsInput>
+}
+
+export type CampaignUpdateWithoutCreatureSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutCampaignsOwnedNestedInput
+  system?: Prisma.GameSystemUpdateOneWithoutCampaignsNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignUncheckedUpdateWithoutCreatureSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignCreateWithoutCharacterSheetsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutCampaignsOwnedInput
+  system?: Prisma.GameSystemCreateNestedOneWithoutCampaignsInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignUncheckedCreateWithoutCharacterSheetsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  ownerId: string
+  systemId?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignCreateOrConnectWithoutCharacterSheetsInput = {
+  where: Prisma.CampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutCharacterSheetsInput, Prisma.CampaignUncheckedCreateWithoutCharacterSheetsInput>
+}
+
+export type CampaignUpsertWithoutCharacterSheetsInput = {
+  update: Prisma.XOR<Prisma.CampaignUpdateWithoutCharacterSheetsInput, Prisma.CampaignUncheckedUpdateWithoutCharacterSheetsInput>
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutCharacterSheetsInput, Prisma.CampaignUncheckedCreateWithoutCharacterSheetsInput>
+  where?: Prisma.CampaignWhereInput
+}
+
+export type CampaignUpdateToOneWithWhereWithoutCharacterSheetsInput = {
+  where?: Prisma.CampaignWhereInput
+  data: Prisma.XOR<Prisma.CampaignUpdateWithoutCharacterSheetsInput, Prisma.CampaignUncheckedUpdateWithoutCharacterSheetsInput>
+}
+
+export type CampaignUpdateWithoutCharacterSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutCampaignsOwnedNestedInput
+  system?: Prisma.GameSystemUpdateOneWithoutCampaignsNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignUncheckedUpdateWithoutCharacterSheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
 export type CampaignCreateWithoutSessionsInput = {
   id?: string
   name: string
@@ -848,6 +1297,11 @@ export type CampaignCreateWithoutSessionsInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutSessionsInput = {
@@ -866,6 +1320,11 @@ export type CampaignUncheckedCreateWithoutSessionsInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutSessionsInput = {
@@ -900,6 +1359,11 @@ export type CampaignUpdateWithoutSessionsInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutSessionsInput = {
@@ -918,6 +1382,11 @@ export type CampaignUncheckedUpdateWithoutSessionsInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateWithoutParticipantsInput = {
@@ -936,6 +1405,11 @@ export type CampaignCreateWithoutParticipantsInput = {
   sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutParticipantsInput = {
@@ -954,6 +1428,11 @@ export type CampaignUncheckedCreateWithoutParticipantsInput = {
   sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutParticipantsInput = {
@@ -988,6 +1467,11 @@ export type CampaignUpdateWithoutParticipantsInput = {
   sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutParticipantsInput = {
@@ -1006,6 +1490,227 @@ export type CampaignUncheckedUpdateWithoutParticipantsInput = {
   sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignCreateWithoutActorsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutCampaignsOwnedInput
+  system?: Prisma.GameSystemCreateNestedOneWithoutCampaignsInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignUncheckedCreateWithoutActorsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  ownerId: string
+  systemId?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignCreateOrConnectWithoutActorsInput = {
+  where: Prisma.CampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutActorsInput, Prisma.CampaignUncheckedCreateWithoutActorsInput>
+}
+
+export type CampaignUpsertWithoutActorsInput = {
+  update: Prisma.XOR<Prisma.CampaignUpdateWithoutActorsInput, Prisma.CampaignUncheckedUpdateWithoutActorsInput>
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutActorsInput, Prisma.CampaignUncheckedCreateWithoutActorsInput>
+  where?: Prisma.CampaignWhereInput
+}
+
+export type CampaignUpdateToOneWithWhereWithoutActorsInput = {
+  where?: Prisma.CampaignWhereInput
+  data: Prisma.XOR<Prisma.CampaignUpdateWithoutActorsInput, Prisma.CampaignUncheckedUpdateWithoutActorsInput>
+}
+
+export type CampaignUpdateWithoutActorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutCampaignsOwnedNestedInput
+  system?: Prisma.GameSystemUpdateOneWithoutCampaignsNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignUncheckedUpdateWithoutActorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignCreateWithoutSceneTokensInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutCampaignsOwnedInput
+  system?: Prisma.GameSystemCreateNestedOneWithoutCampaignsInput
+  participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignUncheckedCreateWithoutSceneTokensInput = {
+  id?: string
+  name: string
+  description?: string | null
+  coverImage?: string | null
+  ownerId: string
+  systemId?: string | null
+  isPublic?: boolean
+  isActive?: boolean
+  maxPlayers?: number
+  inviteCode?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
+  sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
+  invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
+  logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignCreateOrConnectWithoutSceneTokensInput = {
+  where: Prisma.CampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutSceneTokensInput, Prisma.CampaignUncheckedCreateWithoutSceneTokensInput>
+}
+
+export type CampaignUpsertWithoutSceneTokensInput = {
+  update: Prisma.XOR<Prisma.CampaignUpdateWithoutSceneTokensInput, Prisma.CampaignUncheckedUpdateWithoutSceneTokensInput>
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutSceneTokensInput, Prisma.CampaignUncheckedCreateWithoutSceneTokensInput>
+  where?: Prisma.CampaignWhereInput
+}
+
+export type CampaignUpdateToOneWithWhereWithoutSceneTokensInput = {
+  where?: Prisma.CampaignWhereInput
+  data: Prisma.XOR<Prisma.CampaignUpdateWithoutSceneTokensInput, Prisma.CampaignUncheckedUpdateWithoutSceneTokensInput>
+}
+
+export type CampaignUpdateWithoutSceneTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutCampaignsOwnedNestedInput
+  system?: Prisma.GameSystemUpdateOneWithoutCampaignsNestedInput
+  participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignUncheckedUpdateWithoutSceneTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
+  sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
+  invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
+  logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateWithoutInvitesInput = {
@@ -1024,6 +1729,11 @@ export type CampaignCreateWithoutInvitesInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
   sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutInvitesInput = {
@@ -1042,6 +1752,11 @@ export type CampaignUncheckedCreateWithoutInvitesInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
   sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
   logs?: Prisma.CampaignLogUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutInvitesInput = {
@@ -1076,6 +1791,11 @@ export type CampaignUpdateWithoutInvitesInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
   sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutInvitesInput = {
@@ -1094,6 +1814,11 @@ export type CampaignUncheckedUpdateWithoutInvitesInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
   sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateWithoutLogsInput = {
@@ -1112,6 +1837,11 @@ export type CampaignCreateWithoutLogsInput = {
   participants?: Prisma.ParticipantCreateNestedManyWithoutCampaignInput
   sessions?: Prisma.GameSessionCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutLogsInput = {
@@ -1130,6 +1860,11 @@ export type CampaignUncheckedCreateWithoutLogsInput = {
   participants?: Prisma.ParticipantUncheckedCreateNestedManyWithoutCampaignInput
   sessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutCampaignInput
   invites?: Prisma.CampaignInviteUncheckedCreateNestedManyWithoutCampaignInput
+  actors?: Prisma.CampaignActorUncheckedCreateNestedManyWithoutCampaignInput
+  characterSheets?: Prisma.CharacterSheetUncheckedCreateNestedManyWithoutCampaignInput
+  npcSheets?: Prisma.NpcSheetUncheckedCreateNestedManyWithoutCampaignInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedCreateNestedManyWithoutCampaignInput
+  sceneTokens?: Prisma.SceneTokenUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutLogsInput = {
@@ -1164,6 +1899,11 @@ export type CampaignUpdateWithoutLogsInput = {
   participants?: Prisma.ParticipantUpdateManyWithoutCampaignNestedInput
   sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutLogsInput = {
@@ -1182,6 +1922,11 @@ export type CampaignUncheckedUpdateWithoutLogsInput = {
   participants?: Prisma.ParticipantUncheckedUpdateManyWithoutCampaignNestedInput
   sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateManyOwnerInput = {
@@ -1214,6 +1959,11 @@ export type CampaignUpdateWithoutOwnerInput = {
   sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutOwnerInput = {
@@ -1232,6 +1982,11 @@ export type CampaignUncheckedUpdateWithoutOwnerInput = {
   sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateManyWithoutOwnerInput = {
@@ -1278,6 +2033,11 @@ export type CampaignUpdateWithoutSystemInput = {
   sessions?: Prisma.GameSessionUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutSystemInput = {
@@ -1296,6 +2056,11 @@ export type CampaignUncheckedUpdateWithoutSystemInput = {
   sessions?: Prisma.GameSessionUncheckedUpdateManyWithoutCampaignNestedInput
   invites?: Prisma.CampaignInviteUncheckedUpdateManyWithoutCampaignNestedInput
   logs?: Prisma.CampaignLogUncheckedUpdateManyWithoutCampaignNestedInput
+  actors?: Prisma.CampaignActorUncheckedUpdateManyWithoutCampaignNestedInput
+  characterSheets?: Prisma.CharacterSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  npcSheets?: Prisma.NpcSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  creatureSheets?: Prisma.CreatureSheetUncheckedUpdateManyWithoutCampaignNestedInput
+  sceneTokens?: Prisma.SceneTokenUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateManyWithoutSystemInput = {
@@ -1322,6 +2087,11 @@ export type CampaignCountOutputType = {
   sessions: number
   invites: number
   logs: number
+  actors: number
+  characterSheets: number
+  npcSheets: number
+  creatureSheets: number
+  sceneTokens: number
 }
 
 export type CampaignCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1329,6 +2099,11 @@ export type CampaignCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   sessions?: boolean | CampaignCountOutputTypeCountSessionsArgs
   invites?: boolean | CampaignCountOutputTypeCountInvitesArgs
   logs?: boolean | CampaignCountOutputTypeCountLogsArgs
+  actors?: boolean | CampaignCountOutputTypeCountActorsArgs
+  characterSheets?: boolean | CampaignCountOutputTypeCountCharacterSheetsArgs
+  npcSheets?: boolean | CampaignCountOutputTypeCountNpcSheetsArgs
+  creatureSheets?: boolean | CampaignCountOutputTypeCountCreatureSheetsArgs
+  sceneTokens?: boolean | CampaignCountOutputTypeCountSceneTokensArgs
 }
 
 /**
@@ -1369,6 +2144,41 @@ export type CampaignCountOutputTypeCountLogsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.CampaignLogWhereInput
 }
 
+/**
+ * CampaignCountOutputType without action
+ */
+export type CampaignCountOutputTypeCountActorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampaignActorWhereInput
+}
+
+/**
+ * CampaignCountOutputType without action
+ */
+export type CampaignCountOutputTypeCountCharacterSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterSheetWhereInput
+}
+
+/**
+ * CampaignCountOutputType without action
+ */
+export type CampaignCountOutputTypeCountNpcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcSheetWhereInput
+}
+
+/**
+ * CampaignCountOutputType without action
+ */
+export type CampaignCountOutputTypeCountCreatureSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureSheetWhereInput
+}
+
+/**
+ * CampaignCountOutputType without action
+ */
+export type CampaignCountOutputTypeCountSceneTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SceneTokenWhereInput
+}
+
 
 export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1389,6 +2199,11 @@ export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   sessions?: boolean | Prisma.Campaign$sessionsArgs<ExtArgs>
   invites?: boolean | Prisma.Campaign$invitesArgs<ExtArgs>
   logs?: boolean | Prisma.Campaign$logsArgs<ExtArgs>
+  actors?: boolean | Prisma.Campaign$actorsArgs<ExtArgs>
+  characterSheets?: boolean | Prisma.Campaign$characterSheetsArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.Campaign$npcSheetsArgs<ExtArgs>
+  creatureSheets?: boolean | Prisma.Campaign$creatureSheetsArgs<ExtArgs>
+  sceneTokens?: boolean | Prisma.Campaign$sceneTokensArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaign"]>
 
@@ -1449,6 +2264,11 @@ export type CampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   sessions?: boolean | Prisma.Campaign$sessionsArgs<ExtArgs>
   invites?: boolean | Prisma.Campaign$invitesArgs<ExtArgs>
   logs?: boolean | Prisma.Campaign$logsArgs<ExtArgs>
+  actors?: boolean | Prisma.Campaign$actorsArgs<ExtArgs>
+  characterSheets?: boolean | Prisma.Campaign$characterSheetsArgs<ExtArgs>
+  npcSheets?: boolean | Prisma.Campaign$npcSheetsArgs<ExtArgs>
+  creatureSheets?: boolean | Prisma.Campaign$creatureSheetsArgs<ExtArgs>
+  sceneTokens?: boolean | Prisma.Campaign$sceneTokensArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CampaignIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1469,6 +2289,11 @@ export type $CampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     sessions: Prisma.$GameSessionPayload<ExtArgs>[]
     invites: Prisma.$CampaignInvitePayload<ExtArgs>[]
     logs: Prisma.$CampaignLogPayload<ExtArgs>[]
+    actors: Prisma.$CampaignActorPayload<ExtArgs>[]
+    characterSheets: Prisma.$CharacterSheetPayload<ExtArgs>[]
+    npcSheets: Prisma.$NpcSheetPayload<ExtArgs>[]
+    creatureSheets: Prisma.$CreatureSheetPayload<ExtArgs>[]
+    sceneTokens: Prisma.$SceneTokenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1883,6 +2708,11 @@ export interface Prisma__CampaignClient<T, Null = never, ExtArgs extends runtime
   sessions<T extends Prisma.Campaign$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GameSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invites<T extends Prisma.Campaign$invitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$invitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   logs<T extends Prisma.Campaign$logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  actors<T extends Prisma.Campaign$actorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$actorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignActorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterSheets<T extends Prisma.Campaign$characterSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$characterSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcSheets<T extends Prisma.Campaign$npcSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$npcSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatureSheets<T extends Prisma.Campaign$creatureSheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$creatureSheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureSheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sceneTokens<T extends Prisma.Campaign$sceneTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$sceneTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SceneTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2432,6 +3262,126 @@ export type Campaign$logsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.CampaignLogScalarFieldEnum | Prisma.CampaignLogScalarFieldEnum[]
+}
+
+/**
+ * Campaign.actors
+ */
+export type Campaign$actorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampaignActor
+   */
+  select?: Prisma.CampaignActorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CampaignActor
+   */
+  omit?: Prisma.CampaignActorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampaignActorInclude<ExtArgs> | null
+  where?: Prisma.CampaignActorWhereInput
+  orderBy?: Prisma.CampaignActorOrderByWithRelationInput | Prisma.CampaignActorOrderByWithRelationInput[]
+  cursor?: Prisma.CampaignActorWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampaignActorScalarFieldEnum | Prisma.CampaignActorScalarFieldEnum[]
+}
+
+/**
+ * Campaign.characterSheets
+ */
+export type Campaign$characterSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSheet
+   */
+  select?: Prisma.CharacterSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSheet
+   */
+  omit?: Prisma.CharacterSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSheetInclude<ExtArgs> | null
+  where?: Prisma.CharacterSheetWhereInput
+  orderBy?: Prisma.CharacterSheetOrderByWithRelationInput | Prisma.CharacterSheetOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterSheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterSheetScalarFieldEnum | Prisma.CharacterSheetScalarFieldEnum[]
+}
+
+/**
+ * Campaign.npcSheets
+ */
+export type Campaign$npcSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcSheet
+   */
+  select?: Prisma.NpcSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcSheet
+   */
+  omit?: Prisma.NpcSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcSheetInclude<ExtArgs> | null
+  where?: Prisma.NpcSheetWhereInput
+  orderBy?: Prisma.NpcSheetOrderByWithRelationInput | Prisma.NpcSheetOrderByWithRelationInput[]
+  cursor?: Prisma.NpcSheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcSheetScalarFieldEnum | Prisma.NpcSheetScalarFieldEnum[]
+}
+
+/**
+ * Campaign.creatureSheets
+ */
+export type Campaign$creatureSheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureSheet
+   */
+  select?: Prisma.CreatureSheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureSheet
+   */
+  omit?: Prisma.CreatureSheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureSheetInclude<ExtArgs> | null
+  where?: Prisma.CreatureSheetWhereInput
+  orderBy?: Prisma.CreatureSheetOrderByWithRelationInput | Prisma.CreatureSheetOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureSheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureSheetScalarFieldEnum | Prisma.CreatureSheetScalarFieldEnum[]
+}
+
+/**
+ * Campaign.sceneTokens
+ */
+export type Campaign$sceneTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SceneToken
+   */
+  select?: Prisma.SceneTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SceneToken
+   */
+  omit?: Prisma.SceneTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SceneTokenInclude<ExtArgs> | null
+  where?: Prisma.SceneTokenWhereInput
+  orderBy?: Prisma.SceneTokenOrderByWithRelationInput | Prisma.SceneTokenOrderByWithRelationInput[]
+  cursor?: Prisma.SceneTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SceneTokenScalarFieldEnum | Prisma.SceneTokenScalarFieldEnum[]
 }
 
 /**

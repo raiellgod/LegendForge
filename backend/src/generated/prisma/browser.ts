@@ -43,6 +43,421 @@ export type Verification = Prisma.VerificationModel
  */
 export type GameSystem = Prisma.GameSystemModel
 /**
+ * Model NpcTemplate
+ * 
+ */
+export type NpcTemplate = Prisma.NpcTemplateModel
+/**
+ * Model CreatureTemplate
+ * 
+ */
+export type CreatureTemplate = Prisma.CreatureTemplateModel
+/**
+ * Model NpcTemplateClass
+ * 
+ */
+export type NpcTemplateClass = Prisma.NpcTemplateClassModel
+/**
+ * Model NpcTemplateStat
+ * 
+ */
+export type NpcTemplateStat = Prisma.NpcTemplateStatModel
+/**
+ * Model NpcTemplateSkill
+ * 
+ */
+export type NpcTemplateSkill = Prisma.NpcTemplateSkillModel
+/**
+ * Model NpcTemplateDefense
+ * 
+ */
+export type NpcTemplateDefense = Prisma.NpcTemplateDefenseModel
+/**
+ * Model NpcTemplateSense
+ * 
+ */
+export type NpcTemplateSense = Prisma.NpcTemplateSenseModel
+/**
+ * Model NpcTemplateLanguage
+ * 
+ */
+export type NpcTemplateLanguage = Prisma.NpcTemplateLanguageModel
+/**
+ * Model NpcTemplateTrait
+ * 
+ */
+export type NpcTemplateTrait = Prisma.NpcTemplateTraitModel
+/**
+ * Model NpcTemplateAction
+ * 
+ */
+export type NpcTemplateAction = Prisma.NpcTemplateActionModel
+/**
+ * Model NpcTemplateAttack
+ * 
+ */
+export type NpcTemplateAttack = Prisma.NpcTemplateAttackModel
+/**
+ * Model NpcTemplateMultiattack
+ * 
+ */
+export type NpcTemplateMultiattack = Prisma.NpcTemplateMultiattackModel
+/**
+ * Model NpcTemplateMultiattackEntry
+ * 
+ */
+export type NpcTemplateMultiattackEntry = Prisma.NpcTemplateMultiattackEntryModel
+/**
+ * Model NpcTemplateMagicalAbility
+ * 
+ */
+export type NpcTemplateMagicalAbility = Prisma.NpcTemplateMagicalAbilityModel
+/**
+ * Model CreatureTemplateStat
+ * 
+ */
+export type CreatureTemplateStat = Prisma.CreatureTemplateStatModel
+/**
+ * Model CreatureTemplateSkill
+ * 
+ */
+export type CreatureTemplateSkill = Prisma.CreatureTemplateSkillModel
+/**
+ * Model CreatureTemplateDefense
+ * 
+ */
+export type CreatureTemplateDefense = Prisma.CreatureTemplateDefenseModel
+/**
+ * Model CreatureTemplateSense
+ * 
+ */
+export type CreatureTemplateSense = Prisma.CreatureTemplateSenseModel
+/**
+ * Model CreatureTemplateLanguage
+ * 
+ */
+export type CreatureTemplateLanguage = Prisma.CreatureTemplateLanguageModel
+/**
+ * Model CreatureTemplateTrait
+ * 
+ */
+export type CreatureTemplateTrait = Prisma.CreatureTemplateTraitModel
+/**
+ * Model CreatureTemplateAction
+ * 
+ */
+export type CreatureTemplateAction = Prisma.CreatureTemplateActionModel
+/**
+ * Model CreatureTemplateAttack
+ * 
+ */
+export type CreatureTemplateAttack = Prisma.CreatureTemplateAttackModel
+/**
+ * Model CreatureTemplateMultiattack
+ * 
+ */
+export type CreatureTemplateMultiattack = Prisma.CreatureTemplateMultiattackModel
+/**
+ * Model CreatureTemplateMultiattackEntry
+ * 
+ */
+export type CreatureTemplateMultiattackEntry = Prisma.CreatureTemplateMultiattackEntryModel
+/**
+ * Model CreatureTemplateMagicalAbility
+ * 
+ */
+export type CreatureTemplateMagicalAbility = Prisma.CreatureTemplateMagicalAbilityModel
+/**
+ * Model Ancestry
+ * 
+ */
+export type Ancestry = Prisma.AncestryModel
+/**
+ * Model SubAncestry
+ * 
+ */
+export type SubAncestry = Prisma.SubAncestryModel
+/**
+ * Model Background
+ * 
+ */
+export type Background = Prisma.BackgroundModel
+/**
+ * Model CharacterTemplate
+ * 
+ */
+export type CharacterTemplate = Prisma.CharacterTemplateModel
+/**
+ * Model CharacterTemplateClass
+ * 
+ */
+export type CharacterTemplateClass = Prisma.CharacterTemplateClassModel
+/**
+ * Model CharacterTemplateStat
+ * 
+ */
+export type CharacterTemplateStat = Prisma.CharacterTemplateStatModel
+/**
+ * Model CharacterTemplateSkill
+ * 
+ */
+export type CharacterTemplateSkill = Prisma.CharacterTemplateSkillModel
+/**
+ * Model CharacterTemplateSpell
+ * 
+ */
+export type CharacterTemplateSpell = Prisma.CharacterTemplateSpellModel
+/**
+ * Model CharacterTemplateEquipment
+ * 
+ */
+export type CharacterTemplateEquipment = Prisma.CharacterTemplateEquipmentModel
+/**
+ * Model CharacterTemplateLanguage
+ * 
+ */
+export type CharacterTemplateLanguage = Prisma.CharacterTemplateLanguageModel
+/**
+ * Model CharacterTemplateFeatureChoice
+ * 
+ */
+export type CharacterTemplateFeatureChoice = Prisma.CharacterTemplateFeatureChoiceModel
+/**
+ * Model CharacterTemplateProgressionChoice
+ * 
+ */
+export type CharacterTemplateProgressionChoice = Prisma.CharacterTemplateProgressionChoiceModel
+/**
+ * Model NpcSheet
+ * 
+ */
+export type NpcSheet = Prisma.NpcSheetModel
+/**
+ * Model NpcSheetClass
+ * 
+ */
+export type NpcSheetClass = Prisma.NpcSheetClassModel
+/**
+ * Model NpcSheetStat
+ * 
+ */
+export type NpcSheetStat = Prisma.NpcSheetStatModel
+/**
+ * Model NpcSheetSkill
+ * 
+ */
+export type NpcSheetSkill = Prisma.NpcSheetSkillModel
+/**
+ * Model NpcSheetDefense
+ * 
+ */
+export type NpcSheetDefense = Prisma.NpcSheetDefenseModel
+/**
+ * Model NpcSheetSense
+ * 
+ */
+export type NpcSheetSense = Prisma.NpcSheetSenseModel
+/**
+ * Model NpcSheetLanguage
+ * 
+ */
+export type NpcSheetLanguage = Prisma.NpcSheetLanguageModel
+/**
+ * Model CreatureSheet
+ * 
+ */
+export type CreatureSheet = Prisma.CreatureSheetModel
+/**
+ * Model CreatureSheetStat
+ * 
+ */
+export type CreatureSheetStat = Prisma.CreatureSheetStatModel
+/**
+ * Model CreatureSheetSkill
+ * 
+ */
+export type CreatureSheetSkill = Prisma.CreatureSheetSkillModel
+/**
+ * Model CreatureSheetDefense
+ * 
+ */
+export type CreatureSheetDefense = Prisma.CreatureSheetDefenseModel
+/**
+ * Model CreatureSheetSense
+ * 
+ */
+export type CreatureSheetSense = Prisma.CreatureSheetSenseModel
+/**
+ * Model CreatureSheetLanguage
+ * 
+ */
+export type CreatureSheetLanguage = Prisma.CreatureSheetLanguageModel
+/**
+ * Model NpcSheetTrait
+ * 
+ */
+export type NpcSheetTrait = Prisma.NpcSheetTraitModel
+/**
+ * Model NpcSheetAction
+ * 
+ */
+export type NpcSheetAction = Prisma.NpcSheetActionModel
+/**
+ * Model NpcSheetAttack
+ * 
+ */
+export type NpcSheetAttack = Prisma.NpcSheetAttackModel
+/**
+ * Model NpcSheetMultiattack
+ * 
+ */
+export type NpcSheetMultiattack = Prisma.NpcSheetMultiattackModel
+/**
+ * Model NpcSheetMultiattackEntry
+ * 
+ */
+export type NpcSheetMultiattackEntry = Prisma.NpcSheetMultiattackEntryModel
+/**
+ * Model NpcSheetMagicalAbility
+ * 
+ */
+export type NpcSheetMagicalAbility = Prisma.NpcSheetMagicalAbilityModel
+/**
+ * Model CreatureSheetTrait
+ * 
+ */
+export type CreatureSheetTrait = Prisma.CreatureSheetTraitModel
+/**
+ * Model CreatureSheetAction
+ * 
+ */
+export type CreatureSheetAction = Prisma.CreatureSheetActionModel
+/**
+ * Model CreatureSheetAttack
+ * 
+ */
+export type CreatureSheetAttack = Prisma.CreatureSheetAttackModel
+/**
+ * Model CreatureSheetMultiattack
+ * 
+ */
+export type CreatureSheetMultiattack = Prisma.CreatureSheetMultiattackModel
+/**
+ * Model CreatureSheetMultiattackEntry
+ * 
+ */
+export type CreatureSheetMultiattackEntry = Prisma.CreatureSheetMultiattackEntryModel
+/**
+ * Model CreatureSheetMagicalAbility
+ * 
+ */
+export type CreatureSheetMagicalAbility = Prisma.CreatureSheetMagicalAbilityModel
+/**
+ * Model CharacterSheet
+ * 
+ */
+export type CharacterSheet = Prisma.CharacterSheetModel
+/**
+ * Model Language
+ * 
+ */
+export type Language = Prisma.LanguageModel
+/**
+ * Model CharacterSheetLanguage
+ * 
+ */
+export type CharacterSheetLanguage = Prisma.CharacterSheetLanguageModel
+/**
+ * Model CharacterSheetStat
+ * 
+ */
+export type CharacterSheetStat = Prisma.CharacterSheetStatModel
+/**
+ * Model CharacterSheetSkill
+ * 
+ */
+export type CharacterSheetSkill = Prisma.CharacterSheetSkillModel
+/**
+ * Model CharacterSheetSpell
+ * 
+ */
+export type CharacterSheetSpell = Prisma.CharacterSheetSpellModel
+/**
+ * Model CharacterSheetEquipment
+ * 
+ */
+export type CharacterSheetEquipment = Prisma.CharacterSheetEquipmentModel
+/**
+ * Model CharacterSheetClass
+ * 
+ */
+export type CharacterSheetClass = Prisma.CharacterSheetClassModel
+/**
+ * Model CharacterSheetProgressionChoice
+ * 
+ */
+export type CharacterSheetProgressionChoice = Prisma.CharacterSheetProgressionChoiceModel
+/**
+ * Model CharacterClass
+ * 
+ */
+export type CharacterClass = Prisma.CharacterClassModel
+/**
+ * Model CharacterSubclass
+ * 
+ */
+export type CharacterSubclass = Prisma.CharacterSubclassModel
+/**
+ * Model LevelProgression
+ * 
+ */
+export type LevelProgression = Prisma.LevelProgressionModel
+/**
+ * Model LevelProgressionSpellLimit
+ * 
+ */
+export type LevelProgressionSpellLimit = Prisma.LevelProgressionSpellLimitModel
+/**
+ * Model ClassSpell
+ * 
+ */
+export type ClassSpell = Prisma.ClassSpellModel
+/**
+ * Model Feature
+ * 
+ */
+export type Feature = Prisma.FeatureModel
+/**
+ * Model Talent
+ * 
+ */
+export type Talent = Prisma.TalentModel
+/**
+ * Model FeatureChoiceGroup
+ * 
+ */
+export type FeatureChoiceGroup = Prisma.FeatureChoiceGroupModel
+/**
+ * Model FeatureChoiceOption
+ * 
+ */
+export type FeatureChoiceOption = Prisma.FeatureChoiceOptionModel
+/**
+ * Model CharacterSheetFeatureChoice
+ * 
+ */
+export type CharacterSheetFeatureChoice = Prisma.CharacterSheetFeatureChoiceModel
+/**
+ * Model Spell
+ * 
+ */
+export type Spell = Prisma.SpellModel
+/**
+ * Model Equipment
+ * 
+ */
+export type Equipment = Prisma.EquipmentModel
+/**
  * Model Stat
  * 
  */
@@ -67,6 +482,16 @@ export type GameSession = Prisma.GameSessionModel
  * 
  */
 export type Participant = Prisma.ParticipantModel
+/**
+ * Model CampaignActor
+ * 
+ */
+export type CampaignActor = Prisma.CampaignActorModel
+/**
+ * Model SceneToken
+ * 
+ */
+export type SceneToken = Prisma.SceneTokenModel
 /**
  * Model CampaignInvite
  * 

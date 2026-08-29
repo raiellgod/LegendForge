@@ -14,6 +14,7 @@ import z from "zod";
 
 import { auth } from "./lib/auth.js";
 import { campaignRoutes } from "./routes/campaigns.js";
+import { characterSheetsRoutes } from "./routes/character-sheets.js";
 import { systemRoutes } from "./routes/systems.js";
 
 const app = Fastify({
@@ -158,6 +159,7 @@ app.withTypeProvider<ZodTypeProvider>().route({
 });
 
 await app.register(campaignRoutes);
+await app.register(characterSheetsRoutes);
 await app.register(systemRoutes);
 
 try {

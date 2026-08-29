@@ -1,294 +1,312 @@
 # 🧠 DATABASE SETUP — LegendForge
 
-Este documento descreve:
+> Atualizado para novo chat em 16/07/2026. Contexto consolidado após a macro **4.7.7 — Magias iniciais por classe/nível**.
 
-- Estrutura do banco
-- Regras de negócio
-- Limitações do dbdiagram
-- Regras aplicadas fora do dbdiagram
-- Progresso da implementação com Prisma
+## 📌 Status atual
 
----
+Banco funcional com Prisma/PostgreSQL, Better Auth, campanhas, mesa, sistema RPG, fichas e relações avançadas.
 
-# 📌 STATUS ATUAL
-
-✔ Banco modelado no dbdiagram  
-✔ Prisma integrado e funcionando  
-✔ Better Auth integrado ao banco  
-✔ Auth persistindo dados corretamente  
-✔ Campanhas implementadas no Prisma  
-✔ Participantes implementados no Prisma  
-✔ Sessões de jogo implementadas no Prisma  
-🔄 Expansão do domínio RPG em andamento  
-❌ Regras SQL avançadas ainda não aplicadas  
-❌ Triggers ainda não implementadas  
+Última expansão concluída: **4.7.7 — Magias iniciais por classe/nível**.
 
 ---
 
-# 🗺️ BANCO DE DADOS — NÚCLEO ATUAL
+## ✅ Modelos principais implementados
 
-## 🔐 Auth — Better Auth Core
+### Auth
 
-```prisma
-model User {
-  id            String   @id
-  name          String
-  email         String   @unique
-  emailVerified Boolean
-  image         String?
-  status        UserStatus @default(ACTIVE)
-  createdAt     DateTime
-  updatedAt     DateTime
-
-  sessions      Session[]
-  accounts      Account[]
-  campaigns     Campaign[]
-  participants  Participant[]
-}
+```txt
+User
+Session
+Account
+Verification
 ```
 
-Tabelas oficiais do Better Auth:
+### Campanha e mesa
 
-- `user`
-- `session`
-- `account`
-- `verification`
-
----
-
-## 🎲 Campanhas
-
-```prisma
-model Campaign {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  coverImage  String?
-  ownerId     String
-  isPublic    Boolean  @default(false)
-  isActive    Boolean  @default(true)
-  inviteCode  String?  @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  owner        User          @relation(fields: [ownerId], references: [id])
-  participants Participant[]
-  sessions     GameSession[]
-}
+```txt
+Campaign
+Participant
+GameSession
+CampaignActor
+SceneToken
 ```
 
-Responsabilidades:
+### Sistema RPG
 
-- representar um mundo/campanha
-- guardar owner
-- permitir visibilidade pública/futura busca
-- guardar imagem de capa
-- receber participantes
-- conectar sessões de jogo
-
----
-
-## 👥 Participantes
-
-```prisma
-model Participant {
-  id         String   @id @default(uuid())
-  campaignId String
-  userId     String
-  role       ParticipantRole
-  createdAt  DateTime @default(now())
-
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  user     User     @relation(fields: [userId], references: [id])
-}
+```txt
+GameSystem
+Stat
+Skill
+Language
+Ancestry
+Background
+CharacterClass
+CharacterSubclass
+Feature
+Spell
+Equipment
+LevelProgression
+LevelProgressionSpellLimit
+ClassSpell
 ```
 
-Status atual:
+### Ficha
 
-- criador da campanha entra como `GM`
-- jogador que entra por convite será `PLAYER`
-- permissões refinadas ainda serão evoluídas
-
----
-
-## 🗓️ Sessões de jogo
-
-```prisma
-model GameSession {
-  id          String   @id @default(uuid())
-  campaignId  String
-  scheduledAt DateTime
-  createdAt   DateTime @default(now())
-
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-}
+```txt
+CharacterSheet
+CharacterSheetStat
+CharacterSheetSkill
+CharacterSheetSpell
+CharacterSheetLanguage
+CharacterSheetEquipment
+CharacterSheetClass
 ```
 
-Uso atual:
+---
 
-- `GET /campaigns` busca a próxima sessão futura
-- frontend mostra `Not Scheduled` se não houver sessão marcada
+## 🪄 Magias — estado pós 4.7.7
+
+### Novos/atualizados
+
+```txt
+LevelProgressionSpellLimit
+LevelProgression.spellLimits
+CharacterSheetSpell.classId
+CharacterClass.characterSheetSpells
+```
+
+### LevelProgressionSpellLimit
+
+Responsabilidade:
+
+```txt
+Define quantas magias conhecidas/preparadas uma classe recebe por nível de magia em cada nível de classe.
+```
+
+Campos esperados:
+
+```txt
+id
+levelProgressionId
+spellLevel
+spellsKnown
+spellsPrepared
+createdAt
+updatedAt
+```
+
+Regras:
+
+```txt
+@@unique([levelProgressionId, spellLevel])
+@@index([levelProgressionId])
+@@index([spellLevel])
+```
+
+Interpretação:
+
+```txt
+spellLevel 0 = truques
+spellsKnown = limite usado no builder
+spellsPrepared = limite futuro para preparação da ficha
+```
+
+### CharacterSheetSpell
+
+Responsabilidade:
+
+```txt
+Magias realmente conhecidas/registradas pela ficha.
+```
+
+Campos relevantes:
+
+```txt
+characterSheetId
+spellId
+classId
+source
+isPrepared
+isAlwaysPrepared
+uses
+maxUses
+notes
+```
+
+`classId` é origem interna da magia para cálculo futuro de:
+
+```txt
+atributo de conjuração
+CD
+ataque mágico
+regras por classe
+```
+
+Não deve poluir visualmente o card de magia.
+
+Fontes previstas:
+
+```txt
+class
+ancestry
+background
+feature
+manual
+GM/futuro
+```
+
+Observação:
+
+```txt
+Magias concedidas pelo mestre não contam nos limites de builder/level up.
+```
 
 ---
 
-## ⚙️ Sistema RPG inicial
+## 🗣️ Idiomas — estado
 
-- `GameSystem`
-- `Stat`
-- `Skill`
+### Modelos
 
-Esses modelos já existem como base para sistemas customizáveis.
+```txt
+Language
+CharacterSheetLanguage
+Ancestry.languageKeys
+Background.languageKeys
+Background.languageChoiceCount
+GameSystem.languages
+CharacterSheet.languages
+```
 
----
+### Regras atuais
 
-# ⚠️ LIMITAÇÕES DO DBDIAGRAM
+Automáticos:
 
-O dbdiagram não suporta diretamente:
+```txt
+Ancestry.languageKeys
+Background.languageKeys
+```
 
-## ❌ Regras avançadas
+Escolhas extras:
 
-- CHECK constraints
-- validações condicionais
-- regras entre tabelas
+```txt
+CharacterSheetLanguage.source === "builder"
+```
 
-## ❌ Triggers
+Quantidade:
 
-- validação de consistência
-- validação de domínio
-- side effects controlados
+```txt
+Background.languageChoiceCount
+```
 
-## ❌ Índices parciais
+Validação de finalização:
 
-- exemplo: apenas 1 GM principal por campanha
-
-## ❌ Constraints complexas
-
-- validações cruzadas entre entidades
-- regras condicionais com múltiplos campos
-
----
-
-# 🧠 REGRAS QUE DEVEM EXISTIR NO BANCO OU BACKEND
-
-## Campanhas
-
-- apenas owner pode deletar campanha
-- apenas owner/GM pode alterar configurações críticas
-- usuário deve ver campanhas onde é owner ou participant
-- campanhas inativas não devem aparecer na home
-- inviteCode deve ser único
-
-## Participantes
-
-- owner não pode ser removido da própria campanha
-- usuário não deve entrar duas vezes na mesma campanha
-- alteração de GM deve preservar consistência
-- futuro: status `PENDING`, `APPROVED`, `REMOVED`
-
-## Sistemas RPG
-
-- stats devem pertencer ao mesmo sistema da skill
-- níveis devem respeitar limites
-- personagens devem respeitar raça/classe/sistema da campanha
+```txt
+- deve ter exatamente a quantidade exigida de escolhas extras
+- não pode repetir idioma extra
+- não pode escolher como extra um idioma automático
+```
 
 ---
 
-# 🧱 ARQUITETURA DE RESPONSABILIDADE
+## 🧩 Regras atuais de multiclasse
 
-| Camada     | Responsabilidade |
-|------------|------------------|
-| DB         | integridade estrutural |
-| SQL RULES  | regras críticas complexas |
-| Prisma     | acesso tipado |
-| Backend    | lógica, permissões e validação |
-| Frontend   | experiência e feedback visual |
+```txt
+CharacterSheet.level = nível total
+CharacterSheetClass.level = nível por classe
+CharacterSheetClass.isPrimary = classe principal/identidade/fallback
+```
 
----
+Classe principal não deve ser fonte única de regra mecânica quando existir `CharacterSheetClass`.
 
-# 🧪 PASSOS DE IMPLEMENTAÇÃO
+Regras reais devem preferir:
 
-## 🔹 Fase 1 — Setup Prisma
-
-- [x] Criar `schema.prisma`
-- [x] Validar schema
-- [x] Gerar Prisma Client
-- [x] Conectar com banco
-
-## 🔹 Fase 2 — Auth
-
-- [x] Better Auth integrado
-- [x] User
-- [x] Session
-- [x] Account
-- [x] Verification
-- [x] Sessão via cookie validada
-
-## 🔹 Fase 3 — Campanhas
-
-- [x] Campaign
-- [x] Participant
-- [x] GameSession
-- [x] POST `/campaigns`
-- [x] GET `/campaigns`
-- [x] GET `/campaigns/:id`
-- [x] PATCH `/campaigns/:id`
-- [x] DELETE `/campaigns/:id`
-- [x] JOIN por invite code
-- [ ] Busca pública de campanhas
-- [ ] Refinar status de participante
-- [ ] Persistir descrição/capa com validação final
-- [ ] Storage real para capa
-
-## 🔹 Fase 4 — Sistema RPG
-
-- [x] GameSystem
-- [x] Stat
-- [x] Skill
-- [ ] Classes
-- [ ] Subclasses
-- [ ] Features
-- [ ] Characters
-
-## 🔹 Fase 5 — Regras avançadas
-
-- [ ] Aplicar regras SQL avançadas
-- [ ] Implementar triggers quando necessário
-- [ ] Índices específicos para performance e integridade
+```txt
+CharacterSheet.classes
+CharacterSheetClass.classId
+CharacterSheetClass.level
+```
 
 ---
 
-# 🧠 FILOSOFIA DO PROJETO
+## ⚔️ Equipamentos — estado
 
-> Banco é a fundação do sistema.
+`Equipment` já possui campos estruturados para ataque:
 
-Ordem correta:
+```txt
+damageFormula
+damageType
+attackType
+attackAbilityKey
+alternativeAbilityKey
+weaponGroup
+normalRange
+longRange
+isFinesse
+isThrown
+isTwoHanded
+isVersatile
+versatileDamageFormula
+attackBonus
+damageBonus
+imageUrl
+```
 
-1. Auth funcionando
-2. Banco consistente
-3. Backend confiável
-4. Frontend conectado
-5. Expansão controlada
-6. Features avançadas
+A ficha pronta calcula ataque por equipamento usando proficiências efetivas das classes.
+
+Proteções/armaduras já estão preparadas para CA real futura, mas a CA final ainda permanece manual/preview.
 
 ---
 
-# 📍 PRÓXIMO PASSO
+## 🧍 CharacterSheet — estado
 
-👉 Consolidar domínio de campanhas no backend:
+`CharacterSheet` guarda:
 
-- buscar campanhas públicas
-- melhorar update de campanha
-- preparar regras de participação
-- definir como imagem de capa será armazenada em produção
+```txt
+campanha
+sistema
+owner
+ator vinculado
+classe principal legacy
+ancestralidade
+antecedente
+nível total
+status
+dados narrativos
+PV/CA/status
+imagens
+```
+
+Relacionamentos usados pela ficha pronta:
+
+```txt
+stats
+skills
+spells
+languages
+equipment
+classes
+features calculadas no backend
+levelUpPreview calculado no backend
+```
 
 ---
 
-# 📌 CHECKPOINT
+## 🔮 Futuro do banco
 
-✔ Auth funcionando  
-✔ Prisma integrado  
-✔ Banco funcional  
-✔ Campanhas iniciadas  
-✔ Fluxo real de criação de campanha funcionando  
+Ainda não implementado:
 
-👉 Próximo nível: busca/participação de campanhas e página de jogo
+```txt
+SubAncestry/SubAncestralidade
+ChatMessage persistido
+RollLog persistido
+Scene real/múltiplas cenas
+Fog persistida por cena
+Drawing persistido
+NPC sheet
+Creature sheet / bestiary
+Spell slot usage
+Prepared spell state avançado
+Conditions/effects
+Inventory transactions/shops
+File uploads
+```

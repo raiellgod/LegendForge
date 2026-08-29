@@ -1,374 +1,147 @@
 # 📦 FEATURE CAPSULES — LegendForge
 
----
+> Atualizado para novo chat em 16/07/2026. Contexto consolidado após a macro **4.7.7 — Magias iniciais por classe/nível**.
 
-## 📌 About
+## 📌 Sobre
 
-Este arquivo registra o desenvolvimento incremental do projeto.
-
-Cada cápsula representa:
-
-- uma etapa pequena
-- funcional
-- testável
-- validada
+Este arquivo registra o desenvolvimento incremental do projeto. Cada cápsula representa uma etapa pequena, funcional, testável e validada.
 
 ---
 
-# 🧱 Capsule 01 — Setup
+# ✅ Cápsulas já consolidadas
 
-## 🎯 Goal
-
-Configurar o ambiente inicial de desenvolvimento do backend.
-
-## ⚙️ Dependencies Installed
-
-- Node
-- TypeScript
-- @types/node
-- Prettier
-- ESLint
-- tsx
-
-## 🛠️ Tooling & Config
-
-- `git init`
-- `tsc --init`
-- ESLint configurado
-- Prettier integrado
-- Ordenação automática de imports
-
-## ✅ Result
-
-- ambiente funcional
-- código padronizado
-- execução consistente
-
----
-
-# ⚡ Capsule 02 — Backend Base
-
-## 🎯 Goal
-
-Criar base do backend com Fastify.
-
-## ⚙️ Dependencies Installed
-
-- Fastify
-- Zod
-- Swagger
-
-## ✅ Result
-
-- API funcional
-- validação estruturada
-- documentação disponível
-
----
-
-# 🧠 Capsule 03 — Data & UI Design
-
-## 🎯 Goal
-
-Definir domínio do sistema antes da implementação.
-
-## ⚙️ Tools Used
-
-- dbdiagram.io
-- Figma
-
-## ✅ Result
-
-- base conceitual sólida
-- visão clara do produto
-
----
-
-# ⚡ Capsule 04 — Database Design (Core)
-
-## 🎯 Goal
-
-Criar estrutura completa do banco.
-
-## ✅ Result (FINAL)
-
-- banco modelado com qualidade profissional
-- normalização adequada
-- suporte a:
-  - campanhas
-  - personagens
-  - classes e subclasses
-  - sistemas de RPG
-  - participantes
-  - sessões
-  - logs
-
-## 🧠 Decisões Importantes
-
-- Better Auth é o núcleo de identidade
-- features centralizadas em uma tabela
-- regras críticas no banco/backend
-- separação entre modelo e instância
-
----
-
-# ⚡ Capsule 05 — Figma UI
-
-## 🎯 Goal
-
-Criar interface visual do sistema.
-
-## ✅ Result
-
-- fluxo de login/registro
-- home pública
-- home logada de campanhas
-- fluxo inicial de criação de mundo
-- tela de edição/finalização da campanha
-- base visual para capa, informações da campanha e owner
-
-## 🟡 Em progresso
-
-- busca de campanhas
-- tela da mesa
-- responsividade fina
-- fluxo definitivo de upload de imagem
-
----
-
-# ⚡ Capsule 06 — System Design (RPG)
-
-## 🎯 Goal
-
-Criar sistema próprio de RPG.
-
-## ✅ Result
-
-- classes definidas
-- subclasses definidas
-- progressão 1–20
-- talentos (feats)
-- estrutura de atributos
-- base para múltiplos sistemas
-
----
-
-# ⚡ Capsule 07 — Database Refinement (Senior Level)
-
-## 🎯 Goal
-
-Elevar o banco para nível produção real.
-
-## ✅ Result
-
-- banco nível sênior
-- consistente
-- escalável
-- preparado para múltiplos sistemas, campanhas, personagens e inventário
-
----
-
-# ⚡ Capsule 08 — Production Constraints & Integrity
-
-## 🎯 Goal
-
-Definir regras críticas de integridade.
-
-## ✅ Result
-
-- limites de atributos
-- limites de nível
-- preparação para validações complexas
-- entendimento de quais regras ficam no banco e quais ficam no backend
-
----
-
-# ⚡ Capsule 09 — Prisma Integration
-
-## 🎯 Goal
-
-Conectar modelagem ao sistema real.
-
-## ✅ Result
-
-- `schema.prisma` criado
-- Prisma Client gerado
-- PostgreSQL conectado via Docker
-- Prisma Studio funcionando
-- banco sincronizado com `db push`
-
----
-
-# ⚡ Capsule 10 — Authentication (Better Auth)
-
-## 🎯 Goal
-
-Implementar sistema de autenticação real.
-
-## 🧪 Changes Made
-
-- Better Auth integrado
-- Prisma Adapter configurado
-- tabelas oficiais:
-  - `user`
-  - `session`
-  - `account`
-  - `verification`
-- login e registro funcionando
-- sessões persistidas no banco
-- frontend usando `authClient`
-- backend lendo sessão real por cookie com `auth.api.getSession`
-
-## ✅ Result
-
-- registro funcionando
-- login funcionando
-- sessão persistente
-- rota protegida usando sessão real
-- fluxo frontend ↔ backend estabilizado
-
-## 🧠 Decisão Crítica
-
-> Auth NÃO é mais parte do sistema  
-> → é o núcleo do sistema
-
-Todo o domínio depende de:
+As cápsulas anteriores cobrem:
 
 ```txt
-user.id
+01 — Setup
+02 — Backend Base
+03 — Data & UI Design
+04 — Database Design
+05 — Figma UI
+06 — System Design
+07 — Database Refinement
+08 — Production Constraints
+09 — Prisma Integration
+10 — Authentication
+11 — API Integration
+12 — Campaign Domain API
+13 — Campaign Frontend Flow
+14 — Campaign Search & Join
+15 — Game Page Foundation
+16 — Campaign Actors
+17 — Scene Tokens
+18 — RPG System Seed
+19 — CharacterSheet Backend
+20 — Character Creation Menu
+21 — Character Builder Layout
+22 — Character Builder Draft
+23 — Character Builder Options
+24 — Character Choices Persistence
+25 — Character Builder Step Validation
+26 — Attributes
+27 — Skills
+28 — Spells
+29 — Equipment
+30 — About
+31 — Review & Stabilization
+32 — Game Table Refactor
+33 — Game Table Panels
+34 — Game Table Canvas & Tools
+35 — Game Table Regression
+36 — Ready Sheet / Modal / Pop-out
+37 — Automatic Rolls
+38 — Spellcasting Rules
+39 — Equipment Attacks / Features / Level Up Preview
+40 — Multiclass Foundation
+41 — Seed Modularization / Equipment Images
+42 — Character Creation Rules: Skills Foundation
+43 — Character Languages by Source
+44 — Equipment Proficiencies by Source
+45 — Character Narrative Fields
+46 — Initial Multiclass Foundation
+47 — Initial Multiclass HP and Features
 ```
 
 ---
 
-# ⚡ Capsule 11 — API Integration
+# ⚡ Capsule 48 — Multiclass Spell Limits and Spell Sources
 
 ## 🎯 Goal
 
-Validar sistema funcionando end-to-end.
-
-## 🧪 Changes Made
-
-- integração Fastify + Auth
-- testes via Swagger/Scalar
-- validação de endpoints
-- persistência real de dados
-- CORS ajustado para frontend local
-- fluxo de sessão via cookie validado
+Consolidar magias iniciais por classe/nível com suporte a multiclasse, separando magias conhecidas de magias preparadas e preparando origem interna por classe.
 
 ## ✅ Result
 
-- API funcional
-- auth integrado
-- banco persistindo dados reais
-- base pronta para domínio de campanhas
+- `LevelProgressionSpellLimit` modelado no Prisma.
+- `LevelProgression.spellLimits` criado.
+- `CharacterSheetSpell.classId` criado.
+- Seed preenche limites por nível de magia.
+- `/systems/:systemId/character-options` retorna `spellLimits`.
+- Frontend types recebem `CharacterBuilderSpellLimit`.
+- Builder usa `spellsKnown` por nível de magia.
+- Builder não usa `spellsPrepared` como limite de escolha.
+- Preparadas ficam para estado/mecânica futura da ficha.
+- Lista de magias é unificada por classes escolhidas.
+- Magia duplicada entre classes aparece uma vez só.
+- Origem interna prioriza classe principal quando compatível.
+- Backend valida magia contra múltiplas classes.
+- Backend salva `source` e `classId` em `CharacterSheetSpell`.
+- Backend retorna `classId` e `characterClass` em cada magia da ficha.
+- Frontend types aceitam origem interna da magia.
+- Ficha pronta mostra bloco **Conjuração** por classe.
+- Cards de magia continuam limpos, sem origem visual por card.
+- Ataque mágico fica preparado para usar a origem interna da magia.
+
+## 🧠 Decisions
+
+```txt
+Magias conhecidas ≠ magias preparadas.
+Builder escolhe magias conhecidas.
+Preparadas serão estado/função futura da ficha.
+Mago/estudioso usa premissa de grimório: conhece mais do que prepara.
+Magias concedidas pelo mestre não contam no limite do builder/level up.
+Magias sempre conhecidas futuramente não contam no limite comum.
+```
+
+## 🧪 Validation
+
+```txt
+backend eslint limpo
+frontend lint limpo
+páginas sem erro
+ficha abre/finaliza normalmente
+```
+
+## 🔚 Completed micros
+
+```txt
+[x] 4.7.7.0 — Modelar limites de magia por nível
+[x] 4.7.7.1 — União final das permissões de magia por classe no builder
+[x] 4.7.7.2 — Backend valida magia contra múltiplas classes
+[x] 4.7.7.3 — Backend salva e retorna classId/source da magia
+[x] 4.7.7.4 — Frontend types recebem origem interna da magia
+[x] 4.7.7.5 — Bloco de conjuração por classe na ficha pronta
+```
 
 ---
 
-# ⚡ Capsule 12 — Campaign Domain API
+# 🔜 Capsule 49 — Initial Pending Choices
 
 ## 🎯 Goal
 
-Criar primeiras rotas reais de campanha.
+Mapear e preparar escolhas pendentes iniciais sem ainda implementar todo o fluxo de Level Up real.
 
-## 🧪 Changes Made
+## Planned
 
-- `POST /campaigns`
-- `GET /campaigns`
-- `GET /campaigns/:id`
-- `PATCH /campaigns/:id`
-- `DELETE /campaigns/:id`
-- `POST /campaigns/join`
-- rotas de participantes:
-  - listar participantes
-  - trocar role
-  - remover participante
+```txt
+[próximo] 4.7.8.1 — Mapear escolhas pendentes possíveis
+[ ] 4.7.8.2 — Subclasse pendente
+[ ] 4.7.8.3 — Magias/truques pendentes
+[ ] 4.7.8.4 — Proficiências pendentes
+[ ] 4.7.8.5 — Línguas pendentes
+[ ] 4.7.8.6 — Atributos/talentos futuramente
+```
 
-## ✅ Result
+## Notes
 
-- usuário autenticado consegue criar campanha
-- criador entra automaticamente como `GM`
-- home logada lista campanhas onde o usuário é owner ou participant
-- GET de campanha por id pronto para tela de edição
-- PATCH preparado para nome, descrição, capa e visibilidade
-
----
-
-# ⚡ Capsule 13 — Campaign Frontend Flow
-
-## 🎯 Goal
-
-Implementar fluxo inicial real de campanhas no frontend.
-
-## 🧪 Changes Made
-
-- página `/campaigns`
-  - estado sem campanhas
-  - estado com campanhas
-  - cards reais vindos da API
-- página `/campaigns/create`
-  - nome da campanha
-  - seleção visual de ficha/sistema
-  - criação real via API
-  - redirecionamento para edição da campanha
-- página `/campaigns/[id]/edit`
-  - leitura real da campanha
-  - nome digitado aparece como título
-  - placeholder/preview de capa
-  - modal de imagem dentro da área da capa
-  - botões de ação
-  - card “Forjado por”
-  - descrição inicial da campanha
-
-## ✅ Result
-
-- primeiro fluxo de campanha funcionando de ponta a ponta
-- frontend conectado ao backend real
-- UI alinhada com o Figma atual
-- base pronta para evoluir busca de campanha e página de jogo
-
----
-
-# 🧠 Estado Atual do Projeto
-
-O projeto saiu de:
-
-👉 conceito  
-👉 design  
-👉 modelagem  
-👉 auth isolado  
-
-E entrou em:
-
-👉 **fluxo real de campanha funcionando**
-
----
-
-## 🏁 Status
-
-✔ Auth funcional  
-✔ Banco integrado  
-✔ API funcionando  
-✔ Frontend conectado  
-✔ Home logada de campanhas pronta  
-✔ Criação inicial de campanha pronta  
-✔ Tela de edição/finalização inicial pronta  
-
----
-
-## 🚧 Próxima fase
-
-👉 consolidar backend de campanhas e busca
-
-- busca de campanhas públicas
-- convite/código de entrada
-- regras de participação
-- descrição e capa persistidas com fluxo mais robusto
-- futura integração com storage real
-- início da página de jogo
-
----
-
-## 🧠 Regra de Ouro
-
-> Cada cápsula deve gerar valor real  
-> e aproximar o sistema de ser jogável
+As escolhas pendentes devem ser planejadas para servirem tanto ao personagem inicial quanto ao Level Up real depois.

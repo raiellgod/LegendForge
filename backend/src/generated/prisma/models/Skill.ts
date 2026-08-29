@@ -20,8 +20,18 @@ export type SkillModel = runtime.Types.Result.DefaultSelection<Prisma.$SkillPayl
 
 export type AggregateSkill = {
   _count: SkillCountAggregateOutputType | null
+  _avg: SkillAvgAggregateOutputType | null
+  _sum: SkillSumAggregateOutputType | null
   _min: SkillMinAggregateOutputType | null
   _max: SkillMaxAggregateOutputType | null
+}
+
+export type SkillAvgAggregateOutputType = {
+  order: number | null
+}
+
+export type SkillSumAggregateOutputType = {
+  order: number | null
 }
 
 export type SkillMinAggregateOutputType = {
@@ -29,6 +39,9 @@ export type SkillMinAggregateOutputType = {
   systemId: string | null
   statId: string | null
   name: string | null
+  key: string | null
+  description: string | null
+  order: number | null
   createdAt: Date | null
 }
 
@@ -37,6 +50,9 @@ export type SkillMaxAggregateOutputType = {
   systemId: string | null
   statId: string | null
   name: string | null
+  key: string | null
+  description: string | null
+  order: number | null
   createdAt: Date | null
 }
 
@@ -45,16 +61,30 @@ export type SkillCountAggregateOutputType = {
   systemId: number
   statId: number
   name: number
+  key: number
+  description: number
+  order: number
   createdAt: number
   _all: number
 }
 
+
+export type SkillAvgAggregateInputType = {
+  order?: true
+}
+
+export type SkillSumAggregateInputType = {
+  order?: true
+}
 
 export type SkillMinAggregateInputType = {
   id?: true
   systemId?: true
   statId?: true
   name?: true
+  key?: true
+  description?: true
+  order?: true
   createdAt?: true
 }
 
@@ -63,6 +93,9 @@ export type SkillMaxAggregateInputType = {
   systemId?: true
   statId?: true
   name?: true
+  key?: true
+  description?: true
+  order?: true
   createdAt?: true
 }
 
@@ -71,6 +104,9 @@ export type SkillCountAggregateInputType = {
   systemId?: true
   statId?: true
   name?: true
+  key?: true
+  description?: true
+  order?: true
   createdAt?: true
   _all?: true
 }
@@ -113,6 +149,18 @@ export type SkillAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: SkillAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: SkillSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: SkillMinAggregateInputType
@@ -143,6 +191,8 @@ export type SkillGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: SkillCountAggregateInputType | true
+  _avg?: SkillAvgAggregateInputType
+  _sum?: SkillSumAggregateInputType
   _min?: SkillMinAggregateInputType
   _max?: SkillMaxAggregateInputType
 }
@@ -152,8 +202,13 @@ export type SkillGroupByOutputType = {
   systemId: string
   statId: string
   name: string
+  key: string
+  description: string | null
+  order: number
   createdAt: Date
   _count: SkillCountAggregateOutputType | null
+  _avg: SkillAvgAggregateOutputType | null
+  _sum: SkillSumAggregateOutputType | null
   _min: SkillMinAggregateOutputType | null
   _max: SkillMaxAggregateOutputType | null
 }
@@ -181,9 +236,18 @@ export type SkillWhereInput = {
   systemId?: Prisma.StringFilter<"Skill"> | string
   statId?: Prisma.StringFilter<"Skill"> | string
   name?: Prisma.StringFilter<"Skill"> | string
+  key?: Prisma.StringFilter<"Skill"> | string
+  description?: Prisma.StringNullableFilter<"Skill"> | string | null
+  order?: Prisma.IntFilter<"Skill"> | number
   createdAt?: Prisma.DateTimeFilter<"Skill"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   stat?: Prisma.XOR<Prisma.StatScalarRelationFilter, Prisma.StatWhereInput>
+  characterSkills?: Prisma.CharacterSheetSkillListRelationFilter
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillListRelationFilter
+  npcTemplateSkills?: Prisma.NpcTemplateSkillListRelationFilter
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillListRelationFilter
+  npcSheetSkills?: Prisma.NpcSheetSkillListRelationFilter
+  creatureSheetSkills?: Prisma.CreatureSheetSkillListRelationFilter
 }
 
 export type SkillOrderByWithRelationInput = {
@@ -191,34 +255,58 @@ export type SkillOrderByWithRelationInput = {
   systemId?: Prisma.SortOrder
   statId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   stat?: Prisma.StatOrderByWithRelationInput
+  characterSkills?: Prisma.CharacterSheetSkillOrderByRelationAggregateInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillOrderByRelationAggregateInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillOrderByRelationAggregateInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillOrderByRelationAggregateInput
+  npcSheetSkills?: Prisma.NpcSheetSkillOrderByRelationAggregateInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillOrderByRelationAggregateInput
 }
 
 export type SkillWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   systemId_name?: Prisma.SkillSystemIdNameCompoundUniqueInput
+  systemId_key?: Prisma.SkillSystemIdKeyCompoundUniqueInput
   AND?: Prisma.SkillWhereInput | Prisma.SkillWhereInput[]
   OR?: Prisma.SkillWhereInput[]
   NOT?: Prisma.SkillWhereInput | Prisma.SkillWhereInput[]
   systemId?: Prisma.StringFilter<"Skill"> | string
   statId?: Prisma.StringFilter<"Skill"> | string
   name?: Prisma.StringFilter<"Skill"> | string
+  key?: Prisma.StringFilter<"Skill"> | string
+  description?: Prisma.StringNullableFilter<"Skill"> | string | null
+  order?: Prisma.IntFilter<"Skill"> | number
   createdAt?: Prisma.DateTimeFilter<"Skill"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   stat?: Prisma.XOR<Prisma.StatScalarRelationFilter, Prisma.StatWhereInput>
-}, "id" | "systemId_name">
+  characterSkills?: Prisma.CharacterSheetSkillListRelationFilter
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillListRelationFilter
+  npcTemplateSkills?: Prisma.NpcTemplateSkillListRelationFilter
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillListRelationFilter
+  npcSheetSkills?: Prisma.NpcSheetSkillListRelationFilter
+  creatureSheetSkills?: Prisma.CreatureSheetSkillListRelationFilter
+}, "id" | "systemId_name" | "systemId_key">
 
 export type SkillOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   statId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.SkillCountOrderByAggregateInput
+  _avg?: Prisma.SkillAvgOrderByAggregateInput
   _max?: Prisma.SkillMaxOrderByAggregateInput
   _min?: Prisma.SkillMinOrderByAggregateInput
+  _sum?: Prisma.SkillSumOrderByAggregateInput
 }
 
 export type SkillScalarWhereWithAggregatesInput = {
@@ -229,15 +317,27 @@ export type SkillScalarWhereWithAggregatesInput = {
   systemId?: Prisma.StringWithAggregatesFilter<"Skill"> | string
   statId?: Prisma.StringWithAggregatesFilter<"Skill"> | string
   name?: Prisma.StringWithAggregatesFilter<"Skill"> | string
+  key?: Prisma.StringWithAggregatesFilter<"Skill"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Skill"> | string | null
+  order?: Prisma.IntWithAggregatesFilter<"Skill"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Skill"> | Date | string
 }
 
 export type SkillCreateInput = {
   id?: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutSkillsInput
   stat: Prisma.StatCreateNestedOneWithoutSkillsInput
+  characterSkills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillCreateNestedManyWithoutSkillInput
 }
 
 export type SkillUncheckedCreateInput = {
@@ -245,15 +345,33 @@ export type SkillUncheckedCreateInput = {
   systemId: string
   statId: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedCreateNestedManyWithoutSkillInput
 }
 
 export type SkillUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutSkillsNestedInput
   stat?: Prisma.StatUpdateOneRequiredWithoutSkillsNestedInput
+  characterSkills?: Prisma.CharacterSheetSkillUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUpdateManyWithoutSkillNestedInput
 }
 
 export type SkillUncheckedUpdateInput = {
@@ -261,7 +379,16 @@ export type SkillUncheckedUpdateInput = {
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   statId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
 }
 
 export type SkillCreateManyInput = {
@@ -269,12 +396,18 @@ export type SkillCreateManyInput = {
   systemId: string
   statId: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
 }
 
 export type SkillUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -283,6 +416,9 @@ export type SkillUncheckedUpdateManyInput = {
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   statId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -296,9 +432,19 @@ export type SkillOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type SkillScalarRelationFilter = {
+  is?: Prisma.SkillWhereInput
+  isNot?: Prisma.SkillWhereInput
+}
+
 export type SkillSystemIdNameCompoundUniqueInput = {
   systemId: string
   name: string
+}
+
+export type SkillSystemIdKeyCompoundUniqueInput = {
+  systemId: string
+  key: string
 }
 
 export type SkillCountOrderByAggregateInput = {
@@ -306,7 +452,14 @@ export type SkillCountOrderByAggregateInput = {
   systemId?: Prisma.SortOrder
   statId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type SkillAvgOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type SkillMaxOrderByAggregateInput = {
@@ -314,6 +467,9 @@ export type SkillMaxOrderByAggregateInput = {
   systemId?: Prisma.SortOrder
   statId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -322,7 +478,14 @@ export type SkillMinOrderByAggregateInput = {
   systemId?: Prisma.SortOrder
   statId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type SkillSumOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type SkillCreateNestedManyWithoutSystemInput = {
@@ -365,6 +528,90 @@ export type SkillUncheckedUpdateManyWithoutSystemNestedInput = {
   update?: Prisma.SkillUpdateWithWhereUniqueWithoutSystemInput | Prisma.SkillUpdateWithWhereUniqueWithoutSystemInput[]
   updateMany?: Prisma.SkillUpdateManyWithWhereWithoutSystemInput | Prisma.SkillUpdateManyWithWhereWithoutSystemInput[]
   deleteMany?: Prisma.SkillScalarWhereInput | Prisma.SkillScalarWhereInput[]
+}
+
+export type SkillCreateNestedOneWithoutNpcTemplateSkillsInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutNpcTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutNpcTemplateSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutNpcTemplateSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+}
+
+export type SkillUpdateOneRequiredWithoutNpcTemplateSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutNpcTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutNpcTemplateSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutNpcTemplateSkillsInput
+  upsert?: Prisma.SkillUpsertWithoutNpcTemplateSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SkillUpdateToOneWithWhereWithoutNpcTemplateSkillsInput, Prisma.SkillUpdateWithoutNpcTemplateSkillsInput>, Prisma.SkillUncheckedUpdateWithoutNpcTemplateSkillsInput>
+}
+
+export type SkillCreateNestedOneWithoutCreatureTemplateSkillsInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutCreatureTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutCreatureTemplateSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutCreatureTemplateSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+}
+
+export type SkillUpdateOneRequiredWithoutCreatureTemplateSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutCreatureTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutCreatureTemplateSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutCreatureTemplateSkillsInput
+  upsert?: Prisma.SkillUpsertWithoutCreatureTemplateSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SkillUpdateToOneWithWhereWithoutCreatureTemplateSkillsInput, Prisma.SkillUpdateWithoutCreatureTemplateSkillsInput>, Prisma.SkillUncheckedUpdateWithoutCreatureTemplateSkillsInput>
+}
+
+export type SkillCreateNestedOneWithoutCharacterTemplateSkillsInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutCharacterTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutCharacterTemplateSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutCharacterTemplateSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+}
+
+export type SkillUpdateOneRequiredWithoutCharacterTemplateSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutCharacterTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutCharacterTemplateSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutCharacterTemplateSkillsInput
+  upsert?: Prisma.SkillUpsertWithoutCharacterTemplateSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SkillUpdateToOneWithWhereWithoutCharacterTemplateSkillsInput, Prisma.SkillUpdateWithoutCharacterTemplateSkillsInput>, Prisma.SkillUncheckedUpdateWithoutCharacterTemplateSkillsInput>
+}
+
+export type SkillCreateNestedOneWithoutNpcSheetSkillsInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutNpcSheetSkillsInput, Prisma.SkillUncheckedCreateWithoutNpcSheetSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutNpcSheetSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+}
+
+export type SkillUpdateOneRequiredWithoutNpcSheetSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutNpcSheetSkillsInput, Prisma.SkillUncheckedCreateWithoutNpcSheetSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutNpcSheetSkillsInput
+  upsert?: Prisma.SkillUpsertWithoutNpcSheetSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SkillUpdateToOneWithWhereWithoutNpcSheetSkillsInput, Prisma.SkillUpdateWithoutNpcSheetSkillsInput>, Prisma.SkillUncheckedUpdateWithoutNpcSheetSkillsInput>
+}
+
+export type SkillCreateNestedOneWithoutCreatureSheetSkillsInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutCreatureSheetSkillsInput, Prisma.SkillUncheckedCreateWithoutCreatureSheetSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutCreatureSheetSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+}
+
+export type SkillUpdateOneRequiredWithoutCreatureSheetSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutCreatureSheetSkillsInput, Prisma.SkillUncheckedCreateWithoutCreatureSheetSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutCreatureSheetSkillsInput
+  upsert?: Prisma.SkillUpsertWithoutCreatureSheetSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SkillUpdateToOneWithWhereWithoutCreatureSheetSkillsInput, Prisma.SkillUpdateWithoutCreatureSheetSkillsInput>, Prisma.SkillUncheckedUpdateWithoutCreatureSheetSkillsInput>
+}
+
+export type SkillCreateNestedOneWithoutCharacterSkillsInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutCharacterSkillsInput, Prisma.SkillUncheckedCreateWithoutCharacterSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutCharacterSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+}
+
+export type SkillUpdateOneRequiredWithoutCharacterSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.SkillCreateWithoutCharacterSkillsInput, Prisma.SkillUncheckedCreateWithoutCharacterSkillsInput>
+  connectOrCreate?: Prisma.SkillCreateOrConnectWithoutCharacterSkillsInput
+  upsert?: Prisma.SkillUpsertWithoutCharacterSkillsInput
+  connect?: Prisma.SkillWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SkillUpdateToOneWithWhereWithoutCharacterSkillsInput, Prisma.SkillUpdateWithoutCharacterSkillsInput>, Prisma.SkillUncheckedUpdateWithoutCharacterSkillsInput>
 }
 
 export type SkillCreateNestedManyWithoutStatInput = {
@@ -412,15 +659,33 @@ export type SkillUncheckedUpdateManyWithoutStatNestedInput = {
 export type SkillCreateWithoutSystemInput = {
   id?: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   stat: Prisma.StatCreateNestedOneWithoutSkillsInput
+  characterSkills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillCreateNestedManyWithoutSkillInput
 }
 
 export type SkillUncheckedCreateWithoutSystemInput = {
   id?: string
   statId: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedCreateNestedManyWithoutSkillInput
 }
 
 export type SkillCreateOrConnectWithoutSystemInput = {
@@ -457,21 +722,522 @@ export type SkillScalarWhereInput = {
   systemId?: Prisma.StringFilter<"Skill"> | string
   statId?: Prisma.StringFilter<"Skill"> | string
   name?: Prisma.StringFilter<"Skill"> | string
+  key?: Prisma.StringFilter<"Skill"> | string
+  description?: Prisma.StringNullableFilter<"Skill"> | string | null
+  order?: Prisma.IntFilter<"Skill"> | number
   createdAt?: Prisma.DateTimeFilter<"Skill"> | Date | string
+}
+
+export type SkillCreateWithoutNpcTemplateSkillsInput = {
+  id?: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSkillsInput
+  stat: Prisma.StatCreateNestedOneWithoutSkillsInput
+  characterSkills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillCreateNestedManyWithoutSkillInput
+}
+
+export type SkillUncheckedCreateWithoutNpcTemplateSkillsInput = {
+  id?: string
+  systemId: string
+  statId: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+}
+
+export type SkillCreateOrConnectWithoutNpcTemplateSkillsInput = {
+  where: Prisma.SkillWhereUniqueInput
+  create: Prisma.XOR<Prisma.SkillCreateWithoutNpcTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutNpcTemplateSkillsInput>
+}
+
+export type SkillUpsertWithoutNpcTemplateSkillsInput = {
+  update: Prisma.XOR<Prisma.SkillUpdateWithoutNpcTemplateSkillsInput, Prisma.SkillUncheckedUpdateWithoutNpcTemplateSkillsInput>
+  create: Prisma.XOR<Prisma.SkillCreateWithoutNpcTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutNpcTemplateSkillsInput>
+  where?: Prisma.SkillWhereInput
+}
+
+export type SkillUpdateToOneWithWhereWithoutNpcTemplateSkillsInput = {
+  where?: Prisma.SkillWhereInput
+  data: Prisma.XOR<Prisma.SkillUpdateWithoutNpcTemplateSkillsInput, Prisma.SkillUncheckedUpdateWithoutNpcTemplateSkillsInput>
+}
+
+export type SkillUpdateWithoutNpcTemplateSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSkillsNestedInput
+  stat?: Prisma.StatUpdateOneRequiredWithoutSkillsNestedInput
+  characterSkills?: Prisma.CharacterSheetSkillUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillUncheckedUpdateWithoutNpcTemplateSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  statId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillCreateWithoutCreatureTemplateSkillsInput = {
+  id?: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSkillsInput
+  stat: Prisma.StatCreateNestedOneWithoutSkillsInput
+  characterSkills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillCreateNestedManyWithoutSkillInput
+}
+
+export type SkillUncheckedCreateWithoutCreatureTemplateSkillsInput = {
+  id?: string
+  systemId: string
+  statId: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+}
+
+export type SkillCreateOrConnectWithoutCreatureTemplateSkillsInput = {
+  where: Prisma.SkillWhereUniqueInput
+  create: Prisma.XOR<Prisma.SkillCreateWithoutCreatureTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutCreatureTemplateSkillsInput>
+}
+
+export type SkillUpsertWithoutCreatureTemplateSkillsInput = {
+  update: Prisma.XOR<Prisma.SkillUpdateWithoutCreatureTemplateSkillsInput, Prisma.SkillUncheckedUpdateWithoutCreatureTemplateSkillsInput>
+  create: Prisma.XOR<Prisma.SkillCreateWithoutCreatureTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutCreatureTemplateSkillsInput>
+  where?: Prisma.SkillWhereInput
+}
+
+export type SkillUpdateToOneWithWhereWithoutCreatureTemplateSkillsInput = {
+  where?: Prisma.SkillWhereInput
+  data: Prisma.XOR<Prisma.SkillUpdateWithoutCreatureTemplateSkillsInput, Prisma.SkillUncheckedUpdateWithoutCreatureTemplateSkillsInput>
+}
+
+export type SkillUpdateWithoutCreatureTemplateSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSkillsNestedInput
+  stat?: Prisma.StatUpdateOneRequiredWithoutSkillsNestedInput
+  characterSkills?: Prisma.CharacterSheetSkillUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillUncheckedUpdateWithoutCreatureTemplateSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  statId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillCreateWithoutCharacterTemplateSkillsInput = {
+  id?: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSkillsInput
+  stat: Prisma.StatCreateNestedOneWithoutSkillsInput
+  characterSkills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillCreateNestedManyWithoutSkillInput
+}
+
+export type SkillUncheckedCreateWithoutCharacterTemplateSkillsInput = {
+  id?: string
+  systemId: string
+  statId: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+}
+
+export type SkillCreateOrConnectWithoutCharacterTemplateSkillsInput = {
+  where: Prisma.SkillWhereUniqueInput
+  create: Prisma.XOR<Prisma.SkillCreateWithoutCharacterTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutCharacterTemplateSkillsInput>
+}
+
+export type SkillUpsertWithoutCharacterTemplateSkillsInput = {
+  update: Prisma.XOR<Prisma.SkillUpdateWithoutCharacterTemplateSkillsInput, Prisma.SkillUncheckedUpdateWithoutCharacterTemplateSkillsInput>
+  create: Prisma.XOR<Prisma.SkillCreateWithoutCharacterTemplateSkillsInput, Prisma.SkillUncheckedCreateWithoutCharacterTemplateSkillsInput>
+  where?: Prisma.SkillWhereInput
+}
+
+export type SkillUpdateToOneWithWhereWithoutCharacterTemplateSkillsInput = {
+  where?: Prisma.SkillWhereInput
+  data: Prisma.XOR<Prisma.SkillUpdateWithoutCharacterTemplateSkillsInput, Prisma.SkillUncheckedUpdateWithoutCharacterTemplateSkillsInput>
+}
+
+export type SkillUpdateWithoutCharacterTemplateSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSkillsNestedInput
+  stat?: Prisma.StatUpdateOneRequiredWithoutSkillsNestedInput
+  characterSkills?: Prisma.CharacterSheetSkillUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillUncheckedUpdateWithoutCharacterTemplateSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  statId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillCreateWithoutNpcSheetSkillsInput = {
+  id?: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSkillsInput
+  stat: Prisma.StatCreateNestedOneWithoutSkillsInput
+  characterSkills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillCreateNestedManyWithoutSkillInput
+}
+
+export type SkillUncheckedCreateWithoutNpcSheetSkillsInput = {
+  id?: string
+  systemId: string
+  statId: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+}
+
+export type SkillCreateOrConnectWithoutNpcSheetSkillsInput = {
+  where: Prisma.SkillWhereUniqueInput
+  create: Prisma.XOR<Prisma.SkillCreateWithoutNpcSheetSkillsInput, Prisma.SkillUncheckedCreateWithoutNpcSheetSkillsInput>
+}
+
+export type SkillUpsertWithoutNpcSheetSkillsInput = {
+  update: Prisma.XOR<Prisma.SkillUpdateWithoutNpcSheetSkillsInput, Prisma.SkillUncheckedUpdateWithoutNpcSheetSkillsInput>
+  create: Prisma.XOR<Prisma.SkillCreateWithoutNpcSheetSkillsInput, Prisma.SkillUncheckedCreateWithoutNpcSheetSkillsInput>
+  where?: Prisma.SkillWhereInput
+}
+
+export type SkillUpdateToOneWithWhereWithoutNpcSheetSkillsInput = {
+  where?: Prisma.SkillWhereInput
+  data: Prisma.XOR<Prisma.SkillUpdateWithoutNpcSheetSkillsInput, Prisma.SkillUncheckedUpdateWithoutNpcSheetSkillsInput>
+}
+
+export type SkillUpdateWithoutNpcSheetSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSkillsNestedInput
+  stat?: Prisma.StatUpdateOneRequiredWithoutSkillsNestedInput
+  characterSkills?: Prisma.CharacterSheetSkillUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillUncheckedUpdateWithoutNpcSheetSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  statId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillCreateWithoutCreatureSheetSkillsInput = {
+  id?: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSkillsInput
+  stat: Prisma.StatCreateNestedOneWithoutSkillsInput
+  characterSkills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillCreateNestedManyWithoutSkillInput
+}
+
+export type SkillUncheckedCreateWithoutCreatureSheetSkillsInput = {
+  id?: string
+  systemId: string
+  statId: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+}
+
+export type SkillCreateOrConnectWithoutCreatureSheetSkillsInput = {
+  where: Prisma.SkillWhereUniqueInput
+  create: Prisma.XOR<Prisma.SkillCreateWithoutCreatureSheetSkillsInput, Prisma.SkillUncheckedCreateWithoutCreatureSheetSkillsInput>
+}
+
+export type SkillUpsertWithoutCreatureSheetSkillsInput = {
+  update: Prisma.XOR<Prisma.SkillUpdateWithoutCreatureSheetSkillsInput, Prisma.SkillUncheckedUpdateWithoutCreatureSheetSkillsInput>
+  create: Prisma.XOR<Prisma.SkillCreateWithoutCreatureSheetSkillsInput, Prisma.SkillUncheckedCreateWithoutCreatureSheetSkillsInput>
+  where?: Prisma.SkillWhereInput
+}
+
+export type SkillUpdateToOneWithWhereWithoutCreatureSheetSkillsInput = {
+  where?: Prisma.SkillWhereInput
+  data: Prisma.XOR<Prisma.SkillUpdateWithoutCreatureSheetSkillsInput, Prisma.SkillUncheckedUpdateWithoutCreatureSheetSkillsInput>
+}
+
+export type SkillUpdateWithoutCreatureSheetSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSkillsNestedInput
+  stat?: Prisma.StatUpdateOneRequiredWithoutSkillsNestedInput
+  characterSkills?: Prisma.CharacterSheetSkillUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillUncheckedUpdateWithoutCreatureSheetSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  statId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillCreateWithoutCharacterSkillsInput = {
+  id?: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutSkillsInput
+  stat: Prisma.StatCreateNestedOneWithoutSkillsInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillCreateNestedManyWithoutSkillInput
+}
+
+export type SkillUncheckedCreateWithoutCharacterSkillsInput = {
+  id?: string
+  systemId: string
+  statId: string
+  name: string
+  key?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+}
+
+export type SkillCreateOrConnectWithoutCharacterSkillsInput = {
+  where: Prisma.SkillWhereUniqueInput
+  create: Prisma.XOR<Prisma.SkillCreateWithoutCharacterSkillsInput, Prisma.SkillUncheckedCreateWithoutCharacterSkillsInput>
+}
+
+export type SkillUpsertWithoutCharacterSkillsInput = {
+  update: Prisma.XOR<Prisma.SkillUpdateWithoutCharacterSkillsInput, Prisma.SkillUncheckedUpdateWithoutCharacterSkillsInput>
+  create: Prisma.XOR<Prisma.SkillCreateWithoutCharacterSkillsInput, Prisma.SkillUncheckedCreateWithoutCharacterSkillsInput>
+  where?: Prisma.SkillWhereInput
+}
+
+export type SkillUpdateToOneWithWhereWithoutCharacterSkillsInput = {
+  where?: Prisma.SkillWhereInput
+  data: Prisma.XOR<Prisma.SkillUpdateWithoutCharacterSkillsInput, Prisma.SkillUncheckedUpdateWithoutCharacterSkillsInput>
+}
+
+export type SkillUpdateWithoutCharacterSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutSkillsNestedInput
+  stat?: Prisma.StatUpdateOneRequiredWithoutSkillsNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUpdateManyWithoutSkillNestedInput
+}
+
+export type SkillUncheckedUpdateWithoutCharacterSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  statId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
 }
 
 export type SkillCreateWithoutStatInput = {
   id?: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutSkillsInput
+  characterSkills?: Prisma.CharacterSheetSkillCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillCreateNestedManyWithoutSkillInput
 }
 
 export type SkillUncheckedCreateWithoutStatInput = {
   id?: string
   systemId: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedCreateNestedManyWithoutSkillInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedCreateNestedManyWithoutSkillInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedCreateNestedManyWithoutSkillInput
 }
 
 export type SkillCreateOrConnectWithoutStatInput = {
@@ -504,27 +1270,51 @@ export type SkillCreateManySystemInput = {
   id?: string
   statId: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
 }
 
 export type SkillUpdateWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stat?: Prisma.StatUpdateOneRequiredWithoutSkillsNestedInput
+  characterSkills?: Prisma.CharacterSheetSkillUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUpdateManyWithoutSkillNestedInput
 }
 
 export type SkillUncheckedUpdateWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   statId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
 }
 
 export type SkillUncheckedUpdateManyWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   statId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -532,30 +1322,128 @@ export type SkillCreateManyStatInput = {
   id?: string
   systemId: string
   name: string
+  key?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
 }
 
 export type SkillUpdateWithoutStatInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutSkillsNestedInput
+  characterSkills?: Prisma.CharacterSheetSkillUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUpdateManyWithoutSkillNestedInput
 }
 
 export type SkillUncheckedUpdateWithoutStatInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterSkills?: Prisma.CharacterSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  characterTemplateSkills?: Prisma.CharacterTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcTemplateSkills?: Prisma.NpcTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureTemplateSkills?: Prisma.CreatureTemplateSkillUncheckedUpdateManyWithoutSkillNestedInput
+  npcSheetSkills?: Prisma.NpcSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
+  creatureSheetSkills?: Prisma.CreatureSheetSkillUncheckedUpdateManyWithoutSkillNestedInput
 }
 
 export type SkillUncheckedUpdateManyWithoutStatInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type SkillCountOutputType
+ */
+
+export type SkillCountOutputType = {
+  characterSkills: number
+  characterTemplateSkills: number
+  npcTemplateSkills: number
+  creatureTemplateSkills: number
+  npcSheetSkills: number
+  creatureSheetSkills: number
+}
+
+export type SkillCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  characterSkills?: boolean | SkillCountOutputTypeCountCharacterSkillsArgs
+  characterTemplateSkills?: boolean | SkillCountOutputTypeCountCharacterTemplateSkillsArgs
+  npcTemplateSkills?: boolean | SkillCountOutputTypeCountNpcTemplateSkillsArgs
+  creatureTemplateSkills?: boolean | SkillCountOutputTypeCountCreatureTemplateSkillsArgs
+  npcSheetSkills?: boolean | SkillCountOutputTypeCountNpcSheetSkillsArgs
+  creatureSheetSkills?: boolean | SkillCountOutputTypeCountCreatureSheetSkillsArgs
+}
+
+/**
+ * SkillCountOutputType without action
+ */
+export type SkillCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SkillCountOutputType
+   */
+  select?: Prisma.SkillCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SkillCountOutputType without action
+ */
+export type SkillCountOutputTypeCountCharacterSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterSheetSkillWhereInput
+}
+
+/**
+ * SkillCountOutputType without action
+ */
+export type SkillCountOutputTypeCountCharacterTemplateSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterTemplateSkillWhereInput
+}
+
+/**
+ * SkillCountOutputType without action
+ */
+export type SkillCountOutputTypeCountNpcTemplateSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateSkillWhereInput
+}
+
+/**
+ * SkillCountOutputType without action
+ */
+export type SkillCountOutputTypeCountCreatureTemplateSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateSkillWhereInput
+}
+
+/**
+ * SkillCountOutputType without action
+ */
+export type SkillCountOutputTypeCountNpcSheetSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcSheetSkillWhereInput
+}
+
+/**
+ * SkillCountOutputType without action
+ */
+export type SkillCountOutputTypeCountCreatureSheetSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureSheetSkillWhereInput
+}
 
 
 export type SkillSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -563,9 +1451,19 @@ export type SkillSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   systemId?: boolean
   statId?: boolean
   name?: boolean
+  key?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   stat?: boolean | Prisma.StatDefaultArgs<ExtArgs>
+  characterSkills?: boolean | Prisma.Skill$characterSkillsArgs<ExtArgs>
+  characterTemplateSkills?: boolean | Prisma.Skill$characterTemplateSkillsArgs<ExtArgs>
+  npcTemplateSkills?: boolean | Prisma.Skill$npcTemplateSkillsArgs<ExtArgs>
+  creatureTemplateSkills?: boolean | Prisma.Skill$creatureTemplateSkillsArgs<ExtArgs>
+  npcSheetSkills?: boolean | Prisma.Skill$npcSheetSkillsArgs<ExtArgs>
+  creatureSheetSkills?: boolean | Prisma.Skill$creatureSheetSkillsArgs<ExtArgs>
+  _count?: boolean | Prisma.SkillCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["skill"]>
 
 export type SkillSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -573,6 +1471,9 @@ export type SkillSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   systemId?: boolean
   statId?: boolean
   name?: boolean
+  key?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   stat?: boolean | Prisma.StatDefaultArgs<ExtArgs>
@@ -583,6 +1484,9 @@ export type SkillSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   systemId?: boolean
   statId?: boolean
   name?: boolean
+  key?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   stat?: boolean | Prisma.StatDefaultArgs<ExtArgs>
@@ -593,13 +1497,23 @@ export type SkillSelectScalar = {
   systemId?: boolean
   statId?: boolean
   name?: boolean
+  key?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
 }
 
-export type SkillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "statId" | "name" | "createdAt", ExtArgs["result"]["skill"]>
+export type SkillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "statId" | "name" | "key" | "description" | "order" | "createdAt", ExtArgs["result"]["skill"]>
 export type SkillInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   stat?: boolean | Prisma.StatDefaultArgs<ExtArgs>
+  characterSkills?: boolean | Prisma.Skill$characterSkillsArgs<ExtArgs>
+  characterTemplateSkills?: boolean | Prisma.Skill$characterTemplateSkillsArgs<ExtArgs>
+  npcTemplateSkills?: boolean | Prisma.Skill$npcTemplateSkillsArgs<ExtArgs>
+  creatureTemplateSkills?: boolean | Prisma.Skill$creatureTemplateSkillsArgs<ExtArgs>
+  npcSheetSkills?: boolean | Prisma.Skill$npcSheetSkillsArgs<ExtArgs>
+  creatureSheetSkills?: boolean | Prisma.Skill$creatureSheetSkillsArgs<ExtArgs>
+  _count?: boolean | Prisma.SkillCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SkillIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
@@ -615,12 +1529,21 @@ export type $SkillPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
     stat: Prisma.$StatPayload<ExtArgs>
+    characterSkills: Prisma.$CharacterSheetSkillPayload<ExtArgs>[]
+    characterTemplateSkills: Prisma.$CharacterTemplateSkillPayload<ExtArgs>[]
+    npcTemplateSkills: Prisma.$NpcTemplateSkillPayload<ExtArgs>[]
+    creatureTemplateSkills: Prisma.$CreatureTemplateSkillPayload<ExtArgs>[]
+    npcSheetSkills: Prisma.$NpcSheetSkillPayload<ExtArgs>[]
+    creatureSheetSkills: Prisma.$CreatureSheetSkillPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     systemId: string
     statId: string
     name: string
+    key: string
+    description: string | null
+    order: number
     createdAt: Date
   }, ExtArgs["result"]["skill"]>
   composites: {}
@@ -1018,6 +1941,12 @@ export interface Prisma__SkillClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   stat<T extends Prisma.StatDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StatDefaultArgs<ExtArgs>>): Prisma.Prisma__StatClient<runtime.Types.Result.GetResult<Prisma.$StatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  characterSkills<T extends Prisma.Skill$characterSkillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Skill$characterSkillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterTemplateSkills<T extends Prisma.Skill$characterTemplateSkillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Skill$characterTemplateSkillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplateSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcTemplateSkills<T extends Prisma.Skill$npcTemplateSkillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Skill$npcTemplateSkillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatureTemplateSkills<T extends Prisma.Skill$creatureTemplateSkillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Skill$creatureTemplateSkillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcSheetSkills<T extends Prisma.Skill$npcSheetSkillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Skill$npcSheetSkillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcSheetSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatureSheetSkills<T extends Prisma.Skill$creatureSheetSkillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Skill$creatureSheetSkillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureSheetSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1051,6 +1980,9 @@ export interface SkillFieldRefs {
   readonly systemId: Prisma.FieldRef<"Skill", 'String'>
   readonly statId: Prisma.FieldRef<"Skill", 'String'>
   readonly name: Prisma.FieldRef<"Skill", 'String'>
+  readonly key: Prisma.FieldRef<"Skill", 'String'>
+  readonly description: Prisma.FieldRef<"Skill", 'String'>
+  readonly order: Prisma.FieldRef<"Skill", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Skill", 'DateTime'>
 }
     
@@ -1445,6 +2377,150 @@ export type SkillDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Skills to delete.
    */
   limit?: number
+}
+
+/**
+ * Skill.characterSkills
+ */
+export type Skill$characterSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSheetSkill
+   */
+  select?: Prisma.CharacterSheetSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSheetSkill
+   */
+  omit?: Prisma.CharacterSheetSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSheetSkillInclude<ExtArgs> | null
+  where?: Prisma.CharacterSheetSkillWhereInput
+  orderBy?: Prisma.CharacterSheetSkillOrderByWithRelationInput | Prisma.CharacterSheetSkillOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterSheetSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterSheetSkillScalarFieldEnum | Prisma.CharacterSheetSkillScalarFieldEnum[]
+}
+
+/**
+ * Skill.characterTemplateSkills
+ */
+export type Skill$characterTemplateSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterTemplateSkill
+   */
+  select?: Prisma.CharacterTemplateSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterTemplateSkill
+   */
+  omit?: Prisma.CharacterTemplateSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterTemplateSkillInclude<ExtArgs> | null
+  where?: Prisma.CharacterTemplateSkillWhereInput
+  orderBy?: Prisma.CharacterTemplateSkillOrderByWithRelationInput | Prisma.CharacterTemplateSkillOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterTemplateSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterTemplateSkillScalarFieldEnum | Prisma.CharacterTemplateSkillScalarFieldEnum[]
+}
+
+/**
+ * Skill.npcTemplateSkills
+ */
+export type Skill$npcTemplateSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateSkill
+   */
+  select?: Prisma.NpcTemplateSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateSkill
+   */
+  omit?: Prisma.NpcTemplateSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateSkillInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateSkillWhereInput
+  orderBy?: Prisma.NpcTemplateSkillOrderByWithRelationInput | Prisma.NpcTemplateSkillOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateSkillScalarFieldEnum | Prisma.NpcTemplateSkillScalarFieldEnum[]
+}
+
+/**
+ * Skill.creatureTemplateSkills
+ */
+export type Skill$creatureTemplateSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateSkill
+   */
+  select?: Prisma.CreatureTemplateSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateSkill
+   */
+  omit?: Prisma.CreatureTemplateSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateSkillInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateSkillWhereInput
+  orderBy?: Prisma.CreatureTemplateSkillOrderByWithRelationInput | Prisma.CreatureTemplateSkillOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateSkillScalarFieldEnum | Prisma.CreatureTemplateSkillScalarFieldEnum[]
+}
+
+/**
+ * Skill.npcSheetSkills
+ */
+export type Skill$npcSheetSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcSheetSkill
+   */
+  select?: Prisma.NpcSheetSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcSheetSkill
+   */
+  omit?: Prisma.NpcSheetSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcSheetSkillInclude<ExtArgs> | null
+  where?: Prisma.NpcSheetSkillWhereInput
+  orderBy?: Prisma.NpcSheetSkillOrderByWithRelationInput | Prisma.NpcSheetSkillOrderByWithRelationInput[]
+  cursor?: Prisma.NpcSheetSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcSheetSkillScalarFieldEnum | Prisma.NpcSheetSkillScalarFieldEnum[]
+}
+
+/**
+ * Skill.creatureSheetSkills
+ */
+export type Skill$creatureSheetSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureSheetSkill
+   */
+  select?: Prisma.CreatureSheetSkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureSheetSkill
+   */
+  omit?: Prisma.CreatureSheetSkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureSheetSkillInclude<ExtArgs> | null
+  where?: Prisma.CreatureSheetSkillWhereInput
+  orderBy?: Prisma.CreatureSheetSkillOrderByWithRelationInput | Prisma.CreatureSheetSkillOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureSheetSkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureSheetSkillScalarFieldEnum | Prisma.CreatureSheetSkillScalarFieldEnum[]
 }
 
 /**

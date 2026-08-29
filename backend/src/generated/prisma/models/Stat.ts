@@ -20,14 +20,28 @@ export type StatModel = runtime.Types.Result.DefaultSelection<Prisma.$StatPayloa
 
 export type AggregateStat = {
   _count: StatCountAggregateOutputType | null
+  _avg: StatAvgAggregateOutputType | null
+  _sum: StatSumAggregateOutputType | null
   _min: StatMinAggregateOutputType | null
   _max: StatMaxAggregateOutputType | null
+}
+
+export type StatAvgAggregateOutputType = {
+  order: number | null
+}
+
+export type StatSumAggregateOutputType = {
+  order: number | null
 }
 
 export type StatMinAggregateOutputType = {
   id: string | null
   systemId: string | null
   name: string | null
+  key: string | null
+  shortName: string | null
+  description: string | null
+  order: number | null
   createdAt: Date | null
 }
 
@@ -35,6 +49,10 @@ export type StatMaxAggregateOutputType = {
   id: string | null
   systemId: string | null
   name: string | null
+  key: string | null
+  shortName: string | null
+  description: string | null
+  order: number | null
   createdAt: Date | null
 }
 
@@ -42,15 +60,31 @@ export type StatCountAggregateOutputType = {
   id: number
   systemId: number
   name: number
+  key: number
+  shortName: number
+  description: number
+  order: number
   createdAt: number
   _all: number
 }
 
 
+export type StatAvgAggregateInputType = {
+  order?: true
+}
+
+export type StatSumAggregateInputType = {
+  order?: true
+}
+
 export type StatMinAggregateInputType = {
   id?: true
   systemId?: true
   name?: true
+  key?: true
+  shortName?: true
+  description?: true
+  order?: true
   createdAt?: true
 }
 
@@ -58,6 +92,10 @@ export type StatMaxAggregateInputType = {
   id?: true
   systemId?: true
   name?: true
+  key?: true
+  shortName?: true
+  description?: true
+  order?: true
   createdAt?: true
 }
 
@@ -65,6 +103,10 @@ export type StatCountAggregateInputType = {
   id?: true
   systemId?: true
   name?: true
+  key?: true
+  shortName?: true
+  description?: true
+  order?: true
   createdAt?: true
   _all?: true
 }
@@ -107,6 +149,18 @@ export type StatAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: StatAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: StatSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: StatMinAggregateInputType
@@ -137,6 +191,8 @@ export type StatGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: StatCountAggregateInputType | true
+  _avg?: StatAvgAggregateInputType
+  _sum?: StatSumAggregateInputType
   _min?: StatMinAggregateInputType
   _max?: StatMaxAggregateInputType
 }
@@ -145,8 +201,14 @@ export type StatGroupByOutputType = {
   id: string
   systemId: string
   name: string
+  key: string
+  shortName: string
+  description: string | null
+  order: number
   createdAt: Date
   _count: StatCountAggregateOutputType | null
+  _avg: StatAvgAggregateOutputType | null
+  _sum: StatSumAggregateOutputType | null
   _min: StatMinAggregateOutputType | null
   _max: StatMaxAggregateOutputType | null
 }
@@ -173,41 +235,78 @@ export type StatWhereInput = {
   id?: Prisma.StringFilter<"Stat"> | string
   systemId?: Prisma.StringFilter<"Stat"> | string
   name?: Prisma.StringFilter<"Stat"> | string
+  key?: Prisma.StringFilter<"Stat"> | string
+  shortName?: Prisma.StringFilter<"Stat"> | string
+  description?: Prisma.StringNullableFilter<"Stat"> | string | null
+  order?: Prisma.IntFilter<"Stat"> | number
   createdAt?: Prisma.DateTimeFilter<"Stat"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   skills?: Prisma.SkillListRelationFilter
+  characterStats?: Prisma.CharacterSheetStatListRelationFilter
+  characterTemplateStats?: Prisma.CharacterTemplateStatListRelationFilter
+  npcTemplateStats?: Prisma.NpcTemplateStatListRelationFilter
+  creatureTemplateStats?: Prisma.CreatureTemplateStatListRelationFilter
+  npcSheetStats?: Prisma.NpcSheetStatListRelationFilter
+  creatureSheetStats?: Prisma.CreatureSheetStatListRelationFilter
 }
 
 export type StatOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   system?: Prisma.GameSystemOrderByWithRelationInput
   skills?: Prisma.SkillOrderByRelationAggregateInput
+  characterStats?: Prisma.CharacterSheetStatOrderByRelationAggregateInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatOrderByRelationAggregateInput
+  npcTemplateStats?: Prisma.NpcTemplateStatOrderByRelationAggregateInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatOrderByRelationAggregateInput
+  npcSheetStats?: Prisma.NpcSheetStatOrderByRelationAggregateInput
+  creatureSheetStats?: Prisma.CreatureSheetStatOrderByRelationAggregateInput
 }
 
 export type StatWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   systemId_name?: Prisma.StatSystemIdNameCompoundUniqueInput
+  systemId_key?: Prisma.StatSystemIdKeyCompoundUniqueInput
   AND?: Prisma.StatWhereInput | Prisma.StatWhereInput[]
   OR?: Prisma.StatWhereInput[]
   NOT?: Prisma.StatWhereInput | Prisma.StatWhereInput[]
   systemId?: Prisma.StringFilter<"Stat"> | string
   name?: Prisma.StringFilter<"Stat"> | string
+  key?: Prisma.StringFilter<"Stat"> | string
+  shortName?: Prisma.StringFilter<"Stat"> | string
+  description?: Prisma.StringNullableFilter<"Stat"> | string | null
+  order?: Prisma.IntFilter<"Stat"> | number
   createdAt?: Prisma.DateTimeFilter<"Stat"> | Date | string
   system?: Prisma.XOR<Prisma.GameSystemScalarRelationFilter, Prisma.GameSystemWhereInput>
   skills?: Prisma.SkillListRelationFilter
-}, "id" | "systemId_name">
+  characterStats?: Prisma.CharacterSheetStatListRelationFilter
+  characterTemplateStats?: Prisma.CharacterTemplateStatListRelationFilter
+  npcTemplateStats?: Prisma.NpcTemplateStatListRelationFilter
+  creatureTemplateStats?: Prisma.CreatureTemplateStatListRelationFilter
+  npcSheetStats?: Prisma.NpcSheetStatListRelationFilter
+  creatureSheetStats?: Prisma.CreatureSheetStatListRelationFilter
+}, "id" | "systemId_name" | "systemId_key">
 
 export type StatOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.StatCountOrderByAggregateInput
+  _avg?: Prisma.StatAvgOrderByAggregateInput
   _max?: Prisma.StatMaxOrderByAggregateInput
   _min?: Prisma.StatMinOrderByAggregateInput
+  _sum?: Prisma.StatSumOrderByAggregateInput
 }
 
 export type StatScalarWhereWithAggregatesInput = {
@@ -217,51 +316,103 @@ export type StatScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Stat"> | string
   systemId?: Prisma.StringWithAggregatesFilter<"Stat"> | string
   name?: Prisma.StringWithAggregatesFilter<"Stat"> | string
+  key?: Prisma.StringWithAggregatesFilter<"Stat"> | string
+  shortName?: Prisma.StringWithAggregatesFilter<"Stat"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Stat"> | string | null
+  order?: Prisma.IntWithAggregatesFilter<"Stat"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Stat"> | Date | string
 }
 
 export type StatCreateInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
   skills?: Prisma.SkillCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatCreateNestedManyWithoutStatInput
 }
 
 export type StatUncheckedCreateInput = {
   id?: string
   systemId: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedCreateNestedManyWithoutStatInput
 }
 
 export type StatUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
   skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUpdateManyWithoutStatNestedInput
 }
 
 export type StatUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedUpdateManyWithoutStatNestedInput
 }
 
 export type StatCreateManyInput = {
   id?: string
   systemId: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
 }
 
 export type StatUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -269,6 +420,10 @@ export type StatUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -282,22 +437,44 @@ export type StatOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StatScalarRelationFilter = {
+  is?: Prisma.StatWhereInput
+  isNot?: Prisma.StatWhereInput
+}
+
 export type StatSystemIdNameCompoundUniqueInput = {
   systemId: string
   name: string
+}
+
+export type StatSystemIdKeyCompoundUniqueInput = {
+  systemId: string
+  key: string
 }
 
 export type StatCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type StatAvgOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type StatMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -305,12 +482,15 @@ export type StatMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   systemId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  key?: Prisma.SortOrder
+  shortName?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
-export type StatScalarRelationFilter = {
-  is?: Prisma.StatWhereInput
-  isNot?: Prisma.StatWhereInput
+export type StatSumOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type StatCreateNestedManyWithoutSystemInput = {
@@ -355,6 +535,90 @@ export type StatUncheckedUpdateManyWithoutSystemNestedInput = {
   deleteMany?: Prisma.StatScalarWhereInput | Prisma.StatScalarWhereInput[]
 }
 
+export type StatCreateNestedOneWithoutNpcTemplateStatsInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutNpcTemplateStatsInput, Prisma.StatUncheckedCreateWithoutNpcTemplateStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutNpcTemplateStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+}
+
+export type StatUpdateOneRequiredWithoutNpcTemplateStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutNpcTemplateStatsInput, Prisma.StatUncheckedCreateWithoutNpcTemplateStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutNpcTemplateStatsInput
+  upsert?: Prisma.StatUpsertWithoutNpcTemplateStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StatUpdateToOneWithWhereWithoutNpcTemplateStatsInput, Prisma.StatUpdateWithoutNpcTemplateStatsInput>, Prisma.StatUncheckedUpdateWithoutNpcTemplateStatsInput>
+}
+
+export type StatCreateNestedOneWithoutCreatureTemplateStatsInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutCreatureTemplateStatsInput, Prisma.StatUncheckedCreateWithoutCreatureTemplateStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutCreatureTemplateStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+}
+
+export type StatUpdateOneRequiredWithoutCreatureTemplateStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutCreatureTemplateStatsInput, Prisma.StatUncheckedCreateWithoutCreatureTemplateStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutCreatureTemplateStatsInput
+  upsert?: Prisma.StatUpsertWithoutCreatureTemplateStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StatUpdateToOneWithWhereWithoutCreatureTemplateStatsInput, Prisma.StatUpdateWithoutCreatureTemplateStatsInput>, Prisma.StatUncheckedUpdateWithoutCreatureTemplateStatsInput>
+}
+
+export type StatCreateNestedOneWithoutCharacterTemplateStatsInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutCharacterTemplateStatsInput, Prisma.StatUncheckedCreateWithoutCharacterTemplateStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutCharacterTemplateStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+}
+
+export type StatUpdateOneRequiredWithoutCharacterTemplateStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutCharacterTemplateStatsInput, Prisma.StatUncheckedCreateWithoutCharacterTemplateStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutCharacterTemplateStatsInput
+  upsert?: Prisma.StatUpsertWithoutCharacterTemplateStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StatUpdateToOneWithWhereWithoutCharacterTemplateStatsInput, Prisma.StatUpdateWithoutCharacterTemplateStatsInput>, Prisma.StatUncheckedUpdateWithoutCharacterTemplateStatsInput>
+}
+
+export type StatCreateNestedOneWithoutNpcSheetStatsInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutNpcSheetStatsInput, Prisma.StatUncheckedCreateWithoutNpcSheetStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutNpcSheetStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+}
+
+export type StatUpdateOneRequiredWithoutNpcSheetStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutNpcSheetStatsInput, Prisma.StatUncheckedCreateWithoutNpcSheetStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutNpcSheetStatsInput
+  upsert?: Prisma.StatUpsertWithoutNpcSheetStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StatUpdateToOneWithWhereWithoutNpcSheetStatsInput, Prisma.StatUpdateWithoutNpcSheetStatsInput>, Prisma.StatUncheckedUpdateWithoutNpcSheetStatsInput>
+}
+
+export type StatCreateNestedOneWithoutCreatureSheetStatsInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutCreatureSheetStatsInput, Prisma.StatUncheckedCreateWithoutCreatureSheetStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutCreatureSheetStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+}
+
+export type StatUpdateOneRequiredWithoutCreatureSheetStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutCreatureSheetStatsInput, Prisma.StatUncheckedCreateWithoutCreatureSheetStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutCreatureSheetStatsInput
+  upsert?: Prisma.StatUpsertWithoutCreatureSheetStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StatUpdateToOneWithWhereWithoutCreatureSheetStatsInput, Prisma.StatUpdateWithoutCreatureSheetStatsInput>, Prisma.StatUncheckedUpdateWithoutCreatureSheetStatsInput>
+}
+
+export type StatCreateNestedOneWithoutCharacterStatsInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutCharacterStatsInput, Prisma.StatUncheckedCreateWithoutCharacterStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutCharacterStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+}
+
+export type StatUpdateOneRequiredWithoutCharacterStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.StatCreateWithoutCharacterStatsInput, Prisma.StatUncheckedCreateWithoutCharacterStatsInput>
+  connectOrCreate?: Prisma.StatCreateOrConnectWithoutCharacterStatsInput
+  upsert?: Prisma.StatUpsertWithoutCharacterStatsInput
+  connect?: Prisma.StatWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StatUpdateToOneWithWhereWithoutCharacterStatsInput, Prisma.StatUpdateWithoutCharacterStatsInput>, Prisma.StatUncheckedUpdateWithoutCharacterStatsInput>
+}
+
 export type StatCreateNestedOneWithoutSkillsInput = {
   create?: Prisma.XOR<Prisma.StatCreateWithoutSkillsInput, Prisma.StatUncheckedCreateWithoutSkillsInput>
   connectOrCreate?: Prisma.StatCreateOrConnectWithoutSkillsInput
@@ -372,15 +636,35 @@ export type StatUpdateOneRequiredWithoutSkillsNestedInput = {
 export type StatCreateWithoutSystemInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   skills?: Prisma.SkillCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatCreateNestedManyWithoutStatInput
 }
 
 export type StatUncheckedCreateWithoutSystemInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedCreateNestedManyWithoutStatInput
 }
 
 export type StatCreateOrConnectWithoutSystemInput = {
@@ -416,21 +700,549 @@ export type StatScalarWhereInput = {
   id?: Prisma.StringFilter<"Stat"> | string
   systemId?: Prisma.StringFilter<"Stat"> | string
   name?: Prisma.StringFilter<"Stat"> | string
+  key?: Prisma.StringFilter<"Stat"> | string
+  shortName?: Prisma.StringFilter<"Stat"> | string
+  description?: Prisma.StringNullableFilter<"Stat"> | string | null
+  order?: Prisma.IntFilter<"Stat"> | number
   createdAt?: Prisma.DateTimeFilter<"Stat"> | Date | string
+}
+
+export type StatCreateWithoutNpcTemplateStatsInput = {
+  id?: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
+  skills?: Prisma.SkillCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatCreateNestedManyWithoutStatInput
+}
+
+export type StatUncheckedCreateWithoutNpcTemplateStatsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedCreateNestedManyWithoutStatInput
+}
+
+export type StatCreateOrConnectWithoutNpcTemplateStatsInput = {
+  where: Prisma.StatWhereUniqueInput
+  create: Prisma.XOR<Prisma.StatCreateWithoutNpcTemplateStatsInput, Prisma.StatUncheckedCreateWithoutNpcTemplateStatsInput>
+}
+
+export type StatUpsertWithoutNpcTemplateStatsInput = {
+  update: Prisma.XOR<Prisma.StatUpdateWithoutNpcTemplateStatsInput, Prisma.StatUncheckedUpdateWithoutNpcTemplateStatsInput>
+  create: Prisma.XOR<Prisma.StatCreateWithoutNpcTemplateStatsInput, Prisma.StatUncheckedCreateWithoutNpcTemplateStatsInput>
+  where?: Prisma.StatWhereInput
+}
+
+export type StatUpdateToOneWithWhereWithoutNpcTemplateStatsInput = {
+  where?: Prisma.StatWhereInput
+  data: Prisma.XOR<Prisma.StatUpdateWithoutNpcTemplateStatsInput, Prisma.StatUncheckedUpdateWithoutNpcTemplateStatsInput>
+}
+
+export type StatUpdateWithoutNpcTemplateStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUpdateManyWithoutStatNestedInput
+}
+
+export type StatUncheckedUpdateWithoutNpcTemplateStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedUpdateManyWithoutStatNestedInput
+}
+
+export type StatCreateWithoutCreatureTemplateStatsInput = {
+  id?: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
+  skills?: Prisma.SkillCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatCreateNestedManyWithoutStatInput
+}
+
+export type StatUncheckedCreateWithoutCreatureTemplateStatsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedCreateNestedManyWithoutStatInput
+}
+
+export type StatCreateOrConnectWithoutCreatureTemplateStatsInput = {
+  where: Prisma.StatWhereUniqueInput
+  create: Prisma.XOR<Prisma.StatCreateWithoutCreatureTemplateStatsInput, Prisma.StatUncheckedCreateWithoutCreatureTemplateStatsInput>
+}
+
+export type StatUpsertWithoutCreatureTemplateStatsInput = {
+  update: Prisma.XOR<Prisma.StatUpdateWithoutCreatureTemplateStatsInput, Prisma.StatUncheckedUpdateWithoutCreatureTemplateStatsInput>
+  create: Prisma.XOR<Prisma.StatCreateWithoutCreatureTemplateStatsInput, Prisma.StatUncheckedCreateWithoutCreatureTemplateStatsInput>
+  where?: Prisma.StatWhereInput
+}
+
+export type StatUpdateToOneWithWhereWithoutCreatureTemplateStatsInput = {
+  where?: Prisma.StatWhereInput
+  data: Prisma.XOR<Prisma.StatUpdateWithoutCreatureTemplateStatsInput, Prisma.StatUncheckedUpdateWithoutCreatureTemplateStatsInput>
+}
+
+export type StatUpdateWithoutCreatureTemplateStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUpdateManyWithoutStatNestedInput
+}
+
+export type StatUncheckedUpdateWithoutCreatureTemplateStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedUpdateManyWithoutStatNestedInput
+}
+
+export type StatCreateWithoutCharacterTemplateStatsInput = {
+  id?: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
+  skills?: Prisma.SkillCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatCreateNestedManyWithoutStatInput
+}
+
+export type StatUncheckedCreateWithoutCharacterTemplateStatsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedCreateNestedManyWithoutStatInput
+}
+
+export type StatCreateOrConnectWithoutCharacterTemplateStatsInput = {
+  where: Prisma.StatWhereUniqueInput
+  create: Prisma.XOR<Prisma.StatCreateWithoutCharacterTemplateStatsInput, Prisma.StatUncheckedCreateWithoutCharacterTemplateStatsInput>
+}
+
+export type StatUpsertWithoutCharacterTemplateStatsInput = {
+  update: Prisma.XOR<Prisma.StatUpdateWithoutCharacterTemplateStatsInput, Prisma.StatUncheckedUpdateWithoutCharacterTemplateStatsInput>
+  create: Prisma.XOR<Prisma.StatCreateWithoutCharacterTemplateStatsInput, Prisma.StatUncheckedCreateWithoutCharacterTemplateStatsInput>
+  where?: Prisma.StatWhereInput
+}
+
+export type StatUpdateToOneWithWhereWithoutCharacterTemplateStatsInput = {
+  where?: Prisma.StatWhereInput
+  data: Prisma.XOR<Prisma.StatUpdateWithoutCharacterTemplateStatsInput, Prisma.StatUncheckedUpdateWithoutCharacterTemplateStatsInput>
+}
+
+export type StatUpdateWithoutCharacterTemplateStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUpdateManyWithoutStatNestedInput
+}
+
+export type StatUncheckedUpdateWithoutCharacterTemplateStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedUpdateManyWithoutStatNestedInput
+}
+
+export type StatCreateWithoutNpcSheetStatsInput = {
+  id?: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
+  skills?: Prisma.SkillCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatCreateNestedManyWithoutStatInput
+}
+
+export type StatUncheckedCreateWithoutNpcSheetStatsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedCreateNestedManyWithoutStatInput
+}
+
+export type StatCreateOrConnectWithoutNpcSheetStatsInput = {
+  where: Prisma.StatWhereUniqueInput
+  create: Prisma.XOR<Prisma.StatCreateWithoutNpcSheetStatsInput, Prisma.StatUncheckedCreateWithoutNpcSheetStatsInput>
+}
+
+export type StatUpsertWithoutNpcSheetStatsInput = {
+  update: Prisma.XOR<Prisma.StatUpdateWithoutNpcSheetStatsInput, Prisma.StatUncheckedUpdateWithoutNpcSheetStatsInput>
+  create: Prisma.XOR<Prisma.StatCreateWithoutNpcSheetStatsInput, Prisma.StatUncheckedCreateWithoutNpcSheetStatsInput>
+  where?: Prisma.StatWhereInput
+}
+
+export type StatUpdateToOneWithWhereWithoutNpcSheetStatsInput = {
+  where?: Prisma.StatWhereInput
+  data: Prisma.XOR<Prisma.StatUpdateWithoutNpcSheetStatsInput, Prisma.StatUncheckedUpdateWithoutNpcSheetStatsInput>
+}
+
+export type StatUpdateWithoutNpcSheetStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUpdateManyWithoutStatNestedInput
+}
+
+export type StatUncheckedUpdateWithoutNpcSheetStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedUpdateManyWithoutStatNestedInput
+}
+
+export type StatCreateWithoutCreatureSheetStatsInput = {
+  id?: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
+  skills?: Prisma.SkillCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatCreateNestedManyWithoutStatInput
+}
+
+export type StatUncheckedCreateWithoutCreatureSheetStatsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedCreateNestedManyWithoutStatInput
+}
+
+export type StatCreateOrConnectWithoutCreatureSheetStatsInput = {
+  where: Prisma.StatWhereUniqueInput
+  create: Prisma.XOR<Prisma.StatCreateWithoutCreatureSheetStatsInput, Prisma.StatUncheckedCreateWithoutCreatureSheetStatsInput>
+}
+
+export type StatUpsertWithoutCreatureSheetStatsInput = {
+  update: Prisma.XOR<Prisma.StatUpdateWithoutCreatureSheetStatsInput, Prisma.StatUncheckedUpdateWithoutCreatureSheetStatsInput>
+  create: Prisma.XOR<Prisma.StatCreateWithoutCreatureSheetStatsInput, Prisma.StatUncheckedCreateWithoutCreatureSheetStatsInput>
+  where?: Prisma.StatWhereInput
+}
+
+export type StatUpdateToOneWithWhereWithoutCreatureSheetStatsInput = {
+  where?: Prisma.StatWhereInput
+  data: Prisma.XOR<Prisma.StatUpdateWithoutCreatureSheetStatsInput, Prisma.StatUncheckedUpdateWithoutCreatureSheetStatsInput>
+}
+
+export type StatUpdateWithoutCreatureSheetStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUpdateManyWithoutStatNestedInput
+}
+
+export type StatUncheckedUpdateWithoutCreatureSheetStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedUpdateManyWithoutStatNestedInput
+}
+
+export type StatCreateWithoutCharacterStatsInput = {
+  id?: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
+  skills?: Prisma.SkillCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatCreateNestedManyWithoutStatInput
+}
+
+export type StatUncheckedCreateWithoutCharacterStatsInput = {
+  id?: string
+  systemId: string
+  name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
+  createdAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedCreateNestedManyWithoutStatInput
+}
+
+export type StatCreateOrConnectWithoutCharacterStatsInput = {
+  where: Prisma.StatWhereUniqueInput
+  create: Prisma.XOR<Prisma.StatCreateWithoutCharacterStatsInput, Prisma.StatUncheckedCreateWithoutCharacterStatsInput>
+}
+
+export type StatUpsertWithoutCharacterStatsInput = {
+  update: Prisma.XOR<Prisma.StatUpdateWithoutCharacterStatsInput, Prisma.StatUncheckedUpdateWithoutCharacterStatsInput>
+  create: Prisma.XOR<Prisma.StatCreateWithoutCharacterStatsInput, Prisma.StatUncheckedCreateWithoutCharacterStatsInput>
+  where?: Prisma.StatWhereInput
+}
+
+export type StatUpdateToOneWithWhereWithoutCharacterStatsInput = {
+  where?: Prisma.StatWhereInput
+  data: Prisma.XOR<Prisma.StatUpdateWithoutCharacterStatsInput, Prisma.StatUncheckedUpdateWithoutCharacterStatsInput>
+}
+
+export type StatUpdateWithoutCharacterStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUpdateManyWithoutStatNestedInput
+}
+
+export type StatUncheckedUpdateWithoutCharacterStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  systemId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedUpdateManyWithoutStatNestedInput
 }
 
 export type StatCreateWithoutSkillsInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
   system: Prisma.GameSystemCreateNestedOneWithoutStatsInput
+  characterStats?: Prisma.CharacterSheetStatCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatCreateNestedManyWithoutStatInput
 }
 
 export type StatUncheckedCreateWithoutSkillsInput = {
   id?: string
   systemId: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
+  characterStats?: Prisma.CharacterSheetStatUncheckedCreateNestedManyWithoutStatInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedCreateNestedManyWithoutStatInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedCreateNestedManyWithoutStatInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedCreateNestedManyWithoutStatInput
 }
 
 export type StatCreateOrConnectWithoutSkillsInput = {
@@ -452,40 +1264,88 @@ export type StatUpdateToOneWithWhereWithoutSkillsInput = {
 export type StatUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   system?: Prisma.GameSystemUpdateOneRequiredWithoutStatsNestedInput
+  characterStats?: Prisma.CharacterSheetStatUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUpdateManyWithoutStatNestedInput
 }
 
 export type StatUncheckedUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   systemId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  characterStats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedUpdateManyWithoutStatNestedInput
 }
 
 export type StatCreateManySystemInput = {
   id?: string
   name: string
+  key?: string
+  shortName?: string
+  description?: string | null
+  order?: number
   createdAt?: Date | string
 }
 
 export type StatUpdateWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.SkillUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUpdateManyWithoutStatNestedInput
 }
 
 export type StatUncheckedUpdateWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.SkillUncheckedUpdateManyWithoutStatNestedInput
+  characterStats?: Prisma.CharacterSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  characterTemplateStats?: Prisma.CharacterTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcTemplateStats?: Prisma.NpcTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureTemplateStats?: Prisma.CreatureTemplateStatUncheckedUpdateManyWithoutStatNestedInput
+  npcSheetStats?: Prisma.NpcSheetStatUncheckedUpdateManyWithoutStatNestedInput
+  creatureSheetStats?: Prisma.CreatureSheetStatUncheckedUpdateManyWithoutStatNestedInput
 }
 
 export type StatUncheckedUpdateManyWithoutSystemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -496,10 +1356,22 @@ export type StatUncheckedUpdateManyWithoutSystemInput = {
 
 export type StatCountOutputType = {
   skills: number
+  characterStats: number
+  characterTemplateStats: number
+  npcTemplateStats: number
+  creatureTemplateStats: number
+  npcSheetStats: number
+  creatureSheetStats: number
 }
 
 export type StatCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   skills?: boolean | StatCountOutputTypeCountSkillsArgs
+  characterStats?: boolean | StatCountOutputTypeCountCharacterStatsArgs
+  characterTemplateStats?: boolean | StatCountOutputTypeCountCharacterTemplateStatsArgs
+  npcTemplateStats?: boolean | StatCountOutputTypeCountNpcTemplateStatsArgs
+  creatureTemplateStats?: boolean | StatCountOutputTypeCountCreatureTemplateStatsArgs
+  npcSheetStats?: boolean | StatCountOutputTypeCountNpcSheetStatsArgs
+  creatureSheetStats?: boolean | StatCountOutputTypeCountCreatureSheetStatsArgs
 }
 
 /**
@@ -519,14 +1391,66 @@ export type StatCountOutputTypeCountSkillsArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.SkillWhereInput
 }
 
+/**
+ * StatCountOutputType without action
+ */
+export type StatCountOutputTypeCountCharacterStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterSheetStatWhereInput
+}
+
+/**
+ * StatCountOutputType without action
+ */
+export type StatCountOutputTypeCountCharacterTemplateStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CharacterTemplateStatWhereInput
+}
+
+/**
+ * StatCountOutputType without action
+ */
+export type StatCountOutputTypeCountNpcTemplateStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcTemplateStatWhereInput
+}
+
+/**
+ * StatCountOutputType without action
+ */
+export type StatCountOutputTypeCountCreatureTemplateStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureTemplateStatWhereInput
+}
+
+/**
+ * StatCountOutputType without action
+ */
+export type StatCountOutputTypeCountNpcSheetStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpcSheetStatWhereInput
+}
+
+/**
+ * StatCountOutputType without action
+ */
+export type StatCountOutputTypeCountCreatureSheetStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatureSheetStatWhereInput
+}
+
 
 export type StatSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   systemId?: boolean
   name?: boolean
+  key?: boolean
+  shortName?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.Stat$skillsArgs<ExtArgs>
+  characterStats?: boolean | Prisma.Stat$characterStatsArgs<ExtArgs>
+  characterTemplateStats?: boolean | Prisma.Stat$characterTemplateStatsArgs<ExtArgs>
+  npcTemplateStats?: boolean | Prisma.Stat$npcTemplateStatsArgs<ExtArgs>
+  creatureTemplateStats?: boolean | Prisma.Stat$creatureTemplateStatsArgs<ExtArgs>
+  npcSheetStats?: boolean | Prisma.Stat$npcSheetStatsArgs<ExtArgs>
+  creatureSheetStats?: boolean | Prisma.Stat$creatureSheetStatsArgs<ExtArgs>
   _count?: boolean | Prisma.StatCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stat"]>
 
@@ -534,6 +1458,10 @@ export type StatSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   systemId?: boolean
   name?: boolean
+  key?: boolean
+  shortName?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stat"]>
@@ -542,6 +1470,10 @@ export type StatSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   systemId?: boolean
   name?: boolean
+  key?: boolean
+  shortName?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stat"]>
@@ -550,13 +1482,23 @@ export type StatSelectScalar = {
   id?: boolean
   systemId?: boolean
   name?: boolean
+  key?: boolean
+  shortName?: boolean
+  description?: boolean
+  order?: boolean
   createdAt?: boolean
 }
 
-export type StatOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "createdAt", ExtArgs["result"]["stat"]>
+export type StatOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "systemId" | "name" | "key" | "shortName" | "description" | "order" | "createdAt", ExtArgs["result"]["stat"]>
 export type StatInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   system?: boolean | Prisma.GameSystemDefaultArgs<ExtArgs>
   skills?: boolean | Prisma.Stat$skillsArgs<ExtArgs>
+  characterStats?: boolean | Prisma.Stat$characterStatsArgs<ExtArgs>
+  characterTemplateStats?: boolean | Prisma.Stat$characterTemplateStatsArgs<ExtArgs>
+  npcTemplateStats?: boolean | Prisma.Stat$npcTemplateStatsArgs<ExtArgs>
+  creatureTemplateStats?: boolean | Prisma.Stat$creatureTemplateStatsArgs<ExtArgs>
+  npcSheetStats?: boolean | Prisma.Stat$npcSheetStatsArgs<ExtArgs>
+  creatureSheetStats?: boolean | Prisma.Stat$creatureSheetStatsArgs<ExtArgs>
   _count?: boolean | Prisma.StatCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StatIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -571,11 +1513,21 @@ export type $StatPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     system: Prisma.$GameSystemPayload<ExtArgs>
     skills: Prisma.$SkillPayload<ExtArgs>[]
+    characterStats: Prisma.$CharacterSheetStatPayload<ExtArgs>[]
+    characterTemplateStats: Prisma.$CharacterTemplateStatPayload<ExtArgs>[]
+    npcTemplateStats: Prisma.$NpcTemplateStatPayload<ExtArgs>[]
+    creatureTemplateStats: Prisma.$CreatureTemplateStatPayload<ExtArgs>[]
+    npcSheetStats: Prisma.$NpcSheetStatPayload<ExtArgs>[]
+    creatureSheetStats: Prisma.$CreatureSheetStatPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     systemId: string
     name: string
+    key: string
+    shortName: string
+    description: string | null
+    order: number
     createdAt: Date
   }, ExtArgs["result"]["stat"]>
   composites: {}
@@ -973,6 +1925,12 @@ export interface Prisma__StatClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   system<T extends Prisma.GameSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__GameSystemClient<runtime.Types.Result.GetResult<Prisma.$GameSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   skills<T extends Prisma.Stat$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stat$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterStats<T extends Prisma.Stat$characterStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stat$characterStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterSheetStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  characterTemplateStats<T extends Prisma.Stat$characterTemplateStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stat$characterTemplateStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterTemplateStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcTemplateStats<T extends Prisma.Stat$npcTemplateStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stat$npcTemplateStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcTemplateStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatureTemplateStats<T extends Prisma.Stat$creatureTemplateStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stat$creatureTemplateStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureTemplateStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  npcSheetStats<T extends Prisma.Stat$npcSheetStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stat$npcSheetStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpcSheetStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatureSheetStats<T extends Prisma.Stat$creatureSheetStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stat$creatureSheetStatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatureSheetStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1005,6 +1963,10 @@ export interface StatFieldRefs {
   readonly id: Prisma.FieldRef<"Stat", 'String'>
   readonly systemId: Prisma.FieldRef<"Stat", 'String'>
   readonly name: Prisma.FieldRef<"Stat", 'String'>
+  readonly key: Prisma.FieldRef<"Stat", 'String'>
+  readonly shortName: Prisma.FieldRef<"Stat", 'String'>
+  readonly description: Prisma.FieldRef<"Stat", 'String'>
+  readonly order: Prisma.FieldRef<"Stat", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Stat", 'DateTime'>
 }
     
@@ -1423,6 +2385,150 @@ export type Stat$skillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.SkillScalarFieldEnum | Prisma.SkillScalarFieldEnum[]
+}
+
+/**
+ * Stat.characterStats
+ */
+export type Stat$characterStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterSheetStat
+   */
+  select?: Prisma.CharacterSheetStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterSheetStat
+   */
+  omit?: Prisma.CharacterSheetStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterSheetStatInclude<ExtArgs> | null
+  where?: Prisma.CharacterSheetStatWhereInput
+  orderBy?: Prisma.CharacterSheetStatOrderByWithRelationInput | Prisma.CharacterSheetStatOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterSheetStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterSheetStatScalarFieldEnum | Prisma.CharacterSheetStatScalarFieldEnum[]
+}
+
+/**
+ * Stat.characterTemplateStats
+ */
+export type Stat$characterTemplateStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CharacterTemplateStat
+   */
+  select?: Prisma.CharacterTemplateStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CharacterTemplateStat
+   */
+  omit?: Prisma.CharacterTemplateStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CharacterTemplateStatInclude<ExtArgs> | null
+  where?: Prisma.CharacterTemplateStatWhereInput
+  orderBy?: Prisma.CharacterTemplateStatOrderByWithRelationInput | Prisma.CharacterTemplateStatOrderByWithRelationInput[]
+  cursor?: Prisma.CharacterTemplateStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CharacterTemplateStatScalarFieldEnum | Prisma.CharacterTemplateStatScalarFieldEnum[]
+}
+
+/**
+ * Stat.npcTemplateStats
+ */
+export type Stat$npcTemplateStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcTemplateStat
+   */
+  select?: Prisma.NpcTemplateStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcTemplateStat
+   */
+  omit?: Prisma.NpcTemplateStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcTemplateStatInclude<ExtArgs> | null
+  where?: Prisma.NpcTemplateStatWhereInput
+  orderBy?: Prisma.NpcTemplateStatOrderByWithRelationInput | Prisma.NpcTemplateStatOrderByWithRelationInput[]
+  cursor?: Prisma.NpcTemplateStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcTemplateStatScalarFieldEnum | Prisma.NpcTemplateStatScalarFieldEnum[]
+}
+
+/**
+ * Stat.creatureTemplateStats
+ */
+export type Stat$creatureTemplateStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureTemplateStat
+   */
+  select?: Prisma.CreatureTemplateStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureTemplateStat
+   */
+  omit?: Prisma.CreatureTemplateStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureTemplateStatInclude<ExtArgs> | null
+  where?: Prisma.CreatureTemplateStatWhereInput
+  orderBy?: Prisma.CreatureTemplateStatOrderByWithRelationInput | Prisma.CreatureTemplateStatOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureTemplateStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureTemplateStatScalarFieldEnum | Prisma.CreatureTemplateStatScalarFieldEnum[]
+}
+
+/**
+ * Stat.npcSheetStats
+ */
+export type Stat$npcSheetStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpcSheetStat
+   */
+  select?: Prisma.NpcSheetStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpcSheetStat
+   */
+  omit?: Prisma.NpcSheetStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpcSheetStatInclude<ExtArgs> | null
+  where?: Prisma.NpcSheetStatWhereInput
+  orderBy?: Prisma.NpcSheetStatOrderByWithRelationInput | Prisma.NpcSheetStatOrderByWithRelationInput[]
+  cursor?: Prisma.NpcSheetStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpcSheetStatScalarFieldEnum | Prisma.NpcSheetStatScalarFieldEnum[]
+}
+
+/**
+ * Stat.creatureSheetStats
+ */
+export type Stat$creatureSheetStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatureSheetStat
+   */
+  select?: Prisma.CreatureSheetStatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatureSheetStat
+   */
+  omit?: Prisma.CreatureSheetStatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatureSheetStatInclude<ExtArgs> | null
+  where?: Prisma.CreatureSheetStatWhereInput
+  orderBy?: Prisma.CreatureSheetStatOrderByWithRelationInput | Prisma.CreatureSheetStatOrderByWithRelationInput[]
+  cursor?: Prisma.CreatureSheetStatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatureSheetStatScalarFieldEnum | Prisma.CreatureSheetStatScalarFieldEnum[]
 }
 
 /**

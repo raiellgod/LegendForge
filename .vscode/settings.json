@@ -1,7 +1,53 @@
 {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "always"
-    }
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "cSpell.words": [
+    "arcanismo",
+    "Arcanismo",
+    "atuacao",
+    "binstantanea",
+    "binstantaneo",
+    "brutakar",
+    "Brutakar",
+    "caraoucoroa",
+    "datasource",
+    "delu",
+    "durandir",
+    "Durandir",
+    "élficos",
+    "faunari",
+    "Faunari",
+    "herbalismo",
+    "Hikari",
+    "humanis",
+    "Humanis",
+    "intimidacao",
+    "intuicao",
+    "investigacao",
+    "longsword",
+    "masterless",
+    "minuri",
+    "Minuri",
+    "mutada",
+    "mutadas",
+    "Nigrum",
+    "oathbound",
+    "percepcao",
+    "Persistable",
+    "persuasao",
+    "postgresql",
+    "prestidigitacao",
+    "religiao",
+    "shortbow",
+    "sinteticos",
+    "sobrevivencia",
+    "sylvaris",
+    "Sylvaris",
+    "technomancer",
+    "Tecnomante",
+    "uuid"
+  ]
 }

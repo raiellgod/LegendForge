@@ -64,3 +64,158 @@ export const SourceOrigin = {
 } as const
 
 export type SourceOrigin = (typeof SourceOrigin)[keyof typeof SourceOrigin]
+
+
+export const CampaignActorType = {
+  PLAYER_CHARACTER: 'PLAYER_CHARACTER',
+  NPC: 'NPC',
+  CREATURE: 'CREATURE'
+} as const
+
+export type CampaignActorType = (typeof CampaignActorType)[keyof typeof CampaignActorType]
+
+
+export const SceneTokenImageFit = {
+  COVER: 'COVER',
+  CONTAIN: 'CONTAIN',
+  FILL: 'FILL'
+} as const
+
+export type SceneTokenImageFit = (typeof SceneTokenImageFit)[keyof typeof SceneTokenImageFit]
+
+
+export const CreatureSize = {
+  TINY: 'TINY',
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE',
+  HUGE: 'HUGE',
+  GARGANTUAN: 'GARGANTUAN'
+} as const
+
+export type CreatureSize = (typeof CreatureSize)[keyof typeof CreatureSize]
+
+
+export const FeatureSourceType = {
+  ANCESTRY: 'ANCESTRY',
+  SUBANCESTRY: 'SUBANCESTRY',
+  BACKGROUND: 'BACKGROUND',
+  CLASS: 'CLASS',
+  SUBCLASS: 'SUBCLASS',
+  LEVEL: 'LEVEL',
+  CHOICE: 'CHOICE'
+} as const
+
+export type FeatureSourceType = (typeof FeatureSourceType)[keyof typeof FeatureSourceType]
+
+
+export const CharacterSheetStatus = {
+  DRAFT: 'DRAFT',
+  READY: 'READY',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CharacterSheetStatus = (typeof CharacterSheetStatus)[keyof typeof CharacterSheetStatus]
+
+
+export const CharacterProgressionChoiceType = {
+  ATTRIBUTE_INCREASE: 'ATTRIBUTE_INCREASE',
+  TALENT: 'TALENT'
+} as const
+
+export type CharacterProgressionChoiceType = (typeof CharacterProgressionChoiceType)[keyof typeof CharacterProgressionChoiceType]
+
+
+export const CharacterAttributeIncreaseMode = {
+  FOCUSED: 'FOCUSED',
+  SPLIT: 'SPLIT'
+} as const
+
+export type CharacterAttributeIncreaseMode = (typeof CharacterAttributeIncreaseMode)[keyof typeof CharacterAttributeIncreaseMode]
+
+
+export const SpellSchool = {
+  ABJURATION: 'ABJURATION',
+  CONJURATION: 'CONJURATION',
+  DIVINATION: 'DIVINATION',
+  ENCHANTMENT: 'ENCHANTMENT',
+  EVOCATION: 'EVOCATION',
+  ILLUSION: 'ILLUSION',
+  NECROMANCY: 'NECROMANCY',
+  TRANSMUTATION: 'TRANSMUTATION'
+} as const
+
+export type SpellSchool = (typeof SpellSchool)[keyof typeof SpellSchool]
+
+
+export const EquipmentCategory = {
+  WEAPON: 'WEAPON',
+  ARMOR: 'ARMOR',
+  SHIELD: 'SHIELD',
+  TOOL: 'TOOL',
+  GEAR: 'GEAR',
+  CONSUMABLE: 'CONSUMABLE',
+  RELIC: 'RELIC'
+} as const
+
+export type EquipmentCategory = (typeof EquipmentCategory)[keyof typeof EquipmentCategory]
+
+
+export const EquipmentAttackType = {
+  NONE: 'NONE',
+  MELEE: 'MELEE',
+  RANGED: 'RANGED',
+  THROWN: 'THROWN'
+} as const
+
+export type EquipmentAttackType = (typeof EquipmentAttackType)[keyof typeof EquipmentAttackType]
+
+
+export const EquipmentWeaponGroup = {
+  SIMPLE: 'SIMPLE',
+  MARTIAL: 'MARTIAL',
+  IMPROVISED: 'IMPROVISED',
+  NATURAL: 'NATURAL',
+  TECH: 'TECH',
+  RELIC: 'RELIC'
+} as const
+
+export type EquipmentWeaponGroup = (typeof EquipmentWeaponGroup)[keyof typeof EquipmentWeaponGroup]
+
+
+export const CampaignActorLocation = {
+  TABLE: 'TABLE',
+  LIBRARY: 'LIBRARY',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CampaignActorLocation = (typeof CampaignActorLocation)[keyof typeof CampaignActorLocation]
+
+
+export const SheetDefenseKind = {
+  RESISTANCE: 'RESISTANCE',
+  IMMUNITY: 'IMMUNITY',
+  VULNERABILITY: 'VULNERABILITY'
+} as const
+
+export type SheetDefenseKind = (typeof SheetDefenseKind)[keyof typeof SheetDefenseKind]
+
+
+export const SheetActionKind = {
+  ACTION: 'ACTION',
+  BONUS_ACTION: 'BONUS_ACTION',
+  REACTION: 'REACTION'
+} as const
+
+export type SheetActionKind = (typeof SheetActionKind)[keyof typeof SheetActionKind]
+
+
+export const SheetAttackType = {
+  MELEE: 'MELEE',
+  RANGED: 'RANGED',
+  THROWN: 'THROWN',
+  MAGIC: 'MAGIC',
+  OTHER: 'OTHER'
+} as const
+
+export type SheetAttackType = (typeof SheetAttackType)[keyof typeof SheetAttackType]
